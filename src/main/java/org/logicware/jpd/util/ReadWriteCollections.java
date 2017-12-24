@@ -33,67 +33,67 @@ import java.util.Collection;
  */
 public final class ReadWriteCollections {
 
-    private ReadWriteCollections() {
-    }
-
-    public static <E> ReadWriteList<E> newReadWriteArrayList() {
-	return new ReadWriteArrayList<E>();
-    }
-
-    public static <E> ReadWriteList<E> newReadWriteArrayList(int initialCapacity) {
-	return new ReadWriteArrayList<E>(initialCapacity);
-    }
-
-    public static <E> ReadWriteList<E> newReadWriteArrayList(E[] array) {
-	ReadWriteList<E> arrayList = new ReadWriteArrayList<E>(array.length);
-	for (int i = 0; i < array.length; i++) {
-	    arrayList.add(array[i]);
+	private ReadWriteCollections() {
 	}
-	return arrayList;
-    }
 
-    public static <E> ReadWriteList<E> newReadWriteArrayList(Collection<? extends E> c) {
-	return new ReadWriteArrayList<E>(c);
-    }
+	public static <E> ReadWriteList<E> newReadWriteArrayList() {
+		return new ReadWriteArrayList<E>();
+	}
 
-    public static <E> ReadWriteList<E> newReadWriteLinkedList() {
-	return new ReadWriteLinkedList<E>();
-    }
+	public static <E> ReadWriteList<E> newReadWriteArrayList(int initialCapacity) {
+		return new ReadWriteArrayList<E>(initialCapacity);
+	}
 
-    public static <E> ReadWriteList<E> newReadWriteLinkedList(Collection<? extends E> c) {
-	return new ReadWriteLinkedList<E>(c);
-    }
+	public static <E> ReadWriteList<E> newReadWriteArrayList(E[] array) {
+		ReadWriteList<E> arrayList = new ReadWriteArrayList<E>(array.length);
+		for (int i = 0; i < array.length; i++) {
+			arrayList.add(array[i]);
+		}
+		return arrayList;
+	}
 
-    public static <E> ReadWriteSet<E> newReadWriteHashSet() {
-	return new ReadWriteHashSet<E>();
-    }
+	public static <E> ReadWriteList<E> newReadWriteArrayList(Collection<? extends E> c) {
+		return new ReadWriteArrayList<E>(c);
+	}
 
-    public static <E> ReadWriteSet<E> newReadWriteHashSet(int initialCapacity) {
-	return new ReadWriteHashSet<E>(initialCapacity);
-    }
+	public static <E> ReadWriteList<E> newReadWriteLinkedList() {
+		return new ReadWriteLinkedList<E>();
+	}
 
-    public static <E> ReadWriteSet<E> newReadWriteHashSet(int initialCapacity, float loadFactor) {
-	return new ReadWriteHashSet<E>(initialCapacity, loadFactor);
-    }
+	public static <E> ReadWriteList<E> newReadWriteLinkedList(Collection<? extends E> c) {
+		return new ReadWriteLinkedList<E>(c);
+	}
 
-    public static <E> ReadWriteSet<E> newReadWriteHashSet(Collection<? extends E> c) {
-	return new ReadWriteHashSet<E>(c);
-    }
+	public static <E> ReadWriteSet<E> newReadWriteHashSet() {
+		return new ReadWriteHashSet<E>();
+	}
 
-    public static <E> ReadWriteSet<E> newReadWriteLinkedHashSet() {
-	return new ReadWriteLinkedHashSet<E>();
-    }
+	public static <E> ReadWriteSet<E> newReadWriteHashSet(int initialCapacity) {
+		return new ReadWriteHashSet<E>(initialCapacity);
+	}
 
-    public static <E> ReadWriteSet<E> newReadWriteLinkedHashSet(int initialCapacity) {
-	return new ReadWriteLinkedHashSet<E>(initialCapacity);
-    }
+	public static <E> ReadWriteSet<E> newReadWriteHashSet(int initialCapacity, float loadFactor) {
+		return new ReadWriteHashSet<E>(initialCapacity, loadFactor);
+	}
 
-    public static <E> ReadWriteSet<E> newReadWriteLinkedHashSet(int initialCapacity, float loadFactor) {
-	return new ReadWriteLinkedHashSet<E>(initialCapacity, loadFactor);
-    }
+	public static <E> ReadWriteSet<E> newReadWriteHashSet(Collection<? extends E> c) {
+		return new ReadWriteHashSet<E>(c);
+	}
 
-    public static <E> ReadWriteSet<E> newReadWriteLinkedHashSet(Collection<? extends E> c) {
-	return new ReadWriteLinkedHashSet<E>(c);
-    }
+	public static <E> ReadWriteSet<E> newReadWriteLinkedHashSet() {
+		return new ReadWriteLinkedHashSet<E>();
+	}
+
+	public static <E> ReadWriteSet<E> newReadWriteLinkedHashSet(int initialCapacity) {
+		return new ReadWriteLinkedHashSet<E>(initialCapacity);
+	}
+
+	public static <E> ReadWriteSet<E> newReadWriteLinkedHashSet(int initialCapacity, float loadFactor) {
+		return new ReadWriteLinkedHashSet<E>(initialCapacity, loadFactor);
+	}
+
+	public static <E> ReadWriteSet<E> newReadWriteLinkedHashSet(Collection<? extends E> c) {
+		return new ReadWriteLinkedHashSet<E>(c);
+	}
 
 }

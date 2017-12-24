@@ -33,6 +33,7 @@ import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologQuery;
 import org.logicware.jpi.PrologTerm;
 import org.logicware.jpp.AbstractWrapper;
+import org.logicware.jpp.ClassNotFoundError;
 
 /**
  * Implementation of interface {@code Container}. Hold an immutable reference to
@@ -45,249 +46,245 @@ import org.logicware.jpp.AbstractWrapper;
  */
 public abstract class AbstractContainer extends AbstractWrapper implements Container {
 
-    // Prolog engine reference
-    private final PrologEngine engine;
+	// Prolog engine reference
+	private final PrologEngine engine;
 
-    // prolog driver
-    private final PrologProvider provider;
+	// prolog driver
+	private final PrologProvider provider;
 
-    //
-    private final Properties properties;
+	//
+	private final Properties properties;
 
-    // factory for term creation
-    private final ObjectConverter<PrologTerm> converter;
+	// factory for term creation
+	private final ObjectConverter<PrologTerm> converter;
 
-    // non store classes map
-    private static final Set<Class<?>> classes;
+	// non store classes map
+	private static final Set<Class<?>> classes;
 
-    static {
-	classes = new HashSet<Class<?>>();
-	classes.add(String.class);
-	classes.add(Boolean.class);
-	classes.add(Integer.class);
-	classes.add(Float.class);
-	classes.add(Long.class);
-	classes.add(Double.class);
-	classes.add(Object[].class);
-    }
+	static {
+		classes = new HashSet<Class<?>>();
+		classes.add(String.class);
+		classes.add(Boolean.class);
+		classes.add(Integer.class);
+		classes.add(Float.class);
+		classes.add(Long.class);
+		classes.add(Double.class);
+		classes.add(Object[].class);
+	}
 
-    protected final ObjectReflector reflector = new ObjectReflector();
+	protected final ObjectReflector reflector = new ObjectReflector();
 
-    protected static final ExceptionFactory exceptions = new ExceptionFactory();
+	protected AbstractContainer(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter) {
+		this.engine = provider.newEngine();
+		this.properties = properties;
+		this.converter = converter;
+		this.provider = provider;
+	}
 
-    protected AbstractContainer(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter) {
-	this.engine = provider.newEngine();
-	this.properties = properties;
-	this.converter = converter;
-	this.provider = provider;
-    }
+	public boolean contains(String string) {
+		// return engine.clause(string);
+		return engine.contains(string);
+	}
 
-    public boolean contains(String string) {
-	// return engine.clause(string);
-	return engine.contains(string);
-    }
+	public <O> boolean contains(O object) {
+		// return engine.clause(factory.createPrologTerm(object));
+		return engine.contains(converter.toTerm(object));
+	}
 
-    public <O> boolean contains(O object) {
-	// return engine.clause(factory.createPrologTerm(object));
-	return engine.contains(converter.toTerm(object));
-    }
+	public <O> boolean contains(Class<O> clazz) {
+		// return engine.clause(factory.createPrologTerm(clazz));
+		return engine.contains(converter.toTerm(clazz));
+	}
 
-    public <O> boolean contains(Class<O> clazz) {
-	// return engine.clause(factory.createPrologTerm(clazz));
-	return engine.contains(converter.toTerm(clazz));
-    }
-
-    public <O> boolean contains(Predicate<O> predicate) {
-	Class<O> clazz = classOf(predicate);
-	PrologQuery query = prologQueryOf(clazz);
-	if (query.hasSolution()) {
-	    Map<String, PrologTerm>[] solutionsMap = query.allVariablesSolutions();
-	    for (int i = 0; i < solutionsMap.length; i++) {
-		O solution = (O) converter.toObject(clazz, solutionsMap[i]);
-		if (predicate.evaluate(solution)) {
-		    return true;
+	public <O> boolean contains(Predicate<O> predicate) {
+		Class<O> clazz = classOf(predicate);
+		PrologQuery query = prologQueryOf(clazz);
+		if (query.hasSolution()) {
+			Map<String, PrologTerm>[] solutionsMap = query.allVariablesSolutions();
+			for (int i = 0; i < solutionsMap.length; i++) {
+				O solution = (O) converter.toObject(clazz, solutionsMap[i]);
+				if (predicate.evaluate(solution)) {
+					return true;
+				}
+			}
 		}
-	    }
+		return false;
 	}
-	return false;
-    }
 
-    public boolean contains(String functor, int arity) {
-	return engine.currentPredicate(functor, arity);
-    }
-
-    public final PrologEngine getEngine() {
-	return engine;
-    }
-
-    public final PrologProvider getProvider() {
-	return provider;
-    }
-
-    public final Properties getProperties() {
-	return properties;
-    }
-
-    public final ObjectConverter<PrologTerm> getConverter() {
-	return converter;
-    }
-
-    protected final void checkStorableObject(Object object) {
-	if (classes.contains(object.getClass()) || object.getClass().isArray()) {
-	    throw exceptions.persistenceException(object);
+	public boolean contains(String functor, int arity) {
+		return engine.currentPredicate(functor, arity);
 	}
-    }
 
-    protected final void checkReplacementObject(Object match, Object update) {
-	if (match.getClass() != update.getClass()) {
-	    throw exceptions.updateException(match, update);
+	public final PrologEngine getEngine() {
+		return engine;
 	}
-    }
 
-    protected final void checkProcedureInvokation(String name, Field[] fields, Object[] values) {
-	int fieldsNumber = fields.length;
-	int valuesNumber = values.length;
-	if (fieldsNumber != valuesNumber) {
-	    throw exceptions.procedureInvokationException(name, fieldsNumber, valuesNumber);
+	public final PrologProvider getProvider() {
+		return provider;
 	}
-    }
 
-    /**
-     * Allow known the class of some given object
-     * 
-     * @param o
-     *            object to known your class
-     * @return class of object {@code o}
-     */
-    protected final <O> Class<O> classOf(O o) {
-	return (Class<O>) o.getClass();
-    }
-
-    protected final Class<?> classOf(String functor, int length) {
-	String className = removeQuoted(functor);
-	Class<?> clazz = reflector.classForName(className);
-	if (clazz.getDeclaredFields().length != length) {
-	    exceptions.classNotFoundException(functor, length);
+	public final Properties getProperties() {
+		return properties;
 	}
-	return clazz;
-    }
 
-    protected final <O> Class<O> classOf(Predicate<O> predicate) {
-	Class<?> clazz = predicate.getClass();
-	Type[] generics = clazz.getGenericInterfaces();
-	Class<O> templateClass = null;
-	if (generics.length == 1) {
-	    if (generics[0] instanceof ParameterizedType) {
-		ParameterizedType parameterized = (ParameterizedType) generics[0];
-		Type type = parameterized.getActualTypeArguments()[0];
-		if (!(type instanceof Class<?>)) {
-		    throw exceptions.classNotFoundException("" + type + "");
+	public final ObjectConverter<PrologTerm> getConverter() {
+		return converter;
+	}
+
+	protected final void checkStorableObject(Object object) {
+		if (classes.contains(object.getClass()) || object.getClass().isArray()) {
+			throw new PersistenceError(object);
 		}
-		templateClass = (Class<O>) type;
-	    }
 	}
-	return templateClass;
-    }
 
-    protected final ArrayList<Class<?>> classesOf(String string) {
-	PrologTerm[] prologTerms = converter.toTermsArray(string);
-	return classesOf(prologTerms);
-    }
+	protected final void checkReplacementObject(Object match, Object update) {
+		if (match.getClass() != update.getClass()) {
+			throw new UpdateError(match, update);
+		}
+	}
 
-    /**
-     * Return a list with predicate classes present in prolog terms array
-     * 
-     * @param prologTerms
-     *            prolog terms array
-     * @return list with predicate classes present in prolog terms array
-     */
-    protected final ArrayList<Class<?>> classesOf(PrologTerm[] prologTerms) {
-	ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
-	for (int i = 0; i < prologTerms.length; i++) {
-	    PrologTerm prologTerm = prologTerms[i];
-	    if (prologTerm.isStructure() && !prologTerm.isEvaluable()) {
-		String functor = prologTerms[i].getFunctor();
+	protected final void checkProcedureInvokation(String name, Field[] fields, Object[] values) {
+		int fieldsNumber = fields.length;
+		int valuesNumber = values.length;
+		if (fieldsNumber != valuesNumber) {
+			throw new ProcedureInvokationError(name, fieldsNumber, valuesNumber);
+		}
+	}
+
+	/**
+	 * Allow known the class of some given object
+	 * 
+	 * @param o
+	 *            object to known your class
+	 * @return class of object {@code o}
+	 */
+	protected final <O> Class<O> classOf(O o) {
+		return (Class<O>) o.getClass();
+	}
+
+	protected final Class<?> classOf(String functor, int length) {
 		String className = removeQuoted(functor);
-		try {
-		    Class<?> clazz = Class.forName(className);
-		    if (clazz != null) {
-			classes.add(clazz);
-		    }
-		} catch (ClassNotFoundException e) {
-		    throw exceptions.classNotFoundException(functor, e);
+		Class<?> clazz = reflector.classForName(className);
+		if (clazz.getDeclaredFields().length != length) {
+			throw new ClassNotFoundError(className, length);
 		}
-	    }
+		return clazz;
 	}
-	return classes;
-    }
 
-    protected final Object[] solutionOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
-	PrologQuery query = engine.query(prologTerms);
-	if (query.hasSolution()) {
-	    Map<String, PrologTerm> solutionsMap = query.oneVariablesSolution();
-	    Object[] objects = new Object[classes.size()];
-	    for (int i = 0; i < classes.size(); i++) {
-		objects[i] = converter.toObject(classes.get(i), solutionsMap);
-	    }
-	    return objects;
-	}
-	return new Object[0];
-    }
-
-    /**
-     * Find all objects solutions of the prolog terms array. Use a given list of
-     * classes extracted from prolog terms array for convert the result obtained
-     * from prolog query result.
-     * 
-     * @param prologTerms
-     *            prolog terms array to query.
-     * 
-     * @param classes
-     *            classes extracted from prolog terms array.
-     * @return all objects solutions of prologTerms prolog terms array.
-     */
-    protected final List<Object> solutionsOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
-	List<Object> solutionSet = new ArrayList<Object>();
-	PrologQuery query = engine.query(prologTerms);
-	if (query.hasSolution()) {
-	    Map<String, PrologTerm>[] solutionsMap = query.allVariablesSolutions();
-	    for (int i = 0; i < solutionsMap.length; i++) {
-		Object[] objects = new Object[classes.size()];
-		for (int j = 0; j < classes.size(); j++) {
-		    objects[j] = converter.toObject(classes.get(j), solutionsMap[i]);
+	protected final <O> Class<O> classOf(Predicate<O> predicate) {
+		Class<O> templateClass = null;
+		Class<?> clazz = predicate.getClass();
+		Type[] generics = clazz.getGenericInterfaces();
+		if (generics.length == 1 && generics[0] instanceof ParameterizedType) {
+			ParameterizedType parameterized = (ParameterizedType) generics[0];
+			Type type = parameterized.getActualTypeArguments()[0];
+			if (!(type instanceof Class<?>)) {
+				throw new ClassNotFoundError("" + type + "");
+			}
+			templateClass = (Class<O>) type;
 		}
-		solutionSet.add(objects);
-	    }
+		return templateClass;
 	}
-	return solutionSet;
-    }
 
-    protected final PrologQuery prologQueryOf(Class<?> clazz) {
-	PrologTerm goal = converter.toTerm(clazz);
-	return engine.query(goal);
-    }
-
-    protected final PrologQuery prologQueryOf(Object object, Map<String, PrologTerm> map) {
-	PrologTerm goal = converter.toTerm(object, map);
-	return engine.query(goal);
-    }
-
-    protected final boolean quoted(String functor) {
-	if (!functor.isEmpty()) {
-	    char beginChar = functor.charAt(0);
-	    char endChar = functor.charAt(functor.length() - 1);
-	    return beginChar == '\'' && endChar == '\'';
+	protected final List<Class<?>> classesOf(String string) {
+		PrologTerm[] prologTerms = converter.toTermsArray(string);
+		return classesOf(prologTerms);
 	}
-	return false;
-    }
 
-    protected final String removeQuoted(String functor) {
-	if (quoted(functor)) {
-	    String newFunctor = "";
-	    newFunctor += functor.substring(1, functor.length() - 1);
-	    return newFunctor;
+	/**
+	 * Return a list with predicate classes present in prolog terms array
+	 * 
+	 * @param prologTerms
+	 *            prolog terms array
+	 * @return list with predicate classes present in prolog terms array
+	 */
+	protected final List<Class<?>> classesOf(PrologTerm[] prologTerms) {
+		List<Class<?>> classList = new ArrayList<Class<?>>();
+		for (int i = 0; i < prologTerms.length; i++) {
+			PrologTerm prologTerm = prologTerms[i];
+			if (prologTerm.isStructure() && !prologTerm.isEvaluable()) {
+				String functor = prologTerms[i].getFunctor();
+				String className = removeQuoted(functor);
+				try {
+					Class<?> clazz = Class.forName(className);
+					if (clazz != null) {
+						classList.add(clazz);
+					}
+				} catch (ClassNotFoundException e) {
+					throw new ClassNotFoundError(functor, e);
+				}
+			}
+		}
+		return classList;
 	}
-	return functor;
-    }
+
+	protected final Object[] solutionOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
+		PrologQuery query = engine.query(prologTerms);
+		if (query.hasSolution()) {
+			Map<String, PrologTerm> solutionsMap = query.oneVariablesSolution();
+			Object[] objects = new Object[classes.size()];
+			for (int i = 0; i < classes.size(); i++) {
+				objects[i] = converter.toObject(classes.get(i), solutionsMap);
+			}
+			return objects;
+		}
+		return new Object[0];
+	}
+
+	/**
+	 * Find all objects solutions of the prolog terms array. Use a given list of
+	 * classes extracted from prolog terms array for convert the result obtained
+	 * from prolog query result.
+	 * 
+	 * @param prologTerms
+	 *            prolog terms array to query.
+	 * 
+	 * @param classes
+	 *            classes extracted from prolog terms array.
+	 * @return all objects solutions of prologTerms prolog terms array.
+	 */
+	protected final List<Object> solutionsOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
+		List<Object> solutionSet = new ArrayList<Object>();
+		PrologQuery query = engine.query(prologTerms);
+		if (query.hasSolution()) {
+			Map<String, PrologTerm>[] solutionsMap = query.allVariablesSolutions();
+			for (int i = 0; i < solutionsMap.length; i++) {
+				Object[] objects = new Object[classes.size()];
+				for (int j = 0; j < classes.size(); j++) {
+					objects[j] = converter.toObject(classes.get(j), solutionsMap[i]);
+				}
+				solutionSet.add(objects);
+			}
+		}
+		return solutionSet;
+	}
+
+	protected final PrologQuery prologQueryOf(Class<?> clazz) {
+		PrologTerm goal = converter.toTerm(clazz);
+		return engine.query(goal);
+	}
+
+	protected final PrologQuery prologQueryOf(Object object, Map<String, PrologTerm> map) {
+		PrologTerm goal = converter.toTerm(object, map);
+		return engine.query(goal);
+	}
+
+	protected final boolean quoted(String functor) {
+		if (!functor.isEmpty()) {
+			char beginChar = functor.charAt(0);
+			char endChar = functor.charAt(functor.length() - 1);
+			return beginChar == '\'' && endChar == '\'';
+		}
+		return false;
+	}
+
+	protected final String removeQuoted(String functor) {
+		if (quoted(functor)) {
+			String newFunctor = "";
+			newFunctor += functor.substring(1, functor.length() - 1);
+			return newFunctor;
+		}
+		return functor;
+	}
 
 }

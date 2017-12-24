@@ -25,32 +25,32 @@ import org.logicware.jpi.PrologProvider;
 
 public interface ObjectConverter<T> {
 
-    public String removeApices(String functor);
+	public String removeApices(String functor);
 
-    public boolean containApices(String functor);
+	public boolean containApices(String functor);
 
-    //
+	//
 
-    public Class<?> toClass(T prologTerm);
+	public Class<?> toClass(T prologTerm);
 
-    public Class<?>[] toClassArray(T[] terms);
+	public Class<?>[] toClassArray(T[] terms);
 
-    public Object toObject(T prologTerm);
+	public Object toObject(T prologTerm);
 
-    public Object[] toObjectsArray(T[] terms);
+	public Object[] toObjectsArray(T[] terms);
 
-    public Object toObject(Class<?> clazz, Map<String, T> solutionsMap);
+	public Object toObject(Class<?> clazz, Map<String, T> solutionsMap);
 
-    //
+	//
 
-    public T toTerm(Object object);
+	public T toTerm(Object object);
 
-    public T[] toTermsArray(String string);
+	public T[] toTermsArray(String string);
 
-    public T[] toTermsArray(Object[] objects);
+	public T[] toTermsArray(Object[] objects);
 
-    public T toTerm(Object object, Map<String, T> solutionsMap);
+	public T toTerm(Object object, Map<String, T> solutionsMap);
 
-    public PrologProvider getProvider();
+	public PrologProvider getProvider();
 
 }

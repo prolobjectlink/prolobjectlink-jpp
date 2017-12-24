@@ -21,10 +21,10 @@ package org.logicware.jpp;
 
 public class SecurityError extends RuntimeError {
 
-    private static final long serialVersionUID = -4822801857634810479L;
+	private static final long serialVersionUID = -4822801857634810479L;
 
-    public SecurityError(String className, Throwable cause) {
-	super("Security violation at class " + className, cause);
-    }
+	public SecurityError(String className, Throwable cause) {
+		super("Security violation at class " + className, cause);
+	}
 
 }

@@ -26,19 +26,19 @@ import org.logicware.jpi.PrologTerm;
 
 public abstract class AbstractPersistentDocument extends AbstractPersistentContainer implements PersistentDocument {
 
-    protected AbstractPersistentDocument(PrologProvider provider, Properties properties,
-	    ObjectConverter<PrologTerm> converter, String location) {
-	super(provider, properties, converter, location);
-    }
+	protected AbstractPersistentDocument(PrologProvider provider, Properties properties,
+			ObjectConverter<PrologTerm> converter, String location) {
+		super(provider, properties, converter, location);
+	}
 
-    public final void backup(String directory, String zipFileName) {
-	Backup backup = new Backup(getLocation());
-	backup.createBackup(directory, zipFileName);
-    }
+	public final void backup(String directory, String zipFileName) {
+		Backup backup = new Backup(getLocation());
+		backup.createBackup(directory, zipFileName);
+	}
 
-    public final void restore(String directory, String zipFileName) {
-	Restore restore = new Restore();
-	restore.restoreBackup(directory, zipFileName);
-    }
+	public final void restore(String directory, String zipFileName) {
+		Restore restore = new Restore();
+		restore.restoreBackup(directory, zipFileName);
+	}
 
 }

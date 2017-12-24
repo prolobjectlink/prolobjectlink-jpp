@@ -24,131 +24,131 @@ import org.logicware.jpi.PrologProviderFactory;
 
 public final class PersistenceProvider {
 
-    private static final int MAJOR = 1;
-    private static final int MINOR = 0;
-    private static final int MICRO = 0;
+	private static final int MAJOR = 1;
+	private static final int MINOR = 0;
+	private static final int MICRO = 0;
 
-    // private static final String CONTAINER_FACTORY =
-    // JPCObjectContainerFactory.NAME;
-    private static final ExceptionFactory EXCEPTION_FACTORY = new ExceptionFactory();
+	// private static final String CONTAINER_FACTORY =
+	// JPCObjectContainerFactory.NAME;
+	private static final ExceptionFactory EXCEPTION_FACTORY = new ExceptionFactory();
 
-    private PersistenceProvider() {
-    }
-
-    public static String getVersion() {
-	return MAJOR + "." + MINOR + "." + MICRO;
-    }
-
-    public static int getMajorVersion() {
-	return MAJOR;
-    }
-
-    public static int getMinorVersion() {
-	return MINOR;
-    }
-
-    public static int getMicroVersion() {
-	return MICRO;
-    }
-
-    // public static ObjectContainerFactory create(Class<?> provider) {
-    // return create(CONTAINER_FACTORY,
-    // PrologProviderFactory.createPrologProvider(provider), new Properties());
-    // }
-    //
-    // public static ObjectContainerFactory create(Class<?> provider, Properties
-    // parameters) {
-    // return create(CONTAINER_FACTORY,
-    // PrologProviderFactory.createPrologProvider(provider), parameters);
-    // }
-    //
-    // public static ObjectContainerFactory create(PrologProvider prolog,
-    // Properties parameters) {
-    // return createContainerFactory(CONTAINER_FACTORY, prolog, parameters);
-    // }
-
-    // without properties
-
-    public static ContainerFactory create(Class<?> driver, String provider) {
-	return create(driver, PrologProviderFactory.createPrologProvider(provider), new Properties());
-    }
-
-    /**
-     * Create and {@link ContainerFactory} instance using your class and setting
-     * a given {@link PrologProvider}
-     * 
-     * @param driver
-     *            concrete class for create an instance of
-     *            {@link ContainerFactory}
-     * @param prolog
-     * @return {@link ContainerFactory} instance
-     * @since 1.0
-     */
-    public static ContainerFactory create(Class<?> driver, PrologProvider prolog) {
-	return createContainerFactory(driver, prolog, new Properties());
-    }
-
-    public static ContainerFactory create(String driver, String provider) {
-	return create(driver, PrologProviderFactory.createPrologProvider(provider), new Properties());
-    }
-
-    public static ContainerFactory create(String driver, PrologProvider prolog) {
-	return createContainerFactory(driver, prolog, new Properties());
-    }
-
-    // with properties
-
-    public static ContainerFactory create(Class<?> driver, String provider, Properties parameters) {
-	return create(driver, PrologProviderFactory.createPrologProvider(provider), parameters);
-    }
-
-    public static ContainerFactory create(Class<?> driver, PrologProvider prolog, Properties parameters) {
-	return createContainerFactory(driver, prolog, parameters);
-    }
-
-    public static ContainerFactory create(String driver, String provider, Properties parameters) {
-	return create(driver, PrologProviderFactory.createPrologProvider(provider), parameters);
-    }
-
-    public static ContainerFactory create(String driver, PrologProvider prolog, Properties parameters) {
-	return createContainerFactory(driver, prolog, parameters);
-    }
-
-    private static ContainerFactory createContainerFactory(String driver, PrologProvider provider, Object object) {
-	ContainerFactory containerFactory = null;
-	try {
-	    Class<?> clazz = Class.forName(driver);
-	    containerFactory = (ContainerFactory) clazz.newInstance();
-	    containerFactory.setProvider(provider);
-	    if (object instanceof Properties) {
-		Properties parameters = (Properties) object;
-		containerFactory.setProperties(parameters);
-	    }
-	} catch (ClassNotFoundException e) {
-	    throw EXCEPTION_FACTORY.classNotFoundException(driver, e);
-	} catch (InstantiationException e) {
-	    throw EXCEPTION_FACTORY.instantiationException(driver, e);
-	} catch (IllegalAccessException e) {
-	    throw EXCEPTION_FACTORY.illegalAccessException(driver, e);
+	private PersistenceProvider() {
 	}
-	return containerFactory;
-    }
 
-    private static ContainerFactory createContainerFactory(Class<?> driver, PrologProvider provider, Object object) {
-	ContainerFactory containerFactory = null;
-	try {
-	    containerFactory = (ContainerFactory) driver.newInstance();
-	    containerFactory.setProvider(provider);
-	    if (object instanceof Properties) {
-		Properties parameters = (Properties) object;
-		containerFactory.setProperties(parameters);
-	    }
-	} catch (InstantiationException e) {
-	    throw EXCEPTION_FACTORY.instantiationException(driver.getName(), e);
-	} catch (IllegalAccessException e) {
-	    throw EXCEPTION_FACTORY.illegalAccessException(driver.getName(), e);
+	public static String getVersion() {
+		return MAJOR + "." + MINOR + "." + MICRO;
 	}
-	return containerFactory;
-    }
+
+	public static int getMajorVersion() {
+		return MAJOR;
+	}
+
+	public static int getMinorVersion() {
+		return MINOR;
+	}
+
+	public static int getMicroVersion() {
+		return MICRO;
+	}
+
+	// public static ObjectContainerFactory create(Class<?> provider) {
+	// return create(CONTAINER_FACTORY,
+	// PrologProviderFactory.createPrologProvider(provider), new Properties());
+	// }
+	//
+	// public static ObjectContainerFactory create(Class<?> provider, Properties
+	// parameters) {
+	// return create(CONTAINER_FACTORY,
+	// PrologProviderFactory.createPrologProvider(provider), parameters);
+	// }
+	//
+	// public static ObjectContainerFactory create(PrologProvider prolog,
+	// Properties parameters) {
+	// return createContainerFactory(CONTAINER_FACTORY, prolog, parameters);
+	// }
+
+	// without properties
+
+	public static ContainerFactory create(Class<?> driver, String provider) {
+		return create(driver, PrologProviderFactory.createPrologProvider(provider), new Properties());
+	}
+
+	/**
+	 * Create and {@link ContainerFactory} instance using your class and setting
+	 * a given {@link PrologProvider}
+	 * 
+	 * @param driver
+	 *            concrete class for create an instance of
+	 *            {@link ContainerFactory}
+	 * @param prolog
+	 * @return {@link ContainerFactory} instance
+	 * @since 1.0
+	 */
+	public static ContainerFactory create(Class<?> driver, PrologProvider prolog) {
+		return createContainerFactory(driver, prolog, new Properties());
+	}
+
+	public static ContainerFactory create(String driver, String provider) {
+		return create(driver, PrologProviderFactory.createPrologProvider(provider), new Properties());
+	}
+
+	public static ContainerFactory create(String driver, PrologProvider prolog) {
+		return createContainerFactory(driver, prolog, new Properties());
+	}
+
+	// with properties
+
+	public static ContainerFactory create(Class<?> driver, String provider, Properties parameters) {
+		return create(driver, PrologProviderFactory.createPrologProvider(provider), parameters);
+	}
+
+	public static ContainerFactory create(Class<?> driver, PrologProvider prolog, Properties parameters) {
+		return createContainerFactory(driver, prolog, parameters);
+	}
+
+	public static ContainerFactory create(String driver, String provider, Properties parameters) {
+		return create(driver, PrologProviderFactory.createPrologProvider(provider), parameters);
+	}
+
+	public static ContainerFactory create(String driver, PrologProvider prolog, Properties parameters) {
+		return createContainerFactory(driver, prolog, parameters);
+	}
+
+	private static ContainerFactory createContainerFactory(String driver, PrologProvider provider, Object object) {
+		ContainerFactory containerFactory = null;
+		try {
+			Class<?> clazz = Class.forName(driver);
+			containerFactory = (ContainerFactory) clazz.newInstance();
+			containerFactory.setProvider(provider);
+			if (object instanceof Properties) {
+				Properties parameters = (Properties) object;
+				containerFactory.setProperties(parameters);
+			}
+		} catch (ClassNotFoundException e) {
+			throw EXCEPTION_FACTORY.classNotFoundException(driver, e);
+		} catch (InstantiationException e) {
+			throw EXCEPTION_FACTORY.instantiationException(driver, e);
+		} catch (IllegalAccessException e) {
+			throw EXCEPTION_FACTORY.illegalAccessException(driver, e);
+		}
+		return containerFactory;
+	}
+
+	private static ContainerFactory createContainerFactory(Class<?> driver, PrologProvider provider, Object object) {
+		ContainerFactory containerFactory = null;
+		try {
+			containerFactory = (ContainerFactory) driver.newInstance();
+			containerFactory.setProvider(provider);
+			if (object instanceof Properties) {
+				Properties parameters = (Properties) object;
+				containerFactory.setProperties(parameters);
+			}
+		} catch (InstantiationException e) {
+			throw EXCEPTION_FACTORY.instantiationException(driver.getName(), e);
+		} catch (IllegalAccessException e) {
+			throw EXCEPTION_FACTORY.illegalAccessException(driver.getName(), e);
+		}
+		return containerFactory;
+	}
 
 }

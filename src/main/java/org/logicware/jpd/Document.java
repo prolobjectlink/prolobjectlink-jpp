@@ -28,38 +28,38 @@ import java.io.File;
  */
 public interface Document extends PersistentContainer {
 
-    /**
-     * Check that this store have less clauses number in prolog engine that
-     * given capacity.
-     * 
-     * @return true if this store has a clause number lesser than given capacity
-     *         or false otherwise
-     * @since 1.0
-     */
-    public boolean hasCapacity();
+	/**
+	 * Check that this store have less clauses number in prolog engine that
+	 * given capacity.
+	 * 
+	 * @return true if this store has a clause number lesser than given capacity
+	 *         or false otherwise
+	 * @since 1.0
+	 */
+	public boolean hasCapacity();
 
-    public int getCapacity();
+	public int getCapacity();
 
-    /**
-     * The length of the host file for this document.
-     * 
-     * @return length of the file
-     * @since 1.0
-     */
-    public long getLength();
+	/**
+	 * The length of the host file for this document.
+	 * 
+	 * @return length of the file
+	 * @since 1.0
+	 */
+	public long getLength();
 
-    public int getSize();
+	public int getSize();
 
-    public File getFile();
+	public File getFile();
 
-    public void setDirty(boolean dirty);
+	public void setDirty(boolean dirty);
 
-    public boolean isDirty();
+	public boolean isDirty();
 
-    public boolean locked();
+	public boolean locked();
 
-    public void open();
+	public void open();
 
-    public void flush();
+	public void flush();
 
 }

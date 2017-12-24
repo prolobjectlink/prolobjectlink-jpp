@@ -21,8 +21,8 @@ package org.logicware.jpi;
 
 public interface PrologAtom extends PrologTerm {
 
-    public String getStringValue();
+	public String getStringValue();
 
-    public void setStringValue(String value);
+	public void setStringValue(String value);
 
 }

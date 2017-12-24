@@ -35,19 +35,19 @@ import java.io.IOException;
  */
 final class DocumentPoolFileFilter implements FileFilter {
 
-    static final String NUMBER_REGEX = "[0-9]+";
+	static final String NUMBER_REGEX = "[0-9]+";
 
-    public boolean accept(File pathname) {
-	String name;
-	try {
-	    name = pathname.getCanonicalPath();
-	    int lastDotIndex = name.lastIndexOf(".");
-	    String index = name.substring(lastDotIndex + 1);
-	    return index.matches(NUMBER_REGEX);
-	} catch (IOException e) {
-	    e.printStackTrace();
+	public boolean accept(File pathname) {
+		String name;
+		try {
+			name = pathname.getCanonicalPath();
+			int lastDotIndex = name.lastIndexOf(".");
+			String index = name.substring(lastDotIndex + 1);
+			return index.matches(NUMBER_REGEX);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
-	return false;
-    }
 
 }

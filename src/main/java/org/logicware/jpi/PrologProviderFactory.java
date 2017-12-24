@@ -23,36 +23,36 @@ import java.lang.reflect.Constructor;
 
 public final class PrologProviderFactory extends AbstractFactory {
 
-    private PrologProviderFactory() {
-    }
-
-    public static final PrologProvider createPrologProvider(String providerClassName) {
-	PrologProvider provider = null;
-	try {
-	    provider = createPrologProvider(Class.forName(providerClassName));
-	} catch (ClassNotFoundException e) {
-	    e.printStackTrace();
+	private PrologProviderFactory() {
 	}
-	return provider;
-    }
 
-    public static final PrologProvider createPrologProvider(Class<?> providerClass) {
-	PrologProvider provider = null;
-	try {
-	    Constructor<?> constructor = providerClass.getDeclaredConstructor();
-	    constructor.setAccessible(true);
-	    provider = (PrologProvider) providerClass.newInstance();
-	    constructor.setAccessible(false);
-	} catch (InstantiationException e) {
-	    e.printStackTrace();
-	} catch (IllegalAccessException e) {
-	    e.printStackTrace();
-	} catch (NoSuchMethodException e) {
-	    e.printStackTrace();
-	} catch (SecurityException e) {
-	    e.printStackTrace();
+	public static final PrologProvider createPrologProvider(String providerClassName) {
+		PrologProvider provider = null;
+		try {
+			provider = createPrologProvider(Class.forName(providerClassName));
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return provider;
 	}
-	return provider;
-    }
+
+	public static final PrologProvider createPrologProvider(Class<?> providerClass) {
+		PrologProvider provider = null;
+		try {
+			Constructor<?> constructor = providerClass.getDeclaredConstructor();
+			constructor.setAccessible(true);
+			provider = (PrologProvider) providerClass.newInstance();
+			constructor.setAccessible(false);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		return provider;
+	}
 
 }

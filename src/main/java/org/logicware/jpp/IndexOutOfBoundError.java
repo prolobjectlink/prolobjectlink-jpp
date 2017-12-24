@@ -21,10 +21,10 @@ package org.logicware.jpp;
 
 public final class IndexOutOfBoundError extends RuntimeError {
 
-    private static final long serialVersionUID = 2828526751667597579L;
+	private static final long serialVersionUID = 2828526751667597579L;
 
-    public IndexOutOfBoundError(int index) {
-	super("The index is out of bound: " + index);
-    }
+	public IndexOutOfBoundError(int index) {
+		super("The index is out of bound: " + index);
+	}
 
 }

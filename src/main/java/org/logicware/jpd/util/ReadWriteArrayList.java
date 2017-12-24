@@ -25,16 +25,16 @@ import java.util.List;
 
 public final class ReadWriteArrayList<E> extends ReadWriteList<E> implements List<E> {
 
-    public ReadWriteArrayList() {
-	super(new ArrayList<E>());
-    }
+	public ReadWriteArrayList() {
+		super(new ArrayList<E>());
+	}
 
-    public ReadWriteArrayList(int initialCapacity) {
-	super(new ArrayList<E>(initialCapacity));
-    }
+	public ReadWriteArrayList(int initialCapacity) {
+		super(new ArrayList<E>(initialCapacity));
+	}
 
-    public ReadWriteArrayList(Collection<? extends E> c) {
-	super(new ArrayList<E>(c));
-    }
+	public ReadWriteArrayList(Collection<? extends E> c) {
+		super(new ArrayList<E>(c));
+	}
 
 }

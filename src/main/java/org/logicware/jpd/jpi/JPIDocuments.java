@@ -20,40 +20,31 @@
 package org.logicware.jpd.jpi;
 
 import org.logicware.jpd.AbstractDocuments;
-import org.logicware.jpd.Cache;
 import org.logicware.jpd.ContainerFactory;
 import org.logicware.jpd.Document;
 import org.logicware.jpd.DocumentManager;
 import org.logicware.jpd.DocumentPool;
-import org.logicware.jpd.Documents;
 import org.logicware.jpd.Properties;
 import org.logicware.jpi.PrologProvider;
 
 public abstract class JPIDocuments extends AbstractDocuments {
 
-    protected JPIDocuments(Properties properties, PrologProvider provider) {
-	super(properties, provider);
-    }
+	protected JPIDocuments(Properties properties, PrologProvider provider) {
+		super(properties, provider);
+	}
 
-    public abstract Cache createCache();
+	public final Document createDocument(String path) {
+		return new JPIDocument(getProvider(), path);
+	}
 
-    public abstract Documents getInstance();
+	public final DocumentPool createDocumentPool(String path) {
+		ContainerFactory factory = createContainerFactory();
+		return new JPIDocumentPool(getProvider(), getProperties(), path, factory);
+	}
 
-    @Override
-    public final Document createDocument(String path) {
-	return new JPIDocument(getProvider(), path);
-    }
-
-    @Override
-    public final DocumentPool createDocumentPool(String path) {
-	ContainerFactory factory = createContainerFactory();
-	return new JPIDocumentPool(getProvider(), getProperties(), path, factory);
-    }
-
-    @Override
-    public final DocumentManager createDocumentManager(String path) {
-	ContainerFactory factory = createContainerFactory();
-	return new JPIDocumentManager(getProvider(), path, factory);
-    }
+	public final DocumentManager createDocumentManager(String path) {
+		ContainerFactory factory = createContainerFactory();
+		return new JPIDocumentManager(getProvider(), path, factory);
+	}
 
 }

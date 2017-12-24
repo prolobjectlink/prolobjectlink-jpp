@@ -23,11 +23,11 @@ import org.logicware.jpp.RuntimeError;
 
 final class ProcedureInvokationError extends RuntimeError {
 
-    private static final long serialVersionUID = -1926528417397697548L;
+	private static final long serialVersionUID = -1926528417397697548L;
 
-    ProcedureInvokationError(String name, int expected, int invoked) {
-	super("Illegal arguments number for procedure " + name + " invocation. Expected " + expected
-		+ " and was invoked with " + invoked);
-    }
+	ProcedureInvokationError(String name, int expected, int invoked) {
+		super("Illegal arguments number for procedure " + name + " invocation. Expected " + expected
+				+ " and was invoked with " + invoked);
+	}
 
 }

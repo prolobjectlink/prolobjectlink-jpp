@@ -23,15 +23,15 @@ import org.logicware.jpp.RuntimeError;
 
 public final class AtomicExpectedError extends RuntimeError {
 
-    private static final long serialVersionUID = -3064952286859633255L;
+	private static final long serialVersionUID = -3064952286859633255L;
 
-    public AtomicExpectedError(PrologTerm term) {
-	super("The expected term is not a atomic term : " + term);
-    }
+	public AtomicExpectedError(PrologTerm term) {
+		super("The expected term is not a atomic term : " + term);
+	}
 
-    @Deprecated
-    public AtomicExpectedError(Class<?> sender, Object term) {
-	super(sender, "The expected term is not a atomic term : " + term);
-    }
+	@Deprecated
+	public AtomicExpectedError(Class<?> sender, Object term) {
+		super(sender, "The expected term is not a atomic term : " + term);
+	}
 
 }

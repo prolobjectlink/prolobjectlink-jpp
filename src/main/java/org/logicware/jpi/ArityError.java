@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 public final class ArityError extends RuntimeError {
 
-    private static final long serialVersionUID = 2828526751667597579L;
+	private static final long serialVersionUID = 2828526751667597579L;
 
-    public ArityError(PrologTerm term) {
-	super("The term not have arity: " + term);
-    }
+	public ArityError(PrologTerm term) {
+		super("The term not have arity: " + term);
+	}
 
 }

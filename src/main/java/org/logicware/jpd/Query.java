@@ -31,80 +31,80 @@ import java.util.List;
  */
 public interface Query extends TypedQuery<Object> {
 
-    /**
-     * Return the maximum number of solutions to retrieve by the formulated
-     * query
-     * 
-     * @return maximum number of solutions
-     * @since 1.0
-     */
-    public int getMaxSolution();
+	/**
+	 * Return the maximum number of solutions to retrieve by the formulated
+	 * query
+	 * 
+	 * @return maximum number of solutions
+	 * @since 1.0
+	 */
+	public int getMaxSolution();
 
-    /**
-     * Fix the maximum number of solutions to retrieve by the formulated query
-     * 
-     * @param maxSolution
-     *            maximum number of solutions
-     * @return current instance of {@code TypedQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public Query setMaxSolution(int maxSolution);
+	/**
+	 * Fix the maximum number of solutions to retrieve by the formulated query
+	 * 
+	 * @param maxSolution
+	 *            maximum number of solutions
+	 * @return current instance of {@code TypedQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public Query setMaxSolution(int maxSolution);
 
-    /**
-     * Return the fixed position for the first solution to retrieve
-     * 
-     * @return position for the first solution
-     * @since 1.0
-     */
-    public int getFirstSolution();
+	/**
+	 * Return the fixed position for the first solution to retrieve
+	 * 
+	 * @return position for the first solution
+	 * @since 1.0
+	 */
+	public int getFirstSolution();
 
-    /**
-     * Fix the position of the first solution to retrieve.
-     * 
-     * @param firstSolution
-     *            position of the first solution
-     * @return current instance of {@code TypedQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public Query setFirstSolution(int firstSolution);
+	/**
+	 * Fix the position of the first solution to retrieve.
+	 * 
+	 * @param firstSolution
+	 *            position of the first solution
+	 * @return current instance of {@code TypedQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public Query setFirstSolution(int firstSolution);
 
-    /**
-     * @throws NonSolutionError
-     * 
-     */
-    public Object getSolution() throws NonSolutionError;
+	/**
+	 * @throws NonSolutionError
+	 * 
+	 */
+	public Object getSolution() throws NonSolutionError;
 
-    /**
-     * 
-     */
-    public List<Object> getSolutions();
+	/**
+	 * 
+	 */
+	public List<Object> getSolutions();
 
-    /**
-     * 
-     */
-    public Query orderAscending();
+	/**
+	 * 
+	 */
+	public Query orderAscending();
 
-    /**
-     * 
-     */
-    public Query orderDescending();
+	/**
+	 * 
+	 */
+	public Query orderDescending();
 
-    /**
-     * 
-     */
-    public Query orderBy(Comparator<Object> comparator);
+	/**
+	 * 
+	 */
+	public Query orderBy(Comparator<Object> comparator);
 
-    /**
-     * 
-     */
-    public Query descend(String name);
+	/**
+	 * 
+	 */
+	public Query descend(String name);
 
-    /**
-     * Release all allocations and references for the current object
-     * 
-     * @since 1.0
-     */
-    public void dispose();
+	/**
+	 * Release all allocations and references for the current object
+	 * 
+	 * @since 1.0
+	 */
+	public void dispose();
 }

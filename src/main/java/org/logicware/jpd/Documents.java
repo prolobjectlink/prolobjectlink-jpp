@@ -21,6 +21,6 @@ package org.logicware.jpd;
 
 public interface Documents extends Factories {
 
-    Documents getInstance();
+	Documents getInstance();
 
 }

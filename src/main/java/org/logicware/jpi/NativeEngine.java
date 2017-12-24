@@ -30,8 +30,8 @@ package org.logicware.jpi;
  */
 public abstract class NativeEngine extends AbstractEngine implements PrologEngine {
 
-    public NativeEngine(PrologProvider provider) {
-	super(provider);
-    }
+	public NativeEngine(PrologProvider provider) {
+		super(provider);
+	}
 
 }

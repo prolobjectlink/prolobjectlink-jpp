@@ -21,6 +21,6 @@ package org.logicware.jpi;
 
 public abstract class AbstractFactory {
 
-    // protected static final ObjectReflector reflector = new ObjectReflector();
+	// protected static final ObjectReflector reflector = new ObjectReflector();
 
 }

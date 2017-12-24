@@ -21,68 +21,68 @@ package org.logicware.jpd;
 
 public abstract class AbstractQuery<S> {
 
-    protected static final ExceptionFactory EXCEPTIONS = new ExceptionFactory();
+	protected static final ExceptionFactory EXCEPTIONS = new ExceptionFactory();
 
-    protected final ObjectReflector reflector = new ObjectReflector();
+	protected final ObjectReflector reflector = new ObjectReflector();
 
-    /** Greatest possible solutions number to achieve */
-    protected static final int MAX = Integer.MAX_VALUE;
+	/** Greatest possible solutions number to achieve */
+	protected static final int MAX = Integer.MAX_VALUE;
 
-    /** Fix maximum of result number */
-    protected int maxSolution = MAX;
+	/** Fix maximum of result number */
+	protected int maxSolution = MAX;
 
-    /** Fix the first position of result */
-    protected int firstSolution = 0;
+	/** Fix the first position of result */
+	protected int firstSolution = 0;
 
-    public final int getFirstSolution() {
-	return firstSolution;
-    }
-
-    public final int getMaxSolution() {
-	return maxSolution;
-    }
-
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + firstSolution;
-	result = prime * result + maxSolution;
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	AbstractQuery<S> other = (AbstractQuery<S>) obj;
-	if (firstSolution != other.firstSolution)
-	    return false;
-	if (maxSolution != other.maxSolution)
-	    return false;
-	return true;
-    }
-
-    protected final void checkEmptySolution(int size) throws NonSolutionError {
-	if (size == 0) {
-	    throw EXCEPTIONS.nonSolutionException();
+	public final int getFirstSolution() {
+		return firstSolution;
 	}
-    }
 
-    protected final void checkNonNegativePosition(int position) {
-	if (position < 0) {
-	    throw EXCEPTIONS.badPositionException(position);
+	public final int getMaxSolution() {
+		return maxSolution;
 	}
-    }
 
-    protected final void checkSolutionAt(int position, int size) {
-	if (position >= size) {
-	    throw EXCEPTIONS.badPositionException(position);
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + firstSolution;
+		result = prime * result + maxSolution;
+		return result;
 	}
-    }
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractQuery<S> other = (AbstractQuery<S>) obj;
+		if (firstSolution != other.firstSolution)
+			return false;
+		if (maxSolution != other.maxSolution)
+			return false;
+		return true;
+	}
+
+	protected final void checkEmptySolution(int size) throws NonSolutionError {
+		if (size == 0) {
+			throw EXCEPTIONS.nonSolutionException();
+		}
+	}
+
+	protected final void checkNonNegativePosition(int position) {
+		if (position < 0) {
+			throw EXCEPTIONS.badPositionException(position);
+		}
+	}
+
+	protected final void checkSolutionAt(int position, int size) {
+		if (position >= size) {
+			throw EXCEPTIONS.badPositionException(position);
+		}
+	}
 
 }

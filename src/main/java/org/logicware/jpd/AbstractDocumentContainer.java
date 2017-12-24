@@ -26,58 +26,20 @@ import org.logicware.jpi.PrologTerm;
 
 public abstract class AbstractDocumentContainer extends AbstractPersistentDocument implements DocumentContainer {
 
-    // container factory for create containers
-    protected final ContainerFactory containerFactory;
+	// container factory for create containers
+	protected final ContainerFactory containerFactory;
 
-    // file system separator
-    protected final static char separator = File.separatorChar;
+	// file system separator
+	protected static final char SEPARATOR = File.separatorChar;
 
-    protected AbstractDocumentContainer(PrologProvider provider, Properties properties,
-	    ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory) {
-	super(provider, properties, converter, location);
-	this.containerFactory = containerFactory;
-    }
+	protected AbstractDocumentContainer(PrologProvider provider, Properties properties,
+			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory) {
+		super(provider, properties, converter, location);
+		this.containerFactory = containerFactory;
+	}
 
-    public final ContainerFactory getContainerFactory() {
-	return containerFactory;
-    }
-
-    public abstract void open();
-
-    public abstract <O> void insert(O... objects);
-
-    public abstract <O> void update(O match, O update);
-
-    public abstract <O> void delete(O... objects);
-
-    public abstract void delete(Class<?> clazz);
-
-    public abstract boolean contains(String string);
-
-    public abstract <O> boolean contains(O o);
-
-    public abstract <O> boolean contains(Class<O> clazz);
-
-    public abstract <O> boolean contains(Predicate<O> predicate);
-
-    public abstract Transaction getTransaction();
-
-    public abstract Query createQuery(String string);
-
-    public abstract <O> TypedQuery<O> createQuery(O o);
-
-    public abstract <O> TypedQuery<O> createQuery(Class<O> clazz);
-
-    public abstract <O> TypedQuery<O> createQuery(Predicate<O> predicate);
-
-    public abstract <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz);
-
-    public abstract ProcedureQuery createProcedureQuery(String functor, String... args);
-
-    public abstract PersistentContainer containerOf(Class<?> clazz);
-
-    public abstract String locationOf(Class<?> clazz);
-
-    public abstract void close();
+	public final ContainerFactory getContainerFactory() {
+		return containerFactory;
+	}
 
 }

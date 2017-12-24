@@ -23,140 +23,134 @@ import java.util.Map;
 
 public abstract class AbstractProvider implements PrologProvider {
 
-    protected final PrologConverter<?> converter;
+	protected final PrologConverter<?> converter;
 
-    public AbstractProvider(PrologConverter<?> converter) {
-	this.converter = converter;
-    }
-
-    public final PrologList parsePrologList(String stringList) {
-	PrologTerm term = parsePrologTerm(stringList);
-	checkListType(term);
-	return (PrologList) term;
-    }
-
-    public final PrologStructure parsePrologStructure(String stringStructure) {
-	PrologTerm term = parsePrologTerm(stringStructure);
-	checkStructureType(term);
-	return (PrologStructure) term;
-    }
-
-    public final PrologExpression parsePrologExpression(String stringExpression) {
-	PrologTerm term = parsePrologTerm(stringExpression);
-	checkExpressionType(term);
-	return (PrologExpression) term;
-    }
-
-    public final PrologFloat newFloat() {
-	return newFloat(0F);
-    }
-
-    public final PrologDouble newDouble() {
-	return newDouble(0D);
-    }
-
-    public final PrologInteger newInteger() {
-	return newInteger(0);
-    }
-
-    public final PrologLong newLong() {
-	return newLong(0L);
-    }
-
-    public final <K extends PrologTerm> K toTerm(Object o, Class<K> from) {
-	return converter.toTerm(o, from);
-    }
-
-    public final <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from) {
-	return converter.toTermArray(os, from);
-    }
-
-    public final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
-	return converter.toTermTable(oss, from);
-    }
-
-    public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
-	    Class<K> from) {
-	return converter.toTermMap(map, from);
-    }
-
-    public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
-	    Class<K> from) {
-	return converter.toTermMapArray(map, from);
-    }
-
-    public final PrologConverter<?> getConverter() {
-	return converter;
-    }
-
-    public final <K> K fromTerm(PrologTerm term, Class<K> to) {
-	return converter.fromTerm(term, to);
-    }
-
-    public final <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to) {
-	return converter.fromTermArray(terms, to);
-    }
-
-    public final <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to) {
-	return converter.fromTerm(head, body, to);
-    }
-
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((converter == null) ? 0 : converter.hashCode());
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	AbstractProvider other = (AbstractProvider) obj;
-	if (converter == null) {
-	    if (other.converter != null)
-		return false;
-	} else if (!converter.equals(other.converter))
-	    return false;
-	return true;
-    }
-
-    @Override
-    public abstract String toString();
-
-    protected final void checkNumberType(PrologTerm term) {
-	if (!term.isNumber()) {
-	    throw new NumberExpectedError(term);
+	public AbstractProvider(PrologConverter<?> converter) {
+		this.converter = converter;
 	}
-    }
 
-    protected final void checkListType(PrologTerm term) {
-	if (!term.isList()) {
-	    throw new ListExpectedError(term);
+	public final PrologList parsePrologList(String stringList) {
+		PrologTerm term = parsePrologTerm(stringList);
+		checkListType(term);
+		return (PrologList) term;
 	}
-    }
 
-    protected final void checkStructureType(PrologTerm term) {
-	if (!term.isStructure()) {
-	    throw new StructureExpectedError(term);
+	public final PrologStructure parsePrologStructure(String stringStructure) {
+		PrologTerm term = parsePrologTerm(stringStructure);
+		checkStructureType(term);
+		return (PrologStructure) term;
 	}
-    }
 
-    protected final void checkExpressionType(PrologTerm term) {
-	if (!term.isEvaluable()) {
-	    throw new ExpressionExpectedError(term);
+	public final PrologFloat newFloat() {
+		return newFloat(0F);
 	}
-    }
 
-    protected final void checkIndexOutOfBound(int index, int lenght) {
-	if (index < 0 || index > lenght) {
-	    throw new ArrayIndexOutOfBoundsException(index);
+	public final PrologDouble newDouble() {
+		return newDouble(0D);
 	}
-    }
+
+	public final PrologInteger newInteger() {
+		return newInteger(0);
+	}
+
+	public final PrologLong newLong() {
+		return newLong(0L);
+	}
+
+	public final <K extends PrologTerm> K toTerm(Object o, Class<K> from) {
+		return converter.toTerm(o, from);
+	}
+
+	public final <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from) {
+		return converter.toTermArray(os, from);
+	}
+
+	public final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
+		return converter.toTermTable(oss, from);
+	}
+
+	public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
+			Class<K> from) {
+		return converter.toTermMap(map, from);
+	}
+
+	public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
+			Class<K> from) {
+		return converter.toTermMapArray(map, from);
+	}
+
+	public final PrologConverter<?> getConverter() {
+		return converter;
+	}
+
+	public final <K> K fromTerm(PrologTerm term, Class<K> to) {
+		return converter.fromTerm(term, to);
+	}
+
+	public final <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to) {
+		return converter.fromTermArray(terms, to);
+	}
+
+	public final <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to) {
+		return converter.fromTerm(head, body, to);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((converter == null) ? 0 : converter.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractProvider other = (AbstractProvider) obj;
+		if (converter == null) {
+			if (other.converter != null)
+				return false;
+		} else if (!converter.equals(other.converter))
+			return false;
+		return true;
+	}
+
+	@Override
+	public abstract String toString();
+
+	protected final void checkNumberType(PrologTerm term) {
+		if (!term.isNumber()) {
+			throw new NumberExpectedError(term);
+		}
+	}
+
+	protected final void checkListType(PrologTerm term) {
+		if (!term.isList()) {
+			throw new ListExpectedError(term);
+		}
+	}
+
+	protected final void checkStructureType(PrologTerm term) {
+		if (!term.isStructure()) {
+			throw new StructureExpectedError(term);
+		}
+	}
+
+	protected final void checkExpressionType(PrologTerm term) {
+		if (!term.isEvaluable()) {
+			throw new ExpressionExpectedError(term);
+		}
+	}
+
+	protected final void checkIndexOutOfBound(int index, int lenght) {
+		if (index < 0 || index > lenght) {
+			throw new ArrayIndexOutOfBoundsException(index);
+		}
+	}
 
 }

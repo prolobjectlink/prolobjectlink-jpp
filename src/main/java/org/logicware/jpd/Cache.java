@@ -21,17 +21,17 @@ package org.logicware.jpd;
 
 public interface Cache extends VolatileContainer {
 
-    /**
-     * Remove all object of given class from the cache.
-     * 
-     * @param cls
-     *            entity class
-     */
-    public void evict(Class<?> cls);
+	/**
+	 * Remove all object of given class from the cache.
+	 * 
+	 * @param cls
+	 *            entity class
+	 */
+	public void evict(Class<?> cls);
 
-    /**
-     * Clear the cache.
-     */
-    public void evictAll();
+	/**
+	 * Clear the cache.
+	 */
+	public void evictAll();
 
 }

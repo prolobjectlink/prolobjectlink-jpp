@@ -19,7 +19,7 @@
  */
 package org.logicware.jpd.jpi;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.logicware.jpd.AbstractDocumentManager;
 import org.logicware.jpd.Container;
@@ -43,28 +43,28 @@ import org.logicware.jpi.PrologTerm;
  */
 public class JPIDocumentManager extends AbstractDocumentManager implements DocumentManager {
 
-    public JPIDocumentManager(PrologProvider provider, String location, ContainerFactory containerFactory) {
-	super(provider, new Properties(), new JPIObjectConverter(provider), location, containerFactory);
-    }
-
-    public JPIDocumentManager(PrologProvider provider, Properties properties, String location,
-	    ContainerFactory containerFactory) {
-	super(provider, properties, new JPIObjectConverter(provider), location, containerFactory);
-    }
-
-    public JPIDocumentManager(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
-	    String location, ContainerFactory containerFactory) {
-	super(provider, properties, converter, location, containerFactory);
-    }
-
-    public Query createQuery(String string) {
-	ObjectConverter<PrologTerm> c = getConverter();
-	PrologTerm[] terms = c.toTermsArray(string);
-	ArrayList<Class<?>> classes = classesOf(terms);
-	for (Class<?> clazz : classes) {
-	    getEngine().include(locationOf(clazz));
+	public JPIDocumentManager(PrologProvider provider, String location, ContainerFactory containerFactory) {
+		super(provider, new Properties(), new JPIObjectConverter(provider), location, containerFactory);
 	}
-	return new JPIQuery(solutionsOf(terms, classes));
-    }
+
+	public JPIDocumentManager(PrologProvider provider, Properties properties, String location,
+			ContainerFactory containerFactory) {
+		super(provider, properties, new JPIObjectConverter(provider), location, containerFactory);
+	}
+
+	public JPIDocumentManager(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+			String location, ContainerFactory containerFactory) {
+		super(provider, properties, converter, location, containerFactory);
+	}
+
+	public Query createQuery(String string) {
+		ObjectConverter<PrologTerm> c = getConverter();
+		PrologTerm[] terms = c.toTermsArray(string);
+		List<Class<?>> classes = classesOf(terms);
+		for (Class<?> clazz : classes) {
+			getEngine().include(locationOf(clazz));
+		}
+		return new JPIQuery(solutionsOf(terms, classes));
+	}
 
 }

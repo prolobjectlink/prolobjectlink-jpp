@@ -23,14 +23,14 @@ import java.io.IOException;
 
 public class IOError extends IOException {
 
-    private static final long serialVersionUID = 1919293874391034648L;
+	private static final long serialVersionUID = 1919293874391034648L;
 
-    public IOError(String message) {
-	super(message);
-    }
+	public IOError(String message) {
+		super(message);
+	}
 
-    public IOError(String message, Throwable cause) {
-	super(message, cause);
-    }
+	public IOError(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

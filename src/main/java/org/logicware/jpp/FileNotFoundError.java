@@ -21,14 +21,14 @@ package org.logicware.jpp;
 
 public final class FileNotFoundError extends RuntimeError {
 
-    private static final long serialVersionUID = 2392446209035440426L;
+	private static final long serialVersionUID = 2392446209035440426L;
 
-    public FileNotFoundError(Class<?> sender, String name) {
-	super(sender, "The file " + name + " is not found.");
-    }
+	public FileNotFoundError(Class<?> sender, String name) {
+		super(sender, "The file " + name + " is not found.");
+	}
 
-    public FileNotFoundError(Class<?> sender, String name, Throwable cause) {
-	super(sender, "The file " + name + " is not found.", cause);
-    }
+	public FileNotFoundError(Class<?> sender, String name, Throwable cause) {
+		super(sender, "The file " + name + " is not found.", cause);
+	}
 
 }

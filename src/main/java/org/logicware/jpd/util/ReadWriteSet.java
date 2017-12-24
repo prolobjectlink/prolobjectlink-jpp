@@ -28,126 +28,126 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public abstract class ReadWriteSet<E> implements Set<E> {
 
-    private final transient ReadWriteLock lock = new ReentrantReadWriteLock();
-    private final transient Lock writeLock = lock.writeLock();
-    private final transient Lock readLock = lock.readLock();
-    private final transient Set<E> set;
+	private final ReadWriteLock lock = new ReentrantReadWriteLock();
+	private final Lock writeLock = lock.writeLock();
+	private final Lock readLock = lock.readLock();
+	private final Set<E> set;
 
-    protected ReadWriteSet(Set<E> set) {
-	this.set = set;
-    }
-
-    public final int size() {
-	readLock.lock();
-	try {
-	    return set.size();
-	} finally {
-	    readLock.unlock();
+	protected ReadWriteSet(Set<E> set) {
+		this.set = set;
 	}
-    }
 
-    public final boolean isEmpty() {
-	readLock.lock();
-	try {
-	    return set.isEmpty();
-	} finally {
-	    readLock.unlock();
+	public final int size() {
+		readLock.lock();
+		try {
+			return set.size();
+		} finally {
+			readLock.unlock();
+		}
 	}
-    }
 
-    public final boolean contains(Object o) {
-	readLock.lock();
-	try {
-	    return set.contains(o);
-	} finally {
-	    readLock.unlock();
+	public final boolean isEmpty() {
+		readLock.lock();
+		try {
+			return set.isEmpty();
+		} finally {
+			readLock.unlock();
+		}
 	}
-    }
 
-    public final Iterator<E> iterator() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    public final Object[] toArray() {
-	readLock.lock();
-	try {
-	    return set.toArray();
-	} finally {
-	    readLock.unlock();
+	public final boolean contains(Object o) {
+		readLock.lock();
+		try {
+			return set.contains(o);
+		} finally {
+			readLock.unlock();
+		}
 	}
-    }
 
-    public final <T> T[] toArray(T[] a) {
-	readLock.lock();
-	try {
-	    return set.toArray(a);
-	} finally {
-	    readLock.unlock();
+	public final Iterator<E> iterator() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-    }
 
-    public final boolean add(E e) {
-	writeLock.lock();
-	try {
-	    return set.add(e);
-	} finally {
-	    writeLock.unlock();
+	public final Object[] toArray() {
+		readLock.lock();
+		try {
+			return set.toArray();
+		} finally {
+			readLock.unlock();
+		}
 	}
-    }
 
-    public final boolean remove(Object o) {
-	writeLock.lock();
-	try {
-	    return set.remove(o);
-	} finally {
-	    writeLock.unlock();
+	public final <T> T[] toArray(T[] a) {
+		readLock.lock();
+		try {
+			return set.toArray(a);
+		} finally {
+			readLock.unlock();
+		}
 	}
-    }
 
-    public final boolean containsAll(Collection<?> c) {
-	readLock.lock();
-	try {
-	    return set.containsAll(c);
-	} finally {
-	    readLock.unlock();
+	public final boolean add(E e) {
+		writeLock.lock();
+		try {
+			return set.add(e);
+		} finally {
+			writeLock.unlock();
+		}
 	}
-    }
 
-    public final boolean addAll(Collection<? extends E> c) {
-	writeLock.lock();
-	try {
-	    return set.addAll(c);
-	} finally {
-	    writeLock.unlock();
+	public final boolean remove(Object o) {
+		writeLock.lock();
+		try {
+			return set.remove(o);
+		} finally {
+			writeLock.unlock();
+		}
 	}
-    }
 
-    public final boolean retainAll(Collection<?> c) {
-	writeLock.lock();
-	try {
-	    return set.retainAll(c);
-	} finally {
-	    writeLock.unlock();
+	public final boolean containsAll(Collection<?> c) {
+		readLock.lock();
+		try {
+			return set.containsAll(c);
+		} finally {
+			readLock.unlock();
+		}
 	}
-    }
 
-    public final boolean removeAll(Collection<?> c) {
-	writeLock.lock();
-	try {
-	    return set.removeAll(c);
-	} finally {
-	    writeLock.unlock();
+	public final boolean addAll(Collection<? extends E> c) {
+		writeLock.lock();
+		try {
+			return set.addAll(c);
+		} finally {
+			writeLock.unlock();
+		}
 	}
-    }
 
-    public final void clear() {
-	writeLock.lock();
-	try {
-	    set.clear();
-	} finally {
-	    writeLock.unlock();
+	public final boolean retainAll(Collection<?> c) {
+		writeLock.lock();
+		try {
+			return set.retainAll(c);
+		} finally {
+			writeLock.unlock();
+		}
 	}
-    }
+
+	public final boolean removeAll(Collection<?> c) {
+		writeLock.lock();
+		try {
+			return set.removeAll(c);
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
+	public final void clear() {
+		writeLock.lock();
+		try {
+			set.clear();
+		} finally {
+			writeLock.unlock();
+		}
+	}
 
 }

@@ -23,24 +23,24 @@ import org.logicware.jpp.RuntimeError;
 
 public final class SyntaxError extends RuntimeError {
 
-    private static final long serialVersionUID = 2828526751667597579L;
+	private static final long serialVersionUID = 2828526751667597579L;
 
-    public SyntaxError(String string) {
-	super("The string parsed have prolog syntax error: " + string);
-    }
+	public SyntaxError(String string) {
+		super("The string parsed have prolog syntax error: " + string);
+	}
 
-    public SyntaxError(String string, Throwable cause) {
-	super("The string parsed have prolog syntax error: " + string, cause);
-    }
+	public SyntaxError(String string, Throwable cause) {
+		super("The string parsed have prolog syntax error: " + string, cause);
+	}
 
-    @Deprecated
-    public SyntaxError(Class<?> sender, String string) {
-	super(sender, "The string parsed have prolog syntax error: " + string);
-    }
+	@Deprecated
+	public SyntaxError(Class<?> sender, String string) {
+		super(sender, "The string parsed have prolog syntax error: " + string);
+	}
 
-    @Deprecated
-    public SyntaxError(Class<?> sender, String string, Throwable cause) {
-	super(sender, "The string parsed have prolog syntax error: " + string, cause);
-    }
+	@Deprecated
+	public SyntaxError(Class<?> sender, String string, Throwable cause) {
+		super(sender, "The string parsed have prolog syntax error: " + string, cause);
+	}
 
 }

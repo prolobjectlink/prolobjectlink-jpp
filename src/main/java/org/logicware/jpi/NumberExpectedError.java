@@ -23,15 +23,15 @@ import org.logicware.jpp.RuntimeError;
 
 public final class NumberExpectedError extends RuntimeError {
 
-    private static final long serialVersionUID = -3064952286859633255L;
+	private static final long serialVersionUID = -3064952286859633255L;
 
-    public NumberExpectedError(PrologTerm term) {
-	super("The expected term is not an number : " + term);
-    }
+	public NumberExpectedError(PrologTerm term) {
+		super("The expected term is not an number : " + term);
+	}
 
-    @Deprecated
-    public NumberExpectedError(Class<?> sender, Object term) {
-	super(sender, "The expected term is not an number : " + term);
-    }
+	@Deprecated
+	public NumberExpectedError(Class<?> sender, Object term) {
+		super(sender, "The expected term is not an number : " + term);
+	}
 
 }

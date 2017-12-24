@@ -21,36 +21,36 @@ package org.logicware.jpi;
 
 public interface PrologClause {
 
-    public PrologTerm getTerm();
+	public PrologTerm getTerm();
 
-    public PrologTerm getHead();
+	public PrologTerm getHead();
 
-    public PrologTerm getBody();
+	public PrologTerm getBody();
 
-    public String getFunctor();
+	public String getFunctor();
 
-    public int getArity();
+	public int getArity();
 
-    public String getIndicator();
+	public String getIndicator();
 
-    public boolean isDirective();
+	public boolean isDirective();
 
-    public boolean isFact();
+	public boolean isFact();
 
-    public boolean isRule();
+	public boolean isRule();
 
-    public boolean unify(PrologClause clause);
+	public boolean unify(PrologClause clause);
 
-    public boolean isDynamic();
+	public boolean isDynamic();
 
-    public boolean isMultifile();
+	public boolean isMultifile();
 
-    public boolean isDiscontiguous();
+	public boolean isDiscontiguous();
 
-    public int hashCode();
+	public int hashCode();
 
-    public boolean equals(Object obj);
+	public boolean equals(Object obj);
 
-    public String toString();
+	public String toString();
 
 }

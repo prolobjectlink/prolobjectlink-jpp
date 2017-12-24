@@ -19,57 +19,60 @@
  */
 package org.logicware.jpd.io;
 
-public final class File {
+import java.io.Serializable;
 
-    private final String path;
-    private final transient java.io.File file;
+public final class File implements Serializable {
 
-    public File(String path) {
-	this.path = path;
-	this.file = new java.io.File(path);
-    }
+	private final String path;
+	private final transient java.io.File f;
+	private static final long serialVersionUID = -8477430758107520956L;
 
-    public File(java.io.File file) {
-	this.file = file;
-	this.path = file.getPath();
-    }
+	public File(String path) {
+		this.path = path;
+		this.f = new java.io.File(path);
+	}
 
-    public String getPath() {
-	return path;
-    }
+	public File(java.io.File file) {
+		this.f = file;
+		this.path = file.getPath();
+	}
 
-    public java.io.File getFile() {
-	return file;
-    }
+	public String getPath() {
+		return path;
+	}
 
-    @Override
-    public String toString() {
-	return path;
-    }
+	public java.io.File getFile() {
+		return f;
+	}
 
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((path == null) ? 0 : path.hashCode());
-	return result;
-    }
+	@Override
+	public String toString() {
+		return path;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	File other = (File) obj;
-	if (path == null) {
-	    if (other.path != null)
-		return false;
-	} else if (!path.equals(other.path))
-	    return false;
-	return true;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		File other = (File) obj;
+		if (path == null) {
+			if (other.path != null)
+				return false;
+		} else if (!path.equals(other.path))
+			return false;
+		return true;
+	}
 
 }

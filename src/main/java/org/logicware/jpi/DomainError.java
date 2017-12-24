@@ -23,14 +23,14 @@ import org.logicware.jpp.RuntimeError;
 
 public final class DomainError extends RuntimeError {
 
-    private static final long serialVersionUID = 2828526751667597579L;
+	private static final long serialVersionUID = 2828526751667597579L;
 
-    public DomainError(String string) {
-	super(string);
-    }
+	public DomainError(String string) {
+		super(string);
+	}
 
-    public DomainError(String string, Throwable cause) {
-	super(string, cause);
-    }
+	public DomainError(String string, Throwable cause) {
+		super(string, cause);
+	}
 
 }

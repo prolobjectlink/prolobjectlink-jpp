@@ -21,29 +21,29 @@ package org.logicware.jpd;
 
 public interface Restorable {
 
-    /**
-     * Create a database backup named zipFileName.zip hosted on the specified
-     * directory.
-     * 
-     * @param directory
-     *            location to save create zipFileName.zip
-     * @param zipFileName
-     *            database backup file name
-     * @since 1.0
-     * @see #restore(String, String)
-     */
-    public void backup(String directory, String zipFileName);
+	/**
+	 * Create a database backup named zipFileName.zip hosted on the specified
+	 * directory.
+	 * 
+	 * @param directory
+	 *            location to save create zipFileName.zip
+	 * @param zipFileName
+	 *            database backup file name
+	 * @since 1.0
+	 * @see #restore(String, String)
+	 */
+	public void backup(String directory, String zipFileName);
 
-    /**
-     * Restore a database backup named zipFileName in the directory location.
-     * 
-     * @param directory
-     *            location to restore database
-     * @param zipFileName
-     *            database backup file name
-     * @since 1.0
-     * @see #backup(String, String)
-     */
-    public void restore(String directory, String zipFileName);
+	/**
+	 * Restore a database backup named zipFileName in the directory location.
+	 * 
+	 * @param directory
+	 *            location to restore database
+	 * @param zipFileName
+	 *            database backup file name
+	 * @since 1.0
+	 * @see #backup(String, String)
+	 */
+	public void restore(String directory, String zipFileName);
 
 }

@@ -21,20 +21,20 @@ package org.logicware.jpi;
 
 public interface PrologNumber extends PrologTerm {
 
-    public int getIntValue();
+	public int getIntValue();
 
-    public long getLongValue();
+	public long getLongValue();
 
-    public float getFloatValue();
+	public float getFloatValue();
 
-    public double getDoubleValue();
+	public double getDoubleValue();
 
-    public PrologFloat getPrologFloat();
+	public PrologFloat getPrologFloat();
 
-    public PrologInteger getPrologInteger();
+	public PrologInteger getPrologInteger();
 
-    public PrologDouble getPrologDouble();
+	public PrologDouble getPrologDouble();
 
-    public PrologLong getPrologLong();
+	public PrologLong getPrologLong();
 
 }

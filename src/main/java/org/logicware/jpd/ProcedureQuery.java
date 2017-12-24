@@ -29,59 +29,59 @@ import java.util.List;
  */
 public interface ProcedureQuery extends Enumeration<Object> {
 
-    /**
-     * Return the maximum number of solutions to retrieve by the formulated
-     * query
-     * 
-     * @return maximum number of solutions
-     * @since 1.0
-     */
-    public int getMaxSolution();
+	/**
+	 * Return the maximum number of solutions to retrieve by the formulated
+	 * query
+	 * 
+	 * @return maximum number of solutions
+	 * @since 1.0
+	 */
+	public int getMaxSolution();
 
-    /**
-     * Fix the maximum number of solutions to retrieve by the formulated query
-     * 
-     * @param maxSolution
-     *            maximum number of solutions
-     * @return current instance of procedure query with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public ProcedureQuery setMaxSolution(int maxSolution);
+	/**
+	 * Fix the maximum number of solutions to retrieve by the formulated query
+	 * 
+	 * @param maxSolution
+	 *            maximum number of solutions
+	 * @return current instance of procedure query with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public ProcedureQuery setMaxSolution(int maxSolution);
 
-    /**
-     * Return the fixed position for the first solution to retrieve
-     * 
-     * @return position for the first solution
-     * @since 1.0
-     */
-    public int getFirstSolution();
+	/**
+	 * Return the fixed position for the first solution to retrieve
+	 * 
+	 * @return position for the first solution
+	 * @since 1.0
+	 */
+	public int getFirstSolution();
 
-    /**
-     * Fix the position of the first solution to retrieve.
-     * 
-     * @param firstSolution
-     *            position of the first solution
-     * @return current instance of procedure query with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public ProcedureQuery setFirstSolution(int firstSolution);
+	/**
+	 * Fix the position of the first solution to retrieve.
+	 * 
+	 * @param firstSolution
+	 *            position of the first solution
+	 * @return current instance of procedure query with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public ProcedureQuery setFirstSolution(int firstSolution);
 
-    public Object getArgumentValue(int position);
+	public Object getArgumentValue(int position);
 
-    public Object getArgumentValue(String name);
+	public Object getArgumentValue(String name);
 
-    public ProcedureQuery setArgumentValue(int position, Object value);
+	public ProcedureQuery setArgumentValue(int position, Object value);
 
-    public ProcedureQuery setArgumentValue(String name, Object value);
+	public ProcedureQuery setArgumentValue(String name, Object value);
 
-    public ProcedureQuery execute();
+	public ProcedureQuery execute();
 
-    public List<Object> getSolutions();
+	public List<Object> getSolutions();
 
-    public Object getSolution() throws NonSolutionError;
+	public Object getSolution() throws NonSolutionError;
 
-    public void dispose();
+	public void dispose();
 
 }

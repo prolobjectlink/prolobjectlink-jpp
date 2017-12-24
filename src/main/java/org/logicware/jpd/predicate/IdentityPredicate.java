@@ -23,14 +23,14 @@ import org.logicware.jpd.Predicate;
 
 public final class IdentityPredicate<O> implements Predicate<O> {
 
-    private final Object value;
+	private final Object value;
 
-    public IdentityPredicate(Object value) {
-	this.value = value;
-    }
+	public IdentityPredicate(Object value) {
+		this.value = value;
+	}
 
-    public boolean evaluate(O o) {
-	return o == value;
-    }
+	public boolean evaluate(O o) {
+		return o == value;
+	}
 
 }

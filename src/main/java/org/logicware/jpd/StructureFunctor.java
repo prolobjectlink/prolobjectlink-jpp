@@ -38,12 +38,12 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 public @interface StructureFunctor {
 
-    /**
-     * Specify the structure functor in prolog equivalent object
-     * 
-     * @return name structure functor in prolog equivalent object name
-     * @since 1.0
-     */
-    String name();
+	/**
+	 * Specify the structure functor in prolog equivalent object
+	 * 
+	 * @return name structure functor in prolog equivalent object name
+	 * @since 1.0
+	 */
+	String name();
 
 }

@@ -24,20 +24,20 @@ import java.util.Map;
 
 public final class ReadWriteHashMap<K, V> extends ReadWriteMap<K, V> implements Map<K, V> {
 
-    public ReadWriteHashMap() {
-	super(new HashMap<K, V>());
-    }
+	public ReadWriteHashMap() {
+		super(new HashMap<K, V>());
+	}
 
-    public ReadWriteHashMap(int initialCapacity) {
-	super(new HashMap<K, V>(initialCapacity));
-    }
+	public ReadWriteHashMap(int initialCapacity) {
+		super(new HashMap<K, V>(initialCapacity));
+	}
 
-    public ReadWriteHashMap(int initialCapacity, float loadFactor) {
-	super(new HashMap<K, V>(initialCapacity, loadFactor));
-    }
+	public ReadWriteHashMap(int initialCapacity, float loadFactor) {
+		super(new HashMap<K, V>(initialCapacity, loadFactor));
+	}
 
-    public ReadWriteHashMap(Map<? extends K, ? extends V> m) {
-	super(new HashMap<K, V>(m));
-    }
+	public ReadWriteHashMap(Map<? extends K, ? extends V> m) {
+		super(new HashMap<K, V>(m));
+	}
 
 }

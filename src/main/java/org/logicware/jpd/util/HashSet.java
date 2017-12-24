@@ -26,190 +26,188 @@ import java.util.NoSuchElementException;
 
 public class HashSet<E> extends AbstractSet<E> {
 
-    private int size;
-    private Object[] table;
+	private int size;
+	private Object[] table;
 
-    public HashSet() {
-	table = new Object[16];
-    }
-
-    public HashSet(Collection<? extends E> c) {
-	this();
-	addAll(c);
-    }
-
-    private int indexOf(int hash) {
-	int colision = 0;
-	int capacity = table.length;
-	int index = hash < 0 ? -hash % capacity : hash % capacity;
-	while (table[index] != null && table[index].hashCode() != hash) {
-	    index += 2 * ++colision - 1;
-	    if (index >= table.length) {
-		index -= table.length;
-	    }
+	public HashSet() {
+		table = new Object[16];
 	}
-	return index;
-    }
 
-    public int getSize() {
-	return size;
-    }
+	public HashSet(Collection<? extends E> c) {
+		this();
+		addAll(c);
+	}
 
-    public void setSize(int size) {
-	this.size = size;
-    }
+	private int indexOf(int hash) {
+		int colision = 0;
+		int capacity = table.length;
+		int index = hash < 0 ? -hash % capacity : hash % capacity;
+		while (table[index] != null && table[index].hashCode() != hash) {
+			index += 2 * ++colision - 1;
+			if (index >= table.length) {
+				index -= table.length;
+			}
+		}
+		return index;
+	}
 
-    public Object[] getTable() {
-	return table;
-    }
+	public int getSize() {
+		return size;
+	}
 
-    public void setTable(Object[] table) {
-	this.table = table;
-    }
+	public void setSize(int size) {
+		this.size = size;
+	}
 
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + size;
-	result = prime * result + Arrays.hashCode(table);
-	return result;
-    }
+	public Object[] getTable() {
+		return table;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	HashSet<?> other = (HashSet<?>) obj;
-	if (size != other.size)
-	    return false;
-	if (!Arrays.equals(table, other.table))
-	    return false;
-	return true;
-    }
+	public void setTable(Object[] table) {
+		this.table = table;
+	}
 
-    public boolean add(E e) {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + size;
+		result = prime * result + Arrays.hashCode(table);
+		return result;
+	}
 
-	int hash = e.hashCode();
-	int index = indexOf(hash);
-	if (table[index] == null) {
-	    table[index] = e;
-	    float loadFactor = 0.75f;
-	    int capacity = table.length;
-	    if (++size >= capacity * loadFactor) {
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HashSet<?> other = (HashSet<?>) obj;
+		if (size != other.size)
+			return false;
+		if (!Arrays.equals(table, other.table))
+			return false;
+		return true;
+	}
 
-		// rehashing and copy
+	public boolean add(E e) {
 
-		int newCapacity = 2 * capacity;
-		Object[] oldTable = table;
+		int hash = e.hashCode();
+		int index = indexOf(hash);
+		if (table[index] == null) {
+			table[index] = e;
+			float loadFactor = 0.75f;
+			int capacity = table.length;
+			if (++size >= capacity * loadFactor) {
 
+				// rehashing and copy
+
+				int newCapacity = 2 * capacity;
+				Object[] oldTable = table;
+
+				size = 0;
+				table = new Object[newCapacity];
+				for (int i = 0; i < oldTable.length; i++) {
+					if (oldTable[i] != null) {
+						add((E) oldTable[i]);
+					}
+				}
+
+			}
+
+			return true;
+
+		}
+
+		return false;
+	}
+
+	public boolean remove(Object o) {
+		int hash = o.hashCode();
+		int index = indexOf(hash);
+		if (table[index] != null) {
+			table[index] = null;
+			size--;
+			return true;
+		}
+		return false;
+	}
+
+	public void clear() {
 		size = 0;
-		table = new Object[newCapacity];
-		for (int i = 0; i < oldTable.length; i++) {
-		    if (oldTable[i] != null) {
-			add((E) oldTable[i]);
-		    }
+		int i = 0;
+		while (i < table.length) {
+			table[i++] = null;
+		}
+	}
+
+	public int size() {
+		return size;
+	}
+
+	public Iterator<E> iterator() {
+		return new HashSetIterator();
+	}
+
+	private class HashSetIterator implements Iterator<E> {
+
+		private Object next;
+		private Object last;
+
+		// indexes
+		private int nextIndex;
+		private int lastIndex;
+
+		// check illegal state
+		private boolean canRemove;
+
+		public HashSetIterator() {
+			last = next;
+			lastIndex = nextIndex;
+			next = table[nextIndex++];
+			if (next == null) {
+				while (nextIndex < table.length && next == null) {
+					next = table[nextIndex++];
+				}
+			}
 		}
 
-	    }
-
-	    return true;
-
-	}
-
-	return false;
-    }
-
-    public boolean remove(Object o) {
-	int hash = o.hashCode();
-	int index = indexOf(hash);
-	if (table[index] != null) {
-	    table[index] = null;
-	    size--;
-	    return true;
-	}
-	return false;
-    }
-
-    public void clear() {
-	size = 0;
-	int i = 0;
-	while (i < table.length) {
-	    table[i++] = null;
-	}
-    }
-
-    @Override
-    public int size() {
-	return size;
-    }
-
-    @Override
-    public Iterator<E> iterator() {
-	return new HashSetIterator();
-    }
-
-    private class HashSetIterator implements Iterator<E> {
-
-	private Object next;
-	private Object last;
-
-	// indexes
-	private int nextIndex;
-	private int lastIndex;
-
-	// check illegal state
-	private boolean canRemove;
-
-	public HashSetIterator() {
-	    last = next;
-	    lastIndex = nextIndex;
-	    next = table[nextIndex++];
-	    if (next == null) {
-		while (nextIndex < table.length && next == null) {
-		    next = table[nextIndex++];
+		public boolean hasNext() {
+			return next != null;
 		}
-	    }
-	}
 
-	public boolean hasNext() {
-	    return next != null;
-	}
+		public E next() {
 
-	public E next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
 
-	    if (!hasNext()) {
-		throw new NoSuchElementException();
-	    }
+			canRemove = true;
 
-	    canRemove = true;
+			last = next;
+			lastIndex = nextIndex;
+			next = table[nextIndex++];
+			if (next == null) {
+				while (nextIndex < table.length && next == null) {
+					next = table[nextIndex++];
+				}
+			}
 
-	    last = next;
-	    lastIndex = nextIndex;
-	    next = table[nextIndex++];
-	    if (next == null) {
-		while (nextIndex < table.length && next == null) {
-		    next = table[nextIndex++];
+			return (E) last;
 		}
-	    }
 
-	    return (E) last;
+		public void remove() {
+
+			if (!canRemove) {
+				throw new IllegalStateException();
+			}
+
+			table[lastIndex - 1] = null;
+			size--;
+		}
+
 	}
-
-	public void remove() {
-
-	    if (!canRemove) {
-		throw new IllegalStateException();
-	    }
-
-	    table[lastIndex - 1] = null;
-	    size--;
-	}
-
-    }
 
 }

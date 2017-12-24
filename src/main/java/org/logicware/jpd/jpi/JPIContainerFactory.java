@@ -30,29 +30,26 @@ import org.logicware.jpi.PrologProvider;
 
 public abstract class JPIContainerFactory extends AbstractFactories implements ContainerFactory {
 
-    protected JPIContainerFactory(Properties properties, PrologProvider provider) {
-	super(properties, provider);
-    }
+	protected JPIContainerFactory(Properties properties, PrologProvider provider) {
+		super(properties, provider);
+	}
 
-    public Cache createCache() {
-	return new JPICache(getProvider(), getProperties());
-    }
+	public Cache createCache() {
+		return new JPICache(getProvider(), getProperties());
+	}
 
-    @Override
-    public Document createDocument(String path) {
-	return new JPIDocument(getProvider(), getProperties(), path);
-    }
+	public Document createDocument(String path) {
+		return new JPIDocument(getProvider(), getProperties(), path);
+	}
 
-    @Override
-    public DocumentPool createDocumentPool(String path) {
-	ContainerFactory factory = createContainerFactory();
-	return new JPIDocumentPool(getProvider(), getProperties(), path, factory);
-    }
+	public DocumentPool createDocumentPool(String path) {
+		ContainerFactory factory = createContainerFactory();
+		return new JPIDocumentPool(getProvider(), getProperties(), path, factory);
+	}
 
-    @Override
-    public DocumentManager createDocumentManager(String path) {
-	ContainerFactory factory = createContainerFactory();
-	return new JPIDocumentManager(getProvider(), getProperties(), path, factory);
-    }
+	public DocumentManager createDocumentManager(String path) {
+		ContainerFactory factory = createContainerFactory();
+		return new JPIDocumentManager(getProvider(), getProperties(), path, factory);
+	}
 
 }

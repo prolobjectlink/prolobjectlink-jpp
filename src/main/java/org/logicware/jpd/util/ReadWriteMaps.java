@@ -33,36 +33,39 @@ import java.util.Map;
  */
 public final class ReadWriteMaps {
 
-    public static <K, V> ReadWriteMap<K, V> newReadWriteHashMap() {
-	return new ReadWriteHashMap<K, V>();
-    }
+	private ReadWriteMaps() {
+	}
 
-    public static <K, V> ReadWriteMap<K, V> newReadWriteHashMap(int initialCapacity) {
-	return new ReadWriteHashMap<K, V>(initialCapacity);
-    }
+	public static <K, V> ReadWriteMap<K, V> newReadWriteHashMap() {
+		return new ReadWriteHashMap<K, V>();
+	}
 
-    public static <K, V> ReadWriteMap<K, V> newReadWriteHashMap(int initialCapacity, float loadFactor) {
-	return new ReadWriteHashMap<K, V>(initialCapacity, loadFactor);
-    }
+	public static <K, V> ReadWriteMap<K, V> newReadWriteHashMap(int initialCapacity) {
+		return new ReadWriteHashMap<K, V>(initialCapacity);
+	}
 
-    public static <K, V> ReadWriteMap<K, V> newReadWriteHashMap(Map<? extends K, ? extends V> m) {
-	return new ReadWriteHashMap<K, V>(m);
-    }
+	public static <K, V> ReadWriteMap<K, V> newReadWriteHashMap(int initialCapacity, float loadFactor) {
+		return new ReadWriteHashMap<K, V>(initialCapacity, loadFactor);
+	}
 
-    public static <K, V> ReadWriteMap<K, V> newReadWriteLinkedHashMap() {
-	return new ReadWriteLinkedHashMap<K, V>();
-    }
+	public static <K, V> ReadWriteMap<K, V> newReadWriteHashMap(Map<? extends K, ? extends V> m) {
+		return new ReadWriteHashMap<K, V>(m);
+	}
 
-    public static <K, V> ReadWriteMap<K, V> newReadWriteLinkedHashMap(int initialCapacity) {
-	return new ReadWriteLinkedHashMap<K, V>(initialCapacity);
-    }
+	public static <K, V> ReadWriteMap<K, V> newReadWriteLinkedHashMap() {
+		return new ReadWriteLinkedHashMap<K, V>();
+	}
 
-    public static <K, V> ReadWriteMap<K, V> newReadWriteLinkedHashMap(int initialCapacity, float loadFactor) {
-	return new ReadWriteLinkedHashMap<K, V>(initialCapacity, loadFactor);
-    }
+	public static <K, V> ReadWriteMap<K, V> newReadWriteLinkedHashMap(int initialCapacity) {
+		return new ReadWriteLinkedHashMap<K, V>(initialCapacity);
+	}
 
-    public static <K, V> ReadWriteMap<K, V> newReadWriteLinkedHashMap(Map<? extends K, ? extends V> m) {
-	return new ReadWriteLinkedHashMap<K, V>(m);
-    }
+	public static <K, V> ReadWriteMap<K, V> newReadWriteLinkedHashMap(int initialCapacity, float loadFactor) {
+		return new ReadWriteLinkedHashMap<K, V>(initialCapacity, loadFactor);
+	}
+
+	public static <K, V> ReadWriteMap<K, V> newReadWriteLinkedHashMap(Map<? extends K, ? extends V> m) {
+		return new ReadWriteLinkedHashMap<K, V>(m);
+	}
 
 }

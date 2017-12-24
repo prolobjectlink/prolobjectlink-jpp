@@ -21,10 +21,10 @@ package org.logicware.jpd;
 
 public class NonSolutionError extends Exception {
 
-    private static final long serialVersionUID = 8801603216803755048L;
+	private static final long serialVersionUID = 8801603216803755048L;
 
-    public NonSolutionError() {
-	super("The query no have any solution");
-    }
+	public NonSolutionError() {
+		super("The query no have any solution");
+	}
 
 }

@@ -21,32 +21,32 @@ package org.logicware.jpi;
 
 public interface PrologVariable extends PrologTerm {
 
-    /**
-     * Check that current variable be an anonymous variable
-     * 
-     * @return - true if the current variable is an anonymous variable, false in
-     *         other case
-     * @since 1.0
-     */
-    public boolean isAnonymous();
+	/**
+	 * Check that current variable be an anonymous variable
+	 * 
+	 * @return - true if the current variable is an anonymous variable, false in
+	 *         other case
+	 * @since 1.0
+	 */
+	public boolean isAnonymous();
 
-    /**
-     * Name that identify this variable
-     * 
-     * @return variable name
-     * @since 1.0
-     */
-    public String getName();
+	/**
+	 * Name that identify this variable
+	 * 
+	 * @return variable name
+	 * @since 1.0
+	 */
+	public String getName();
 
-    public void setName(String name);
+	public void setName(String name);
 
-    /**
-     * Non negative integer that represent the variable position of the
-     * Structure where the variable is first time declared.
-     * 
-     * @return
-     * @since 1.0
-     */
-    public int getPosition();
+	/**
+	 * Non negative integer that represent the variable position of the
+	 * Structure where the variable is first time declared.
+	 * 
+	 * @return
+	 * @since 1.0
+	 */
+	public int getPosition();
 
 }

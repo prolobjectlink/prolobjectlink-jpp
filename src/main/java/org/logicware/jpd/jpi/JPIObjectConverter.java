@@ -39,338 +39,338 @@ import org.logicware.jpp.ClassNotFoundError;
 
 public final class JPIObjectConverter extends AbstractConverter<PrologTerm> implements ObjectConverter<PrologTerm> {
 
-    public JPIObjectConverter(PrologProvider provider) {
-	super(provider);
-    }
-
-    public Class<?> toClass(PrologTerm prologTerm) {
-	switch (prologTerm.getType()) {
-	case PrologTerm.NIL_TYPE:
-	    return null;
-	case PrologTerm.TRUE_TYPE:
-	    return Boolean.class;
-	case PrologTerm.FALSE_TYPE:
-	    return Boolean.class;
-	case PrologTerm.ATOM_TYPE:
-	    return String.class;
-	case PrologTerm.INTEGER_TYPE:
-	    return Integer.class;
-	case PrologTerm.FLOAT_TYPE:
-	    return Float.class;
-	case PrologTerm.LONG_TYPE:
-	    return Long.class;
-	case PrologTerm.DOUBLE_TYPE:
-	    return Double.class;
-	case PrologTerm.EMPTY_TYPE:
-	    return Object[].class;
-	case PrologTerm.LIST_TYPE:
-	    return Object[].class;
-	case PrologTerm.STRUCTURE_TYPE:
-	    String className = removeApices(prologTerm.getFunctor());
-	    try {
-		return Class.forName(className);
-	    } catch (ClassNotFoundException e) {
-		throw new ClassNotFoundError(className, e);
-	    }
-	default:
-	    throw new UnknownTermError(prologTerm);
-	}
-    }
-
-    public Object toObject(PrologTerm prologTerm) {
-
-	if (prologTerm == null) {
-	    return null;
+	public JPIObjectConverter(PrologProvider provider) {
+		super(provider);
 	}
 
-	switch (prologTerm.getType()) {
-	case PrologTerm.NIL_TYPE:
-	    return null;
-	case PrologTerm.TRUE_TYPE:
-	    return true;
-	case PrologTerm.FALSE_TYPE:
-	    return false;
-	case PrologTerm.EMPTY_TYPE:
-	    return new Object[0];
-	case PrologTerm.ATOM_TYPE:
-	    return new String(removeApices(prologTerm.getFunctor()));
-	case PrologTerm.INTEGER_TYPE:
-	    return new Integer(((PrologInteger) prologTerm).getIntValue());
-	case PrologTerm.FLOAT_TYPE:
-	    return new Float(((PrologFloat) prologTerm).getFloatValue());
-	case PrologTerm.LONG_TYPE:
-	    return new Long(((PrologLong) prologTerm).getLongValue());
-	case PrologTerm.DOUBLE_TYPE:
-	    return new Double(((PrologDouble) prologTerm).getDoubleValue());
-	case PrologTerm.VARIABLE_TYPE:
-	    return null;
-	case PrologTerm.LIST_TYPE:
-	    return toObjectsArray(prologTerm.getArguments());
-	case PrologTerm.STRUCTURE_TYPE: {
+	public Class<?> toClass(PrologTerm prologTerm) {
+		switch (prologTerm.getType()) {
+		case PrologTerm.NIL_TYPE:
+			return null;
+		case PrologTerm.TRUE_TYPE:
+			return Boolean.class;
+		case PrologTerm.FALSE_TYPE:
+			return Boolean.class;
+		case PrologTerm.ATOM_TYPE:
+			return String.class;
+		case PrologTerm.INTEGER_TYPE:
+			return Integer.class;
+		case PrologTerm.FLOAT_TYPE:
+			return Float.class;
+		case PrologTerm.LONG_TYPE:
+			return Long.class;
+		case PrologTerm.DOUBLE_TYPE:
+			return Double.class;
+		case PrologTerm.EMPTY_TYPE:
+			return Object[].class;
+		case PrologTerm.LIST_TYPE:
+			return Object[].class;
+		case PrologTerm.STRUCTURE_TYPE:
+			String className = removeApices(prologTerm.getFunctor());
+			try {
+				return Class.forName(className);
+			} catch (ClassNotFoundException e) {
+				throw new ClassNotFoundError(className, e);
+			}
+		default:
+			throw new UnknownTermError(prologTerm);
+		}
+	}
 
-	    PrologStructure prologStructure = (PrologStructure) prologTerm;
+	public Object toObject(PrologTerm prologTerm) {
 
-	    Object object = null;
-
-	    // getting prolog structure functor that have complex atom syntax
-	    String functor = prologStructure.getFunctor();
-
-	    // class name is removed quotes of the complex functor syntax
-	    String className = removeApices(functor);
-
-	    try {
-
-		// getting class from class map
-		Class<?> classPtr = Class.forName(className);
-
-		// creating new instance
-		object = newInstance(classPtr);
-
-		Deque<Field> stack = new ArrayDeque<Field>();
-
-		while (classPtr != Object.class) {
-
-		    // getting declared fields
-		    Field[] fields = classPtr.getDeclaredFields();
-
-		    for (int i = fields.length - 1; i >= 0; i--) {
-
-			// staking field for write
-			// in FIFO order
-			stack.push(fields[i]);
-
-		    }
-
-		    // update class pointer for the next super class
-		    classPtr = classPtr.getSuperclass();
+		if (prologTerm == null) {
+			return null;
 		}
 
-		PrologTerm[] prologArguments = prologStructure.getArguments();
+		switch (prologTerm.getType()) {
+		case PrologTerm.NIL_TYPE:
+			return null;
+		case PrologTerm.TRUE_TYPE:
+			return true;
+		case PrologTerm.FALSE_TYPE:
+			return false;
+		case PrologTerm.EMPTY_TYPE:
+			return new Object[0];
+		case PrologTerm.ATOM_TYPE:
+			return new String(removeApices(prologTerm.getFunctor()));
+		case PrologTerm.INTEGER_TYPE:
+			return new Integer(((PrologInteger) prologTerm).getIntValue());
+		case PrologTerm.FLOAT_TYPE:
+			return new Float(((PrologFloat) prologTerm).getFloatValue());
+		case PrologTerm.LONG_TYPE:
+			return new Long(((PrologLong) prologTerm).getLongValue());
+		case PrologTerm.DOUBLE_TYPE:
+			return new Double(((PrologDouble) prologTerm).getDoubleValue());
+		case PrologTerm.VARIABLE_TYPE:
+			return null;
+		case PrologTerm.LIST_TYPE:
+			return toObjectsArray(prologTerm.getArguments());
+		case PrologTerm.STRUCTURE_TYPE: {
 
-		for (int i = 0; i < prologArguments.length && !stack.isEmpty(); i++) {
+			PrologStructure prologStructure = (PrologStructure) prologTerm;
 
-		    //
-		    Field field = stack.pop();
+			Object object = null;
 
-		    // recovery data object
-		    Object value = toObject(prologStructure.getArguments()[i]);
+			// getting prolog structure functor that have complex atom syntax
+			String functor = prologStructure.getFunctor();
 
-		    // write field with argument value
-		    writeValue(field, object, value);
+			// class name is removed quotes of the complex functor syntax
+			String className = removeApices(functor);
 
-		}
+			try {
 
-	    } catch (ClassNotFoundException e) {
-		throw new ClassNotFoundError(className, e);
-	    }
+				// getting class from class map
+				Class<?> classPtr = Class.forName(className);
 
-	    return object;
-	}
-	default:
-	    throw new UnknownTermError(prologTerm);
-	}
-    }
+				// creating new instance
+				object = newInstance(classPtr);
 
-    public PrologTerm toTerm(Object object) {
+				Deque<Field> stack = new ArrayDeque<Field>();
 
-	// null pointer
-	if (object == null) {
-	    return provider.prologNil();
-	}
+				while (classPtr != Object.class) {
 
-	// class data type
-	else if (object instanceof Class) {
-	    return toStructure((Class<?>) object, null);
-	}
+					// getting declared fields
+					Field[] fields = classPtr.getDeclaredFields();
 
-	// string data type
-	else if (object instanceof String) {
-	    return provider.newAtom("" + (String) object + "");
-	}
+					for (int i = fields.length - 1; i >= 0; i--) {
 
-	// primitives and wrappers data types
-	else if (object.getClass() == boolean.class || object instanceof Boolean) {
-	    return (Boolean) object ? provider.prologTrue() : provider.prologFalse();
-	} else if (object.getClass() == int.class || object instanceof Integer) {
-	    return provider.newInteger((Integer) object);
-	} else if (object.getClass() == float.class || object instanceof Float) {
-	    return provider.newFloat((Float) object);
-	} else if (object.getClass() == long.class || object instanceof Long) {
-	    return provider.newLong((Long) object);
-	} else if (object.getClass() == double.class || object instanceof Double) {
-	    return provider.newDouble((Double) object);
-	}
+						// staking field for write
+						// in FIFO order
+						stack.push(fields[i]);
 
-	//
-	else if (object instanceof Object[]) {
-	    return provider.newList(toTermsArray((Object[]) object));
-	} else {
-	    return toStructure(object.getClass(), object);
-	}
+					}
 
-    }
+					// update class pointer for the next super class
+					classPtr = classPtr.getSuperclass();
+				}
 
-    public PrologTerm toTerm(Object object, Map<String, PrologTerm> solutionsMap) {
+				PrologTerm[] prologArguments = prologStructure.getArguments();
 
-	// null pointer
-	if (object == null) {
-	    return provider.prologNil();
-	}
+				for (int i = 0; i < prologArguments.length && !stack.isEmpty(); i++) {
 
-	// class data type
-	else if (object instanceof Class) {
-	    return toStructure((Class<?>) object, null);
-	}
+					//
+					Field field = stack.pop();
 
-	// string data type
-	else if (object instanceof String) {
-	    return provider.newAtom("" + (String) object + "");
-	}
+					// recovery data object
+					Object value = toObject(prologStructure.getArguments()[i]);
 
-	// primitives and wrappers data types
-	else if (object.getClass() == boolean.class || object instanceof Boolean) {
-	    return (Boolean) object ? provider.prologTrue() : provider.prologFalse();
-	} else if (object.getClass() == int.class || object instanceof Integer) {
-	    return provider.newInteger((Integer) object);
-	} else if (object.getClass() == float.class || object instanceof Float) {
-	    return provider.newFloat((Float) object);
-	} else if (object.getClass() == long.class || object instanceof Long) {
-	    return provider.newLong((Long) object);
-	} else if (object.getClass() == double.class || object instanceof Double) {
-	    return provider.newDouble((Double) object);
-	}
+					// write field with argument value
+					writeValue(field, object, value);
 
-	//
-	else if (object instanceof Object[]) {
-	    return provider.newList(toTermsArray((Object[]) object));
-	} else {
+				}
 
-	    // retrieve object class
-	    Class<?> classPtr = object.getClass();
-
-	    // stack for resolve prolog structure arguments order
-	    Deque<PrologTerm> stack = new ArrayDeque<PrologTerm>();
-
-	    // class name to convert in predicate functor
-	    String className = classPtr.getName();
-
-	    // setting quotes to complex class name
-	    String functor = "'" + className + "'";
-
-	    // loop for resolve inheritance classes
-	    while (classPtr != Object.class) {
-
-		// getting declared fields
-		Field[] fields = classPtr.getDeclaredFields();
-
-		for (int i = fields.length - 1; i >= 0; i--) {
-		    Field field = fields[i];
-
-		    if (isPersistent(field) && !isStaticAndFinal(field)) {
-
-			String fieldName = field.getName();
-
-			Object argument = readValue(field, object);
-
-			// variable name = field name first char in upper case
-			String variableName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
-
-			if (argument == null) {
-			    if (solutionsMap.containsKey(variableName)) {
-				stack.push(solutionsMap.get(variableName));
-			    } else {
-				PrologVariable variableArgument = provider.newVariable(variableName, i);
-				stack.push(variableArgument);
-			    }
-			} else {
-			    PrologTerm prologArgument = toTerm(argument);
-			    stack.push(prologArgument);
-			    solutionsMap.put(variableName, prologArgument);
+			} catch (ClassNotFoundException e) {
+				throw new ClassNotFoundError(className, e);
 			}
 
-		    }
+			return object;
+		}
+		default:
+			throw new UnknownTermError(prologTerm);
+		}
+	}
 
+	public PrologTerm toTerm(Object object) {
+
+		// null pointer
+		if (object == null) {
+			return provider.prologNil();
 		}
 
-		// update class pointer for the next super class
-		classPtr = classPtr.getSuperclass();
-	    }
-
-	    PrologTerm[] prologArguments = new PrologTerm[stack.size()];
-	    for (int i = 0; i < prologArguments.length || !stack.isEmpty(); i++) {
-		prologArguments[i] = stack.pop();
-	    }
-
-	    return provider.newStructure(functor, prologArguments);
-
-	}
-    }
-
-    // public PrologTerm[] createPrologTermsArray(String string) {
-    // return provider.parsePrologTerms(string);
-    // }
-
-    public PrologTerm[] toTermsArray(Object[] objects) {
-	PrologTerm[] terms = new PrologTerm[objects.length];
-	for (int i = 0; i < objects.length; i++) {
-	    terms[i] = toTerm(objects[i]);
-	}
-	return terms;
-    }
-
-    private PrologStructure toStructure(Class<?> clazz, Object object) {
-
-	Class<?> classPtr = clazz;
-
-	// stack for resolve prolog structure arguments order
-	Deque<PrologTerm> stack = new ArrayDeque<PrologTerm>();
-
-	// class name to convert in predicate functor
-	String functor = "'" + classPtr.getName() + "'";
-
-	// loop for resolve term inheritance classes
-	while (classPtr != Object.class) {
-
-	    // getting declared fields
-	    Field[] fields = classPtr.getDeclaredFields();
-
-	    for (int i = fields.length - 1; i >= 0; i--) {
-		Field field = fields[i];
-
-		// check persistence condition
-		if (isPersistent(field) && !isStaticAndFinal(field)) {
-
-		    String fieldName = field.getName();
-
-		    if (object != null) {
-
-			Object argument = readValue(field, object);
-			PrologTerm prologArgument = toTerm(argument);
-			stack.push(prologArgument);
-
-		    } else {
-
-			// variable name = field name first char in upper case
-			String varName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
-
-			// pushing the variable name for create predicate
-			stack.push(provider.newVariable(varName, i));
-		    }
-
+		// class data type
+		else if (object instanceof Class) {
+			return toStructure((Class<?>) object, null);
 		}
 
-	    }
+		// string data type
+		else if (object instanceof String) {
+			return provider.newAtom("" + (String) object + "");
+		}
 
-	    // update class pointer for the next super class
-	    classPtr = classPtr.getSuperclass();
+		// primitives and wrappers data types
+		else if (object.getClass() == boolean.class || object instanceof Boolean) {
+			return (Boolean) object ? provider.prologTrue() : provider.prologFalse();
+		} else if (object.getClass() == int.class || object instanceof Integer) {
+			return provider.newInteger((Integer) object);
+		} else if (object.getClass() == float.class || object instanceof Float) {
+			return provider.newFloat((Float) object);
+		} else if (object.getClass() == long.class || object instanceof Long) {
+			return provider.newLong((Long) object);
+		} else if (object.getClass() == double.class || object instanceof Double) {
+			return provider.newDouble((Double) object);
+		}
+
+		//
+		else if (object instanceof Object[]) {
+			return provider.newList(toTermsArray((Object[]) object));
+		} else {
+			return toStructure(object.getClass(), object);
+		}
+
 	}
 
-	PrologTerm[] prologArguments = new PrologTerm[stack.size()];
-	for (int i = 0; i < prologArguments.length || !stack.isEmpty(); i++) {
-	    prologArguments[i] = stack.pop();
+	public PrologTerm toTerm(Object object, Map<String, PrologTerm> solutionsMap) {
+
+		// null pointer
+		if (object == null) {
+			return provider.prologNil();
+		}
+
+		// class data type
+		else if (object instanceof Class) {
+			return toStructure((Class<?>) object, null);
+		}
+
+		// string data type
+		else if (object instanceof String) {
+			return provider.newAtom("" + (String) object + "");
+		}
+
+		// primitives and wrappers data types
+		else if (object.getClass() == boolean.class || object instanceof Boolean) {
+			return (Boolean) object ? provider.prologTrue() : provider.prologFalse();
+		} else if (object.getClass() == int.class || object instanceof Integer) {
+			return provider.newInteger((Integer) object);
+		} else if (object.getClass() == float.class || object instanceof Float) {
+			return provider.newFloat((Float) object);
+		} else if (object.getClass() == long.class || object instanceof Long) {
+			return provider.newLong((Long) object);
+		} else if (object.getClass() == double.class || object instanceof Double) {
+			return provider.newDouble((Double) object);
+		}
+
+		//
+		else if (object instanceof Object[]) {
+			return provider.newList(toTermsArray((Object[]) object));
+		} else {
+
+			// retrieve object class
+			Class<?> classPtr = object.getClass();
+
+			// stack for resolve prolog structure arguments order
+			Deque<PrologTerm> stack = new ArrayDeque<PrologTerm>();
+
+			// class name to convert in predicate functor
+			String className = classPtr.getName();
+
+			// setting quotes to complex class name
+			String functor = "'" + className + "'";
+
+			// loop for resolve inheritance classes
+			while (classPtr != Object.class) {
+
+				// getting declared fields
+				Field[] fields = classPtr.getDeclaredFields();
+
+				for (int i = fields.length - 1; i >= 0; i--) {
+					Field field = fields[i];
+
+					if (isPersistent(field) && !isStaticAndFinal(field)) {
+
+						String fieldName = field.getName();
+
+						Object argument = readValue(field, object);
+
+						// variable name = field name first char in upper case
+						String variableName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+
+						if (argument == null) {
+							if (solutionsMap.containsKey(variableName)) {
+								stack.push(solutionsMap.get(variableName));
+							} else {
+								PrologVariable variableArgument = provider.newVariable(variableName, i);
+								stack.push(variableArgument);
+							}
+						} else {
+							PrologTerm prologArgument = toTerm(argument);
+							stack.push(prologArgument);
+							solutionsMap.put(variableName, prologArgument);
+						}
+
+					}
+
+				}
+
+				// update class pointer for the next super class
+				classPtr = classPtr.getSuperclass();
+			}
+
+			PrologTerm[] prologArguments = new PrologTerm[stack.size()];
+			for (int i = 0; i < prologArguments.length || !stack.isEmpty(); i++) {
+				prologArguments[i] = stack.pop();
+			}
+
+			return provider.newStructure(functor, prologArguments);
+
+		}
 	}
 
-	return provider.newStructure(functor, prologArguments);
-    }
+	// public PrologTerm[] createPrologTermsArray(String string) {
+	// return provider.parsePrologTerms(string);
+	// }
+
+	public PrologTerm[] toTermsArray(Object[] objects) {
+		PrologTerm[] terms = new PrologTerm[objects.length];
+		for (int i = 0; i < objects.length; i++) {
+			terms[i] = toTerm(objects[i]);
+		}
+		return terms;
+	}
+
+	private PrologStructure toStructure(Class<?> clazz, Object object) {
+
+		Class<?> classPtr = clazz;
+
+		// stack for resolve prolog structure arguments order
+		Deque<PrologTerm> stack = new ArrayDeque<PrologTerm>();
+
+		// class name to convert in predicate functor
+		String functor = "'" + classPtr.getName() + "'";
+
+		// loop for resolve term inheritance classes
+		while (classPtr != Object.class) {
+
+			// getting declared fields
+			Field[] fields = classPtr.getDeclaredFields();
+
+			for (int i = fields.length - 1; i >= 0; i--) {
+				Field field = fields[i];
+
+				// check persistence condition
+				if (isPersistent(field) && !isStaticAndFinal(field)) {
+
+					String fieldName = field.getName();
+
+					if (object != null) {
+
+						Object argument = readValue(field, object);
+						PrologTerm prologArgument = toTerm(argument);
+						stack.push(prologArgument);
+
+					} else {
+
+						// variable name = field name first char in upper case
+						String varName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+
+						// pushing the variable name for create predicate
+						stack.push(provider.newVariable(varName, i));
+					}
+
+				}
+
+			}
+
+			// update class pointer for the next super class
+			classPtr = classPtr.getSuperclass();
+		}
+
+		PrologTerm[] prologArguments = new PrologTerm[stack.size()];
+		for (int i = 0; i < prologArguments.length || !stack.isEmpty(); i++) {
+			prologArguments[i] = stack.pop();
+		}
+
+		return provider.newStructure(functor, prologArguments);
+	}
 
 }

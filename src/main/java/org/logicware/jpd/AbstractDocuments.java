@@ -23,12 +23,8 @@ import org.logicware.jpi.PrologProvider;
 
 public abstract class AbstractDocuments extends AbstractFactories implements Documents {
 
-    protected AbstractDocuments(Properties properties, PrologProvider provider) {
-	super(properties, provider);
-    }
-
-    public abstract ContainerFactory createContainerFactory();
-
-    public abstract Documents getInstance();
+	protected AbstractDocuments(Properties properties, PrologProvider provider) {
+		super(properties, provider);
+	}
 
 }

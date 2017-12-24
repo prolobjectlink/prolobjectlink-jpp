@@ -32,29 +32,23 @@ import java.util.Set;
  */
 public abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
 
-    public AbstractSet() {
-    }
-
-    @Override
-    public String toString() {
-	String result = "[";
-	Iterator<E> i = iterator();
-	if (i.hasNext()) {
-	    E entry = i.next();
-	    result += entry;
-	    while (i.hasNext()) {
-		entry = i.next();
-		result += ", ";
-		result += entry;
-	    }
+	public AbstractSet() {
 	}
-	return result + "]";
-    }
 
-    @Override
-    public abstract int hashCode();
-
-    @Override
-    public abstract boolean equals(Object obj);
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder("[");
+		Iterator<E> i = iterator();
+		if (i.hasNext()) {
+			E entry = i.next();
+			result.append(entry);
+			while (i.hasNext()) {
+				entry = i.next();
+				result.append(", ");
+				result.append(entry);
+			}
+		}
+		return result + "]";
+	}
 
 }

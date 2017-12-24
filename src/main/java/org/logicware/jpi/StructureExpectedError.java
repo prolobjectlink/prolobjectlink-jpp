@@ -23,15 +23,15 @@ import org.logicware.jpp.RuntimeError;
 
 public final class StructureExpectedError extends RuntimeError {
 
-    private static final long serialVersionUID = -3064952286859633255L;
+	private static final long serialVersionUID = -3064952286859633255L;
 
-    public StructureExpectedError(Object term) {
-	super("The expected term is not a structure : " + term);
-    }
+	public StructureExpectedError(Object term) {
+		super("The expected term is not a structure : " + term);
+	}
 
-    @Deprecated
-    public StructureExpectedError(Class<?> sender, Object term) {
-	super(sender, "The expected term is not a structure : " + term);
-    }
+	@Deprecated
+	public StructureExpectedError(Class<?> sender, Object term) {
+		super(sender, "The expected term is not a structure : " + term);
+	}
 
 }

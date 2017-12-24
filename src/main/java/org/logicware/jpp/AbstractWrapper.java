@@ -28,33 +28,33 @@ package org.logicware.jpp;
  */
 public class AbstractWrapper implements Wrapper {
 
-    public final <K> K unwrap(Class<K> cls) {
-	return unwrap(this, cls);
-    }
-
-    public final <K> K unwrap(Object o, Class<K> cls) {
-	try {
-	    if (cls.isAssignableFrom(o.getClass())) {
-		return cls.cast(o);
-	    }
-	} catch (Exception e) {
-	    throw new RuntimeError(
-
-		    "Impossible unwrap " + getClass()
-
-			    + " to " + cls.getName()
-
-	    , e);
+	public final <K> K unwrap(Class<K> cls) {
+		return unwrap(this, cls);
 	}
-	return null;
-    }
 
-    public final boolean isWrappedBy(Class<?> cls) {
-	return cls.isInstance(this);
-    }
+	public final <K> K unwrap(Object o, Class<K> cls) {
+		try {
+			if (cls.isAssignableFrom(o.getClass())) {
+				return cls.cast(o);
+			}
+		} catch (Exception e) {
+			throw new RuntimeError(
 
-    public final boolean isWrappedBy(Object o, Class<?> cls) {
-	return cls.isInstance(o);
-    }
+					"Impossible unwrap " + getClass()
+
+							+ " to " + cls.getName()
+
+					, e);
+		}
+		return null;
+	}
+
+	public final boolean isWrappedBy(Class<?> cls) {
+		return cls.isInstance(this);
+	}
+
+	public final boolean isWrappedBy(Object o, Class<?> cls) {
+		return cls.isInstance(o);
+	}
 
 }

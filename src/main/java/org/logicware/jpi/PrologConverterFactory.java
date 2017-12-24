@@ -23,36 +23,36 @@ import java.lang.reflect.Constructor;
 
 public final class PrologConverterFactory extends AbstractFactory {
 
-    private PrologConverterFactory() {
-    }
-
-    public static final <T> PrologConverter<T> createPrologConverter(String converterClassName) {
-	PrologConverter<T> provider = null;
-	try {
-	    provider = createPrologConverter(Class.forName(converterClassName));
-	} catch (ClassNotFoundException e) {
-	    e.printStackTrace();
+	private PrologConverterFactory() {
 	}
-	return provider;
-    }
 
-    public static final <T> PrologConverter<T> createPrologConverter(Class<?> converterClass) {
-	PrologConverter<T> provider = null;
-	try {
-	    Constructor<?> constructor = converterClass.getDeclaredConstructor();
-	    constructor.setAccessible(true);
-	    provider = (PrologConverter<T>) converterClass.newInstance();
-	    constructor.setAccessible(false);
-	} catch (InstantiationException e) {
-	    e.printStackTrace();
-	} catch (IllegalAccessException e) {
-	    e.printStackTrace();
-	} catch (NoSuchMethodException e) {
-	    e.printStackTrace();
-	} catch (SecurityException e) {
-	    e.printStackTrace();
+	public static final <T> PrologConverter<T> createPrologConverter(String converterClassName) {
+		PrologConverter<T> provider = null;
+		try {
+			provider = createPrologConverter(Class.forName(converterClassName));
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return provider;
 	}
-	return provider;
-    }
+
+	public static final <T> PrologConverter<T> createPrologConverter(Class<?> converterClass) {
+		PrologConverter<T> provider = null;
+		try {
+			Constructor<?> constructor = converterClass.getDeclaredConstructor();
+			constructor.setAccessible(true);
+			provider = (PrologConverter<T>) converterClass.newInstance();
+			constructor.setAccessible(false);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		return provider;
+	}
 
 }

@@ -27,386 +27,381 @@ import java.util.NoSuchElementException;
 
 public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
-    private TreeSet<E> left;
-    private E element;
-    private TreeSet<E> right;
+	private TreeSet<E> left;
+	private E element;
+	private TreeSet<E> right;
 
-    public TreeSet() {
-    }
-
-    TreeSet(E element) {
-	this.element = element;
-    }
-
-    public TreeSet(Collection<? extends E> c) {
-	addAll(c);
-    }
-
-    TreeSet(TreeSet<E> left, E element, TreeSet<E> right) {
-	this(element);
-	this.left = left;
-	this.right = right;
-    }
-
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((element == null) ? 0 : element.hashCode());
-	result = prime * result + ((left == null) ? 0 : left.hashCode());
-	result = prime * result + ((right == null) ? 0 : right.hashCode());
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	TreeSet<?> other = (TreeSet<?>) obj;
-	if (element == null) {
-	    if (other.element != null)
-		return false;
-	} else if (!element.equals(other.element))
-	    return false;
-	if (left == null) {
-	    if (other.left != null)
-		return false;
-	} else if (!left.equals(other.left))
-	    return false;
-	if (right == null) {
-	    if (other.right != null)
-		return false;
-	} else if (!right.equals(other.right))
-	    return false;
-	return true;
-    }
-
-    // @Override
-    // public String toString() {
-    // return "( " + left + " ) <-- " + element + " --> ( " + right + " )";
-    // }
-
-    public int size() {
-	if (!(element == null)) {
-	    int size = 1;
-	    if (left != null) {
-		size += left.size();
-	    }
-	    if (right != null) {
-		size += right.size();
-	    }
-	    return size;
-	}
-	return 0;
-    }
-
-    public boolean contains(Object o) {
-	if (o instanceof Comparable) {
-	    E e = (E) o;
-	    if (e.compareTo(element) < 0) {
-		if (left != null) {
-		    return left.contains(e);
-		}
-	    } else if (e.compareTo(element) > 0) {
-		if (right != null) {
-		    return right.contains(e);
-		}
-	    }
-	    return e.equals(element);
-	}
-	return false;
-    }
-
-    public boolean add(E e) {
-
-	TreeSet<E> root = this;
-
-	boolean result = false;
-
-	if (!isEmpty()) {
-
-	    if (e.compareTo(element) < 0) {
-		if (root.left == null && e != null) {
-		    root.left = new TreeSet<E>(e);
-		    result = true;
-		} else {
-		    result = root.left.add(e);
-		}
-	    } else if (e.compareTo(element) > 0) {
-		if (root.right == null && e != null) {
-		    root.right = new TreeSet<E>(e);
-		    result = true;
-		} else {
-		    result = root.right.add(e);
-		}
-
-	    } else {
-
-	    }
-
-	    // balance if required
-	    fixAfterChange(root);
-	    return result;
-
+	public TreeSet() {
 	}
 
-	root.element = e != null ? e : null;
-	return e != null;
-    }
+	TreeSet(E element) {
+		this.element = element;
+	}
 
-    public boolean remove(Object o) {
+	public TreeSet(Collection<? extends E> c) {
+		addAll(c);
+	}
 
-	boolean isChanged = false;
+	TreeSet(TreeSet<E> left, E element, TreeSet<E> right) {
+		this(element);
+		this.left = left;
+		this.right = right;
+	}
 
-	if (o instanceof Comparable) {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((element == null) ? 0 : element.hashCode());
+		result = prime * result + ((left == null) ? 0 : left.hashCode());
+		result = prime * result + ((right == null) ? 0 : right.hashCode());
+		return result;
+	}
 
-	    E e = (E) o;
-	    TreeSet<E> root = this;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TreeSet<?> other = (TreeSet<?>) obj;
+		if (element == null) {
+			if (other.element != null)
+				return false;
+		} else if (!element.equals(other.element))
+			return false;
+		if (left == null) {
+			if (other.left != null)
+				return false;
+		} else if (!left.equals(other.left))
+			return false;
+		if (right == null) {
+			if (other.right != null)
+				return false;
+		} else if (!right.equals(other.right))
+			return false;
+		return true;
+	}
 
-	    if (e.compareTo(this.element) < 0) {
-		if (left != null) {
-		    isChanged = left.remove(e);
-		    if (left.isEmpty()) {
-			left = null;
-		    }
+	public int size() {
+		if (element != null) {
+			int size = 1;
+			if (left != null) {
+				size += left.size();
+			}
+			if (right != null) {
+				size += right.size();
+			}
+			return size;
 		}
-	    } else if (e.compareTo(this.element) > 0) {
-		if (right != null) {
-		    isChanged = right.remove(e);
-		    if (right.isEmpty()) {
-			right = null;
-		    }
+		return 0;
+	}
+
+	public boolean contains(Object o) {
+		if (o instanceof Comparable) {
+			E e = (E) o;
+			if (e.compareTo(element) < 0) {
+				if (left != null) {
+					return left.contains(e);
+				}
+			} else if (e.compareTo(element) > 0) {
+				if (right != null) {
+					return right.contains(e);
+				}
+			}
+			return e.equals(element);
 		}
-	    } else {
+		return false;
+	}
 
-		e = element;
-		TreeSet<E> parent = root;
+	public boolean add(E e) {
 
-		if (left != null) {
+		TreeSet<E> root = this;
 
-		    TreeSet<E> treeIter = left;
-		    TreeSet<E> predeccessor = this;
-		    while (treeIter != null) {
-			parent = predeccessor;
-			predeccessor = treeIter;
-			treeIter = treeIter.right;
-		    }
+		boolean result = false;
 
-		    root.element = predeccessor.element;
+		if (!isEmpty()) {
 
-		    // two subtree children
-		    if (root.left != null && root.right != null) {
-			// System.out.println("two subtree childrens");
-			if (root.left.equals(predeccessor)) {
-			    root.left = predeccessor.left;
+			if (e.compareTo(element) < 0) {
+				if (root.left == null && e != null) {
+					root.left = new TreeSet<E>(e);
+					result = true;
+				} else {
+					result = root.left.add(e);
+				}
+			} else if (e.compareTo(element) > 0) {
+				if (root.right == null && e != null) {
+					root.right = new TreeSet<E>(e);
+					result = true;
+				} else {
+					result = root.right.add(e);
+				}
+
 			} else {
-			    parent.right = predeccessor.left;
+
 			}
 
-		    } else {
-			root.left = predeccessor.left;
-			root.right = predeccessor.right;
-		    }
+			// balance if required
+			fixAfterChange(root);
+			return result;
 
-		} else if (right != null) {
+		}
 
-		    TreeSet<E> treeIter = right;
-		    TreeSet<E> successor = this;
-		    while (treeIter != null) {
-			// parent = successor;
-			successor = treeIter;
-			treeIter = treeIter.left;
-		    }
+		root.element = e != null ? e : null;
+		return e != null;
+	}
 
-		    root.element = successor.element;
+	public boolean remove(Object o) {
 
-		    // two subtree children
-		    if (root.left != null && root.right != null) {
-			// System.out.println("two subtree childrens");
-			if (root.right.equals(successor)) {
-			    root.left = successor.right;
+		boolean isChanged = false;
+
+		if (o instanceof Comparable) {
+
+			E e = (E) o;
+			TreeSet<E> root = this;
+
+			if (e.compareTo(this.element) < 0) {
+				if (left != null) {
+					isChanged = left.remove(e);
+					if (left.isEmpty()) {
+						left = null;
+					}
+				}
+			} else if (e.compareTo(this.element) > 0) {
+				if (right != null) {
+					isChanged = right.remove(e);
+					if (right.isEmpty()) {
+						right = null;
+					}
+				}
 			} else {
-			    parent.left = successor.right;
+
+				e = element;
+				TreeSet<E> parent = root;
+
+				if (left != null) {
+
+					TreeSet<E> treeIter = left;
+					TreeSet<E> predeccessor = this;
+					while (treeIter != null) {
+						parent = predeccessor;
+						predeccessor = treeIter;
+						treeIter = treeIter.right;
+					}
+
+					root.element = predeccessor.element;
+
+					// two subtree children
+					if (root.left != null && root.right != null) {
+						// System.out.println("two subtree childrens");
+						if (root.left.equals(predeccessor)) {
+							root.left = predeccessor.left;
+						} else {
+							parent.right = predeccessor.left;
+						}
+
+					} else {
+						root.left = predeccessor.left;
+						root.right = predeccessor.right;
+					}
+
+				} else if (right != null) {
+
+					TreeSet<E> treeIter = right;
+					TreeSet<E> successor = this;
+					while (treeIter != null) {
+						// parent = successor;
+						successor = treeIter;
+						treeIter = treeIter.left;
+					}
+
+					root.element = successor.element;
+
+					// two subtree children
+					if (root.left != null && root.right != null) {
+						// System.out.println("two subtree childrens");
+						if (root.right.equals(successor)) {
+							root.left = successor.right;
+						} else {
+							parent.left = successor.right;
+						}
+
+					} else {
+						root.left = successor.left;
+						root.right = successor.right;
+					}
+
+				} else {
+
+					// put to empty
+					this.element = null;
+
+				}
+
+				// tree was changed
+				isChanged = true;
+
 			}
 
-		    } else {
-			root.left = successor.left;
-			root.right = successor.right;
-		    }
-
-		} else {
-
-		    // put to empty
-		    this.element = null;
+			// balance if required
+			fixAfterChange(root);
 
 		}
 
-		// tree was changed
-		isChanged = true;
+		return isChanged;
+	}
 
-	    }
+	public void clear() {
+		left = null;
+		element = null;
+		right = null;
+	}
 
-	    // balance if required
-	    fixAfterChange(root);
+	public Iterator<E> iterator() {
+		return new TreeSetIterator();
+	}
+
+	protected TreeSet<E> clone() {
+		return new TreeSet<E>(left, element, right);
+	}
+
+	private int heigh(TreeSet<E> tree) {
+		return tree != null ? 1 + Math.max(heigh(tree.left), heigh(tree.right)) : 0;
+	}
+
+	private void rotateLeft(TreeSet<E> root) {
+
+		TreeSet<E> toBeLeft = root.clone();
+
+		TreeSet<E> r = toBeLeft.right;
+		toBeLeft.right = r.left;
+		r.left = toBeLeft;
+
+		root.element = r.element;
+		root.left = toBeLeft;
+		root.right = r.right;
 
 	}
 
-	return isChanged;
-    }
+	private void rotateRight(TreeSet<E> root) {
 
-    public void clear() {
-	left = null;
-	element = null;
-	right = null;
-    }
+		TreeSet<E> toBeRight = root.clone();
 
-    public Iterator<E> iterator() {
-	return new TreeSetIterator();
-    }
+		TreeSet<E> l = toBeRight.left;
+		toBeRight.left = l.right;
+		l.right = toBeRight;
 
-    protected TreeSet<E> clone() {
-	return new TreeSet<E>(left, element, right);
-    }
+		root.element = l.element;
+		root.left = l.left;
+		root.right = toBeRight;
 
-    private int heigh(TreeSet<E> tree) {
-	return tree != null ? 1 + Math.max(heigh(tree.left), heigh(tree.right)) : 0;
-    }
+	}
 
-    private void rotateLeft(TreeSet<E> root) {
+	private void fixAfterChange(TreeSet<E> root) {
 
-	TreeSet<E> toBeLeft = root.clone();
+		if (root != null) {
 
-	TreeSet<E> r = toBeLeft.right;
-	toBeLeft.right = r.left;
-	r.left = toBeLeft;
+			int leftHeigh = heigh(root.left);
+			int rightHeigh = heigh(root.right);
 
-	root.element = r.element;
-	root.left = toBeLeft;
-	root.right = r.right;
+			if (leftHeigh - 2 == rightHeigh) {
+				if (root.left != null) {
 
-    }
+					leftHeigh = heigh(root.left.left);
+					rightHeigh = heigh(root.left.right);
 
-    private void rotateRight(TreeSet<E> root) {
+					if (leftHeigh < rightHeigh) {
+						// System.out.println("rotate left " +
+						// root.left.element);
+						rotateLeft(root.left);
+					}
 
-	TreeSet<E> toBeRight = root.clone();
+				}
+				// System.out.println("rotate right " + root.element);
+				rotateRight(root);
+			} else if (leftHeigh == rightHeigh - 2) {
+				if (root.right != null) {
 
-	TreeSet<E> l = toBeRight.left;
-	toBeRight.left = l.right;
-	l.right = toBeRight;
+					leftHeigh = heigh(root.right.left);
+					rightHeigh = heigh(root.right.right);
 
-	root.element = l.element;
-	root.left = l.left;
-	root.right = toBeRight;
+					if (leftHeigh > rightHeigh) {
+						// System.out.println("rotate right " +
+						// root.right.element);
+						rotateRight(root.right);
+					}
 
-    }
-
-    private void fixAfterChange(TreeSet<E> root) {
-
-	if (root != null) {
-
-	    int leftHeigh = heigh(root.left);
-	    int rightHeigh = heigh(root.right);
-
-	    if (leftHeigh - 2 == rightHeigh) {
-		if (root.left != null) {
-
-		    leftHeigh = heigh(root.left.left);
-		    rightHeigh = heigh(root.left.right);
-
-		    if (leftHeigh < rightHeigh) {
-			// System.out.println("rotate left " +
-			// root.left.element);
-			rotateLeft(root.left);
-		    }
+				}
+				// System.out.println("rotate left " + root.element);
+				rotateLeft(root);
+			}
 
 		}
-		// System.out.println("rotate right " + root.element);
-		rotateRight(root);
-	    } else if (leftHeigh == rightHeigh - 2) {
-		if (root.right != null) {
 
-		    leftHeigh = heigh(root.right.left);
-		    rightHeigh = heigh(root.right.right);
+	}
 
-		    if (leftHeigh > rightHeigh) {
-			// System.out.println("rotate right " +
-			// root.right.element);
-			rotateRight(root.right);
-		    }
+	private class TreeSetIterator implements Iterator<E> {
+
+		private TreeSet<E> last;
+
+		// check illegal state
+		private boolean canRemove;
+
+		private final TreeSet<E> root;
+		private final Deque<TreeSet<E>> stack;
+
+		public TreeSetIterator() {
+			stack = new ArrayDeque<TreeSet<E>>();
+			TreeSet<E> ptr = root = TreeSet.this;
+
+			while (ptr != null && !ptr.isEmpty()) {
+				stack.push(ptr);
+				ptr = ptr.left;
+			}
+		}
+
+		public boolean hasNext() {
+			return !stack.isEmpty();
+		}
+
+		public E next() {
+
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
+
+			canRemove = true;
+
+			last = stack.pop();
+			TreeSet<E> ptr = last.right;
+			while (ptr != null && !ptr.isEmpty()) {
+				stack.push(ptr);
+				ptr = ptr.left;
+			}
+
+			return last.element;
 
 		}
-		// System.out.println("rotate left " + root.element);
-		rotateLeft(root);
-	    }
 
+		public void remove() {
+
+			if (!canRemove) {
+				throw new IllegalStateException();
+			}
+
+			stack.clear();
+
+			TreeSet<E> ptr = root;
+			ptr.remove(last.element);
+
+			while (ptr != null && !ptr.isEmpty()) {
+				stack.push(ptr);
+				ptr = ptr.left;
+			}
+
+		}
 	}
-
-    }
-
-    private class TreeSetIterator implements Iterator<E> {
-
-	private TreeSet<E> last;
-
-	// check illegal state
-	private boolean canRemove;
-
-	private final TreeSet<E> root;
-	private final Deque<TreeSet<E>> stack;
-
-	public TreeSetIterator() {
-	    stack = new ArrayDeque<TreeSet<E>>();
-	    TreeSet<E> ptr = root = TreeSet.this;
-
-	    while (ptr != null && !ptr.isEmpty()) {
-		stack.push(ptr);
-		ptr = ptr.left;
-	    }
-	}
-
-	public boolean hasNext() {
-	    return !stack.isEmpty();
-	}
-
-	public E next() {
-
-	    if (!hasNext()) {
-		throw new NoSuchElementException();
-	    }
-
-	    canRemove = true;
-
-	    last = stack.pop();
-	    TreeSet<E> ptr = last.right;
-	    while (ptr != null && !ptr.isEmpty()) {
-		stack.push(ptr);
-		ptr = ptr.left;
-	    }
-
-	    return last.element;
-
-	}
-
-	public void remove() {
-
-	    if (!canRemove) {
-		throw new IllegalStateException();
-	    }
-
-	    stack.clear();
-
-	    TreeSet<E> ptr = root;
-	    ptr.remove(last.element);
-
-	    while (ptr != null && !ptr.isEmpty()) {
-		stack.push(ptr);
-		ptr = ptr.left;
-	    }
-
-	}
-    }
 
 }

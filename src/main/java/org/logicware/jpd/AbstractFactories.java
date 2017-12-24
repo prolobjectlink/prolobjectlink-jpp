@@ -23,70 +23,64 @@ import org.logicware.jpi.PrologProvider;
 
 public abstract class AbstractFactories implements Factories {
 
-    private Properties properties;
-    private PrologProvider provider;
+	private Properties properties;
+	private PrologProvider provider;
 
-    protected AbstractFactories(Properties properties, PrologProvider provider) {
-	this.properties = properties;
-	this.provider = provider;
-    }
+	protected AbstractFactories(Properties properties, PrologProvider provider) {
+		this.properties = properties;
+		this.provider = provider;
+	}
 
-    public abstract Document createDocument(String path);
+	public final void setProvider(PrologProvider provider) {
+		this.provider = provider;
+	}
 
-    public abstract DocumentPool createDocumentPool(String path);
+	public final void setProperties(Properties properties) {
+		this.properties = properties;
+	}
 
-    public abstract DocumentManager createDocumentManager(String path);
+	public final Properties getProperties() {
+		return properties;
+	}
 
-    public final void setProvider(PrologProvider provider) {
-	this.provider = provider;
-    }
+	public final PrologProvider getProvider() {
+		return provider;
+	}
 
-    public final void setProperties(Properties properties) {
-	this.properties = properties;
-    }
+	@Override
+	public final int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((properties == null) ? 0 : properties.hashCode());
+		result = prime * result + ((provider == null) ? 0 : provider.hashCode());
+		return result;
+	}
 
-    public final Properties getProperties() {
-	return properties;
-    }
+	@Override
+	public final boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractFactories other = (AbstractFactories) obj;
+		if (properties == null) {
+			if (other.properties != null)
+				return false;
+		} else if (!properties.equals(other.properties))
+			return false;
+		if (provider == null) {
+			if (other.provider != null)
+				return false;
+		} else if (!provider.equals(other.provider))
+			return false;
+		return true;
+	}
 
-    public final PrologProvider getProvider() {
-	return provider;
-    }
-
-    @Override
-    public final int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((properties == null) ? 0 : properties.hashCode());
-	result = prime * result + ((provider == null) ? 0 : provider.hashCode());
-	return result;
-    }
-
-    @Override
-    public final boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	AbstractFactories other = (AbstractFactories) obj;
-	if (properties == null) {
-	    if (other.properties != null)
-		return false;
-	} else if (!properties.equals(other.properties))
-	    return false;
-	if (provider == null) {
-	    if (other.provider != null)
-		return false;
-	} else if (!provider.equals(other.provider))
-	    return false;
-	return true;
-    }
-
-    @Override
-    public final String toString() {
-	return "[properties=" + properties + ", provider=" + provider + "]";
-    }
+	@Override
+	public final String toString() {
+		return "[properties=" + properties + ", provider=" + provider + "]";
+	}
 
 }

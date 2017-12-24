@@ -29,77 +29,73 @@ import java.nio.file.Files;
 
 public abstract class AbstractPlatform extends AbstractWrapper implements Platform {
 
-    protected static final int IO_BUFFER_SIZE = 4 * 1024;
-    protected static final long MAX_IO_BUFFER_SIZE = Long.MAX_VALUE;
+	protected static final int IO_BUFFER_SIZE = 4 * 1024;
+	protected static final long MAX_IO_BUFFER_SIZE = Long.MAX_VALUE;
 
-    protected synchronized final long copy(InputStream in, OutputStream out) {
-	long copied = 0;
-	try {
-	    long length = MAX_IO_BUFFER_SIZE;
-	    int len = (int) Math.min(length, IO_BUFFER_SIZE);
-	    byte[] buffer = new byte[len];
-	    while (length > 0) {
-		len = in.read(buffer, 0, len);
-		if (len < 0) {
-		    break;
+	protected final synchronized long copy(InputStream in, OutputStream out) {
+		long copied = 0;
+		try {
+			long length = MAX_IO_BUFFER_SIZE;
+			int len = (int) Math.min(length, IO_BUFFER_SIZE);
+			byte[] buffer = new byte[len];
+			while (length > 0) {
+				len = in.read(buffer, 0, len);
+				if (len < 0) {
+					break;
+				}
+				if (out != null) {
+					out.write(buffer, 0, len);
+				}
+				copied += len;
+				length -= len;
+				len = (int) Math.min(length, IO_BUFFER_SIZE);
+			}
+			return copied;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		if (out != null) {
-		    out.write(buffer, 0, len);
+		return copied;
+	}
+
+	public final boolean runOnOsX() {
+		return getOsName().indexOf("mac os x") != -1;
+	}
+
+	public final boolean runOnWindows() {
+		return getOsName().indexOf("windows") != 1;
+	}
+
+	public final boolean runOnLinux() {
+		return getOsName().indexOf("linux") != 1;
+	}
+
+	public final String getOsName() {
+		String os = System.getProperty("os.name");
+		if (os == null)
+			return "unknow";
+		return os;
+	}
+
+	protected final void clean(String file) {
+		PrintWriter w;
+		try {
+			w = new PrintWriter(file);
+			w.print("");
+			w.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
-		copied += len;
-		length -= len;
-		len = (int) Math.min(length, IO_BUFFER_SIZE);
-	    }
-	    return copied;
-	} catch (Exception e) {
-	    e.printStackTrace();
 	}
-	return copied;
-    }
 
-    public final boolean runOnOsX() {
-	return getOsName().indexOf("mac os x") != -1;
-    }
-
-    public final boolean runOnWindows() {
-	return getOsName().indexOf("windows") != 1;
-    }
-
-    public final boolean runOnLinux() {
-	return getOsName().indexOf("linux") != 1;
-    }
-
-    public final String getOsName() {
-	String os = System.getProperty("os.name");
-	if (os == null)
-	    throw new RuntimeException("Impossible to obtain the 'os.name' property.");
-	return os;
-    }
-
-    public abstract int hashCode();
-
-    public abstract boolean equals(Object obj);
-
-    protected final void clean(String file) {
-	PrintWriter w;
-	try {
-	    w = new PrintWriter(file);
-	    w.print("");
-	    w.close();
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
+	protected final void delete(String file) {
+		File x = new File(file);
+		if (Files.exists(x.toPath())) {
+			try {
+				Files.delete(x.toPath());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
-    }
-
-    protected final void delete(String file) {
-	File x = new File(file);
-	if (Files.exists(x.toPath())) {
-	    try {
-		Files.delete(x.toPath());
-	    } catch (IOException e) {
-		e.printStackTrace();
-	    }
-	}
-    }
 
 }

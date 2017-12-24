@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 final class UpdateError extends RuntimeError {
 
-    private static final long serialVersionUID = 3143696067561658574L;
+	private static final long serialVersionUID = 3143696067561658574L;
 
-    UpdateError(Object match, Object update) {
-	super("The update object class is different to match object: " + update);
-    }
+	UpdateError(Object match, Object update) {
+		super("The update object class is different to match object: " + update);
+	}
 
 }

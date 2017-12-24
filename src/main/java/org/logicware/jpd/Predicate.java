@@ -54,9 +54,9 @@ import org.logicware.jpd.predicate.TruePredicate;
  * <pre>
  * List&lt;Point&gt; points = objectContainer.findAll(new Predicate&lt;Point&gt;() {
  * 
- *     public boolean evaluate(Point point) {
- * 	return (point.getX() == 3.5) &amp;&amp; (point.getY() == 10.14);
- *     }
+ * 	public boolean evaluate(Point point) {
+ * 		return (point.getX() == 3.5) &amp;&amp; (point.getY() == 10.14);
+ * 	}
  * 
  * });
  * </pre>
@@ -80,23 +80,23 @@ import org.logicware.jpd.predicate.TruePredicate;
  */
 public interface Predicate<O> {
 
-    public static final Predicate TRUE = new TruePredicate();
-    public static final Predicate FALSE = new FalsePredicate();
+	public static final Predicate TRUE = new TruePredicate();
+	public static final Predicate FALSE = new FalsePredicate();
 
-    public static final Predicate NULL = new NullPredicate();
-    public static final Predicate NOT_NULL = new NotNullPredicate();
+	public static final Predicate NULL = new NullPredicate();
+	public static final Predicate NOT_NULL = new NotNullPredicate();
 
-    /**
-     * Return true if some object match with the current {@link Predicate}. If
-     * the object match, will be include in the solution list.
-     * 
-     * @param o
-     *            possible candidate to be match and include in the solution
-     *            list.
-     * @return true if the object match and will be include in the solution
-     *         list.
-     * @since 1.0
-     */
-    public boolean evaluate(final O o);
+	/**
+	 * Return true if some object match with the current {@link Predicate}. If
+	 * the object match, will be include in the solution list.
+	 * 
+	 * @param o
+	 *            possible candidate to be match and include in the solution
+	 *            list.
+	 * @return true if the object match and will be include in the solution
+	 *         list.
+	 * @since 1.0
+	 */
+	public boolean evaluate(final O o);
 
 }

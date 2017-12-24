@@ -23,39 +23,39 @@ import java.util.List;
 
 public interface VolatileContainer extends Container {
 
-    public <O> void add(O... facts);
+	public <O> void add(O... facts);
 
-    public <O> void modify(O match, O merge);
+	public <O> void modify(O match, O merge);
 
-    public void remove(Class<?> clazz);
+	public void remove(Class<?> clazz);
 
-    public <O> void remove(O... facts);
+	public <O> void remove(O... facts);
 
-    public Object find(String string) throws NonSolutionError;
+	public Object find(String string) throws NonSolutionError;
 
-    public Object find(String functor, Object... args) throws NonSolutionError;
+	public Object find(String functor, Object... args) throws NonSolutionError;
 
-    public <O> O find(O o) throws NonSolutionError;
+	public <O> O find(O o) throws NonSolutionError;
 
-    public <O> O find(Class<O> clazz) throws NonSolutionError;
+	public <O> O find(Class<O> clazz) throws NonSolutionError;
 
-    public <O> O find(Predicate<O> predicate) throws NonSolutionError;
+	public <O> O find(Predicate<O> predicate) throws NonSolutionError;
 
-    public List<Object> findAll(String string);
+	public List<Object> findAll(String string);
 
-    public List<Object> findAll(String functor, Object... args);
+	public List<Object> findAll(String functor, Object... args);
 
-    public <O> List<O> findAll(O o);
+	public <O> List<O> findAll(O o);
 
-    public <O> List<O> findAll(Class<O> clazz);
+	public <O> List<O> findAll(Class<O> clazz);
 
-    public <O> List<O> findAll(Predicate<O> predicate);
+	public <O> List<O> findAll(Predicate<O> predicate);
 
-    /**
-     * Clear cache erase all objects in main memory. The {@code ObjectStore}
-     * implementations erase all objects in main memory such as a flush method
-     * invocation set to empty the physic file
-     */
-    public void clear();
+	/**
+	 * Clear cache erase all objects in main memory. The {@code ObjectStore}
+	 * implementations erase all objects in main memory such as a flush method
+	 * invocation set to empty the physic file
+	 */
+	public void clear();
 
 }

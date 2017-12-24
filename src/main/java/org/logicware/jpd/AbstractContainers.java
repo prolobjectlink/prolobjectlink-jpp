@@ -23,14 +23,8 @@ import org.logicware.jpi.PrologProvider;
 
 public abstract class AbstractContainers extends AbstractFactories implements Containers {
 
-    protected AbstractContainers(Properties properties, PrologProvider provider) {
-	super(properties, provider);
-    }
-
-    public abstract ContainerFactory createContainerFactory();
-
-    public abstract Containers getInstance();
-
-    public abstract Cache createCache();
+	protected AbstractContainers(Properties properties, PrologProvider provider) {
+		super(properties, provider);
+	}
 
 }

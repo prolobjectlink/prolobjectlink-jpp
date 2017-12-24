@@ -23,15 +23,15 @@ import org.logicware.jpp.RuntimeError;
 
 public final class FunctorError extends RuntimeError {
 
-    private static final long serialVersionUID = -3324307242366044977L;
+	private static final long serialVersionUID = -3324307242366044977L;
 
-    public FunctorError(PrologTerm term) {
-	super("The term not have functor: " + term);
-    }
+	public FunctorError(PrologTerm term) {
+		super("The term not have functor: " + term);
+	}
 
-    @Deprecated
-    public FunctorError(Class<?> sender, PrologTerm term) {
-	super(sender, "The term not have functor: " + term);
-    }
+	@Deprecated
+	public FunctorError(Class<?> sender, PrologTerm term) {
+		super(sender, "The term not have functor: " + term);
+	}
 
 }

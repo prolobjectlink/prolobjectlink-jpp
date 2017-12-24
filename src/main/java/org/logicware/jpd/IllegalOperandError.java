@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 public final class IllegalOperandError extends RuntimeError {
 
-    private static final long serialVersionUID = -3064952286859633255L;
+	private static final long serialVersionUID = -3064952286859633255L;
 
-    public IllegalOperandError(Object term) {
-	super("The term " + term + " is not an aritmethic operand");
-    }
+	public IllegalOperandError(Object term) {
+		super("The term " + term + " is not an aritmethic operand");
+	}
 
 }

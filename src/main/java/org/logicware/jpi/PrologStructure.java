@@ -21,6 +21,6 @@ package org.logicware.jpi;
 
 public interface PrologStructure extends PrologTerm {
 
-    public PrologTerm getArgument(int index);
+	public PrologTerm getArgument(int index);
 
 }

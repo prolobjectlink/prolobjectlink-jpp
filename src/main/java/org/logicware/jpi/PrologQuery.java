@@ -26,105 +26,105 @@ import org.logicware.jpp.Wrapper;
 
 public interface PrologQuery extends Wrapper, Enumeration<PrologTerm[]>, Iterable<PrologTerm[]> {
 
-    /**
-     * Engine hold by the current query
-     * 
-     * @return
-     */
-    public PrologEngine getEngine();
+	/**
+	 * Engine hold by the current query
+	 * 
+	 * @return
+	 */
+	public PrologEngine getEngine();
 
-    /**
-     * <p>
-     * Check that the current query has solution.
-     * </p>
-     * 
-     * 
-     * 
-     * @return true if the current query has solution, false if not
-     * @since 1.0
-     */
-    public boolean hasSolution();
+	/**
+	 * <p>
+	 * Check that the current query has solution.
+	 * </p>
+	 * 
+	 * 
+	 * 
+	 * @return true if the current query has solution, false if not
+	 * @since 1.0
+	 */
+	public boolean hasSolution();
 
-    /**
-     * <p>
-     * Check if the current query has more solutions.
-     * </p>
-     * 
-     * 
-     * @return true if the current query has more solutions, false if not
-     * @since 1.0
-     */
-    public boolean hasMoreSolutions();
+	/**
+	 * <p>
+	 * Check if the current query has more solutions.
+	 * </p>
+	 * 
+	 * 
+	 * @return true if the current query has more solutions, false if not
+	 * @since 1.0
+	 */
+	public boolean hasMoreSolutions();
 
-    /**
-     * <p>
-     * Return the prolog terms that conform the solution set for the current
-     * query. The solution set is a prolog terms array and each term is an
-     * instance value for the variables not anonymous involved in the query.
-     * </p>
-     * 
-     * <pre>
-     * IPrologTerm[] solution = query.oneSolution();
-     * for (int i = 0; i &lt; solution.length; i++) {
-     *     System.out.println(solution[i]);
-     * }
-     * </pre>
-     * 
-     * @return prolog terms solution set for the current query
-     * @since 1.0
-     */
-    public PrologTerm[] oneSolution();
+	/**
+	 * <p>
+	 * Return the prolog terms that conform the solution set for the current
+	 * query. The solution set is a prolog terms array and each term is an
+	 * instance value for the variables not anonymous involved in the query.
+	 * </p>
+	 * 
+	 * <pre>
+	 * IPrologTerm[] solution = query.oneSolution();
+	 * for (int i = 0; i &lt; solution.length; i++) {
+	 * 	System.out.println(solution[i]);
+	 * }
+	 * </pre>
+	 * 
+	 * @return prolog terms solution set for the current query
+	 * @since 1.0
+	 */
+	public PrologTerm[] oneSolution();
 
-    /**
-     * 
-     * @return
-     * @since 1.0
-     */
-    public Map<String, PrologTerm> oneVariablesSolution();
+	/**
+	 * 
+	 * @return
+	 * @since 1.0
+	 */
+	public Map<String, PrologTerm> oneVariablesSolution();
 
-    /**
-     * @since 1.0
-     * @return
-     */
-    public PrologTerm[] nextSolution();
+	/**
+	 * @since 1.0
+	 * @return
+	 */
+	public PrologTerm[] nextSolution();
 
-    /**
-     * @since 1.0
-     * @return
-     */
-    public Map<String, PrologTerm> nextVariablesSolution();
+	/**
+	 * @since 1.0
+	 * @return
+	 */
+	public Map<String, PrologTerm> nextVariablesSolution();
 
-    /**
-     * @since 1.0
-     * @param n
-     * @return
-     */
-    public PrologTerm[][] nSolutions(int n);
+	/**
+	 * @since 1.0
+	 * @param n
+	 * @return
+	 */
+	public PrologTerm[][] nSolutions(int n);
 
-    /**
-     * @since 1.0
-     * @param n
-     * @return
-     */
-    public Map<String, PrologTerm>[] nVariablesSolutions(int n);
+	/**
+	 * @since 1.0
+	 * @param n
+	 * @return
+	 */
+	public Map<String, PrologTerm>[] nVariablesSolutions(int n);
 
-    /**
-     * @since 1.0
-     * @return
-     */
-    public PrologTerm[][] allSolutions();
+	/**
+	 * @since 1.0
+	 * @return
+	 */
+	public PrologTerm[][] allSolutions();
 
-    /**
-     * @since 1.0
-     * @return
-     */
-    public Map<String, PrologTerm>[] allVariablesSolutions();
+	/**
+	 * @since 1.0
+	 * @return
+	 */
+	public Map<String, PrologTerm>[] allVariablesSolutions();
 
-    /**
-     * Release all allocations for the query
-     * 
-     * @since 1.0
-     */
-    public void dispose();
+	/**
+	 * Release all allocations for the query
+	 * 
+	 * @since 1.0
+	 */
+	public void dispose();
 
 }

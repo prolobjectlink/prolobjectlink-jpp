@@ -23,22 +23,22 @@ import org.logicware.jpi.PrologProvider;
 
 public interface Factories {
 
-    public ContainerFactory createContainerFactory();
+	public ContainerFactory createContainerFactory();
 
-    public DocumentManager createDocumentManager(String path);
+	public DocumentManager createDocumentManager(String path);
 
-    public DocumentPool createDocumentPool(String path);
+	public DocumentPool createDocumentPool(String path);
 
-    public Document createDocument(String path);
+	public Document createDocument(String path);
 
-    public Cache createCache();
+	public Cache createCache();
 
-    public Properties getProperties();
+	public Properties getProperties();
 
-    public PrologProvider getProvider();
+	public PrologProvider getProvider();
 
-    public void setProvider(PrologProvider provider);
+	public void setProvider(PrologProvider provider);
 
-    public void setProperties(Properties properties);
+	public void setProperties(Properties properties);
 
 }

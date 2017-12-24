@@ -24,50 +24,50 @@ import java.io.OutputStream;
 
 abstract class Tool {
 
-    /**
-     * The block size for I/O operations.
-     */
-    public static final int IO_BUFFER_SIZE = 4 * 1024;
+	/**
+	 * The block size for I/O operations.
+	 */
+	public static final int IO_BUFFER_SIZE = 4 * 1024;
 
-    /**
-     * The max block size allowed for I/O operations.
-     */
-    public static final long MAX_IO_BUFFER_SIZE = Long.MAX_VALUE;
+	/**
+	 * The max block size allowed for I/O operations.
+	 */
+	public static final long MAX_IO_BUFFER_SIZE = Long.MAX_VALUE;
 
-    /**
-     * Copy all data from the input stream to the output stream. Both streams
-     * are kept open.
-     * 
-     * @param in
-     *            the input stream
-     * @param out
-     *            the output stream (null if writing is not required)
-     * @param length
-     *            the maximum number of bytes to copy
-     * @return the number of bytes copied
-     */
-    public long copy(InputStream in, OutputStream out) {
-	long copied = 0;
-	try {
-	    long length = MAX_IO_BUFFER_SIZE;
-	    int len = (int) Math.min(length, IO_BUFFER_SIZE);
-	    byte[] buffer = new byte[len];
-	    while (length > 0) {
-		len = in.read(buffer, 0, len);
-		if (len < 0) {
-		    break;
+	/**
+	 * Copy all data from the input stream to the output stream. Both streams
+	 * are kept open.
+	 * 
+	 * @param in
+	 *            the input stream
+	 * @param out
+	 *            the output stream (null if writing is not required)
+	 * @param length
+	 *            the maximum number of bytes to copy
+	 * @return the number of bytes copied
+	 */
+	public long copy(InputStream in, OutputStream out) {
+		long copied = 0;
+		try {
+			long length = MAX_IO_BUFFER_SIZE;
+			int len = (int) Math.min(length, IO_BUFFER_SIZE);
+			byte[] buffer = new byte[len];
+			while (length > 0) {
+				len = in.read(buffer, 0, len);
+				if (len < 0) {
+					break;
+				}
+				if (out != null) {
+					out.write(buffer, 0, len);
+				}
+				copied += len;
+				length -= len;
+				len = (int) Math.min(length, IO_BUFFER_SIZE);
+			}
+			return copied;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		if (out != null) {
-		    out.write(buffer, 0, len);
-		}
-		copied += len;
-		length -= len;
-		len = (int) Math.min(length, IO_BUFFER_SIZE);
-	    }
-	    return copied;
-	} catch (Exception e) {
-	    e.printStackTrace();
+		return copied;
 	}
-	return copied;
-    }
 }

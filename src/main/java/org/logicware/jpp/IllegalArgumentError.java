@@ -21,14 +21,14 @@ package org.logicware.jpp;
 
 public final class IllegalArgumentError extends IllegalArgumentException {
 
-    private static final long serialVersionUID = -3445521548634661542L;
+	private static final long serialVersionUID = -3445521548634661542L;
 
-    public IllegalArgumentError(String method, String clazz) {
-	super("Illegal argument for method name " + method + " in class" + clazz + ". \n");
-    }
+	public IllegalArgumentError(String method, String clazz) {
+		super("Illegal argument for method name " + method + " in class" + clazz + ". \n");
+	}
 
-    public IllegalArgumentError(String method, String clazz, Throwable throwable) {
-	super("Illegal argument for method name " + method + " in class" + clazz + ". \n" + throwable);
-    }
+	public IllegalArgumentError(String method, String clazz, Throwable throwable) {
+		super("Illegal argument for method name " + method + " in class" + clazz + ". \n" + throwable);
+	}
 
 }

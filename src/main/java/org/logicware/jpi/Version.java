@@ -27,16 +27,16 @@ package org.logicware.jpi;
  */
 public final class Version {
 
-    public static final int MAJOR = 1;
-    public static final int MINOR = 0;
-    public static final int MICRO = 0;
+	public static final int MAJOR = 1;
+	public static final int MINOR = 0;
+	public static final int MICRO = 0;
 
-    private Version() {
-    }
+	private Version() {
+	}
 
-    @Override
-    public String toString() {
-	return MAJOR + "." + MINOR + "." + MICRO;
-    }
+	@Override
+	public String toString() {
+		return MAJOR + "." + MINOR + "." + MICRO;
+	}
 
 }

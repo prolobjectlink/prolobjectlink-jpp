@@ -20,156 +20,154 @@
 package org.logicware.jpd;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
 
 public abstract class AbstractDocumentManager extends AbstractDocumentContainer implements DocumentManager {
 
-    // container register mapping class name -> persistent container
-    private final HashMap<String, PersistentContainer> master;
+	// container register mapping class name -> persistent container
+	private final HashMap<String, PersistentContainer> master;
 
-    protected AbstractDocumentManager(PrologProvider provider, Properties properties,
-	    ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory) {
-	super(provider, properties, converter, location, containerFactory);
-	this.master = new HashMap<String, PersistentContainer>();
-    }
-
-    public final void open() {
-	open = true;
-    }
-
-    public final <O> void insert(O... objects) {
-	if (objects != null && objects.length > 0) {
-	    Class<?> clazz = objects.getClass();
-	    Class<?> type = clazz.getComponentType();
-	    containerOf(type).insert(objects);
+	protected AbstractDocumentManager(PrologProvider provider, Properties properties,
+			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory) {
+		super(provider, properties, converter, location, containerFactory);
+		this.master = new HashMap<String, PersistentContainer>();
 	}
-    }
 
-    public final <O> void update(O match, O update) {
-	checkReplacementObject(match, update);
-	Class<?> clazz = match.getClass();
-	containerOf(clazz).update(match, update);
-    }
-
-    /**
-     * bulk deletion for non null objects array
-     * 
-     * @param objects
-     */
-    public final <O> void delete(O... objects) {
-	if (objects != null && objects.length > 0) {
-	    Class<?> clazz = objects.getClass();
-	    Class<?> type = clazz.getComponentType();
-	    containerOf(type).delete(objects);
+	public final void open() {
+		open = true;
 	}
-    }
 
-    public final void delete(Class<?> clazz) {
-	containerOf(clazz).delete(clazz);
-	String path = locationOf(clazz);
-	File fileLock = new File(path + ".lock");
-	File file = new File(path);
-	if (file.delete()) {
-	    fileLock.delete();
+	public final <O> void insert(O... objects) {
+		if (objects != null && objects.length > 0) {
+			Class<?> clazz = objects.getClass();
+			Class<?> type = clazz.getComponentType();
+			containerOf(type).insert(objects);
+		}
 	}
-    }
 
-    public final boolean contains(String string) {
-	ArrayList<Class<?>> classes = classesOf(string);
-	for (Class<?> clazz : classes) {
-	    getEngine().include(locationOf(clazz));
+	public final <O> void update(O match, O update) {
+		checkReplacementObject(match, update);
+		Class<?> clazz = match.getClass();
+		containerOf(clazz).update(match, update);
 	}
-	// return engine.clause(string);
-	return getEngine().contains(string);
-    }
 
-    public final <O> boolean contains(O o) {
-	PersistentContainer container = containerOf(classOf(o));
-	container.getTransaction().begin();
-	boolean contains = container.contains(o);
-	container.getTransaction().commit();
-	container.close();
-	return contains;
-    }
-
-    public final <O> boolean contains(Class<O> clazz) {
-	PersistentContainer container = containerOf(clazz);
-	container.getTransaction().begin();
-	boolean contains = container.contains(clazz);
-	container.getTransaction().commit();
-	container.close();
-	return contains;
-    }
-
-    public final <O> boolean contains(Predicate<O> predicate) {
-	PersistentContainer container = containerOf(classOf(predicate));
-	container.getTransaction().begin();
-	boolean contains = container.contains(predicate);
-	container.getTransaction().commit();
-	container.close();
-	return contains;
-    }
-
-    public abstract Query createQuery(String string);
-
-    public final <O> TypedQuery<O> createQuery(O o) {
-	return containerOf(classOf(o)).createQuery(o);
-    }
-
-    public final <O> TypedQuery<O> createQuery(Class<O> clazz) {
-	return containerOf(clazz).createQuery(clazz);
-    }
-
-    public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
-	return containerOf(classOf(predicate)).createQuery(predicate);
-    }
-
-    public final <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
-	return containerOf(clazz).createConstraintQuery(clazz);
-    }
-
-    public final ProcedureQuery createProcedureQuery(String functor, String... args) {
-	return containerOf(classOf(functor, args.length)).createProcedureQuery(functor, args);
-    }
-
-    public final Transaction getTransaction() {
-	return new DefaultTransaction(this);
-    }
-
-    public final PersistentContainer containerOf(Class<?> clazz) {
-	String key = clazz.getName();
-	PersistentContainer container = master.get(key);
-	if (container == null) {
-	    String path = locationOf(clazz);
-	    container = containerFactory.createDocument(path);
-	    master.put(key, container);
+	/**
+	 * bulk deletion for non null objects array
+	 * 
+	 * @param objects
+	 */
+	public final <O> void delete(O... objects) {
+		if (objects != null && objects.length > 0) {
+			Class<?> clazz = objects.getClass();
+			Class<?> type = clazz.getComponentType();
+			containerOf(type).delete(objects);
+		}
 	}
-	return container;
-    }
 
-    public final String locationOf(Class<?> clazz) {
-	String name = clazz.getName();
-	String path = name.replace('.', separator);
-	return getLocation() + separator + path;
-    }
-
-    public final void flush() {
-	for (PersistentContainer c : master.values()) {
-	    c.flush();
+	public final void delete(Class<?> clazz) {
+		containerOf(clazz).delete(clazz);
+		String path = locationOf(clazz);
+		File fileLock = new File(path + ".lock");
+		File file = new File(path);
+		if (file.delete()) {
+			fileLock.delete();
+		}
 	}
-    }
 
-    public final void close() {
-	for (PersistentContainer c : master.values()) {
-	    c.clear();
-	    c.close();
+	public final boolean contains(String string) {
+		List<Class<?>> classes = classesOf(string);
+		for (Class<?> clazz : classes) {
+			getEngine().include(locationOf(clazz));
+		}
+		// return engine.clause(string);
+		return getEngine().contains(string);
 	}
-	master.clear();
-	open = false;
-    }
+
+	public final <O> boolean contains(O o) {
+		PersistentContainer container = containerOf(classOf(o));
+		container.getTransaction().begin();
+		boolean contains = container.contains(o);
+		container.getTransaction().commit();
+		container.close();
+		return contains;
+	}
+
+	public final <O> boolean contains(Class<O> clazz) {
+		PersistentContainer container = containerOf(clazz);
+		container.getTransaction().begin();
+		boolean contains = container.contains(clazz);
+		container.getTransaction().commit();
+		container.close();
+		return contains;
+	}
+
+	public final <O> boolean contains(Predicate<O> predicate) {
+		PersistentContainer container = containerOf(classOf(predicate));
+		container.getTransaction().begin();
+		boolean contains = container.contains(predicate);
+		container.getTransaction().commit();
+		container.close();
+		return contains;
+	}
+
+	public final <O> TypedQuery<O> createQuery(O o) {
+		return containerOf(classOf(o)).createQuery(o);
+	}
+
+	public final <O> TypedQuery<O> createQuery(Class<O> clazz) {
+		return containerOf(clazz).createQuery(clazz);
+	}
+
+	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
+		return containerOf(classOf(predicate)).createQuery(predicate);
+	}
+
+	public final <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
+		return containerOf(clazz).createConstraintQuery(clazz);
+	}
+
+	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
+		return containerOf(classOf(functor, args.length)).createProcedureQuery(functor, args);
+	}
+
+	public final Transaction getTransaction() {
+		return new DefaultTransaction(this);
+	}
+
+	public final PersistentContainer containerOf(Class<?> clazz) {
+		String key = clazz.getName();
+		PersistentContainer container = master.get(key);
+		if (container == null) {
+			String path = locationOf(clazz);
+			container = containerFactory.createDocument(path);
+			master.put(key, container);
+		}
+		return container;
+	}
+
+	public final String locationOf(Class<?> clazz) {
+		String name = clazz.getName();
+		String path = name.replace('.', SEPARATOR);
+		return getLocation() + SEPARATOR + path;
+	}
+
+	public final void flush() {
+		for (PersistentContainer c : master.values()) {
+			c.flush();
+		}
+	}
+
+	public final void close() {
+		for (PersistentContainer c : master.values()) {
+			c.clear();
+			c.close();
+		}
+		master.clear();
+		open = false;
+	}
 
 }

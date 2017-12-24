@@ -21,18 +21,18 @@ package org.logicware.jpp;
 
 public interface Platform extends Wrapper {
 
-    public String getOsName();
+	public String getOsName();
 
-    public boolean runOnLinux();
+	public boolean runOnLinux();
 
-    public boolean runOnWindows();
+	public boolean runOnWindows();
 
-    public boolean runOnOsX();
+	public boolean runOnOsX();
 
-    public boolean equals(Object obj);
+	public boolean equals(Object obj);
 
-    public int hashCode();
+	public int hashCode();
 
-    public String toString();
+	public String toString();
 
 }

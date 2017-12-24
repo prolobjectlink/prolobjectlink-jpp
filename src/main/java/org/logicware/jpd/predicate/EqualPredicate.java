@@ -23,14 +23,14 @@ import org.logicware.jpd.Predicate;
 
 public final class EqualPredicate<O> implements Predicate<O> {
 
-    private final Object value;
+	private final Object value;
 
-    public EqualPredicate(Object value) {
-	this.value = value;
-    }
+	public EqualPredicate(Object value) {
+		this.value = value;
+	}
 
-    public boolean evaluate(O o) {
-	return o.equals(value);
-    }
+	public boolean evaluate(O o) {
+		return o.equals(value);
+	}
 
 }

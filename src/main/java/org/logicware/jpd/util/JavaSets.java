@@ -21,66 +21,70 @@ package org.logicware.jpd.util;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 public final class JavaSets {
 
-    /**
-     * Create a new TreeSet.
-     * 
-     * @param <T>
-     *            the type
-     * @return the object
-     */
-    public static <T extends Comparable<? super T>> TreeSet<T> treeSet() {
-	return new TreeSet<T>();
-    }
+	private JavaSets() {
+	}
 
-    /**
-     * Create a new HashSet.
-     * 
-     * @param <T>
-     *            the type
-     * @return the object
-     */
-    public static <T> HashSet<T> hashSet() {
-	return new HashSet<T>();
-    }
+	/**
+	 * Create a new TreeSet.
+	 * 
+	 * @param <T>
+	 *            the type
+	 * @return the object
+	 */
+	public static <T extends Comparable<? super T>> Set<T> treeSet() {
+		return new TreeSet<T>();
+	}
 
-    /**
-     * Create a new LinkedHashSet.
-     * 
-     * @param <T>
-     *            the type
-     * @return the object
-     */
-    public static <T> LinkedHashSet<T> linkedHashSet() {
-	return new LinkedHashSet<T>();
-    }
+	/**
+	 * Create a new HashSet.
+	 * 
+	 * @param <T>
+	 *            the type
+	 * @return the object
+	 */
+	public static <T> Set<T> hashSet() {
+		return new HashSet<T>();
+	}
 
-    /**
-     * Create a new HashSet.
-     * 
-     * @param <T>
-     *            the type
-     * @param capacity
-     *            the initial capacity
-     * @return the object
-     */
-    public static <T> HashSet<T> hashSet(int capacity) {
-	return new HashSet<T>(capacity);
-    }
+	/**
+	 * Create a new LinkedHashSet.
+	 * 
+	 * @param <T>
+	 *            the type
+	 * @return the object
+	 */
+	public static <T> Set<T> linkedHashSet() {
+		return new LinkedHashSet<T>();
+	}
 
-    /**
-     * Create a new LinkedHashSet.
-     * 
-     * @param <T>
-     *            the type
-     * @param capacity
-     *            the initial capacity
-     * @return the object
-     */
-    public static <T> LinkedHashSet<T> linkedHashSet(int capacity) {
-	return new LinkedHashSet<T>(capacity);
-    }
+	/**
+	 * Create a new HashSet.
+	 * 
+	 * @param <T>
+	 *            the type
+	 * @param capacity
+	 *            the initial capacity
+	 * @return the object
+	 */
+	public static <T> Set<T> hashSet(int capacity) {
+		return new HashSet<T>(capacity);
+	}
+
+	/**
+	 * Create a new LinkedHashSet.
+	 * 
+	 * @param <T>
+	 *            the type
+	 * @param capacity
+	 *            the initial capacity
+	 * @return the object
+	 */
+	public static <T> Set<T> linkedHashSet(int capacity) {
+		return new LinkedHashSet<T>(capacity);
+	}
 
 }

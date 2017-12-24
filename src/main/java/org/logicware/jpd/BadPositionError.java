@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 final class BadPositionError extends RuntimeError {
 
-    private static final long serialVersionUID = -6152930068991157486L;
+	private static final long serialVersionUID = -6152930068991157486L;
 
-    BadPositionError(int position) {
-	super("The position " + position + " is solution out of bound");
-    }
+	BadPositionError(int position) {
+		super("The position " + position + " is solution out of bound");
+	}
 
 }

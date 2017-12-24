@@ -29,44 +29,44 @@ package org.logicware.jpp;
  */
 public interface Wrapper {
 
-    /**
-     * Down cast the current wrapper object to specific given class. Call
-     * {@code Wrapper#unwrap(Object, Class)} passing like argument this instance
-     * and the given class. If down casting is not possible raise a
-     * {@link RuntimeError}.
-     * 
-     * @param cls
-     *            class to obtain a down cast.
-     * @throws RuntimeError
-     *             if down casting is not possible
-     * @return current instance of type cls.
-     * @since 1.0
-     * @see #unwrap(Object, Class)
-     */
-    <K> K unwrap(Class<K> cls);
+	/**
+	 * Down cast the current wrapper object to specific given class. Call
+	 * {@code Wrapper#unwrap(Object, Class)} passing like argument this instance
+	 * and the given class. If down casting is not possible raise a
+	 * {@link RuntimeError}.
+	 * 
+	 * @param cls
+	 *            class to obtain a down cast.
+	 * @throws RuntimeError
+	 *             if down casting is not possible
+	 * @return current instance of type cls.
+	 * @since 1.0
+	 * @see #unwrap(Object, Class)
+	 */
+	<K> K unwrap(Class<K> cls);
 
-    /**
-     * Down cast a given wrapper object to specific given class. If down casting
-     * is not possible raise a {@link RuntimeError}.
-     * 
-     * @param cls
-     *            class to obtain a down cast.
-     * @throws RuntimeError
-     *             if down casting is not possible
-     * @return current instance of type cls.
-     * @since 1.0
-     * @see #unwrap(Class)
-     */
-    <K> K unwrap(Object o, Class<K> cls);
+	/**
+	 * Down cast a given wrapper object to specific given class. If down casting
+	 * is not possible raise a {@link RuntimeError}.
+	 * 
+	 * @param cls
+	 *            class to obtain a down cast.
+	 * @throws RuntimeError
+	 *             if down casting is not possible
+	 * @return current instance of type cls.
+	 * @since 1.0
+	 * @see #unwrap(Class)
+	 */
+	<K> K unwrap(Object o, Class<K> cls);
 
-    /**
-     * 
-     * @param cls
-     * @return
-     * @since 1.0
-     */
-    boolean isWrappedBy(Class<?> cls);
+	/**
+	 * 
+	 * @param cls
+	 * @return
+	 * @since 1.0
+	 */
+	boolean isWrappedBy(Class<?> cls);
 
-    boolean isWrappedBy(Object o, Class<?> cls);
+	boolean isWrappedBy(Object o, Class<?> cls);
 
 }

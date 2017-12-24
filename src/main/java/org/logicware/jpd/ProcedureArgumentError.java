@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 public final class ProcedureArgumentError extends RuntimeError {
 
-    private static final long serialVersionUID = -1926528417397697548L;
+	private static final long serialVersionUID = -1926528417397697548L;
 
-    public ProcedureArgumentError(String procedureName, String argumentName) {
-	super("No register argument '" + argumentName + "' for the procedure '" + procedureName + "'.");
-    }
+	public ProcedureArgumentError(String procedureName, String argumentName) {
+		super("No register argument '" + argumentName + "' for the procedure '" + procedureName + "'.");
+	}
 
 }

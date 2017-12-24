@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 public final class DoubleExpectedError extends RuntimeError {
 
-    private static final long serialVersionUID = -1138262990138844046L;
+	private static final long serialVersionUID = -1138262990138844046L;
 
-    public DoubleExpectedError(Object term) {
-	super("The expected term is not a double : " + term);
-    }
+	public DoubleExpectedError(Object term) {
+		super("The expected term is not a double : " + term);
+	}
 
 }

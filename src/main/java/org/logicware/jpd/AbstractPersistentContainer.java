@@ -24,35 +24,26 @@ import org.logicware.jpi.PrologTerm;
 
 public abstract class AbstractPersistentContainer extends AbstractVolatileContainer implements PersistentContainer {
 
-    // open/close state flag
-    protected boolean open;
+	// open/close state flag
+	protected boolean open;
 
-    // database root location
-    // location for all data files
-    private final String location;
+	// database root location
+	// location for all data files
+	private final String location;
 
-    protected AbstractPersistentContainer(PrologProvider provider, Properties properties,
-	    ObjectConverter<PrologTerm> converter, String location) {
-	super(provider, properties, converter);
-	this.location = location;
-	this.open = true;
-    }
+	protected AbstractPersistentContainer(PrologProvider provider, Properties properties,
+			ObjectConverter<PrologTerm> converter, String location) {
+		super(provider, properties, converter);
+		this.location = location;
+		this.open = true;
+	}
 
-    public abstract void backup(String directory, String zipFileName);
+	public final String getLocation() {
+		return location;
+	}
 
-    public abstract void restore(String directory, String zipFileName);
-
-    public final String getLocation() {
-	return location;
-    }
-
-    public final boolean isOpen() {
-	return open;
-    }
-
-    public abstract void close();
-
-    @Deprecated
-    public abstract void open();
+	public final boolean isOpen() {
+		return open;
+	}
 
 }

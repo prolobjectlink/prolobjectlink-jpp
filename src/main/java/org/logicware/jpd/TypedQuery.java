@@ -89,8 +89,8 @@ import java.util.List;
  * <pre>
  * TypedQuery&lt;Point&gt; query = container.createQuery(Point.class);
  * for (Enumeration&lt;Point&gt; e = query; e.hasMoreElements();) {
- *     Point point = (Point) e.nextElement();
- *     // do something with the retrieved point object
+ * 	Point point = (Point) e.nextElement();
+ * 	// do something with the retrieved point object
  * }
  * </pre>
  * 
@@ -104,212 +104,212 @@ import java.util.List;
  */
 public interface TypedQuery<O> extends Enumeration<O> {
 
-    /**
-     * Return the maximum number of solutions to retrieve by the formulated
-     * query
-     * 
-     * @return maximum number of solutions
-     * @since 1.0
-     */
-    public int getMaxSolution();
+	/**
+	 * Return the maximum number of solutions to retrieve by the formulated
+	 * query
+	 * 
+	 * @return maximum number of solutions
+	 * @since 1.0
+	 */
+	public int getMaxSolution();
 
-    /**
-     * Fix the maximum number of solutions to retrieve by the formulated query
-     * 
-     * @param maxSolution
-     *            maximum number of solutions
-     * @return current instance of {@code TypedQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public TypedQuery<O> setMaxSolution(int maxSolution);
+	/**
+	 * Fix the maximum number of solutions to retrieve by the formulated query
+	 * 
+	 * @param maxSolution
+	 *            maximum number of solutions
+	 * @return current instance of {@code TypedQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public TypedQuery<O> setMaxSolution(int maxSolution);
 
-    /**
-     * Return the fixed position for the first solution to retrieve
-     * 
-     * @return position for the first solution
-     * @since 1.0
-     */
-    public int getFirstSolution();
+	/**
+	 * Return the fixed position for the first solution to retrieve
+	 * 
+	 * @return position for the first solution
+	 * @since 1.0
+	 */
+	public int getFirstSolution();
 
-    /**
-     * Fix the position of the first solution to retrieve.
-     * 
-     * @param firstSolution
-     *            position of the first solution
-     * @return current instance of {@code TypedQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public TypedQuery<O> setFirstSolution(int firstSolution);
+	/**
+	 * Fix the position of the first solution to retrieve.
+	 * 
+	 * @param firstSolution
+	 *            position of the first solution
+	 * @return current instance of {@code TypedQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public TypedQuery<O> setFirstSolution(int firstSolution);
 
-    /**
-     * Return a single solution of the current {@code TypedQuery}. The solution
-     * object type is in correspondence whit root class type specified in the
-     * criteria query construction when its is created through {@link Document}.
-     * 
-     * <pre>
-     * Point point = objectContainer.createQuery(Point.class).getSolution();
-     * </pre>
-     * 
-     * @return Return a single solution of the current {@code TypedQuery}
-     * @throws NonSolutionError
-     *             throw an exception if not exist any solution object
-     * @since 1.0
-     */
-    public O getSolution() throws NonSolutionError;
+	/**
+	 * Return a single solution of the current {@code TypedQuery}. The solution
+	 * object type is in correspondence whit root class type specified in the
+	 * criteria query construction when its is created through {@link Document}.
+	 * 
+	 * <pre>
+	 * Point point = objectContainer.createQuery(Point.class).getSolution();
+	 * </pre>
+	 * 
+	 * @return Return a single solution of the current {@code TypedQuery}
+	 * @throws NonSolutionError
+	 *             throw an exception if not exist any solution object
+	 * @since 1.0
+	 */
+	public O getSolution() throws NonSolutionError;
 
-    /**
-     * Return a all solutions of the current {@code TypedQuery}. The solutions
-     * list object type is in correspondence whit root class type specified in
-     * the criteria query construction when its is created through
-     * {@link Document}.
-     * 
-     * <pre>
-     * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).getSolutions();
-     * </pre>
-     * 
-     * @return Return all solutions of the current {@code TypedQuery}
-     * @since 1.0
-     */
-    public List<O> getSolutions();
+	/**
+	 * Return a all solutions of the current {@code TypedQuery}. The solutions
+	 * list object type is in correspondence whit root class type specified in
+	 * the criteria query construction when its is created through
+	 * {@link Document}.
+	 * 
+	 * <pre>
+	 * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).getSolutions();
+	 * </pre>
+	 * 
+	 * @return Return all solutions of the current {@code TypedQuery}
+	 * @since 1.0
+	 */
+	public List<O> getSolutions();
 
-    /**
-     * <p>
-     * Ascendant ordering of all solutions to be returned by the solutions
-     * methods invocation. The order criterion is base in object hash code. Is
-     * suggested and very important the {@code Object#hashCode()} implementation
-     * in the model objects to achieve a corrected solution . The alternation
-     * with the {@code TypedQuery#orderDescending()} invocation only apply the
-     * latest ordering method invocation. For example if we want the list of
-     * stored point in ascendant order:
-     * </p>
-     * 
-     * <pre>
-     * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).orderAscending().getSolutions();
-     * </pre>
-     * 
-     * <p>
-     * This example return a list with a, b, c, d Point class instances objects
-     * </p>
-     * 
-     * 
-     * 
-     * @return current instance of {@code TypedQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * @see TypedQuery#orderDescending()
-     * @see TypedQuery#orderBy(Comparator)
-     */
-    public TypedQuery<O> orderAscending();
+	/**
+	 * <p>
+	 * Ascendant ordering of all solutions to be returned by the solutions
+	 * methods invocation. The order criterion is base in object hash code. Is
+	 * suggested and very important the {@code Object#hashCode()} implementation
+	 * in the model objects to achieve a corrected solution . The alternation
+	 * with the {@code TypedQuery#orderDescending()} invocation only apply the
+	 * latest ordering method invocation. For example if we want the list of
+	 * stored point in ascendant order:
+	 * </p>
+	 * 
+	 * <pre>
+	 * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).orderAscending().getSolutions();
+	 * </pre>
+	 * 
+	 * <p>
+	 * This example return a list with a, b, c, d Point class instances objects
+	 * </p>
+	 * 
+	 * 
+	 * 
+	 * @return current instance of {@code TypedQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * @see TypedQuery#orderDescending()
+	 * @see TypedQuery#orderBy(Comparator)
+	 */
+	public TypedQuery<O> orderAscending();
 
-    /**
-     * Descendant ordering of all solutions to be returned by the solutions
-     * methods invocation. The order criterion is base in object hash code. Is
-     * suggested and very important the {@code Object#hashCode()} implementation
-     * in the model objects to achieve a corrected solution . The alternation
-     * with the {@code TypedQuery#orderAscending()} invocation only apply the
-     * latest ordering method invocation. For example if we want the list of
-     * stored point in descendant order:
-     * 
-     * <pre>
-     * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).orderDescending().getSolutions();
-     * </pre>
-     * 
-     * <p>
-     * This example return a list with d, c, b, a Point class instances objects
-     * </p>
-     * 
-     * 
-     * @return current instance of {@code TypedQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * @see TypedQuery#orderAscending()
-     * @see TypedQuery#orderBy(Comparator)
-     */
-    public TypedQuery<O> orderDescending();
+	/**
+	 * Descendant ordering of all solutions to be returned by the solutions
+	 * methods invocation. The order criterion is base in object hash code. Is
+	 * suggested and very important the {@code Object#hashCode()} implementation
+	 * in the model objects to achieve a corrected solution . The alternation
+	 * with the {@code TypedQuery#orderAscending()} invocation only apply the
+	 * latest ordering method invocation. For example if we want the list of
+	 * stored point in descendant order:
+	 * 
+	 * <pre>
+	 * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).orderDescending().getSolutions();
+	 * </pre>
+	 * 
+	 * <p>
+	 * This example return a list with d, c, b, a Point class instances objects
+	 * </p>
+	 * 
+	 * 
+	 * @return current instance of {@code TypedQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * @see TypedQuery#orderAscending()
+	 * @see TypedQuery#orderBy(Comparator)
+	 */
+	public TypedQuery<O> orderDescending();
 
-    /**
-     * <p>
-     * Ordering of all solutions to be returned by the solutions methods
-     * invocation by a given comparator implementation. This alternative is
-     * useful when most specific compare criteria is needed between objects.
-     * </p>
-     * 
-     * <p>
-     * The followed example is equivalent to apply ascending order to point
-     * solutions based in point identifier. This example return a list with a,
-     * b, c, d Point class instances objects
-     * </p>
-     * 
-     * <pre>
-     * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).orderBy(new Comparator&lt;Point&gt;() {
-     * 
-     *     public int compare(Point o1, Point o2) {
-     * 	if (o1.getIdp().compareTo(o2.getIdp()) &lt; 0) {
-     * 	    return -1;
-     * 	} else if (o1.getIdp().compareTo(o2.getIdp()) &gt; 0) {
-     * 	    return 1;
-     * 	}
-     * 	return 0;
-     *     }
-     * }).getSolutions();
-     * </pre>
-     * 
-     * @param comparator
-     *            comparator used for compare an ordering solutions to be
-     *            returned
-     * @return current instance of {@code TypedQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * @see TypedQuery#orderAscending()
-     * @see TypedQuery#orderDescending()
-     */
-    public TypedQuery<O> orderBy(Comparator<O> comparator);
+	/**
+	 * <p>
+	 * Ordering of all solutions to be returned by the solutions methods
+	 * invocation by a given comparator implementation. This alternative is
+	 * useful when most specific compare criteria is needed between objects.
+	 * </p>
+	 * 
+	 * <p>
+	 * The followed example is equivalent to apply ascending order to point
+	 * solutions based in point identifier. This example return a list with a,
+	 * b, c, d Point class instances objects
+	 * </p>
+	 * 
+	 * <pre>
+	 * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).orderBy(new Comparator&lt;Point&gt;() {
+	 * 
+	 * 	public int compare(Point o1, Point o2) {
+	 * 		if (o1.getIdp().compareTo(o2.getIdp()) &lt; 0) {
+	 * 			return -1;
+	 * 		} else if (o1.getIdp().compareTo(o2.getIdp()) &gt; 0) {
+	 * 			return 1;
+	 * 		}
+	 * 		return 0;
+	 * 	}
+	 * }).getSolutions();
+	 * </pre>
+	 * 
+	 * @param comparator
+	 *            comparator used for compare an ordering solutions to be
+	 *            returned
+	 * @return current instance of {@code TypedQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * @see TypedQuery#orderAscending()
+	 * @see TypedQuery#orderDescending()
+	 */
+	public TypedQuery<O> orderBy(Comparator<O> comparator);
 
-    public O max();
+	public O max();
 
-    public O max(Comparator<O> comparator);
+	public O max(Comparator<O> comparator);
 
-    public O min();
+	public O min();
 
-    public O min(Comparator<O> comparator);
+	public O min(Comparator<O> comparator);
 
-    /**
-     * <p>
-     * Create a new {@code TypedQuery} descending to object store in the
-     * specified field that match with name parameter and present in the objects
-     * hold by the query instance. If the specified field is not found in the
-     * objects hold by the query instance then an exception is raised. This
-     * operation walk the graph represented by object relationship determined by
-     * yours field.
-     * </p>
-     * 
-     * <p>
-     * For example suppose a Polygon class is composed by segments objects and
-     * one segment by points objects and the point by one point identifier. If
-     * we want all identifiers of the initials points of the initials segments
-     * from all polygons:
-     * </p>
-     * 
-     * <pre>
-     * objectContainer.createQuery(Polygon.class).descend(&quot;segment0&quot;).descend(&quot;point0&quot;).descend(&quot;idp&quot;).getSolutions();
-     * </pre>
-     * 
-     * @param name
-     *            class field name to descend
-     * @return new instance of {@code TypedQuery} with the restriction appended.
-     * @since 1.0
-     */
-    public TypedQuery<Object> descend(String name);
+	/**
+	 * <p>
+	 * Create a new {@code TypedQuery} descending to object store in the
+	 * specified field that match with name parameter and present in the objects
+	 * hold by the query instance. If the specified field is not found in the
+	 * objects hold by the query instance then an exception is raised. This
+	 * operation walk the graph represented by object relationship determined by
+	 * yours field.
+	 * </p>
+	 * 
+	 * <p>
+	 * For example suppose a Polygon class is composed by segments objects and
+	 * one segment by points objects and the point by one point identifier. If
+	 * we want all identifiers of the initials points of the initials segments
+	 * from all polygons:
+	 * </p>
+	 * 
+	 * <pre>
+	 * objectContainer.createQuery(Polygon.class).descend(&quot;segment0&quot;).descend(&quot;point0&quot;).descend(&quot;idp&quot;).getSolutions();
+	 * </pre>
+	 * 
+	 * @param name
+	 *            class field name to descend
+	 * @return new instance of {@code TypedQuery} with the restriction appended.
+	 * @since 1.0
+	 */
+	public TypedQuery<Object> descend(String name);
 
-    public int count();
+	public int count();
 
-    /**
-     * Release all allocations and references for the current object
-     * 
-     * @since 1.0
-     */
-    public void dispose();
+	/**
+	 * Release all allocations and references for the current object
+	 * 
+	 * @since 1.0
+	 */
+	public void dispose();
 
 }

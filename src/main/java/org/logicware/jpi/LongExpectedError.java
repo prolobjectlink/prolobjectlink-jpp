@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 public final class LongExpectedError extends RuntimeError {
 
-    private static final long serialVersionUID = -8364430747596659410L;
+	private static final long serialVersionUID = -8364430747596659410L;
 
-    public LongExpectedError(Object term) {
-	super("The expected term is not a long : " + term);
-    }
+	public LongExpectedError(Object term) {
+		super("The expected term is not a long : " + term);
+	}
 
 }

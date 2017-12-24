@@ -21,6 +21,6 @@ package org.logicware.jpd;
 
 public interface DocumentContainer extends PersistentContainer {
 
-    ContainerFactory getContainerFactory();
+	ContainerFactory getContainerFactory();
 
 }

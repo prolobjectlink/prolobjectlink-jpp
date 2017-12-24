@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 public class InstantiationError extends RuntimeError {
 
-    private static final long serialVersionUID = -6469645531503868695L;
+	private static final long serialVersionUID = -6469645531503868695L;
 
-    public InstantiationError(Class<?> sender, String name, Throwable throwable) {
-	super(sender, "The class name " + name + " don't have empty constructor. \n" + throwable);
-    }
+	public InstantiationError(Class<?> sender, String name, Throwable throwable) {
+		super(sender, "The class name " + name + " don't have empty constructor. \n" + throwable);
+	}
 
 }

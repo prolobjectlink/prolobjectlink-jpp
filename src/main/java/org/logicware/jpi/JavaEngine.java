@@ -30,8 +30,8 @@ package org.logicware.jpi;
  */
 public abstract class JavaEngine extends AbstractEngine implements PrologEngine {
 
-    public JavaEngine(PrologProvider provider) {
-	super(provider);
-    }
+	public JavaEngine(PrologProvider provider) {
+		super(provider);
+	}
 
 }

@@ -26,34 +26,34 @@ import org.logicware.jpi.PrologProvider;
 
 public final class ObjectConverterFactory {
 
-    private static final ExceptionFactory EXCEPTION_FACTORY = new ExceptionFactory();
+	private static final ExceptionFactory EXCEPTION_FACTORY = new ExceptionFactory();
 
-    public ObjectConverterFactory() {
-    }
-
-    public static <T> ObjectConverter<T> createConverter(Class<T> cls, PrologProvider provider) {
-	ObjectConverter<T> converter = null;
-	try {
-	    Constructor<?> constructor = cls.getConstructor(PrologProvider.class);
-	    converter = (ObjectConverter<T>) constructor.newInstance(provider);
-	} catch (InstantiationException e) {
-	    throw EXCEPTION_FACTORY.instantiationException(cls.getName(), e);
-	} catch (IllegalAccessException e) {
-	    throw EXCEPTION_FACTORY.illegalAccessException(cls.getName(), e);
-	} catch (NoSuchMethodException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	} catch (SecurityException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	} catch (IllegalArgumentException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	} catch (InvocationTargetException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	public ObjectConverterFactory() {
 	}
-	return converter;
-    }
+
+	public static <T> ObjectConverter<T> createConverter(Class<T> cls, PrologProvider provider) {
+		ObjectConverter<T> converter = null;
+		try {
+			Constructor<?> constructor = cls.getConstructor(PrologProvider.class);
+			converter = (ObjectConverter<T>) constructor.newInstance(provider);
+		} catch (InstantiationException e) {
+			throw EXCEPTION_FACTORY.instantiationException(cls.getName(), e);
+		} catch (IllegalAccessException e) {
+			throw EXCEPTION_FACTORY.illegalAccessException(cls.getName(), e);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return converter;
+	}
 
 }

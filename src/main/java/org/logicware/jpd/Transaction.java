@@ -21,22 +21,22 @@ package org.logicware.jpd;
 
 public interface Transaction extends Comparable<Transaction> {
 
-    public void begin();
+	public void begin();
 
-    public void commit();
+	public void commit();
 
-    public void rollback();
+	public void rollback();
 
-    public boolean isActive();
+	public boolean isActive();
 
-    public long getTimestamp();
+	public long getTimestamp();
 
-    public int hashCode();
+	public int hashCode();
 
-    public boolean equals(Object obj);
+	public boolean equals(Object obj);
 
-    public boolean after(Transaction t);
+	public boolean after(Transaction t);
 
-    public boolean before(Transaction t);
+	public boolean before(Transaction t);
 
 }

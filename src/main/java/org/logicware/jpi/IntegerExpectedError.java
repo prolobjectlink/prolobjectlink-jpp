@@ -23,15 +23,15 @@ import org.logicware.jpp.RuntimeError;
 
 public final class IntegerExpectedError extends RuntimeError {
 
-    private static final long serialVersionUID = -3064952286859633255L;
+	private static final long serialVersionUID = -3064952286859633255L;
 
-    public IntegerExpectedError(Object term) {
-	super("The expected term is not an integer : " + term);
-    }
+	public IntegerExpectedError(Object term) {
+		super("The expected term is not an integer : " + term);
+	}
 
-    @Deprecated
-    public IntegerExpectedError(Class<?> sender, Object term) {
-	super(sender, "The expected term is not an integer : " + term);
-    }
+	@Deprecated
+	public IntegerExpectedError(Class<?> sender, Object term) {
+		super(sender, "The expected term is not an integer : " + term);
+	}
 
 }

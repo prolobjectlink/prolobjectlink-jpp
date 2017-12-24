@@ -25,55 +25,55 @@ import java.util.Set;
 
 public interface PrologProgram extends Set<PrologClauses>, Iterable<PrologClauses> {
 
-    public PrologClauses get(String key);
+	public PrologClauses get(String key);
 
-    public void add(PrologClause clause);
+	public void add(PrologClause clause);
 
-    public void add(PrologProgram program);
+	public void add(PrologProgram program);
 
-    public void push(PrologClause clause);
+	public void push(PrologClause clause);
 
-    public void removeAll(String key);
+	public void removeAll(String key);
 
-    public void removeAll(String functor, int arity);
+	public void removeAll(String functor, int arity);
 
-    public List<PrologGoal> getGoals();
+	public List<PrologGoal> getGoals();
 
-    public boolean addGoal(PrologGoal goal);
+	public boolean addGoal(PrologGoal goal);
 
-    public boolean removeGoal(PrologGoal goal);
+	public boolean removeGoal(PrologGoal goal);
 
-    public List<PrologGoal> getDirectives();
+	public List<PrologGoal> getDirectives();
 
-    public boolean addDirective(PrologGoal directive);
+	public boolean addDirective(PrologGoal directive);
 
-    public boolean removeDirective(PrologGoal directive);
+	public boolean removeDirective(PrologGoal directive);
 
-    public void markDynamic(String functor, int arity);
+	public void markDynamic(String functor, int arity);
 
-    public void unmarkDynamic(String functor, int arity);
+	public void unmarkDynamic(String functor, int arity);
 
-    public boolean isDynamic(String functor, int arity);
+	public boolean isDynamic(String functor, int arity);
 
-    public void markMultifile(String functor, int arity);
+	public void markMultifile(String functor, int arity);
 
-    public void unmarkMultifile(String functor, int arity);
+	public void unmarkMultifile(String functor, int arity);
 
-    public boolean isMultifile(String functor, int arity);
+	public boolean isMultifile(String functor, int arity);
 
-    public void markDiscontiguous(String functor, int arity);
+	public void markDiscontiguous(String functor, int arity);
 
-    public void unmarkDiscontiguous(String functor, int arity);
+	public void unmarkDiscontiguous(String functor, int arity);
 
-    public boolean isDiscontiguous(String functor, int arity);
+	public boolean isDiscontiguous(String functor, int arity);
 
-    public Set<String> getIndicators();
+	public Set<String> getIndicators();
 
-    public String toString();
+	public String toString();
 
-    public int hashCode();
+	public int hashCode();
 
-    public boolean equals(Object obj);
+	public boolean equals(Object obj);
 
-    public abstract Map<String, PrologClauses> getClauses();
+	public abstract Map<String, PrologClauses> getClauses();
 }

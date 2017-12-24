@@ -21,14 +21,14 @@ package org.logicware.jpi;
 
 public interface PrologList extends PrologTerm, Iterable<PrologTerm> {
 
-    public int size();
+	public int size();
 
-    public void clear();
+	public void clear();
 
-    public boolean isEmpty();
+	public boolean isEmpty();
 
-    public PrologTerm getHead();
+	public PrologTerm getHead();
 
-    public PrologTerm getTail();
+	public PrologTerm getTail();
 
 }

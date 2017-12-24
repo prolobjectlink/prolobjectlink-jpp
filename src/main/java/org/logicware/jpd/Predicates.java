@@ -32,47 +32,47 @@ import org.logicware.jpd.predicate.TruePredicate;
 
 public final class Predicates {
 
-    private Predicates() {
-    }
+	private Predicates() {
+	}
 
-    public static <O> Predicate<O> andPredicate(Predicate<O> leftPredicate, Predicate<O> rigthPredicate) {
-	return new AndPredicate<O>(leftPredicate, rigthPredicate);
-    }
+	public static <O> Predicate<O> andPredicate(Predicate<O> leftPredicate, Predicate<O> rigthPredicate) {
+		return new AndPredicate<O>(leftPredicate, rigthPredicate);
+	}
 
-    public static <O> Predicate<O> orPredicate(Predicate<O> leftPredicate, Predicate<O> rigthPredicate) {
-	return new OrPredicate<O>(leftPredicate, rigthPredicate);
-    }
+	public static <O> Predicate<O> orPredicate(Predicate<O> leftPredicate, Predicate<O> rigthPredicate) {
+		return new OrPredicate<O>(leftPredicate, rigthPredicate);
+	}
 
-    public static <O> Predicate<O> notPredicate(Predicate<O> predicate) {
-	return new NotPredicate<O>(predicate);
-    }
+	public static <O> Predicate<O> notPredicate(Predicate<O> predicate) {
+		return new NotPredicate<O>(predicate);
+	}
 
-    public static <O> Predicate<O> equalPredicate(Object value) {
-	return new EqualPredicate<O>(value);
-    }
+	public static <O> Predicate<O> equalPredicate(Object value) {
+		return new EqualPredicate<O>(value);
+	}
 
-    public static <O> Predicate<O> identityPredicate(Object value) {
-	return new IdentityPredicate<O>(value);
-    }
+	public static <O> Predicate<O> identityPredicate(Object value) {
+		return new IdentityPredicate<O>(value);
+	}
 
-    public static <O> Predicate<O> instanceOfPredicate(Class<?> clazz) {
-	return new InstanceOfPredicate<O>(clazz);
-    }
+	public static <O> Predicate<O> instanceOfPredicate(Class<?> clazz) {
+		return new InstanceOfPredicate<O>(clazz);
+	}
 
-    public static <O> Predicate<O> falsePredicate() {
-	return new FalsePredicate<O>();
-    }
+	public static <O> Predicate<O> falsePredicate() {
+		return new FalsePredicate<O>();
+	}
 
-    public static <O> Predicate<O> truePredicate() {
-	return new TruePredicate<O>();
-    }
+	public static <O> Predicate<O> truePredicate() {
+		return new TruePredicate<O>();
+	}
 
-    public static <O> Predicate<O> notNullPredicate() {
-	return new NotNullPredicate<O>();
-    }
+	public static <O> Predicate<O> notNullPredicate() {
+		return new NotNullPredicate<O>();
+	}
 
-    public static <O> Predicate<O> nullPredicate() {
-	return new NullPredicate<O>();
-    }
+	public static <O> Predicate<O> nullPredicate() {
+		return new NullPredicate<O>();
+	}
 
 }

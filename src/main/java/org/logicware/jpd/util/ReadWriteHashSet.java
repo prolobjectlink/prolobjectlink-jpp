@@ -25,20 +25,20 @@ import java.util.Set;
 
 public class ReadWriteHashSet<E> extends ReadWriteSet<E> implements Set<E> {
 
-    public ReadWriteHashSet() {
-	super(new HashSet<E>());
-    }
+	public ReadWriteHashSet() {
+		super(new HashSet<E>());
+	}
 
-    public ReadWriteHashSet(Collection<? extends E> c) {
-	super(new HashSet<E>(c));
-    }
+	public ReadWriteHashSet(Collection<? extends E> c) {
+		super(new HashSet<E>(c));
+	}
 
-    public ReadWriteHashSet(int initialCapacity, float loadFactor) {
-	super(new HashSet<E>(initialCapacity, loadFactor));
-    }
+	public ReadWriteHashSet(int initialCapacity, float loadFactor) {
+		super(new HashSet<E>(initialCapacity, loadFactor));
+	}
 
-    public ReadWriteHashSet(int initialCapacity) {
-	super(new HashSet<E>(initialCapacity));
-    }
+	public ReadWriteHashSet(int initialCapacity) {
+		super(new HashSet<E>(initialCapacity));
+	}
 
 }

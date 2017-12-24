@@ -29,32 +29,32 @@ import java.util.Iterator;
  */
 public final class PrologQueryIterator implements Iterator<PrologTerm[]> {
 
-    private final PrologQuery query;
+	private final PrologQuery query;
 
-    public PrologQueryIterator(PrologQuery query) {
-	this.query = query;
-    }
+	public PrologQueryIterator(PrologQuery query) {
+		this.query = query;
+	}
 
-    /**
-     * True if the current Prolog query has more solution, false if not has more
-     * solution
-     */
-    public boolean hasNext() {
-	return query.hasMoreSolutions();
-    }
+	/**
+	 * True if the current Prolog query has more solution, false if not has more
+	 * solution
+	 */
+	public boolean hasNext() {
+		return query.hasMoreSolutions();
+	}
 
-    /**
-     * Next Prolog solution terms
-     */
-    public PrologTerm[] next() {
-	return query.nextSolution();
-    }
+	/**
+	 * Next Prolog solution terms
+	 */
+	public PrologTerm[] next() {
+		return query.nextSolution();
+	}
 
-    /**
-     * Skip the next solution invoking next solution method
-     */
-    public void remove() {
-	query.nextSolution();
-    }
+	/**
+	 * Skip the next solution invoking next solution method
+	 */
+	public void remove() {
+		query.nextSolution();
+	}
 
 }

@@ -23,14 +23,14 @@ import org.logicware.jpd.Predicate;
 
 public final class InstanceOfPredicate<O> implements Predicate<O> {
 
-    private final Class<?> clazz;
+	private final Class<?> clazz;
 
-    public InstanceOfPredicate(Class<?> clazz) {
-	this.clazz = clazz;
-    }
+	public InstanceOfPredicate(Class<?> clazz) {
+		this.clazz = clazz;
+	}
 
-    public boolean evaluate(final O o) {
-	return clazz.isInstance(o);
-    }
+	public boolean evaluate(final O o) {
+		return clazz.isInstance(o);
+	}
 
 }

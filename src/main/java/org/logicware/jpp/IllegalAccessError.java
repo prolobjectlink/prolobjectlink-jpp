@@ -21,10 +21,10 @@ package org.logicware.jpp;
 
 public final class IllegalAccessError extends RuntimeError {
 
-    private static final long serialVersionUID = -3445521548634661542L;
+	private static final long serialVersionUID = -3445521548634661542L;
 
-    public IllegalAccessError(String name, Throwable throwable) {
-	super("The class " + name + " can't be access to this member. \n" + throwable);
-    }
+	public IllegalAccessError(String name, Throwable throwable) {
+		super("The class " + name + " can't be access to this member. \n" + throwable);
+	}
 
 }

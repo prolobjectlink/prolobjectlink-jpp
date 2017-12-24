@@ -23,14 +23,14 @@ import org.logicware.jpd.Predicate;
 
 public final class NotPredicate<O> implements Predicate<O> {
 
-    private final Predicate<O> predicate;
+	private final Predicate<O> predicate;
 
-    public NotPredicate(Predicate<O> predicate) {
-	this.predicate = predicate;
-    }
+	public NotPredicate(Predicate<O> predicate) {
+		this.predicate = predicate;
+	}
 
-    public boolean evaluate(final O o) {
-	return !predicate.evaluate(o);
-    }
+	public boolean evaluate(final O o) {
+		return !predicate.evaluate(o);
+	}
 
 }

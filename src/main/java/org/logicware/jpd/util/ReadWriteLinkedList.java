@@ -25,12 +25,12 @@ import java.util.List;
 
 public final class ReadWriteLinkedList<E> extends ReadWriteList<E> implements List<E> {
 
-    public ReadWriteLinkedList() {
-	super(new LinkedList<E>());
-    }
+	public ReadWriteLinkedList() {
+		super(new LinkedList<E>());
+	}
 
-    public ReadWriteLinkedList(Collection<? extends E> c) {
-	super(new LinkedList<E>(c));
-    }
+	public ReadWriteLinkedList(Collection<? extends E> c) {
+		super(new LinkedList<E>(c));
+	}
 
 }

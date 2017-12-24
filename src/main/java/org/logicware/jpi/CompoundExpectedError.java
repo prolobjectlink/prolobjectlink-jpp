@@ -23,15 +23,15 @@ import org.logicware.jpp.RuntimeError;
 
 public final class CompoundExpectedError extends RuntimeError {
 
-    private static final long serialVersionUID = -3064952286859633255L;
+	private static final long serialVersionUID = -3064952286859633255L;
 
-    public CompoundExpectedError(PrologTerm term) {
-	super("The expected term is not a compound term : " + term);
-    }
+	public CompoundExpectedError(PrologTerm term) {
+		super("The expected term is not a compound term : " + term);
+	}
 
-    @Deprecated
-    public CompoundExpectedError(Class<?> sender, Object term) {
-	super(sender, "The expected term is not a compound term : " + term);
-    }
+	@Deprecated
+	public CompoundExpectedError(Class<?> sender, Object term) {
+		super(sender, "The expected term is not a compound term : " + term);
+	}
 
 }

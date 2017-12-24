@@ -23,42 +23,34 @@ import java.util.Date;
 
 public abstract class AbstractTransaction implements Transaction {
 
-    private final long timestamp;
-    private final PersistentContainer persistentContainer;
+	private final long timestamp;
+	private final PersistentContainer persistentContainer;
 
-    public AbstractTransaction(long timestamp, PersistentContainer persistentContainer) {
-	this.persistentContainer = persistentContainer;
-	this.timestamp = timestamp;
-    }
+	public AbstractTransaction(long timestamp, PersistentContainer persistentContainer) {
+		this.persistentContainer = persistentContainer;
+		this.timestamp = timestamp;
+	}
 
-    public final PersistentContainer getPersistentContainer() {
-	return persistentContainer;
-    }
+	public final PersistentContainer getPersistentContainer() {
+		return persistentContainer;
+	}
 
-    public final boolean before(Transaction t) {
-	return compareTo(t) == -1;
-    }
+	public final boolean before(Transaction t) {
+		return compareTo(t) < 0;
+	}
 
-    public final boolean after(Transaction t) {
-	return compareTo(t) == 1;
-    }
+	public final boolean after(Transaction t) {
+		return compareTo(t) > 0;
+	}
 
-    public final int compareTo(Transaction o) {
-	Date thisDate = new Date(timestamp);
-	Date otherDate = new Date(o.getTimestamp());
-	return thisDate.compareTo(otherDate);
-    }
+	public final int compareTo(Transaction o) {
+		Date thisDate = new Date(timestamp);
+		Date otherDate = new Date(o.getTimestamp());
+		return thisDate.compareTo(otherDate);
+	}
 
-    public abstract void begin();
-
-    public abstract void commit();
-
-    public abstract void rollback();
-
-    public abstract boolean isActive();
-
-    public final long getTimestamp() {
-	return timestamp;
-    }
+	public final long getTimestamp() {
+		return timestamp;
+	}
 
 }

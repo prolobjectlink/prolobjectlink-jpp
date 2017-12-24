@@ -23,15 +23,15 @@ import org.logicware.jpp.RuntimeError;
 
 public final class IndicatorError extends RuntimeError {
 
-    private static final long serialVersionUID = 3634744000779459116L;
+	private static final long serialVersionUID = 3634744000779459116L;
 
-    public IndicatorError(PrologTerm term) {
-	super("The term not have indicator: " + term);
-    }
+	public IndicatorError(PrologTerm term) {
+		super("The term not have indicator: " + term);
+	}
 
-    @Deprecated
-    public IndicatorError(Class<?> sender, PrologTerm term) {
-	super(sender, "The term not have indicator: " + term);
-    }
+	@Deprecated
+	public IndicatorError(Class<?> sender, PrologTerm term) {
+		super(sender, "The term not have indicator: " + term);
+	}
 
 }

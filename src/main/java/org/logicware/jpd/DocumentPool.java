@@ -34,37 +34,37 @@ import java.util.List;
  */
 public interface DocumentPool extends DocumentContainer {
 
-    public Document createDocument(String location, int maxCapacity);
+	public Document createDocument(String location, int maxCapacity);
 
-    public List<Document> getDocuments();
+	public List<Document> getDocuments();
 
-    public int getCapacity();
+	public int getCapacity();
 
-    /**
-     * Documents number in this document pool.
-     * 
-     * @return Documents number in this document pool.
-     * @since 1.0
-     */
-    public int getPoolSize();
+	/**
+	 * Documents number in this document pool.
+	 * 
+	 * @return Documents number in this document pool.
+	 * @since 1.0
+	 */
+	public int getPoolSize();
 
-    /**
-     * Check if this document pool no have any document. Equivalent to
-     * {@code #getPoolSize()==0}.
-     * 
-     * @return true if document pool no have any document and false otherwise
-     * @since 1.0
-     */
-    public boolean isEmpty();
+	/**
+	 * Check if this document pool no have any document. Equivalent to
+	 * {@code #getPoolSize()==0}.
+	 * 
+	 * @return true if document pool no have any document and false otherwise
+	 * @since 1.0
+	 */
+	public boolean isEmpty();
 
-    /**
-     * File filter used for filter pool files into document pool.
-     * 
-     * @return File filter used for filter pool files into document pool.
-     * @since 1.0
-     */
-    public FileFilter getFilter();
+	/**
+	 * File filter used for filter pool files into document pool.
+	 * 
+	 * @return File filter used for filter pool files into document pool.
+	 * @since 1.0
+	 */
+	public FileFilter getFilter();
 
-    public void flush();
+	public void flush();
 
 }

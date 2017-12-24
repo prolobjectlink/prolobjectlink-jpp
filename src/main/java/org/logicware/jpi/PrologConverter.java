@@ -32,48 +32,48 @@ import java.util.Map;
  */
 public interface PrologConverter<T> {
 
-    public <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
-	    Class<K> from);
+	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
+			Class<K> from);
 
-    public <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
-	    Class<K> from);
+	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
+			Class<K> from);
 
-    public <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from);
+	public <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from);
 
-    public <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from);
+	public <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from);
 
-    public <K extends PrologTerm> K toTerm(Object o, Class<K> from);
+	public <K extends PrologTerm> K toTerm(Object o, Class<K> from);
 
-    public Map<String, PrologTerm>[] toTermMapArray(Map<String, T>[] map);
+	public Map<String, PrologTerm>[] toTermMapArray(Map<String, T>[] map);
 
-    public Map<String, PrologTerm> toTermMap(Map<String, T> map);
+	public Map<String, PrologTerm> toTermMap(Map<String, T> map);
 
-    public PrologTerm[][] toTermTable(T[][] terms);
+	public PrologTerm[][] toTermTable(T[][] terms);
 
-    public PrologTerm[] toTermArray(T[] terms);
+	public PrologTerm[] toTermArray(T[] terms);
 
-    public PrologTerm toTerm(T prologTerm);
+	public PrologTerm toTerm(T prologTerm);
 
-    public T fromTerm(PrologTerm term);
+	public T fromTerm(PrologTerm term);
 
-    public T[] fromTermArray(PrologTerm[] terms);
+	public T[] fromTermArray(PrologTerm[] terms);
 
-    public T fromTerm(PrologTerm head, PrologTerm[] body);
+	public T fromTerm(PrologTerm head, PrologTerm[] body);
 
-    public <K> K fromTerm(PrologTerm term, Class<K> to);
+	public <K> K fromTerm(PrologTerm term, Class<K> to);
 
-    public <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to);
+	public <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to);
 
-    public <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to);
+	public <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to);
 
-    public Class<T> getGenericClass();
+	public Class<T> getGenericClass();
 
-    public PrologProvider createProvider();
+	public PrologProvider createProvider();
 
-    public int hashCode();
+	public int hashCode();
 
-    public boolean equals(Object obj);
+	public boolean equals(Object obj);
 
-    public String toString();
+	public String toString();
 
 }

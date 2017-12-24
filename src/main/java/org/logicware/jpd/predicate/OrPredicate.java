@@ -23,16 +23,16 @@ import org.logicware.jpd.Predicate;
 
 public final class OrPredicate<O> implements Predicate<O> {
 
-    private final Predicate<O> leftPredicate;
-    private final Predicate<O> rigthPredicate;
+	private final Predicate<O> leftPredicate;
+	private final Predicate<O> rigthPredicate;
 
-    public OrPredicate(Predicate<O> leftPredicate, Predicate<O> rigthPredicate) {
-	this.leftPredicate = leftPredicate;
-	this.rigthPredicate = rigthPredicate;
-    }
+	public OrPredicate(Predicate<O> leftPredicate, Predicate<O> rigthPredicate) {
+		this.leftPredicate = leftPredicate;
+		this.rigthPredicate = rigthPredicate;
+	}
 
-    public boolean evaluate(final O o) {
-	return leftPredicate.evaluate(o) || rigthPredicate.evaluate(o);
-    }
+	public boolean evaluate(final O o) {
+		return leftPredicate.evaluate(o) || rigthPredicate.evaluate(o);
+	}
 
 }

@@ -21,10 +21,10 @@ package org.logicware.jpi;
 
 public interface PrologIndicator {
 
-    public int getArity();
+	public int getArity();
 
-    public String getFunctor();
+	public String getFunctor();
 
-    public String getIndicator();
+	public String getIndicator();
 
 }

@@ -21,52 +21,52 @@ package org.logicware.jpd;
 
 public class DefaultTransaction extends AbstractTransaction implements Transaction {
 
-    private boolean active;
+	private boolean active;
 
-    public DefaultTransaction(PersistentContainer persistentContainer) {
-	super(System.currentTimeMillis(), persistentContainer);
-    }
-
-    public final void begin() {
-	checkActiveTransaction();
-	if (getPersistentContainer().isWrappedBy(PersistentDocument.class)) {
-	    getPersistentContainer().unwrap(PersistentDocument.class).open();
+	public DefaultTransaction(PersistentContainer persistentContainer) {
+		super(System.currentTimeMillis(), persistentContainer);
 	}
-	active = true;
-    }
 
-    public final void commit() {
-	checkNonActiveTransaction();
-	if (getPersistentContainer().isWrappedBy(PersistentDocument.class)) {
-	    getPersistentContainer().unwrap(PersistentDocument.class).flush();
+	public final void begin() {
+		checkActiveTransaction();
+		if (getPersistentContainer().isWrappedBy(PersistentDocument.class)) {
+			getPersistentContainer().unwrap(PersistentDocument.class).open();
+		}
+		active = true;
 	}
-	active = false;
-    }
 
-    public final void rollback() {
-	checkNonActiveTransaction();
-	if (getPersistentContainer().isWrappedBy(PersistentDocument.class)) {
-	    // roll back open from the file losing
-	    // all memory data changes
-	    getPersistentContainer().unwrap(PersistentDocument.class).open();
+	public final void commit() {
+		checkNonActiveTransaction();
+		if (getPersistentContainer().isWrappedBy(PersistentDocument.class)) {
+			getPersistentContainer().unwrap(PersistentDocument.class).flush();
+		}
+		active = false;
 	}
-	active = false;
-    }
 
-    public final boolean isActive() {
-	return active;
-    }
-
-    private void checkNonActiveTransaction() {
-	if (!isActive()) {
-	    throw new IllegalStateException("Entity Transaction is not active");
+	public final void rollback() {
+		checkNonActiveTransaction();
+		if (getPersistentContainer().isWrappedBy(PersistentDocument.class)) {
+			// roll back open from the file losing
+			// all memory data changes
+			getPersistentContainer().unwrap(PersistentDocument.class).open();
+		}
+		active = false;
 	}
-    }
 
-    private void checkActiveTransaction() {
-	if (isActive()) {
-	    throw new IllegalStateException("Entity Transaction is active");
+	public final boolean isActive() {
+		return active;
 	}
-    }
+
+	private void checkNonActiveTransaction() {
+		if (!isActive()) {
+			throw new IllegalStateException("Entity Transaction is not active");
+		}
+	}
+
+	private void checkActiveTransaction() {
+		if (isActive()) {
+			throw new IllegalStateException("Entity Transaction is active");
+		}
+	}
 
 }

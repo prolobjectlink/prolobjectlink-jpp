@@ -21,63 +21,67 @@ package org.logicware.jpd.util;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public final class JavaMaps {
 
-    /**
-     * Create a new HashMap.
-     * 
-     * @param <K>
-     *            the key type
-     * @param <V>
-     *            the value type
-     * @return the object
-     */
-    public static <K, V> HashMap<K, V> hashMap() {
-	return new HashMap<K, V>();
-    }
+	private JavaMaps() {
+	}
 
-    /**
-     * Create a new HashMap.
-     * 
-     * @param <K>
-     *            the key type
-     * @param <V>
-     *            the value type
-     * @param capacity
-     *            the initial capacity
-     * @return the object
-     */
-    public static <K, V> HashMap<K, V> hashMap(int capacity) {
-	return new HashMap<K, V>(capacity);
-    }
+	/**
+	 * Create a new HashMap.
+	 * 
+	 * @param <K>
+	 *            the key type
+	 * @param <V>
+	 *            the value type
+	 * @return the object
+	 */
+	public static <K, V> Map<K, V> hashMap() {
+		return new HashMap<K, V>();
+	}
 
-    /**
-     * Create a new LinkedHashMap.
-     * 
-     * @param <K>
-     *            the key type
-     * @param <V>
-     *            the value type
-     * @return the object
-     */
-    public static <K, V> LinkedHashMap<K, V> linkedHashMap() {
-	return new LinkedHashMap<K, V>();
-    }
+	/**
+	 * Create a new HashMap.
+	 * 
+	 * @param <K>
+	 *            the key type
+	 * @param <V>
+	 *            the value type
+	 * @param capacity
+	 *            the initial capacity
+	 * @return the object
+	 */
+	public static <K, V> Map<K, V> hashMap(int capacity) {
+		return new HashMap<K, V>(capacity);
+	}
 
-    /**
-     * Create a new LinkedHashMap.
-     * 
-     * @param <K>
-     *            the key type
-     * @param <V>
-     *            the value type
-     * @param capacity
-     *            the initial capacity
-     * @return the object
-     */
-    public static <K, V> LinkedHashMap<K, V> linkedHashMap(int capacity) {
-	return new LinkedHashMap<K, V>(capacity);
-    }
+	/**
+	 * Create a new LinkedHashMap.
+	 * 
+	 * @param <K>
+	 *            the key type
+	 * @param <V>
+	 *            the value type
+	 * @return the object
+	 */
+	public static <K, V> Map<K, V> linkedHashMap() {
+		return new LinkedHashMap<K, V>();
+	}
+
+	/**
+	 * Create a new LinkedHashMap.
+	 * 
+	 * @param <K>
+	 *            the key type
+	 * @param <V>
+	 *            the value type
+	 * @param capacity
+	 *            the initial capacity
+	 * @return the object
+	 */
+	public static <K, V> Map<K, V> linkedHashMap(int capacity) {
+		return new LinkedHashMap<K, V>(capacity);
+	}
 
 }

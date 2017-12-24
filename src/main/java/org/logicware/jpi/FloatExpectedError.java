@@ -23,15 +23,15 @@ import org.logicware.jpp.RuntimeError;
 
 public final class FloatExpectedError extends RuntimeError {
 
-    private static final long serialVersionUID = -3064952286859633255L;
+	private static final long serialVersionUID = -3064952286859633255L;
 
-    public FloatExpectedError(Object term) {
-	super("The expected term is not a float : " + term);
-    }
+	public FloatExpectedError(Object term) {
+		super("The expected term is not a float : " + term);
+	}
 
-    // @Deprecated
-    // public FloatExpectedError(Class<?> sender, Object term) {
-    // super(sender, "The expected term is not a float : " + term);
-    // }
+	// @Deprecated
+	// public FloatExpectedError(Class<?> sender, Object term) {
+	// super(sender, "The expected term is not a float : " + term);
+	// }
 
 }

@@ -19,81 +19,112 @@
  */
 package org.logicware.jpd;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractProcedureQuery<S> extends AbstractQuery<S> implements ProcedureQuery {
 
-    // prolog procedure name
-    private final String functor;
+	// prolog procedure name
+	private final String functor;
 
-    // prolog procedures arguments
-    private final String[] arguments;
+	// prolog procedures arguments
+	private final String[] arguments;
 
-    protected AbstractProcedureQuery(String functor, String[] arguments) {
-	this.functor = functor;
-	this.arguments = arguments;
-    }
+	protected AbstractProcedureQuery(String functor, String[] arguments) {
+		this.functor = functor;
+		this.arguments = arguments;
+	}
 
-    public boolean hasMoreElements() {
-	// TODO Auto-generated method stub
-	return false;
-    }
+	public boolean hasMoreElements() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    public Object nextElement() {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	public Object nextElement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public abstract ProcedureQuery setMaxSolution(int maxSolution);
+	public Object getArgumentValue(int position) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public abstract ProcedureQuery setFirstSolution(int firstSolution);
+	public Object getArgumentValue(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public Object getArgumentValue(int position) {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	public ProcedureQuery setArgumentValue(int position, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public Object getArgumentValue(String name) {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	public ProcedureQuery setArgumentValue(String name, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public ProcedureQuery setArgumentValue(int position, Object value) {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	public ProcedureQuery execute() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public ProcedureQuery setArgumentValue(String name, Object value) {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	public List<Object> getSolutions() {
+		// TODO Auto-generated method stub
+		return new ArrayList<Object>();
+	}
 
-    public ProcedureQuery execute() {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	public Object getSolution() throws NonSolutionError {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public List<Object> getSolutions() {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	public void dispose() {
+		// TODO Auto-generated method stub
 
-    public Object getSolution() throws NonSolutionError {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	}
 
-    public void dispose() {
-	// TODO Auto-generated method stub
+	protected final String getFunctor() {
+		return functor;
+	}
 
-    }
+	protected final String[] getArguments() {
+		return arguments;
+	}
 
-    protected final String getFunctor() {
-	return functor;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Arrays.hashCode(arguments);
+		result = prime * result + ((functor == null) ? 0 : functor.hashCode());
+		return result;
+	}
 
-    protected final String[] getArguments() {
-	return arguments;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractProcedureQuery other = (AbstractProcedureQuery) obj;
+		if (!Arrays.equals(arguments, other.arguments))
+			return false;
+		if (functor == null) {
+			if (other.functor != null)
+				return false;
+		} else if (!functor.equals(other.functor))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "AbstractProcedureQuery [functor=" + functor + ", arguments=" + Arrays.toString(arguments) + "]";
+	}
 
 }

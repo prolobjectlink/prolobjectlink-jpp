@@ -21,57 +21,57 @@ package org.logicware.jpi;
 
 public final class PredicateIndicator implements PrologIndicator {
 
-    private final String functor;
-    private final int arity;
+	private final String functor;
+	private final int arity;
 
-    public PredicateIndicator(String functor, int arity) {
-	this.functor = functor;
-	this.arity = arity;
-    }
+	public PredicateIndicator(String functor, int arity) {
+		this.functor = functor;
+		this.arity = arity;
+	}
 
-    public String getIndicator() {
-	return functor + "/" + arity;
-    }
+	public String getIndicator() {
+		return functor + "/" + arity;
+	}
 
-    public String getFunctor() {
-	return functor;
-    }
+	public String getFunctor() {
+		return functor;
+	}
 
-    public int getArity() {
-	return arity;
-    }
+	public int getArity() {
+		return arity;
+	}
 
-    @Override
-    public String toString() {
-	return getIndicator();
-    }
+	@Override
+	public String toString() {
+		return getIndicator();
+	}
 
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + arity;
-	result = prime * result + ((functor == null) ? 0 : functor.hashCode());
-	return result;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + arity;
+		result = prime * result + ((functor == null) ? 0 : functor.hashCode());
+		return result;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	PredicateIndicator other = (PredicateIndicator) obj;
-	if (arity != other.arity)
-	    return false;
-	if (functor == null) {
-	    if (other.functor != null)
-		return false;
-	} else if (!functor.equals(other.functor))
-	    return false;
-	return true;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PredicateIndicator other = (PredicateIndicator) obj;
+		if (arity != other.arity)
+			return false;
+		if (functor == null) {
+			if (other.functor != null)
+				return false;
+		} else if (!functor.equals(other.functor))
+			return false;
+		return true;
+	}
 
 }

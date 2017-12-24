@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 public final class AtomExpectedError extends RuntimeError {
 
-    private static final long serialVersionUID = -3064952286859633255L;
+	private static final long serialVersionUID = -3064952286859633255L;
 
-    public AtomExpectedError(Object term) {
-	super("The expected term is not an atom : " + term);
-    }
+	public AtomExpectedError(Object term) {
+		super("The expected term is not an atom : " + term);
+	}
 
 }

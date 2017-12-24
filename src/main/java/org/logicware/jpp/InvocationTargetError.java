@@ -21,14 +21,14 @@ package org.logicware.jpp;
 
 public final class InvocationTargetError extends RuntimeError {
 
-    private static final long serialVersionUID = -498286484125187866L;
+	private static final long serialVersionUID = -498286484125187866L;
 
-    public InvocationTargetError(String name) {
-	super("The  class " + name + " can't be instanced.");
-    }
+	public InvocationTargetError(String name) {
+		super("The  class " + name + " can't be instanced.");
+	}
 
-    public InvocationTargetError(String name, Throwable throwable) {
-	super("The  class " + name + " can't be instanced. \n" + throwable);
-    }
+	public InvocationTargetError(String name, Throwable throwable) {
+		super("The  class " + name + " can't be instanced. \n" + throwable);
+	}
 
 }

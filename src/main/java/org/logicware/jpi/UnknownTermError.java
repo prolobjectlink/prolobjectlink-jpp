@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 public final class UnknownTermError extends RuntimeError {
 
-    private static final long serialVersionUID = 3634055905766091444L;
+	private static final long serialVersionUID = 3634055905766091444L;
 
-    public UnknownTermError(Object unknow) {
-	super("The object " + unknow + " is not a correct prolog term");
-    }
+	public UnknownTermError(Object unknow) {
+		super("The object " + unknow + " is not a correct prolog term");
+	}
 
 }

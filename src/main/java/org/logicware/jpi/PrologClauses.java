@@ -23,18 +23,18 @@ import java.util.List;
 
 public interface PrologClauses extends List<PrologClause> {
 
-    public boolean isDynamic();
+	public boolean isDynamic();
 
-    public boolean isMultifile();
+	public boolean isMultifile();
 
-    public boolean isDiscontiguous();
+	public boolean isDiscontiguous();
 
-    public String getIndicator();
+	public String getIndicator();
 
-    public String toString();
+	public String toString();
 
-    public int hashCode();
+	public int hashCode();
 
-    public boolean equals(Object obj);
+	public boolean equals(Object obj);
 
 }

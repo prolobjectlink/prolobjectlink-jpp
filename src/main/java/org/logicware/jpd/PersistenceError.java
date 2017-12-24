@@ -23,10 +23,10 @@ import org.logicware.jpp.RuntimeError;
 
 final class PersistenceError extends RuntimeError {
 
-    private static final long serialVersionUID = -4687773866577482903L;
+	private static final long serialVersionUID = -4687773866577482903L;
 
-    PersistenceError(Object object) {
-	super("The object can not convert to prolog structure to persist : " + object);
-    }
+	PersistenceError(Object object) {
+		super("The object can not convert to prolog structure to persist : " + object);
+	}
 
 }

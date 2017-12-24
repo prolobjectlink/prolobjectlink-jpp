@@ -110,436 +110,436 @@ import java.util.List;
  */
 public interface ConstraintQuery<O> {
 
-    /**
-     * Return the maximum number of solutions to retrieve by the formulated
-     * query
-     * 
-     * @return maximum number of solutions
-     * @since 1.0
-     */
-    public int getMaxSolution();
+	/**
+	 * Return the maximum number of solutions to retrieve by the formulated
+	 * query
+	 * 
+	 * @return maximum number of solutions
+	 * @since 1.0
+	 */
+	public int getMaxSolution();
 
-    /**
-     * Fix the maximum number of solutions to retrieve by the formulated query
-     * 
-     * @param maxSolution
-     *            maximum number of solutions
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public ConstraintQuery<O> setMaxSolution(int maxSolution);
+	/**
+	 * Fix the maximum number of solutions to retrieve by the formulated query
+	 * 
+	 * @param maxSolution
+	 *            maximum number of solutions
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public ConstraintQuery<O> setMaxSolution(int maxSolution);
 
-    /**
-     * Return the fixed position for the first solution to retrieve
-     * 
-     * @return position for the first solution
-     * @since 1.0
-     */
-    public int getFirstSolution();
+	/**
+	 * Return the fixed position for the first solution to retrieve
+	 * 
+	 * @return position for the first solution
+	 * @since 1.0
+	 */
+	public int getFirstSolution();
 
-    /**
-     * Fix the position of the first solution to retrieve.
-     * 
-     * @param firstSolution
-     *            position of the first solution
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public ConstraintQuery<O> setFirstSolution(int firstSolution);
+	/**
+	 * Fix the position of the first solution to retrieve.
+	 * 
+	 * @param firstSolution
+	 *            position of the first solution
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public ConstraintQuery<O> setFirstSolution(int firstSolution);
 
-    /**
-     * Add a class that will be converted to prolog structure and negate the
-     * existence of the equivalent prolog structure. This operator is
-     * correspondent to prolog negation <b>(\+) or (not)</b>.
-     * 
-     * @param clazz
-     *            class to be converted to prolog structure
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public ConstraintQuery<O> not(Class<?> clazz);
+	/**
+	 * Add a class that will be converted to prolog structure and negate the
+	 * existence of the equivalent prolog structure. This operator is
+	 * correspondent to prolog negation <b>(\+) or (not)</b>.
+	 * 
+	 * @param clazz
+	 *            class to be converted to prolog structure
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public ConstraintQuery<O> not(Class<?> clazz);
 
-    /**
-     * Add a class that will be converted to prolog structure like a conjunction
-     * in the formulated query.This operator is correspondent to prolog comma
-     * conjunction <b>( , )</b>.
-     * 
-     * @param clazz
-     *            class to be converted to prolog structure
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public ConstraintQuery<O> and(Class<?> clazz);
+	/**
+	 * Add a class that will be converted to prolog structure like a conjunction
+	 * in the formulated query.This operator is correspondent to prolog comma
+	 * conjunction <b>( , )</b>.
+	 * 
+	 * @param clazz
+	 *            class to be converted to prolog structure
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public ConstraintQuery<O> and(Class<?> clazz);
 
-    /**
-     * Add a class that will be converted to prolog structure like a disjunction
-     * in the formulated query.This operator is correspondent to prolog
-     * semicolon disjunction <b>( ; )</b>.
-     * 
-     * @param clazz
-     *            class to be converted to prolog structure
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public ConstraintQuery<O> or(Class<?> clazz);
+	/**
+	 * Add a class that will be converted to prolog structure like a disjunction
+	 * in the formulated query.This operator is correspondent to prolog
+	 * semicolon disjunction <b>( ; )</b>.
+	 * 
+	 * @param clazz
+	 *            class to be converted to prolog structure
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public ConstraintQuery<O> or(Class<?> clazz);
 
-    // Object comparison operators
+	// Object comparison operators
 
-    /**
-     * Unify operator method put in the criteria object the restriction of the
-     * specified field store a Object <b>unify</b> to Object value when the
-     * query will be created and executed. The restriction is appended as a
-     * conjunction to the concrete prolog query to resolve by the engine.This
-     * method is the representation of prolog Object unification <b>( = )</b>
-     * that succeeds if a Object1 <b>unify</b> to a Object2.
-     * 
-     * <pre>
-     * Object1 = Object2
-     * </pre>
-     * 
-     * @param field
-     *            class field annotated with argument annotation.
-     * @param value
-     *            Object value to compare.
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * 
-     * @see #notUnify(String, Object)
-     */
-    public ConstraintQuery<O> unify(String field, Object value);
+	/**
+	 * Unify operator method put in the criteria object the restriction of the
+	 * specified field store a Object <b>unify</b> to Object value when the
+	 * query will be created and executed. The restriction is appended as a
+	 * conjunction to the concrete prolog query to resolve by the engine.This
+	 * method is the representation of prolog Object unification <b>( = )</b>
+	 * that succeeds if a Object1 <b>unify</b> to a Object2.
+	 * 
+	 * <pre>
+	 * Object1 = Object2
+	 * </pre>
+	 * 
+	 * @param field
+	 *            class field annotated with argument annotation.
+	 * @param value
+	 *            Object value to compare.
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * 
+	 * @see #notUnify(String, Object)
+	 */
+	public ConstraintQuery<O> unify(String field, Object value);
 
-    /**
-     * NotUnify operator method put in the criteria object the restriction of
-     * the specified field store a Object <b>not unify</b> to Object value when
-     * the query will be created and executed. The restriction is appended as a
-     * conjunction to the concrete prolog query to resolve by the engine.This
-     * method is the representation of prolog Object not unification <b>( \=
-     * )</b> that succeeds if a Object1 <b>not unify</b> to a Object2.
-     * 
-     * <pre>
-     * Object1 \= Object2
-     * </pre>
-     * 
-     * @param field
-     *            class field annotated with argument annotation.
-     * @param value
-     *            Object value to compare.
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * 
-     * @see #unify(String, Object)
-     */
-    public ConstraintQuery<O> notUnify(String field, Object value);
+	/**
+	 * NotUnify operator method put in the criteria object the restriction of
+	 * the specified field store a Object <b>not unify</b> to Object value when
+	 * the query will be created and executed. The restriction is appended as a
+	 * conjunction to the concrete prolog query to resolve by the engine.This
+	 * method is the representation of prolog Object not unification <b>( \=
+	 * )</b> that succeeds if a Object1 <b>not unify</b> to a Object2.
+	 * 
+	 * <pre>
+	 * Object1 \= Object2
+	 * </pre>
+	 * 
+	 * @param field
+	 *            class field annotated with argument annotation.
+	 * @param value
+	 *            Object value to compare.
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * 
+	 * @see #unify(String, Object)
+	 */
+	public ConstraintQuery<O> notUnify(String field, Object value);
 
-    /**
-     * Equivalent operator method put in the criteria object the restriction of
-     * the specified field store a Object <b>equivalent</b> to Object value when
-     * the query will be created and executed. The restriction is appended as a
-     * conjunction to the concrete prolog query to resolve by the engine.This
-     * method is the representation of prolog Object comparison <b>( == )</b>
-     * that succeeds if a Object1 is <b>equivalent</b> to a Object2.
-     * 
-     * <pre>
-     * Object1 == Object2
-     * </pre>
-     * 
-     * @param field
-     *            class field annotated with argument annotation.
-     * @param value
-     *            Object value to compare.
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * 
-     * @see #notEquivalent(String, Object)
-     */
-    public ConstraintQuery<O> equivalent(String field, Object value);
+	/**
+	 * Equivalent operator method put in the criteria object the restriction of
+	 * the specified field store a Object <b>equivalent</b> to Object value when
+	 * the query will be created and executed. The restriction is appended as a
+	 * conjunction to the concrete prolog query to resolve by the engine.This
+	 * method is the representation of prolog Object comparison <b>( == )</b>
+	 * that succeeds if a Object1 is <b>equivalent</b> to a Object2.
+	 * 
+	 * <pre>
+	 * Object1 == Object2
+	 * </pre>
+	 * 
+	 * @param field
+	 *            class field annotated with argument annotation.
+	 * @param value
+	 *            Object value to compare.
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * 
+	 * @see #notEquivalent(String, Object)
+	 */
+	public ConstraintQuery<O> equivalent(String field, Object value);
 
-    /**
-     * NotEquivalent operator method put in the criteria object the restriction
-     * of the specified field store a Object <b>not equivalent</b> to Object
-     * value when the query will be created and executed. The restriction is
-     * appended as a conjunction to the concrete prolog query to resolve by the
-     * engine.This method is the representation of prolog Object comparison <b>(
-     * \== )</b> that succeeds if a Object1 is <b>not equivalent</b> to a
-     * Object2.
-     * 
-     * <pre>
-     * Object1 \== Object2
-     * </pre>
-     * 
-     * @param field
-     *            class field annotated with argument annotation.
-     * @param value
-     *            Object value to compare.
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * 
-     * @see #equivalent(String, Object)
-     */
-    public ConstraintQuery<O> notEquivalent(String field, Object value);
+	/**
+	 * NotEquivalent operator method put in the criteria object the restriction
+	 * of the specified field store a Object <b>not equivalent</b> to Object
+	 * value when the query will be created and executed. The restriction is
+	 * appended as a conjunction to the concrete prolog query to resolve by the
+	 * engine.This method is the representation of prolog Object comparison <b>(
+	 * \== )</b> that succeeds if a Object1 is <b>not equivalent</b> to a
+	 * Object2.
+	 * 
+	 * <pre>
+	 * Object1 \== Object2
+	 * </pre>
+	 * 
+	 * @param field
+	 *            class field annotated with argument annotation.
+	 * @param value
+	 *            Object value to compare.
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * 
+	 * @see #equivalent(String, Object)
+	 */
+	public ConstraintQuery<O> notEquivalent(String field, Object value);
 
-    /**
-     * Before operator method put in the criteria object the restriction of the
-     * specified field store a Object that is <b>before</b> of the Object value
-     * attending to prolog standard order, when the query will be created and
-     * executed. The restriction is appended as a conjunction to the concrete
-     * prolog query to resolve by the engine.This method is the representation
-     * of prolog Object comparison <b>( @< )</b> that succeeds if a Object1 is
-     * <b>before</b> to a Object2.
-     * 
-     * <pre>
-     * Object1 @< Object2
-     * </pre>
-     * 
-     * @param field
-     *            class field annotated with argument annotation.
-     * @param value
-     *            Object value to compare.
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * 
-     * @see #beforeEquals(String, Object)
-     * @see #after(String, Object)
-     * @see #afterEquals(String, Object)
-     */
-    public ConstraintQuery<O> before(String field, Object value);
+	/**
+	 * Before operator method put in the criteria object the restriction of the
+	 * specified field store a Object that is <b>before</b> of the Object value
+	 * attending to prolog standard order, when the query will be created and
+	 * executed. The restriction is appended as a conjunction to the concrete
+	 * prolog query to resolve by the engine.This method is the representation
+	 * of prolog Object comparison <b>( @< )</b> that succeeds if a Object1 is
+	 * <b>before</b> to a Object2.
+	 * 
+	 * <pre>
+	 * Object1 @< Object2
+	 * </pre>
+	 * 
+	 * @param field
+	 *            class field annotated with argument annotation.
+	 * @param value
+	 *            Object value to compare.
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * 
+	 * @see #beforeEquals(String, Object)
+	 * @see #after(String, Object)
+	 * @see #afterEquals(String, Object)
+	 */
+	public ConstraintQuery<O> before(String field, Object value);
 
-    /**
-     * After operator method put in the criteria object the restriction of the
-     * specified field store a Object that is <b>after</b> of the Object value
-     * attending to prolog standard order, when the query will be created and
-     * executed. The restriction is appended as a conjunction to the concrete
-     * prolog query to resolve by the engine.This method is the representation
-     * of prolog Object comparison <b>( @> )</b> that succeeds if a Object1 is
-     * <b>after</b> to a Object2.
-     * 
-     * <pre>
-     * Object1 @> Object2
-     * </pre>
-     * 
-     * @param field
-     *            class field annotated with argument annotation.
-     * @param value
-     *            Object value to compare.
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * 
-     * @see #before(String, Object)
-     * @see #beforeEquals(String, Object)
-     * @see #afterEquals(String, Object)
-     */
-    public ConstraintQuery<O> after(String field, Object value);
+	/**
+	 * After operator method put in the criteria object the restriction of the
+	 * specified field store a Object that is <b>after</b> of the Object value
+	 * attending to prolog standard order, when the query will be created and
+	 * executed. The restriction is appended as a conjunction to the concrete
+	 * prolog query to resolve by the engine.This method is the representation
+	 * of prolog Object comparison <b>( @> )</b> that succeeds if a Object1 is
+	 * <b>after</b> to a Object2.
+	 * 
+	 * <pre>
+	 * Object1 @> Object2
+	 * </pre>
+	 * 
+	 * @param field
+	 *            class field annotated with argument annotation.
+	 * @param value
+	 *            Object value to compare.
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * 
+	 * @see #before(String, Object)
+	 * @see #beforeEquals(String, Object)
+	 * @see #afterEquals(String, Object)
+	 */
+	public ConstraintQuery<O> after(String field, Object value);
 
-    /**
-     * This operator method put in the criteria object the restriction of the
-     * specified field store a Object that is <b>before or equal</b> of the
-     * Object value attending to prolog standard order, when the query will be
-     * created and executed. The restriction is appended as a conjunction to the
-     * concrete prolog query to resolve by the engine.This method is the
-     * representation of prolog Object comparison <b>( @=< )</b> that succeeds
-     * if a Object1 is <b>before or equal</b> to a Object2.
-     * 
-     * <pre>
-     * Object1 @=< Object2
-     * </pre>
-     * 
-     * @param field
-     *            class field annotated with argument annotation.
-     * @param value
-     *            Object value to compare.
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * 
-     * @see #before(String, Object)
-     * @see #after(String, Object)
-     * @see #afterEquals(String, Object)
-     */
-    public ConstraintQuery<O> beforeEquals(String field, Object value);
+	/**
+	 * This operator method put in the criteria object the restriction of the
+	 * specified field store a Object that is <b>before or equal</b> of the
+	 * Object value attending to prolog standard order, when the query will be
+	 * created and executed. The restriction is appended as a conjunction to the
+	 * concrete prolog query to resolve by the engine.This method is the
+	 * representation of prolog Object comparison <b>( @=< )</b> that succeeds
+	 * if a Object1 is <b>before or equal</b> to a Object2.
+	 * 
+	 * <pre>
+	 * Object1 @=< Object2
+	 * </pre>
+	 * 
+	 * @param field
+	 *            class field annotated with argument annotation.
+	 * @param value
+	 *            Object value to compare.
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * 
+	 * @see #before(String, Object)
+	 * @see #after(String, Object)
+	 * @see #afterEquals(String, Object)
+	 */
+	public ConstraintQuery<O> beforeEquals(String field, Object value);
 
-    /**
-     * This operator method put in the criteria object the restriction of the
-     * specified field store a Object that is <b>after or equal</b> of the
-     * Object value attending to prolog standard order, when the query will be
-     * created and executed. The restriction is appended as a conjunction to the
-     * concrete prolog query to resolve by the engine.This method is the
-     * representation of prolog Object comparison <b>( @>= )</b> that succeeds
-     * if a Object1 is <b>after or equal</b> to a Object2.
-     * 
-     * <pre>
-     * Object1 @>= Object2
-     * </pre>
-     * 
-     * @param field
-     *            class field annotated with argument annotation.
-     * @param value
-     *            Object value to compare.
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * 
-     * @see #before(String, Object)
-     * @see #beforeEquals(String, Object)
-     * @see #after(String, Object)
-     */
-    public ConstraintQuery<O> afterEquals(String field, Object value);
+	/**
+	 * This operator method put in the criteria object the restriction of the
+	 * specified field store a Object that is <b>after or equal</b> of the
+	 * Object value attending to prolog standard order, when the query will be
+	 * created and executed. The restriction is appended as a conjunction to the
+	 * concrete prolog query to resolve by the engine.This method is the
+	 * representation of prolog Object comparison <b>( @>= )</b> that succeeds
+	 * if a Object1 is <b>after or equal</b> to a Object2.
+	 * 
+	 * <pre>
+	 * Object1 @>= Object2
+	 * </pre>
+	 * 
+	 * @param field
+	 *            class field annotated with argument annotation.
+	 * @param value
+	 *            Object value to compare.
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * 
+	 * @see #before(String, Object)
+	 * @see #beforeEquals(String, Object)
+	 * @see #after(String, Object)
+	 */
+	public ConstraintQuery<O> afterEquals(String field, Object value);
 
-    // arithmetics expression operators
+	// arithmetics expression operators
 
-    /**
-     * This operator method put in the criteria object the restriction of the
-     * specified field store a Object that is <b>equal</b> of the Object value
-     * attending to prolog standard order, when the query will be created and
-     * executed. The restriction is appended as a conjunction to the concrete
-     * prolog query to resolve by the engine.This method is the representation
-     * of prolog Object comparison <b>( =:= )</b> that succeeds if a Object1 is
-     * <b>after or equal</b> to a Object2.
-     * 
-     * <pre>
-     * Object1 =:= Object2
-     * </pre>
-     * 
-     * @param field
-     *            class field annotated with argument annotation.
-     * @param value
-     *            Object value to compare.
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * 
-     * @see #notEquals(String, Object)
-     */
-    public ConstraintQuery<O> equals(String field, Object value);
+	/**
+	 * This operator method put in the criteria object the restriction of the
+	 * specified field store a Object that is <b>equal</b> of the Object value
+	 * attending to prolog standard order, when the query will be created and
+	 * executed. The restriction is appended as a conjunction to the concrete
+	 * prolog query to resolve by the engine.This method is the representation
+	 * of prolog Object comparison <b>( =:= )</b> that succeeds if a Object1 is
+	 * <b>after or equal</b> to a Object2.
+	 * 
+	 * <pre>
+	 * Object1 =:= Object2
+	 * </pre>
+	 * 
+	 * @param field
+	 *            class field annotated with argument annotation.
+	 * @param value
+	 *            Object value to compare.
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * 
+	 * @see #notEquals(String, Object)
+	 */
+	public ConstraintQuery<O> equals(String field, Object value);
 
-    /**
-     * This operator method put in the criteria object the restriction of the
-     * specified field store a Object that is <b>not equal</b> of the Object
-     * value attending to prolog standard order, when the query will be created
-     * and executed. The restriction is appended as a conjunction to the
-     * concrete prolog query to resolve by the engine.This method is the
-     * representation of prolog Object comparison <b>( =\= )</b> that succeeds
-     * if a Object1 is <b>after or equal</b> to a Object2.
-     * 
-     * <pre>
-     * Object1 =\= Object2
-     * </pre>
-     * 
-     * @param field
-     *            class field annotated with argument annotation.
-     * @param value
-     *            Object value to compare.
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     * 
-     * @see #equals(String, Object)
-     */
-    public ConstraintQuery<O> notEquals(String field, Object value);
+	/**
+	 * This operator method put in the criteria object the restriction of the
+	 * specified field store a Object that is <b>not equal</b> of the Object
+	 * value attending to prolog standard order, when the query will be created
+	 * and executed. The restriction is appended as a conjunction to the
+	 * concrete prolog query to resolve by the engine.This method is the
+	 * representation of prolog Object comparison <b>( =\= )</b> that succeeds
+	 * if a Object1 is <b>after or equal</b> to a Object2.
+	 * 
+	 * <pre>
+	 * Object1 =\= Object2
+	 * </pre>
+	 * 
+	 * @param field
+	 *            class field annotated with argument annotation.
+	 * @param value
+	 *            Object value to compare.
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 * 
+	 * @see #equals(String, Object)
+	 */
+	public ConstraintQuery<O> notEquals(String field, Object value);
 
-    public ConstraintQuery<O> greater(String field, Object value);
+	public ConstraintQuery<O> greater(String field, Object value);
 
-    public ConstraintQuery<O> less(String field, Object value);
+	public ConstraintQuery<O> less(String field, Object value);
 
-    public ConstraintQuery<O> greaterEquals(String field, Object value);
+	public ConstraintQuery<O> greaterEquals(String field, Object value);
 
-    public ConstraintQuery<O> lessEquals(String field, Object value);
+	public ConstraintQuery<O> lessEquals(String field, Object value);
 
-    // criteria for two declared fields
+	// criteria for two declared fields
 
-    public ConstraintQuery<O> unifyField(String left, String right);
+	public ConstraintQuery<O> unifyField(String left, String right);
 
-    public ConstraintQuery<O> notUnifyField(String left, String right);
+	public ConstraintQuery<O> notUnifyField(String left, String right);
 
-    public ConstraintQuery<O> equivalentField(String left, String right);
+	public ConstraintQuery<O> equivalentField(String left, String right);
 
-    public ConstraintQuery<O> notEquivalentField(String left, String right);
+	public ConstraintQuery<O> notEquivalentField(String left, String right);
 
-    public ConstraintQuery<O> beforeField(String left, String right);
+	public ConstraintQuery<O> beforeField(String left, String right);
 
-    public ConstraintQuery<O> afterField(String left, String right);
+	public ConstraintQuery<O> afterField(String left, String right);
 
-    public ConstraintQuery<O> beforeEqualsField(String left, String right);
+	public ConstraintQuery<O> beforeEqualsField(String left, String right);
 
-    public ConstraintQuery<O> afterEqualsField(String left, String right);
+	public ConstraintQuery<O> afterEqualsField(String left, String right);
 
-    public ConstraintQuery<O> equalsField(String left, String right);
+	public ConstraintQuery<O> equalsField(String left, String right);
 
-    public ConstraintQuery<O> notEqualsField(String left, String right);
+	public ConstraintQuery<O> notEqualsField(String left, String right);
 
-    public ConstraintQuery<O> lessField(String left, String right);
+	public ConstraintQuery<O> lessField(String left, String right);
 
-    public ConstraintQuery<O> greaterField(String left, String right);
+	public ConstraintQuery<O> greaterField(String left, String right);
 
-    public ConstraintQuery<O> greaterEqualsField(String left, String right);
+	public ConstraintQuery<O> greaterEqualsField(String left, String right);
 
-    public ConstraintQuery<O> lessEqualsField(String left, String right);
+	public ConstraintQuery<O> lessEqualsField(String left, String right);
 
-    /**
-     * Return a single solution of the current criteria query. The solution
-     * object type is in correspondence whit root class type specified in the
-     * criteria query construction when its is created through {@link Document}.
-     * It is a shortcut to the create the typed query from this criteria query
-     * and request to the typed query one single solution.
-     * 
-     * <pre>
-     * Point point = objectContainer.createCriteriaQuery(Point.class).getSolution();
-     * </pre>
-     * 
-     * @return Return a single solution of the current criteria query
-     * @throws NonSolutionError
-     *             throw an exception if not exist any solution object
-     * @since 1.0
-     */
-    public O getSolution() throws NonSolutionError;
+	/**
+	 * Return a single solution of the current criteria query. The solution
+	 * object type is in correspondence whit root class type specified in the
+	 * criteria query construction when its is created through {@link Document}.
+	 * It is a shortcut to the create the typed query from this criteria query
+	 * and request to the typed query one single solution.
+	 * 
+	 * <pre>
+	 * Point point = objectContainer.createCriteriaQuery(Point.class).getSolution();
+	 * </pre>
+	 * 
+	 * @return Return a single solution of the current criteria query
+	 * @throws NonSolutionError
+	 *             throw an exception if not exist any solution object
+	 * @since 1.0
+	 */
+	public O getSolution() throws NonSolutionError;
 
-    /**
-     * Return a all solutions of the current criteria query. The solutions list
-     * object type is in correspondence whit root class type specified in the
-     * criteria query construction when its is created through {@link Document}.
-     * It is a shortcut to the create the typed query from this criteria query
-     * and request to the typed query all solutions.
-     * 
-     * <pre>
-     * List&lt;Point&gt; points = objectContainer.createCriteriaQuery(Point.class).getSolutions();
-     * </pre>
-     * 
-     * @return Return all solutions of the current criteria query
-     * @since 1.0
-     */
-    public List<O> getSolutions();
+	/**
+	 * Return a all solutions of the current criteria query. The solutions list
+	 * object type is in correspondence whit root class type specified in the
+	 * criteria query construction when its is created through {@link Document}.
+	 * It is a shortcut to the create the typed query from this criteria query
+	 * and request to the typed query all solutions.
+	 * 
+	 * <pre>
+	 * List&lt;Point&gt; points = objectContainer.createCriteriaQuery(Point.class).getSolutions();
+	 * </pre>
+	 * 
+	 * @return Return all solutions of the current criteria query
+	 * @since 1.0
+	 */
+	public List<O> getSolutions();
 
-    /**
-     * Create a {@code TypedQuery} of root criteria class type that include the
-     * restrictions appended to the current criteria object.
-     * 
-     * @return {@code TypedQuery} of root criteria class type.
-     * @since 1.0
-     */
-    public TypedQuery<O> createQuery();
+	/**
+	 * Create a {@code TypedQuery} of root criteria class type that include the
+	 * restrictions appended to the current criteria object.
+	 * 
+	 * @return {@code TypedQuery} of root criteria class type.
+	 * @since 1.0
+	 */
+	public TypedQuery<O> createQuery();
 
-    /**
-     * Trace the low level prolog query execute by the prolog engine.
-     * 
-     * @return current instance of {@code CriteriaQuery} with the restriction
-     *         appended.
-     * @since 1.0
-     */
-    public ConstraintQuery<O> trace();
+	/**
+	 * Trace the low level prolog query execute by the prolog engine.
+	 * 
+	 * @return current instance of {@code CriteriaQuery} with the restriction
+	 *         appended.
+	 * @since 1.0
+	 */
+	public ConstraintQuery<O> trace();
 
-    /**
-     * Release all allocations and references for the current object
-     */
-    public void dispose();
+	/**
+	 * Release all allocations and references for the current object
+	 */
+	public void dispose();
 
 }

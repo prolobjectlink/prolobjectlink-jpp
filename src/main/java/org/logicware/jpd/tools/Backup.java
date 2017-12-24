@@ -32,75 +32,75 @@ import java.util.zip.ZipOutputStream;
 
 public class Backup extends Tool {
 
-    private String db;
+	private String db;
 
-    /**
-     * 
-     * @param db
-     *            the source database name (null if there is only one database,
-     *            and and empty string to backup all files in this directory)
-     */
-    public Backup(String db) {
-	this.db = db;
-    }
-
-    /**
-     * Create backs up database file.
-     * 
-     * @param zipFileName
-     *            the name of the target backup file (including path)
-     * @param directory
-     *            the destiny directory name
-     */
-    public void createBackup(String directory, String zipFileName) {
-
-	try {
-
-	    //
-	    File zipFile = new File(directory + zipFileName);
-	    if (!zipFile.exists()) {
-		File parent = zipFile.getParentFile();
-		if (parent != null) {
-		    parent.mkdirs();
-		}
-	    }
-
-	    //
-	    OutputStream out = new FileOutputStream(zipFile);
-	    ZipOutputStream zipOut = new ZipOutputStream(out);
-	    zipOut.setComment("Prolobjectlink Database Backup File");
-
-	    //
-	    Queue<File> queue = new ArrayDeque<File>();
-
-	    queue.offer(new File(db));
-	    while (!queue.isEmpty()) {
-		File filePtr = queue.poll();
-		if (filePtr.isDirectory()) {
-
-		    File[] files = filePtr.listFiles();
-		    for (File file : files) {
-			queue.offer(file);
-		    }
-
-		} else {
-
-		    InputStream in = new FileInputStream(filePtr);
-		    ZipEntry entry = new ZipEntry(filePtr.getPath());
-		    zipOut.putNextEntry(entry);
-		    copy(in, zipOut);
-		    zipOut.closeEntry();
-		    in.close();
-
-		}
-	    }
-
-	    zipOut.close();
-	    out.close();
-
-	} catch (IOException e) {
-	    // TODO: handle exception
+	/**
+	 * 
+	 * @param db
+	 *            the source database name (null if there is only one database,
+	 *            and and empty string to backup all files in this directory)
+	 */
+	public Backup(String db) {
+		this.db = db;
 	}
 
-    }
+	/**
+	 * Create backs up database file.
+	 * 
+	 * @param zipFileName
+	 *            the name of the target backup file (including path)
+	 * @param directory
+	 *            the destiny directory name
+	 */
+	public void createBackup(String directory, String zipFileName) {
+
+		try {
+
+			//
+			File zipFile = new File(directory + zipFileName);
+			if (!zipFile.exists()) {
+				File parent = zipFile.getParentFile();
+				if (parent != null) {
+					parent.mkdirs();
+				}
+			}
+
+			//
+			OutputStream out = new FileOutputStream(zipFile);
+			ZipOutputStream zipOut = new ZipOutputStream(out);
+			zipOut.setComment("Prolobjectlink Database Backup File");
+
+			//
+			Queue<File> queue = new ArrayDeque<File>();
+
+			queue.offer(new File(db));
+			while (!queue.isEmpty()) {
+				File filePtr = queue.poll();
+				if (filePtr.isDirectory()) {
+
+					File[] files = filePtr.listFiles();
+					for (File file : files) {
+						queue.offer(file);
+					}
+
+				} else {
+
+					InputStream in = new FileInputStream(filePtr);
+					ZipEntry entry = new ZipEntry(filePtr.getPath());
+					zipOut.putNextEntry(entry);
+					copy(in, zipOut);
+					zipOut.closeEntry();
+					in.close();
+
+				}
+			}
+
+			zipOut.close();
+			out.close();
+
+		} catch (IOException e) {
+			// TODO: handle exception
+		}
+
+	}
 }

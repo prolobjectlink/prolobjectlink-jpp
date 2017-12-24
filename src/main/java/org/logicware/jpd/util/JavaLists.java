@@ -21,44 +21,48 @@ package org.logicware.jpd.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public final class JavaLists {
 
-    /**
-     * Create a new ArrayList.
-     * 
-     * @param <T>
-     *            the type
-     * @return the object
-     */
-    public static <T> ArrayList<T> arrayList() {
-	return new ArrayList<T>();
-    }
+	private JavaLists() {
+	}
 
-    /**
-     * Create a new ArrayList.
-     * 
-     * @param <T>
-     *            the type
-     * @param capacity
-     *            the initial capacity
-     * @return the object
-     */
-    public static <T> ArrayList<T> arrayList(int capacity) {
-	return new ArrayList<T>(capacity);
-    }
+	/**
+	 * Create a new ArrayList.
+	 * 
+	 * @param <T>
+	 *            the type
+	 * @return the object
+	 */
+	public static <T> List<T> arrayList() {
+		return new ArrayList<T>();
+	}
 
-    /**
-     * Create a new ArrayList.
-     * 
-     * @param <T>
-     *            the type
-     * @param c
-     *            the collection
-     * @return the object
-     */
-    public static <T> ArrayList<T> arrayList(Collection<T> c) {
-	return new ArrayList<T>(c);
-    }
+	/**
+	 * Create a new ArrayList.
+	 * 
+	 * @param <T>
+	 *            the type
+	 * @param capacity
+	 *            the initial capacity
+	 * @return the object
+	 */
+	public static <T> List<T> arrayList(int capacity) {
+		return new ArrayList<T>(capacity);
+	}
+
+	/**
+	 * Create a new ArrayList.
+	 * 
+	 * @param <T>
+	 *            the type
+	 * @param c
+	 *            the collection
+	 * @return the object
+	 */
+	public static <T> List<T> arrayList(Collection<T> c) {
+		return new ArrayList<T>(c);
+	}
 
 }

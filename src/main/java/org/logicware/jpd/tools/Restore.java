@@ -30,66 +30,66 @@ import java.util.zip.ZipInputStream;
 
 public class Restore extends Tool {
 
-    /**
-     * Restore database files.
-     * 
-     * @param zipFileName
-     *            the name of the backup file
-     * @param directory
-     *            the directory name to be restored
-     */
-    public void restoreBackup(String directory, String zipFileName) {
+	/**
+	 * Restore database files.
+	 * 
+	 * @param zipFileName
+	 *            the name of the backup file
+	 * @param directory
+	 *            the directory name to be restored
+	 */
+	public void restoreBackup(String directory, String zipFileName) {
 
-	try {
+		try {
 
-	    // streams initialization
-	    InputStream in = new FileInputStream(zipFileName);
-	    ZipInputStream zipIn = new ZipInputStream(in);
-	    ZipEntry entry = zipIn.getNextEntry();
+			// streams initialization
+			InputStream in = new FileInputStream(zipFileName);
+			ZipInputStream zipIn = new ZipInputStream(in);
+			ZipEntry entry = zipIn.getNextEntry();
 
-	    // while entries exist
-	    while (entry != null) {
+			// while entries exist
+			while (entry != null) {
 
-		// retrieve entry name
-		String fileName = entry.getName();
+				// retrieve entry name
+				String fileName = entry.getName();
 
-		// restoring windows backups on linux and vice versa
-		fileName = fileName.replace('\\', File.separator.charAt(0));
-		fileName = fileName.replace('/', File.separator.charAt(0));
+				// restoring windows backups on linux and vice versa
+				fileName = fileName.replace('\\', File.separator.charAt(0));
+				fileName = fileName.replace('/', File.separator.charAt(0));
 
-		// root treatment
-		if (fileName.startsWith(File.separator)) {
-		    fileName = fileName.substring(1);
+				// root treatment
+				if (fileName.startsWith(File.separator)) {
+					fileName = fileName.substring(1);
+				}
+
+				// directories creation if needed
+				File file = new File(directory + fileName);
+				if (!file.exists()) {
+					File parent = file.getParentFile();
+					if (parent != null) {
+						parent.mkdirs();
+					}
+				}
+
+				// extraction copy
+				OutputStream out = new FileOutputStream(file, false);
+				copy(zipIn, out);
+				out.close();
+
+				// close current entry
+				zipIn.closeEntry();
+
+				// retrieve next entry
+				entry = zipIn.getNextEntry();
+
+			}
+
+			// close stream
+			zipIn.close();
+
+		} catch (IOException e) {
+			// TODO: handle exception
 		}
 
-		// directories creation if needed
-		File file = new File(directory + fileName);
-		if (!file.exists()) {
-		    File parent = file.getParentFile();
-		    if (parent != null) {
-			parent.mkdirs();
-		    }
-		}
-
-		// extraction copy
-		OutputStream out = new FileOutputStream(file, false);
-		copy(zipIn, out);
-		out.close();
-
-		// close current entry
-		zipIn.closeEntry();
-
-		// retrieve next entry
-		entry = zipIn.getNextEntry();
-
-	    }
-
-	    // close stream
-	    zipIn.close();
-
-	} catch (IOException e) {
-	    // TODO: handle exception
 	}
-
-    }
 }
