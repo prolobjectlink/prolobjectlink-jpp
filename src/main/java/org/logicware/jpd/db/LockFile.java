@@ -105,10 +105,8 @@ public class LockFile implements Runnable {
 				if (daemon != null) {
 					daemon.interrupt();
 				}
-				if (file != null) {
-					if (load().equals(properties)) {
-						file.delete();
-					}
+				if (file != null && load().equals(properties)) {
+					file.delete();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -116,6 +114,7 @@ public class LockFile implements Runnable {
 				file = null;
 			}
 		}
+
 	}
 
 	public boolean islock() {
@@ -188,10 +187,8 @@ public class LockFile implements Runnable {
 			sleep(2 * sleep);
 			checkLockedBefore();
 			boolean deleted = file.delete();
-			if (deleted) {
-				if (!file.createNewFile()) {
-					throw new Exception("Another process was faster");
-				}
+			if (deleted && !file.createNewFile()) {
+				throw new Exception("Another process was faster");
 			}
 		}
 		save();

@@ -321,19 +321,54 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 		}
 
 		public Iterator<E> iterator() {
-			return listIterator();
-		}
-
-		@Override
-		public ListIterator<E> listIterator(int index) {
-			// TODO Auto-generated method stub
-			return super.listIterator(index);
+			return super.listIterator();
 		}
 
 		@Override
 		public List<E> subList(int fromIndex, int toIndex) {
 			checkRange(fromIndex, toIndex);
 			return new SubList(this, offset, fromIndex, toIndex);
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = super.hashCode();
+			result = prime * result + getOuterType().hashCode();
+			result = prime * result + offset;
+			result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+			result = prime * result + parentOffset;
+			result = prime * result + size;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (!super.equals(obj))
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			SubList other = (SubList) obj;
+			if (!getOuterType().equals(other.getOuterType()))
+				return false;
+			if (offset != other.offset)
+				return false;
+			if (parent == null) {
+				if (other.parent != null)
+					return false;
+			} else if (!parent.equals(other.parent))
+				return false;
+			if (parentOffset != other.parentOffset)
+				return false;
+			if (size != other.size)
+				return false;
+			return true;
+		}
+
+		private ArrayList getOuterType() {
+			return ArrayList.this;
 		}
 
 	}

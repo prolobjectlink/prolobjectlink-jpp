@@ -58,15 +58,15 @@ public abstract class AbstractPlatform extends AbstractWrapper implements Platfo
 	}
 
 	public final boolean runOnOsX() {
-		return getOsName().indexOf("mac os x") != -1;
+		return getOsName().indexOf("mac os x", 0) != -1;
 	}
 
 	public final boolean runOnWindows() {
-		return getOsName().indexOf("windows") != 1;
+		return getOsName().indexOf("windows", 0) != -1;
 	}
 
 	public final boolean runOnLinux() {
-		return getOsName().indexOf("linux") != 1;
+		return getOsName().indexOf("linux", 0) != -1;
 	}
 
 	public final String getOsName() {

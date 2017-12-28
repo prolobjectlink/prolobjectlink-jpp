@@ -21,7 +21,7 @@ package org.logicware.jpi;
 
 import java.lang.reflect.Constructor;
 
-public final class PrologConverterFactory extends AbstractFactory {
+public final class PrologConverterFactory {
 
 	private PrologConverterFactory() {
 	}
