@@ -1,0 +1,34 @@
+package org.logicware.jpi;
+
+public final class PrologTermType {
+
+	// constant for prolog variables
+	public static final int VARIABLE_TYPE = 0x100;
+
+	// constants for prolog numbers
+	public static final int INTEGER_TYPE = 0x200;
+	public static final int LONG_TYPE = 0x201;
+	public static final int FLOAT_TYPE = 0x202;
+	public static final int DOUBLE_TYPE = 0x203;
+
+	// constant for prolog atoms
+	public static final int ATOM_TYPE = 0x300;
+	public static final int NIL_TYPE = 0x301;
+	public static final int FALSE_TYPE = 0x302;
+	public static final int TRUE_TYPE = 0x303;
+	public static final int CUT_TYPE = 0x304;
+	public static final int FAIL_TYPE = 0x305;
+
+	// constant for special objects
+	public static final int OBJECT_TYPE = 0x400;
+	public static final int STREAM_TYPE = 0x401;
+
+	// constants for prolog list and prolog structure
+	public static final int EMPTY_TYPE = 0x500;
+	public static final int LIST_TYPE = 0x501;
+	public static final int STRUCTURE_TYPE = 0x502;
+
+	private PrologTermType() {
+	}
+
+}

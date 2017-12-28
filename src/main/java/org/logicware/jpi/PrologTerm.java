@@ -23,42 +23,33 @@ import java.util.Map;
 
 import org.logicware.jpp.Wrapper;
 
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
 public interface PrologTerm extends Wrapper, Comparable<PrologTerm> {
 
-	// constant for prolog variables
-	public static final int VARIABLE_TYPE = 0x100;
-
-	// constants for prolog numbers
-	public static final int INTEGER_TYPE = 0x200;
-	public static final int LONG_TYPE = 0x201;
-	public static final int FLOAT_TYPE = 0x202;
-	public static final int DOUBLE_TYPE = 0x203;
-
-	// constant for prolog atoms
-	public static final int ATOM_TYPE = 0x300;
-	public static final int NIL_TYPE = 0x301;
-	public static final int FALSE_TYPE = 0x302;
-	public static final int TRUE_TYPE = 0x303;
-	public static final int CUT_TYPE = 0x304;
-	public static final int FAIL_TYPE = 0x305;
-
-	// constant for special objects
-	public static final int OBJECT_TYPE = 0x400;
-	public static final int STREAM_TYPE = 0x401;
-
-	// constants for prolog list and prolog structure
-	public static final int EMPTY_TYPE = 0x500;
-	public static final int LIST_TYPE = 0x501;
-	public static final int STRUCTURE_TYPE = 0x502;
-
 	/**
-	 * Gets the term indicator
+	 * Gets the term indicator represented by one string with the format
+	 * functor/arity.
 	 * 
 	 * @return term indicator
 	 * @since 1.0
 	 */
 	public String getIndicator();
 
+	/**
+	 * True if term has an indicator with the format functor/arity that match
+	 * with the given functor and arity.
+	 * 
+	 * @param functor
+	 *            term functor
+	 * @param arity
+	 *            term arity
+	 * @return True if term has an indicator functor/arity.
+	 * @since 1.0
+	 */
 	public boolean hasIndicator(String functor, int arity);
 
 	/**

@@ -19,6 +19,19 @@
  */
 package org.logicware.jpd.jpi;
 
+import static org.logicware.jpi.PrologTermType.ATOM_TYPE;
+import static org.logicware.jpi.PrologTermType.DOUBLE_TYPE;
+import static org.logicware.jpi.PrologTermType.EMPTY_TYPE;
+import static org.logicware.jpi.PrologTermType.FALSE_TYPE;
+import static org.logicware.jpi.PrologTermType.FLOAT_TYPE;
+import static org.logicware.jpi.PrologTermType.INTEGER_TYPE;
+import static org.logicware.jpi.PrologTermType.LIST_TYPE;
+import static org.logicware.jpi.PrologTermType.LONG_TYPE;
+import static org.logicware.jpi.PrologTermType.NIL_TYPE;
+import static org.logicware.jpi.PrologTermType.STRUCTURE_TYPE;
+import static org.logicware.jpi.PrologTermType.TRUE_TYPE;
+import static org.logicware.jpi.PrologTermType.VARIABLE_TYPE;
+
 import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -45,27 +58,27 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 
 	public Class<?> toClass(PrologTerm prologTerm) {
 		switch (prologTerm.getType()) {
-		case PrologTerm.NIL_TYPE:
+		case NIL_TYPE:
 			return null;
-		case PrologTerm.TRUE_TYPE:
+		case TRUE_TYPE:
 			return Boolean.class;
-		case PrologTerm.FALSE_TYPE:
+		case FALSE_TYPE:
 			return Boolean.class;
-		case PrologTerm.ATOM_TYPE:
+		case ATOM_TYPE:
 			return String.class;
-		case PrologTerm.INTEGER_TYPE:
+		case INTEGER_TYPE:
 			return Integer.class;
-		case PrologTerm.FLOAT_TYPE:
+		case FLOAT_TYPE:
 			return Float.class;
-		case PrologTerm.LONG_TYPE:
+		case LONG_TYPE:
 			return Long.class;
-		case PrologTerm.DOUBLE_TYPE:
+		case DOUBLE_TYPE:
 			return Double.class;
-		case PrologTerm.EMPTY_TYPE:
+		case EMPTY_TYPE:
 			return Object[].class;
-		case PrologTerm.LIST_TYPE:
+		case LIST_TYPE:
 			return Object[].class;
-		case PrologTerm.STRUCTURE_TYPE:
+		case STRUCTURE_TYPE:
 			String className = removeApices(prologTerm.getFunctor());
 			try {
 				return Class.forName(className);
@@ -84,29 +97,29 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		}
 
 		switch (prologTerm.getType()) {
-		case PrologTerm.NIL_TYPE:
+		case NIL_TYPE:
 			return null;
-		case PrologTerm.TRUE_TYPE:
+		case TRUE_TYPE:
 			return true;
-		case PrologTerm.FALSE_TYPE:
+		case FALSE_TYPE:
 			return false;
-		case PrologTerm.EMPTY_TYPE:
+		case EMPTY_TYPE:
 			return new Object[0];
-		case PrologTerm.ATOM_TYPE:
-			return new String(removeApices(prologTerm.getFunctor()));
-		case PrologTerm.INTEGER_TYPE:
-			return new Integer(((PrologInteger) prologTerm).getIntValue());
-		case PrologTerm.FLOAT_TYPE:
-			return new Float(((PrologFloat) prologTerm).getFloatValue());
-		case PrologTerm.LONG_TYPE:
-			return new Long(((PrologLong) prologTerm).getLongValue());
-		case PrologTerm.DOUBLE_TYPE:
-			return new Double(((PrologDouble) prologTerm).getDoubleValue());
-		case PrologTerm.VARIABLE_TYPE:
+		case ATOM_TYPE:
+			return removeApices(prologTerm.getFunctor());
+		case INTEGER_TYPE:
+			return ((PrologInteger) prologTerm).getIntValue();
+		case FLOAT_TYPE:
+			return ((PrologFloat) prologTerm).getFloatValue();
+		case LONG_TYPE:
+			return ((PrologLong) prologTerm).getLongValue();
+		case DOUBLE_TYPE:
+			return ((PrologDouble) prologTerm).getDoubleValue();
+		case VARIABLE_TYPE:
 			return null;
-		case PrologTerm.LIST_TYPE:
+		case LIST_TYPE:
 			return toObjectsArray(prologTerm.getArguments());
-		case PrologTerm.STRUCTURE_TYPE: {
+		case STRUCTURE_TYPE: {
 
 			PrologStructure prologStructure = (PrologStructure) prologTerm;
 
