@@ -126,10 +126,6 @@ public abstract class AbstractEngine extends AbstractPlatform implements PrologE
 		return true;
 	}
 
-	public Iterator<PrologClause> iterator() {
-		return getProgramIterator();
-	}
-
 	protected class PrologProgramIterator implements Iterator<PrologClause> {
 
 		private PrologClause last;

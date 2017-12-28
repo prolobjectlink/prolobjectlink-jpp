@@ -19,7 +19,6 @@
  */
 package org.logicware.jpi;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -473,8 +472,6 @@ public interface PrologEngine extends Platform, Iterable<PrologClause> {
 	 * @return Defined Operator Set.
 	 */
 	public Set<PrologOperator> currentOperators();
-
-	public Iterator<PrologClause> getProgramIterator();
 
 	/**
 	 * Number of clauses in main memory program.

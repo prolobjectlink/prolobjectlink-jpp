@@ -26,7 +26,7 @@ import java.util.Map;
  * term representation.
  * 
  * @author Jose Zalacain
- * 
+ * @since 1.0
  * @param <T>
  *            Native Term Representation
  */

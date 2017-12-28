@@ -21,10 +21,10 @@ package org.logicware.jpi;
 
 public interface PrologOperator extends Comparable<PrologOperator> {
 
-	public abstract String getOperator();
+	public String getOperator();
 
-	public abstract String getSpecifier();
+	public String getSpecifier();
 
-	public abstract int getPriority();
+	public int getPriority();
 
 }
