@@ -19,7 +19,7 @@
  */
 package org.logicware.jpi;
 
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,7 +32,7 @@ import org.logicware.jpp.Platform;
  * @see AbstractEngine
  *
  */
-public interface PrologEngine extends Platform {
+public interface PrologEngine extends Platform, Iterable<PrologClause> {
 
 	public void include(String path);
 
@@ -474,7 +474,7 @@ public interface PrologEngine extends Platform {
 	 */
 	public Set<PrologOperator> currentOperators();
 
-	public Enumeration<PrologClause> getProgramClauses();
+	public Iterator<PrologClause> getProgramIterator();
 
 	/**
 	 * Number of clauses in main memory program.

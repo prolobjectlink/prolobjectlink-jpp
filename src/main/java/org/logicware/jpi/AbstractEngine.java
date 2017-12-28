@@ -19,7 +19,10 @@
  */
 package org.logicware.jpi;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.logicware.jpp.AbstractPlatform;
 
@@ -121,6 +124,40 @@ public abstract class AbstractEngine extends AbstractPlatform implements PrologE
 		} else if (!provider.equals(other.provider))
 			return false;
 		return true;
+	}
+
+	public Iterator<PrologClause> iterator() {
+		return getProgramIterator();
+	}
+
+	protected class PrologProgramIterator implements Iterator<PrologClause> {
+
+		private PrologClause last;
+		private final Iterator<PrologClause> i;
+
+		public PrologProgramIterator(Collection<PrologClause> cls) {
+			i = cls.iterator();
+		}
+
+		public boolean hasNext() {
+			return i.hasNext();
+		}
+
+		public PrologClause next() {
+			if (!i.hasNext()) {
+				throw new NoSuchElementException();
+			}
+			last = i.next();
+			return last;
+		}
+
+		public void remove() {
+			PrologTerm h = last.getHead();
+			PrologTerm b = last.getBody();
+			retract(h, b);
+			i.remove();
+		}
+
 	}
 
 }

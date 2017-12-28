@@ -20,6 +20,7 @@
 package org.logicware.jpi;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Iterator class implementation for Prolog Query
@@ -47,6 +48,9 @@ public final class PrologQueryIterator implements Iterator<PrologTerm[]> {
 	 * Next Prolog solution terms
 	 */
 	public PrologTerm[] next() {
+		if (!query.hasMoreSolutions()) {
+			throw new NoSuchElementException();
+		}
 		return query.nextSolution();
 	}
 
