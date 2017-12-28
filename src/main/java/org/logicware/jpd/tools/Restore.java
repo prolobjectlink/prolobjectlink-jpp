@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -40,11 +39,12 @@ public class Restore extends Tool {
 	 */
 	public void restoreBackup(String directory, String zipFileName) {
 
+		ZipInputStream zipIn = null;
+
 		try {
 
 			// streams initialization
-			InputStream in = new FileInputStream(zipFileName);
-			ZipInputStream zipIn = new ZipInputStream(in);
+			zipIn = new ZipInputStream(new FileInputStream(zipFileName));
 			ZipEntry entry = zipIn.getNextEntry();
 
 			// while entries exist
@@ -84,11 +84,16 @@ public class Restore extends Tool {
 
 			}
 
-			// close stream
-			zipIn.close();
-
 		} catch (IOException e) {
-			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			if (zipIn != null) {
+				try {
+					zipIn.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 	}

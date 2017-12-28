@@ -23,9 +23,6 @@ import org.logicware.jpd.Predicate;
 
 public final class TruePredicate<O> implements Predicate<O> {
 
-	public TruePredicate() {
-	}
-
 	public boolean evaluate(final O o) {
 		return true;
 	}

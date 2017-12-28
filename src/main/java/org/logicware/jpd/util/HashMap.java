@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class HashMap<K, V> extends AbstractMap<K, V> {
@@ -171,7 +172,8 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 		}
 
 		public V0 setValue(V0 value) {
-			return this.value = value;
+			this.value = value;
+			return value;
 		}
 
 		@Override
@@ -290,6 +292,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 	private class KeySetIterator extends AbstractIterator implements Iterator<K> {
 
 		public K next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
 			return nextEntry().getKey();
 		}
 
@@ -298,6 +303,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 	private class ValueSetIterator extends AbstractIterator implements Iterator<V> {
 
 		public V next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
 			return nextEntry().getValue();
 		}
 
@@ -306,6 +314,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 	private class EntrySetIterator extends AbstractIterator implements Iterator<Map.Entry<K, V>> {
 
 		public HashEntry<K, V> next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
 			return nextEntry();
 		}
 

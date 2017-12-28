@@ -28,10 +28,6 @@ public final class PersistenceProvider {
 	private static final int MINOR = 0;
 	private static final int MICRO = 0;
 
-	// private static final String CONTAINER_FACTORY =
-	// JPCObjectContainerFactory.NAME;
-	private static final ExceptionFactory EXCEPTION_FACTORY = new ExceptionFactory();
-
 	private PersistenceProvider() {
 	}
 
@@ -50,22 +46,6 @@ public final class PersistenceProvider {
 	public static int getMicroVersion() {
 		return MICRO;
 	}
-
-	// public static ObjectContainerFactory create(Class<?> provider) {
-	// return create(CONTAINER_FACTORY,
-	// PrologProviderFactory.createPrologProvider(provider), new Properties());
-	// }
-	//
-	// public static ObjectContainerFactory create(Class<?> provider, Properties
-	// parameters) {
-	// return create(CONTAINER_FACTORY,
-	// PrologProviderFactory.createPrologProvider(provider), parameters);
-	// }
-	//
-	// public static ObjectContainerFactory create(PrologProvider prolog,
-	// Properties parameters) {
-	// return createContainerFactory(CONTAINER_FACTORY, prolog, parameters);
-	// }
 
 	// without properties
 
@@ -125,11 +105,11 @@ public final class PersistenceProvider {
 				containerFactory.setProperties(parameters);
 			}
 		} catch (ClassNotFoundException e) {
-			throw EXCEPTION_FACTORY.classNotFoundException(driver, e);
+			e.printStackTrace();
 		} catch (InstantiationException e) {
-			throw EXCEPTION_FACTORY.instantiationException(driver, e);
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			throw EXCEPTION_FACTORY.illegalAccessException(driver, e);
+			e.printStackTrace();
 		}
 		return containerFactory;
 	}
@@ -144,9 +124,9 @@ public final class PersistenceProvider {
 				containerFactory.setProperties(parameters);
 			}
 		} catch (InstantiationException e) {
-			throw EXCEPTION_FACTORY.instantiationException(driver.getName(), e);
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			throw EXCEPTION_FACTORY.illegalAccessException(driver.getName(), e);
+			e.printStackTrace();
 		}
 		return containerFactory;
 	}

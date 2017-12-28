@@ -25,10 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.logicware.jpd.AbstractQuery;
 import org.logicware.jpd.ConstraintQuery;
+import org.logicware.jpd.IllegalOperandError;
 import org.logicware.jpd.NonSolutionError;
 import org.logicware.jpd.ObjectConverter;
 import org.logicware.jpd.TypedQuery;
@@ -37,6 +39,7 @@ import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologQuery;
 import org.logicware.jpi.PrologTerm;
 import org.logicware.jpi.PrologVariable;
+import org.logicware.jpp.NoSuchFieldError;
 
 /**
  * Implementation of {@code CriteriaQuery} interface. Contains a Prolog query
@@ -106,13 +109,13 @@ public final class PrologConstraintQuery<O>
 
 	private void checkNumericValue(Object value) {
 		if (!(value instanceof Number)) {
-			throw EXCEPTIONS.illegalOperandException(value);
+			throw new IllegalOperandError(value);
 		}
 	}
 
 	private void checkDeclaredFiled(String field) {
 		if (!fieldVarMap.containsKey(field)) {
-			throw EXCEPTIONS.noSuchFieldException(field);
+			throw new NoSuchFieldError(field);
 		}
 	}
 
@@ -121,7 +124,7 @@ public final class PrologConstraintQuery<O>
 		String indexedField = fieldVarMap.get(field);
 		PrologTerm left = createPrologVariable(indexedField);
 		PrologTerm right = factory.toTerm(value);
-		return provider.newExpression(left, operator, right);
+		return provider.newStructure(left, operator, right);
 	}
 
 	private PrologTerm createFieldFieldExpression(String left, String operator, String right) {
@@ -129,7 +132,7 @@ public final class PrologConstraintQuery<O>
 		checkDeclaredFiled(right);
 		PrologVariable leftField = createPrologVariable(fieldVarMap.get(left));
 		PrologVariable rightField = createPrologVariable(fieldVarMap.get(right));
-		return provider.newExpression(leftField, operator, rightField);
+		return provider.newStructure(leftField, operator, rightField);
 	}
 
 	private PrologVariable createPrologVariable(String name) {
@@ -157,7 +160,7 @@ public final class PrologConstraintQuery<O>
 	 */
 	private void traceFormulatedQuery(PrologQuery query) {
 		if (trace) {
-			logger.info(query.toString());
+			logger.log(Level.INFO, "", query);
 		}
 	}
 

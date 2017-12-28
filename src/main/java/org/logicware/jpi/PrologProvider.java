@@ -227,7 +227,7 @@ public interface PrologProvider {
 
 	public PrologStructure newStructure(String functor, PrologTerm... arguments);
 
-	public PrologTerm newExpression(PrologTerm left, String operator, PrologTerm right);
+	public PrologTerm newStructure(PrologTerm left, String operator, PrologTerm right);
 
 	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
 			Class<K> from);

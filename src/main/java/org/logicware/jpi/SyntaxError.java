@@ -33,14 +33,4 @@ public final class SyntaxError extends RuntimeError {
 		super("The string parsed have prolog syntax error: " + string, cause);
 	}
 
-	@Deprecated
-	public SyntaxError(Class<?> sender, String string) {
-		super(sender, "The string parsed have prolog syntax error: " + string);
-	}
-
-	@Deprecated
-	public SyntaxError(Class<?> sender, String string, Throwable cause) {
-		super(sender, "The string parsed have prolog syntax error: " + string, cause);
-	}
-
 }

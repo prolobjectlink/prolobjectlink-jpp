@@ -29,9 +29,4 @@ public final class CompoundExpectedError extends RuntimeError {
 		super("The expected term is not a compound term : " + term);
 	}
 
-	@Deprecated
-	public CompoundExpectedError(Class<?> sender, Object term) {
-		super(sender, "The expected term is not a compound term : " + term);
-	}
-
 }

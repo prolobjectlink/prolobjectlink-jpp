@@ -29,9 +29,4 @@ public final class ListExpectedError extends RuntimeError {
 		super("The expected term is not an atom : " + term);
 	}
 
-	@Deprecated
-	public ListExpectedError(Class<?> sender, Object term) {
-		super(sender, "The expected term is not an atom : " + term);
-	}
-
 }

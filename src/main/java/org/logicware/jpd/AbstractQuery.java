@@ -21,8 +21,6 @@ package org.logicware.jpd;
 
 public abstract class AbstractQuery<S> {
 
-	protected static final ExceptionFactory EXCEPTIONS = new ExceptionFactory();
-
 	protected final ObjectReflector reflector = new ObjectReflector();
 
 	/** Greatest possible solutions number to achieve */
@@ -69,19 +67,19 @@ public abstract class AbstractQuery<S> {
 
 	protected final void checkEmptySolution(int size) throws NonSolutionError {
 		if (size == 0) {
-			throw EXCEPTIONS.nonSolutionException();
+			throw new NonSolutionError();
 		}
 	}
 
 	protected final void checkNonNegativePosition(int position) {
 		if (position < 0) {
-			throw EXCEPTIONS.badPositionException(position);
+			throw new BadPositionError(position);
 		}
 	}
 
 	protected final void checkSolutionAt(int position, int size) {
 		if (position >= size) {
-			throw EXCEPTIONS.badPositionException(position);
+			throw new BadPositionError(position);
 		}
 	}
 

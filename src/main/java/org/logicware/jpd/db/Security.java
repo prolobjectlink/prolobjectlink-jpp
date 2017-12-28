@@ -29,7 +29,7 @@ public final class Security {
 	private int j;
 	private final byte[] sbox = new byte[256];
 
-	public static final String SALT = "Prolobjectlink-Security";
+	public static final String SALT = "prolobjectlink-security";
 
 	/**
 	 * Generates a string of 32 letters (A to Z)
@@ -105,7 +105,8 @@ public final class Security {
 			md5.update(text.getBytes());
 			final BigInteger hash = new BigInteger(1, md5.digest());
 			hashword.append(hash.toString(16));
-		} catch (final NoSuchAlgorithmException nsae) {
+		} catch (final NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
 
 		while (hashword.length() < 32) {
@@ -121,7 +122,8 @@ public final class Security {
 			sha1.update(text.getBytes());
 			final BigInteger hash = new BigInteger(1, sha1.digest());
 			hashword.append(hash.toString(16));
-		} catch (final NoSuchAlgorithmException nsae) {
+		} catch (final NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
 
 		while (hashword.length() < 32) {
@@ -143,7 +145,7 @@ public final class Security {
 	 */
 	public String codeDecode(final String plaintext) {
 		byte x;
-		String r = "";
+		StringBuilder r = new StringBuilder();
 		final int pl = plaintext.length();
 		for (int k = 0; k < pl; k++) {
 			i = i + 1 & 0xff;
@@ -153,9 +155,9 @@ public final class Security {
 			sbox[i] = sbox[j];
 			sbox[j] = x;
 
-			r += (char) (plaintext.charAt(k) ^ sbox[sbox[i] + sbox[j] & 0xff] & 0xff);
+			r.append((char) (plaintext.charAt(k) ^ sbox[sbox[i] + sbox[j] & 0xff] & 0xff));
 		}
-		return r;
+		return r.toString();
 	}
 
 	/**

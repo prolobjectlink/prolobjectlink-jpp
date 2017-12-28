@@ -53,8 +53,7 @@ public class ObjectReflector {
 
 	/**
 	 * Check if the given field is {@code this} result of inner classes
-	 * instantiation. Basically from the given field is checked by
-	 * {@code Field#isSynthetic()} method invocation.
+	 * instantiation.
 	 * 
 	 * @param field
 	 *            field to check if is Synthetic
@@ -142,15 +141,12 @@ public class ObjectReflector {
 				// This exception is reported when a constructor not
 				// initialize directly yours fields, but make the job
 
-				// throw new ProlobjectlinkInvocationTargetException(getClass(),
-				// constructor.getName(), e);
-
 			} finally {
 				constructor.setAccessible(false);
 			}
 
 		}
-		return null;
+		throw new InstantiationError(getClass(), clazz.getName());
 	}
 
 	/**
@@ -166,8 +162,7 @@ public class ObjectReflector {
 	public final Object readValue(Field field, Object object) {
 		try {
 			field.setAccessible(true);
-			Object value = field.get(object);
-			return value;
+			return field.get(object);
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentError(field.getName(), object.getClass().getName(), e);
 		} catch (IllegalAccessException e) {
@@ -264,8 +259,7 @@ public class ObjectReflector {
 	public final Object invoke(Object object, Method method, Object... arguments) {
 		try {
 			method.setAccessible(true);
-			Object value = method.invoke(object, arguments);
-			return value;
+			return method.invoke(object, arguments);
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentError(method.getName(), object.getClass().getName(), e);
 		} catch (IllegalAccessException e) {

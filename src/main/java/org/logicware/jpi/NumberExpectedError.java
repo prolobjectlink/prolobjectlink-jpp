@@ -29,9 +29,4 @@ public final class NumberExpectedError extends RuntimeError {
 		super("The expected term is not an number : " + term);
 	}
 
-	@Deprecated
-	public NumberExpectedError(Class<?> sender, Object term) {
-		super(sender, "The expected term is not an number : " + term);
-	}
-
 }

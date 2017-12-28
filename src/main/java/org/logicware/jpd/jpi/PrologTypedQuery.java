@@ -30,6 +30,7 @@ import java.util.NoSuchElementException;
 import org.logicware.jpd.AbstractQuery;
 import org.logicware.jpd.NonSolutionError;
 import org.logicware.jpd.TypedQuery;
+import org.logicware.jpp.NoSuchFieldError;
 
 public final class PrologTypedQuery<T> extends AbstractQuery<T> implements TypedQuery<T> {
 
@@ -153,7 +154,7 @@ public final class PrologTypedQuery<T> extends AbstractQuery<T> implements Typed
 				Field field = clazz.getDeclaredField(name);
 				solutionList.add(reflector.readValue(field, object));
 			} catch (NoSuchFieldException e) {
-				throw EXCEPTIONS.noSuchFieldException(name, clazz, e);
+				throw new NoSuchFieldError(name, clazz, e);
 			}
 		}
 		return new PrologTypedQuery<Object>(solutionList);

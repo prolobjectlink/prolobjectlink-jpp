@@ -29,9 +29,4 @@ public final class FunctorError extends RuntimeError {
 		super("The term not have functor: " + term);
 	}
 
-	@Deprecated
-	public FunctorError(Class<?> sender, PrologTerm term) {
-		super(sender, "The term not have functor: " + term);
-	}
-
 }

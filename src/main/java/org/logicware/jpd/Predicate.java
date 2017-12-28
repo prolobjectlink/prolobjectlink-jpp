@@ -80,12 +80,6 @@ import org.logicware.jpd.predicate.TruePredicate;
  */
 public interface Predicate<O> {
 
-	public static final Predicate TRUE = new TruePredicate();
-	public static final Predicate FALSE = new FalsePredicate();
-
-	public static final Predicate NULL = new NullPredicate();
-	public static final Predicate NOT_NULL = new NotNullPredicate();
-
 	/**
 	 * Return true if some object match with the current {@link Predicate}. If
 	 * the object match, will be include in the solution list.

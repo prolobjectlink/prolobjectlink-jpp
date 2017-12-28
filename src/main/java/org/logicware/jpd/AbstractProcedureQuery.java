@@ -19,9 +19,7 @@
  */
 package org.logicware.jpd;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public abstract class AbstractProcedureQuery<S> extends AbstractQuery<S> implements ProcedureQuery {
 
@@ -34,56 +32,6 @@ public abstract class AbstractProcedureQuery<S> extends AbstractQuery<S> impleme
 	protected AbstractProcedureQuery(String functor, String[] arguments) {
 		this.functor = functor;
 		this.arguments = arguments;
-	}
-
-	public boolean hasMoreElements() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public Object nextElement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getArgumentValue(int position) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getArgumentValue(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ProcedureQuery setArgumentValue(int position, Object value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ProcedureQuery setArgumentValue(String name, Object value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ProcedureQuery execute() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Object> getSolutions() {
-		// TODO Auto-generated method stub
-		return new ArrayList<Object>();
-	}
-
-	public Object getSolution() throws NonSolutionError {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void dispose() {
-		// TODO Auto-generated method stub
-
 	}
 
 	protected final String getFunctor() {

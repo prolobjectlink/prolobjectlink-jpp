@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.logicware.jpd.AbstractProcedureQuery;
-import org.logicware.jpd.NoExecutedException;
+import org.logicware.jpd.NoExecutedError;
 import org.logicware.jpd.NonSolutionError;
 import org.logicware.jpd.ObjectConverter;
 import org.logicware.jpd.ProcedureArgumentError;
@@ -73,7 +73,7 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 	public boolean hasMoreElements() {
 
 		if (!executed) {
-			throw new NoExecutedException(getFunctor(), getArguments().length);
+			throw new NoExecutedError(getFunctor(), getArguments().length);
 		}
 
 		if (returnedTerms == null && currentTerms != null) {
@@ -89,7 +89,7 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 	public Object nextElement() {
 
 		if (!executed) {
-			throw new NoExecutedException(getFunctor(), getArguments().length);
+			throw new NoExecutedError(getFunctor(), getArguments().length);
 		}
 
 		if (!hasMoreElements()) {

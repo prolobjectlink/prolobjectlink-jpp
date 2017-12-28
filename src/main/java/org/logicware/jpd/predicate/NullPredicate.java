@@ -23,9 +23,6 @@ import org.logicware.jpd.Predicate;
 
 public final class NullPredicate<O> implements Predicate<O> {
 
-	public NullPredicate() {
-	}
-
 	public boolean evaluate(final O o) {
 		return o == null;
 	}

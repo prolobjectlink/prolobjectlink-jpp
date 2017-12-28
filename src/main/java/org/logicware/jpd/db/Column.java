@@ -24,7 +24,7 @@ public final class Column {
 	private String name;
 	private Class<?> type;
 
-	Column(String name, Class<?> type) {
+	public Column(String name, Class<?> type) {
 		this.name = name;
 		this.type = type;
 	}

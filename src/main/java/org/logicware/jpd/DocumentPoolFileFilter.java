@@ -41,7 +41,7 @@ final class DocumentPoolFileFilter implements FileFilter {
 		String name;
 		try {
 			name = pathname.getCanonicalPath();
-			int lastDotIndex = name.lastIndexOf(".");
+			int lastDotIndex = name.lastIndexOf('.');
 			String index = name.substring(lastDotIndex + 1);
 			return index.matches(NUMBER_REGEX);
 		} catch (IOException e) {

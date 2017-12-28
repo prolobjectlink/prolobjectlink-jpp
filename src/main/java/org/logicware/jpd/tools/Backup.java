@@ -54,6 +54,10 @@ public class Backup extends Tool {
 	 */
 	public void createBackup(String directory, String zipFileName) {
 
+		InputStream in = null;
+		OutputStream out = null;
+		ZipOutputStream zipOut = null;
+
 		try {
 
 			//
@@ -66,8 +70,8 @@ public class Backup extends Tool {
 			}
 
 			//
-			OutputStream out = new FileOutputStream(zipFile);
-			ZipOutputStream zipOut = new ZipOutputStream(out);
+			out = new FileOutputStream(zipFile);
+			zipOut = new ZipOutputStream(out);
 			zipOut.setComment("Prolobjectlink Database Backup File");
 
 			//
@@ -85,21 +89,40 @@ public class Backup extends Tool {
 
 				} else {
 
-					InputStream in = new FileInputStream(filePtr);
-					ZipEntry entry = new ZipEntry(filePtr.getPath());
+					String path = filePtr.getPath();
+					in = new FileInputStream(filePtr);
+					ZipEntry entry = new ZipEntry(path);
 					zipOut.putNextEntry(entry);
 					copy(in, zipOut);
 					zipOut.closeEntry();
-					in.close();
 
 				}
 			}
 
-			zipOut.close();
-			out.close();
-
 		} catch (IOException e) {
-			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			if (zipOut != null) {
+				try {
+					zipOut.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 	}

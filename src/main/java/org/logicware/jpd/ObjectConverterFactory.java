@@ -26,9 +26,7 @@ import org.logicware.jpi.PrologProvider;
 
 public final class ObjectConverterFactory {
 
-	private static final ExceptionFactory EXCEPTION_FACTORY = new ExceptionFactory();
-
-	public ObjectConverterFactory() {
+	private ObjectConverterFactory() {
 	}
 
 	public static <T> ObjectConverter<T> createConverter(Class<T> cls, PrologProvider provider) {
@@ -37,20 +35,16 @@ public final class ObjectConverterFactory {
 			Constructor<?> constructor = cls.getConstructor(PrologProvider.class);
 			converter = (ObjectConverter<T>) constructor.newInstance(provider);
 		} catch (InstantiationException e) {
-			throw EXCEPTION_FACTORY.instantiationException(cls.getName(), e);
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			throw EXCEPTION_FACTORY.illegalAccessException(cls.getName(), e);
+			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return converter;

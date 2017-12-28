@@ -29,9 +29,4 @@ public final class FloatExpectedError extends RuntimeError {
 		super("The expected term is not a float : " + term);
 	}
 
-	// @Deprecated
-	// public FloatExpectedError(Class<?> sender, Object term) {
-	// super(sender, "The expected term is not a float : " + term);
-	// }
-
 }

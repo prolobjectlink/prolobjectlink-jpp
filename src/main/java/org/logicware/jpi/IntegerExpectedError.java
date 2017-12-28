@@ -29,9 +29,4 @@ public final class IntegerExpectedError extends RuntimeError {
 		super("The expected term is not an integer : " + term);
 	}
 
-	@Deprecated
-	public IntegerExpectedError(Class<?> sender, Object term) {
-		super(sender, "The expected term is not an integer : " + term);
-	}
-
 }

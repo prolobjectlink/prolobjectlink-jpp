@@ -106,13 +106,11 @@ public abstract class AbstractClause implements PrologClause {
 	}
 
 	public void markDynamic() {
-		// TODO Auto-generated method stub
-
+		dynamic = true;
 	}
 
 	public void unmarkDynamic() {
-		// TODO Auto-generated method stub
-
+		dynamic = false;
 	}
 
 	public final boolean isMultifile() {
@@ -120,13 +118,11 @@ public abstract class AbstractClause implements PrologClause {
 	}
 
 	public void markMultifile() {
-		// TODO Auto-generated method stub
-
+		multifile = true;
 	}
 
 	public void unmarkMultifile() {
-		// TODO Auto-generated method stub
-
+		multifile = false;
 	}
 
 	public final boolean isDiscontiguous() {
@@ -134,13 +130,11 @@ public abstract class AbstractClause implements PrologClause {
 	}
 
 	public void markDiscontiguous() {
-		// TODO Auto-generated method stub
-
+		discontiguous = true;
 	}
 
 	public void unmarkDiscontiguous() {
-		// TODO Auto-generated method stub
-
+		discontiguous = false;
 	}
 
 	@Override

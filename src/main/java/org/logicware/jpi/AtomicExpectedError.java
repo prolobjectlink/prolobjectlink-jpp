@@ -29,9 +29,4 @@ public final class AtomicExpectedError extends RuntimeError {
 		super("The expected term is not a atomic term : " + term);
 	}
 
-	@Deprecated
-	public AtomicExpectedError(Class<?> sender, Object term) {
-		super(sender, "The expected term is not a atomic term : " + term);
-	}
-
 }

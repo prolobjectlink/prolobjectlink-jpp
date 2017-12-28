@@ -29,9 +29,4 @@ public final class ExpressionExpectedError extends RuntimeError {
 		super("The expected term is not an expression : " + term);
 	}
 
-	@Deprecated
-	public ExpressionExpectedError(Class<?> sender, Object term) {
-		super(sender, "The expected term is not an expression : " + term);
-	}
-
 }

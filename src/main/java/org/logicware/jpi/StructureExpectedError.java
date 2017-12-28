@@ -29,9 +29,4 @@ public final class StructureExpectedError extends RuntimeError {
 		super("The expected term is not a structure : " + term);
 	}
 
-	@Deprecated
-	public StructureExpectedError(Class<?> sender, Object term) {
-		super(sender, "The expected term is not a structure : " + term);
-	}
-
 }

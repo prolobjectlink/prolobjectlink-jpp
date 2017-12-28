@@ -30,6 +30,7 @@ import java.util.NoSuchElementException;
 import org.logicware.jpd.AbstractQuery;
 import org.logicware.jpd.NonSolutionError;
 import org.logicware.jpd.Query;
+import org.logicware.jpp.NoSuchFieldError;
 
 public class PrologQuery extends AbstractQuery<Object> implements Query {
 
@@ -210,7 +211,7 @@ public class PrologQuery extends AbstractQuery<Object> implements Query {
 						Field field = clazz.getDeclaredField(name);
 						array[i] = reflector.readValue(field, objectInArray);
 					} catch (NoSuchFieldException e) {
-						throw EXCEPTIONS.noSuchFieldException(name, clazz, e);
+						throw new NoSuchFieldError(name, clazz, e);
 					}
 				}
 				solutionList.add(array);

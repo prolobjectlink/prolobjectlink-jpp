@@ -29,9 +29,4 @@ public final class IndicatorError extends RuntimeError {
 		super("The term not have indicator: " + term);
 	}
 
-	@Deprecated
-	public IndicatorError(Class<?> sender, PrologTerm term) {
-		super(sender, "The term not have indicator: " + term);
-	}
-
 }

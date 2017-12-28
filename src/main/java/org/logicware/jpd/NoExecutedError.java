@@ -21,11 +21,11 @@ package org.logicware.jpd;
 
 import org.logicware.jpp.RuntimeError;
 
-public class NoExecutedException extends RuntimeError {
+public class NoExecutedError extends RuntimeError {
 
 	private static final long serialVersionUID = -6637602843485237347L;
 
-	public NoExecutedException(String functor, int arity) {
+	public NoExecutedError(String functor, int arity) {
 		super("The procedure query " + functor + "/" + arity + " no was executed. Call execute method");
 	}
 
