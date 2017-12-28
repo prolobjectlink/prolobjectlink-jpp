@@ -37,9 +37,9 @@ import org.logicware.jpi.PrologVariable;
 import org.logicware.jpi.UnknownTermError;
 import org.logicware.jpp.ClassNotFoundError;
 
-public final class JPIObjectConverter extends AbstractConverter<PrologTerm> implements ObjectConverter<PrologTerm> {
+public final class PrologObjectConverter extends AbstractConverter<PrologTerm> implements ObjectConverter<PrologTerm> {
 
-	public JPIObjectConverter(PrologProvider provider) {
+	public PrologObjectConverter(PrologProvider provider) {
 		super(provider);
 	}
 

@@ -19,32 +19,33 @@
  */
 package org.logicware.jpd.jpi;
 
-import org.logicware.jpd.AbstractDocuments;
+import org.logicware.jpd.AbstractFactories;
 import org.logicware.jpd.ContainerFactory;
 import org.logicware.jpd.Document;
 import org.logicware.jpd.DocumentManager;
 import org.logicware.jpd.DocumentPool;
+import org.logicware.jpd.Factories;
 import org.logicware.jpd.Properties;
 import org.logicware.jpi.PrologProvider;
 
-public abstract class JPIDocuments extends AbstractDocuments {
+public abstract class PrologFactories extends AbstractFactories implements Factories {
 
-	protected JPIDocuments(Properties properties, PrologProvider provider) {
+	protected PrologFactories(Properties properties, PrologProvider provider) {
 		super(properties, provider);
 	}
 
 	public final Document createDocument(String path) {
-		return new JPIDocument(getProvider(), path);
+		return new PrologDocument(getProvider(), getProperties(), path);
 	}
 
 	public final DocumentPool createDocumentPool(String path) {
 		ContainerFactory factory = createContainerFactory();
-		return new JPIDocumentPool(getProvider(), getProperties(), path, factory);
+		return new PrologDocumentPool(getProvider(), getProperties(), path, factory);
 	}
 
 	public final DocumentManager createDocumentManager(String path) {
 		ContainerFactory factory = createContainerFactory();
-		return new JPIDocumentManager(getProvider(), path, factory);
+		return new PrologDocumentManager(getProvider(), getProperties(), path, factory);
 	}
 
 }

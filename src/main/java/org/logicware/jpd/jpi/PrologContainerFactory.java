@@ -28,28 +28,28 @@ import org.logicware.jpd.DocumentPool;
 import org.logicware.jpd.Properties;
 import org.logicware.jpi.PrologProvider;
 
-public abstract class JPIContainerFactory extends AbstractFactories implements ContainerFactory {
+public abstract class PrologContainerFactory extends AbstractFactories implements ContainerFactory {
 
-	protected JPIContainerFactory(Properties properties, PrologProvider provider) {
+	protected PrologContainerFactory(Properties properties, PrologProvider provider) {
 		super(properties, provider);
 	}
 
 	public Cache createCache() {
-		return new JPICache(getProvider(), getProperties());
+		return new PrologCache(getProvider(), getProperties());
 	}
 
 	public Document createDocument(String path) {
-		return new JPIDocument(getProvider(), getProperties(), path);
+		return new PrologDocument(getProvider(), getProperties(), path);
 	}
 
 	public DocumentPool createDocumentPool(String path) {
 		ContainerFactory factory = createContainerFactory();
-		return new JPIDocumentPool(getProvider(), getProperties(), path, factory);
+		return new PrologDocumentPool(getProvider(), getProperties(), path, factory);
 	}
 
 	public DocumentManager createDocumentManager(String path) {
 		ContainerFactory factory = createContainerFactory();
-		return new JPIDocumentManager(getProvider(), getProperties(), path, factory);
+		return new PrologDocumentManager(getProvider(), getProperties(), path, factory);
 	}
 
 }

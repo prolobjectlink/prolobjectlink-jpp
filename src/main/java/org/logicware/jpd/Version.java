@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.jpi;
+package org.logicware.jpd;
 
 /**
  * Version

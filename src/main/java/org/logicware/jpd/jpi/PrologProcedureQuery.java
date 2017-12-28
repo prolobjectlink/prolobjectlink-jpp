@@ -36,7 +36,7 @@ import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologQuery;
 import org.logicware.jpi.PrologTerm;
 
-public final class JPIProcedureQuery extends AbstractProcedureQuery<Object> implements ProcedureQuery {
+public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> implements ProcedureQuery {
 
 	private boolean executed;
 
@@ -61,9 +61,9 @@ public final class JPIProcedureQuery extends AbstractProcedureQuery<Object> impl
 	// Factory for object/term creation
 	private final ObjectConverter<PrologTerm> converter;
 
-	public JPIProcedureQuery(String path, PrologProvider provider, String functor, String... arguments) {
+	public PrologProcedureQuery(String path, PrologProvider provider, String functor, String... arguments) {
 		super(functor, arguments);
-		this.converter = new JPIObjectConverter(provider);
+		this.converter = new PrologObjectConverter(provider);
 		this.currentTerms = new PrologTerm[arguments.length];
 		this.engine = provider.newEngine();
 		this.provider = provider;
@@ -230,7 +230,7 @@ public final class JPIProcedureQuery extends AbstractProcedureQuery<Object> impl
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPIProcedureQuery other = (JPIProcedureQuery) obj;
+		PrologProcedureQuery other = (PrologProcedureQuery) obj;
 		if (converter == null) {
 			if (other.converter != null)
 				return false;

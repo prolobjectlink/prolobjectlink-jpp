@@ -38,25 +38,25 @@ import org.logicware.jpd.util.ReadWriteCollections;
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
 
-public class JPIDocumentPool extends AbstractDocumentPool implements DocumentPool {
+public class PrologDocumentPool extends AbstractDocumentPool implements DocumentPool {
 
 	private final Transaction transaction;
 
-	public JPIDocumentPool(PrologProvider provider, String location, ContainerFactory containerFactory) {
-		this(provider, new Properties(), new JPIObjectConverter(provider), location, containerFactory, 10000);
+	public PrologDocumentPool(PrologProvider provider, String location, ContainerFactory containerFactory) {
+		this(provider, new Properties(), new PrologObjectConverter(provider), location, containerFactory, 10000);
 	}
 
-	public JPIDocumentPool(PrologProvider provider, Properties properties, String location,
+	public PrologDocumentPool(PrologProvider provider, Properties properties, String location,
 			ContainerFactory containerFactory) {
-		this(provider, properties, new JPIObjectConverter(provider), location, containerFactory, 10000);
+		this(provider, properties, new PrologObjectConverter(provider), location, containerFactory, 10000);
 	}
 
-	public JPIDocumentPool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+	public PrologDocumentPool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
 			String location, ContainerFactory containerFactory) {
 		this(provider, properties, converter, location, containerFactory, 1000);
 	}
 
-	public JPIDocumentPool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+	public PrologDocumentPool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
 			String location, ContainerFactory containerFactory, int documentCapacity) {
 		super(provider, properties, converter, location, containerFactory, documentCapacity);
 		this.transaction = new DefaultTransaction(this);
@@ -68,22 +68,22 @@ public class JPIDocumentPool extends AbstractDocumentPool implements DocumentPoo
 
 	public Query createQuery(String string) {
 		open();
-		return new JPIQuery(findAll(string));
+		return new PrologQuery(findAll(string));
 	}
 
 	public <O> TypedQuery<O> createQuery(O o) {
 		open();
-		return new JPITypedQuery<O>(findAll(o));
+		return new PrologTypedQuery<O>(findAll(o));
 	}
 
 	public <O> TypedQuery<O> createQuery(Class<O> clazz) {
 		open();
-		return new JPITypedQuery<O>(findAll(clazz));
+		return new PrologTypedQuery<O>(findAll(clazz));
 	}
 
 	public <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
 		open();
-		return new JPITypedQuery<O>(findAll(predicate));
+		return new PrologTypedQuery<O>(findAll(predicate));
 	}
 
 	public <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
@@ -95,7 +95,7 @@ public class JPIDocumentPool extends AbstractDocumentPool implements DocumentPoo
 	}
 
 	public Document createDocument(String location, int maxCapacity) {
-		return new JPIDocument(getProvider(), getProperties(), getConverter(), location, maxCapacity);
+		return new PrologDocument(getProvider(), getProperties(), getConverter(), location, maxCapacity);
 	}
 
 	private final class JPIDocumetPoolConstraintQuery<O> extends DocumetPoolConstraintQuery<O>
@@ -111,7 +111,7 @@ public class JPIDocumentPool extends AbstractDocumentPool implements DocumentPoo
 				List<O> objects = constraintQuery.getSolutions();
 				list.addAll(objects);
 			}
-			TypedQuery<O> query = new JPITypedQuery<O>(list);
+			TypedQuery<O> query = new PrologTypedQuery<O>(list);
 			query.setFirstSolution(getFirstSolution());
 			query.setMaxSolution(getMaxSolution());
 			return query;

@@ -26,17 +26,17 @@ import org.logicware.jpd.Properties;
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
 
-public class JPICache extends AbstractCache implements Cache {
+public class PrologCache extends AbstractCache implements Cache {
 
-	public JPICache(PrologProvider provider) {
-		super(provider, new Properties(), new JPIObjectConverter(provider));
+	public PrologCache(PrologProvider provider) {
+		super(provider, new Properties(), new PrologObjectConverter(provider));
 	}
 
-	public JPICache(PrologProvider provider, Properties properties) {
-		super(provider, properties, new JPIObjectConverter(provider));
+	public PrologCache(PrologProvider provider, Properties properties) {
+		super(provider, properties, new PrologObjectConverter(provider));
 	}
 
-	public JPICache(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter) {
+	public PrologCache(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter) {
 		super(provider, properties, converter);
 	}
 

@@ -41,18 +41,18 @@ import org.logicware.jpi.PrologTerm;
  * @see VolatileContainer
  * @see Document
  */
-public class JPIDocumentManager extends AbstractDocumentManager implements DocumentManager {
+public class PrologDocumentManager extends AbstractDocumentManager implements DocumentManager {
 
-	public JPIDocumentManager(PrologProvider provider, String location, ContainerFactory containerFactory) {
-		super(provider, new Properties(), new JPIObjectConverter(provider), location, containerFactory);
+	public PrologDocumentManager(PrologProvider provider, String location, ContainerFactory containerFactory) {
+		super(provider, new Properties(), new PrologObjectConverter(provider), location, containerFactory);
 	}
 
-	public JPIDocumentManager(PrologProvider provider, Properties properties, String location,
+	public PrologDocumentManager(PrologProvider provider, Properties properties, String location,
 			ContainerFactory containerFactory) {
-		super(provider, properties, new JPIObjectConverter(provider), location, containerFactory);
+		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory);
 	}
 
-	public JPIDocumentManager(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+	public PrologDocumentManager(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
 			String location, ContainerFactory containerFactory) {
 		super(provider, properties, converter, location, containerFactory);
 	}
@@ -64,7 +64,7 @@ public class JPIDocumentManager extends AbstractDocumentManager implements Docum
 		for (Class<?> clazz : classes) {
 			getEngine().include(locationOf(clazz));
 		}
-		return new JPIQuery(solutionsOf(terms, classes));
+		return new PrologQuery(solutionsOf(terms, classes));
 	}
 
 }

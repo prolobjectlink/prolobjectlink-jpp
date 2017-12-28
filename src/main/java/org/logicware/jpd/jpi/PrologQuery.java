@@ -31,7 +31,7 @@ import org.logicware.jpd.AbstractQuery;
 import org.logicware.jpd.NonSolutionError;
 import org.logicware.jpd.Query;
 
-public class JPIQuery extends AbstractQuery<Object> implements Query {
+public class PrologQuery extends AbstractQuery<Object> implements Query {
 
 	private int index;
 
@@ -120,7 +120,7 @@ public class JPIQuery extends AbstractQuery<Object> implements Query {
 
 	}
 
-	public JPIQuery(List<Object> solution) {
+	public PrologQuery(List<Object> solution) {
 		this.solution = solution;
 	}
 
@@ -216,7 +216,7 @@ public class JPIQuery extends AbstractQuery<Object> implements Query {
 				solutionList.add(array);
 			}
 		}
-		return new JPIQuery(solutionList);
+		return new PrologQuery(solutionList);
 	}
 
 	@Override
@@ -236,7 +236,7 @@ public class JPIQuery extends AbstractQuery<Object> implements Query {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPIQuery other = (JPIQuery) obj;
+		PrologQuery other = (PrologQuery) obj;
 		if (index != other.index)
 			return false;
 		if (solution == null) {

@@ -33,25 +33,25 @@ import org.logicware.jpd.TypedQuery;
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
 
-public final class JPIDocument extends AbstractDocument implements Document {
+public final class PrologDocument extends AbstractDocument implements Document {
 
 	private final Transaction transaction;
 
-	public JPIDocument(PrologProvider provider, String location) {
+	public PrologDocument(PrologProvider provider, String location) {
 		this(provider, new Properties(), location);
 	}
 
-	public JPIDocument(PrologProvider provider, Properties properties, String location) {
-		this(provider, properties, new JPIObjectConverter(provider), location);
+	public PrologDocument(PrologProvider provider, Properties properties, String location) {
+		this(provider, properties, new PrologObjectConverter(provider), location);
 	}
 
-	public JPIDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+	public PrologDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
 			String location, int maxCapacity) {
 		super(provider, properties, converter, location, maxCapacity);
 		this.transaction = new DefaultTransaction(this);
 	}
 
-	public JPIDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+	public PrologDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
 			String location) {
 		super(provider, properties, converter, location);
 		this.transaction = new DefaultTransaction(this);
@@ -63,30 +63,30 @@ public final class JPIDocument extends AbstractDocument implements Document {
 
 	public Query createQuery(String string) {
 		open();
-		return new JPIQuery(findAll(string));
+		return new PrologQuery(findAll(string));
 	}
 
 	public <O> TypedQuery<O> createQuery(O o) {
 		open();
-		return new JPITypedQuery<O>(findAll(o));
+		return new PrologTypedQuery<O>(findAll(o));
 	}
 
 	public <O> TypedQuery<O> createQuery(Class<O> clazz) {
 		open();
-		return new JPITypedQuery<O>(findAll(clazz));
+		return new PrologTypedQuery<O>(findAll(clazz));
 	}
 
 	public <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
 		open();
-		return new JPITypedQuery<O>(findAll(predicate));
+		return new PrologTypedQuery<O>(findAll(predicate));
 	}
 
 	public <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
-		return new JPIConstraintQuery<O>(getLocation(), getEngine(), getProvider(), clazz);
+		return new PrologConstraintQuery<O>(getLocation(), getEngine(), getProvider(), clazz);
 	}
 
 	public ProcedureQuery createProcedureQuery(String functor, String... args) {
-		return new JPIProcedureQuery(getLocation(), getProvider(), functor, args);
+		return new PrologProcedureQuery(getLocation(), getProvider(), functor, args);
 	}
 
 }

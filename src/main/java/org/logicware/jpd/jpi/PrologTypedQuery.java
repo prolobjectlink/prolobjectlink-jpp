@@ -31,7 +31,7 @@ import org.logicware.jpd.AbstractQuery;
 import org.logicware.jpd.NonSolutionError;
 import org.logicware.jpd.TypedQuery;
 
-public final class JPITypedQuery<T> extends AbstractQuery<T> implements TypedQuery<T> {
+public final class PrologTypedQuery<T> extends AbstractQuery<T> implements TypedQuery<T> {
 
 	private int index;
 
@@ -41,7 +41,7 @@ public final class JPITypedQuery<T> extends AbstractQuery<T> implements TypedQue
 	private AscendantComparator ascendant = new AscendantComparator();
 	private DescendantComparator descendant = new DescendantComparator();
 
-	public JPITypedQuery(List<T> solution) {
+	public PrologTypedQuery(List<T> solution) {
 		this.solution = solution;
 	}
 
@@ -156,7 +156,7 @@ public final class JPITypedQuery<T> extends AbstractQuery<T> implements TypedQue
 				throw EXCEPTIONS.noSuchFieldException(name, clazz, e);
 			}
 		}
-		return new JPITypedQuery<Object>(solutionList);
+		return new PrologTypedQuery<Object>(solutionList);
 	}
 
 	@Override
@@ -176,7 +176,7 @@ public final class JPITypedQuery<T> extends AbstractQuery<T> implements TypedQue
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPITypedQuery other = (JPITypedQuery) obj;
+		PrologTypedQuery other = (PrologTypedQuery) obj;
 		if (index != other.index)
 			return false;
 		if (solution == null) {

@@ -50,7 +50,7 @@ import org.logicware.jpi.PrologVariable;
  *            class object that is root of the query and the type of solutions
  * @since 1.0
  */
-public final class JPIConstraintQuery<O>
+public final class PrologConstraintQuery<O>
 		/* TODO remove this extension declaration */extends AbstractQuery<O> implements ConstraintQuery<O> {
 
 	// trace flag
@@ -84,12 +84,12 @@ public final class JPIConstraintQuery<O>
 	// Logger for trace query
 	private static final Logger logger = Logger.getLogger(ConstraintQuery.class.getName());
 
-	public JPIConstraintQuery(String path, PrologEngine engine, PrologProvider prolog, Class<O> clazz) {
+	public PrologConstraintQuery(String path, PrologEngine engine, PrologProvider prolog, Class<O> clazz) {
 		engine.consult(path);
 		this.engine = engine;
 		this.provider = prolog;
 		this.classes.add(clazz);
-		this.factory = new JPIObjectConverter(prolog);
+		this.factory = new PrologObjectConverter(prolog);
 		String functor = "'" + clazz.getName() + "'";
 		Field[] fields = clazz.getDeclaredFields();
 		PrologTerm[] arguments = new PrologTerm[fields.length];
@@ -402,7 +402,7 @@ public final class JPIConstraintQuery<O>
 				solutionSet.add((O) factory.toObject(classes.get(0), s));
 			}
 		}
-		return new JPITypedQuery<O>(solutionSet).setFirstSolution(firstSolution).setMaxSolution(maxSolution);
+		return new PrologTypedQuery<O>(solutionSet).setFirstSolution(firstSolution).setMaxSolution(maxSolution);
 	}
 
 	public ConstraintQuery<O> trace() {
