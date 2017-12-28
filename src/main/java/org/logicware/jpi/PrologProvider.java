@@ -24,30 +24,13 @@ import java.util.Map;
 public interface PrologProvider {
 
 	/**
-	 * True if under-laying engine implement ISO Prolog and false in other case
+	 * True if wrapped engine implement ISO Prolog and false in other case
 	 * 
-	 * @return true if under-laying engine implement ISO Prolog and false in
-	 *         other case
+	 * @return true if wrapped engine implement ISO Prolog and false in other
+	 *         case
 	 * @since 1.0
 	 */
 	public boolean isCompliant();
-
-	/**
-	 * True if under-laying engine save complex functors using quotes e.g.
-	 * 'Foo.Bar'(baz) in internal clause database. False if under-laying prolog
-	 * engine remove quotes for save complex functors e.g. Foo.Bar(baz). If
-	 * {@link #preserveQuotes()} return false the query 'Foo.Bar'(X) fail raise
-	 * an existence prolog error for 'Foo.Bar'/1 because the under-laying engine
-	 * remove quotes and no resolve the existing predicate is Foo.Bar(baz) with
-	 * indicator Foo.Bar/1.
-	 * 
-	 * @return True if under-laying engine save complex functors using quotes,
-	 *         false if remove quotes for save complex functors.
-	 * @since 1.0
-	 * @deprecated
-	 */
-	@Deprecated
-	public boolean preserveQuotes();
 
 	// prolog constants term
 
@@ -77,24 +60,38 @@ public interface PrologProvider {
 
 	public PrologEngine newEngine();
 
+	public PrologEngine newEngine(String path);
+
 	// prolog term instantiation
 
 	public PrologAtom newAtom(String functor);
 
+	/**
+	 * Create a prolog float number instance with 0.0 value.
+	 * 
+	 * @return prolog float number with 0.0 value.
+	 * @since 1.0
+	 */
 	public PrologFloat newFloat();
 
+	/**
+	 * Create a prolog float number instance with 0.0 value.
+	 * 
+	 * @return prolog float number with 0.0 value.
+	 * @since 1.0
+	 */
 	public PrologFloat newFloat(Number value);
 
 	/**
-	 * Create a prolog double number instance.
+	 * Create a prolog double number instance with 0.0 value.
 	 * 
-	 * @return prolog double number
+	 * @return prolog double number with 0.0 value.
 	 * @since 1.0
 	 */
 	public PrologDouble newDouble();
 
 	/**
-	 * Create a prolog double number instance.
+	 * Create a prolog double number instance with the given value.
 	 * 
 	 * @param value
 	 *            numeric value
@@ -104,12 +101,42 @@ public interface PrologProvider {
 	 */
 	public PrologDouble newDouble(Number value);
 
+	/**
+	 * Create a prolog integer number instance with 0 value.
+	 * 
+	 * @return prolog integer number with 0 value.
+	 * @since 1.0
+	 */
 	public PrologInteger newInteger();
 
+	/**
+	 * Create a prolog integer number instance with the given value.
+	 * 
+	 * @param value
+	 *            numeric value
+	 * 
+	 * @return prolog integer number
+	 * @since 1.0
+	 */
 	public PrologInteger newInteger(Number value);
 
+	/**
+	 * Create a prolog long number instance with 0 value.
+	 * 
+	 * @return prolog long number with 0 value.
+	 * @since 1.0
+	 */
 	public PrologLong newLong();
 
+	/**
+	 * Create a prolog long number instance with the given value.
+	 * 
+	 * @param value
+	 *            numeric value
+	 * 
+	 * @return prolog long number
+	 * @since 1.0
+	 */
 	public PrologLong newLong(Number value);
 
 	/**
@@ -117,14 +144,15 @@ public interface PrologProvider {
 	 * 
 	 * @return An anonymous variable instance.
 	 * @throws UnsupportedOperationException
-	 *             if the under-laying prolog provider use an anonymous
-	 *             instantiation with associated index {@link #newVariable(int)}
+	 *             if the wrapped prolog provider use an anonymous instantiation
+	 *             with associated index {@link #newVariable(int)}
 	 * @since 1.0
 	 * @see PrologProvider#newVariable(int)
 	 * @see PrologProvider#newVariable(String)
 	 * @see PrologProvider#newVariable(String, int)
 	 * @deprecated use {@link PrologProvider#newVariable(int)}
 	 */
+	@Deprecated
 	public PrologVariable newVariable();
 
 	/**
@@ -134,8 +162,8 @@ public interface PrologProvider {
 	 *            variable name (upper case beginning)
 	 * @return A named variable instance.
 	 * @throws UnsupportedOperationException
-	 *             if the under-laying prolog provider use an anonymous
-	 *             instantiation with associated index
+	 *             if the wrapped prolog provider use an anonymous instantiation
+	 *             with associated index
 	 *             {@link PrologProvider#newVariable(String, int)}
 	 * @since 1.0
 	 * @see PrologProvider#newVariable()
@@ -143,12 +171,13 @@ public interface PrologProvider {
 	 * @see PrologProvider#newVariable(String, int)
 	 * @deprecated use {@link PrologProvider#newVariable(String, int)}
 	 */
+	@Deprecated
 	public PrologVariable newVariable(String name);
 
 	/**
 	 * Create an anonymous variable instance with associated index. Index is a
 	 * non negative integer that represent the variable position of the
-	 * Structure where the variable is first time declared. If the under-laying
+	 * Structure where the variable is first time declared. If the wrapped
 	 * prolog provider no use specific index, have the same effect of
 	 * {@link PrologProvider#newVariable()}
 	 * 
@@ -168,8 +197,8 @@ public interface PrologProvider {
 	/**
 	 * Create an named variable instance with associated index. Index is a non
 	 * negative integer that represent the variable position of the Structure
-	 * where the variable is first time declared. If the under-laying prolog
-	 * provider no use specific index, have the same effect of
+	 * where the variable is first time declared. If the wrapped prolog provider
+	 * no use specific index, have the same effect of
 	 * {@link PrologProvider#newVariable(String)}
 	 * 
 	 * @param name
@@ -219,11 +248,5 @@ public interface PrologProvider {
 	public <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to);
 
 	public PrologConverter<?> getConverter();
-
-	public int hashCode();
-
-	public boolean equals(Object obj);
-
-	public String toString();
 
 }

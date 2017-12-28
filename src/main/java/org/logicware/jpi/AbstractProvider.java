@@ -41,6 +41,12 @@ public abstract class AbstractProvider implements PrologProvider {
 		return (PrologStructure) term;
 	}
 
+	public PrologEngine newEngine(String path) {
+		PrologEngine engine = newEngine();
+		engine.consult(path);
+		return engine;
+	}
+
 	public final PrologFloat newFloat() {
 		return newFloat(0F);
 	}
