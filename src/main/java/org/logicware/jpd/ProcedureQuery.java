@@ -19,7 +19,7 @@
  */
 package org.logicware.jpd;
 
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -27,7 +27,7 @@ import java.util.List;
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface ProcedureQuery extends Enumeration<Object> {
+public interface ProcedureQuery extends Iterator<Object> {
 
 	/**
 	 * Return the maximum number of solutions to retrieve by the formulated

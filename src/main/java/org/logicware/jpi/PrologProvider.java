@@ -150,9 +150,7 @@ public interface PrologProvider {
 	 * @see PrologProvider#newVariable(int)
 	 * @see PrologProvider#newVariable(String)
 	 * @see PrologProvider#newVariable(String, int)
-	 * @deprecated use {@link PrologProvider#newVariable(int)}
 	 */
-	@Deprecated
 	public PrologVariable newVariable();
 
 	/**
@@ -169,9 +167,7 @@ public interface PrologProvider {
 	 * @see PrologProvider#newVariable()
 	 * @see PrologProvider#newVariable(int)
 	 * @see PrologProvider#newVariable(String, int)
-	 * @deprecated use {@link PrologProvider#newVariable(String, int)}
 	 */
-	@Deprecated
 	public PrologVariable newVariable(String name);
 
 	/**
@@ -247,6 +243,6 @@ public interface PrologProvider {
 
 	public <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to);
 
-	public PrologConverter<?> getConverter();
+	public <K> PrologConverter<K> getConverter();
 
 }

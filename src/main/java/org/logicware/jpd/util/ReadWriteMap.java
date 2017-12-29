@@ -135,17 +135,17 @@ public abstract class ReadWriteMap<K, V> implements Map<K, V> {
 
 	public Set<K> keySet() {
 		// TODO Auto-generated method stub
-		return null;
+		return map.keySet();
 	}
 
 	public Collection<V> values() {
 		// TODO Auto-generated method stub
-		return null;
+		return map.values();
 	}
 
 	public Set<java.util.Map.Entry<K, V>> entrySet() {
 		// TODO Auto-generated method stub
-		return null;
+		return map.entrySet();
 	}
 
 }

@@ -33,14 +33,6 @@ public abstract class AbstractQuery extends AbstractWrapper implements PrologQue
 		this.engine = engine;
 	}
 
-	public final boolean hasMoreElements() {
-		return hasMoreSolutions();
-	}
-
-	public final PrologTerm[] nextElement() {
-		return nextSolution();
-	}
-
 	public final PrologEngine getEngine() {
 		return engine;
 	}
@@ -81,6 +73,22 @@ public abstract class AbstractQuery extends AbstractWrapper implements PrologQue
 
 	public final Iterator<PrologTerm[]> iterator() {
 		return new PrologQueryIterator(this);
+	}
+
+	public final boolean hasNext() {
+		return hasMoreSolutions();
+	}
+
+	public final PrologTerm[] next() {
+		// don't check has next
+		// don't raise NoSuchElementException
+		// need a deep revision in wrapped engines
+		return nextSolution();
+	}
+
+	public final void remove() {
+		// skip
+		nextSolution();
 	}
 
 	@Override

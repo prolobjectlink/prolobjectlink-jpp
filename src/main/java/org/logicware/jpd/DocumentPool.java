@@ -29,10 +29,37 @@ import java.util.List;
  * @author Jose Zalacain
  * @since 1.0
  * @see Document
- * @see DocumentContainer
  * @see DocumentManager
  */
-public interface DocumentPool extends DocumentContainer {
+public interface DocumentPool extends PersistentContainer {
+
+	public <O> void add(O... facts);
+
+	public <O> void modify(O match, O merge);
+
+	public void remove(Class<?> clazz);
+
+	public <O> void remove(O... facts);
+
+	public Object find(String string) throws NonSolutionError;
+
+	public Object find(String functor, Object... args) throws NonSolutionError;
+
+	public <O> O find(O o) throws NonSolutionError;
+
+	public <O> O find(Class<O> clazz) throws NonSolutionError;
+
+	public <O> O find(Predicate<O> predicate) throws NonSolutionError;
+
+	public List<Object> findAll(String string);
+
+	public List<Object> findAll(String functor, Object... args);
+
+	public <O> List<O> findAll(O o);
+
+	public <O> List<O> findAll(Class<O> clazz);
+
+	public <O> List<O> findAll(Predicate<O> predicate);
 
 	public Document createDocument(String location, int maxCapacity);
 
@@ -66,5 +93,7 @@ public interface DocumentPool extends DocumentContainer {
 	public FileFilter getFilter();
 
 	public void flush();
+
+	public void clear();
 
 }

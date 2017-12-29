@@ -60,9 +60,7 @@ public abstract class AbstractQuery<S> {
 		AbstractQuery<S> other = (AbstractQuery<S>) obj;
 		if (firstSolution != other.firstSolution)
 			return false;
-		if (maxSolution != other.maxSolution)
-			return false;
-		return true;
+		return maxSolution == other.maxSolution;
 	}
 
 	protected final void checkEmptySolution(int size) throws NonSolutionError {

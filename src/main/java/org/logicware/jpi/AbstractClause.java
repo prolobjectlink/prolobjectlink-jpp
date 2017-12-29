@@ -172,9 +172,7 @@ public abstract class AbstractClause implements PrologClause {
 				return false;
 		} else if (!head.equals(other.head))
 			return false;
-		if (multifile != other.multifile)
-			return false;
-		return true;
+		return multifile == other.multifile;
 	}
 
 	@Override

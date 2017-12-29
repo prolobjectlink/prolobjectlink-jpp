@@ -25,12 +25,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import org.logicware.jpd.util.ReadWriteCollections;
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
 
-public abstract class AbstractDocumentPool extends AbstractDocumentContainer implements DocumentPool {
+public abstract class AbstractDocumentPool extends AbstractPersistentContainer implements DocumentPool {
 
 	// disposed document
 	private Document lastDocument;
@@ -300,8 +301,6 @@ public abstract class AbstractDocumentPool extends AbstractDocumentContainer imp
 					documents = new ArrayList<Document>(files.length);
 					if (index.matches(DocumentPoolFileFilter.NUMBER_REGEX)) {
 						lastDocument = createDocument(name, documentCapacity);
-						// int i = Integer.parseInt(index);
-						// documents.set(i, lastDocument);
 						documents.add(lastDocument);
 						lastDocument.open();
 					}
@@ -622,7 +621,8 @@ public abstract class AbstractDocumentPool extends AbstractDocumentContainer imp
 			final int prime = 31;
 			int result = super.hashCode();
 			result = prime * result + getOuterType().hashCode();
-			result = prime * result + ((rootClass == null) ? 0 : rootClass.hashCode());
+			result = prime * result + Objects.hashCode(constraints);
+			result = prime * result + Objects.hashCode(rootClass);
 			return result;
 		}
 
@@ -634,17 +634,12 @@ public abstract class AbstractDocumentPool extends AbstractDocumentContainer imp
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			DocumetPoolConstraintQuery other = (DocumetPoolConstraintQuery) obj;
+			DocumetPoolConstraintQuery<O> other = (DocumetPoolConstraintQuery) obj;
 			if (!getOuterType().equals(other.getOuterType()))
 				return false;
-			else if (!constraints.equals(other.constraints))
+			if (!Objects.equals(constraints, other.constraints))
 				return false;
-			if (rootClass == null) {
-				if (other.rootClass != null)
-					return false;
-			} else if (!rootClass.equals(other.rootClass))
-				return false;
-			return true;
+			return Objects.equals(rootClass, other.rootClass);
 		}
 
 		protected final List<Document> getDocuments() {
@@ -676,28 +671,6 @@ public abstract class AbstractDocumentPool extends AbstractDocumentContainer imp
 			for (Document document : documents) {
 				queries.add(document.createProcedureQuery(functor, arguments));
 			}
-		}
-
-		public boolean hasMoreElements() {
-			for (ProcedureQuery procedureQuery : queries) {
-				if (procedureQuery.hasMoreElements()) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		public Object nextElement() {
-			for (ProcedureQuery procedureQuery : queries) {
-				if (procedureQuery.hasMoreElements()) {
-					Object object = procedureQuery.nextElement();
-					if (object instanceof Object[]) {
-						Object[] array = (Object[]) object;
-						list = ReadWriteCollections.newReadWriteArrayList(array);
-					}
-				}
-			}
-			return list.toArray();
 		}
 
 		public ProcedureQuery setMaxSolution(int maxSolution) {
@@ -755,7 +728,7 @@ public abstract class AbstractDocumentPool extends AbstractDocumentContainer imp
 		}
 
 		public Object getSolution() throws NonSolutionError {
-			return nextElement();
+			return next();
 		}
 
 		public void dispose() {
@@ -766,6 +739,60 @@ public abstract class AbstractDocumentPool extends AbstractDocumentContainer imp
 
 		protected final List<ProcedureQuery> getQueries() {
 			return queries;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = super.hashCode();
+			result = prime * result + getOuterType().hashCode();
+			result = prime * result + Objects.hashCode(queries);
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (!super.equals(obj))
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			DocumentPoolProcedureQuery other = (DocumentPoolProcedureQuery) obj;
+			if (!getOuterType().equals(other.getOuterType()))
+				return false;
+			return Objects.equals(queries, other.queries);
+		}
+
+		private AbstractDocumentPool getOuterType() {
+			return AbstractDocumentPool.this;
+		}
+
+		public boolean hasNext() {
+			for (ProcedureQuery procedureQuery : queries) {
+				if (procedureQuery.hasNext()) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public Object next() {
+			for (ProcedureQuery procedureQuery : queries) {
+				if (procedureQuery.hasNext()) {
+					Object object = procedureQuery.next();
+					if (object instanceof Object[]) {
+						Object[] array = (Object[]) object;
+						list = ReadWriteCollections.newReadWriteArrayList(array);
+					}
+				}
+			}
+			return list.toArray();
+		}
+
+		public void remove() {
+			// skip the current solution
+			next();
 		}
 
 	}

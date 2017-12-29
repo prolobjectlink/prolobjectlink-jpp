@@ -17,51 +17,34 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.jpd.util;
+package org.logicware.jpd.db;
 
-public final class DateTime implements Comparable<DateTime> {
+import java.util.Objects;
 
-	private long time;
+import org.logicware.jpi.PrologClause;
 
-	public DateTime() {
-		this(System.currentTimeMillis());
+public final class Row {
+
+	private final PrologClause clause;
+
+	public Row(PrologClause clause) {
+		this.clause = clause;
 	}
 
-	public DateTime(long time) {
-		this.time = time;
-	}
-
-	public long getTime() {
-		return time;
-	}
-
-	public java.util.Date getJavaUtilDate() {
-		return new java.util.Date(time);
-	}
-
-	public boolean before(DateTime dateTime) {
-		return compareTo(dateTime) < 0;
-	}
-
-	public boolean after(DateTime dateTime) {
-		return compareTo(dateTime) > 0;
-	}
-
-	public int compareTo(DateTime o) {
-		int t = time > o.time ? 1 : 0;
-		return time < o.time ? -1 : t;
+	public PrologClause getClause() {
+		return clause;
 	}
 
 	@Override
 	public String toString() {
-		return getJavaUtilDate().toString();
+		return "" + clause + "";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (time ^ (time >>> 32));
+		result = prime * result + ((clause == null) ? 0 : clause.hashCode());
 		return result;
 	}
 
@@ -73,8 +56,8 @@ public final class DateTime implements Comparable<DateTime> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DateTime other = (DateTime) obj;
-		return time == other.time;
+		Row other = (Row) obj;
+		return Objects.equals(clause, other.clause);
 	}
 
 }

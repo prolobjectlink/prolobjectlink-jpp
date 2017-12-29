@@ -82,17 +82,14 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 	}
 
 	public boolean contains(String string) {
-		// return engine.clause(string);
 		return engine.contains(string);
 	}
 
 	public <O> boolean contains(O object) {
-		// return engine.clause(factory.createPrologTerm(object));
 		return engine.contains(converter.toTerm(object));
 	}
 
 	public <O> boolean contains(Class<O> clazz) {
-		// return engine.clause(factory.createPrologTerm(clazz));
 		return engine.contains(converter.toTerm(clazz));
 	}
 

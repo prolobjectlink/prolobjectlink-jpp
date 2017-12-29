@@ -30,8 +30,7 @@ import java.util.Properties;
 
 /**
  * The file lock is used to lock a database so that only one process can write
- * to it. It uses a cooperative locking protocol. Usually a .lock.db file is
- * used, but locking by creating a socket is supported as well.
+ * to it. It uses a cooperative locking protocol. Usually a .lock file is used.
  */
 public class LockFile implements Runnable {
 
@@ -44,7 +43,7 @@ public class LockFile implements Runnable {
 	private static final int TIME_GRANULARITY = 80;
 
 	// milliseconds to sleep after file checking.
-	private final int sleep;
+	private final long sleep;
 
 	// The lock file
 	private volatile File file;
@@ -54,9 +53,6 @@ public class LockFile implements Runnable {
 
 	// The last time the lock file was written.
 	private long lastWrite;
-
-	//
-	private String uniqueId;
 
 	// file lock observer thread
 	private Thread daemon;
@@ -105,8 +101,8 @@ public class LockFile implements Runnable {
 				if (daemon != null) {
 					daemon.interrupt();
 				}
-				if (file != null && load().equals(properties)) {
-					file.delete();
+				if (file != null && load().equals(properties) && file.delete()) {
+					System.out.println("FileLock delete lock file");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -130,11 +126,11 @@ public class LockFile implements Runnable {
 				Thread.sleep(sleep);
 			}
 		} catch (OutOfMemoryError e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// e.printStackTrace();
+			Thread.currentThread().interrupt();
 		} catch (NullPointerException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -178,7 +174,7 @@ public class LockFile implements Runnable {
 		return properties;
 	}
 
-	private void lockFile() throws IOException, Exception {
+	private void lockFile() throws Exception {
 		generateUniqueId();
 		createParentDirectories();
 		if (file != null && !file.createNewFile()) {
@@ -202,7 +198,7 @@ public class LockFile implements Runnable {
 		}
 	}
 
-	private void waitUntilOld() throws Exception {
+	private void waitUntilOld() {
 		int n = 2 * TIME_GRANULARITY / SLEEP_GAP;
 		for (int i = 0; i < n; i++) {
 			long last = file.lastModified();
@@ -231,14 +227,14 @@ public class LockFile implements Runnable {
 		try {
 			byte[] bytes = secureRandomBytes(16);
 			String random = convertBytesToHex(bytes, bytes.length);
-			uniqueId = Long.toHexString(System.currentTimeMillis()) + random;
+			String uniqueId = Long.toHexString(System.currentTimeMillis()) + random;
 			properties.setProperty("id", uniqueId);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void checkLockedBefore() throws Exception {
+	private void checkLockedBefore() {
 		if (!load().equals(properties)) {
 			System.out.println("Locked by another process");
 		}
@@ -298,7 +294,7 @@ public class LockFile implements Runnable {
 		try {
 			Thread.sleep(time);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Thread.currentThread().interrupt();
 		}
 	}
 

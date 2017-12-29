@@ -22,17 +22,18 @@ package org.logicware.jpp;
 public final class NoSuchFieldError extends RuntimeError {
 
 	private static final long serialVersionUID = 3248316676856294109L;
+	private static final String THE_FIELD_NAMED = "The field named ";
 
 	public NoSuchFieldError(String field) {
-		super("The field named " + field + " is not declared");
+		super(THE_FIELD_NAMED + field + " is not declared");
 	}
 
 	public NoSuchFieldError(String field, Class<?> clazz) {
-		super("The field named " + field + " is not declared in the class " + clazz.getName());
+		super(THE_FIELD_NAMED + field + " is not declared in the class " + clazz.getName());
 	}
 
 	public NoSuchFieldError(String field, Class<?> clazz, Throwable throwable) {
-		super("The field named " + field + " is not declared in the class " + clazz.getName(), throwable);
+		super(THE_FIELD_NAMED + field + " is not declared in the class " + clazz.getName(), throwable);
 	}
 
 }

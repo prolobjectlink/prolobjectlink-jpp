@@ -33,6 +33,9 @@ import org.logicware.jpp.RuntimeError;
 public abstract class AbstractConverter<T> implements PrologConverter<T> {
 
 	protected static final String SIMPLE_ATOM_REGEX = ".|[a-z][A-Za-z0-9_]*";
+	private static final String IMPOSIBLE_CONVERT = "Impossible convert '";
+	private static final String FROM = "' from '";
+	private static final String TO = "' to '";
 
 	protected final HashMap<String, PrologVariable> sharedVariables;
 	protected final HashMap<String, T> sharedPrologVariables;
@@ -114,7 +117,7 @@ public abstract class AbstractConverter<T> implements PrologConverter<T> {
 		}
 		throw new RuntimeError(
 
-				"Impossible convert '" + o + "' from '" + from + "'"
+				IMPOSIBLE_CONVERT + o + FROM + from + "'"
 
 		);
 	}
@@ -130,11 +133,11 @@ public abstract class AbstractConverter<T> implements PrologConverter<T> {
 		}
 		throw new RuntimeError(
 
-				"Impossible convert '" +
+				IMPOSIBLE_CONVERT +
 
 						Arrays.toString(os) +
 
-						"' from '" + from + "'"
+						FROM + from + "'"
 
 		);
 	}
@@ -151,11 +154,11 @@ public abstract class AbstractConverter<T> implements PrologConverter<T> {
 		}
 		throw new RuntimeError(
 
-				"Impossible convert '" +
+				IMPOSIBLE_CONVERT +
 
 						Arrays.toString(oss) +
 
-						"' from '" + from + "'"
+						FROM + from + "'"
 
 		);
 	}
@@ -188,7 +191,7 @@ public abstract class AbstractConverter<T> implements PrologConverter<T> {
 		}
 		throw new RuntimeError(
 
-				"Impossible convert '" + term + "' to '" + to + "'"
+				IMPOSIBLE_CONVERT + term + TO + to + "'"
 
 		);
 	}
@@ -200,7 +203,7 @@ public abstract class AbstractConverter<T> implements PrologConverter<T> {
 		}
 		throw new RuntimeError(
 
-				"Impossible convert '" + terms + "' to '" + to + "'"
+				IMPOSIBLE_CONVERT + terms + TO + to + "'"
 
 		);
 	}
@@ -212,11 +215,11 @@ public abstract class AbstractConverter<T> implements PrologConverter<T> {
 		}
 		throw new RuntimeError(
 
-				"Impossible convert '" +
+				IMPOSIBLE_CONVERT +
 
 						head + " and " + Arrays.toString(body) +
 
-						"' to '" + to + "'"
+						TO + to + "'"
 
 		);
 	}

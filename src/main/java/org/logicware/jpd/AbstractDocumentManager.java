@@ -26,7 +26,7 @@ import java.util.List;
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
 
-public abstract class AbstractDocumentManager extends AbstractDocumentContainer implements DocumentManager {
+public abstract class AbstractDocumentManager extends AbstractPersistentContainer implements DocumentManager {
 
 	// container register mapping class name -> persistent container
 	private final HashMap<String, PersistentContainer> master;
@@ -74,7 +74,7 @@ public abstract class AbstractDocumentManager extends AbstractDocumentContainer 
 		File fileLock = new File(path + ".lock");
 		File file = new File(path);
 		if (file.delete()) {
-			fileLock.delete();
+			fileLock.deleteOnExit();
 		}
 	}
 
@@ -83,7 +83,6 @@ public abstract class AbstractDocumentManager extends AbstractDocumentContainer 
 		for (Class<?> clazz : classes) {
 			getEngine().include(locationOf(clazz));
 		}
-		// return engine.clause(string);
 		return getEngine().contains(string);
 	}
 
@@ -159,6 +158,10 @@ public abstract class AbstractDocumentManager extends AbstractDocumentContainer 
 		for (PersistentContainer c : master.values()) {
 			c.flush();
 		}
+	}
+
+	public final void clear() {
+		master.clear();
 	}
 
 	public final void close() {

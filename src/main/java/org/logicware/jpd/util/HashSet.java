@@ -87,9 +87,7 @@ public class HashSet<E> extends AbstractSet<E> {
 		HashSet<?> other = (HashSet<?>) obj;
 		if (size != other.size)
 			return false;
-		if (!Arrays.equals(table, other.table))
-			return false;
-		return true;
+		return Arrays.equals(table, other.table);
 	}
 
 	public boolean add(E e) {

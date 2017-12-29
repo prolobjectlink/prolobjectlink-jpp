@@ -39,7 +39,8 @@ public abstract class PrologContainerFactory extends AbstractFactories implement
 	}
 
 	public Document createDocument(String path) {
-		return new PrologDocument(getProvider(), getProperties(), path);
+		ContainerFactory factory = createContainerFactory();
+		return new PrologDocument(getProvider(), getProperties(), path, factory);
 	}
 
 	public DocumentPool createDocumentPool(String path) {

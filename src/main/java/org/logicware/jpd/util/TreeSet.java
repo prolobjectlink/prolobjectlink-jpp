@@ -106,10 +106,8 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 				if (left != null) {
 					return left.contains(e);
 				}
-			} else if (e.compareTo(element) > 0) {
-				if (right != null) {
-					return right.contains(e);
-				}
+			} else if (e.compareTo(element) > 0 && right != null) {
+				return right.contains(e);
 			}
 			return e.equals(element);
 		}
@@ -125,21 +123,19 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 		if (!isEmpty()) {
 
 			if (e.compareTo(element) < 0) {
-				if (root.left == null && e != null) {
+				if (root.left == null) {
 					root.left = new TreeSet<E>(e);
 					result = true;
 				} else {
 					result = root.left.add(e);
 				}
 			} else if (e.compareTo(element) > 0) {
-				if (root.right == null && e != null) {
+				if (root.right == null) {
 					root.right = new TreeSet<E>(e);
 					result = true;
 				} else {
 					result = root.right.add(e);
 				}
-
-			} else {
 
 			}
 
@@ -178,7 +174,6 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 				}
 			} else {
 
-				e = element;
 				TreeSet<E> parent = root;
 
 				if (left != null) {
@@ -195,7 +190,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 					// two subtree children
 					if (root.left != null && root.right != null) {
-						// System.out.println("two subtree childrens");
+						// two subtree children
 						if (root.left.equals(predeccessor)) {
 							root.left = predeccessor.left;
 						} else {
@@ -212,7 +207,6 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 					TreeSet<E> treeIter = right;
 					TreeSet<E> successor = this;
 					while (treeIter != null) {
-						// parent = successor;
 						successor = treeIter;
 						treeIter = treeIter.left;
 					}
@@ -221,7 +215,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 					// two subtree children
 					if (root.left != null && root.right != null) {
-						// System.out.println("two subtree childrens");
+						// two subtree children
 						if (root.right.equals(successor)) {
 							root.left = successor.right;
 						} else {
@@ -263,7 +257,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 		return new TreeSetIterator();
 	}
 
-	protected TreeSet<E> clone() {
+	protected TreeSet<E> copy() {
 		return new TreeSet<E>(left, element, right);
 	}
 
@@ -273,7 +267,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 	private void rotateLeft(TreeSet<E> root) {
 
-		TreeSet<E> toBeLeft = root.clone();
+		TreeSet<E> toBeLeft = root.copy();
 
 		TreeSet<E> r = toBeLeft.right;
 		toBeLeft.right = r.left;
@@ -287,7 +281,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 	private void rotateRight(TreeSet<E> root) {
 
-		TreeSet<E> toBeRight = root.clone();
+		TreeSet<E> toBeRight = root.copy();
 
 		TreeSet<E> l = toBeRight.left;
 		toBeRight.left = l.right;
@@ -313,13 +307,12 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 					rightHeigh = heigh(root.left.right);
 
 					if (leftHeigh < rightHeigh) {
-						// System.out.println("rotate left " +
-						// root.left.element);
+						// rotate left -> root.left.element
 						rotateLeft(root.left);
 					}
 
 				}
-				// System.out.println("rotate right " + root.element);
+				// rotate right -> root.element
 				rotateRight(root);
 			} else if (leftHeigh == rightHeigh - 2) {
 				if (root.right != null) {
@@ -328,13 +321,12 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 					rightHeigh = heigh(root.right.right);
 
 					if (leftHeigh > rightHeigh) {
-						// System.out.println("rotate right " +
-						// root.right.element);
+						// rotate right -> root.right.element
 						rotateRight(root.right);
 					}
 
 				}
-				// System.out.println("rotate left " + root.element);
+				// rotate left -> root.element
 				rotateLeft(root);
 			}
 

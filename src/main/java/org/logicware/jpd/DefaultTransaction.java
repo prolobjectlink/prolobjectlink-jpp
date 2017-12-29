@@ -29,26 +29,25 @@ public class DefaultTransaction extends AbstractTransaction implements Transacti
 
 	public final void begin() {
 		checkActiveTransaction();
-		if (getPersistentContainer().isWrappedBy(PersistentDocument.class)) {
-			getPersistentContainer().unwrap(PersistentDocument.class).open();
+		if (getPersistentContainer().isWrappedBy(PersistentContainer.class)) {
+			getPersistentContainer().unwrap(PersistentContainer.class).open();
 		}
 		active = true;
 	}
 
 	public final void commit() {
 		checkNonActiveTransaction();
-		if (getPersistentContainer().isWrappedBy(PersistentDocument.class)) {
-			getPersistentContainer().unwrap(PersistentDocument.class).flush();
+		if (getPersistentContainer().isWrappedBy(PersistentContainer.class)) {
+			getPersistentContainer().unwrap(PersistentContainer.class).flush();
 		}
 		active = false;
 	}
 
 	public final void rollback() {
 		checkNonActiveTransaction();
-		if (getPersistentContainer().isWrappedBy(PersistentDocument.class)) {
-			// roll back open from the file losing
-			// all memory data changes
-			getPersistentContainer().unwrap(PersistentDocument.class).open();
+		if (getPersistentContainer().isWrappedBy(PersistentContainer.class)) {
+			getPersistentContainer().unwrap(PersistentContainer.class).open();
+			// roll back open from the file losing all memory data changes
 		}
 		active = false;
 	}

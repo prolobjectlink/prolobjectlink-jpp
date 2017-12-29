@@ -224,7 +224,7 @@ public abstract class ReadWriteList<E> implements List<E> {
 
 	public List<E> subList(int fromIndex, int toIndex) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<E>();
 	}
 
 	private class ReadWriteIterator implements Iterator<E> {

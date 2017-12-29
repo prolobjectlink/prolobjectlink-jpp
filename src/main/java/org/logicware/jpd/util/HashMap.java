@@ -77,9 +77,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 		HashMap<?, ?> other = (HashMap<?, ?>) obj;
 		if (size != other.size)
 			return false;
-		if (!Arrays.equals(table, other.table))
-			return false;
-		return true;
+		return Arrays.equals(table, other.table);
 	}
 
 	public int size() {

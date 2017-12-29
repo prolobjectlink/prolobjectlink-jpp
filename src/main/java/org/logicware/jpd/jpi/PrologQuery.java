@@ -153,17 +153,20 @@ public class PrologQuery extends AbstractQuery<Object> implements Query {
 		return solutionList;
 	}
 
-	public boolean hasMoreElements() {
+	public boolean hasNext() {
 		return index < solution.size();
 	}
 
-	public Object nextElement() {
-
-		if (!hasMoreElements()) {
+	public Object next() {
+		if (!hasNext()) {
 			throw new NoSuchElementException();
 		}
-
 		return solution.get(index++);
+	}
+
+	public void remove() {
+		// skip
+		next();
 	}
 
 	public Query orderAscending() {

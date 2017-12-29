@@ -53,8 +53,7 @@ import org.logicware.jpp.NoSuchFieldError;
  *            class object that is root of the query and the type of solutions
  * @since 1.0
  */
-public final class PrologConstraintQuery<O>
-		/* TODO remove this extension declaration */extends AbstractQuery<O> implements ConstraintQuery<O> {
+public final class PrologConstraintQuery<O> extends AbstractQuery<O> implements ConstraintQuery<O> {
 
 	// trace flag
 	private boolean trace;
@@ -188,7 +187,8 @@ public final class PrologConstraintQuery<O>
 			varFieldMap.put(variable.getName(), field.getName());
 		}
 		varIndex++;
-		appendConjunction(provider.newStructure(functor, arguments));
+		PrologTerm structure = provider.newStructure(functor, arguments);
+		appendConjunction(provider.newStructure("not", structure));
 		return this;
 	}
 
@@ -430,6 +430,31 @@ public final class PrologConstraintQuery<O>
 			fieldVarMap.clear();
 			fieldVarMap = null;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((builder == null) ? 0 : builder.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PrologConstraintQuery other = (PrologConstraintQuery) obj;
+		if (builder == null) {
+			if (other.builder != null)
+				return false;
+		} else if (!builder.equals(other.builder))
+			return false;
+		return true;
 	}
 
 }

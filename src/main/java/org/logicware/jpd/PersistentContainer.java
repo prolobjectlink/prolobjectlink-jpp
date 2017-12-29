@@ -28,7 +28,7 @@ import java.io.Closeable;
  * @see Container
  * @see VolatileContainer
  */
-public interface PersistentContainer extends Closeable, Restorable, VolatileContainer {
+public interface PersistentContainer extends Closeable, Restorable, Container {
 
 	public void open();
 
@@ -249,6 +249,8 @@ public interface PersistentContainer extends Closeable, Restorable, VolatileCont
 	 */
 	public void restore(String directory, String zipFileName);
 
+	public ContainerFactory getContainerFactory();
+
 	public String getLocation();
 
 	/**
@@ -261,6 +263,8 @@ public interface PersistentContainer extends Closeable, Restorable, VolatileCont
 	public boolean isOpen();
 
 	public void flush();
+
+	public void clear();
 
 	/**
 	 * Release all container resources

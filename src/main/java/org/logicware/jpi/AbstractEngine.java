@@ -21,8 +21,10 @@ package org.logicware.jpi;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import org.logicware.jpp.AbstractPlatform;
 
@@ -47,19 +49,19 @@ public abstract class AbstractEngine extends AbstractPlatform implements PrologE
 		return query(goal).hasSolution();
 	}
 
-	public final Map<String, PrologTerm> find(String goal) {
+	public final Map<String, PrologTerm> queryOne(String goal) {
 		return query(goal).oneVariablesSolution();
 	}
 
-	public final Map<String, PrologTerm> find(PrologTerm... goal) {
+	public final Map<String, PrologTerm> queryOne(PrologTerm... goal) {
 		return query(goal).oneVariablesSolution();
 	}
 
-	public final Map<String, PrologTerm>[] findAll(String goal) {
+	public final Map<String, PrologTerm>[] queryAll(String goal) {
 		return query(goal).allVariablesSolutions();
 	}
 
-	public final Map<String, PrologTerm>[] findAll(PrologTerm... goal) {
+	public final Map<String, PrologTerm>[] queryAll(PrologTerm... goal) {
 		return query(goal).allVariablesSolutions();
 	}
 
@@ -95,6 +97,15 @@ public abstract class AbstractEngine extends AbstractPlatform implements PrologE
 
 	public final <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to) {
 		return provider.fromTerm(head, body, to);
+	}
+
+	public final Set<PrologClause> getProgramClauses() {
+		Set<PrologClause> c = new LinkedHashSet<PrologClause>();
+		for (Iterator<PrologClause> i = iterator(); i.hasNext();) {
+			PrologClause prologClause = i.next();
+			c.add(prologClause);
+		}
+		return c;
 	}
 
 	public final boolean isProgramEmpty() {

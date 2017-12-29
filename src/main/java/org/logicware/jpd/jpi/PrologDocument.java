@@ -21,6 +21,7 @@ package org.logicware.jpd.jpi;
 
 import org.logicware.jpd.AbstractDocument;
 import org.logicware.jpd.ConstraintQuery;
+import org.logicware.jpd.ContainerFactory;
 import org.logicware.jpd.DefaultTransaction;
 import org.logicware.jpd.Document;
 import org.logicware.jpd.ObjectConverter;
@@ -30,6 +31,7 @@ import org.logicware.jpd.Properties;
 import org.logicware.jpd.Query;
 import org.logicware.jpd.Transaction;
 import org.logicware.jpd.TypedQuery;
+import org.logicware.jpd.db.LockFile;
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
 
@@ -37,23 +39,27 @@ public final class PrologDocument extends AbstractDocument implements Document {
 
 	private final Transaction transaction;
 
-	public PrologDocument(PrologProvider provider, String location) {
-		this(provider, new Properties(), location);
+	public PrologDocument(PrologProvider provider, Properties properties, String location,
+			ContainerFactory containerFactory) {
+		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory);
+		this.transaction = new DefaultTransaction(this);
 	}
 
-	public PrologDocument(PrologProvider provider, Properties properties, String location) {
-		this(provider, properties, new PrologObjectConverter(provider), location);
-	}
-
-	public PrologDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
-			String location, int maxCapacity) {
-		super(provider, properties, converter, location, maxCapacity);
+	public PrologDocument(PrologProvider provider, Properties properties, String location,
+			ContainerFactory containerFactory, int maxCapacity) {
+		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory, maxCapacity);
 		this.transaction = new DefaultTransaction(this);
 	}
 
 	public PrologDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
-			String location) {
-		super(provider, properties, converter, location);
+			String location, ContainerFactory containerFactory, int maxCapacity) {
+		super(provider, properties, converter, location, containerFactory, maxCapacity);
+		this.transaction = new DefaultTransaction(this);
+	}
+
+	public PrologDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+			String location, ContainerFactory containerFactory, LockFile lock, int maxCapacity) {
+		super(provider, properties, converter, location, containerFactory, lock, maxCapacity);
 		this.transaction = new DefaultTransaction(this);
 	}
 

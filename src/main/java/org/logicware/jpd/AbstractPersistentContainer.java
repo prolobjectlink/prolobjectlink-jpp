@@ -19,10 +19,14 @@
  */
 package org.logicware.jpd;
 
+import java.io.File;
+
+import org.logicware.jpd.tools.Backup;
+import org.logicware.jpd.tools.Restore;
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
 
-public abstract class AbstractPersistentContainer extends AbstractVolatileContainer implements PersistentContainer {
+public abstract class AbstractPersistentContainer extends AbstractContainer implements PersistentContainer {
 
 	// open/close state flag
 	protected boolean open;
@@ -31,11 +35,32 @@ public abstract class AbstractPersistentContainer extends AbstractVolatileContai
 	// location for all data files
 	private final String location;
 
+	// file system separator
+	protected static final char SEPARATOR = File.separatorChar;
+
+	// container factory for create containers
+	protected final ContainerFactory containerFactory;
+
 	protected AbstractPersistentContainer(PrologProvider provider, Properties properties,
-			ObjectConverter<PrologTerm> converter, String location) {
+			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory) {
 		super(provider, properties, converter);
+		this.containerFactory = containerFactory;
 		this.location = location;
 		this.open = true;
+	}
+
+	public final ContainerFactory getContainerFactory() {
+		return containerFactory;
+	}
+
+	public final void backup(String directory, String zipFileName) {
+		Backup backup = new Backup(getLocation());
+		backup.createBackup(directory, zipFileName);
+	}
+
+	public final void restore(String directory, String zipFileName) {
+		Restore restore = new Restore();
+		restore.restoreBackup(directory, zipFileName);
 	}
 
 	public final String getLocation() {

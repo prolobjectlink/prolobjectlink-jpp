@@ -21,6 +21,7 @@ package org.logicware.jpd;
 
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -102,7 +103,7 @@ import java.util.List;
  * @since 1.0
  * 
  */
-public interface TypedQuery<O> extends Enumeration<O> {
+public interface TypedQuery<O> extends Iterator<O> {
 
 	/**
 	 * Return the maximum number of solutions to retrieve by the formulated

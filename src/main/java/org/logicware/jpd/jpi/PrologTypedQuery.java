@@ -100,17 +100,20 @@ public final class PrologTypedQuery<T> extends AbstractQuery<T> implements Typed
 		return solutionList;
 	}
 
-	public boolean hasMoreElements() {
+	public boolean hasNext() {
 		return index < solution.size();
 	}
 
-	public T nextElement() {
-
-		if (!hasMoreElements()) {
+	public T next() {
+		if (!hasNext()) {
 			throw new NoSuchElementException();
 		}
-
 		return solution.get(index++);
+	}
+
+	public void remove() {
+		// skip
+		next();
 	}
 
 	public TypedQuery<T> orderAscending() {

@@ -119,7 +119,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			return null;
 		case LIST_TYPE:
 			return toObjectsArray(prologTerm.getArguments());
-		case STRUCTURE_TYPE: {
+		case STRUCTURE_TYPE:
 
 			PrologStructure prologStructure = (PrologStructure) prologTerm;
 
@@ -178,7 +178,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			}
 
 			return object;
-		}
+
 		default:
 			throw new UnknownTermError(prologTerm);
 		}
@@ -318,10 +318,6 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 
 		}
 	}
-
-	// public PrologTerm[] createPrologTermsArray(String string) {
-	// return provider.parsePrologTerms(string);
-	// }
 
 	public PrologTerm[] toTermsArray(Object[] objects) {
 		PrologTerm[] terms = new PrologTerm[objects.length];

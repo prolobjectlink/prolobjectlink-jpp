@@ -22,17 +22,18 @@ package org.logicware.jpp;
 public final class ClassNotFoundError extends RuntimeError {
 
 	private static final long serialVersionUID = 2392446209035440426L;
+	private static final String THE_CLASS_NAME = "The class name ";
 
 	public ClassNotFoundError(String name) {
-		super("The class name " + name + " is not present in classpath");
+		super(THE_CLASS_NAME + name + " is not present in classpath");
 	}
 
 	public ClassNotFoundError(String name, Throwable cause) {
-		super("The class name " + name + " is not present in classpath.", cause);
+		super(THE_CLASS_NAME + name + " is not present in classpath.", cause);
 	}
 
 	public ClassNotFoundError(String name, int fields) {
-		super("The class name " + name + " with " + fields + " fields is not present in classpath.");
+		super(THE_CLASS_NAME + name + " with " + fields + " fields is not present in classpath.");
 	}
 
 }

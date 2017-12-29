@@ -19,36 +19,33 @@
  */
 package org.logicware.jpd;
 
-public class Properties {
+public final class Properties {
 
-	// connection
+	private String url;
+	private String driver;
+	private String engine;
+	private Integer arity;
+	private Integer stack;
 
-	/**
-	 * 
-	 */
-	public String url;
+	public String getUrl() {
+		return url;
+	}
 
-	/**
-	 * 
-	 */
-	public String driver;
+	public String getDriver() {
+		return driver;
+	}
 
-	// engine
+	public String getEngine() {
+		return engine;
+	}
 
-	/**
-	 * 
-	 */
-	public String engine;
+	public Integer getArity() {
+		return arity;
+	}
 
-	/**
-	 * 
-	 */
-	public Integer arity;
-
-	/**
-	 * 
-	 */
-	public Integer stack;
+	public Integer getStack() {
+		return stack;
+	}
 
 	/**
 	 * 

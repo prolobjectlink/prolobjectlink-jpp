@@ -31,7 +31,7 @@ import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologQuery;
 import org.logicware.jpi.PrologTerm;
 
-public abstract class AbstractDocument extends AbstractPersistentDocument implements Document {
+public abstract class AbstractDocument extends AbstractPersistentContainer implements Document {
 
 	// modified flag
 	private boolean dirty;
@@ -44,23 +44,19 @@ public abstract class AbstractDocument extends AbstractPersistentDocument implem
 	private final int maxCapacity;
 
 	protected AbstractDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
-			String location) {
-		this(provider, properties, converter, location, new LockFile(location + ".lock"));
+			String location, ContainerFactory containerFactory) {
+		this(provider, properties, converter, location, containerFactory, Integer.MAX_VALUE);
 	}
 
 	protected AbstractDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
-			String location, LockFile lock) {
-		this(provider, properties, converter, location, lock, Integer.MAX_VALUE);
+			String location, ContainerFactory containerFactory, int maxCapacity) {
+		this(provider, properties, converter, location, containerFactory, new LockFile(location + ".lock"),
+				maxCapacity);
 	}
 
 	protected AbstractDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
-			String location, int maxCapacity) {
-		this(provider, properties, converter, location, new LockFile(location + ".lock"), maxCapacity);
-	}
-
-	protected AbstractDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
-			String location, LockFile lock, int maxCapacity) {
-		super(provider, properties, converter, location);
+			String location, ContainerFactory containerFactory, LockFile lock, int maxCapacity) {
+		super(provider, properties, converter, location, containerFactory);
 		this.maxCapacity = maxCapacity;
 		this.lock = lock;
 	}

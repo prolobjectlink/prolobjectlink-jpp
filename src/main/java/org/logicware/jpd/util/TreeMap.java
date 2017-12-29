@@ -99,7 +99,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 		return true;
 	}
 
-	protected TreeMap<K, V> clone() {
+	protected TreeMap<K, V> copy() {
 		return new TreeMap<K, V>(key, value, left, right);
 	}
 
@@ -127,13 +127,15 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 			TreeMap<K, V> entry = new TreeMap<K, V>(key, value);
 			if (key.compareTo(root.key) < 0) {
 				if (root.left == null) {
-					v = (root.left = entry).value;
+					root.left = entry;
+					v = entry.value;
 				} else {
 					v = root.left.put(key, value);
 				}
 			} else if (key.compareTo(root.key) > 0) {
 				if (root.right == null) {
-					v = (root.right = entry).value;
+					root.right = entry;
+					v = entry.value;
 				} else {
 					v = root.right.put(key, value);
 				}
@@ -147,7 +149,8 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 		}
 
 		root.key = key;
-		return root.value = value;
+		root.value = value;
+		return value;
 
 	}
 
@@ -191,7 +194,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 				// two subtree children
 				if (root.left != null && root.right != null) {
-					// System.out.println("two subtree childrens");
+					// two subtree children
 					if (root.left.equals(predeccessor)) {
 						root.left = predeccessor.left;
 					} else {
@@ -208,7 +211,6 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 				TreeMap<K, V> treeIter = right;
 				TreeMap<K, V> successor = this;
 				while (treeIter != null) {
-					// parent = successor;
 					successor = treeIter;
 					treeIter = treeIter.left;
 				}
@@ -218,7 +220,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 				// two subtree children
 				if (root.left != null && root.right != null) {
-					// System.out.println("two subtree childrens");
+					// two subtree children
 					if (root.right.equals(successor)) {
 						root.left = successor.right;
 					} else {
@@ -275,10 +277,8 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 				if (left != null) {
 					return left.getEntry(key);
 				}
-			} else if (k.compareTo(this.key) > 0) {
-				if (right != null) {
-					return right.getEntry(key);
-				}
+			} else if (k.compareTo(this.key) > 0 && right != null) {
+				return right.getEntry(key);
 			}
 			return this;
 		}
@@ -287,7 +287,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 	private void rotateLeft(TreeMap<K, V> root) {
 
-		TreeMap<K, V> toBeLeft = root.clone();
+		TreeMap<K, V> toBeLeft = root.copy();
 
 		TreeMap<K, V> r = toBeLeft.right;
 		toBeLeft.right = r.left;
@@ -302,7 +302,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 	private void rotateRight(TreeMap<K, V> root) {
 
-		TreeMap<K, V> toBeRight = root.clone();
+		TreeMap<K, V> toBeRight = root.copy();
 
 		TreeMap<K, V> l = toBeRight.left;
 		toBeRight.left = l.right;
@@ -329,12 +329,12 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 					rightHeigh = heigh(root.left.right);
 
 					if (leftHeigh < rightHeigh) {
-						// System.out.println("rotate left " + root.left.key);
+						// rotate left -> root.left.key
 						rotateLeft(root.left);
 					}
 
 				}
-				// System.out.println("rotate right " + root.key);
+				// rotate right -> root.key
 				rotateRight(root);
 			} else if (leftHeigh == rightHeigh - 2) {
 				if (root.right != null) {
@@ -343,12 +343,12 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 					rightHeigh = heigh(root.right.right);
 
 					if (leftHeigh > rightHeigh) {
-						// System.out.println("rotate right " + root.right.key);
+						// rotate right -> root.right.key
 						rotateRight(root.right);
 					}
 
 				}
-				// System.out.println("rotate left " + root.key);
+				// rotate left -> root.key
 				rotateLeft(root);
 			}
 
@@ -462,6 +462,9 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 	private class KeySetIterator extends AbstractIterator implements Iterator<K> {
 
 		public K next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
 			return nextEntry().getKey();
 		}
 
@@ -470,6 +473,9 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 	private class ValueSetIterator extends AbstractIterator implements Iterator<V> {
 
 		public V next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
 			return nextEntry().getValue();
 		}
 
@@ -478,6 +484,9 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 	private class EntrySetIterator extends AbstractIterator implements Iterator<Entry<K, V>> {
 
 		public Entry<K, V> next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
 			return nextEntry();
 		}
 

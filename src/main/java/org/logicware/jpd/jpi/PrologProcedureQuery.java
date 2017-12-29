@@ -21,7 +21,7 @@ package org.logicware.jpd.jpi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -68,43 +68,6 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 		this.engine = provider.newEngine();
 		this.provider = provider;
 		this.path = path;
-	}
-
-	public boolean hasMoreElements() {
-
-		if (!executed) {
-			throw new NoExecutedError(getFunctor(), getArguments().length);
-		}
-
-		if (returnedTerms == null && currentTerms != null) {
-			return true;
-		} else if (returnedTerms != null && currentTerms != null) {
-			return !Arrays.equals(returnedTerms, currentTerms);
-		}
-
-		return false;
-
-	}
-
-	public Object nextElement() {
-
-		if (!executed) {
-			throw new NoExecutedError(getFunctor(), getArguments().length);
-		}
-
-		if (!hasMoreElements()) {
-			throw new NoSuchElementException();
-		}
-
-		returnedTerms = Arrays.copyOf(currentTerms, currentTerms.length);
-		currentTerms = query.nextElement();
-
-		Object[] values = new Object[returnedTerms.length];
-		for (int i = 0; i < returnedTerms.length; i++) {
-			values[i] = converter.toObject(returnedTerms[i]);
-		}
-		return values;
-
 	}
 
 	public ProcedureQuery setMaxSolution(int maxSolution) {
@@ -179,18 +142,18 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 
 	public List<Object> getSolutions() {
 		int index = 0;
-		List<Object> solutionList = new ArrayList<Object>();
-		for (Enumeration<Object> e = this; e.hasMoreElements(); index++) {
-			Object object = e.nextElement();
+		List<Object> solutions = new ArrayList<Object>();
+		for (Iterator<Object> i = this; i.hasNext(); index++) {
+			Object object = i.next();
 			if (index >= firstSolution && index < maxSolution) {
-				solutionList.add(object);
+				solutions.add(object);
 			}
 		}
-		return solutionList;
+		return solutions;
 	}
 
 	public Object getSolution() throws NonSolutionError {
-		return nextElement();
+		return next();
 	}
 
 	@Override
@@ -211,12 +174,9 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((converter == null) ? 0 : converter.hashCode());
 		result = prime * result + Arrays.hashCode(currentTerms);
-		result = prime * result + ((engine == null) ? 0 : engine.hashCode());
 		result = prime * result + (executed ? 1231 : 1237);
 		result = prime * result + ((path == null) ? 0 : path.hashCode());
-		result = prime * result + ((provider == null) ? 0 : provider.hashCode());
 		result = prime * result + ((query == null) ? 0 : query.hashCode());
 		result = prime * result + Arrays.hashCode(returnedTerms);
 		return result;
@@ -231,17 +191,7 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 		if (getClass() != obj.getClass())
 			return false;
 		PrologProcedureQuery other = (PrologProcedureQuery) obj;
-		if (converter == null) {
-			if (other.converter != null)
-				return false;
-		} else if (!converter.equals(other.converter))
-			return false;
 		if (!Arrays.equals(currentTerms, other.currentTerms))
-			return false;
-		if (engine == null) {
-			if (other.engine != null)
-				return false;
-		} else if (!engine.equals(other.engine))
 			return false;
 		if (executed != other.executed)
 			return false;
@@ -250,19 +200,50 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 				return false;
 		} else if (!path.equals(other.path))
 			return false;
-		if (provider == null) {
-			if (other.provider != null)
-				return false;
-		} else if (!provider.equals(other.provider))
-			return false;
 		if (query == null) {
 			if (other.query != null)
 				return false;
 		} else if (!query.equals(other.query))
 			return false;
-		if (!Arrays.equals(returnedTerms, other.returnedTerms))
-			return false;
-		return true;
+		return Arrays.equals(returnedTerms, other.returnedTerms);
+	}
+
+	public boolean hasNext() {
+		if (!executed) {
+			throw new NoExecutedError(getFunctor(), getArguments().length);
+		}
+
+		if (returnedTerms == null && currentTerms != null) {
+			return true;
+		} else if (returnedTerms != null && currentTerms != null) {
+			return !Arrays.equals(returnedTerms, currentTerms);
+		}
+
+		return false;
+	}
+
+	public Object next() {
+		if (!executed) {
+			throw new NoExecutedError(getFunctor(), getArguments().length);
+		}
+
+		if (!hasNext()) {
+			throw new NoSuchElementException();
+		}
+
+		returnedTerms = Arrays.copyOf(currentTerms, currentTerms.length);
+		currentTerms = query.next();
+
+		Object[] values = new Object[returnedTerms.length];
+		for (int i = 0; i < returnedTerms.length; i++) {
+			values[i] = converter.toObject(returnedTerms[i]);
+		}
+		return values;
+	}
+
+	public void remove() {
+		// skip
+		next();
 	}
 
 }

@@ -95,7 +95,8 @@ public class PrologDocumentPool extends AbstractDocumentPool implements Document
 	}
 
 	public Document createDocument(String location, int maxCapacity) {
-		return new PrologDocument(getProvider(), getProperties(), getConverter(), location, maxCapacity);
+		return new PrologDocument(getProvider(), getProperties(), getConverter(), location, getContainerFactory(),
+				maxCapacity);
 	}
 
 	private final class JPIDocumetPoolConstraintQuery<O> extends DocumetPoolConstraintQuery<O>

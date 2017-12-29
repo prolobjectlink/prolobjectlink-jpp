@@ -19,6 +19,6 @@
  */
 package org.logicware.jpd;
 
-public interface DocumentManager extends DocumentContainer {
+public interface DocumentManager extends PersistentContainer {
 
 }

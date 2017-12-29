@@ -343,17 +343,17 @@ public interface PrologEngine extends Platform, Iterable<PrologClause> {
 	 */
 	public boolean contains(PrologTerm... goal);
 
-	public Map<String, PrologTerm> find(String goal);
-
-	public Map<String, PrologTerm> find(PrologTerm... goal);
-
-	public Map<String, PrologTerm>[] findAll(String goal);
-
-	public Map<String, PrologTerm>[] findAll(PrologTerm... goal);
-
 	public PrologQuery query(String stringQuery);
 
 	public PrologQuery query(PrologTerm... terms);
+
+	public Map<String, PrologTerm> queryOne(String goal);
+
+	public Map<String, PrologTerm> queryOne(PrologTerm... goal);
+
+	public Map<String, PrologTerm>[] queryAll(String goal);
+
+	public Map<String, PrologTerm>[] queryAll(PrologTerm... goal);
 
 	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
 			Class<K> from);
@@ -472,6 +472,8 @@ public interface PrologEngine extends Platform, Iterable<PrologClause> {
 	 * @return Defined Operator Set.
 	 */
 	public Set<PrologOperator> currentOperators();
+
+	public Set<PrologClause> getProgramClauses();
 
 	/**
 	 * Number of clauses in main memory program.
