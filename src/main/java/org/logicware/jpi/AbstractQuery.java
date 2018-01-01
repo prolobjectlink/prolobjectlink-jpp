@@ -22,7 +22,7 @@ package org.logicware.jpi;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.logicware.jpp.AbstractWrapper;
+import org.logicware.AbstractWrapper;
 
 public abstract class AbstractQuery extends AbstractWrapper implements PrologQuery {
 

@@ -22,7 +22,7 @@ package org.logicware.jpi;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.logicware.jpp.Wrapper;
+import org.logicware.Wrapper;
 
 public interface PrologQuery extends Wrapper, Iterator<PrologTerm[]>, Iterable<PrologTerm[]> {
 

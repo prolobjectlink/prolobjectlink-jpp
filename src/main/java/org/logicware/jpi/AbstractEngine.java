@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.logicware.jpp.AbstractPlatform;
+import org.logicware.AbstractPlatform;
 
 public abstract class AbstractEngine extends AbstractPlatform implements PrologEngine {
 
@@ -110,6 +110,16 @@ public abstract class AbstractEngine extends AbstractPlatform implements PrologE
 
 	public final boolean isProgramEmpty() {
 		return getProgramSize() == 0;
+	}
+
+	public final void toXml(String path) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public final void fromXml(String path) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

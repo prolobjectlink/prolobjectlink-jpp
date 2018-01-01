@@ -19,7 +19,7 @@
  */
 package org.logicware.jpi;
 
-import org.logicware.jpp.RuntimeError;
+import org.logicware.RuntimeError;
 
 public final class SyntaxError extends RuntimeError {
 

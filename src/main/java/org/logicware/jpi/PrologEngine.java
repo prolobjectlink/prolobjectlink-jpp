@@ -22,7 +22,7 @@ package org.logicware.jpi;
 import java.util.Map;
 import java.util.Set;
 
-import org.logicware.jpp.Platform;
+import org.logicware.Platform;
 
 /**
  * 
@@ -32,6 +32,10 @@ import org.logicware.jpp.Platform;
  *
  */
 public interface PrologEngine extends Platform, Iterable<PrologClause> {
+
+	public void toXml(String path);
+
+	public void fromXml(String path);
 
 	public void include(String path);
 

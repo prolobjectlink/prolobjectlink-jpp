@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.logicware.jpp.ClassNotFoundError;
-import org.logicware.jpp.RuntimeError;
+import org.logicware.ClassNotFoundError;
+import org.logicware.RuntimeError;
 
 public abstract class AbstractConverter<T> implements PrologConverter<T> {
 

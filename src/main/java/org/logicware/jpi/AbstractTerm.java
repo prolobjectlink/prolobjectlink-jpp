@@ -21,8 +21,8 @@ package org.logicware.jpi;
 
 import java.util.Map;
 
-import org.logicware.jpp.AbstractWrapper;
-import org.logicware.jpp.IndexOutOfBoundError;
+import org.logicware.AbstractWrapper;
+import org.logicware.IndexOutOfBoundError;
 
 public abstract class AbstractTerm extends AbstractWrapper implements PrologTerm {
 

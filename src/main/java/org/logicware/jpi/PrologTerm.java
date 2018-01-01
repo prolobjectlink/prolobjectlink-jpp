@@ -21,7 +21,7 @@ package org.logicware.jpi;
 
 import java.util.Map;
 
-import org.logicware.jpp.Wrapper;
+import org.logicware.Wrapper;
 
 /**
  * 

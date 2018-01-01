@@ -19,17 +19,19 @@
  */
 package org.logicware.jpi;
 
+import java.util.List;
+
 public interface PrologClause {
+
+	public int getArity();
+
+	public String getFunctor();
 
 	public PrologTerm getTerm();
 
 	public PrologTerm getHead();
 
 	public PrologTerm getBody();
-
-	public String getFunctor();
-
-	public int getArity();
 
 	public String getIndicator();
 
@@ -40,6 +42,8 @@ public interface PrologClause {
 	public boolean isRule();
 
 	public boolean unify(PrologClause clause);
+
+	public List<PrologTerm> getBodyTerms();
 
 	public boolean isDynamic();
 

@@ -19,6 +19,10 @@
  */
 package org.logicware.jpi;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public abstract class AbstractClause implements PrologClause {
 
 	private boolean dynamic;
@@ -27,6 +31,8 @@ public abstract class AbstractClause implements PrologClause {
 
 	private final PrologTerm head;
 	private final PrologTerm body;
+
+	private final PrologProvider provider;
 
 	/**
 	 * Fact clause
@@ -37,8 +43,9 @@ public abstract class AbstractClause implements PrologClause {
 	 * @param discontiguous
 	 * @since 1.0
 	 */
-	protected AbstractClause(PrologTerm head, boolean dynamic, boolean multifile, boolean discontiguous) {
-		this(head, null, dynamic, multifile, discontiguous);
+	protected AbstractClause(PrologProvider provider, PrologTerm head, boolean dynamic, boolean multifile,
+			boolean discontiguous) {
+		this(provider, head, null, dynamic, multifile, discontiguous);
 	}
 
 	/**
@@ -51,18 +58,21 @@ public abstract class AbstractClause implements PrologClause {
 	 * @param discontiguous
 	 * @since 1.0
 	 */
-	protected AbstractClause(PrologTerm head, PrologTerm body, boolean dynamic, boolean multifile,
-			boolean discontiguous) {
+	protected AbstractClause(PrologProvider provider, PrologTerm head, PrologTerm body, boolean dynamic,
+			boolean multifile, boolean discontiguous) {
 		this.head = head;
 		this.body = body;
+		this.provider = provider;
 		this.dynamic = dynamic;
 		this.multifile = multifile;
 		this.discontiguous = discontiguous;
 	}
 
 	public final PrologTerm getTerm() {
-		// TODO Auto-generated method stub
-		return null;
+		String neck = ":-";
+		PrologTerm h = getHead();
+		PrologTerm b = getBody();
+		return provider.newStructure(neck, h, b);
 	}
 
 	public final PrologTerm getHead() {
@@ -71,6 +81,17 @@ public abstract class AbstractClause implements PrologClause {
 
 	public final PrologTerm getBody() {
 		return body;
+	}
+
+	public final List<PrologTerm> getBodyTerms() {
+		PrologTerm ptr = getBody();
+		List<PrologTerm> terms = new ArrayList<PrologTerm>();
+		while (ptr.isCompound() && ptr.hasIndicator(",", 2)) {
+			terms.add(ptr.getArgument(0));
+			ptr = ptr.getArgument(1);
+		}
+		terms.add(ptr);
+		return terms;
 	}
 
 	public final String getFunctor() {
@@ -177,7 +198,21 @@ public abstract class AbstractClause implements PrologClause {
 
 	@Override
 	public String toString() {
-		return isRule() ? head + ":-\n\t" + body + "." : head + ".";
+		StringBuilder b = new StringBuilder();
+		b.append(getHead());
+		if (isRule()) {
+			b.append(":-\n\t");
+			List<PrologTerm> l = getBodyTerms();
+			Iterator<PrologTerm> i = l.iterator();
+			while (i.hasNext()) {
+				b.append(i.next());
+				if (i.hasNext()) {
+					b.append(",\n\t");
+				}
+			}
+		}
+		b.append('.');
+		return "" + b + "";
 	}
 
 }
