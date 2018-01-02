@@ -33,6 +33,7 @@ public abstract class AbstractClause implements PrologClause {
 	private final PrologTerm body;
 
 	private final PrologProvider provider;
+	private final PrologIndicator indicator;
 
 	/**
 	 * Fact clause
@@ -66,6 +67,9 @@ public abstract class AbstractClause implements PrologClause {
 		this.dynamic = dynamic;
 		this.multifile = multifile;
 		this.discontiguous = discontiguous;
+		int arity = head.getArity();
+		String functor = head.getFunctor();
+		indicator = new PredicateIndicator(functor, arity);
 	}
 
 	public final PrologTerm getTerm() {
@@ -156,6 +160,10 @@ public abstract class AbstractClause implements PrologClause {
 
 	public void unmarkDiscontiguous() {
 		discontiguous = false;
+	}
+
+	public final PrologIndicator getPrologIndicator() {
+		return indicator;
 	}
 
 	@Override

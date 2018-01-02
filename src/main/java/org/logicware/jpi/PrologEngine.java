@@ -33,10 +33,6 @@ import org.logicware.Platform;
  */
 public interface PrologEngine extends Platform, Iterable<PrologClause> {
 
-	public void toXml(String path);
-
-	public void fromXml(String path);
-
 	public void include(String path);
 
 	public void consult(String path);
@@ -500,6 +496,8 @@ public interface PrologEngine extends Platform, Iterable<PrologClause> {
 	 * @since 1.0
 	 */
 	public boolean isProgramEmpty();
+
+	public Set<PrologIndicator> getBuiltIns();
 
 	public PrologProvider getProvider();
 

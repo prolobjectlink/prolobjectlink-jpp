@@ -65,6 +65,8 @@ public interface DocumentPool extends PersistentContainer {
 
 	public List<Document> getDocuments();
 
+	public String getPoolName();
+
 	public int getCapacity();
 
 	/**

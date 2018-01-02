@@ -52,7 +52,7 @@ public abstract class AbstractPlatform extends AbstractWrapper implements Platfo
 			}
 			return copied;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LoggerUtils.error(getClass(), "Some error occurss on copy", e);
 		}
 		return copied;
 	}
@@ -83,7 +83,7 @@ public abstract class AbstractPlatform extends AbstractWrapper implements Platfo
 			w.print("");
 			w.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			LoggerUtils.error(getClass(), LoggerConstants.FILE_NOT_FOUND + file, e);
 		}
 	}
 
@@ -93,7 +93,7 @@ public abstract class AbstractPlatform extends AbstractWrapper implements Platfo
 			try {
 				Files.delete(x.toPath());
 			} catch (IOException e) {
-				e.printStackTrace();
+				LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR + file, e);
 			}
 		}
 	}

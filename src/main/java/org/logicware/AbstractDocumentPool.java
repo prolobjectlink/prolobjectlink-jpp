@@ -33,6 +33,9 @@ import org.logicware.util.ReadWriteCollections;
 
 public abstract class AbstractDocumentPool extends AbstractPersistentContainer implements DocumentPool {
 
+	// pool name
+	private final String name;
+
 	// disposed document
 	private Document lastDocument;
 
@@ -49,12 +52,13 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	private final FileFilter filter = new DocumentPoolFileFilter();
 
 	protected AbstractDocumentPool(PrologProvider provider, Properties properties,
-			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory,
+			ObjectConverter<PrologTerm> converter, String location, String name, ContainerFactory containerFactory,
 			int documentCapacity) {
 		super(provider, properties, converter, location, containerFactory);
 		this.documentCapacity = documentCapacity;
 		rootDirectory = new File(location);
 		rootDirectory.mkdir();
+		this.name = name;
 		open = false;
 	}
 
@@ -295,17 +299,17 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 		if (files != null) {
 			for (File filex : files) {
 				try {
-					String name = filex.getCanonicalPath();
-					int lastDotIndex = name.lastIndexOf('.');
-					String index = name.substring(lastDotIndex + 1);
+					String canonical = filex.getCanonicalPath();
+					int lastDotIndex = canonical.lastIndexOf('.');
+					String index = canonical.substring(lastDotIndex + 1);
 					documents = new ArrayList<Document>(files.length);
 					if (index.matches(DocumentPoolFileFilter.NUMBER_REGEX)) {
-						lastDocument = createDocument(name, documentCapacity);
+						lastDocument = createDocument(canonical, documentCapacity);
 						documents.add(lastDocument);
 						lastDocument.open();
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR + filex, e);
 				}
 			}
 		}
@@ -314,6 +318,10 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 
 	public final List<Document> getDocuments() {
 		return documents;
+	}
+
+	public final String getPoolName() {
+		return name;
 	}
 
 	public final int getCapacity() {

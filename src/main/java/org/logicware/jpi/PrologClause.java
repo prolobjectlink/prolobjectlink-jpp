@@ -51,6 +51,8 @@ public interface PrologClause {
 
 	public boolean isDiscontiguous();
 
+	public PrologIndicator getPrologIndicator();
+
 	public int hashCode();
 
 	public boolean equals(Object obj);

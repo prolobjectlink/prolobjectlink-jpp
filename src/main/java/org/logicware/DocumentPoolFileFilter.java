@@ -19,6 +19,8 @@
  */
 package org.logicware;
 
+import static org.logicware.LoggerConstants.IO_ERROR;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -45,7 +47,7 @@ final class DocumentPoolFileFilter implements FileFilter {
 			String index = name.substring(lastDotIndex + 1);
 			return index.matches(NUMBER_REGEX);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LoggerUtils.error(getClass(), IO_ERROR + pathname, e);
 		}
 		return false;
 	}

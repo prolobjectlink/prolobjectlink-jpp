@@ -22,6 +22,8 @@ package org.logicware.tools;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.logicware.LoggerUtils;
+
 abstract class Tool {
 
 	/**
@@ -66,7 +68,7 @@ abstract class Tool {
 			}
 			return copied;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LoggerUtils.error(getClass(), "Some error occurss on copy", e);
 		}
 		return copied;
 	}

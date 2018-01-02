@@ -40,23 +40,24 @@ public class PrologDocumentPool extends AbstractDocumentPool implements Document
 
 	private final Transaction transaction;
 
-	public PrologDocumentPool(PrologProvider provider, String location, ContainerFactory containerFactory) {
-		this(provider, new Properties(), new PrologObjectConverter(provider), location, containerFactory, 10000);
-	}
-
-	public PrologDocumentPool(PrologProvider provider, Properties properties, String location,
+	public PrologDocumentPool(PrologProvider provider, String location, String name,
 			ContainerFactory containerFactory) {
-		this(provider, properties, new PrologObjectConverter(provider), location, containerFactory, 10000);
+		this(provider, new Properties(), new PrologObjectConverter(provider), location, name, containerFactory, 10000);
+	}
+
+	public PrologDocumentPool(PrologProvider provider, Properties properties, String location, String name,
+			ContainerFactory containerFactory) {
+		this(provider, properties, new PrologObjectConverter(provider), location, name, containerFactory, 10000);
 	}
 
 	public PrologDocumentPool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
-			String location, ContainerFactory containerFactory) {
-		this(provider, properties, converter, location, containerFactory, 1000);
+			String location, String name, ContainerFactory containerFactory) {
+		this(provider, properties, converter, location, name, containerFactory, 1000);
 	}
 
 	public PrologDocumentPool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
-			String location, ContainerFactory containerFactory, int documentCapacity) {
-		super(provider, properties, converter, location, containerFactory, documentCapacity);
+			String location, String name, ContainerFactory containerFactory, int documentCapacity) {
+		super(provider, properties, converter, location, name, containerFactory, documentCapacity);
 		this.transaction = new DefaultTransaction(this);
 	}
 

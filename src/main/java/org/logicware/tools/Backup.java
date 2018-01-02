@@ -19,6 +19,8 @@
  */
 package org.logicware.tools;
 
+import static org.logicware.LoggerConstants.IO_ERROR;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,6 +31,8 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import org.logicware.LoggerUtils;
 
 public class Backup extends Tool {
 
@@ -100,27 +104,27 @@ public class Backup extends Tool {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LoggerUtils.error(getClass(), IO_ERROR + in, e);
 		} finally {
 			if (zipOut != null) {
 				try {
 					zipOut.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					LoggerUtils.error(getClass(), IO_ERROR + zipOut, e);
 				}
 			}
 			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					LoggerUtils.error(getClass(), IO_ERROR + out, e);
 				}
 			}
 			if (in != null) {
 				try {
 					in.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					LoggerUtils.error(getClass(), IO_ERROR + in, e);
 				}
 			}
 		}

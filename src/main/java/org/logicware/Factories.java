@@ -27,7 +27,7 @@ public interface Factories {
 
 	public DocumentManager createDocumentManager(String path);
 
-	public DocumentPool createDocumentPool(String path);
+	public DocumentPool createDocumentPool(String path, String name);
 
 	public Document createDocument(String path);
 

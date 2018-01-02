@@ -23,6 +23,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.logicware.LoggerUtils;
+
 public final class Security {
 
 	private int i;
@@ -106,7 +108,7 @@ public final class Security {
 			final BigInteger hash = new BigInteger(1, md5.digest());
 			hashword.append(hash.toString(16));
 		} catch (final NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			LoggerUtils.error(Security.class, "Impossible intantiate MD5 algorithm", e);
 		}
 
 		while (hashword.length() < 32) {
@@ -123,7 +125,7 @@ public final class Security {
 			final BigInteger hash = new BigInteger(1, sha1.digest());
 			hashword.append(hash.toString(16));
 		} catch (final NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			LoggerUtils.error(Security.class, "Impossible intantiate SHA algorithm", e);
 		}
 
 		while (hashword.length() < 32) {
@@ -132,6 +134,7 @@ public final class Security {
 		return hashword.toString();
 	}
 
+	// impossible
 	/**
 	 * Assuming everything was set up earlier, encode plaintext. This can be
 	 * done in stream fashion; sequential calls to this routine will be the same

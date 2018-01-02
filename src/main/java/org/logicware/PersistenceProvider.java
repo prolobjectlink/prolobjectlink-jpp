@@ -19,6 +19,8 @@
  */
 package org.logicware;
 
+import static org.logicware.LoggerConstants.CLASS_NOT_FOUND;
+
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologProviderFactory;
 
@@ -105,7 +107,7 @@ public final class PersistenceProvider {
 				containerFactory.setProperties(parameters);
 			}
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			LoggerUtils.error(PrologProvider.class, CLASS_NOT_FOUND, e);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

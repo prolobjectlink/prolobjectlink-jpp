@@ -112,14 +112,16 @@ public abstract class AbstractEngine extends AbstractPlatform implements PrologE
 		return getProgramSize() == 0;
 	}
 
-	public final void toXml(String path) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public final void fromXml(String path) {
-		// TODO Auto-generated method stub
-
+	public final Set<PrologIndicator> getBuiltIns() {
+		Set<PrologIndicator> pis = currentPredicates();
+		Set<PrologClause> clauses = getProgramClauses();
+		for (PrologClause prologClause : clauses) {
+			PrologIndicator pi = prologClause.getPrologIndicator();
+			if (pis.contains(pi)) {
+				pis.remove(pi);
+			}
+		}
+		return pis;
 	}
 
 	@Override
