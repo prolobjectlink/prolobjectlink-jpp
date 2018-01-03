@@ -19,11 +19,11 @@
  */
 package org.logicware.jpi;
 
-import org.logicware.AbstractDocument;
+import org.logicware.AbstractStorage;
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
 import org.logicware.DefaultTransaction;
-import org.logicware.Document;
+import org.logicware.Storage;
 import org.logicware.ObjectConverter;
 import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
@@ -33,29 +33,29 @@ import org.logicware.Transaction;
 import org.logicware.TypedQuery;
 import org.logicware.db.LockFile;
 
-public final class PrologDocument extends AbstractDocument implements Document {
+public final class PrologStorage extends AbstractStorage implements Storage {
 
 	private final Transaction transaction;
 
-	public PrologDocument(PrologProvider provider, Properties properties, String location,
+	public PrologStorage(PrologProvider provider, Properties properties, String location,
 			ContainerFactory containerFactory) {
 		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory);
 		this.transaction = new DefaultTransaction(this);
 	}
 
-	public PrologDocument(PrologProvider provider, Properties properties, String location,
+	public PrologStorage(PrologProvider provider, Properties properties, String location,
 			ContainerFactory containerFactory, int maxCapacity) {
 		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory, maxCapacity);
 		this.transaction = new DefaultTransaction(this);
 	}
 
-	public PrologDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+	public PrologStorage(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
 			String location, ContainerFactory containerFactory, int maxCapacity) {
 		super(provider, properties, converter, location, containerFactory, maxCapacity);
 		this.transaction = new DefaultTransaction(this);
 	}
 
-	public PrologDocument(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+	public PrologStorage(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
 			String location, ContainerFactory containerFactory, LockFile lock, int maxCapacity) {
 		super(provider, properties, converter, location, containerFactory, lock, maxCapacity);
 		this.transaction = new DefaultTransaction(this);

@@ -21,11 +21,11 @@ package org.logicware.jpi;
 
 import java.util.List;
 
-import org.logicware.AbstractDocumentManager;
+import org.logicware.AbstractStorageManager;
 import org.logicware.Container;
 import org.logicware.ContainerFactory;
-import org.logicware.Document;
-import org.logicware.DocumentManager;
+import org.logicware.Storage;
+import org.logicware.StorageManager;
 import org.logicware.ObjectConverter;
 import org.logicware.Properties;
 import org.logicware.Query;
@@ -37,20 +37,20 @@ import org.logicware.VolatileContainer;
  * @since 1.0
  * @see Container
  * @see VolatileContainer
- * @see Document
+ * @see Storage
  */
-public class PrologDocumentManager extends AbstractDocumentManager implements DocumentManager {
+public class PrologStorageManager extends AbstractStorageManager implements StorageManager {
 
-	public PrologDocumentManager(PrologProvider provider, String location, ContainerFactory containerFactory) {
+	public PrologStorageManager(PrologProvider provider, String location, ContainerFactory containerFactory) {
 		super(provider, new Properties(), new PrologObjectConverter(provider), location, containerFactory);
 	}
 
-	public PrologDocumentManager(PrologProvider provider, Properties properties, String location,
+	public PrologStorageManager(PrologProvider provider, Properties properties, String location,
 			ContainerFactory containerFactory) {
 		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory);
 	}
 
-	public PrologDocumentManager(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+	public PrologStorageManager(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
 			String location, ContainerFactory containerFactory) {
 		super(provider, properties, converter, location, containerFactory);
 	}

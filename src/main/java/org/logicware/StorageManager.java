@@ -19,6 +19,6 @@
  */
 package org.logicware;
 
-public interface DocumentFactory extends Factories {
+public interface StorageManager extends PersistentContainer {
 
 }

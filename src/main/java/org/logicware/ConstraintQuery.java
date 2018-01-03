@@ -29,7 +29,7 @@ import java.util.List;
  * append restrictions to the criteria object and build a final query from this
  * criteria.
  * 
- * A criteria is created by the {@link Document} taking as parameter the root
+ * A criteria is created by the {@link Storage} taking as parameter the root
  * restriction class being this the first step of the work flow. Once created
  * criteria object, append the desired restrictions and finally create the query
  * object. The query object created by a criteria is an instance of TypedQuery
@@ -488,7 +488,7 @@ public interface ConstraintQuery<O> {
 	/**
 	 * Return a single solution of the current criteria query. The solution
 	 * object type is in correspondence whit root class type specified in the
-	 * criteria query construction when its is created through {@link Document}.
+	 * criteria query construction when its is created through {@link Storage}.
 	 * It is a shortcut to the create the typed query from this criteria query
 	 * and request to the typed query one single solution.
 	 * 
@@ -506,7 +506,7 @@ public interface ConstraintQuery<O> {
 	/**
 	 * Return a all solutions of the current criteria query. The solutions list
 	 * object type is in correspondence whit root class type specified in the
-	 * criteria query construction when its is created through {@link Document}.
+	 * criteria query construction when its is created through {@link Storage}.
 	 * It is a shortcut to the create the typed query from this criteria query
 	 * and request to the typed query all solutions.
 	 * 

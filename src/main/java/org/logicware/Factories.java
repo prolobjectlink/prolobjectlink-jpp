@@ -23,16 +23,6 @@ import org.logicware.jpi.PrologProvider;
 
 public interface Factories {
 
-	public ContainerFactory createContainerFactory();
-
-	public DocumentManager createDocumentManager(String path);
-
-	public DocumentPool createDocumentPool(String path, String name);
-
-	public Document createDocument(String path);
-
-	public Cache createCache();
-
 	public Properties getProperties();
 
 	public PrologProvider getProvider();
@@ -40,5 +30,15 @@ public interface Factories {
 	public void setProvider(PrologProvider provider);
 
 	public void setProperties(Properties properties);
+
+	public ContainerFactory createContainerFactory();
+
+	public StorageManager createStorageManager(String path);
+
+	public StoragePool createStoragePool(String path, String name);
+
+	public Storage createStorage(String path);
+
+	public Cache createCache();
 
 }

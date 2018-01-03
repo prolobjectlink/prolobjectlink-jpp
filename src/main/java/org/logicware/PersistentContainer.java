@@ -177,8 +177,8 @@ public interface PersistentContainer extends Closeable, Restorable, Container {
 	 *            object template
 	 * @return TypedQuery builded from a object template.
 	 * @since 1.0
-	 * @see Document#createQuery(Class)
-	 * @see Document#createQuery(String)
+	 * @see Storage#createQuery(Class)
+	 * @see Storage#createQuery(String)
 	 */
 	public <O> TypedQuery<O> createQuery(O o);
 
@@ -209,8 +209,8 @@ public interface PersistentContainer extends Closeable, Restorable, Container {
 	 *            class for build the query
 	 * @return TypedQuery builded from a Object class
 	 * @since 1.0
-	 * @see Document#createQuery(O)
-	 * @see Document#createQuery(String)
+	 * @see Storage#createQuery(O)
+	 * @see Storage#createQuery(String)
 	 */
 	public <O> TypedQuery<O> createQuery(Class<O> clazz);
 

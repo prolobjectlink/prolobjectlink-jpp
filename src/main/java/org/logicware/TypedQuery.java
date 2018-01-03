@@ -27,10 +27,10 @@ import java.util.List;
 /**
  * <p>
  * Query is a concept for retrieve objects from object containers. The query
- * object is created through {@link Document},{@link PersistentContainer} which
- * have three variants {@link Document#createQuery(Class)},
- * {@link Document#createQuery(Object)} (query by example ) and
- * {@link Document#createQuery(Predicate)}. This methods force to the prolog
+ * object is created through {@link Storage},{@link PersistentContainer} which
+ * have three variants {@link Storage#createQuery(Class)},
+ * {@link Storage#createQuery(Object)} (query by example ) and
+ * {@link Storage#createQuery(Predicate)}. This methods force to the prolog
  * engine to find all possibles solution for the formulated query and with this
  * solutions the query is builded. All before mentioned methods return a
  * {@link TypedQuery} object that hold a solution list that can be retrieved
@@ -147,7 +147,7 @@ public interface TypedQuery<O> extends Iterator<O> {
 	/**
 	 * Return a single solution of the current {@code TypedQuery}. The solution
 	 * object type is in correspondence whit root class type specified in the
-	 * criteria query construction when its is created through {@link Document}.
+	 * criteria query construction when its is created through {@link Storage}.
 	 * 
 	 * <pre>
 	 * Point point = objectContainer.createQuery(Point.class).getSolution();
@@ -164,7 +164,7 @@ public interface TypedQuery<O> extends Iterator<O> {
 	 * Return a all solutions of the current {@code TypedQuery}. The solutions
 	 * list object type is in correspondence whit root class type specified in
 	 * the criteria query construction when its is created through
-	 * {@link Document}.
+	 * {@link Storage}.
 	 * 
 	 * <pre>
 	 * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).getSolutions();

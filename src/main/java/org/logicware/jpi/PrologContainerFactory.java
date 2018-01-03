@@ -22,9 +22,9 @@ package org.logicware.jpi;
 import org.logicware.AbstractFactories;
 import org.logicware.Cache;
 import org.logicware.ContainerFactory;
-import org.logicware.Document;
-import org.logicware.DocumentManager;
-import org.logicware.DocumentPool;
+import org.logicware.Storage;
+import org.logicware.StorageManager;
+import org.logicware.StoragePool;
 import org.logicware.Properties;
 
 public abstract class PrologContainerFactory extends AbstractFactories implements ContainerFactory {
@@ -37,19 +37,19 @@ public abstract class PrologContainerFactory extends AbstractFactories implement
 		return new PrologCache(getProvider(), getProperties());
 	}
 
-	public Document createDocument(String path) {
+	public Storage createStorage(String path) {
 		ContainerFactory factory = createContainerFactory();
-		return new PrologDocument(getProvider(), getProperties(), path, factory);
+		return new PrologStorage(getProvider(), getProperties(), path, factory);
 	}
 
-	public DocumentPool createDocumentPool(String path, String name) {
+	public StoragePool createStoragePool(String path, String name) {
 		ContainerFactory factory = createContainerFactory();
-		return new PrologDocumentPool(getProvider(), getProperties(), path, name, factory);
+		return new PrologStoragePool(getProvider(), getProperties(), path, name, factory);
 	}
 
-	public DocumentManager createDocumentManager(String path) {
+	public StorageManager createStorageManager(String path) {
 		ContainerFactory factory = createContainerFactory();
-		return new PrologDocumentManager(getProvider(), getProperties(), path, factory);
+		return new PrologStorageManager(getProvider(), getProperties(), path, factory);
 	}
 
 }

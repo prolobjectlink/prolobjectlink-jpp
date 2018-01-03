@@ -26,12 +26,12 @@ import java.util.List;
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
 
-public abstract class AbstractDocumentManager extends AbstractPersistentContainer implements DocumentManager {
+public abstract class AbstractStorageManager extends AbstractPersistentContainer implements StorageManager {
 
 	// container register mapping class name -> persistent container
 	private final HashMap<String, PersistentContainer> master;
 
-	protected AbstractDocumentManager(PrologProvider provider, Properties properties,
+	protected AbstractStorageManager(PrologProvider provider, Properties properties,
 			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory) {
 		super(provider, properties, converter, location, containerFactory);
 		this.master = new HashMap<String, PersistentContainer>();
@@ -142,7 +142,7 @@ public abstract class AbstractDocumentManager extends AbstractPersistentContaine
 		PersistentContainer container = master.get(key);
 		if (container == null) {
 			String path = locationOf(clazz);
-			container = containerFactory.createDocument(path);
+			container = containerFactory.createStorage(path);
 			master.put(key, container);
 		}
 		return container;

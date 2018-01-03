@@ -27,7 +27,7 @@ import java.util.List;
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface Document extends PersistentContainer {
+public interface Storage extends PersistentContainer {
 
 	public <O> void add(O... facts);
 

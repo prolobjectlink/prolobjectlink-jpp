@@ -21,12 +21,12 @@ package org.logicware.jpi;
 
 import java.util.List;
 
-import org.logicware.AbstractDocumentPool;
+import org.logicware.AbstractStoragePool;
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
 import org.logicware.DefaultTransaction;
-import org.logicware.Document;
-import org.logicware.DocumentPool;
+import org.logicware.Storage;
+import org.logicware.StoragePool;
 import org.logicware.ObjectConverter;
 import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
@@ -36,26 +36,26 @@ import org.logicware.Transaction;
 import org.logicware.TypedQuery;
 import org.logicware.util.ReadWriteCollections;
 
-public class PrologDocumentPool extends AbstractDocumentPool implements DocumentPool {
+public class PrologStoragePool extends AbstractStoragePool implements StoragePool {
 
 	private final Transaction transaction;
 
-	public PrologDocumentPool(PrologProvider provider, String location, String name,
+	public PrologStoragePool(PrologProvider provider, String location, String name,
 			ContainerFactory containerFactory) {
 		this(provider, new Properties(), new PrologObjectConverter(provider), location, name, containerFactory, 10000);
 	}
 
-	public PrologDocumentPool(PrologProvider provider, Properties properties, String location, String name,
+	public PrologStoragePool(PrologProvider provider, Properties properties, String location, String name,
 			ContainerFactory containerFactory) {
 		this(provider, properties, new PrologObjectConverter(provider), location, name, containerFactory, 10000);
 	}
 
-	public PrologDocumentPool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+	public PrologStoragePool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
 			String location, String name, ContainerFactory containerFactory) {
 		this(provider, properties, converter, location, name, containerFactory, 1000);
 	}
 
-	public PrologDocumentPool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+	public PrologStoragePool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
 			String location, String name, ContainerFactory containerFactory, int documentCapacity) {
 		super(provider, properties, converter, location, name, containerFactory, documentCapacity);
 		this.transaction = new DefaultTransaction(this);
@@ -93,12 +93,12 @@ public class PrologDocumentPool extends AbstractDocumentPool implements Document
 		return new JPIDocumentPoolProcedureQuery(functor, args);
 	}
 
-	public Document createDocument(String location, int maxCapacity) {
-		return new PrologDocument(getProvider(), getProperties(), getConverter(), location, getContainerFactory(),
+	public Storage createStorage(String location, int maxCapacity) {
+		return new PrologStorage(getProvider(), getProperties(), getConverter(), location, getContainerFactory(),
 				maxCapacity);
 	}
 
-	private final class JPIDocumetPoolConstraintQuery<O> extends DocumetPoolConstraintQuery<O>
+	private final class JPIDocumetPoolConstraintQuery<O> extends StoragePoolConstraintQuery<O>
 			implements ConstraintQuery<O> {
 
 		protected JPIDocumetPoolConstraintQuery(Class<O> clazz) {
@@ -119,7 +119,7 @@ public class PrologDocumentPool extends AbstractDocumentPool implements Document
 
 	}
 
-	private final class JPIDocumentPoolProcedureQuery extends DocumentPoolProcedureQuery {
+	private final class JPIDocumentPoolProcedureQuery extends StoragePoolProcedureQuery {
 
 		protected JPIDocumentPoolProcedureQuery(String functor, String[] arguments) {
 			super(functor, arguments);

@@ -40,7 +40,7 @@ import org.logicware.predicate.TruePredicate;
  * </p>
  * 
  * <p>
- * The {@link Predicate} implementation is used by {@link Document},
+ * The {@link Predicate} implementation is used by {@link Storage},
  * {@link TypedQuery} and {@link Query}. They go selecting from an object list
  * retrieve previously there objects that match with the condition implemented
  * in the {@link Predicate#evaluate(Object)} method.
@@ -48,7 +48,7 @@ import org.logicware.predicate.TruePredicate;
  * 
  * <p>
  * Sample using {@link Predicate} for find all points with <tt>X == 3.5</tt> and
- * <tt>Y == 10.14</tt> from {@link Document}.
+ * <tt>Y == 10.14</tt> from {@link Storage}.
  * </p>
  * 
  * <pre>

@@ -31,13 +31,13 @@ import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
 import org.logicware.util.ReadWriteCollections;
 
-public abstract class AbstractDocumentPool extends AbstractPersistentContainer implements DocumentPool {
+public abstract class AbstractStoragePool extends AbstractPersistentContainer implements StoragePool {
 
 	// pool name
 	private final String name;
 
 	// disposed document
-	private Document lastDocument;
+	private Storage lastDocument;
 
 	// capacity per document to store clauses
 	private final int documentCapacity;
@@ -46,12 +46,12 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	private final File rootDirectory;
 
 	// list of documents in the pool
-	private List<Document> documents = new ArrayList<Document>();
+	private List<Storage> storages = new ArrayList<Storage>();
 
 	// file filter for pool files
-	private final FileFilter filter = new DocumentPoolFileFilter();
+	private final FileFilter filter = new StoragePoolFileFilter();
 
-	protected AbstractDocumentPool(PrologProvider provider, Properties properties,
+	protected AbstractStoragePool(PrologProvider provider, Properties properties,
 			ObjectConverter<PrologTerm> converter, String location, String name, ContainerFactory containerFactory,
 			int documentCapacity) {
 		super(provider, properties, converter, location, containerFactory);
@@ -67,37 +67,37 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 		String root = getLocation();
 		String path = root + SEPARATOR + root + "." + index;
 		if (lastDocument == null) {
-			lastDocument = createDocument(path, documentCapacity);
-			documents.add(lastDocument);
+			lastDocument = createStorage(path, documentCapacity);
+			storages.add(lastDocument);
 		}
 		if (!lastDocument.hasCapacity()) {
-			lastDocument = createDocument(path, documentCapacity);
-			documents.add(lastDocument);
+			lastDocument = createStorage(path, documentCapacity);
+			storages.add(lastDocument);
 		} else {
 			lastDocument.add(facts);
 		}
 	}
 
 	public final <O> void modify(O match, O merge) {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			document.modify(match, merge);
 		}
 	}
 
 	public final void remove(Class<?> clazz) {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			document.remove(clazz);
 		}
 	}
 
 	public final <O> void remove(O... facts) {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			document.remove(facts);
 		}
 	}
 
 	public final Object find(String string) throws NonSolutionError {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			Object object = document.find(string);
 			if (object != null) {
 				return object;
@@ -107,7 +107,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final Object find(String functor, Object... args) throws NonSolutionError {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			Object object = document.find(functor, args);
 			if (object != null) {
 				return object;
@@ -117,7 +117,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final <O> O find(O o) throws NonSolutionError {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			O object = document.find(o);
 			if (object != null) {
 				return object;
@@ -127,7 +127,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final <O> O find(Class<O> clazz) throws NonSolutionError {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			O object = document.find(clazz);
 			if (object != null) {
 				return object;
@@ -137,7 +137,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final <O> O find(Predicate<O> predicate) throws NonSolutionError {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			O object = document.find(predicate);
 			if (object != null) {
 				return object;
@@ -148,7 +148,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 
 	public final List<Object> findAll(String string) {
 		List<Object> list = ReadWriteCollections.newReadWriteArrayList();
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			List<Object> objects = document.findAll(string);
 			for (Object object : objects) {
 				if (!list.contains(object)) {
@@ -161,7 +161,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 
 	public final List<Object> findAll(String functor, Object... args) {
 		List<Object> list = ReadWriteCollections.newReadWriteArrayList();
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			List<Object> objects = document.findAll(functor, args);
 			for (Object object : objects) {
 				if (!list.contains(object)) {
@@ -174,7 +174,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 
 	public final <O> List<O> findAll(O o) {
 		List<O> list = ReadWriteCollections.newReadWriteArrayList();
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			List<O> objects = document.findAll(o);
 			for (O object : objects) {
 				if (!list.contains(object)) {
@@ -187,7 +187,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 
 	public final <O> List<O> findAll(Class<O> clazz) {
 		List<O> list = ReadWriteCollections.newReadWriteArrayList();
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			List<O> objects = document.findAll(clazz);
 			for (O object : objects) {
 				if (!list.contains(object)) {
@@ -200,7 +200,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 
 	public final <O> List<O> findAll(Predicate<O> predicate) {
 		List<O> list = ReadWriteCollections.newReadWriteArrayList();
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			List<O> objects = document.findAll(predicate);
 			for (O object : objects) {
 				if (!list.contains(object)) {
@@ -212,7 +212,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final boolean contains(String string) {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			if (document.contains(string)) {
 				return true;
 			}
@@ -221,7 +221,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final <O> boolean contains(O object) {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			if (document.contains(object)) {
 				return true;
 			}
@@ -230,7 +230,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final <O> boolean contains(Class<O> clazz) {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			if (document.contains(clazz)) {
 				return true;
 			}
@@ -239,7 +239,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final <O> boolean contains(Predicate<O> predicate) {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			if (document.contains(predicate)) {
 				return true;
 			}
@@ -248,7 +248,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final void clear() {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			document.clear();
 		}
 	}
@@ -286,11 +286,11 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final void close() {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			document.clear();
 			document.close();
 		}
-		documents.clear();
+		storages.clear();
 		open = false;
 	}
 
@@ -302,10 +302,10 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 					String canonical = filex.getCanonicalPath();
 					int lastDotIndex = canonical.lastIndexOf('.');
 					String index = canonical.substring(lastDotIndex + 1);
-					documents = new ArrayList<Document>(files.length);
-					if (index.matches(DocumentPoolFileFilter.NUMBER_REGEX)) {
-						lastDocument = createDocument(canonical, documentCapacity);
-						documents.add(lastDocument);
+					storages = new ArrayList<Storage>(files.length);
+					if (index.matches(StoragePoolFileFilter.NUMBER_REGEX)) {
+						lastDocument = createStorage(canonical, documentCapacity);
+						storages.add(lastDocument);
 						lastDocument.open();
 					}
 				} catch (IOException e) {
@@ -316,8 +316,8 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 		open = true;
 	}
 
-	public final List<Document> getDocuments() {
-		return documents;
+	public final List<Storage> getStorages() {
+		return storages;
 	}
 
 	public final String getPoolName() {
@@ -329,11 +329,11 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final int getPoolSize() {
-		return documents.size();
+		return storages.size();
 	}
 
 	public final boolean isEmpty() {
-		return documents.isEmpty();
+		return storages.isEmpty();
 	}
 
 	public final FileFilter getFilter() {
@@ -341,7 +341,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	}
 
 	public final void flush() {
-		for (Document document : documents) {
+		for (Storage document : storages) {
 			if (document.isDirty()) {
 				document.flush();
 			}
@@ -356,7 +356,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 	 * @param <O>
 	 *            parametric object
 	 */
-	protected abstract class DocumetPoolConstraintQuery<O> extends AbstractQuery<O> implements ConstraintQuery<O> {
+	protected abstract class StoragePoolConstraintQuery<O> extends AbstractQuery<O> implements ConstraintQuery<O> {
 
 		//
 		private final Class<O> rootClass;
@@ -364,9 +364,9 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 		//
 		private final List<ConstraintQuery<O>> constraints = new LinkedList<ConstraintQuery<O>>();
 
-		protected DocumetPoolConstraintQuery(Class<O> clazz) {
+		protected StoragePoolConstraintQuery(Class<O> clazz) {
 			this.rootClass = clazz;
-			for (Document document : documents) {
+			for (Storage document : storages) {
 				constraints.add(document.createConstraintQuery(clazz));
 			}
 		}
@@ -642,7 +642,7 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			DocumetPoolConstraintQuery<O> other = (DocumetPoolConstraintQuery) obj;
+			StoragePoolConstraintQuery<O> other = (StoragePoolConstraintQuery) obj;
 			if (!getOuterType().equals(other.getOuterType()))
 				return false;
 			if (!Objects.equals(constraints, other.constraints))
@@ -650,8 +650,8 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 			return Objects.equals(rootClass, other.rootClass);
 		}
 
-		protected final List<Document> getDocuments() {
-			return documents;
+		protected final List<Storage> getDocuments() {
+			return storages;
 		}
 
 		protected final List<ConstraintQuery<O>> getConstraints() {
@@ -662,21 +662,21 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 			return rootClass;
 		}
 
-		private AbstractDocumentPool getOuterType() {
-			return AbstractDocumentPool.this;
+		private AbstractStoragePool getOuterType() {
+			return AbstractStoragePool.this;
 		}
 
 	}
 
-	protected class DocumentPoolProcedureQuery extends AbstractProcedureQuery<Object> implements ProcedureQuery {
+	protected class StoragePoolProcedureQuery extends AbstractProcedureQuery<Object> implements ProcedureQuery {
 
 		private List<Object> list = ReadWriteCollections.newReadWriteArrayList();
 		private final List<ProcedureQuery> queries = new ArrayList<ProcedureQuery>();
 
-		protected DocumentPoolProcedureQuery(String functor, String[] arguments) {
+		protected StoragePoolProcedureQuery(String functor, String[] arguments) {
 			super(functor, arguments);
-			AbstractDocumentPool.this.open();
-			for (Document document : documents) {
+			AbstractStoragePool.this.open();
+			for (Storage document : storages) {
 				queries.add(document.createProcedureQuery(functor, arguments));
 			}
 		}
@@ -766,14 +766,14 @@ public abstract class AbstractDocumentPool extends AbstractPersistentContainer i
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			DocumentPoolProcedureQuery other = (DocumentPoolProcedureQuery) obj;
+			StoragePoolProcedureQuery other = (StoragePoolProcedureQuery) obj;
 			if (!getOuterType().equals(other.getOuterType()))
 				return false;
 			return Objects.equals(queries, other.queries);
 		}
 
-		private AbstractDocumentPool getOuterType() {
-			return AbstractDocumentPool.this;
+		private AbstractStoragePool getOuterType() {
+			return AbstractStoragePool.this;
 		}
 
 		public boolean hasNext() {

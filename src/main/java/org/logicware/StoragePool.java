@@ -28,10 +28,10 @@ import java.util.List;
  * 
  * @author Jose Zalacain
  * @since 1.0
- * @see Document
- * @see DocumentManager
+ * @see Storage
+ * @see StorageManager
  */
-public interface DocumentPool extends PersistentContainer {
+public interface StoragePool extends PersistentContainer {
 
 	public <O> void add(O... facts);
 
@@ -61,9 +61,9 @@ public interface DocumentPool extends PersistentContainer {
 
 	public <O> List<O> findAll(Predicate<O> predicate);
 
-	public Document createDocument(String location, int maxCapacity);
+	public Storage createStorage(String location, int maxCapacity);
 
-	public List<Document> getDocuments();
+	public List<Storage> getStorages();
 
 	public String getPoolName();
 

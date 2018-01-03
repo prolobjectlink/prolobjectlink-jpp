@@ -35,7 +35,7 @@ import java.io.IOException;
  * @since 1.0
  *
  */
-final class DocumentPoolFileFilter implements FileFilter {
+final class StoragePoolFileFilter implements FileFilter {
 
 	static final String NUMBER_REGEX = "[0-9]+";
 
