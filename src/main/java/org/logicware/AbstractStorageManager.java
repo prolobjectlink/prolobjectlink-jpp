@@ -81,7 +81,16 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	public final boolean contains(String string) {
 		List<Class<?>> classes = classesOf(string);
 		for (Class<?> clazz : classes) {
-			getEngine().include(locationOf(clazz));
+			PersistentContainer pc = containerOf(clazz);
+			if (pc instanceof StoragePool) {
+				StoragePool sp = (StoragePool) pc;
+				sp.open();
+				List<Storage> storages = sp.getStorages();
+				for (Storage storage : storages) {
+					String path = storage.getLocation();
+					getEngine().include(path);
+				}
+			}
 		}
 		return getEngine().contains(string);
 	}
@@ -139,10 +148,11 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 
 	public final PersistentContainer containerOf(Class<?> clazz) {
 		String key = clazz.getName();
+		String name = clazz.getSimpleName();
 		PersistentContainer container = master.get(key);
 		if (container == null) {
 			String path = locationOf(clazz);
-			container = containerFactory.createStorage(path);
+			container = containerFactory.createStoragePool(path, name);
 			master.put(key, container);
 		}
 		return container;
@@ -151,6 +161,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	public final String locationOf(Class<?> clazz) {
 		String name = clazz.getName();
 		String path = name.replace('.', SEPARATOR);
+		path = path.substring(0, path.lastIndexOf(SEPARATOR));
 		return getLocation() + SEPARATOR + path;
 	}
 

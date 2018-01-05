@@ -37,6 +37,10 @@ public abstract class AbstractQuery extends AbstractWrapper implements PrologQue
 		return engine;
 	}
 
+	public final PrologProvider getProvider() {
+		return engine.getProvider();
+	}
+
 	public final <K extends PrologTerm> K toTerm(Object o, Class<K> from) {
 		return engine.toTerm(o, from);
 	}

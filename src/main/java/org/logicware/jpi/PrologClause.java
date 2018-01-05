@@ -19,7 +19,7 @@
  */
 package org.logicware.jpi;
 
-import java.util.List;
+import java.util.Iterator;
 
 public interface PrologClause {
 
@@ -43,8 +43,6 @@ public interface PrologClause {
 
 	public boolean unify(PrologClause clause);
 
-	public List<PrologTerm> getBodyTerms();
-
 	public boolean isDynamic();
 
 	public boolean isMultifile();
@@ -52,6 +50,10 @@ public interface PrologClause {
 	public boolean isDiscontiguous();
 
 	public PrologIndicator getPrologIndicator();
+
+	public Iterator<PrologTerm> getBodyIterator();
+
+	public PrologTerm[] getBodyArray();
 
 	public int hashCode();
 

@@ -24,6 +24,7 @@ public class LoggerConstants {
 	public static final String RUNTIME_ERROR = "Runtime error ";
 	public static final String FILE_NOT_FOUND = "File not found ";
 	public static final String CLASS_NOT_FOUND = "Class not found ";
+	public static final String UNKNOW_PREDICATE = "Unknow predicate";
 	public static final String SYNTAX_ERROR = "Syntax error in the file ";
 	public static final String NON_SOLUTION = "The query no have solution ";
 	public static final String INDICATOR_NOT_FOUND = "Predicate not found for ";

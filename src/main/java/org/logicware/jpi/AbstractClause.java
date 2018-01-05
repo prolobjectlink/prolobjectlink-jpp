@@ -22,6 +22,7 @@ package org.logicware.jpi;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public abstract class AbstractClause implements PrologClause {
 
@@ -87,7 +88,7 @@ public abstract class AbstractClause implements PrologClause {
 		return body;
 	}
 
-	public final List<PrologTerm> getBodyTerms() {
+	public final PrologTerm[] getBodyArray() {
 		PrologTerm ptr = getBody();
 		List<PrologTerm> terms = new ArrayList<PrologTerm>();
 		while (ptr.isCompound() && ptr.hasIndicator(",", 2)) {
@@ -95,7 +96,11 @@ public abstract class AbstractClause implements PrologClause {
 			ptr = ptr.getArgument(1);
 		}
 		terms.add(ptr);
-		return terms;
+		return terms.toArray(new PrologTerm[0]);
+	}
+
+	public final Iterator<PrologTerm> getBodyIterator() {
+		return new BodyIterator(getBodyArray());
 	}
 
 	public final String getFunctor() {
@@ -210,8 +215,7 @@ public abstract class AbstractClause implements PrologClause {
 		b.append(getHead());
 		if (isRule()) {
 			b.append(":-\n\t");
-			List<PrologTerm> l = getBodyTerms();
-			Iterator<PrologTerm> i = l.iterator();
+			Iterator<PrologTerm> i = getBodyIterator();
 			while (i.hasNext()) {
 				b.append(i.next());
 				if (i.hasNext()) {
@@ -221,6 +225,32 @@ public abstract class AbstractClause implements PrologClause {
 		}
 		b.append('.');
 		return "" + b + "";
+	}
+
+	private class BodyIterator implements Iterator<PrologTerm> {
+
+		private int nextIndex;
+
+		private final PrologTerm[] elements;
+
+		protected BodyIterator(PrologTerm[] elements) {
+			this.elements = elements;
+		}
+
+		public boolean hasNext() {
+			return nextIndex < elements.length;
+		}
+
+		public PrologTerm next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			return elements[nextIndex++];
+		}
+
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
 	}
 
 }

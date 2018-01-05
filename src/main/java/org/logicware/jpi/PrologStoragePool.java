@@ -19,35 +19,35 @@
  */
 package org.logicware.jpi;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.logicware.AbstractStoragePool;
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
 import org.logicware.DefaultTransaction;
-import org.logicware.Storage;
-import org.logicware.StoragePool;
 import org.logicware.ObjectConverter;
 import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
 import org.logicware.Properties;
 import org.logicware.Query;
+import org.logicware.Storage;
+import org.logicware.StoragePool;
 import org.logicware.Transaction;
 import org.logicware.TypedQuery;
-import org.logicware.util.ReadWriteCollections;
 
 public class PrologStoragePool extends AbstractStoragePool implements StoragePool {
 
 	private final Transaction transaction;
 
-	public PrologStoragePool(PrologProvider provider, String location, String name,
-			ContainerFactory containerFactory) {
-		this(provider, new Properties(), new PrologObjectConverter(provider), location, name, containerFactory, 10000);
+	public PrologStoragePool(PrologProvider provider, String location, String name, ContainerFactory containerFactory) {
+		this(provider, new Properties(), new PrologObjectConverter(provider), location, name, containerFactory, 1000);
 	}
 
 	public PrologStoragePool(PrologProvider provider, Properties properties, String location, String name,
 			ContainerFactory containerFactory) {
-		this(provider, properties, new PrologObjectConverter(provider), location, name, containerFactory, 10000);
+		this(provider, properties, new PrologObjectConverter(provider), location, name, containerFactory, 1000);
 	}
 
 	public PrologStoragePool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
@@ -106,7 +106,7 @@ public class PrologStoragePool extends AbstractStoragePool implements StoragePoo
 		}
 
 		public TypedQuery<O> createQuery() {
-			List<O> list = ReadWriteCollections.newReadWriteArrayList();
+			List<O> list = Collections.synchronizedList(new ArrayList<O>());
 			for (ConstraintQuery<O> constraintQuery : getConstraints()) {
 				List<O> objects = constraintQuery.getSolutions();
 				list.addAll(objects);

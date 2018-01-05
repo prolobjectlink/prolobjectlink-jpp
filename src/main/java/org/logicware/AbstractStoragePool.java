@@ -23,13 +23,13 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 import org.logicware.jpi.PrologProvider;
 import org.logicware.jpi.PrologTerm;
-import org.logicware.util.ReadWriteCollections;
 
 public abstract class AbstractStoragePool extends AbstractPersistentContainer implements StoragePool {
 
@@ -37,10 +37,10 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	private final String name;
 
 	// disposed document
-	private Storage lastDocument;
+	private Storage lastStorage;
 
 	// capacity per document to store clauses
-	private final int documentCapacity;
+	private final int storageCapacity;
 
 	//
 	private final File rootDirectory;
@@ -51,12 +51,11 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	// file filter for pool files
 	private final FileFilter filter = new StoragePoolFileFilter();
 
-	protected AbstractStoragePool(PrologProvider provider, Properties properties,
-			ObjectConverter<PrologTerm> converter, String location, String name, ContainerFactory containerFactory,
-			int documentCapacity) {
-		super(provider, properties, converter, location, containerFactory);
-		this.documentCapacity = documentCapacity;
-		rootDirectory = new File(location);
+	protected AbstractStoragePool(PrologProvider provider, Properties properties, ObjectConverter<PrologTerm> converter,
+			String location, String name, ContainerFactory containerFactory, int storageCapacity) {
+		super(provider, properties, converter, location + SEPARATOR + name, containerFactory);
+		rootDirectory = new File(location + SEPARATOR + name);
+		this.storageCapacity = storageCapacity;
 		rootDirectory.mkdir();
 		this.name = name;
 		open = false;
@@ -66,15 +65,15 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		int index = getPoolSize();
 		String root = getLocation();
 		String path = root + SEPARATOR + root + "." + index;
-		if (lastDocument == null) {
-			lastDocument = createStorage(path, documentCapacity);
-			storages.add(lastDocument);
+		if (lastStorage == null) {
+			lastStorage = createStorage(path, storageCapacity);
+			storages.add(lastStorage);
 		}
-		if (!lastDocument.hasCapacity()) {
-			lastDocument = createStorage(path, documentCapacity);
-			storages.add(lastDocument);
+		if (!lastStorage.hasCapacity()) {
+			lastStorage = createStorage(path, storageCapacity);
+			storages.add(lastStorage);
 		} else {
-			lastDocument.add(facts);
+			lastStorage.add(facts);
 		}
 	}
 
@@ -147,7 +146,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final List<Object> findAll(String string) {
-		List<Object> list = ReadWriteCollections.newReadWriteArrayList();
+		List<Object> list = Collections.synchronizedList(new ArrayList<Object>());
 		for (Storage document : storages) {
 			List<Object> objects = document.findAll(string);
 			for (Object object : objects) {
@@ -160,7 +159,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final List<Object> findAll(String functor, Object... args) {
-		List<Object> list = ReadWriteCollections.newReadWriteArrayList();
+		List<Object> list = Collections.synchronizedList(new ArrayList<Object>());
 		for (Storage document : storages) {
 			List<Object> objects = document.findAll(functor, args);
 			for (Object object : objects) {
@@ -173,7 +172,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> List<O> findAll(O o) {
-		List<O> list = ReadWriteCollections.newReadWriteArrayList();
+		List<O> list = Collections.synchronizedList(new ArrayList<O>());
 		for (Storage document : storages) {
 			List<O> objects = document.findAll(o);
 			for (O object : objects) {
@@ -186,7 +185,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> List<O> findAll(Class<O> clazz) {
-		List<O> list = ReadWriteCollections.newReadWriteArrayList();
+		List<O> list = Collections.synchronizedList(new ArrayList<O>());
 		for (Storage document : storages) {
 			List<O> objects = document.findAll(clazz);
 			for (O object : objects) {
@@ -199,7 +198,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> List<O> findAll(Predicate<O> predicate) {
-		List<O> list = ReadWriteCollections.newReadWriteArrayList();
+		List<O> list = Collections.synchronizedList(new ArrayList<O>());
 		for (Storage document : storages) {
 			List<O> objects = document.findAll(predicate);
 			for (O object : objects) {
@@ -304,9 +303,9 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 					String index = canonical.substring(lastDotIndex + 1);
 					storages = new ArrayList<Storage>(files.length);
 					if (index.matches(StoragePoolFileFilter.NUMBER_REGEX)) {
-						lastDocument = createStorage(canonical, documentCapacity);
-						storages.add(lastDocument);
-						lastDocument.open();
+						lastStorage = createStorage(canonical, storageCapacity);
+						storages.add(lastStorage);
+						lastStorage.open();
 					}
 				} catch (IOException e) {
 					LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR + filex, e);
@@ -325,7 +324,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final int getCapacity() {
-		return documentCapacity;
+		return storageCapacity;
 	}
 
 	public final int getPoolSize() {
@@ -670,7 +669,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 
 	protected class StoragePoolProcedureQuery extends AbstractProcedureQuery<Object> implements ProcedureQuery {
 
-		private List<Object> list = ReadWriteCollections.newReadWriteArrayList();
+		private List<Object> list = Collections.synchronizedList(new ArrayList<Object>());
 		private final List<ProcedureQuery> queries = new ArrayList<ProcedureQuery>();
 
 		protected StoragePoolProcedureQuery(String functor, String[] arguments) {
@@ -790,8 +789,11 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 				if (procedureQuery.hasNext()) {
 					Object object = procedureQuery.next();
 					if (object instanceof Object[]) {
-						Object[] array = (Object[]) object;
-						list = ReadWriteCollections.newReadWriteArrayList(array);
+						Object[] a = (Object[]) object;
+						list = Collections.synchronizedList(new ArrayList<Object>(a.length));
+						for (int i = 0; i < a.length; i++) {
+							list.add(a[i]);
+						}
 					}
 				}
 			}

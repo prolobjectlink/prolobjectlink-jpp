@@ -75,10 +75,10 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 		checkStorableObject(match);
 		checkStorableObject(merge);
 		checkReplacementObject(match, merge);
-		PrologTerm prologMatch = getConverter().toTerm(match);
-		PrologTerm prologMerge = getConverter().toTerm(merge);
-		getEngine().retract(prologMatch);
-		getEngine().assertz(prologMerge);
+		PrologTerm pMatch = getConverter().toTerm(match);
+		PrologTerm pMerge = getConverter().toTerm(merge);
+		getEngine().retract(pMatch);
+		getEngine().assertz(pMerge);
 		setDirty(true);
 	}
 

@@ -29,9 +29,18 @@ public interface PrologQuery extends Wrapper, Iterator<PrologTerm[]>, Iterable<P
 	/**
 	 * Engine hold by the current query
 	 * 
-	 * @return
+	 * @return wrapped engine
+	 * @since 1.0
 	 */
 	public PrologEngine getEngine();
+
+	/**
+	 * Provider instance
+	 * 
+	 * @return provider instance
+	 * @since 1.0
+	 */
+	public PrologProvider getProvider();
 
 	/**
 	 * <p>

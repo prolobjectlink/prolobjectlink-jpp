@@ -26,7 +26,9 @@ import org.logicware.Container;
 import org.logicware.ContainerFactory;
 import org.logicware.Storage;
 import org.logicware.StorageManager;
+import org.logicware.StoragePool;
 import org.logicware.ObjectConverter;
+import org.logicware.PersistentContainer;
 import org.logicware.Properties;
 import org.logicware.Query;
 import org.logicware.VolatileContainer;
@@ -60,7 +62,16 @@ public class PrologStorageManager extends AbstractStorageManager implements Stor
 		PrologTerm[] terms = c.toTermsArray(string);
 		List<Class<?>> classes = classesOf(terms);
 		for (Class<?> clazz : classes) {
-			getEngine().include(locationOf(clazz));
+			PersistentContainer pc = containerOf(clazz);
+			if (pc instanceof StoragePool) {
+				StoragePool sp = (StoragePool) pc;
+				sp.open();
+				List<Storage> storages = sp.getStorages();
+				for (Storage storage : storages) {
+					String path = storage.getLocation();
+					getEngine().include(path);
+				}
+			}
 		}
 		return new PrologContainerQuery(solutionsOf(terms, classes));
 	}
