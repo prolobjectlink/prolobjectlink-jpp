@@ -19,7 +19,7 @@
  */
 package org.logicware.tools;
 
-import static org.logicware.LoggerConstants.IO_ERROR;
+import static org.logicware.logging.LoggerConstants.IO_ERROR;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,7 +29,7 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.logicware.LoggerUtils;
+import org.logicware.logging.LoggerUtils;
 
 public class Restore extends Tool {
 
@@ -89,7 +89,7 @@ public class Restore extends Tool {
 			}
 
 		} catch (IOException e) {
-			LoggerUtils.error(getClass(), IO_ERROR + zipIn, e);
+			LoggerUtils.error(getClass(), IO_ERROR + zipFileName, e);
 		} finally {
 			if (zipIn != null) {
 				try {

@@ -28,8 +28,17 @@ import java.io.Closeable;
  * @see Container
  * @see VolatileContainer
  */
-public interface PersistentContainer extends Closeable, Restorable, Container {
+public interface PersistentContainer extends Closeable, Restorable, Container, Transactional, Defragtable {
 
+	/**
+	 * Open all file resources associated to this {@link PersistentContainer}
+	 * and set ready to operate.
+	 * 
+	 * @since 1.0
+	 *
+	 * @deprecated use {@code #getTransaction()#begin()}
+	 */
+	@Deprecated
 	public void open();
 
 	/**
@@ -224,53 +233,50 @@ public interface PersistentContainer extends Closeable, Restorable, Container {
 
 	public String locationOf(Class<?> clazz);
 
-	/**
-	 * Create a database backup named zipFileName.zip hosted on the specified
-	 * directory.
-	 * 
-	 * @param directory
-	 *            location to save create zipFileName.zip
-	 * @param zipFileName
-	 *            database backup file name
-	 * @since 1.0
-	 * @see #restore(String, String)
-	 */
-	public void backup(String directory, String zipFileName);
-
-	/**
-	 * Restore a database backup named zipFileName in the directory location.
-	 * 
-	 * @param directory
-	 *            location to restore database
-	 * @param zipFileName
-	 *            database backup file name
-	 * @since 1.0
-	 * @see #backup(String, String)
-	 */
-	public void restore(String directory, String zipFileName);
-
 	public ContainerFactory getContainerFactory();
 
+	/**
+	 * Include to the held engine the code from given prolog source file located
+	 * at string path
+	 * 
+	 * @param path
+	 *            prolog source file location
+	 * @since 1.0
+	 */
+	public void include(String path);
+
+	/**
+	 * Return an string that represent the current location of this
+	 * {@link PersistentContainer}
+	 * 
+	 * @return string location of this {@link PersistentContainer}
+	 * @since 1.0
+	 */
 	public String getLocation();
 
 	/**
-	 * Check if the current {@code ObjectManager} instance is ready for operate
+	 * Check if the current {@link PersistentContainer} instance is ready for
+	 * operate
 	 * 
-	 * @return true if {@code ObjectManager} instance is ready and false in
-	 *         otherwise.
+	 * @return true if {@link PersistentContainer} instance is ready and false
+	 *         in otherwise.
 	 * @since 1.0
+	 * @deprecated use {@code transaction is active}
 	 */
+	@Deprecated
 	public boolean isOpen();
 
+	/**
+	 * @deprecated use {@code #getTransaction()#commit()}
+	 */
+	@Deprecated
 	public void flush();
 
-	public void clear();
-
 	/**
-	 * Release all container resources
+	 * Clear all memory data
 	 * 
 	 * @since 1.0
 	 */
-	public void close();
+	public void clear();
 
 }

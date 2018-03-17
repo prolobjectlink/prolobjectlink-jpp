@@ -21,18 +21,19 @@ package org.logicware;
 
 import java.util.Date;
 
-public abstract class AbstractTransaction implements Transaction {
+public abstract class AbstractTransaction extends AbstractWrapper implements Transaction {
 
+	protected boolean active;
 	private final long timestamp;
-	private final PersistentContainer persistentContainer;
+	private final Transactional transactional;
 
-	public AbstractTransaction(long timestamp, PersistentContainer persistentContainer) {
-		this.persistentContainer = persistentContainer;
+	public AbstractTransaction(Transactional transactional, long timestamp) {
+		this.transactional = transactional;
 		this.timestamp = timestamp;
 	}
 
-	public final PersistentContainer getPersistentContainer() {
-		return persistentContainer;
+	public final Transactional getTransactional() {
+		return transactional;
 	}
 
 	public final boolean before(Transaction t) {

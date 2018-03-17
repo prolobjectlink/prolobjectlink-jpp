@@ -24,7 +24,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.logicware.jpi.PrologProvider;
+import org.logicware.prolog.PrologProvider;
 
 public abstract class AbstractConverter<T> extends ObjectReflector implements ObjectConverter<T> {
 

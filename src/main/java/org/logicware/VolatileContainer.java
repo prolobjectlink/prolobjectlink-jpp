@@ -50,6 +50,19 @@ public interface VolatileContainer extends Container {
 	public <O> List<O> findAll(Class<O> clazz);
 
 	public <O> List<O> findAll(Predicate<O> predicate);
+	
+	/**
+	 * Remove all object of given class from the cache.
+	 * 
+	 * @param cls
+	 *            entity class
+	 */
+	public void evict(Class<?> cls);
+
+	/**
+	 * Clear the cache.
+	 */
+	public void evictAll();
 
 	/**
 	 * Clear cache erase all objects in main memory. The {@code ObjectStore}

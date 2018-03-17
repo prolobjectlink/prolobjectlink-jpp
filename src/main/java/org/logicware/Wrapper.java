@@ -65,8 +65,8 @@ public interface Wrapper {
 	 * @return
 	 * @since 1.0
 	 */
-	boolean isWrappedBy(Class<?> cls);
+	boolean isWrappedFor(Class<?> cls);
 
-	boolean isWrappedBy(Object o, Class<?> cls);
+	boolean isWrappedFor(Object o, Class<?> cls);
 
 }

@@ -49,11 +49,11 @@ public class AbstractWrapper implements Wrapper {
 		return null;
 	}
 
-	public final boolean isWrappedBy(Class<?> cls) {
+	public final boolean isWrappedFor(Class<?> cls) {
 		return cls.isInstance(this);
 	}
 
-	public final boolean isWrappedBy(Object o, Class<?> cls) {
+	public final boolean isWrappedFor(Object o, Class<?> cls) {
 		return cls.isInstance(o);
 	}
 

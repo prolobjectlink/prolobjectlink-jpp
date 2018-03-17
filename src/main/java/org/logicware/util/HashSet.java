@@ -39,16 +39,14 @@ public class HashSet<E> extends AbstractSet<E> {
 	}
 
 	private int indexOf(int hash) {
-		int colision = 0;
 		int capacity = table.length;
-		int index = hash < 0 ? -hash % capacity : hash % capacity;
-		while (table[index] != null && table[index].hashCode() != hash) {
-			index += 2 * ++colision - 1;
-			if (index >= table.length) {
-				index -= table.length;
-			}
+		int i = hash < 0 ? -hash % capacity : hash % capacity;
+		Object key = table[i] != null ? table[i] : null;
+		while (key != null && key.hashCode() != hash) {
+			i = (i + 1) % capacity;
+			key = table[i] != null ? table[i] : null;
 		}
-		return index;
+		return i;
 	}
 
 	public int getSize() {
@@ -164,7 +162,7 @@ public class HashSet<E> extends AbstractSet<E> {
 		public HashSetIterator() {
 			last = next;
 			lastIndex = nextIndex;
-			next = table[nextIndex++];
+			next = table[nextIndex++];// FIXME INDEX OUT OF BOUND
 			if (next == null) {
 				while (nextIndex < table.length && next == null) {
 					next = table[nextIndex++];
@@ -186,7 +184,7 @@ public class HashSet<E> extends AbstractSet<E> {
 
 			last = next;
 			lastIndex = nextIndex;
-			next = table[nextIndex++];
+			next = table[nextIndex++];// FIXME INDEX OUT OF BOUND
 			if (next == null) {
 				while (nextIndex < table.length && next == null) {
 					next = table[nextIndex++];

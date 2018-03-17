@@ -22,7 +22,7 @@ package org.logicware;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.logicware.jpi.PrologProvider;
+import org.logicware.prolog.PrologProvider;
 
 public final class ObjectConverterFactory {
 

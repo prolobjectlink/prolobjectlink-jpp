@@ -27,6 +27,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 
+import org.logicware.logging.LoggerConstants;
+import org.logicware.logging.LoggerUtils;
+
 public abstract class AbstractPlatform extends AbstractWrapper implements Platform {
 
 	protected static final int IO_BUFFER_SIZE = 4 * 1024;

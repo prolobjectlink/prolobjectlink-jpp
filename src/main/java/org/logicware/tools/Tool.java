@@ -22,7 +22,7 @@ package org.logicware.tools;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.logicware.LoggerUtils;
+import org.logicware.logging.LoggerUtils;
 
 abstract class Tool {
 

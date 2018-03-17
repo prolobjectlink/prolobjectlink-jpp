@@ -38,16 +38,14 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 	}
 
 	private int indexOf(int hash) {
-		int colision = 0;
 		int capacity = table.length;
-		int index = hash < 0 ? -hash % capacity : hash % capacity;
-		while (table[index] != null && table[index].getKey().hashCode() != hash) {
-			index += 2 * ++colision - 1;
-			if (index >= table.length) {
-				index -= table.length;
-			}
+		int i = hash < 0 ? -hash % capacity : hash % capacity;
+		K key = table[i] != null ? table[i].getKey() : null;
+		while (key != null && key.hashCode() != hash) {
+			i = (i + 1) % capacity;
+			key = table[i] != null ? table[i].getKey() : null;
 		}
-		return index;
+		return i;
 	}
 
 	@Override
@@ -276,9 +274,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 		}
 
 		protected HashEntry<K, V> nextEntry() {
-			HashEntry<K, V> lastReturned = next;
-			next = table[lastIndex++];
 			int capacity = table.length;
+			HashEntry<K, V> lastReturned = next;
+			next = lastIndex < capacity ? table[lastIndex++] : null;
 			for (; lastIndex < capacity && next == null; lastIndex++) {
 				next = table[lastIndex];
 			}

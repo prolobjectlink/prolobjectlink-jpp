@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
-import org.logicware.jpi.InstantiationError;
+import org.logicware.prolog.InstantiationError;
 
 /**
  * 

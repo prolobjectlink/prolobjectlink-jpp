@@ -19,11 +19,13 @@
  */
 package org.logicware;
 
+import java.util.List;
+
 import javax.naming.spi.ObjectFactory;
 
-import org.logicware.jpi.PrologEngine;
-import org.logicware.jpi.PrologProvider;
-import org.logicware.jpi.PrologTerm;
+import org.logicware.prolog.PrologEngine;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 /**
  * Main concept for object contention mechanism. Are derived classes from this
@@ -174,12 +176,60 @@ public interface Container extends Wrapper {
 	 */
 	public boolean contains(String functor, int arity);
 
-	ObjectConverter<PrologTerm> getConverter();
+	public ObjectConverter<PrologTerm> getConverter();
 
-	Properties getProperties();
+	public Settings getProperties();
 
-	PrologProvider getProvider();
+	public PrologProvider getProvider();
 
-	PrologEngine getEngine();
+	public PrologEngine getEngine();
+
+	/**
+	 * Return a list with predicate classes present in prolog terms array
+	 * 
+	 * @param prologTerms
+	 *            prolog terms array
+	 * @return list with predicate classes present in prolog terms array
+	 * @since 1.0
+	 */
+	public List<Class<?>> classesOf(PrologTerm[] prologTerms);
+
+	public List<Class<?>> classesOf(String string);
+
+	public <O> Class<O> classOf(Predicate<O> predicate);
+
+	/**
+	 * Allow known the class with functor/arity signature
+	 * 
+	 * @param functor
+	 *            functor class name
+	 * @param arity
+	 *            arity (fields number)
+	 * @return class class that match with functor/arity signature
+	 * @since 1.0
+	 */
+	public Class<?> classOf(String functor, int arity);
+
+	/**
+	 * Allow known the class of some given object
+	 * 
+	 * @param o
+	 *            object to known your class
+	 * @return class of object {@code o}
+	 * @since 1.0
+	 */
+	public <O> Class<O> classOf(O o);
+
+	/**
+	 * List all objects in this container after retrieve all clauses and convert
+	 * this clauses in object. This is a heavy operation that can consume a long
+	 * time depending of the prolog engine. The fact clauses are strike forward
+	 * converted. The rule clauses are executed using the engine and solution
+	 * are converted.
+	 * 
+	 * @return all objects in this container
+	 * @since 1.0
+	 */
+	public List<Object> findAll();
 
 }

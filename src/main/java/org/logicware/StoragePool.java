@@ -33,14 +33,6 @@ import java.util.List;
  */
 public interface StoragePool extends PersistentContainer {
 
-	public <O> void add(O... facts);
-
-	public <O> void modify(O match, O merge);
-
-	public void remove(Class<?> clazz);
-
-	public <O> void remove(O... facts);
-
 	public Object find(String string) throws NonSolutionError;
 
 	public Object find(String functor, Object... args) throws NonSolutionError;

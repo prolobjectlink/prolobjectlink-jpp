@@ -19,6 +19,6 @@
  */
 package org.logicware;
 
-public interface StorageManager extends PersistentContainer {
+public interface StorageManager extends PersistentContainer, Defragtable {
 
 }

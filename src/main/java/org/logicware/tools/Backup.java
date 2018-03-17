@@ -19,7 +19,7 @@
  */
 package org.logicware.tools;
 
-import static org.logicware.LoggerConstants.IO_ERROR;
+import static org.logicware.logging.LoggerConstants.IO_ERROR;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,20 +32,20 @@ import java.util.Queue;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.logicware.LoggerUtils;
+import org.logicware.logging.LoggerUtils;
 
 public class Backup extends Tool {
 
 	private String db;
 
 	/**
+	 * Create an backup tool object
 	 * 
-	 * @param db
-	 *            the source database name (null if there is only one database,
-	 *            and and empty string to backup all files in this directory)
+	 * @param path
+	 *            the database path
 	 */
-	public Backup(String db) {
-		this.db = db;
+	public Backup(String path) {
+		this.db = path;
 	}
 
 	/**
@@ -58,6 +58,7 @@ public class Backup extends Tool {
 	 */
 	public void createBackup(String directory, String zipFileName) {
 
+		File filePtr = null;
 		InputStream in = null;
 		OutputStream out = null;
 		ZipOutputStream zipOut = null;
@@ -83,7 +84,7 @@ public class Backup extends Tool {
 
 			queue.offer(new File(db));
 			while (!queue.isEmpty()) {
-				File filePtr = queue.poll();
+				filePtr = queue.poll();
 				if (filePtr.isDirectory()) {
 
 					File[] files = filePtr.listFiles();
@@ -104,7 +105,7 @@ public class Backup extends Tool {
 			}
 
 		} catch (IOException e) {
-			LoggerUtils.error(getClass(), IO_ERROR + in, e);
+			LoggerUtils.error(getClass(), IO_ERROR + filePtr, e);
 		} finally {
 			if (zipOut != null) {
 				try {

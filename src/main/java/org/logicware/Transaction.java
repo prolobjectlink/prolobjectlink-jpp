@@ -19,13 +19,9 @@
  */
 package org.logicware;
 
-public interface Transaction extends Comparable<Transaction> {
+import java.io.Closeable;
 
-	public void begin();
-
-	public void commit();
-
-	public void rollback();
+public interface Transaction extends Transactional, Comparable<Transaction>, Closeable {
 
 	public boolean isActive();
 
@@ -38,5 +34,7 @@ public interface Transaction extends Comparable<Transaction> {
 	public boolean after(Transaction t);
 
 	public boolean before(Transaction t);
+
+	public Transactional getTransactional();
 
 }
