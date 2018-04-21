@@ -1,6 +1,6 @@
 /*
  * #%L
- * prolobjectlink
+ * prolobjectlink-db
  * %%
  * Copyright (C) 2012 - 2018 Logicware Project
  * %%
@@ -20,6 +20,7 @@
 package org.logicware;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
 import org.logicware.prolog.PrologEngine;
@@ -52,15 +53,16 @@ public abstract class DatabaseCode implements Serializable {
 
 	private final String name;
 	private final String path;
-	protected transient String code;
-	private transient CodifiableType type;
-	private final List<String> parameters;
+	protected final List<String> parameters;
 	protected transient DatabaseSchema schema;
+	private final transient CodifiableType type;
 	private final transient PrologEngine engine;
 	private final transient PrologProvider provider;
+	protected final transient List<String> instructions;
 	private static final long serialVersionUID = 7552979263681672426L;
 
 	public DatabaseCode() {
+		this.instructions = new ArrayList<String>();
 		this.parameters = new ArrayList<String>();
 		this.provider = null;
 		this.schema = null;
@@ -71,6 +73,7 @@ public abstract class DatabaseCode implements Serializable {
 	}
 
 	public DatabaseCode(CodifiableType type, String path, String name, DatabaseSchema schema, PrologProvider provider) {
+		this.instructions = new ArrayList<String>();
 		this.parameters = new ArrayList<String>();
 		this.engine = provider.newEngine();
 		this.provider = provider;
@@ -92,10 +95,33 @@ public abstract class DatabaseCode implements Serializable {
 	}
 
 	public final String getCode() {
-		return code;
+		String n = getName();
+		StringBuilder buffer = new StringBuilder();
+		Iterator<String> i = parameters.iterator();
+		String regex = "\\.|\\?|#|[a-z][A-Za-z0-9_]*";
+		buffer.append(n.matches(regex) ? n : "'" + n + "'");
+		buffer.append('(');
+		while (i.hasNext()) {
+			buffer.append(i.next());
+			if (i.hasNext()) {
+				buffer.append(',');
+			}
+		}
+		buffer.append(')');
+		buffer.append(' ');
+		buffer.append(":-");
+		buffer.append(' ');
+		buffer.append('\n');
+		buffer.append('\t');
+		i = instructions.iterator();
+		while (i.hasNext()) {
+			buffer.append(i.next());
+			if (i.hasNext()) {
+				buffer.append(',');
+			}
+		}
+		return "" + buffer + "";
 	}
-
-	public abstract DatabaseCode setCode(String code);
 
 	public final DatabaseSchema getSchema() {
 		return schema;
@@ -103,11 +129,21 @@ public abstract class DatabaseCode implements Serializable {
 
 	public abstract DatabaseCode setSchema(DatabaseSchema schema);
 
+	public final CodifiableType getType() {
+		return type;
+	}
+
+	public abstract DatabaseCode addInstructions(String code);
+
+	public final List<String> getInstructions() {
+		return instructions;
+	}
+
 	public final List<String> getParameters() {
 		return parameters;
 	}
 
-	public boolean containsParameter(String string) {
+	public final boolean containsParameter(String string) {
 		return parameters.contains(string);
 	}
 
@@ -128,9 +164,6 @@ public abstract class DatabaseCode implements Serializable {
 	}
 
 	public final DatabaseCode save() {
-		if (getCode() == null) {
-			throw new PersistenceError("The " + type.name + " " + getName() + " dont't have code");
-		}
 		getEngine().consult(getPath());
 		getEngine().assertz(getCode());
 		getEngine().persist(getPath());

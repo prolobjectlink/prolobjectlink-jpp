@@ -1,6 +1,6 @@
 /*
  * #%L
- * prolobjectlink
+ * prolobjectlink-db
  * %%
  * Copyright (C) 2012 - 2018 Logicware Project
  * %%
@@ -40,15 +40,16 @@ import org.objectweb.asm.util.TraceClassVisitor;
 public final class DatabaseClass implements Serializable {
 
 	private String name;
+	private boolean isView;
 	private String shortName;
 	private boolean isAbstract;
 	private String javaClassName;
 	private transient Class<?> javaClass;
 	private transient DatabaseSchema schema;
 	private transient DatabaseClass superClass;
-	private transient DatabaseField primaryKeyField;
 	private final List<DatabaseClass> superClasses;
 	private final Map<String, DatabaseField> fields;
+	private transient DatabaseField primaryKeyField;
 	private static final long serialVersionUID = -8770366199140961351L;
 
 	private DatabaseField newField(String name, int position, Class<?> type) {
@@ -183,7 +184,7 @@ public final class DatabaseClass implements Serializable {
 
 		String superclass = superClass != null ? //
 				superClass.getName().replace('.', '/') : //
-				"java/lang/Object";
+				Type.getInternalName(Object.class);
 
 		String[] interfaces = new String[superClasses.size()];
 		for (int i = 0; i < superClasses.size(); i++) {
@@ -248,6 +249,15 @@ public final class DatabaseClass implements Serializable {
 	public void setJavaClass(Class<?> javaClass) {
 		this.javaClassName = javaClass != null ? javaClass.getName() : "";
 		this.javaClass = javaClass;
+	}
+
+	public boolean isView() {
+		return isView;
+	}
+
+	public DatabaseClass setView(boolean isView) {
+		this.isView = isView;
+		return this;
 	}
 
 	public boolean isAbstract() {

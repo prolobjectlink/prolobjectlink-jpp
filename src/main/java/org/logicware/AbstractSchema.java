@@ -1,6 +1,6 @@
 /*
  * #%L
- * prolobjectlink
+ * prolobjectlink-db
  * %%
  * Copyright (C) 2012 - 2018 Logicware Project
  * %%
@@ -76,7 +76,7 @@ public abstract class AbstractSchema implements DatabaseSchema {
 		return new PrologDatabaseFunction(name, this, path1, provider);
 	}
 
-	private DatabaseView newDatabaseView(Class<? extends DatabaseView> target) {
+	private DatabaseView newDatabaseView(Class<?> target) {
 		String path0 = location.substring(0, location.lastIndexOf(File.separatorChar));
 		String path1 = path0 + File.separator + "views.pl";
 		return new PrologDatabaseView(path1, target, this, provider);
@@ -417,22 +417,22 @@ public abstract class AbstractSchema implements DatabaseSchema {
 		return sequences.size();
 	}
 
-	public final DatabaseView addView(Class<? extends DatabaseView> target) {
+	public final DatabaseView addView(Class<?> target) {
 		DatabaseView f = newDatabaseView(target);
 		views.put(target.getName(), f);
 		return f;
 	}
 
-	public final DatabaseSchema removeView(Class<? extends DatabaseView> target) {
+	public final DatabaseSchema removeView(Class<?> target) {
 		views.remove(target.getName());
 		return this;
 	}
 
-	public final DatabaseView getView(Class<? extends DatabaseView> target) {
+	public final DatabaseView getView(Class<?> target) {
 		return views.get(target.getName());
 	}
 
-	public final boolean containsView(Class<? extends DatabaseView> target) {
+	public final boolean containsView(Class<?> target) {
 		return views.containsKey(target.getName());
 	}
 

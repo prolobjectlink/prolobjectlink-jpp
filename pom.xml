@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.logicware</groupId>
-	<artifactId>prolobjectlink</artifactId>
+	<artifactId>prolobjectlink-db</artifactId>
 	<version>1.0.0</version>
-	<name>prolobjectlink</name>
-	<description>prolobjectlink</description>
+	<name>prolobjectlink-db</name>
+	<description>Prolobjectlink Database API</description>
 
 	<url>http://www.logicware.org</url>
 	<inceptionYear>2012</inceptionYear>
@@ -72,9 +72,9 @@
 			<version>6.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>javax.persistence</artifactId>
-			<version>2.1.0</version>
+			<groupId>org.logicware</groupId>
+			<artifactId>prolobjectlink</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.logicware</groupId>

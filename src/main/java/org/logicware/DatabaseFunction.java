@@ -1,6 +1,6 @@
 /*
  * #%L
- * prolobjectlink
+ * prolobjectlink-db
  * %%
  * Copyright (C) 2012 - 2018 Logicware Project
  * %%
@@ -20,16 +20,15 @@
 package org.logicware;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.logicware.prolog.PrologProvider;
-import org.logicware.util.ArrayList;
 
 public abstract class DatabaseFunction extends DatabaseCode implements Serializable {
 
 	private static final long serialVersionUID = -4680176548026593510L;
 
 	protected DatabaseFunction() {
+		// internal reflection
 	}
 
 	public DatabaseFunction(String name, DatabaseSchema schema, String path, PrologProvider provider) {
@@ -47,14 +46,14 @@ public abstract class DatabaseFunction extends DatabaseCode implements Serializa
 	}
 
 	@Override
-	public final DatabaseFunction setCode(String code) {
-		this.code = code;
+	public final DatabaseFunction setSchema(DatabaseSchema schema) {
+		this.schema = schema;
 		return this;
 	}
 
 	@Override
-	public final DatabaseFunction setSchema(DatabaseSchema schema) {
-		this.schema = schema;
+	public final DatabaseFunction addInstructions(String code) {
+		instructions.add(code);
 		return this;
 	}
 

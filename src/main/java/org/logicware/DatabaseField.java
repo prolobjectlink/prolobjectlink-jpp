@@ -1,6 +1,6 @@
 /*
  * #%L
- * prolobjectlink
+ * prolobjectlink-db
  * %%
  * Copyright (C) 2012 - 2018 Logicware Project
  * %%
@@ -43,6 +43,7 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 	private boolean notNull;
 	private String fullName;
 	private boolean primaryKey;
+	private boolean isTrnasient;
 	private String linkedTypeName;
 	private Serializable minValue;
 	private Serializable maxValue;
@@ -244,7 +245,7 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 		return name.compareTo(o.getName());
 	}
 
-	public final int getPosition() {
+	public int getPosition() {
 		return position;
 	}
 
@@ -321,6 +322,15 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 
 	public void setPrimaryKey(boolean primaryKey) {
 		this.primaryKey = primaryKey;
+	}
+
+	public boolean isTrnasient() {
+		return isTrnasient;
+	}
+
+	public DatabaseField setTrnasient(boolean isTrnasient) {
+		this.isTrnasient = isTrnasient;
+		return this;
 	}
 
 	public boolean isNotNull() {

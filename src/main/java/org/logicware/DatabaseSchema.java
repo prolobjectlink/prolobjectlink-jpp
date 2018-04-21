@@ -1,6 +1,6 @@
 /*
  * #%L
- * prolobjectlink
+ * prolobjectlink-db
  * %%
  * Copyright (C) 2012 - 2018 Logicware Project
  * %%
@@ -89,13 +89,13 @@ public interface DatabaseSchema {
 
 	public Collection<DatabaseView> getViews();
 
-	public boolean containsView(Class<? extends DatabaseView> target);
+	public boolean containsView(Class<?> target);
 
-	public DatabaseView getView(Class<? extends DatabaseView> target);
+	public DatabaseView getView(Class<?> target);
 
-	public DatabaseSchema removeView(Class<? extends DatabaseView> target);
+	public DatabaseSchema removeView(Class<?> target);
 
-	public DatabaseView addView(Class<? extends DatabaseView> target);
+	public DatabaseView addView(Class<?> target);
 
 	public int countClasses();
 
