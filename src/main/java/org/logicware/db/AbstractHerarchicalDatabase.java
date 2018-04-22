@@ -20,6 +20,7 @@
 package org.logicware.db;
 
 import java.io.File;
+import java.util.List;
 
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
@@ -132,6 +133,10 @@ public abstract class AbstractHerarchicalDatabase extends AbstractDatabaseEngine
 
 	public final void include(String path) {
 		storage.include(path);
+	}
+
+	public final List<Class<?>> classes() {
+		return getSchema().getJavaClasses();
 	}
 
 	public final boolean isOpen() {

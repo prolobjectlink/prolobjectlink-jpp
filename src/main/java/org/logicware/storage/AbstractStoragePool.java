@@ -297,6 +297,11 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		return this;
 	}
 
+	public List<Class<?>> classes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public final void close() {
 		executor.close();
 		storages.clear();

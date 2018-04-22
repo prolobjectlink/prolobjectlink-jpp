@@ -217,6 +217,11 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 		return selection;
 	}
 
+	public List<Class<?>> classes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public final void clear() {
 		getEngine().dispose();
 		setDirty(true);

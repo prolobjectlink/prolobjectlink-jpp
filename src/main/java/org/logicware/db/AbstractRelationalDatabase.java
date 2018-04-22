@@ -20,6 +20,7 @@
 package org.logicware.db;
 
 import java.io.File;
+import java.util.List;
 
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
@@ -136,6 +137,10 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 
 	public final void defragment() {
 		storage.defragment();
+	}
+
+	public final List<Class<?>> classes() {
+		return getSchema().getJavaClasses();
 	}
 
 	public final void begin() {

@@ -151,6 +151,8 @@ public interface DatabaseSchema {
 
 	public boolean isRelationalType(Class<?> type);
 
+	public List<Class<?>> getJavaClasses();
+
 	public List<Class<?>> compile();
 
 	public String generate();

@@ -36,7 +36,8 @@ import org.logicware.prolog.PrologTerm;
 
 public abstract class AbstractHierarchicalCache extends AbstractVolatileContainer implements VolatileContainer {
 
-	public AbstractHierarchicalCache(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter) {
+	public AbstractHierarchicalCache(PrologProvider provider, Settings properties,
+			ObjectConverter<PrologTerm> converter) {
 		super(provider, properties, converter);
 	}
 
@@ -189,8 +190,9 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		return selection;
 	}
 
-	public final void clear() {
-		getEngine().dispose();
+	public final List<Class<?>> classes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public final void evict(Class<?> cls) {
@@ -199,6 +201,10 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 
 	public final void evictAll() {
 		clear();
+	}
+
+	public final void clear() {
+		getEngine().dispose();
 	}
 
 }

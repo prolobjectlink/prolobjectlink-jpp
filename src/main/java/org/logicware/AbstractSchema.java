@@ -559,6 +559,15 @@ public abstract class AbstractSchema implements DatabaseSchema {
 		return g;
 	}
 
+	public final List<Class<?>> getJavaClasses() {
+		int size = countClasses();
+		List<Class<?>> l = new ArrayList<Class<?>>(size);
+		for (DatabaseClass c : getClasses()) {
+			l.add(c.getJavaClass());
+		}
+		return l;
+	}
+
 	public final void clear() {
 		sequences.clear();
 		functions.clear();

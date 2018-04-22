@@ -19,6 +19,8 @@
  */
 package org.logicware.db;
 
+import java.util.List;
+
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
 import org.logicware.DatabaseEngine;
@@ -39,78 +41,82 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 
 	private final DatabaseEngine engine;
 
-	public AbstractDatabaseService(PrologProvider provider, Settings properties,
-			ObjectConverter<PrologTerm> converter, ContainerFactory containerFactory, String location, String name,
-			DatabaseSchema schema, DatabaseUser owner, DatabaseEngine engine) {
+	public AbstractDatabaseService(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
+			ContainerFactory containerFactory, String location, String name, DatabaseSchema schema, DatabaseUser owner,
+			DatabaseEngine engine) {
 		super(provider, properties, converter, containerFactory, location, name, schema, owner);
 		this.engine = engine;
 	}
 
-	public String getDatabaseLocation() {
+	public final String getDatabaseLocation() {
 		return engine.getDatabaseLocation();
 	}
 
-	public String getStorageLocation() {
+	public final String getStorageLocation() {
 		return engine.getStorageLocation();
 	}
 
-	public String getBaseLocation() {
+	public final String getBaseLocation() {
 		return engine.getBaseLocation();
 	}
 
-	public void create() {
+	public final List<Class<?>> classes() {
+		return getSchema().getJavaClasses();
+	}
+
+	public final void create() {
 		engine.create();
 	}
 
-	public void drop() {
+	public final void drop() {
 		engine.drop();
 	}
 
-	public void open() {
+	public final void open() {
 		engine.open();
 	}
 
-	public <O> void insert(O... facts) {
+	public final <O> void insert(O... facts) {
 		engine.insert(facts);
 	}
 
-	public <O> void update(O match, O update) {
+	public final <O> void update(O match, O update) {
 		engine.update(match, update);
 	}
 
-	public void delete(Class<?> clazz) {
+	public final void delete(Class<?> clazz) {
 		engine.delete(clazz);
 	}
 
-	public <O> void delete(O... facts) {
+	public final <O> void delete(O... facts) {
 		engine.delete(facts);
 	}
 
-	public Query createQuery(String string) {
+	public final Query createQuery(String string) {
 		return engine.createQuery(string);
 	}
 
-	public <O> TypedQuery<O> createQuery(O o) {
+	public final <O> TypedQuery<O> createQuery(O o) {
 		return engine.createQuery(o);
 	}
 
-	public <O> TypedQuery<O> createQuery(Class<O> clazz) {
+	public final <O> TypedQuery<O> createQuery(Class<O> clazz) {
 		return engine.createQuery(clazz);
 	}
 
-	public <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
+	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
 		return engine.createQuery(predicate);
 	}
 
-	public <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
+	public final <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
 		return engine.createConstraintQuery(clazz);
 	}
 
-	public ProcedureQuery createProcedureQuery(String functor, String... args) {
+	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
 		return engine.createProcedureQuery(functor, args);
 	}
 
-	public PersistentContainer containerOf(Class<?> clazz) {
+	public final PersistentContainer containerOf(Class<?> clazz) {
 		return engine.containerOf(clazz);
 	}
 

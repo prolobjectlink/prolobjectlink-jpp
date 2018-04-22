@@ -23,15 +23,15 @@ import java.util.List;
 
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
+import org.logicware.DatabaseSchema;
+import org.logicware.DefaultTransaction;
 import org.logicware.ObjectConverter;
 import org.logicware.PersistentContainer;
 import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
-import org.logicware.Settings;
 import org.logicware.Query;
 import org.logicware.RuntimeError;
-import org.logicware.DatabaseSchema;
-import org.logicware.DefaultTransaction;
+import org.logicware.Settings;
 import org.logicware.StorageGraph;
 import org.logicware.StorageManager;
 import org.logicware.Transaction;
@@ -136,9 +136,13 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 		return false;
 	}
 
-	public List<Object> findAll() {
+	public final List<Object> findAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public final List<Class<?>> classes() {
+		return storage.classes();
 	}
 
 	public final ObjectConverter<PrologTerm> getConverter() {

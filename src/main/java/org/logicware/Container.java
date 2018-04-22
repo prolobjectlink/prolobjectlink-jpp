@@ -196,6 +196,14 @@ public interface Container extends Wrapper {
 
 	public List<Class<?>> classesOf(String string);
 
+	/**
+	 * List all classes in this container
+	 * 
+	 * @return classes in this container
+	 * @since 1.0
+	 */
+	public List<Class<?>> classes();
+
 	public <O> Class<O> classOf(Predicate<O> predicate);
 
 	/**

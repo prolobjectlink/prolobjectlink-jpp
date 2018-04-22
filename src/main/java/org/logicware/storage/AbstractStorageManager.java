@@ -30,8 +30,8 @@ import org.logicware.ObjectConverter;
 import org.logicware.PersistentContainer;
 import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
-import org.logicware.Settings;
 import org.logicware.Query;
+import org.logicware.Settings;
 import org.logicware.Storage;
 import org.logicware.StorageManager;
 import org.logicware.StoragePool;
@@ -41,6 +41,7 @@ import org.logicware.db.AbstractPersistentContainer;
 import org.logicware.prolog.PrologContainerQuery;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
+import org.logicware.util.ArrayList;
 
 public abstract class AbstractStorageManager extends AbstractPersistentContainer implements StorageManager {
 
@@ -72,11 +73,6 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		containerOf(clazz).update(match, update);
 	}
 
-	/**
-	 * bulk deletion for non null objects array
-	 * 
-	 * @param objects
-	 */
 	public final <O> void delete(O... objects) {
 		if (objects != null && objects.length > 0) {
 			Class<?> clazz = objects.getClass();
@@ -113,39 +109,19 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	}
 
 	public final <O> boolean contains(O o) {
-		PersistentContainer container = containerOf(classOf(o));
-		// container.getTransaction().begin();
-		boolean contains = container.contains(o);
-		// container.getTransaction().commit();
-		// container.close();
-		return contains;
+		return containerOf(classOf(o)).contains(o);
 	}
 
 	public final <O> boolean contains(Class<O> clazz) {
-		PersistentContainer container = containerOf(clazz);
-		// container.getTransaction().begin();
-		boolean contains = container.contains(clazz);
-		// container.getTransaction().commit();
-		// container.close();
-		return contains;
+		return containerOf(clazz).contains(clazz);
 	}
 
 	public final <O> boolean contains(Predicate<O> predicate) {
-		PersistentContainer container = containerOf(classOf(predicate));
-		// container.getTransaction().begin();
-		boolean contains = container.contains(predicate);
-		// container.getTransaction().commit();
-		// container.close();
-		return contains;
+		return containerOf(classOf(predicate)).contains(predicate);
 	}
 
-	public final boolean contains(String functor, int arity) {
-		PersistentContainer container = containerOf(classOf(functor, arity));
-		// container.getTransaction().begin();
-		boolean contains = container.contains(removeQuoted(functor), arity);
-		// container.getTransaction().commit();
-		// container.close();
-		return contains;
+	public final boolean contains(String f, int a) {
+		return containerOf(classOf(f, a)).contains(removeQuoted(f), a);
 	}
 
 	public final Query createQuery(String string) {
@@ -220,6 +196,15 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		for (PersistentContainer c : master.values()) {
 			c.defragment();
 		}
+	}
+
+	public List<Class<?>> classes() {
+		int s = master.size();
+		List<Class<?>> l = new ArrayList<Class<?>>(s);
+		for (PersistentContainer c : master.values()) {
+			l.addAll(c.classes());
+		}
+		return l;
 	}
 
 	public final void flush() {

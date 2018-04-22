@@ -218,6 +218,10 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 		return null;
 	}
 
+	public final List<Class<?>> classes() {
+		return getSchema().getJavaClasses();
+	}
+
 	public final <K> K unwrap(Class<K> cls) {
 		return unwrap(this, cls);
 	}
