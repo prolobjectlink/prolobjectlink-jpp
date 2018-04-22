@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
-import org.logicware.DatabaseSchema;
+import org.logicware.Schema;
 import org.logicware.DatabaseUser;
 import org.logicware.PersistentContainer;
 import org.logicware.Predicate;
@@ -41,7 +41,7 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 	protected static final String LOCATION = "relational";
 
 	public AbstractRelationalDatabase(PrologProvider provider, ContainerFactory containerFactory, String name,
-			DatabaseSchema schema, DatabaseUser user, StorageGraph storage) {
+			Schema schema, DatabaseUser user, StorageGraph storage) {
 		super(provider, storage.getProperties(), storage.getConverter(), containerFactory,
 				LOCATION + File.separator + name + File.separator + "database", name, schema, user);
 		this.storage = storage;

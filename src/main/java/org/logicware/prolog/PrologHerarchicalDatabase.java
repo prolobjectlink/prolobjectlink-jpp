@@ -22,19 +22,19 @@ package org.logicware.prolog;
 import java.io.File;
 
 import org.logicware.ContainerFactory;
+import org.logicware.DatabaseSchema;
 import org.logicware.DatabaseUser;
 import org.logicware.HierarchicalDatabase;
 import org.logicware.ObjectConverter;
 import org.logicware.Settings;
 import org.logicware.db.AbstractHerarchicalDatabase;
-import org.logicware.db.MetadataSchema;
 
 public class PrologHerarchicalDatabase extends AbstractHerarchicalDatabase implements HierarchicalDatabase {
 
 	public PrologHerarchicalDatabase(PrologProvider provider, Settings properties, ContainerFactory containerFactory,
 			String name, DatabaseUser user) {
 		super(provider, containerFactory, name,
-				new MetadataSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
+				new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
 				new PrologStorageManager(provider, properties, new PrologObjectConverter(provider),
 						LOCATION + File.separator + name + File.separator + "database", containerFactory));
 	}
@@ -42,7 +42,7 @@ public class PrologHerarchicalDatabase extends AbstractHerarchicalDatabase imple
 	public PrologHerarchicalDatabase(PrologProvider provider, Settings properties,
 			ObjectConverter<PrologTerm> converter, ContainerFactory containerFactory, String name, DatabaseUser user) {
 		super(provider, containerFactory, name,
-				new MetadataSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
+				new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
 				new PrologStorageManager(provider, properties, converter,
 						LOCATION + File.separator + name + File.separator + "database", containerFactory));
 	}

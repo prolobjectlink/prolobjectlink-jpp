@@ -35,7 +35,7 @@ public abstract class DatabaseView extends DatabaseCode implements Serializable 
 		// internal reflection
 	}
 
-	public DatabaseView(String path, Class<?> target, DatabaseSchema schema, PrologProvider provider) {
+	public DatabaseView(String path, Class<?> target, Schema schema, PrologProvider provider) {
 		super(CodifiableType.VIEW, path, target != null ? target.getName() : "", schema, provider);
 		if (target != null) {
 			// iterate over hierarchy
@@ -67,7 +67,7 @@ public abstract class DatabaseView extends DatabaseCode implements Serializable 
 	}
 
 	@Override
-	public final DatabaseView setSchema(DatabaseSchema schema) {
+	public final DatabaseView setSchema(Schema schema) {
 		this.schema = schema;
 		return this;
 	}

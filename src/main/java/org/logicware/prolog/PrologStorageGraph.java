@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.logicware.ClassNotFoundError;
 import org.logicware.ContainerFactory;
-import org.logicware.DatabaseSchema;
+import org.logicware.Schema;
 import org.logicware.ObjectConverter;
 import org.logicware.Predicate;
 import org.logicware.Settings;
@@ -37,18 +37,18 @@ public class PrologStorageGraph extends AbstractStorageGraph implements StorageG
 
 	private final ObjectConverter<PrologTerm> converter;
 
-	public PrologStorageGraph(PrologProvider provider, Settings properties, String location, DatabaseSchema schema,
+	public PrologStorageGraph(PrologProvider provider, Settings properties, String location, Schema schema,
 			ContainerFactory containerFactory) {
 		this(location, schema, properties, provider, containerFactory, new PrologObjectConverter(provider));
 	}
 
-	public PrologStorageGraph(String location, DatabaseSchema schema, Settings properties, PrologProvider provider,
+	public PrologStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter) {
 		super(location, schema, properties, provider, containerFactory, converter);
 		this.converter = converter;
 	}
 
-	public PrologStorageGraph(String location, DatabaseSchema schema, Settings properties, PrologProvider provider,
+	public PrologStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter,
 			RelationalGraph<Object, Object> graph) {
 		super(location, schema, properties, provider, containerFactory, converter, graph);

@@ -19,7 +19,7 @@
  */
 package org.logicware.prolog;
 
-import org.logicware.DatabaseSchema;
+import org.logicware.Schema;
 import org.logicware.DatabaseView;
 
 public final class PrologDatabaseView extends DatabaseView {
@@ -31,7 +31,7 @@ public final class PrologDatabaseView extends DatabaseView {
 		// for internal reflection
 	}
 
-	public PrologDatabaseView(String path, Class<?> target, DatabaseSchema schema, PrologProvider provider) {
+	public PrologDatabaseView(String path, Class<?> target, Schema schema, PrologProvider provider) {
 		super(path, target, schema, provider);
 	}
 

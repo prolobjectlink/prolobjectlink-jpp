@@ -24,7 +24,7 @@ import java.io.Serializable;
 public final class DatabaseUser extends DatabaseGrantee implements Serializable {
 
 	private static final long serialVersionUID = -351409099556857936L;
-	private transient DatabaseSchema schema;
+	private transient Schema schema;
 	private final String username;
 	private final String password;
 	private String databasename;
@@ -46,11 +46,11 @@ public final class DatabaseUser extends DatabaseGrantee implements Serializable 
 		return password;
 	}
 
-	public DatabaseSchema getSchema() {
+	public Schema getSchema() {
 		return schema;
 	}
 
-	public DatabaseUser setSchema(DatabaseSchema schema) {
+	public DatabaseUser setSchema(Schema schema) {
 		this.schema = schema;
 		return this;
 	}

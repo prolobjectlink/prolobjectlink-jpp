@@ -31,7 +31,7 @@ public interface ContainerFactory {
 
 	public void setProperties(Settings properties);
 
-	public RelationalCache createRelationalCache(DatabaseSchema schema);
+	public RelationalCache createRelationalCache(Schema schema);
 
 	public RelationalDatabase createRelationalDatabase(String name, DatabaseUser user);
 
@@ -47,7 +47,7 @@ public interface ContainerFactory {
 
 	public StoragePool createStoragePool(String path, String name);
 
-	public StorageGraph createStorageGraph(String path, DatabaseSchema schema);
+	public StorageGraph createStorageGraph(String path, Schema schema);
 
 	public Storage createStorage(String path);
 

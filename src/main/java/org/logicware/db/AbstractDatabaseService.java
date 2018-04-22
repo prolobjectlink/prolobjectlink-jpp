@@ -24,7 +24,7 @@ import java.util.List;
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
 import org.logicware.DatabaseEngine;
-import org.logicware.DatabaseSchema;
+import org.logicware.Schema;
 import org.logicware.DatabaseUser;
 import org.logicware.EmbeddedDatabase;
 import org.logicware.ObjectConverter;
@@ -42,7 +42,7 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 	private final DatabaseEngine engine;
 
 	public AbstractDatabaseService(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
-			ContainerFactory containerFactory, String location, String name, DatabaseSchema schema, DatabaseUser owner,
+			ContainerFactory containerFactory, String location, String name, Schema schema, DatabaseUser owner,
 			DatabaseEngine engine) {
 		super(provider, properties, converter, containerFactory, location, name, schema, owner);
 		this.engine = engine;

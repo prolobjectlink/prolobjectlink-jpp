@@ -23,6 +23,6 @@ public interface RelationalCache extends VolatileContainer, Wrapper {
 
 	public ContainerFactory getContainerFactory();
 
-	public DatabaseSchema getSchema();
+	public Schema getSchema();
 
 }

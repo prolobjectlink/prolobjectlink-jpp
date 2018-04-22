@@ -30,7 +30,7 @@ import org.objectweb.asm.Type;
  * Represent a field for a database class in the database schema
  * 
  * @author Jose Zalacain
- * @see DatabaseSchema
+ * @see Schema
  * @see DatabaseClass
  * @since 1.0
  * 

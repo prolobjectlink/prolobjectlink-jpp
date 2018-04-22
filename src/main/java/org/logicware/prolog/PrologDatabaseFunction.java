@@ -20,7 +20,7 @@
 package org.logicware.prolog;
 
 import org.logicware.DatabaseFunction;
-import org.logicware.DatabaseSchema;
+import org.logicware.Schema;
 import org.logicware.NonSolutionError;
 import org.logicware.ProcedureQuery;
 import org.logicware.logging.LoggerConstants;
@@ -35,7 +35,7 @@ public final class PrologDatabaseFunction extends DatabaseFunction {
 		// for internal reflection
 	}
 
-	public PrologDatabaseFunction(String name, DatabaseSchema schema, String path, PrologProvider provider) {
+	public PrologDatabaseFunction(String name, Schema schema, String path, PrologProvider provider) {
 		super(name, schema, path, provider);
 	}
 

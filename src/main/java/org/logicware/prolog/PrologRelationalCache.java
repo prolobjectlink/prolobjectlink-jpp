@@ -20,7 +20,7 @@
 package org.logicware.prolog;
 
 import org.logicware.ContainerFactory;
-import org.logicware.DatabaseSchema;
+import org.logicware.Schema;
 import org.logicware.ObjectConverter;
 import org.logicware.RelationalCache;
 import org.logicware.Settings;
@@ -29,22 +29,22 @@ import org.logicware.graph.RelationalGraph;
 
 public final class PrologRelationalCache extends AbstractRelationalCache implements RelationalCache {
 
-	public PrologRelationalCache(DatabaseSchema schema, Settings properties, PrologProvider provider,
+	public PrologRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory) {
 		super(schema, properties, provider, containerFactory, new PrologObjectConverter(provider));
 	}
 
-	public PrologRelationalCache(DatabaseSchema schema, Settings properties, PrologProvider provider,
+	public PrologRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, RelationalGraph<Object, Object> graph) {
 		super(schema, properties, provider, containerFactory, new PrologObjectConverter(provider), graph);
 	}
 
-	public PrologRelationalCache(DatabaseSchema schema, Settings properties, PrologProvider provider,
+	public PrologRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter) {
 		super(schema, properties, provider, containerFactory, converter);
 	}
 
-	public PrologRelationalCache(DatabaseSchema schema, Settings properties, PrologProvider provider,
+	public PrologRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter,
 			RelationalGraph<Object, Object> graph) {
 		super(schema, properties, provider, containerFactory, converter, graph);

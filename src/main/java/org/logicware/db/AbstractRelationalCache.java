@@ -22,7 +22,7 @@ package org.logicware.db;
 import java.util.List;
 
 import org.logicware.ContainerFactory;
-import org.logicware.DatabaseSchema;
+import org.logicware.Schema;
 import org.logicware.NonSolutionError;
 import org.logicware.ObjectConverter;
 import org.logicware.Predicate;
@@ -37,7 +37,7 @@ import org.logicware.prolog.PrologTerm;
 public class AbstractRelationalCache extends RelationalGraph<Object, Object> implements RelationalCache {
 
 	private final PrologEngine engine;
-	private final DatabaseSchema schema;
+	private final Schema schema;
 	private final Settings properties;
 	private final PrologProvider provider;
 	// private final Transaction transaction;
@@ -45,7 +45,7 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 	private final ContainerFactory containerFactory;
 	private final ObjectConverter<PrologTerm> converter;
 
-	public AbstractRelationalCache(DatabaseSchema schema, Settings properties, PrologProvider provider,
+	public AbstractRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter) {
 		// this.transaction = new DefaultTransaction(this);
 		this.containerFactory = containerFactory;
@@ -56,7 +56,7 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 		this.schema = schema;
 	}
 
-	public AbstractRelationalCache(DatabaseSchema schema, Settings properties, PrologProvider provider,
+	public AbstractRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter,
 			RelationalGraph<Object, Object> graph) {
 		super(graph);
@@ -255,7 +255,7 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 		return containerFactory;
 	}
 
-	public final DatabaseSchema getSchema() {
+	public final Schema getSchema() {
 		return schema;
 	}
 

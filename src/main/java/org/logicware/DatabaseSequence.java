@@ -27,7 +27,7 @@ public final class DatabaseSequence implements Serializable {
 	private String javaClass;
 	private final String name;
 	private final int increment;
-	private transient DatabaseSchema schema;
+	private transient Schema schema;
 	private static final long serialVersionUID = 937204609884481388L;
 
 	private DatabaseSequence() {
@@ -37,7 +37,7 @@ public final class DatabaseSequence implements Serializable {
 		// for internal reflection
 	}
 
-	public DatabaseSequence(String name, Class<?> clazz, int increment, DatabaseSchema schema) {
+	public DatabaseSequence(String name, Class<?> clazz, int increment, Schema schema) {
 		this.javaClass = clazz != null ? clazz.getName() : "";
 		this.increment = increment;
 		this.schema = schema;
@@ -65,11 +65,11 @@ public final class DatabaseSequence implements Serializable {
 		return value;
 	}
 
-	public DatabaseSchema getSchema() {
+	public Schema getSchema() {
 		return schema;
 	}
 
-	public DatabaseSequence setSchema(DatabaseSchema schema) {
+	public DatabaseSequence setSchema(Schema schema) {
 		this.schema = schema;
 		return this;
 	}

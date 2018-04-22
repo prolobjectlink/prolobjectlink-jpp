@@ -17,15 +17,11 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.storage;
+package org.logicware;
 
-import org.logicware.AbstractSchema;
-import org.logicware.ContainerFactory;
-import org.logicware.DatabaseSchema;
-import org.logicware.DatabaseUser;
 import org.logicware.prolog.PrologProvider;
 
-public final class StorageSchema extends AbstractSchema implements DatabaseSchema {
+public final class StorageSchema extends AbstractSchema implements Schema {
 
 	public StorageSchema(String location, PrologProvider provider, ContainerFactory factory, DatabaseUser owner) {
 		super(location, provider, factory, owner);

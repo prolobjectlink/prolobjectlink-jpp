@@ -26,7 +26,7 @@ import org.logicware.HierarchicalDatabase;
 import org.logicware.Settings;
 import org.logicware.RelationalCache;
 import org.logicware.RelationalDatabase;
-import org.logicware.DatabaseSchema;
+import org.logicware.Schema;
 import org.logicware.Storage;
 import org.logicware.StorageGraph;
 import org.logicware.StorageManager;
@@ -39,7 +39,7 @@ public abstract class PrologContainerFactory extends AbstractContainerFactory im
 		super(properties, provider);
 	}
 
-	public RelationalCache createRelationalCache(DatabaseSchema schema) {
+	public RelationalCache createRelationalCache(Schema schema) {
 		return new PrologRelationalCache(schema, getProperties(), getProvider(), this);
 	}
 
@@ -59,7 +59,7 @@ public abstract class PrologContainerFactory extends AbstractContainerFactory im
 		return new PrologStorageManager(getProvider(), getProperties(), path, this);
 	}
 
-	public StorageGraph createStorageGraph(String path, DatabaseSchema schema) {
+	public StorageGraph createStorageGraph(String path, Schema schema) {
 		return new PrologStorageGraph(getProvider(), getProperties(), path, schema, this);
 	}
 

@@ -45,7 +45,7 @@ public final class DatabaseClass implements Serializable {
 	private boolean isAbstract;
 	private String javaClassName;
 	private transient Class<?> javaClass;
-	private transient DatabaseSchema schema;
+	private transient Schema schema;
 	private transient DatabaseClass superClass;
 	private final List<DatabaseClass> superClasses;
 	private final Map<String, DatabaseField> fields;
@@ -56,15 +56,15 @@ public final class DatabaseClass implements Serializable {
 		return new DatabaseField(name, position, type, this);
 	}
 
-	public DatabaseClass(String name, DatabaseSchema schema) {
+	public DatabaseClass(String name, Schema schema) {
 		this(name, null, schema);
 	}
 
-	public DatabaseClass(Class<?> javaClass, DatabaseSchema schema) {
+	public DatabaseClass(Class<?> javaClass, Schema schema) {
 		this(javaClass.getName(), javaClass, schema);
 	}
 
-	public DatabaseClass(String name, Class<?> javaClass, DatabaseSchema schema) {
+	public DatabaseClass(String name, Class<?> javaClass, Schema schema) {
 		if (name.contains("." + "")) {
 			int index = name.lastIndexOf('.');
 			shortName = name.substring(index + 1);
@@ -229,11 +229,11 @@ public final class DatabaseClass implements Serializable {
 		return name.compareTo(o.getName());
 	}
 
-	public DatabaseSchema getSchema() {
+	public Schema getSchema() {
 		return schema;
 	}
 
-	public DatabaseClass setSchema(DatabaseSchema schema) {
+	public DatabaseClass setSchema(Schema schema) {
 		this.schema = schema;
 		return this;
 	}

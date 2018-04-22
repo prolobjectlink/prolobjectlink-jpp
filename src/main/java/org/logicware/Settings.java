@@ -207,7 +207,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		return getContainerFactory().createStoragePool(poolRoot, poolName);
 	}
 
-	public StorageGraph createStorageGraph(String path, DatabaseSchema schema) {
+	public StorageGraph createStorageGraph(String path, Schema schema) {
 		return containerFactory.createStorageGraph(path, schema);
 	}
 
@@ -215,7 +215,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		return getContainerFactory().createStorageManager(root);
 	}
 
-	public RelationalCache createRelationalCache(DatabaseSchema schema) {
+	public RelationalCache createRelationalCache(Schema schema) {
 		return containerFactory.createRelationalCache(schema);
 	}
 

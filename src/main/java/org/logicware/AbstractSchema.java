@@ -38,7 +38,7 @@ import org.logicware.prolog.PrologDatabaseView;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.util.ArrayList;
 
-public abstract class AbstractSchema implements DatabaseSchema {
+public abstract class AbstractSchema implements Schema {
 
 	private int version;
 	private final String location;
@@ -189,11 +189,11 @@ public abstract class AbstractSchema implements DatabaseSchema {
 		return typePackage.equals(langPackage);
 	}
 
-	public final DatabaseSchema addPackage(Package pack) {
+	public final Schema addPackage(Package pack) {
 		return addPackage(pack.getName());
 	}
 
-	public final DatabaseSchema addPackage(String packageName) {
+	public final Schema addPackage(String packageName) {
 		try {
 			Class<?>[] classArray = findClasses(packageName);
 			for (int i = 0; i < classArray.length; i++) {
@@ -295,7 +295,7 @@ public abstract class AbstractSchema implements DatabaseSchema {
 		return c;
 	}
 
-	public final DatabaseSchema removeClass(String className) {
+	public final Schema removeClass(String className) {
 		classes.remove(className);
 		return this;
 	}
@@ -360,7 +360,7 @@ public abstract class AbstractSchema implements DatabaseSchema {
 		return f;
 	}
 
-	public final DatabaseSchema removeFunctions(String name) {
+	public final Schema removeFunctions(String name) {
 		functions.remove(name);
 		return this;
 	}
@@ -387,7 +387,7 @@ public abstract class AbstractSchema implements DatabaseSchema {
 		return s;
 	}
 
-	public final DatabaseSchema removeSequence(String name) {
+	public final Schema removeSequence(String name) {
 		sequences.remove(name);
 		return this;
 	}
@@ -423,7 +423,7 @@ public abstract class AbstractSchema implements DatabaseSchema {
 		return f;
 	}
 
-	public final DatabaseSchema removeView(Class<?> target) {
+	public final Schema removeView(Class<?> target) {
 		views.remove(target.getName());
 		return this;
 	}
@@ -451,7 +451,7 @@ public abstract class AbstractSchema implements DatabaseSchema {
 		return user;
 	}
 
-	public final DatabaseSchema removeUser(String name) {
+	public final Schema removeUser(String name) {
 		users.remove(name);
 		return this;
 	}
@@ -575,7 +575,7 @@ public abstract class AbstractSchema implements DatabaseSchema {
 		users.clear();
 	}
 
-	public final DatabaseSchema load() {
+	public final Schema load() {
 		storage.getTransaction().begin();
 		List<DatabaseUser> u = storage.findAll(DatabaseUser.class);
 		for (DatabaseUser databaseUser : u) {

@@ -54,7 +54,7 @@ public abstract class DatabaseCode implements Serializable {
 	private final String name;
 	private final String path;
 	protected final List<String> parameters;
-	protected transient DatabaseSchema schema;
+	protected transient Schema schema;
 	private final transient CodifiableType type;
 	private final transient PrologEngine engine;
 	private final transient PrologProvider provider;
@@ -72,7 +72,7 @@ public abstract class DatabaseCode implements Serializable {
 		this.type = null;
 	}
 
-	public DatabaseCode(CodifiableType type, String path, String name, DatabaseSchema schema, PrologProvider provider) {
+	public DatabaseCode(CodifiableType type, String path, String name, Schema schema, PrologProvider provider) {
 		this.instructions = new ArrayList<String>();
 		this.parameters = new ArrayList<String>();
 		this.engine = provider.newEngine();
@@ -123,11 +123,11 @@ public abstract class DatabaseCode implements Serializable {
 		return "" + buffer + "";
 	}
 
-	public final DatabaseSchema getSchema() {
+	public final Schema getSchema() {
 		return schema;
 	}
 
-	public abstract DatabaseCode setSchema(DatabaseSchema schema);
+	public abstract DatabaseCode setSchema(Schema schema);
 
 	public final CodifiableType getType() {
 		return type;

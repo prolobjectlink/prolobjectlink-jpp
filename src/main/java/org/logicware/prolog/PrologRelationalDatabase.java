@@ -22,30 +22,30 @@ package org.logicware.prolog;
 import java.io.File;
 
 import org.logicware.ContainerFactory;
+import org.logicware.DatabaseSchema;
 import org.logicware.DatabaseUser;
 import org.logicware.ObjectConverter;
 import org.logicware.Settings;
 import org.logicware.RelationalDatabase;
 import org.logicware.db.AbstractRelationalDatabase;
-import org.logicware.db.MetadataSchema;
 
 public final class PrologRelationalDatabase extends AbstractRelationalDatabase implements RelationalDatabase {
 
 	public PrologRelationalDatabase(PrologProvider provider, Settings properties, ContainerFactory containerFactory,
 			String name, DatabaseUser user) {
 		super(provider, containerFactory, name,
-				new MetadataSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
+				new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
 				new PrologStorageGraph(LOCATION + File.separator + name + File.separator + "database",
-						new MetadataSchema(LOCATION + File.separator + name, provider, containerFactory, user),
+						new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user),
 						properties, provider, containerFactory, new PrologObjectConverter(provider)));
 	}
 
 	public PrologRelationalDatabase(PrologProvider provider, Settings properties,
 			ObjectConverter<PrologTerm> converter, ContainerFactory containerFactory, String name, DatabaseUser user) {
 		super(provider, containerFactory, name,
-				new MetadataSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
+				new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
 				new PrologStorageGraph(LOCATION + File.separator + name + File.separator + "database",
-						new MetadataSchema(LOCATION + File.separator + name, provider, containerFactory, user),
+						new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user),
 						properties, provider, containerFactory, converter));
 	}
 
