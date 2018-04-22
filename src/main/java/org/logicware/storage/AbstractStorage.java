@@ -56,9 +56,9 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 		this(provider, properties, converter, location, containerFactory, Integer.MAX_VALUE);
 	}
 
-	protected AbstractStorage(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
+	protected AbstractStorage(PrologProvider provider, Settings settings, ObjectConverter<PrologTerm> converter,
 			String location, ContainerFactory containerFactory, int maxCapacity) {
-		this(provider, properties, converter, location, containerFactory, new LockFile(location + ".lock"),
+		this(provider, settings, converter, location, containerFactory, new LockFile(location + ".lock",settings),
 				maxCapacity);
 	}
 

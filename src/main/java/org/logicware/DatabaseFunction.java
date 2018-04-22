@@ -32,7 +32,11 @@ public abstract class DatabaseFunction extends DatabaseCode implements Serializa
 	}
 
 	public DatabaseFunction(String name, Schema schema, String path, PrologProvider provider) {
-		super(CodifiableType.FUNCTION, path, name, schema, provider);
+		super(name, schema, path, provider);
+	}
+
+	public DatabaseFunction(String name, String comment, Schema schema, String path, PrologProvider provider) {
+		super(name, comment, schema, path, provider);
 	}
 
 	public final DatabaseFunction addParameter(String parameter) {
@@ -45,7 +49,6 @@ public abstract class DatabaseFunction extends DatabaseCode implements Serializa
 		return this;
 	}
 
-	@Override
 	public final DatabaseFunction setSchema(Schema schema) {
 		this.schema = schema;
 		return this;
@@ -55,6 +58,20 @@ public abstract class DatabaseFunction extends DatabaseCode implements Serializa
 	public final DatabaseFunction addInstructions(String code) {
 		instructions.add(code);
 		return this;
+	}
+
+	public DatabaseFunction setComment(String comment) {
+		this.comment = comment;
+		return this;
+	}
+
+	public SchemaElementType geElementType() {
+		return SchemaElementType.FUNCTION;
+	}
+
+	@Override
+	public DatabaseCodeType getType() {
+		return DatabaseCodeType.FUNCTION;
 	}
 
 }

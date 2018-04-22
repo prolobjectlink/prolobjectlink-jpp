@@ -38,7 +38,7 @@ import org.logicware.prolog.PrologProvider;
 public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine implements RelationalDatabase {
 
 	private final StorageGraph storage;
-	protected static final String LOCATION = "relational";
+	protected static final String LOCATION = "dat" + File.separator + "relational";
 
 	public AbstractRelationalDatabase(PrologProvider provider, ContainerFactory containerFactory, String name,
 			Schema schema, DatabaseUser user, StorageGraph storage) {

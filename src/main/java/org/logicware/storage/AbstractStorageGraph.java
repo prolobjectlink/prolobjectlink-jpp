@@ -136,11 +136,6 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 		return false;
 	}
 
-	public final List<Object> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public final List<Class<?>> classes() {
 		return storage.classes();
 	}

@@ -24,13 +24,13 @@ import java.util.List;
 
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
-import org.logicware.Schema;
 import org.logicware.DatabaseUser;
 import org.logicware.HierarchicalDatabase;
 import org.logicware.PersistentContainer;
 import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
 import org.logicware.Query;
+import org.logicware.Schema;
 import org.logicware.StorageManager;
 import org.logicware.TypedQuery;
 import org.logicware.prolog.PrologProvider;
@@ -38,7 +38,7 @@ import org.logicware.prolog.PrologProvider;
 public abstract class AbstractHerarchicalDatabase extends AbstractDatabaseEngine implements HierarchicalDatabase {
 
 	private final StorageManager storage;
-	protected static final String LOCATION = "hierarchical";
+	protected static final String LOCATION = "dat" + File.separator + "hierarchical";
 
 	public AbstractHerarchicalDatabase(PrologProvider provider, ContainerFactory containerFactory, String name,
 			Schema schema, DatabaseUser user, StorageManager storage) {

@@ -137,6 +137,16 @@ public interface Schema {
 
 	public Schema addPackage(Package pack);
 
+	public int countPackages();
+
+	public Collection<DatabasePackage> getPackages();
+
+	public boolean containsPackage(String name);
+
+	public DatabasePackage getPackage(String name);
+
+	public Schema removePackage(String name);
+
 	public boolean isJavaLangType(Class<?> type);
 
 	public boolean isSet(Class<?> type);

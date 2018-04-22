@@ -17,12 +17,30 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware;
+package org.logicware.graph;
 
-public interface Reloadble<R extends Reloadble<R>> {
+import org.logicware.GraphVertex;
 
-	public R save();
+public abstract class AbstractGraphVertex<V> extends AbstractGraphElement<V> implements GraphVertex<V> {
 
-	public R load();
+	public AbstractGraphVertex(V element) {
+		super(element);
+	}
+
+	public final <K> K unwrap(Class<K> cls) {
+		if (cls.isAssignableFrom(getClass())) {
+			return cls.cast(this);
+		}
+		return null;
+	}
+
+	public final boolean isWrappedFor(Class<?> cls) {
+		return cls.isInstance(this);
+	}
+
+	@Override
+	public String toString() {
+		return "(" + getElement() + ")";
+	}
 
 }

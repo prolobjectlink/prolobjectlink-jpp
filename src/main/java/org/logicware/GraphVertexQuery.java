@@ -19,27 +19,22 @@
  */
 package org.logicware;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.Executors;
+public interface GraphVertexQuery<V> {
 
-public class DatabaseServer {
+	public long count();
 
-	private static final int N = 100;
-	private static final int PORT = 5370;
+	public GraphVertexQuery<V> limit(int limit);
 
-	public static void main(String[] args) throws IOException {
-		ServerSocket socket = new ServerSocket(PORT);
-		while (true) {
-			final Socket connection = socket.accept();
-			Runnable task = new Runnable() {
-				public void run() {
+	public GraphVertexQuery<V> has(String key);
 
-					// TODO
-				}
-			};
-			Executors.newFixedThreadPool(N).execute(task);
-		}
-	}
+	public GraphVertexQuery<V> hasNot(String key);
+
+	public GraphVertexQuery<V> has(String key, Object value);
+
+	public GraphVertexQuery<V> hasNot(String key, Object value);
+
+	public <T extends Comparable<T>> GraphVertexQuery<V> has(String key, T value, Comparable<T> compare);
+
+	public <T extends Comparable<?>> GraphVertexQuery<V> interval(String key, T startValue, T endValue);
+
 }

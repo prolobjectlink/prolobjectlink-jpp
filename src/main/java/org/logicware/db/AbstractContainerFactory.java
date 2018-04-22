@@ -48,11 +48,11 @@ public abstract class AbstractContainerFactory implements ContainerFactory {
 		this.provider = provider;
 	}
 
-	public final void setProperties(Settings properties) {
+	public final void setSettings(Settings properties) {
 		this.properties = properties;
 	}
 
-	public final Settings getProperties() {
+	public final Settings getSettings() {
 		return properties;
 	}
 

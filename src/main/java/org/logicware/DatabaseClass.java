@@ -20,7 +20,6 @@
 package org.logicware;
 
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -37,15 +36,13 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.util.CheckClassAdapter;
 import org.objectweb.asm.util.TraceClassVisitor;
 
-public final class DatabaseClass implements Serializable {
+public final class DatabaseClass extends AbstractElement implements Comparable<DatabaseClass> {
 
-	private String name;
 	private boolean isView;
 	private String shortName;
 	private boolean isAbstract;
 	private String javaClassName;
 	private transient Class<?> javaClass;
-	private transient Schema schema;
 	private transient DatabaseClass superClass;
 	private final List<DatabaseClass> superClasses;
 	private final Map<String, DatabaseField> fields;
@@ -53,7 +50,7 @@ public final class DatabaseClass implements Serializable {
 	private static final long serialVersionUID = -8770366199140961351L;
 
 	private DatabaseField newField(String name, int position, Class<?> type) {
-		return new DatabaseField(name, position, type, this);
+		return new DatabaseField(name, position, type, schema, this);
 	}
 
 	public DatabaseClass(String name, Schema schema) {
@@ -65,6 +62,11 @@ public final class DatabaseClass implements Serializable {
 	}
 
 	public DatabaseClass(String name, Class<?> javaClass, Schema schema) {
+		this(name, "", javaClass, schema);
+	}
+
+	public DatabaseClass(String name, String comment, Class<?> javaClass, Schema schema) {
+		super(name, comment, schema);
 		if (name.contains("." + "")) {
 			int index = name.lastIndexOf('.');
 			shortName = name.substring(index + 1);
@@ -76,7 +78,6 @@ public final class DatabaseClass implements Serializable {
 		this.superClasses = new ArrayList<DatabaseClass>();
 		this.javaClass = javaClass;
 		this.schema = schema;
-		this.name = name;
 	}
 
 	public String generate() {
@@ -229,10 +230,6 @@ public final class DatabaseClass implements Serializable {
 		return name.compareTo(o.getName());
 	}
 
-	public Schema getSchema() {
-		return schema;
-	}
-
 	public DatabaseClass setSchema(Schema schema) {
 		this.schema = schema;
 		return this;
@@ -249,6 +246,14 @@ public final class DatabaseClass implements Serializable {
 	public void setJavaClass(Class<?> javaClass) {
 		this.javaClassName = javaClass != null ? javaClass.getName() : "";
 		this.javaClass = javaClass;
+	}
+
+	public String getJavaClassName() {
+		return javaClassName;
+	}
+
+	public void setJavaClassName(String javaClassName) {
+		this.javaClassName = javaClassName;
 	}
 
 	public boolean isView() {
@@ -327,15 +332,6 @@ public final class DatabaseClass implements Serializable {
 	public boolean isSuperClassOf(String name) {
 		DatabaseClass c = schema.getClass(name);
 		return c != null && c.isSubClassOf(this);
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public DatabaseClass setName(String name) {
-		this.name = name;
-		return this;
 	}
 
 	public String getShortName() {
@@ -531,6 +527,15 @@ public final class DatabaseClass implements Serializable {
 		public int compare(DatabaseField o1, DatabaseField o2) {
 			return o1.compareTo(o2);
 		}
+	}
+
+	public DatabaseClass setComment(String comment) {
+		this.comment = comment;
+		return this;
+	}
+
+	public SchemaElementType geElementType() {
+		return SchemaElementType.CLASS;
 	}
 
 }

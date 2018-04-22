@@ -19,27 +19,24 @@
  */
 package org.logicware;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.Executors;
+public enum DatabaseCodeType {
 
-public class DatabaseServer {
+	VIEW("View", 0), FUNCTION("Function", 1);
 
-	private static final int N = 100;
-	private static final int PORT = 5370;
+	private final String name;
+	private final int ordinal;
 
-	public static void main(String[] args) throws IOException {
-		ServerSocket socket = new ServerSocket(PORT);
-		while (true) {
-			final Socket connection = socket.accept();
-			Runnable task = new Runnable() {
-				public void run() {
-
-					// TODO
-				}
-			};
-			Executors.newFixedThreadPool(N).execute(task);
-		}
+	DatabaseCodeType(String name, int ordinal) {
+		this.ordinal = ordinal;
+		this.name = name;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getOrdinal() {
+		return ordinal;
+	}
+
 }

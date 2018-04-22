@@ -22,6 +22,7 @@ package org.logicware.storage;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
@@ -220,7 +221,10 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		// String path = getLocation() + c + name;
 		// try {
 		// Files.delete(rootDirectory.toPath());
-		// add(findAll().toArray(new Object[0]));
+		// List<Class<?>> classList = classes();
+		// for (Class<?> clazz : classList) {
+		// insert(findAll(clazz).toArray(new Object[0]));
+		// }
 		// Files.delete(new File(path).toPath());
 		// } catch (Exception e) {
 		// String s = LoggerConstants.IO_ERROR;
@@ -297,7 +301,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		return this;
 	}
 
-	public List<Class<?>> classes() {
+	public final List<Class<?>> classes() {
 		// TODO Auto-generated method stub
 		return null;
 	}

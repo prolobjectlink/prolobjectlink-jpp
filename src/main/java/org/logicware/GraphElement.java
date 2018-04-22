@@ -19,27 +19,9 @@
  */
 package org.logicware;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.Executors;
+public interface GraphElement<E> {
 
-public class DatabaseServer {
+	public E getElement();
 
-	private static final int N = 100;
-	private static final int PORT = 5370;
-
-	public static void main(String[] args) throws IOException {
-		ServerSocket socket = new ServerSocket(PORT);
-		while (true) {
-			final Socket connection = socket.accept();
-			Runnable task = new Runnable() {
-				public void run() {
-
-					// TODO
-				}
-			};
-			Executors.newFixedThreadPool(N).execute(task);
-		}
-	}
+	public Class<E> getElementClass();
 }

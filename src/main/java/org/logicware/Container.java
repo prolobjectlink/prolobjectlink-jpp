@@ -228,16 +228,4 @@ public interface Container extends Wrapper {
 	 */
 	public <O> Class<O> classOf(O o);
 
-	/**
-	 * List all objects in this container after retrieve all clauses and convert
-	 * this clauses in object. This is a heavy operation that can consume a long
-	 * time depending of the prolog engine. The fact clauses are strike forward
-	 * converted. The rule clauses are executed using the engine and solution
-	 * are converted.
-	 * 
-	 * @return all objects in this container
-	 * @since 1.0
-	 */
-	public List<Object> findAll();
-
 }

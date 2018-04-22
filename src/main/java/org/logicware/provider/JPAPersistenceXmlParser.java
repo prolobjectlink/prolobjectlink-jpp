@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.spi;
+package org.logicware.provider;
 
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 import static javax.xml.validation.SchemaFactory.newInstance;

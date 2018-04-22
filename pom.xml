@@ -51,10 +51,6 @@
 		<downloadUrl>http://www.logicware.org/download</downloadUrl>
 	</distributionManagement>
 
-	<properties>
-		<project.version>1.0.0</project.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.ow2.asm</groupId>
@@ -74,12 +70,7 @@
 		<dependency>
 			<groupId>org.logicware</groupId>
 			<artifactId>prolobjectlink</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.logicware</groupId>
-			<artifactId>prolobjectlink-graph</artifactId>
-			<version>${project.version}</version>
+			<version>[1.0.0, )</version>
 		</dependency>
 	</dependencies>
 

@@ -23,13 +23,13 @@ import org.logicware.prolog.PrologProvider;
 
 public interface ContainerFactory {
 
-	public Settings getProperties();
+	public Settings getSettings();
 
 	public PrologProvider getProvider();
 
-	public void setProvider(PrologProvider provider);
+	public void setSettings(Settings properties);
 
-	public void setProperties(Settings properties);
+	public void setProvider(PrologProvider provider);
 
 	public RelationalCache createRelationalCache(Schema schema);
 

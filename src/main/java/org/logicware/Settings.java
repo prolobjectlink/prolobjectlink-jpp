@@ -20,9 +20,9 @@
 package org.logicware;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Map;
@@ -34,11 +34,11 @@ import org.logicware.logging.LoggerUtils;
 import org.logicware.prolog.PrologProvider;
 
 public final class Settings extends AbstractMap<Object, Object>
-		implements Map<Object, Object>, ContainerFactory, Reloadble<Settings> {
+		implements Map<Object, Object>, ContainerFactory, SaveLoad<Settings> {
 
 	public static final String PROVIDER = Settings.class.getPackage().getName().concat(".prologProvider");
 	public static final String FACTORY = Settings.class.getPackage().getName().concat(".containerFactory");
-	public static final String PATH = "etc" + File.separator + "system.properties";
+	public static final String XML = "etc" + File.separator + "settings.xml";
 	public static final String PASSWORD = "javax.persistence.jdbc.password";
 	public static final String DRIVER = "javax.persistence.jdbc.driver";
 	public static final String USER = "javax.persistence.jdbc.user";
@@ -62,7 +62,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		ObjectReflector o = new ObjectReflector();
 		containerFactory = (ContainerFactory) o.newInstance(driver);
 		containerFactory.setProvider(provider);
-		containerFactory.setProperties(this);
+		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
 	}
@@ -74,7 +74,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		Class<?> clazz = ReflectionUtils.classForName(driver);
 		containerFactory = (ContainerFactory) o.newInstance(clazz);
 		containerFactory.setProvider(provider);
-		containerFactory.setProperties(this);
+		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
 	}
@@ -85,7 +85,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		prologProvider = (PrologProvider) o.newInstance(provider);
 		containerFactory = (ContainerFactory) o.newInstance(driver);
 		containerFactory.setProvider(prologProvider);
-		containerFactory.setProperties(this);
+		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
 	}
@@ -97,7 +97,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		prologProvider = (PrologProvider) o.newInstance(provider);
 		containerFactory = (ContainerFactory) o.newInstance(clazz);
 		containerFactory.setProvider(prologProvider);
-		containerFactory.setProperties(this);
+		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
 	}
@@ -109,7 +109,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		prologProvider = (PrologProvider) o.newInstance(clazz);
 		containerFactory = (ContainerFactory) o.newInstance(driver);
 		containerFactory.setProvider(prologProvider);
-		containerFactory.setProperties(this);
+		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
 	}
@@ -122,7 +122,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		prologProvider = (PrologProvider) o.newInstance(clazzProvider);
 		containerFactory = (ContainerFactory) o.newInstance(clazzDriver);
 		containerFactory.setProvider(prologProvider);
-		containerFactory.setProperties(this);
+		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
 	}
@@ -133,8 +133,8 @@ public final class Settings extends AbstractMap<Object, Object>
 
 	public Settings load() {
 		try {
-			properties.load(new FileReader(PATH));
 			ObjectReflector o = new ObjectReflector();
+			properties.loadFromXML(new FileInputStream(XML));
 			String driver = properties.getProperty(FACTORY);
 			String provider = properties.getProperty(PROVIDER);
 			Class<?> clazzDriver = ReflectionUtils.classForName(driver);
@@ -142,7 +142,7 @@ public final class Settings extends AbstractMap<Object, Object>
 			prologProvider = (PrologProvider) o.newInstance(clazzProvider);
 			containerFactory = (ContainerFactory) o.newInstance(clazzDriver);
 			containerFactory.setProvider(prologProvider);
-			containerFactory.setProperties(this);
+			containerFactory.setSettings(this);
 		} catch (FileNotFoundException e) {
 			LoggerUtils.error(getClass(), LoggerConstants.FILE_NOT_FOUND, e);
 		} catch (IOException e) {
@@ -155,7 +155,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		try {
 			properties.put(PROVIDER, prologProvider.getClass().getName());
 			properties.put(FACTORY, containerFactory.getClass().getName());
-			properties.store(new FileWriter(PATH), "ProlobjectLink Properties File");
+			properties.storeToXML(new FileOutputStream(XML), null);
 		} catch (IOException e) {
 			LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR, e);
 		}
@@ -231,13 +231,13 @@ public final class Settings extends AbstractMap<Object, Object>
 		this.prologProvider = provider;
 	}
 
-	public void setProperties(Settings s) {
+	public void setSettings(Settings s) {
 		containerFactory = s.containerFactory;
 		prologProvider = s.prologProvider;
 		properties = s.properties;
 	}
 
-	public Settings getProperties() {
+	public Settings getSettings() {
 		return this;
 	}
 
@@ -255,20 +255,20 @@ public final class Settings extends AbstractMap<Object, Object>
 		return properties.entrySet();
 	}
 
-	public String getDriver() {
-		return properties.getProperty(DRIVER);
+	public String getPassword() {
+		return properties.getProperty(PASSWORD);
 	}
 
-	public String getURL() {
-		return properties.getProperty(URL);
+	public String getDriver() {
+		return properties.getProperty(DRIVER);
 	}
 
 	public String getUser() {
 		return properties.getProperty(USER);
 	}
 
-	public String getPassword() {
-		return properties.getProperty(PASSWORD);
+	public String getURL() {
+		return properties.getProperty(URL);
 	}
 
 }

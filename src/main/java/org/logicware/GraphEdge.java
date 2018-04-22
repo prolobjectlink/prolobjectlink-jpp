@@ -19,27 +19,20 @@
  */
 package org.logicware;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.Executors;
+public interface GraphEdge<E> extends GraphElement<E> {
 
-public class DatabaseServer {
+	public <V> GraphVertex<V> getFrom();
 
-	private static final int N = 100;
-	private static final int PORT = 5370;
+	public <V> GraphVertex<V> getTo();
 
-	public static void main(String[] args) throws IOException {
-		ServerSocket socket = new ServerSocket(PORT);
-		while (true) {
-			final Socket connection = socket.accept();
-			Runnable task = new Runnable() {
-				public void run() {
+	Class<?> getToVertexElementClass();
 
-					// TODO
-				}
-			};
-			Executors.newFixedThreadPool(N).execute(task);
-		}
-	}
+	Class<?> getFromVertexElementClass();
+
+	public boolean equals(Object obj);
+
+	public int hashCode();
+
+	Direction getDirection();
+
 }

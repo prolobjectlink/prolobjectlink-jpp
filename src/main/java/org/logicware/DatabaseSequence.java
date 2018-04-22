@@ -30,11 +30,11 @@ public final class DatabaseSequence implements Serializable {
 	private transient Schema schema;
 	private static final long serialVersionUID = 937204609884481388L;
 
-	private DatabaseSequence() {
+	/**
+	 * for internal reflection only
+	 */
+	protected DatabaseSequence() {
 		this(null, null, 1, null);
-
-		// TODO use object reflection helper
-		// for internal reflection
 	}
 
 	public DatabaseSequence(String name, Class<?> clazz, int increment, Schema schema) {
@@ -119,9 +119,7 @@ public final class DatabaseSequence implements Serializable {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (value != other.value)
-			return false;
-		return true;
+		return value == other.value;
 	}
 
 }

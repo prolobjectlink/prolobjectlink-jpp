@@ -51,6 +51,7 @@ public abstract class AbstractSchema implements Schema {
 	private final Map<String, DatabaseView> views;
 	private final Map<String, DatabaseUser> users;
 	private final Map<String, DatabaseClass> classes;
+	private final Map<String, DatabasePackage> packages;
 	private final Map<String, DatabaseFunction> functions;
 	private final Map<String, DatabaseSequence> sequences;
 
@@ -80,6 +81,10 @@ public abstract class AbstractSchema implements Schema {
 		String path0 = location.substring(0, location.lastIndexOf(File.separatorChar));
 		String path1 = path0 + File.separator + "views.pl";
 		return new PrologDatabaseView(path1, target, this, provider);
+	}
+
+	private DatabasePackage newDatabasePackage(String packageName) {
+		return new DatabasePackage(packageName, this);
 	}
 
 	private Class<?>[] findClasses(String packageName) throws ClassNotFoundException, IOException {
@@ -131,6 +136,7 @@ public abstract class AbstractSchema implements Schema {
 		this.storage = factory.createStorage(location + File.separator + "metadata" + File.separator + "schema.pl");
 		this.functions = new LinkedHashMap<String, DatabaseFunction>();
 		this.sequences = new LinkedHashMap<String, DatabaseSequence>();
+		this.packages = new LinkedHashMap<String, DatabasePackage>();
 		this.classes = new LinkedHashMap<String, DatabaseClass>();
 		this.users = new LinkedHashMap<String, DatabaseUser>();
 		this.views = new LinkedHashMap<String, DatabaseView>();
@@ -194,13 +200,17 @@ public abstract class AbstractSchema implements Schema {
 	}
 
 	public final Schema addPackage(String packageName) {
+		String packItr = packageName;
+		DatabasePackage p = newDatabasePackage(packItr);
 		try {
-			Class<?>[] classArray = findClasses(packageName);
+			Class<?>[] classArray = findClasses(packItr);
 			for (int i = 0; i < classArray.length; i++) {
 				Class<?> clazz = classArray[i];
 				Class<?> sc = clazz.getSuperclass();
 				DatabaseClass c = getOrAddClass(clazz);
 				DatabaseClass dbsc = addAbstractClass(sc);
+				p = newDatabasePackage(packItr);
+				packages.put(clazz.getPackage().getName(), p);
 				c.setSuperClass(dbsc);
 			}
 		} catch (ClassNotFoundException e) {
@@ -209,6 +219,27 @@ public abstract class AbstractSchema implements Schema {
 			LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR, e);
 		}
 		return this;
+	}
+
+	public final Schema removePackage(String name) {
+		packages.remove(name);
+		return this;
+	}
+
+	public final DatabasePackage getPackage(String name) {
+		return packages.get(name);
+	}
+
+	public final boolean containsPackage(String name) {
+		return packages.containsKey(name);
+	}
+
+	public final Collection<DatabasePackage> getPackages() {
+		return packages.values();
+	}
+
+	public final int countPackages() {
+		return packages.size();
 	}
 
 	public final DatabaseClass addClass(Class<?> clazz) {

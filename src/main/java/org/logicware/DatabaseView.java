@@ -21,8 +21,6 @@ package org.logicware;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.ArrayDeque;
-import java.util.Deque;
 
 import org.logicware.prolog.PrologProvider;
 
@@ -36,23 +34,17 @@ public abstract class DatabaseView extends DatabaseCode implements Serializable 
 	}
 
 	public DatabaseView(String path, Class<?> target, Schema schema, PrologProvider provider) {
-		super(CodifiableType.VIEW, path, target != null ? target.getName() : "", schema, provider);
+		super(target != null ? target.getName() : "", schema, path, provider);
 		if (target != null) {
-			// iterate over hierarchy
 			Class<?> ptr = target;
-			Deque<String> s = new ArrayDeque<String>();
 			while (ptr != Object.class) {
 				for (Field field : ptr.getDeclaredFields()) {
 					String fieldName = field.getName();
 					char n = Character.toUpperCase(fieldName.charAt(0));
-					// s.push(n + fieldName.substring(1));
-					parameters.add(n + fieldName.substring(1));
+					getParameters().add(n + fieldName.substring(1));
 				}
 				ptr = ptr.getSuperclass();
 			}
-			// while (!s.isEmpty()) {
-			// parameters.add(s.pop());
-			// }
 		}
 		this.target = target;
 	}
@@ -66,7 +58,6 @@ public abstract class DatabaseView extends DatabaseCode implements Serializable 
 		return this;
 	}
 
-	@Override
 	public final DatabaseView setSchema(Schema schema) {
 		this.schema = schema;
 		return this;
@@ -76,6 +67,45 @@ public abstract class DatabaseView extends DatabaseCode implements Serializable 
 	public final DatabaseView addInstructions(String code) {
 		instructions.add(code);
 		return this;
+	}
+
+	public DatabaseView setComment(String comment) {
+		this.comment = comment;
+		return this;
+	}
+
+	public SchemaElementType geElementType() {
+		return SchemaElementType.VIEW;
+	}
+
+	@Override
+	public DatabaseCodeType getType() {
+		return DatabaseCodeType.VIEW;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((target == null) ? 0 : target.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DatabaseView other = (DatabaseView) obj;
+		if (target == null) {
+			if (other.target != null)
+				return false;
+		} else if (!target.equals(other.target))
+			return false;
+		return true;
 	}
 
 }

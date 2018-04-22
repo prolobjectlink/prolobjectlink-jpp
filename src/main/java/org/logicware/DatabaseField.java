@@ -35,9 +35,8 @@ import org.objectweb.asm.Type;
  * @since 1.0
  * 
  */
-public final class DatabaseField implements Serializable, Comparable<DatabaseField> {
+public final class DatabaseField extends AbstractElement implements SchemaElement, Comparable<DatabaseField> {
 
-	private String name;
 	private int position;
 	private String typeName;
 	private boolean notNull;
@@ -53,16 +52,23 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 	private transient Class<?> linkedType;
 	private static final long serialVersionUID = 3864527141246876427L;
 
-	private DatabaseField() {
-		// for internal reflection
+	/**
+	 * use for internal reflection only
+	 */
+	protected DatabaseField() {
+
 	}
 
-	public DatabaseField(String name, int position, Class<?> type, DatabaseClass owner) {
+	public DatabaseField(String name, int position, Class<?> type, Schema schema, DatabaseClass owner) {
+		this(name, "", position, type, schema, owner);
+	}
+
+	public DatabaseField(String name, String comment, int position, Class<?> type, Schema schema, DatabaseClass owner) {
+		super(name, comment, schema);
 		this.fullName = owner.getName() + "." + name;
 		this.typeName = type.getName();
 		this.position = position;
 		this.javaType = type;
-		this.name = name;
 	}
 
 	public void generateField(StringBuilder buffer) {
@@ -78,7 +84,7 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 			buffer.append('>');
 		}
 		buffer.append(' ');
-		buffer.append(name);
+		buffer.append(getName());
 		buffer.append(';');
 		buffer.append('\n');
 	}
@@ -194,7 +200,7 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 	 * @since 1.0
 	 */
 	public void createField(ClassVisitor cv) {
-		cv.visitField(Opcodes.ACC_PRIVATE, name, Type.getDescriptor(getType()), null, null).visitEnd();
+		cv.visitField(Opcodes.ACC_PRIVATE, getName(), Type.getDescriptor(getType()), null, null).visitEnd();
 	}
 
 	/**
@@ -207,12 +213,12 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 	 * @since 1.0
 	 */
 	public void createSetter(ClassVisitor cv, String className, String type, Class<?> c) {
-		String methodName = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+		String methodName = "set" + getName().substring(0, 1).toUpperCase() + getName().substring(1);
 		MethodVisitor mv = cv.visitMethod(Opcodes.ACC_PUBLIC, methodName, "(" + type + ")V", null, null);
 		mv.visitCode();
 		mv.visitVarInsn(Opcodes.ALOAD, 0);
 		mv.visitVarInsn(Type.getType(c).getOpcode(Opcodes.ILOAD), Type.getType(c).getSize());
-		mv.visitFieldInsn(Opcodes.PUTFIELD, className, name, type);
+		mv.visitFieldInsn(Opcodes.PUTFIELD, className, getName(), type);
 		mv.visitInsn(Opcodes.RETURN);
 		mv.visitMaxs(0, 0);
 	}
@@ -227,11 +233,11 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 	 * @since 1.0
 	 */
 	public void createGetter(ClassVisitor cv, String className, String returnType, Class<?> c) {
-		String methodName = "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
+		String methodName = "get" + getName().substring(0, 1).toUpperCase() + getName().substring(1);
 		MethodVisitor mv = cv.visitMethod(Opcodes.ACC_PUBLIC, methodName, "()" + returnType, null, null);
 		mv.visitCode();
 		mv.visitVarInsn(Opcodes.ALOAD, 0);
-		mv.visitFieldInsn(Opcodes.GETFIELD, className, name, returnType);
+		mv.visitFieldInsn(Opcodes.GETFIELD, className, getName(), returnType);
 		mv.visitInsn(Type.getType(c).getOpcode(Opcodes.IRETURN));
 		mv.visitMaxs(0, 0);
 	}
@@ -242,24 +248,15 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 		} else if (position > o.position) {
 			return Math.abs(position - o.position);
 		}
-		return name.compareTo(o.getName());
+		return getName().compareTo(o.getName());
 	}
 
 	public int getPosition() {
 		return position;
 	}
 
-	public String getName() {
-		return name;
-	}
-
 	public String getFullName() {
 		return fullName;
-	}
-
-	public DatabaseField setName(String name) {
-		this.name = name;
-		return this;
 	}
 
 	public Class<?> getType() {
@@ -375,16 +372,24 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 		return this;
 	}
 
-	@Override
-	public String toString() {
-		return getName();
+	public DatabaseField setComment(String comment) {
+		this.comment = comment;
+		return this;
+	}
+
+	public DatabaseField setSchema(Schema schema) {
+		this.schema = schema;
+		return this;
+	}
+
+	public SchemaElementType geElementType() {
+		return SchemaElementType.FIELD;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		int result = super.hashCode();
 		result = prime * result + position;
 		return result;
 	}
@@ -393,17 +398,17 @@ public final class DatabaseField implements Serializable, Comparable<DatabaseFie
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		DatabaseField other = (DatabaseField) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
 		return position == other.position;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
 	}
 
 }

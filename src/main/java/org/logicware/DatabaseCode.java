@@ -27,35 +27,10 @@ import org.logicware.prolog.PrologEngine;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.util.ArrayList;
 
-public abstract class DatabaseCode implements Serializable {
+public abstract class DatabaseCode extends AbstractElement implements Serializable {
 
-	public enum CodifiableType {
-
-		VIEW("View", 0), FUNCTION("Function", 1);
-
-		private final String name;
-		private final int ordinal;
-
-		CodifiableType(String name, int ordinal) {
-			this.ordinal = ordinal;
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public int getOrdinal() {
-			return ordinal;
-		}
-
-	}
-
-	private final String name;
 	private final String path;
-	protected final List<String> parameters;
-	protected transient Schema schema;
-	private final transient CodifiableType type;
+	private final List<String> parameters;
 	private final transient PrologEngine engine;
 	private final transient PrologProvider provider;
 	protected final transient List<String> instructions;
@@ -65,22 +40,28 @@ public abstract class DatabaseCode implements Serializable {
 		this.instructions = new ArrayList<String>();
 		this.parameters = new ArrayList<String>();
 		this.provider = null;
-		this.schema = null;
 		this.engine = null;
 		this.path = null;
-		this.name = null;
-		this.type = null;
 	}
 
-	public DatabaseCode(CodifiableType type, String path, String name, Schema schema, PrologProvider provider) {
+	public DatabaseCode(String name, Schema schema, String path, PrologProvider provider) {
+		super(name, "", schema);
 		this.instructions = new ArrayList<String>();
 		this.parameters = new ArrayList<String>();
 		this.engine = provider.newEngine();
 		this.provider = provider;
 		this.schema = schema;
 		this.path = path;
-		this.name = name;
-		this.type = type;
+	}
+
+	public DatabaseCode(String name, String comment, Schema schema, String path, PrologProvider provider) {
+		super(name, comment, schema);
+		this.instructions = new ArrayList<String>();
+		this.parameters = new ArrayList<String>();
+		this.engine = provider.newEngine();
+		this.provider = provider;
+		this.schema = schema;
+		this.path = path;
 	}
 
 	public final String getDescriptor() {
@@ -123,15 +104,7 @@ public abstract class DatabaseCode implements Serializable {
 		return "" + buffer + "";
 	}
 
-	public final Schema getSchema() {
-		return schema;
-	}
-
-	public abstract DatabaseCode setSchema(Schema schema);
-
-	public final CodifiableType getType() {
-		return type;
-	}
+	public abstract DatabaseCodeType getType();
 
 	public abstract DatabaseCode addInstructions(String code);
 
@@ -145,10 +118,6 @@ public abstract class DatabaseCode implements Serializable {
 
 	public final boolean containsParameter(String string) {
 		return parameters.contains(string);
-	}
-
-	public final String getName() {
-		return name;
 	}
 
 	public final String getPath() {
@@ -176,7 +145,7 @@ public abstract class DatabaseCode implements Serializable {
 	}
 
 	@Override
-	public final int hashCode() {
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -184,7 +153,7 @@ public abstract class DatabaseCode implements Serializable {
 	}
 
 	@Override
-	public final boolean equals(Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

@@ -68,10 +68,10 @@ public class LockFile implements Runnable {
 	 * @param sleep
 	 *            the number of milliseconds to sleep
 	 */
-	public LockFile(String fileName) {
-		this.sleep = LOCK_SLEEP;
-		file = new File(fileName);
+	public LockFile(String fileName, Settings settings) {
 		properties = new Properties();
+		file = new File(fileName);
+		this.sleep = LOCK_SLEEP;
 	}
 
 	/**

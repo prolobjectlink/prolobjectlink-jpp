@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.spi;
+package org.logicware.provider;
 
 import java.util.StringTokenizer;
 

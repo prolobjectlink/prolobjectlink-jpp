@@ -40,35 +40,35 @@ public abstract class PrologContainerFactory extends AbstractContainerFactory im
 	}
 
 	public RelationalCache createRelationalCache(Schema schema) {
-		return new PrologRelationalCache(schema, getProperties(), getProvider(), this);
+		return new PrologRelationalCache(schema, getSettings(), getProvider(), this);
 	}
 
 	public HierarchicalCache createHierarchicalCache() {
-		return new PrologHierarchicalCache(getProvider(), getProperties());
+		return new PrologHierarchicalCache(getProvider(), getSettings());
 	}
 
 	public Storage createStorage(String path) {
-		return new PrologStorage(getProvider(), getProperties(), path, this);
+		return new PrologStorage(getProvider(), getSettings(), path, this);
 	}
 
 	public StoragePool createStoragePool(String path, String name) {
-		return new PrologStoragePool(getProvider(), getProperties(), path, name, this);
+		return new PrologStoragePool(getProvider(), getSettings(), path, name, this);
 	}
 
 	public StorageManager createStorageManager(String path) {
-		return new PrologStorageManager(getProvider(), getProperties(), path, this);
+		return new PrologStorageManager(getProvider(), getSettings(), path, this);
 	}
 
 	public StorageGraph createStorageGraph(String path, Schema schema) {
-		return new PrologStorageGraph(getProvider(), getProperties(), path, schema, this);
+		return new PrologStorageGraph(getProvider(), getSettings(), path, schema, this);
 	}
 
 	public RelationalDatabase createRelationalDatabase(String name, DatabaseUser user) {
-		return new PrologRelationalDatabase(getProvider(), getProperties(), this, name, user);
+		return new PrologRelationalDatabase(getProvider(), getSettings(), this, name, user);
 	}
 
 	public HierarchicalDatabase createHierarchicalDatabase(String name, DatabaseUser user) {
-		return new PrologHerarchicalDatabase(getProvider(), getProperties(), this, name, user);
+		return new PrologHerarchicalDatabase(getProvider(), getSettings(), this, name, user);
 	}
 
 }

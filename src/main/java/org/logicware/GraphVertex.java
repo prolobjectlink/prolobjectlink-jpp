@@ -19,27 +19,24 @@
  */
 package org.logicware;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.Executors;
+public interface GraphVertex<V> extends GraphElement<V> {
 
-public class DatabaseServer {
+	public GraphVertexQuery<V> query();
 
-	private static final int N = 100;
-	private static final int PORT = 5370;
+	public boolean isWrappedFor(Class<?> cls);
 
-	public static void main(String[] args) throws IOException {
-		ServerSocket socket = new ServerSocket(PORT);
-		while (true) {
-			final Socket connection = socket.accept();
-			Runnable task = new Runnable() {
-				public void run() {
+	public <K> K unwrap(Class<K> cls);
 
-					// TODO
-				}
-			};
-			Executors.newFixedThreadPool(N).execute(task);
-		}
-	}
+	public Iterable<GraphVertex<V>> getIncomingsVertices();
+
+	public Iterable<GraphVertex<V>> getOutgoingsVertices();
+
+	public int countIncomings();
+
+	public int countOutgoings();
+
+	public boolean equals(Object obj);
+
+	public int hashCode();
+
 }

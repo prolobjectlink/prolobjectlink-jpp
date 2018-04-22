@@ -19,27 +19,18 @@
  */
 package org.logicware;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.Executors;
+public interface SchemaElement {
 
-public class DatabaseServer {
+	public SchemaElement setComment(String comment);
 
-	private static final int N = 100;
-	private static final int PORT = 5370;
+	public SchemaElement setSchema(Schema schema);
 
-	public static void main(String[] args) throws IOException {
-		ServerSocket socket = new ServerSocket(PORT);
-		while (true) {
-			final Socket connection = socket.accept();
-			Runnable task = new Runnable() {
-				public void run() {
+	public SchemaElementType geElementType();
 
-					// TODO
-				}
-			};
-			Executors.newFixedThreadPool(N).execute(task);
-		}
-	}
+	public String getComment();
+
+	public Schema getSchema();
+
+	public String getName();
+
 }

@@ -22,12 +22,12 @@ package org.logicware.db;
 import java.util.List;
 
 import org.logicware.ContainerFactory;
-import org.logicware.Schema;
 import org.logicware.NonSolutionError;
 import org.logicware.ObjectConverter;
 import org.logicware.Predicate;
 import org.logicware.RelationalCache;
 import org.logicware.RuntimeError;
+import org.logicware.Schema;
 import org.logicware.Settings;
 import org.logicware.graph.RelationalGraph;
 import org.logicware.prolog.PrologEngine;
@@ -209,11 +209,6 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 	}
 
 	public <O> Class<O> classOf(O o) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Object> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
