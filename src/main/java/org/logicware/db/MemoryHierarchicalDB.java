@@ -22,12 +22,12 @@ package org.logicware.db;
 import org.logicware.ContainerFactory;
 import org.logicware.DatabaseEngine;
 import org.logicware.DatabaseMode;
-import org.logicware.Schema;
-import org.logicware.DatabaseService;
+import org.logicware.DatabaseType;
 import org.logicware.DatabaseUser;
 import org.logicware.HierarchicalCache;
 import org.logicware.MemoryDatabase;
 import org.logicware.ObjectConverter;
+import org.logicware.Schema;
 import org.logicware.Settings;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
@@ -44,7 +44,7 @@ public final class MemoryHierarchicalDB extends AbstractDatabaseService implemen
 		this.cache = properties.createHierarchicalCache();
 	}
 
-	public static final MemoryDatabase instance() {
+	public static final MemoryDatabase newInstance() {
 		if (memoryHierarchicalDB == null) {
 			// TODO LOAD ALL FROM PROPERTIES FILE
 		}
@@ -53,6 +53,10 @@ public final class MemoryHierarchicalDB extends AbstractDatabaseService implemen
 
 	public DatabaseMode getMode() {
 		return DatabaseMode.MEMORY;
+	}
+
+	public DatabaseType getType() {
+		return DatabaseType.HIERARCHY;
 	}
 
 }

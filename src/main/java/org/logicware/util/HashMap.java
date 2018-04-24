@@ -194,7 +194,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			HashEntry<K0, V0> other = (HashEntry<K0, V0>) obj;
+			HashEntry<?, ?> other = (HashEntry<?, ?>) obj;
 			if (key == null) {
 				if (other.key != null)
 					return false;

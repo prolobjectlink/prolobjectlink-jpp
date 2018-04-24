@@ -142,7 +142,7 @@ public final class HashList<E> extends AbstractList<E> implements List<E> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		HashList<E> other = (HashList<E>) obj;
+		HashList<?> other = (HashList<?>) obj;
 		if (e == null) {
 			if (other.e != null)
 				return false;

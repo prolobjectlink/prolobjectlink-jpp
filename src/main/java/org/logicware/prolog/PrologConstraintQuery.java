@@ -136,7 +136,7 @@ public final class PrologConstraintQuery<O> extends AbstractQuery<O> implements 
 
 	private PrologVariable createPrologVariable(String name, int index) {
 		String varName = "" + Character.toUpperCase(name.charAt(0)) + "";
-		return provider.newVariable(varName + name.substring(1) + "_" + index);
+		return provider.newVariable(varName + name.substring(1) + "_" + index, index);
 	}
 
 	private void appendConjunction(PrologTerm prologTerm) {

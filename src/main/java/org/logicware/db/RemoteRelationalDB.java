@@ -22,10 +22,11 @@ package org.logicware.db;
 import org.logicware.ContainerFactory;
 import org.logicware.DatabaseEngine;
 import org.logicware.DatabaseMode;
-import org.logicware.Schema;
+import org.logicware.DatabaseType;
 import org.logicware.DatabaseUser;
 import org.logicware.ObjectConverter;
 import org.logicware.RemoteDatabase;
+import org.logicware.Schema;
 import org.logicware.Settings;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
@@ -40,7 +41,7 @@ public final class RemoteRelationalDB extends AbstractDatabaseService implements
 		super(provider, properties, converter, containerFactory, location, name, schema, owner, engine);
 	}
 
-	public static final RemoteDatabase instance() {
+	public static final RemoteDatabase newInstance() {
 		if (embeddedRelationalDB == null) {
 			// TODO LOAD ALL FROM PROPERTIES FILE
 		}
@@ -49,6 +50,10 @@ public final class RemoteRelationalDB extends AbstractDatabaseService implements
 
 	public DatabaseMode getMode() {
 		return DatabaseMode.REMOTE;
+	}
+
+	public DatabaseType getType() {
+		return DatabaseType.RELATIONAL;
 	}
 
 }

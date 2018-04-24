@@ -62,18 +62,18 @@ public interface StoragePool extends PersistentContainer {
 	public int getCapacity();
 
 	/**
-	 * Documents number in this document pool.
+	 * Storage number in this storage pool.
 	 * 
-	 * @return Documents number in this document pool.
+	 * @return Storage number in this storage pool.
 	 * @since 1.0
 	 */
 	public int getPoolSize();
 
 	/**
-	 * Check if this document pool no have any document. Equivalent to
+	 * Check if this storage pool no have any storage. Equivalent to
 	 * {@code #getPoolSize()==0}.
 	 * 
-	 * @return true if document pool no have any document and false otherwise
+	 * @return true if storage pool no have any storage and false otherwise
 	 * @since 1.0
 	 */
 	public boolean isEmpty();
@@ -85,9 +85,5 @@ public interface StoragePool extends PersistentContainer {
 	 * @since 1.0
 	 */
 	public FileFilter getFilter();
-
-	public void flush();
-
-	public void clear();
 
 }

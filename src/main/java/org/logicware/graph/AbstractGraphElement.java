@@ -59,7 +59,7 @@ public abstract class AbstractGraphElement<E> implements GraphElement<E> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractGraphElement other = (AbstractGraphElement) obj;
+		AbstractGraphElement<?> other = (AbstractGraphElement<?>) obj;
 		if (element == null) {
 			if (other.element != null)
 				return false;

@@ -27,6 +27,18 @@ public abstract class AbstractTransaction extends AbstractWrapper implements Tra
 	private final long timestamp;
 	private final Transactional transactional;
 
+	private void checkNonActiveTransaction() {
+		if (!isActive()) {
+			throw new IllegalStateException("Entity Transaction is not active");
+		}
+	}
+
+	private void checkActiveTransaction() {
+		if (isActive()) {
+			throw new IllegalStateException("Entity Transaction is active");
+		}
+	}
+
 	public AbstractTransaction(Transactional transactional, long timestamp) {
 		this.transactional = transactional;
 		this.timestamp = timestamp;
@@ -52,6 +64,30 @@ public abstract class AbstractTransaction extends AbstractWrapper implements Tra
 
 	public final long getTimestamp() {
 		return timestamp;
+	}
+
+	public final void begin() {
+		checkActiveTransaction();
+		getTransactional().begin();
+		active = true;
+	}
+
+	public final void commit() {
+		checkNonActiveTransaction();
+		getTransactional().commit();
+	}
+
+	public final void rollback() {
+		checkNonActiveTransaction();
+		getTransactional().rollback();
+	}
+
+	public final boolean isActive() {
+		return active;
+	}
+
+	public final void close() {
+		active = false;
 	}
 
 }

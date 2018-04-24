@@ -19,10 +19,8 @@
  */
 package org.logicware;
 
-public interface DatabaseService extends DatabaseEngine {
+public enum DatabaseType {
 
-	public DatabaseMode getMode();
-
-	public DatabaseType getType();
+	HIERARCHY, RELATIONAL;
 
 }

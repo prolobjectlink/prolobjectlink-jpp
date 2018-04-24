@@ -22,7 +22,6 @@ package org.logicware.storage;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
@@ -34,6 +33,7 @@ import java.util.concurrent.Executors;
 
 import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
+import org.logicware.DefaultTransaction;
 import org.logicware.NonSolutionError;
 import org.logicware.ObjectConverter;
 import org.logicware.PersistentContainer;
@@ -43,6 +43,7 @@ import org.logicware.ProcedureQuery;
 import org.logicware.Settings;
 import org.logicware.Storage;
 import org.logicware.StoragePool;
+import org.logicware.Transaction;
 import org.logicware.db.AbstractPersistentContainer;
 import org.logicware.logging.LoggerConstants;
 import org.logicware.logging.LoggerUtils;
@@ -68,6 +69,9 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	// elimination counter for defrag
 	private volatile int counter = 0;
 
+	// transaction
+	private final Transaction transaction;
+
 	// thread executor pool
 	private final StoragePoolExecutor executor;
 
@@ -86,6 +90,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 		this.rootDirectory = new File(location + SEPARATOR + name);
 		this.executor = new StoragePoolExecutor(es, this);
+		this.transaction = new DefaultTransaction(this);
 		this.storageCapacity = storageCapacity;
 		this.rootDirectory.mkdir();
 		this.open = false;
@@ -332,6 +337,10 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 			}
 		}
 		open = true;
+	}
+
+	public final Transaction getTransaction() {
+		return transaction;
 	}
 
 	public final List<Storage> getStorages() {

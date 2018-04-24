@@ -193,7 +193,7 @@ public abstract class AbstractGraph<V, E> implements Graph<V, E> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractGraph other = (AbstractGraph) obj;
+		AbstractGraph<?, ?> other = (AbstractGraph<?, ?>) obj;
 		if (edges == null) {
 			if (other.edges != null)
 				return false;

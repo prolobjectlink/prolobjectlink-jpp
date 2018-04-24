@@ -39,7 +39,7 @@ import org.logicware.storage.AbstractStoragePool;
 
 public class PrologStoragePool extends AbstractStoragePool implements StoragePool {
 
-	private final Transaction transaction;
+	// private final Transaction transaction;
 
 	public PrologStoragePool(PrologProvider provider, Settings properties, String location, String name,
 			ContainerFactory containerFactory) {
@@ -54,12 +54,12 @@ public class PrologStoragePool extends AbstractStoragePool implements StoragePoo
 	public PrologStoragePool(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
 			String location, String name, ContainerFactory containerFactory, int documentCapacity) {
 		super(provider, properties, converter, location, name, containerFactory, documentCapacity);
-		this.transaction = new DefaultTransaction(this);
+		// this.transaction = new DefaultTransaction(this);
 	}
 
-	public Transaction getTransaction() {
-		return transaction;
-	}
+	// public Transaction getTransaction() {
+	// return transaction;
+	// }
 
 	public Query createQuery(String string) {
 		open();

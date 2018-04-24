@@ -111,9 +111,9 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 		if (getClass() != obj.getClass())
 			return false;
 		ArrayList<?> other = (ArrayList<?>) obj;
-		if (!Arrays.equals(elements, other.elements))
+		if (size != other.size)
 			return false;
-		return size == other.size;
+		return Arrays.equals(elements, other.elements);
 	}
 
 	public void clear() {
@@ -363,7 +363,7 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 			return size == other.size;
 		}
 
-		private ArrayList getOuterType() {
+		private ArrayList<E> getOuterType() {
 			return ArrayList.this;
 		}
 

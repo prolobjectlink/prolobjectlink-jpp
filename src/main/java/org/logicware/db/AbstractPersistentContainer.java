@@ -57,7 +57,7 @@ public abstract class AbstractPersistentContainer extends AbstractContainer impl
 		return containerFactory;
 	}
 
-	public void backup(String directory, String zipFileName) {
+	public final void backup(String directory, String zipFileName) {
 		Backup backup = new Backup(getLocation());
 		backup.createBackup(directory, zipFileName);
 	}

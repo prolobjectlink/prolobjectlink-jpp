@@ -21,44 +21,8 @@ package org.logicware;
 
 public class DefaultTransaction extends AbstractTransaction implements Transaction {
 
-	private void checkNonActiveTransaction() {
-		if (!isActive()) {
-			throw new IllegalStateException("Entity Transaction is not active");
-		}
-	}
-
-	private void checkActiveTransaction() {
-		if (isActive()) {
-			throw new IllegalStateException("Entity Transaction is active");
-		}
-	}
-
 	public DefaultTransaction(Transactional transactional) {
 		super(transactional, System.currentTimeMillis());
-	}
-
-	public final void begin() {
-		checkActiveTransaction();
-		getTransactional().begin();
-		active = true;
-	}
-
-	public final void commit() {
-		checkNonActiveTransaction();
-		getTransactional().commit();
-	}
-
-	public final void rollback() {
-		checkNonActiveTransaction();
-		getTransactional().rollback();
-	}
-
-	public final boolean isActive() {
-		return active;
-	}
-
-	public final void close() {
-		active = false;
 	}
 
 }
