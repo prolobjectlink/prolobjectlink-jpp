@@ -19,10 +19,21 @@
  */
 package org.logicware;
 
+/**
+ * @deprecated use {@link ArrayIndexOutOfBoundsException}
+ * @author jzalacain
+ *
+ */
+@Deprecated
 public final class IndexOutOfBoundError extends RuntimeError {
 
 	private static final long serialVersionUID = 2828526751667597579L;
 
+	/**
+	 * @deprecated use {@link ArrayIndexOutOfBoundsException}
+	 * @param index
+	 */
+	@Deprecated
 	public IndexOutOfBoundError(int index) {
 		super("The index is out of bound: " + index);
 	}

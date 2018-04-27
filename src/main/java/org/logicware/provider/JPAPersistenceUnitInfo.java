@@ -37,7 +37,9 @@ public final class JPAPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	private static final String ALL = "ALL";
 	private static final String NONE = "NONE";
+	private static final String AUTO = "AUTO";
 	private static final String CALLBACK = "CALLBACK";
+	private static final String UNSPECIFIED = "UNSPECIFIED";
 	private static final String ENABLE_SELECTIVE = "ENABLE_SELECTIVE";
 	private static final String DISABLE_SELECTIVE = "DISABLE_SELECTIVE";
 
@@ -45,8 +47,8 @@ public final class JPAPersistenceUnitInfo implements PersistenceUnitInfo {
 	private final URL persistenceUnitRootUrl;
 
 	// xml headers
-	private final JPASchemaVersion xmlVersion;
-	private final JPAPersistenceVersion persistenceVersion;
+	private final PersistenceSchemaVersion xmlVersion;
+	private final PersistenceVersion persistenceVersion;
 
 	// persistence unit attributes
 	private final String unitName;
@@ -55,7 +57,7 @@ public final class JPAPersistenceUnitInfo implements PersistenceUnitInfo {
 	//
 	private final List<URL> jarFileUrls = new ArrayList<URL>();
 	private final List<String> managedClasses = new ArrayList<String>();
-	private final Properties properties = new JPAPersistenceProperties();
+	private final Properties properties = new PersistenceProperties();
 	private final List<String> mappingFileNames = new ArrayList<String>();
 	private final Set<ClassTransformer> classTransformers = new HashSet<ClassTransformer>();
 
@@ -68,8 +70,8 @@ public final class JPAPersistenceUnitInfo implements PersistenceUnitInfo {
 	private ValidationMode validationMode = ValidationMode.AUTO;
 	private SharedCacheMode sharedCacheMode = SharedCacheMode.UNSPECIFIED;
 
-	public JPAPersistenceUnitInfo(URL unitRootUrl, JPASchemaVersion xmlVersion,
-			JPAPersistenceVersion persistenceVersion, String unitName, PersistenceUnitTransactionType transactionType) {
+	public JPAPersistenceUnitInfo(URL unitRootUrl, PersistenceSchemaVersion xmlVersion,
+			PersistenceVersion persistenceVersion, String unitName, PersistenceUnitTransactionType transactionType) {
 		this.persistenceUnitRootUrl = unitRootUrl;
 		this.xmlVersion = xmlVersion;
 		this.persistenceVersion = persistenceVersion;
@@ -162,7 +164,7 @@ public final class JPAPersistenceUnitInfo implements PersistenceUnitInfo {
 	}
 
 	void addMappingFilesNames(String mappingFilesName) {
-		managedClasses.add(mappingFilesName);
+		mappingFileNames.add(mappingFilesName);
 	}
 
 	String getPersistenceDescription() {
@@ -193,21 +195,27 @@ public final class JPAPersistenceUnitInfo implements PersistenceUnitInfo {
 		this.persistenceNonJtaDataSource = persistenceNonJtaDataSource;
 	}
 
-	JPAPersistenceVersion getPersistenceVersion() {
+	PersistenceVersion getPersistenceVersion() {
 		return persistenceVersion;
 	}
 
-	public void setValidationMode(String mode) {
+	void setValidationMode(String mode) {
 		if (mode.equals(NONE)) {
 			validationMode = ValidationMode.NONE;
+		} else if (mode.equals(AUTO)) {
+			validationMode = ValidationMode.AUTO;
 		} else if (mode.equals(CALLBACK)) {
 			validationMode = ValidationMode.CALLBACK;
 		}
 	}
 
-	public void setSharedCacheMode(String mode) {
+	void setSharedCacheMode(String mode) {
 		if (mode.equals(ALL)) {
 			sharedCacheMode = SharedCacheMode.ALL;
+		} else if (mode.equals(NONE)) {
+			sharedCacheMode = SharedCacheMode.NONE;
+		} else if (mode.equals(UNSPECIFIED)) {
+			sharedCacheMode = SharedCacheMode.UNSPECIFIED;
 		} else if (mode.equals(ENABLE_SELECTIVE)) {
 			sharedCacheMode = SharedCacheMode.ENABLE_SELECTIVE;
 		} else if (mode.equals(DISABLE_SELECTIVE)) {
@@ -215,9 +223,13 @@ public final class JPAPersistenceUnitInfo implements PersistenceUnitInfo {
 		}
 	}
 
+	public final Set<ClassTransformer> getClassTransformers() {
+		return classTransformers;
+	}
+
 	@Override
 	public String toString() {
-		return "LogicPersistenceUnitInfo [unitName=" + unitName + "]";
+		return "JPAPersistenceUnitInfo [unitName=" + unitName + "]";
 	}
 
 	@Override

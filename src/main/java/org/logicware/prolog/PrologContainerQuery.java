@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
 import org.logicware.NoSuchFieldError;
 import org.logicware.NonSolutionError;
 import org.logicware.Query;
-import org.logicware.query.AbstractQuery;
+import org.logicware.db.AbstractQuery;
 
 public class PrologContainerQuery extends AbstractQuery<Object> implements Query {
 

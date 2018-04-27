@@ -19,15 +19,14 @@
  */
 package org.logicware.prolog;
 
-import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
 import org.logicware.DefaultTransaction;
 import org.logicware.LockFile;
 import org.logicware.ObjectConverter;
 import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
-import org.logicware.Settings;
 import org.logicware.Query;
+import org.logicware.Settings;
 import org.logicware.Storage;
 import org.logicware.Transaction;
 import org.logicware.TypedQuery;
@@ -79,10 +78,6 @@ public final class PrologStorage extends AbstractStorage implements Storage {
 
 	public <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
 		return new PrologTypedQuery<O>(findAll(predicate));
-	}
-
-	public <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
-		return new PrologConstraintQuery<O>(getLocation(), getEngine(), getProvider(), clazz);
 	}
 
 	public ProcedureQuery createProcedureQuery(String functor, String... args) {

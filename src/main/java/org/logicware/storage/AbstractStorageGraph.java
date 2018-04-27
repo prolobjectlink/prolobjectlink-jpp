@@ -21,9 +21,7 @@ package org.logicware.storage;
 
 import java.util.List;
 
-import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
-import org.logicware.Schema;
 import org.logicware.DefaultTransaction;
 import org.logicware.ObjectConverter;
 import org.logicware.PersistentContainer;
@@ -31,6 +29,7 @@ import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
 import org.logicware.Query;
 import org.logicware.RuntimeError;
+import org.logicware.Schema;
 import org.logicware.Settings;
 import org.logicware.StorageGraph;
 import org.logicware.StorageManager;
@@ -200,11 +199,6 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 	}
 
 	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public final <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
 		// TODO Auto-generated method stub
 		return null;
 	}

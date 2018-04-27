@@ -24,14 +24,11 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.ConcurrentModificationException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
 import org.logicware.DefaultTransaction;
 import org.logicware.NonSolutionError;
@@ -45,12 +42,11 @@ import org.logicware.Storage;
 import org.logicware.StoragePool;
 import org.logicware.Transaction;
 import org.logicware.db.AbstractPersistentContainer;
+import org.logicware.db.AbstractProcedureQuery;
 import org.logicware.logging.LoggerConstants;
 import org.logicware.logging.LoggerUtils;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
-import org.logicware.query.AbstractProcedureQuery;
-import org.logicware.query.AbstractQuery;
 
 public abstract class AbstractStoragePool extends AbstractPersistentContainer implements StoragePool {
 
@@ -75,9 +71,6 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	// thread executor pool
 	private final StoragePoolExecutor executor;
 
-	// concurrent modification flag
-	private volatile boolean concurrentModification = false;
-
 	// list of storages in the pool
 	private List<Storage> storages = new ArrayList<Storage>();
 
@@ -95,13 +88,6 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		this.rootDirectory.mkdir();
 		this.open = false;
 		this.name = name;
-	}
-
-	protected final void checkModification() {
-		if (concurrentModification) {
-			String s = "Storage Pool has been modified";
-			throw new ConcurrentModificationException(s);
-		}
 	}
 
 	public final Object find(String string) throws NonSolutionError {
@@ -373,326 +359,6 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 				storage.flush();
 			}
 		}
-	}
-
-	/**
-	 * ConstraintQuery implementation for storage pool
-	 * 
-	 * @author Jose Zalacain
-	 * @since 1.0
-	 * @param <O>
-	 *            parametric object
-	 */
-	protected abstract class StoragePoolConstraintQuery<O> extends AbstractQuery<O> implements ConstraintQuery<O> {
-
-		//
-		private final Class<O> rootClass;
-
-		//
-		private final List<ConstraintQuery<O>> constraints = new LinkedList<ConstraintQuery<O>>();
-
-		protected StoragePoolConstraintQuery(Class<O> clazz) {
-			this.rootClass = clazz;
-			for (Storage storage : storages) {
-				constraints.add(storage.createConstraintQuery(clazz));
-			}
-		}
-
-		public ConstraintQuery<O> setMaxSolution(int maxSolution) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.setMaxSolution(maxSolution);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> setFirstSolution(int firstSolution) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.setFirstSolution(firstSolution);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> not(Class<?> clazz) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.not(clazz);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> and(Class<?> clazz) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.and(clazz);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> or(Class<?> clazz) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.or(clazz);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> unify(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.unify(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> notUnify(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.notUnify(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> equivalent(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.equivalent(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> notEquivalent(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.notEquivalent(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> before(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.before(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> after(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.after(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> beforeEquals(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.beforeEquals(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> afterEquals(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.afterEquals(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> equals(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.equals(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> notEquals(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.notEquals(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> greater(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.greater(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> less(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.less(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> greaterEquals(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.greaterEquals(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> lessEquals(String field, Object value) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.lessEquals(field, value);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> unifyField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.unifyField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> notUnifyField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.notUnifyField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> equivalentField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.equivalentField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> notEquivalentField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.notEquivalentField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> beforeField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.beforeField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> afterField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.afterField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> beforeEqualsField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.beforeEqualsField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> afterEqualsField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.afterEqualsField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> equalsField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.equalsField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> notEqualsField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.notEqualsField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> lessField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.lessField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> greaterField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.greaterField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> greaterEqualsField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.greaterEqualsField(left, right);
-			}
-			return this;
-		}
-
-		public ConstraintQuery<O> lessEqualsField(String left, String right) {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.lessEqualsField(left, right);
-			}
-			return this;
-		}
-
-		public O getSolution() throws NonSolutionError {
-			return createQuery().getSolution();
-		}
-
-		public List<O> getSolutions() {
-			return createQuery().getSolutions();
-		}
-
-		public ConstraintQuery<O> trace() {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.trace();
-			}
-			return this;
-		}
-
-		public void dispose() {
-			for (ConstraintQuery<O> constraintQuery : constraints) {
-				constraintQuery.dispose();
-			}
-			constraints.clear();
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = super.hashCode();
-			result = prime * result + getOuterType().hashCode();
-			result = prime * result + Objects.hashCode(constraints);
-			result = prime * result + Objects.hashCode(rootClass);
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (!super.equals(obj))
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			StoragePoolConstraintQuery<O> other = (StoragePoolConstraintQuery) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
-			if (!Objects.equals(constraints, other.constraints))
-				return false;
-			return Objects.equals(rootClass, other.rootClass);
-		}
-
-		protected final List<Storage> getstorages() {
-			return storages;
-		}
-
-		protected final List<ConstraintQuery<O>> getConstraints() {
-			return constraints;
-		}
-
-		protected final Class<O> getRootClass() {
-			return rootClass;
-		}
-
-		private AbstractStoragePool getOuterType() {
-			return AbstractStoragePool.this;
-		}
-
 	}
 
 	protected class StoragePoolProcedureQuery extends AbstractProcedureQuery<Object> implements ProcedureQuery {

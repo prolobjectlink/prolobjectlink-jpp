@@ -73,7 +73,7 @@ public interface PrologQuery extends Wrapper, Iterator<PrologTerm[]>, Iterable<P
 	 * </p>
 	 * 
 	 * <pre>
-	 * IPrologTerm[] solution = query.oneSolution();
+	 * PrologTerm[] solution = query.oneSolution();
 	 * for (int i = 0; i &lt; solution.length; i++) {
 	 * 	System.out.println(solution[i]);
 	 * }

@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.query;
+package org.logicware.db;
 
 import org.logicware.BadPositionError;
 import org.logicware.NonSolutionError;
@@ -61,7 +61,7 @@ public abstract class AbstractQuery<S> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractQuery<S> other = (AbstractQuery<S>) obj;
+		AbstractQuery<?> other = (AbstractQuery<?>) obj;
 		if (firstSolution != other.firstSolution)
 			return false;
 		return maxSolution == other.maxSolution;

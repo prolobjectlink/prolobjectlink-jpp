@@ -19,21 +19,14 @@
  */
 package org.logicware.prolog;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
-import org.logicware.DefaultTransaction;
 import org.logicware.ObjectConverter;
 import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
-import org.logicware.Settings;
 import org.logicware.Query;
+import org.logicware.Settings;
 import org.logicware.Storage;
 import org.logicware.StoragePool;
-import org.logicware.Transaction;
 import org.logicware.TypedQuery;
 import org.logicware.storage.AbstractStoragePool;
 
@@ -81,10 +74,6 @@ public class PrologStoragePool extends AbstractStoragePool implements StoragePoo
 		return new PrologTypedQuery<O>(findAll(predicate));
 	}
 
-	public <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
-		return new PrologStoragePoolConstraintQuery<O>(clazz);
-	}
-
 	public ProcedureQuery createProcedureQuery(String functor, String... args) {
 		return new PrologStoragePoolProcedureQuery(functor, args);
 	}
@@ -92,27 +81,6 @@ public class PrologStoragePool extends AbstractStoragePool implements StoragePoo
 	public Storage createStorage(String location, int maxCapacity) {
 		return new PrologStorage(getProvider(), getProperties(), getConverter(), location, getContainerFactory(),
 				maxCapacity);
-	}
-
-	private final class PrologStoragePoolConstraintQuery<O> extends StoragePoolConstraintQuery<O>
-			implements ConstraintQuery<O> {
-
-		protected PrologStoragePoolConstraintQuery(Class<O> clazz) {
-			super(clazz);
-		}
-
-		public TypedQuery<O> createQuery() {
-			List<O> list = Collections.synchronizedList(new ArrayList<O>());
-			for (ConstraintQuery<O> constraintQuery : getConstraints()) {
-				List<O> objects = constraintQuery.getSolutions();
-				list.addAll(objects);
-			}
-			TypedQuery<O> query = new PrologTypedQuery<O>(list);
-			query.setFirstSolution(getFirstSolution());
-			query.setMaxSolution(getMaxSolution());
-			return query;
-		}
-
 	}
 
 	private final class PrologStoragePoolProcedureQuery extends StoragePoolProcedureQuery {

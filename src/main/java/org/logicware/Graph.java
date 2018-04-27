@@ -73,8 +73,6 @@ public interface Graph<V, E> {
 
 	public int countVertices();
 
-	public GraphQuery<V, E> query();
-
 	public boolean equals(Object obj);
 
 	public int hashCode();

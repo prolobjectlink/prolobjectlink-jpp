@@ -26,9 +26,7 @@ import java.util.Map;
 import org.logicware.Direction;
 import org.logicware.Graph;
 import org.logicware.GraphEdge;
-import org.logicware.GraphQuery;
 import org.logicware.GraphVertex;
-import org.logicware.GraphVertexQuery;
 
 /**
  * Directed graph implementation
@@ -137,17 +135,6 @@ public class DirectedGraph<V, E> extends AbstractGraph<V, E> implements Graph<V,
 		return getEdge(f, t);
 	}
 
-	public final GraphQuery<V, E> query() {
-		return new GenericGraphQuery(this);
-	}
-
-	private class GenericGraphQuery extends AbstractGraphQuery<V, E> implements GraphQuery<V, E> {
-
-		private GenericGraphQuery(Graph<V, E> graph) {
-			super(graph);
-		}
-	}
-
 	private class GenericGraphEdge extends AbstractGraphEdge<E> implements GraphEdge<E> {
 
 		private final GraphVertex<V> from;
@@ -207,10 +194,6 @@ public class DirectedGraph<V, E> extends AbstractGraph<V, E> implements Graph<V,
 			return outgoing.size();
 		}
 
-		public GraphVertexQuery<V> query() {
-			return new GenericGraphVertexQuery(this);
-		}
-
 		@Override
 		public int hashCode() {
 			return super.hashCode();
@@ -223,10 +206,4 @@ public class DirectedGraph<V, E> extends AbstractGraph<V, E> implements Graph<V,
 
 	}
 
-	private class GenericGraphVertexQuery extends AbstractGraphVertexQuery<V> implements GraphVertexQuery<V> {
-
-		private GenericGraphVertexQuery(GraphVertex<V> vertex) {
-			super(vertex);
-		}
-	}
 }

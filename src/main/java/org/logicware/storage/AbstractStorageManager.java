@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
 import org.logicware.DefaultTransaction;
 import org.logicware.ObjectConverter;
@@ -153,10 +152,6 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 
 	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
 		return containerOf(classOf(predicate)).createQuery(predicate);
-	}
-
-	public final <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
-		return containerOf(clazz).createConstraintQuery(clazz);
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {

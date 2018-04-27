@@ -22,7 +22,6 @@ package org.logicware.db;
 import java.io.File;
 import java.util.List;
 
-import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
 import org.logicware.DatabaseUser;
 import org.logicware.HierarchicalDatabase;
@@ -101,10 +100,6 @@ public abstract class AbstractHerarchicalDatabase extends AbstractDatabaseEngine
 
 	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
 		return storage.createQuery(predicate);
-	}
-
-	public final <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
-		return storage.createConstraintQuery(clazz);
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {

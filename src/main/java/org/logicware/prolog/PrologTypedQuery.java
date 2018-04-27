@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
 import org.logicware.NoSuchFieldError;
 import org.logicware.NonSolutionError;
 import org.logicware.TypedQuery;
-import org.logicware.query.AbstractQuery;
+import org.logicware.db.AbstractQuery;
 
 public final class PrologTypedQuery<T> extends AbstractQuery<T> implements TypedQuery<T> {
 

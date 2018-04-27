@@ -225,8 +225,6 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 
 	public <O> TypedQuery<O> createQuery(Predicate<O> predicate);
 
-	public <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz);
-
 	public ProcedureQuery createProcedureQuery(String functor, String... args);
 
 	public PersistentContainer containerOf(Class<?> clazz);

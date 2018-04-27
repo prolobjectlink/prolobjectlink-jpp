@@ -21,8 +21,6 @@ package org.logicware;
 
 public interface GraphVertex<V> extends GraphElement<V> {
 
-	public GraphVertexQuery<V> query();
-
 	public boolean isWrappedFor(Class<?> cls);
 
 	public <K> K unwrap(Class<K> cls);

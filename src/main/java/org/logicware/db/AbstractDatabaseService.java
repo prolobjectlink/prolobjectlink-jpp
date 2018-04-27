@@ -21,18 +21,17 @@ package org.logicware.db;
 
 import java.util.List;
 
-import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
 import org.logicware.DatabaseEngine;
-import org.logicware.Schema;
 import org.logicware.DatabaseUser;
 import org.logicware.EmbeddedDatabase;
 import org.logicware.ObjectConverter;
 import org.logicware.PersistentContainer;
 import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
-import org.logicware.Settings;
 import org.logicware.Query;
+import org.logicware.Schema;
+import org.logicware.Settings;
 import org.logicware.TypedQuery;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
@@ -106,10 +105,6 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 
 	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
 		return engine.createQuery(predicate);
-	}
-
-	public final <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
-		return engine.createConstraintQuery(clazz);
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {

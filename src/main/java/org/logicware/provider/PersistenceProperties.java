@@ -24,11 +24,11 @@ import java.util.Properties;
 
 import org.logicware.Settings;
 
-public final class JPAPersistenceProperties extends Properties {
+public final class PersistenceProperties extends Properties {
 
 	private static final long serialVersionUID = -2013758241662724837L;
 
-	public JPAPersistenceProperties() {
+	public PersistenceProperties() {
 	}
 
 	/**
@@ -36,7 +36,7 @@ public final class JPAPersistenceProperties extends Properties {
 	 * 
 	 * @param properties
 	 */
-	public JPAPersistenceProperties(final Map<String, Object> properties) {
+	public PersistenceProperties(final Map<String, Object> properties) {
 		if (properties == null) {
 			throw new IllegalStateException("Map properties for entity manager should not be null");
 		} else if (!properties.containsKey(Settings.DRIVER)) {
@@ -45,9 +45,8 @@ public final class JPAPersistenceProperties extends Properties {
 			throw new IllegalStateException("URL propertiy for entity manager should not be null or empty");
 		} else if (!properties.containsKey(Settings.USER)) {
 			throw new IllegalStateException("User propertiy for entity manager should not be null or empty");
-		} else {
-			putAll(properties);
 		}
+		putAll(properties);
 	}
 
 	public String getDriver() {

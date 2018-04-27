@@ -22,15 +22,14 @@ package org.logicware.db;
 import java.io.File;
 import java.util.List;
 
-import org.logicware.ConstraintQuery;
 import org.logicware.ContainerFactory;
-import org.logicware.Schema;
 import org.logicware.DatabaseUser;
 import org.logicware.PersistentContainer;
 import org.logicware.Predicate;
 import org.logicware.ProcedureQuery;
 import org.logicware.Query;
 import org.logicware.RelationalDatabase;
+import org.logicware.Schema;
 import org.logicware.StorageGraph;
 import org.logicware.TypedQuery;
 import org.logicware.prolog.PrologProvider;
@@ -101,10 +100,6 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 
 	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
 		return storage.createQuery(predicate);
-	}
-
-	public final <O> ConstraintQuery<O> createConstraintQuery(Class<O> clazz) {
-		return storage.createConstraintQuery(clazz);
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {

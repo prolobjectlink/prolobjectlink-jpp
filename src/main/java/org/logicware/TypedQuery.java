@@ -20,7 +20,6 @@
 package org.logicware;
 
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -83,14 +82,14 @@ import java.util.List;
  * </pre>
  * 
  * <p>
- * {@link TypedQuery} object implement {@link Enumeration} interface providing
- * an easy way to retrieve each object present in the internal solution list.
+ * {@link TypedQuery} object implement {@link Iterator} interface providing an
+ * easy way to retrieve each object present in the internal solution list.
  * </p>
  * 
  * <pre>
  * TypedQuery&lt;Point&gt; query = container.createQuery(Point.class);
- * for (Enumeration&lt;Point&gt; e = query; e.hasMoreElements();) {
- * 	Point point = (Point) e.nextElement();
+ * for (Iterator&lt;Point&gt; i = query; e.hasNext();) {
+ * 	Point point = (Point) e.next();
  * 	// do something with the retrieved point object
  * }
  * </pre>

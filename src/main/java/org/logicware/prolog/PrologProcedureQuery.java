@@ -30,7 +30,7 @@ import org.logicware.NonSolutionError;
 import org.logicware.ObjectConverter;
 import org.logicware.ProcedureArgumentError;
 import org.logicware.ProcedureQuery;
-import org.logicware.query.AbstractProcedureQuery;
+import org.logicware.db.AbstractProcedureQuery;
 
 public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> implements ProcedureQuery {
 

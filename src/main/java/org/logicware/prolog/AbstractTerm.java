@@ -118,14 +118,21 @@ public abstract class AbstractTerm extends AbstractWrapper implements PrologTerm
 
 	protected final void checkIndex(int index) {
 		if (index < 0) {
-			throw new IndexOutOfBoundError(index);
+			throw new ArrayIndexOutOfBoundsException(index);
 		}
 	}
 
 	protected final void checkIndex(int index, int max) {
 		if (index < 0 || index > max) {
-			throw new IndexOutOfBoundError(index);
+			throw new ArrayIndexOutOfBoundsException(index);
 		}
+	}
+
+	protected final String removeQuoted(String functor) {
+		if (functor != null && functor.startsWith("\'") && functor.endsWith("\'")) {
+			return functor.substring(1, functor.length() - 1);
+		}
+		return functor;
 	}
 
 	public final <K extends PrologTerm> K toTerm(Object o, Class<K> from) {
@@ -168,12 +175,12 @@ public abstract class AbstractTerm extends AbstractWrapper implements PrologTerm
 		return array[index];
 	}
 
-	public final int getType() {
-		return type;
-	}
-
 	public PrologTerm getTerm() {
 		return this;
+	}
+
+	public final int getType() {
+		return type;
 	}
 
 	public final PrologTerm getRight() {

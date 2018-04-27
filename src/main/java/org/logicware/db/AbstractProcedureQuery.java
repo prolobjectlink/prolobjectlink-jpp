@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.query;
+package org.logicware.db;
 
 import java.util.Arrays;
 
@@ -61,7 +61,7 @@ public abstract class AbstractProcedureQuery<S> extends AbstractQuery<S> impleme
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractProcedureQuery other = (AbstractProcedureQuery) obj;
+		AbstractProcedureQuery<?> other = (AbstractProcedureQuery<?>) obj;
 		if (!Arrays.equals(arguments, other.arguments))
 			return false;
 		if (functor == null) {
