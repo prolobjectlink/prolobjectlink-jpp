@@ -105,27 +105,27 @@ public class Backup extends Tool {
 			}
 
 		} catch (IOException e) {
-			LoggerUtils.error(getClass(), IO_ERROR + filePtr, e);
+			LoggerUtils.error(getClass(), IO_ERROR, e);
 		} finally {
 			if (zipOut != null) {
 				try {
 					zipOut.close();
 				} catch (IOException e) {
-					LoggerUtils.error(getClass(), IO_ERROR + zipOut, e);
+					LoggerUtils.error(getClass(), IO_ERROR, e);
 				}
 			}
 			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
-					LoggerUtils.error(getClass(), IO_ERROR + out, e);
+					LoggerUtils.error(getClass(), IO_ERROR, e);
 				}
 			}
 			if (in != null) {
 				try {
 					in.close();
 				} catch (IOException e) {
-					LoggerUtils.error(getClass(), IO_ERROR + in, e);
+					LoggerUtils.error(getClass(), IO_ERROR, e);
 				}
 			}
 		}

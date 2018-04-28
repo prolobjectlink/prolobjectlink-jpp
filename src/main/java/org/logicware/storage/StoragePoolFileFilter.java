@@ -49,7 +49,7 @@ final class StoragePoolFileFilter implements FileFilter {
 			String index = name.substring(lastDotIndex + 1);
 			return index.matches(NUMBER_REGEX);
 		} catch (IOException e) {
-			LoggerUtils.error(getClass(), IO_ERROR + pathname, e);
+			LoggerUtils.error(getClass(), IO_ERROR, e);
 		}
 		return false;
 	}

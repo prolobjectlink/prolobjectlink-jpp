@@ -57,51 +57,51 @@ public final class SystemLogger {
 		return new SystemLogger();
 	}
 
-	public final void log(Object sender, Level level, String message) {
+	public final void log(Object sender, Level level, Object message) {
 		logger.log(level, sender + "\n" + message, (Throwable) null);
 	}
 
-	public final void log(Object sender, Level level, String message, Throwable throwable) {
+	public final void log(Object sender, Level level, Object message, Throwable throwable) {
 		logger.log(level, sender + "\n" + message, throwable);
 	}
 
-	public final void trace(Object sender, String message) {
+	public final void trace(Object sender, Object message) {
 		log(sender, Level.FINEST, message);
 	}
 
-	public final void trace(Object sender, String message, Throwable throwable) {
+	public final void trace(Object sender, Object message, Throwable throwable) {
 		log(sender, Level.FINEST, message, throwable);
 	}
 
-	public final void debug(Object sender, String message) {
+	public final void debug(Object sender, Object message) {
 		log(sender, Level.FINE, message);
 	}
 
-	public final void debug(Object sender, String message, Throwable throwable) {
+	public final void debug(Object sender, Object message, Throwable throwable) {
 		log(sender, Level.FINE, message, throwable);
 	}
 
-	public final void info(Object sender, String message) {
+	public final void info(Object sender, Object message) {
 		log(sender, Level.INFO, message);
 	}
 
-	public final void info(Object sender, String message, Throwable throwable) {
+	public final void info(Object sender, Object message, Throwable throwable) {
 		log(sender, Level.INFO, message, throwable);
 	}
 
-	public final void warn(Object sender, String message) {
+	public final void warn(Object sender, Object message) {
 		log(sender, Level.WARNING, message);
 	}
 
-	public final void warn(Object sender, String message, Throwable throwable) {
+	public final void warn(Object sender, Object message, Throwable throwable) {
 		log(sender, Level.WARNING, message, throwable);
 	}
 
-	public final void error(Object sender, String message) {
+	public final void error(Object sender, Object message) {
 		log(sender, Level.SEVERE, message);
 	}
 
-	public final void error(Object sender, String message, Throwable throwable) {
+	public final void error(Object sender, Object message, Throwable throwable) {
 		log(sender, Level.SEVERE, message, throwable);
 	}
 

@@ -19,20 +19,50 @@
  */
 package org.logicware.logging;
 
-public interface LoggerConstants {
+public enum LoggerConstants {
 
-	public static final String RUNTIME_ERROR = "Runtime error ";
-	public static final String FILE_NOT_FOUND = "File not found ";
-	public static final String CLASS_NOT_FOUND = "Class not found ";
-	public static final String UNKNOW_PREDICATE = "Unknow predicate";
-	public static final String SYNTAX_ERROR = "Syntax error in the file ";
-	public static final String NON_SOLUTION = "The query no have solution ";
-	public static final String INDICATOR_NOT_FOUND = "Predicate not found for ";
-	public static final String IO_ERROR = "Some error occurs opening the file ";
-	public static final String ERROR_LOADING_BUILT_INS = "Error loading prolog built-ins ";
-	public static final String DONT_WORRY = "Don't worry about it, the file was create for you ";
-	public static final String INTERRUPTED_ERROR = "Thread interrupted error";
-	public static final String EXECUTION_ERROR = "Thread execution error";
-	public static final String FILE_NOT_DELETE = "File not delete ";
+	RUNTIME_ERROR("Runtime error "),
+
+	FILE_NOT_FOUND("File not found "),
+
+	CLASS_NOT_FOUND("Class not found "),
+
+	UNKNOW_PREDICATE("Unknow predicate"),
+
+	SYNTAX_ERROR("Syntax error in the file "),
+
+	NON_SOLUTION("The query no have solution "),
+
+	INDICATOR_NOT_FOUND("Predicate not found for"),
+
+	IO_ERROR("Some error occurs opening the file"),
+
+	ERROR_LOADING_BUILT_INS("Error loading prolog built-ins "),
+
+	DONT_WORRY("Don't worry about it, the file was create for you "),
+
+	INTERRUPTED_ERROR("Thread interrupted error"),
+
+	EXECUTION_ERROR("Thread execution error"),
+
+	FILE_NOT_DELETE("File not delete "),
+
+	INSTANTIATION_ERROR("Instantiation error "),
+
+	ILLEGAL_ACCESS_ERROR("Illegal access error "),
+
+	NO_SUCH_METHOD_ERROR("No such method error"),
+
+	SECURITY_ERROR("Security error ");
+
+	private final String name;
+
+	LoggerConstants(String name) {
+		this.name = name;
+	}
+
+	public final String getName() {
+		return name;
+	}
 
 }

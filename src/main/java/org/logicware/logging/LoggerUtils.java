@@ -25,43 +25,43 @@ public class LoggerUtils {
 
 	private static final SystemLogger LOGGER = SystemLogger.getInstance();
 
-	public static final void trace(Object sender, String message) {
+	public static final void trace(Object sender, Object message) {
 		LOGGER.log(sender, Level.FINEST, message);
 	}
 
-	public static final void trace(Object sender, String message, Throwable throwable) {
+	public static final void trace(Object sender, Object message, Throwable throwable) {
 		LOGGER.log(sender, Level.FINEST, message, throwable);
 	}
 
-	public static final void debug(Object sender, String message) {
+	public static final void debug(Object sender, Object message) {
 		LOGGER.log(sender, Level.FINE, message);
 	}
 
-	public static final void debug(Object sender, String message, Throwable throwable) {
+	public static final void debug(Object sender, Object message, Throwable throwable) {
 		LOGGER.log(sender, Level.FINE, message, throwable);
 	}
 
-	public static final void info(Object sender, String message) {
+	public static final void info(Object sender, Object message) {
 		LOGGER.log(sender, Level.INFO, message);
 	}
 
-	public static final void info(Object sender, String message, Throwable throwable) {
+	public static final void info(Object sender, Object message, Throwable throwable) {
 		LOGGER.log(sender, Level.INFO, message, throwable);
 	}
 
-	public static final void warn(Object sender, String message) {
+	public static final void warn(Object sender, Object message) {
 		LOGGER.log(sender, Level.WARNING, message);
 	}
 
-	public static final void warn(Object sender, String message, Throwable throwable) {
+	public static final void warn(Object sender, Object message, Throwable throwable) {
 		LOGGER.log(sender, Level.WARNING, message, throwable);
 	}
 
-	public static final void error(Object sender, String message) {
+	public static final void error(Object sender, Object message) {
 		LOGGER.log(sender, Level.SEVERE, message);
 	}
 
-	public static final void error(Object sender, String message, Throwable throwable) {
+	public static final void error(Object sender, Object message, Throwable throwable) {
 		LOGGER.log(sender, Level.SEVERE, message, throwable);
 	}
 

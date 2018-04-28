@@ -21,22 +21,16 @@ package org.logicware;
 
 public enum DatabaseCodeType {
 
-	VIEW("View", 0), FUNCTION("Function", 1);
+	VIEW("View"), FUNCTION("Function");
 
 	private final String name;
-	private final int ordinal;
 
-	DatabaseCodeType(String name, int ordinal) {
-		this.ordinal = ordinal;
+	DatabaseCodeType(String name) {
 		this.name = name;
 	}
 
 	public String getName() {
 		return name;
-	}
-
-	public int getOrdinal() {
-		return ordinal;
 	}
 
 }

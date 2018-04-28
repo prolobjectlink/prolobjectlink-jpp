@@ -95,7 +95,7 @@ public class Restore extends Tool {
 				try {
 					zipIn.close();
 				} catch (IOException e) {
-					LoggerUtils.error(getClass(), IO_ERROR + zipIn, e);
+					LoggerUtils.error(getClass(), IO_ERROR, e);
 				}
 			}
 		}

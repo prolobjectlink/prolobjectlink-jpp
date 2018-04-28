@@ -318,7 +318,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 						storages.add(lastStorage);
 					}
 				} catch (IOException e) {
-					LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR + filex, e);
+					LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR, e);
 				}
 			}
 		}
