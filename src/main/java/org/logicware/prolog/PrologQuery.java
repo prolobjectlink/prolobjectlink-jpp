@@ -20,6 +20,7 @@
 package org.logicware.prolog;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.logicware.Wrapper;
@@ -128,6 +129,18 @@ public interface PrologQuery extends Wrapper, Iterator<PrologTerm[]>, Iterable<P
 	 * @return
 	 */
 	public Map<String, PrologTerm>[] allVariablesSolutions();
+
+	/**
+	 * @since 1.0
+	 * @return
+	 */
+	public Map<String, PrologTerm> one();
+
+	/**
+	 * @since 1.0
+	 * @return
+	 */
+	public List<Map<String, PrologTerm>> all();
 
 	/**
 	 * Release all allocations for the query
