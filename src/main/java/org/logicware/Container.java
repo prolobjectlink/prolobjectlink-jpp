@@ -19,6 +19,7 @@
  */
 package org.logicware;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.naming.spi.ObjectFactory;
@@ -202,7 +203,7 @@ public interface Container extends Wrapper {
 	 * @return classes in this container
 	 * @since 1.0
 	 */
-	public List<Class<?>> classes();
+	public Collection<Class<?>> classes();
 
 	public <O> Class<O> classOf(Predicate<O> predicate);
 

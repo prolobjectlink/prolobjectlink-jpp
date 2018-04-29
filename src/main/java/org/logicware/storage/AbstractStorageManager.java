@@ -20,6 +20,7 @@
 package org.logicware.storage;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -193,7 +194,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		}
 	}
 
-	public List<Class<?>> classes() {
+	public final Collection<Class<?>> classes() {
 		int s = master.size();
 		List<Class<?>> l = new ArrayList<Class<?>>(s);
 		for (PersistentContainer c : master.values()) {

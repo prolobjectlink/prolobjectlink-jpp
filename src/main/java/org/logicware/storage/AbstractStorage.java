@@ -22,6 +22,7 @@ package org.logicware.storage;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import org.logicware.Predicate;
 import org.logicware.Settings;
 import org.logicware.Storage;
 import org.logicware.db.AbstractPersistentContainer;
+import org.logicware.prolog.PrologClause;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologQuery;
 import org.logicware.prolog.PrologTerm;
@@ -58,7 +60,7 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 
 	protected AbstractStorage(PrologProvider provider, Settings settings, ObjectConverter<PrologTerm> converter,
 			String location, ContainerFactory containerFactory, int maxCapacity) {
-		this(provider, settings, converter, location, containerFactory, new LockFile(location + ".lock",settings),
+		this(provider, settings, converter, location, containerFactory, new LockFile(location + ".lock", settings),
 				maxCapacity);
 	}
 
@@ -217,9 +219,13 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 		return selection;
 	}
 
-	public List<Class<?>> classes() {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Class<?>> classes() {
+		Map<String, Class<?>> m = new HashMap<String, Class<?>>();
+		for (PrologClause clause : getEngine()) {
+			String functor = removeQuoted(clause.getFunctor());
+			m.put(functor, reflector.classForName(functor));
+		}
+		return m.values();
 	}
 
 	public final void clear() {

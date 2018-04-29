@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -292,9 +293,12 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		return this;
 	}
 
-	public final List<Class<?>> classes() {
-		// TODO Auto-generated method stub
-		return null;
+	public final Collection<Class<?>> classes() {
+		List<Class<?>> c = new ArrayList<Class<?>>();
+		for (Storage storage : storages) {
+			c.addAll(storage.classes());
+		}
+		return c;
 	}
 
 	public final void close() {

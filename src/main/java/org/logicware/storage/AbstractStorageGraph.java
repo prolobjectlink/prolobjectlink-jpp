@@ -19,7 +19,7 @@
  */
 package org.logicware.storage;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.logicware.ContainerFactory;
 import org.logicware.DefaultTransaction;
@@ -135,7 +135,7 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 		return false;
 	}
 
-	public final List<Class<?>> classes() {
+	public final Collection<Class<?>> classes() {
 		return storage.classes();
 	}
 
