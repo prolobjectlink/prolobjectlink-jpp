@@ -71,8 +71,8 @@ public abstract class AbstractProvider implements PrologProvider {
 		return converter.toTermArray(os, from);
 	}
 
-	public final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
-		return converter.toTermTable(oss, from);
+	public final <K extends PrologTerm> K[][] toTermMatrix(Object[][] oss, Class<K[][]> from) {
+		return converter.toTermMatrix(oss, from);
 	}
 
 	public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,

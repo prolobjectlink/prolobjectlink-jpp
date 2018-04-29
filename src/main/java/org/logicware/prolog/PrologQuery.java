@@ -27,6 +27,24 @@ import org.logicware.Wrapper;
 
 public interface PrologQuery extends Wrapper, Iterator<PrologTerm[]>, Iterable<PrologTerm[]> {
 
+	public <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to);
+
+	public <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to);
+
+	public <K> K fromTerm(PrologTerm term, Class<K> to);
+
+	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
+			Class<K> from);
+
+	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
+			Class<K> from);
+
+	public <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from);
+
+	public <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from);
+
+	public <K extends PrologTerm> K toTerm(Object o, Class<K> from);
+
 	/**
 	 * Engine hold by the current query
 	 * 

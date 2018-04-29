@@ -22,6 +22,7 @@ package org.logicware.prolog;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -57,12 +58,12 @@ public abstract class AbstractEngine extends AbstractPlatform implements PrologE
 		return query(goal).oneVariablesSolution();
 	}
 
-	public final Map<String, PrologTerm>[] queryAll(String goal) {
-		return query(goal).allVariablesSolutions();
+	public final List<Map<String, PrologTerm>> queryAll(String goal) {
+		return query(goal).all();
 	}
 
-	public final Map<String, PrologTerm>[] queryAll(PrologTerm... goal) {
-		return query(goal).allVariablesSolutions();
+	public final List<Map<String, PrologTerm>> queryAll(PrologTerm... goal) {
+		return query(goal).all();
 	}
 
 	public final <K extends PrologTerm> K toTerm(Object o, Class<K> from) {
@@ -73,8 +74,8 @@ public abstract class AbstractEngine extends AbstractPlatform implements PrologE
 		return provider.toTermArray(os, from);
 	}
 
-	public final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
-		return provider.toTermTable(oss, from);
+	public final <K extends PrologTerm> K[][] toTermMatrix(Object[][] oss, Class<K[][]> from) {
+		return provider.toTermMatrix(oss, from);
 	}
 
 	public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,

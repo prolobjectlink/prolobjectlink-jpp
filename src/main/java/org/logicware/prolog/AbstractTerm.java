@@ -144,7 +144,7 @@ public abstract class AbstractTerm extends AbstractWrapper implements PrologTerm
 	}
 
 	public final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
-		return provider.toTermTable(oss, from);
+		return provider.toTermMatrix(oss, from);
 	}
 
 	public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,

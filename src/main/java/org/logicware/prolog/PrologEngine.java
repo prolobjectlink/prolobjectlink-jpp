@@ -19,6 +19,7 @@
  */
 package org.logicware.prolog;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -351,9 +352,9 @@ public interface PrologEngine extends Platform, Iterable<PrologClause> {
 
 	public Map<String, PrologTerm> queryOne(PrologTerm... goal);
 
-	public Map<String, PrologTerm>[] queryAll(String goal);
+	public List<Map<String, PrologTerm>> queryAll(String goal);
 
-	public Map<String, PrologTerm>[] queryAll(PrologTerm... goal);
+	public List<Map<String, PrologTerm>> queryAll(PrologTerm... goal);
 
 	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
 			Class<K> from);
@@ -361,7 +362,7 @@ public interface PrologEngine extends Platform, Iterable<PrologClause> {
 	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
 			Class<K> from);
 
-	public <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from);
+	public <K extends PrologTerm> K[][] toTermMatrix(Object[][] oss, Class<K[][]> from);
 
 	public <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from);
 

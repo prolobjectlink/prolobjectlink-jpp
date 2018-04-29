@@ -80,7 +80,7 @@ public abstract class AbstractConverter<T> implements PrologConverter<T> {
 		return iTerms;
 	}
 
-	public final PrologTerm[][] toTermTable(T[][] terms) {
+	public final PrologTerm[][] toTermMatrix(T[][] terms) {
 		int n = terms.length;
 		int m = terms[0].length;
 		PrologTerm[][] iTerms = new PrologTerm[n][m];
@@ -142,12 +142,12 @@ public abstract class AbstractConverter<T> implements PrologConverter<T> {
 		);
 	}
 
-	public final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
+	public final <K extends PrologTerm> K[][] toTermMatrix(Object[][] oss, Class<K[][]> from) {
 		Class<T> clazz = getGenericClass();
 		Class<?> cType = oss.getClass().getComponentType();
 		Class<?> c = Array.newInstance(clazz, 0).getClass();
 		if (c.isAssignableFrom(cType)) {
-			PrologTerm[][] terms = toTermTable((T[][]) oss);
+			PrologTerm[][] terms = toTermMatrix((T[][]) oss);
 			if (from.isAssignableFrom(terms.getClass())) {
 				return from.cast(terms);
 			}

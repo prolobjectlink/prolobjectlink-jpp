@@ -38,7 +38,7 @@ public interface PrologConverter<T> {
 	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
 			Class<K> from);
 
-	public <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from);
+	public <K extends PrologTerm> K[][] toTermMatrix(Object[][] oss, Class<K[][]> from);
 
 	public <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from);
 
@@ -48,7 +48,7 @@ public interface PrologConverter<T> {
 
 	public Map<String, PrologTerm> toTermMap(Map<String, T> map);
 
-	public PrologTerm[][] toTermTable(T[][] terms);
+	public PrologTerm[][] toTermMatrix(T[][] terms);
 
 	public PrologTerm[] toTermArray(T[] terms);
 

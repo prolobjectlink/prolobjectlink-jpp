@@ -231,7 +231,7 @@ public interface PrologProvider {
 	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
 			Class<K> from);
 
-	public <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from);
+	public <K extends PrologTerm> K[][] toTermMatrix(Object[][] oss, Class<K[][]> from);
 
 	public <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from);
 

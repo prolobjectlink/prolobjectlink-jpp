@@ -50,7 +50,7 @@ public abstract class AbstractQuery extends AbstractWrapper implements PrologQue
 	}
 
 	public final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
-		return engine.toTermTable(oss, from);
+		return engine.toTermMatrix(oss, from);
 	}
 
 	public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
@@ -93,6 +93,10 @@ public abstract class AbstractQuery extends AbstractWrapper implements PrologQue
 	public final void remove() {
 		// skip
 		nextSolution();
+	}
+
+	public final Map<String, PrologTerm> one() {
+		return oneVariablesSolution();
 	}
 
 	@Override
