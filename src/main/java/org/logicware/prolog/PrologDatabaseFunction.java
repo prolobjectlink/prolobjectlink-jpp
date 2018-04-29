@@ -20,9 +20,9 @@
 package org.logicware.prolog;
 
 import org.logicware.DatabaseFunction;
-import org.logicware.Schema;
 import org.logicware.NonSolutionError;
 import org.logicware.ProcedureQuery;
+import org.logicware.Schema;
 import org.logicware.logging.LoggerConstants;
 import org.logicware.logging.LoggerUtils;
 
@@ -31,12 +31,11 @@ public final class PrologDatabaseFunction extends DatabaseFunction {
 	private static final long serialVersionUID = 142499432277102067L;
 
 	private PrologDatabaseFunction() {
-		// TODO use refelection utils
 		// for internal reflection
 	}
 
-	public PrologDatabaseFunction(String name, Schema schema, String path, PrologProvider provider) {
-		super(name, schema, path, provider);
+	public PrologDatabaseFunction(String name, String comment, Schema schema, String path, PrologProvider provider) {
+		super(name, comment, schema, path, provider);
 	}
 
 	private ProcedureQuery createProcedureQuery(Object... arguments) {

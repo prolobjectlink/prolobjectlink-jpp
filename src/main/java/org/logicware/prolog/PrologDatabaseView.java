@@ -19,20 +19,19 @@
  */
 package org.logicware.prolog;
 
-import org.logicware.Schema;
 import org.logicware.DatabaseView;
+import org.logicware.Schema;
 
 public final class PrologDatabaseView extends DatabaseView {
 
 	private static final long serialVersionUID = 6645651570601921306L;
 
 	private PrologDatabaseView() {
-		// TODO use refelection utils
 		// for internal reflection
 	}
 
-	public PrologDatabaseView(String path, Class<?> target, Schema schema, PrologProvider provider) {
-		super(path, target, schema, provider);
+	public PrologDatabaseView(String path, Class<?> target, String comment, Schema schema, PrologProvider provider) {
+		super(path, target, comment, schema, provider);
 	}
 
 }

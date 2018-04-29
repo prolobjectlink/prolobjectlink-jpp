@@ -55,36 +55,36 @@ public abstract class AbstractSchema implements Schema {
 	private final Map<String, DatabaseFunction> functions;
 	private final Map<String, DatabaseSequence> sequences;
 
-	private DatabaseClass newDatabaseClass(Class<?> clazz) {
-		DatabaseClass c = new DatabaseClass(clazz, this);
+	private DatabaseClass newDatabaseClass(Class<?> clazz, String comment) {
+		DatabaseClass c = new DatabaseClass(clazz, comment, this);
 		Field[] fields = clazz.getDeclaredFields();
 		for (int i = 0; i < fields.length; i++) {
 			Field field = fields[i];
 			String name = field.getName();
 			Class<?> type = field.getType();
-			c.addField(name, i, type);
+			c.addField(name, "", i, type);
 		}
 		return c;
 	}
 
-	private DatabaseClass newDatabaseClass(String clazz) {
-		return new DatabaseClass(clazz, this);
+	private DatabaseClass newDatabaseClass(String clazz, String comment) {
+		return new DatabaseClass(clazz, comment, this);
 	}
 
-	private DatabaseFunction newDatabaseFunction(String name) {
+	private DatabaseFunction newDatabaseFunction(String name, String comment) {
 		String path0 = location.substring(0, location.lastIndexOf(File.separatorChar));
-		String path1 = path0 + File.separator + "functions.pl";
-		return new PrologDatabaseFunction(name, this, path1, provider);
+		String path1 = path0.replace(File.separatorChar, '/') + "/functions.pl";
+		return new PrologDatabaseFunction(name, comment, this, path1, provider);
 	}
 
-	private DatabaseView newDatabaseView(Class<?> target) {
+	private DatabaseView newDatabaseView(Class<?> target, String comment) {
 		String path0 = location.substring(0, location.lastIndexOf(File.separatorChar));
-		String path1 = path0 + File.separator + "views.pl";
-		return new PrologDatabaseView(path1, target, this, provider);
+		String path1 = path0.replace(File.separatorChar, '/') + "/views.pl";
+		return new PrologDatabaseView(path1, target, comment, this, provider);
 	}
 
-	private DatabasePackage newDatabasePackage(String packageName) {
-		return new DatabasePackage(packageName, this);
+	private DatabasePackage newDatabasePackage(String packageName, String comment) {
+		return new DatabasePackage(packageName, comment, this);
 	}
 
 	private Class<?>[] findClasses(String packageName) throws ClassNotFoundException, IOException {
@@ -195,21 +195,21 @@ public abstract class AbstractSchema implements Schema {
 		return typePackage.equals(langPackage);
 	}
 
-	public final Schema addPackage(Package pack) {
-		return addPackage(pack.getName());
+	public final Schema addPackage(Package pack, String comment) {
+		return addPackage(pack.getName(), comment);
 	}
 
-	public final Schema addPackage(String packageName) {
+	public final Schema addPackage(String packageName, String comment) {
 		String packItr = packageName;
-		DatabasePackage p = newDatabasePackage(packItr);
+		DatabasePackage p = newDatabasePackage(packItr, comment);
 		try {
 			Class<?>[] classArray = findClasses(packItr);
 			for (int i = 0; i < classArray.length; i++) {
 				Class<?> clazz = classArray[i];
 				Class<?> sc = clazz.getSuperclass();
 				DatabaseClass c = getOrAddClass(clazz);
-				DatabaseClass dbsc = addAbstractClass(sc);
-				p = newDatabasePackage(packItr);
+				DatabaseClass dbsc = addAbstractClass(sc, "");
+				p = newDatabasePackage(packItr, comment);
 				packages.put(clazz.getPackage().getName(), p);
 				c.setSuperClass(dbsc);
 			}
@@ -242,8 +242,8 @@ public abstract class AbstractSchema implements Schema {
 		return packages.size();
 	}
 
-	public final DatabaseClass addClass(Class<?> clazz) {
-		DatabaseClass c = newDatabaseClass(clazz);
+	public final DatabaseClass addClass(Class<?> clazz, String comment) {
+		DatabaseClass c = newDatabaseClass(clazz, comment);
 		classes.put(clazz.getName(), c);
 		return c;
 	}
@@ -256,8 +256,8 @@ public abstract class AbstractSchema implements Schema {
 	 * @return database class instance.
 	 * @since 1.0
 	 */
-	public final DatabaseClass addClass(String className) {
-		DatabaseClass c = newDatabaseClass(className);
+	public final DatabaseClass addClass(String className, String comment) {
+		DatabaseClass c = newDatabaseClass(className, comment);
 		classes.put(className, c);
 		return c;
 	}
@@ -272,8 +272,8 @@ public abstract class AbstractSchema implements Schema {
 	 * @return database class instance.
 	 * @since 1.0
 	 */
-	public final DatabaseClass addClass(String className, DatabaseClass superClass) {
-		DatabaseClass c = newDatabaseClass(className);
+	public final DatabaseClass addClass(String className, String comment, DatabaseClass superClass) {
+		DatabaseClass c = newDatabaseClass(className, comment);
 		classes.put(className, c.setSuperClass(superClass));
 		return c;
 	}
@@ -288,8 +288,8 @@ public abstract class AbstractSchema implements Schema {
 	 * @return database class instance
 	 * @since 1.0
 	 */
-	public final DatabaseClass addClass(String className, DatabaseClass... superClasses) {
-		DatabaseClass c = newDatabaseClass(className);
+	public final DatabaseClass addClass(String className, String comment, DatabaseClass... superClasses) {
+		DatabaseClass c = newDatabaseClass(className, comment);
 		if (superClasses != null && superClasses.length >= 1) {
 			c.setSuperClass(superClasses[0]);
 			for (int i = 1; i < superClasses.length; i++) {
@@ -301,27 +301,27 @@ public abstract class AbstractSchema implements Schema {
 		return c;
 	}
 
-	public final DatabaseClass addAbstractClass(Class<?> clazz) {
-		DatabaseClass c = newDatabaseClass(clazz);
+	public final DatabaseClass addAbstractClass(Class<?> clazz, String comment) {
+		DatabaseClass c = newDatabaseClass(clazz, comment);
 		c.setAbstract(true).setJavaClass(clazz);
 		classes.put(clazz.getSimpleName(), c);
 		return c;
 	}
 
-	public final DatabaseClass addAbstractClass(String n) {
-		DatabaseClass c = newDatabaseClass(n);
+	public final DatabaseClass addAbstractClass(String n, String comment) {
+		DatabaseClass c = newDatabaseClass(n, comment);
 		classes.put(n, c.setAbstract(true));
 		return c;
 	}
 
-	public final DatabaseClass addAbstractClass(String className, DatabaseClass superClass) {
-		DatabaseClass c = addClass(className, superClass);
+	public final DatabaseClass addAbstractClass(String className, String comment, DatabaseClass superClass) {
+		DatabaseClass c = addClass(className, comment, superClass);
 		c.setAbstract(true);
 		return c;
 	}
 
-	public final DatabaseClass addAbstractClass(String className, DatabaseClass... superClasses) {
-		DatabaseClass c = addClass(className, superClasses);
+	public final DatabaseClass addAbstractClass(String className, String comment, DatabaseClass... superClasses) {
+		DatabaseClass c = addClass(className, comment, superClasses);
 		c.setAbstract(true);
 		return c;
 	}
@@ -348,7 +348,7 @@ public abstract class AbstractSchema implements Schema {
 		if (clazz != null) {
 			return clazz;
 		}
-		return addClass(className);
+		return addClass(className, "");
 	}
 
 	public final DatabaseClass getOrAddClass(Class<?> clazz) {
@@ -356,7 +356,7 @@ public abstract class AbstractSchema implements Schema {
 		if (c != null) {
 			return c;
 		}
-		return addClass(clazz);
+		return addClass(clazz, "");
 	}
 
 	public final DatabaseClass getOrAddClass(String className, DatabaseClass superClass) {
@@ -385,8 +385,8 @@ public abstract class AbstractSchema implements Schema {
 		return classes.size();
 	}
 
-	public final DatabaseFunction addFunction(String name) {
-		DatabaseFunction f = newDatabaseFunction(name);
+	public final DatabaseFunction addFunction(String name, String comment) {
+		DatabaseFunction f = newDatabaseFunction(name, comment);
 		functions.put(name, f);
 		return f;
 	}
@@ -412,8 +412,8 @@ public abstract class AbstractSchema implements Schema {
 		return functions.size();
 	}
 
-	public final DatabaseSequence addSequence(String name, Class<?> clazz, int increment) {
-		DatabaseSequence s = new DatabaseSequence(name, clazz, increment, this);
+	public final DatabaseSequence addSequence(String name, String comment, Class<?> clazz, int increment) {
+		DatabaseSequence s = new DatabaseSequence(name, comment, clazz, increment, this);
 		sequences.put(name, s);
 		return s;
 	}
@@ -448,8 +448,8 @@ public abstract class AbstractSchema implements Schema {
 		return sequences.size();
 	}
 
-	public final DatabaseView addView(Class<?> target) {
-		DatabaseView f = newDatabaseView(target);
+	public final DatabaseView addView(Class<?> target, String comment) {
+		DatabaseView f = newDatabaseView(target, comment);
 		views.put(target.getName(), f);
 		return f;
 	}
@@ -554,7 +554,7 @@ public abstract class AbstractSchema implements Schema {
 	}
 
 	public final RelationalGraph<DatabaseClass, DatabaseClass> getGraph() {
-		DatabaseClass relationEdge = addAbstractClass(RelationalEdge.class);
+		DatabaseClass relationEdge = addAbstractClass(RelationalEdge.class, "");
 		RelationalGraph<DatabaseClass, DatabaseClass> g = new RelationalGraph<DatabaseClass, DatabaseClass>();
 		for (DatabaseClass clazz : new ArrayList<DatabaseClass>(classes.values())) {
 			if (!clazz.equals(relationEdge) && !clazz.isSubClassOf(relationEdge)) {

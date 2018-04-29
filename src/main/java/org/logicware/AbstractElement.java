@@ -30,11 +30,9 @@ public abstract class AbstractElement implements SchemaElement, Serializable {
 
 	protected AbstractElement() {
 		// for internal reflection
-		this(null, null);
-	}
-
-	public AbstractElement(String name, Schema schema) {
-		this(name, "", schema);
+		this.comment = null;
+		this.schema = null;
+		this.name = null;
 	}
 
 	public AbstractElement(String name, String comment, Schema schema) {

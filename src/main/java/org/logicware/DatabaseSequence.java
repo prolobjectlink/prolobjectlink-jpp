@@ -21,31 +21,25 @@ package org.logicware;
 
 import java.io.Serializable;
 
-public final class DatabaseSequence implements Serializable {
+public final class DatabaseSequence extends AbstractElement implements Serializable {
 
 	private int value;
 	private String javaClass;
-	private final String name;
 	private final int increment;
-	private transient Schema schema;
 	private static final long serialVersionUID = 937204609884481388L;
 
 	/**
 	 * for internal reflection only
 	 */
 	protected DatabaseSequence() {
-		this(null, null, 1, null);
+		this(null, null, null, 1, null);
 	}
 
-	public DatabaseSequence(String name, Class<?> clazz, int increment, Schema schema) {
+	public DatabaseSequence(String name, String comment, Class<?> clazz, int increment, Schema schema) {
+		super(name, comment, schema);
 		this.javaClass = clazz != null ? clazz.getName() : "";
 		this.increment = increment;
 		this.schema = schema;
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public int getIncrement() {
@@ -63,10 +57,6 @@ public final class DatabaseSequence implements Serializable {
 	public int increment() {
 		this.value++;
 		return value;
-	}
-
-	public Schema getSchema() {
-		return schema;
 	}
 
 	public DatabaseSequence setSchema(Schema schema) {
@@ -120,6 +110,15 @@ public final class DatabaseSequence implements Serializable {
 		} else if (!name.equals(other.name))
 			return false;
 		return value == other.value;
+	}
+
+	public DatabaseSequence setComment(String comment) {
+		this.comment = comment;
+		return this;
+	}
+
+	public SchemaElementType geElementType() {
+		return SchemaElementType.SEQUENCE;
 	}
 
 }

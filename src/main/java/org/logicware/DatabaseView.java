@@ -33,8 +33,8 @@ public abstract class DatabaseView extends DatabaseCode implements Serializable 
 		// internal reflection
 	}
 
-	public DatabaseView(String path, Class<?> target, Schema schema, PrologProvider provider) {
-		super(target != null ? target.getName() : "", schema, path, provider);
+	public DatabaseView(String path, Class<?> target, String comment, Schema schema, PrologProvider provider) {
+		super(target != null ? target.getName() : "", comment, schema, path, provider);
 		if (target != null) {
 			Class<?> ptr = target;
 			while (ptr != Object.class) {

@@ -59,10 +59,6 @@ public final class DatabaseField extends AbstractElement implements SchemaElemen
 
 	}
 
-	public DatabaseField(String name, int position, Class<?> type, Schema schema, DatabaseClass owner) {
-		this(name, "", position, type, schema, owner);
-	}
-
 	public DatabaseField(String name, String comment, int position, Class<?> type, Schema schema, DatabaseClass owner) {
 		super(name, comment, schema);
 		this.fullName = owner.getName() + "." + name;

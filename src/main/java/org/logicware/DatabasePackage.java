@@ -30,10 +30,6 @@ public final class DatabasePackage extends AbstractElement implements SchemaElem
 
 	}
 
-	public DatabasePackage(String name, Schema schema) {
-		super(name, schema);
-	}
-
 	public DatabasePackage(String name, String comment, Schema schema) {
 		super(name, comment, schema);
 	}

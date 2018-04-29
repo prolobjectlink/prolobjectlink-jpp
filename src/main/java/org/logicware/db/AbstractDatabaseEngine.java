@@ -27,10 +27,10 @@ import java.util.Map;
 import org.logicware.ContainerFactory;
 import org.logicware.DatabaseEngine;
 import org.logicware.DatabaseRole;
-import org.logicware.Schema;
 import org.logicware.DatabaseUser;
 import org.logicware.DefaultTransaction;
 import org.logicware.ObjectConverter;
+import org.logicware.Schema;
 import org.logicware.Settings;
 import org.logicware.Transaction;
 import org.logicware.prolog.PrologProvider;
@@ -41,17 +41,16 @@ import org.logicware.tools.Restore;
 public abstract class AbstractDatabaseEngine extends AbstractContainer implements DatabaseEngine {
 
 	private final String name;
+	private final Schema schema;
 	private final String location;
 	private final DatabaseUser owner;
-	private final Schema schema;
 	private final Transaction transaction;
 	private final Map<String, DatabaseUser> users;
 	private final Map<String, DatabaseRole> roles;
 	private final ContainerFactory containerFactory;
 
 	public AbstractDatabaseEngine(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
-			ContainerFactory containerFactory, String location, String name, Schema schema,
-			DatabaseUser owner) {
+			ContainerFactory containerFactory, String location, String name, Schema schema, DatabaseUser owner) {
 		super(provider, properties, converter);
 		this.roles = new HashMap<String, DatabaseRole>();
 		this.users = new HashMap<String, DatabaseUser>();

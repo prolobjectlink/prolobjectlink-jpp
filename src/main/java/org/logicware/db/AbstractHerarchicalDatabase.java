@@ -51,59 +51,111 @@ public abstract class AbstractHerarchicalDatabase extends AbstractDatabaseEngine
 	}
 
 	public final <O> void insert(O... facts) {
+		storage.getTransaction().begin();
 		storage.insert(facts);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
 	}
 
 	public final <O> void update(O match, O update) {
+		storage.getTransaction().begin();
 		storage.update(match, update);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
 	}
 
 	public final void delete(Class<?> clazz) {
+		storage.getTransaction().begin();
 		storage.delete(clazz);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
 	}
 
 	public final <O> void delete(O... facts) {
+		storage.getTransaction().begin();
 		storage.delete(facts);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
 	}
 
 	public final boolean contains(String string) {
-		return storage.contains(string);
+		storage.getTransaction().begin();
+		boolean b = storage.contains(string);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
+		return b;
 	}
 
 	public final <O> boolean contains(O object) {
-		return storage.contains(object);
+		storage.getTransaction().begin();
+		boolean b = storage.contains(object);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
+		return b;
 	}
 
 	public final <O> boolean contains(Class<O> clazz) {
-		return storage.contains(clazz);
+		storage.getTransaction().begin();
+		boolean b = storage.contains(clazz);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
+		return b;
 	}
 
 	public final <O> boolean contains(Predicate<O> predicate) {
-		return storage.contains(predicate);
+		storage.getTransaction().begin();
+		boolean b = storage.contains(predicate);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
+		return b;
 	}
 
 	public final boolean contains(String functor, int arity) {
-		return storage.contains(functor, arity);
+		storage.getTransaction().begin();
+		boolean b = storage.contains(functor, arity);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
+		return b;
 	}
 
 	public final Query createQuery(String string) {
-		return storage.createQuery(string);
+		storage.getTransaction().begin();
+		Query q = storage.createQuery(string);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
+		return q;
 	}
 
 	public final <O> TypedQuery<O> createQuery(O o) {
-		return storage.createQuery(o);
+		storage.getTransaction().begin();
+		TypedQuery<O> q = storage.createQuery(o);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
+		return q;
 	}
 
 	public final <O> TypedQuery<O> createQuery(Class<O> clazz) {
-		return storage.createQuery(clazz);
+		storage.getTransaction().begin();
+		TypedQuery<O> q = storage.createQuery(clazz);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
+		return q;
 	}
 
 	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
-		return storage.createQuery(predicate);
+		storage.getTransaction().begin();
+		TypedQuery<O> q = storage.createQuery(predicate);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
+		return q;
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
-		return storage.createProcedureQuery(functor, args);
+		storage.getTransaction().begin();
+		ProcedureQuery pq = storage.createProcedureQuery(functor, args);
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
+		return pq;
 	}
 
 	public final PersistentContainer containerOf(Class<?> clazz) {
@@ -143,7 +195,10 @@ public abstract class AbstractHerarchicalDatabase extends AbstractDatabaseEngine
 	}
 
 	public final void clear() {
+		storage.getTransaction().begin();
 		storage.clear();
+		storage.getTransaction().commit();
+		storage.getTransaction().close();
 	}
 
 	public final void close() {

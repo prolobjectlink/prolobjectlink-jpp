@@ -49,20 +49,16 @@ public final class DatabaseClass extends AbstractElement implements Comparable<D
 	private transient DatabaseField primaryKeyField;
 	private static final long serialVersionUID = -8770366199140961351L;
 
-	private DatabaseField newField(String name, int position, Class<?> type) {
-		return new DatabaseField(name, position, type, schema, this);
+	private DatabaseField newField(String name, String comment, int position, Class<?> type) {
+		return new DatabaseField(name, comment, position, type, schema, this);
 	}
 
-	public DatabaseClass(String name, Schema schema) {
-		this(name, null, schema);
+	public DatabaseClass(String name, String comment, Schema schema) {
+		this(name, comment, null, schema);
 	}
 
-	public DatabaseClass(Class<?> javaClass, Schema schema) {
-		this(javaClass.getName(), javaClass, schema);
-	}
-
-	public DatabaseClass(String name, Class<?> javaClass, Schema schema) {
-		this(name, "", javaClass, schema);
+	public DatabaseClass(Class<?> javaClass, String comment, Schema schema) {
+		this(javaClass.getName(), comment, javaClass, schema);
 	}
 
 	public DatabaseClass(String name, String comment, Class<?> javaClass, Schema schema) {
@@ -378,8 +374,8 @@ public final class DatabaseClass extends AbstractElement implements Comparable<D
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */
-	public DatabaseField addField(String name, int position, Class<?> type) {
-		return addField(name, position, type, false);
+	public DatabaseField addField(String name, String comment, int position, Class<?> type) {
+		return addField(name, comment, position, type, false);
 	}
 
 	/**
@@ -395,8 +391,8 @@ public final class DatabaseClass extends AbstractElement implements Comparable<D
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */
-	public DatabaseField addField(String name, int position, Class<?> type, boolean primaryKey) {
-		DatabaseField f = newField(name, position, type);
+	public DatabaseField addField(String name, String comment, int position, Class<?> type, boolean primaryKey) {
+		DatabaseField f = newField(name, comment, position, type);
 		f.setPrimaryKey(primaryKey);
 		fields.put(name, f);
 		return f;
@@ -415,8 +411,8 @@ public final class DatabaseClass extends AbstractElement implements Comparable<D
 	 * @since 1.0
 	 */
 	@Deprecated
-	public DatabaseField addField(String name, int position, Class<?> type, DatabaseClass linkedClass) {
-		DatabaseField f = newField(name, position, type);
+	public DatabaseField addField(String name, String comment, int position, Class<?> type, DatabaseClass linkedClass) {
+		DatabaseField f = newField(name, comment, position, type);
 		f.setLinkedClass(linkedClass);
 		fields.put(name, f);
 		return f;
@@ -434,8 +430,8 @@ public final class DatabaseClass extends AbstractElement implements Comparable<D
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */
-	public DatabaseField addField(String name, int position, Class<?> type, Class<?> linkedType) {
-		DatabaseField f = newField(name, position, type);
+	public DatabaseField addField(String name, String comment, int position, Class<?> type, Class<?> linkedType) {
+		DatabaseField f = newField(name, comment, position, type);
 		f.setLinkedType(linkedType);
 		fields.put(name, f);
 		return f;

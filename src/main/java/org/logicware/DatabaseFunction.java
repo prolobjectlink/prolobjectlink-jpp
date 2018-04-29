@@ -31,10 +31,6 @@ public abstract class DatabaseFunction extends DatabaseCode implements Serializa
 		// internal reflection
 	}
 
-	public DatabaseFunction(String name, Schema schema, String path, PrologProvider provider) {
-		super(name, schema, path, provider);
-	}
-
 	public DatabaseFunction(String name, String comment, Schema schema, String path, PrologProvider provider) {
 		super(name, comment, schema, path, provider);
 	}

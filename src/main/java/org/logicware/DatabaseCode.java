@@ -36,22 +36,13 @@ public abstract class DatabaseCode extends AbstractElement implements Serializab
 	protected final transient List<String> instructions;
 	private static final long serialVersionUID = 7552979263681672426L;
 
-	public DatabaseCode() {
+	protected DatabaseCode() {
+		// for internal reflection
 		this.instructions = new ArrayList<String>();
 		this.parameters = new ArrayList<String>();
 		this.provider = null;
 		this.engine = null;
 		this.path = null;
-	}
-
-	public DatabaseCode(String name, Schema schema, String path, PrologProvider provider) {
-		super(name, "", schema);
-		this.instructions = new ArrayList<String>();
-		this.parameters = new ArrayList<String>();
-		this.engine = provider.newEngine();
-		this.provider = provider;
-		this.schema = schema;
-		this.path = path;
 	}
 
 	public DatabaseCode(String name, String comment, Schema schema, String path, PrologProvider provider) {

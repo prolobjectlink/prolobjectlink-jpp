@@ -71,7 +71,7 @@ public interface Schema {
 
 	public Schema removeSequence(String name);
 
-	public DatabaseSequence addSequence(String name, Class<?> clazz, int increment);
+	public DatabaseSequence addSequence(String name, String comment, Class<?> clazz, int increment);
 
 	public int countFunctions();
 
@@ -83,7 +83,7 @@ public interface Schema {
 
 	public Schema removeFunctions(String name);
 
-	public DatabaseFunction addFunction(String name);
+	public DatabaseFunction addFunction(String name, String comment);
 
 	public int countViews();
 
@@ -95,7 +95,7 @@ public interface Schema {
 
 	public Schema removeView(Class<?> target);
 
-	public DatabaseView addView(Class<?> target);
+	public DatabaseView addView(Class<?> target, String comment);
 
 	public int countClasses();
 
@@ -117,25 +117,25 @@ public interface Schema {
 
 	public Schema removeClass(String className);
 
-	public DatabaseClass addAbstractClass(String className, DatabaseClass... superClasses);
+	public DatabaseClass addAbstractClass(String className, String comment, DatabaseClass... superClasses);
 
-	public DatabaseClass addAbstractClass(String className, DatabaseClass superClass);
+	public DatabaseClass addAbstractClass(String className, String comment, DatabaseClass superClass);
 
-	public DatabaseClass addAbstractClass(String n);
+	public DatabaseClass addAbstractClass(String n, String comment);
 
-	public DatabaseClass addAbstractClass(Class<?> clazz);
+	public DatabaseClass addAbstractClass(Class<?> clazz, String comment);
 
-	public DatabaseClass addClass(String className, DatabaseClass... superClasses);
+	public DatabaseClass addClass(String className, String comment, DatabaseClass... superClasses);
 
-	public DatabaseClass addClass(String className, DatabaseClass superClass);
+	public DatabaseClass addClass(String className, String comment, DatabaseClass superClass);
 
-	public DatabaseClass addClass(String className);
+	public DatabaseClass addClass(String className, String comment);
 
-	public DatabaseClass addClass(Class<?> clazz);
+	public DatabaseClass addClass(Class<?> clazz, String comment);
 
-	public Schema addPackage(String packageName);
+	public Schema addPackage(String packageName, String comment);
 
-	public Schema addPackage(Package pack);
+	public Schema addPackage(Package pack, String comment);
 
 	public int countPackages();
 

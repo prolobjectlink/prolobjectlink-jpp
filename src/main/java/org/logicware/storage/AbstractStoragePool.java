@@ -154,7 +154,13 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> List<O> findAll(Class<O> clazz) {
-		return executor.findAll(clazz);
+		// return executor.findAll(clazz);
+		List<O> list = Collections.synchronizedList(new ArrayList<O>());
+		for (int i = 0; i < getStorages().size(); i++) {
+			Storage storage = getStorages().get(i);
+			list.addAll(storage.findAll(clazz));
+		}
+		return list;
 	}
 
 	public final <O> List<O> findAll(Predicate<O> predicate) {
@@ -247,6 +253,40 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		}
 		flush();
 	}
+
+	// FIXME pool add method
+	// public final <O> void insert(O... objects) {
+	//
+	// String root = getLocation();
+	//
+	// int length = objects.length;
+	// if (lastStorage != null) {
+	// int size = lastStorage.getSize();
+	// int newLength = size + length;
+	// if (newLength < storageCapacity) {
+	// lastStorage.insert(objects);
+	// } else if (lastStorage.hasCapacity()) {
+	// int free = storageCapacity - lastStorage.getSize();
+	// O[] array2 = Arrays.copyOfRange(objects, free, length);
+	// O[] array1 = Arrays.copyOf(objects, free);
+	// lastStorage.insert(array1);
+	// insert(array2);
+	// } else {
+	// int index = getPoolSize();
+	// String path = root + SEPARATOR + name + "." + (index + 1);
+	// lastStorage = createStorage(path, storageCapacity);
+	// storages.add(lastStorage);
+	// insert(objects);
+	// }
+	// } else {
+	// int index = getPoolSize();
+	// String path = root + SEPARATOR + name + "." + index;
+	// lastStorage = createStorage(path, storageCapacity);
+	// storages.add(lastStorage);
+	// insert(objects);
+	// }
+	//
+	// }
 
 	public final <O> void update(O match, O merge) {
 		open();

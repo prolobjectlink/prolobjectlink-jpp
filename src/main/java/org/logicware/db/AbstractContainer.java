@@ -37,6 +37,7 @@ import org.logicware.PersistenceError;
 import org.logicware.Predicate;
 import org.logicware.ProcedureInvokationError;
 import org.logicware.Settings;
+import org.logicware.Transaction;
 import org.logicware.UpdateError;
 import org.logicware.prolog.PrologClause;
 import org.logicware.prolog.PrologEngine;
@@ -245,6 +246,12 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 		int valuesNumber = values.length;
 		if (fieldsNumber != valuesNumber) {
 			throw new ProcedureInvokationError(name, fieldsNumber, valuesNumber);
+		}
+	}
+
+	protected final void checkActiveTransaction(Transaction transaction) {
+		if (!transaction.isActive()) {
+			throw new IllegalStateException("Entity Transaction is not active");
 		}
 	}
 

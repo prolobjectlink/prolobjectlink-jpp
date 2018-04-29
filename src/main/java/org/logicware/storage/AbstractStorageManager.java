@@ -60,6 +60,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	}
 
 	public final <O> void insert(O... objects) {
+		checkActiveTransaction(transaction);
 		if (objects != null && objects.length > 0) {
 			Class<?> clazz = objects.getClass();
 			Class<?> type = clazz.getComponentType();
@@ -68,12 +69,14 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	}
 
 	public final <O> void update(O match, O update) {
+		checkActiveTransaction(transaction);
 		checkReplacementObject(match, update);
 		Class<?> clazz = match.getClass();
 		containerOf(clazz).update(match, update);
 	}
 
 	public final <O> void delete(O... objects) {
+		checkActiveTransaction(transaction);
 		if (objects != null && objects.length > 0) {
 			Class<?> clazz = objects.getClass();
 			Class<?> type = clazz.getComponentType();
@@ -82,6 +85,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	}
 
 	public final void delete(Class<?> clazz) {
+		checkActiveTransaction(transaction);
 		containerOf(clazz).delete(clazz);
 		String path = locationOf(clazz);
 		File fileLock = new File(path + ".lock");
@@ -92,39 +96,46 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	}
 
 	public final boolean contains(String string) {
+		checkActiveTransaction(transaction);
 		List<Class<?>> classes = classesOf(string);
 		for (Class<?> clazz : classes) {
 			PersistentContainer pc = containerOf(clazz);
 			if (pc instanceof StoragePool) {
 				StoragePool sp = (StoragePool) pc;
-				sp.open();
+				sp.getTransaction().begin();
 				List<Storage> storages = sp.getStorages();
 				for (Storage storage : storages) {
 					String path = storage.getLocation();
 					getEngine().include(path);
 				}
+				sp.getTransaction().close();
 			}
 		}
 		return getEngine().contains(string);
 	}
 
 	public final <O> boolean contains(O o) {
+		checkActiveTransaction(transaction);
 		return containerOf(classOf(o)).contains(o);
 	}
 
 	public final <O> boolean contains(Class<O> clazz) {
+		checkActiveTransaction(transaction);
 		return containerOf(clazz).contains(clazz);
 	}
 
 	public final <O> boolean contains(Predicate<O> predicate) {
+		checkActiveTransaction(transaction);
 		return containerOf(classOf(predicate)).contains(predicate);
 	}
 
 	public final boolean contains(String f, int a) {
+		checkActiveTransaction(transaction);
 		return containerOf(classOf(f, a)).contains(removeQuoted(f), a);
 	}
 
 	public final Query createQuery(String string) {
+		checkActiveTransaction(transaction);
 		ObjectConverter<PrologTerm> c = getConverter();
 		PrologTerm[] terms = c.toTermsArray(string);
 		List<Class<?>> classes = classesOf(terms);
@@ -132,30 +143,35 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 			PersistentContainer pc = containerOf(clazz);
 			if (pc instanceof StoragePool) {
 				StoragePool sp = (StoragePool) pc;
-				sp.open();
+				sp.getTransaction().begin();
 				List<Storage> storages = sp.getStorages();
 				for (Storage storage : storages) {
 					String path = storage.getLocation();
 					getEngine().include(path);
 				}
+				sp.getTransaction().close();
 			}
 		}
 		return new PrologContainerQuery(solutionsOf(terms, classes));
 	}
 
 	public final <O> TypedQuery<O> createQuery(O o) {
+		checkActiveTransaction(transaction);
 		return containerOf(classOf(o)).createQuery(o);
 	}
 
 	public final <O> TypedQuery<O> createQuery(Class<O> clazz) {
+		checkActiveTransaction(transaction);
 		return containerOf(clazz).createQuery(clazz);
 	}
 
 	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
+		checkActiveTransaction(transaction);
 		return containerOf(classOf(predicate)).createQuery(predicate);
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
+		checkActiveTransaction(transaction);
 		return containerOf(classOf(functor, args.length)).createProcedureQuery(functor, args);
 	}
 
@@ -210,6 +226,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	}
 
 	public final void clear() {
+		checkActiveTransaction(transaction);
 		for (PersistentContainer c : master.values()) {
 			c.clear();
 		}
