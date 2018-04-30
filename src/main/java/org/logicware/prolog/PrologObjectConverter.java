@@ -123,77 +123,66 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			return toObjectsArray(prologTerm.getArguments());
 		case STRUCTURE_TYPE:
 
-			PrologStructure prologStructure = (PrologStructure) prologTerm;
+			System.out.println(prologTerm.getFunctor());
 
+			Class<?> structureClass = toClass(prologTerm);
+
+			//
 			Object object = null;
 
-			// getting prolog structure functor that have complex atom syntax
-			String functor = prologStructure.getFunctor();
+			// getting class from class map
+			Class<?> classPtr = structureClass;
 
-			// class name is removed quotes of the complex functor syntax
-			String className = removeApices(functor);
+			// creating new instance
+			object = newInstance(classPtr);
 
-			try {
+			Deque<Field> stack = new ArrayDeque<Field>();
 
-				// getting class from class map
-				Class<?> classPtr = Class.forName(className);
+			while (classPtr != null && classPtr != Object.class) {
 
-				// creating new instance
-				object = newInstance(classPtr);
+				// getting declared fields
+				Field[] fields = classPtr.getDeclaredFields();
 
-				Deque<Field> stack = new ArrayDeque<Field>();
+				for (int i = fields.length - 1; i >= 0; i--) {
+					Field field = fields[i];
 
-				while (classPtr != null && classPtr != Object.class) {
-
-					// getting declared fields
-					Field[] fields = classPtr.getDeclaredFields();
-
-					for (int i = fields.length - 1; i >= 0; i--) {
-						Field field = fields[i];
-
-						// check persistence condition
-						if (isPersistent(field) && !isStaticAndFinal(field)) {
-							stack.push(field);
-						}
-
+					// check persistence condition
+					if (isPersistent(field) && !isStaticAndFinal(field)) {
+						stack.push(field);
 					}
 
-					// update class pointer for the next super class
-					classPtr = classPtr.getSuperclass();
 				}
 
-				PrologTerm[] prologArguments = prologStructure.getArguments();
-
-				for (int i = 0; i < prologArguments.length && !stack.isEmpty(); i++) {
-
-					//
-					Field field = stack.pop();
-
-					// recovery data object
-					Object value = toObject(prologStructure.getArguments()[i]);
-
-					// write field with argument value
-					writeValue(field, object, value);
-
-				}
-
-			} catch (ClassNotFoundException e) {
-				throw new ClassNotFoundError(className, e);
+				// update class pointer for the next super class
+				classPtr = classPtr.getSuperclass();
 			}
 
-			// collections transformations
-			if (object instanceof org.logicware.util.ArrayList) {
+			PrologTerm[] prologArguments = prologTerm.getArguments();
+
+			for (int i = 0; i < prologArguments.length && !stack.isEmpty(); i++) {
+
+				//
+				Field field = stack.pop();
+
+				// recovery data object
+				Object value = toObject(prologTerm.getArguments()[i]);
+
+				// write field with argument value
+				writeValue(field, object, value);
+
+			}
+
+			if (structureClass == org.logicware.util.ArrayList.class) {
 				return JavaLists.arrayList((org.logicware.util.ArrayList<?>) object);
-			} else if (object instanceof org.logicware.util.HashMap) {
+			} else if (structureClass == org.logicware.util.HashMap.class) {
 				return JavaMaps.hashMap((org.logicware.util.HashMap<?, ?>) object);
-			} else if (object instanceof org.logicware.util.HashSet) {
+			} else if (structureClass == org.logicware.util.HashSet.class) {
 				return JavaSets.hashSet((org.logicware.util.HashSet<?>) object);
-			} else if (object instanceof org.logicware.util.TreeMap) {
+			} else if (structureClass == org.logicware.util.TreeMap.class) {
 				return JavaMaps.treeMap((org.logicware.util.TreeMap) object);
-			} else if (object instanceof org.logicware.util.TreeSet) {
+			} else if (structureClass == org.logicware.util.TreeSet.class) {
 				return JavaSets.treeSet((org.logicware.util.TreeSet) object);
 			}
-			//
 
 			return object;
 
