@@ -27,8 +27,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.logicware.ContainerFactory;
 import org.logicware.DefaultTransaction;
@@ -69,9 +67,6 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	// transaction
 	private final Transaction transaction;
 
-	// thread executor pool
-	private final StoragePoolExecutor executor;
-
 	// list of storages in the pool
 	private List<Storage> storages = new ArrayList<Storage>();
 
@@ -81,9 +76,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	protected AbstractStoragePool(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
 			String location, String name, ContainerFactory containerFactory, int storageCapacity) {
 		super(provider, properties, converter, location + SEPARATOR + name, containerFactory);
-		ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 		this.rootDirectory = new File(location + SEPARATOR + name);
-		this.executor = new StoragePoolExecutor(es, this);
 		this.transaction = new DefaultTransaction(this);
 		this.storageCapacity = storageCapacity;
 		this.rootDirectory.mkdir();
@@ -142,19 +135,33 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final List<Object> findAll(String string) {
-		return executor.findAll(string);
+		List<Object> list = Collections.synchronizedList(new ArrayList<Object>());
+		for (int i = 0; i < getStorages().size(); i++) {
+			Storage storage = getStorages().get(i);
+			list.addAll(storage.findAll(string));
+		}
+		return list;
 	}
 
 	public final List<Object> findAll(String functor, Object... args) {
-		return executor.findAll(functor, args);
+		List<Object> list = Collections.synchronizedList(new ArrayList<Object>());
+		for (int i = 0; i < getStorages().size(); i++) {
+			Storage storage = getStorages().get(i);
+			list.addAll(storage.findAll(functor, args));
+		}
+		return list;
 	}
 
 	public final <O> List<O> findAll(O o) {
-		return executor.findAll(o);
+		List<O> list = Collections.synchronizedList(new ArrayList<O>());
+		for (int i = 0; i < getStorages().size(); i++) {
+			Storage storage = getStorages().get(i);
+			list.addAll(storage.findAll(o));
+		}
+		return list;
 	}
 
 	public final <O> List<O> findAll(Class<O> clazz) {
-		// return executor.findAll(clazz);
 		List<O> list = Collections.synchronizedList(new ArrayList<O>());
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
@@ -164,7 +171,12 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> List<O> findAll(Predicate<O> predicate) {
-		return executor.findAll(predicate);
+		List<O> list = Collections.synchronizedList(new ArrayList<O>());
+		for (int i = 0; i < getStorages().size(); i++) {
+			Storage storage = getStorages().get(i);
+			list.addAll(storage.findAll(predicate));
+		}
+		return list;
 	}
 
 	public final boolean contains(String string) {
@@ -232,7 +244,9 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final void clear() {
-		executor.clear();
+		for (Storage s : storages) {
+			s.clear();
+		}
 		storages.clear();
 	}
 
@@ -342,7 +356,10 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final void close() {
-		executor.close();
+		for (Storage s : storages) {
+			s.clear();
+			s.close();
+		}
 		storages.clear();
 		open = false;
 	}
