@@ -17,20 +17,20 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.util.Iterator;
 import java.util.Set;
 
 /**
- * @see HashSet
- * @see TreeSet
+ * @see PrologHashSet
+ * @see PrologTreeSet
  * @author Jose Zalacain
  * @since 1.0
  * @param <E>
  *            generic object type
  */
-public abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
+abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
 
 	public AbstractSet() {
 	}

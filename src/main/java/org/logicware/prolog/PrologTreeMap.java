@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
@@ -29,26 +29,26 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V> implements Map.Entry<K, V> {
+ class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V> implements Map.Entry<K, V> {
 
-	private TreeMap<K, V> left;
+	private PrologTreeMap<K, V> left;
 	private K key;
 	private V value;
-	private TreeMap<K, V> right;
+	private PrologTreeMap<K, V> right;
 
-	public TreeMap() {
+	public PrologTreeMap() {
 	}
 
-	public TreeMap(Map<K, V> map) {
+	public PrologTreeMap(Map<K, V> map) {
 		putAll(map);
 	}
 
-	public TreeMap(K key, V value) {
+	public PrologTreeMap(K key, V value) {
 		this.key = key;
 		this.value = value;
 	}
 
-	TreeMap(K key, V value, TreeMap<K, V> left, TreeMap<K, V> right) {
+	PrologTreeMap(K key, V value, PrologTreeMap<K, V> left, PrologTreeMap<K, V> right) {
 		this(key, value);
 		this.left = left;
 		this.right = right;
@@ -85,7 +85,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TreeMap<?, ?> other = (TreeMap<?, ?>) obj;
+		PrologTreeMap<?, ?> other = (PrologTreeMap<?, ?>) obj;
 		if (key == null) {
 			if (other.key != null)
 				return false;
@@ -99,8 +99,8 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 		return true;
 	}
 
-	protected TreeMap<K, V> copy() {
-		return new TreeMap<K, V>(key, value, left, right);
+	protected PrologTreeMap<K, V> copy() {
+		return new PrologTreeMap<K, V>(key, value, left, right);
 	}
 
 	public int size() {
@@ -119,12 +119,12 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 	public V put(K key, V value) {
 
-		TreeMap<K, V> root = this;
+		PrologTreeMap<K, V> root = this;
 
 		if (!isEmpty()) {
 
 			V v = null;
-			TreeMap<K, V> entry = new TreeMap<K, V>(key, value);
+			PrologTreeMap<K, V> entry = new PrologTreeMap<K, V>(key, value);
 			if (key.compareTo(root.key) < 0) {
 				if (root.left == null) {
 					root.left = entry;
@@ -158,7 +158,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 		V v = null;
 		K k = (K) key;
-		TreeMap<K, V> root = this;
+		PrologTreeMap<K, V> root = this;
 
 		if (k.compareTo(this.key) < 0) {
 			if (left != null) {
@@ -177,12 +177,12 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 		} else {
 
 			v = value;
-			TreeMap<K, V> parent = root;
+			PrologTreeMap<K, V> parent = root;
 
 			if (left != null) {
 
-				TreeMap<K, V> treeIter = left;
-				TreeMap<K, V> predeccessor = this;
+				PrologTreeMap<K, V> treeIter = left;
+				PrologTreeMap<K, V> predeccessor = this;
 				while (treeIter != null) {
 					parent = predeccessor;
 					predeccessor = treeIter;
@@ -208,8 +208,8 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 			} else if (right != null) {
 
-				TreeMap<K, V> treeIter = right;
-				TreeMap<K, V> successor = this;
+				PrologTreeMap<K, V> treeIter = right;
+				PrologTreeMap<K, V> successor = this;
 				while (treeIter != null) {
 					successor = treeIter;
 					treeIter = treeIter.left;
@@ -266,11 +266,11 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 		return new EntrySet();
 	}
 
-	private int heigh(TreeMap<K, V> tree) {
+	private int heigh(PrologTreeMap<K, V> tree) {
 		return tree != null ? 1 + Math.max(heigh(tree.left), heigh(tree.right)) : 0;
 	}
 
-	protected TreeMap<K, V> getEntry(Object key) {
+	protected PrologTreeMap<K, V> getEntry(Object key) {
 		if (key instanceof Comparable) {
 			K k = (K) key;
 			if (k.compareTo(this.key) < 0) {
@@ -285,11 +285,11 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 		return null;
 	}
 
-	private void rotateLeft(TreeMap<K, V> root) {
+	private void rotateLeft(PrologTreeMap<K, V> root) {
 
-		TreeMap<K, V> toBeLeft = root.copy();
+		PrologTreeMap<K, V> toBeLeft = root.copy();
 
-		TreeMap<K, V> r = toBeLeft.right;
+		PrologTreeMap<K, V> r = toBeLeft.right;
 		toBeLeft.right = r.left;
 		r.left = toBeLeft;
 
@@ -300,11 +300,11 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 	}
 
-	private void rotateRight(TreeMap<K, V> root) {
+	private void rotateRight(PrologTreeMap<K, V> root) {
 
-		TreeMap<K, V> toBeRight = root.copy();
+		PrologTreeMap<K, V> toBeRight = root.copy();
 
-		TreeMap<K, V> l = toBeRight.left;
+		PrologTreeMap<K, V> l = toBeRight.left;
 		toBeRight.left = l.right;
 		l.right = toBeRight;
 
@@ -315,7 +315,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 	}
 
-	private void fixAfterChange(TreeMap<K, V> root) {
+	private void fixAfterChange(PrologTreeMap<K, V> root) {
 
 		if (root != null) {
 
@@ -365,7 +365,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 		@Override
 		public int size() {
-			return TreeMap.this.size();
+			return PrologTreeMap.this.size();
 		}
 
 	}
@@ -379,7 +379,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 		@Override
 		public int size() {
-			return TreeMap.this.size();
+			return PrologTreeMap.this.size();
 		}
 
 	}
@@ -393,24 +393,24 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 		@Override
 		public int size() {
-			return TreeMap.this.size();
+			return PrologTreeMap.this.size();
 		}
 
 	}
 
 	private abstract class AbstractIterator {
 
-		private TreeMap<K, V> last;
+		private PrologTreeMap<K, V> last;
 
 		// check illegal state
 		private boolean canRemove;
 
-		private final TreeMap<K, V> root;
-		private final Deque<TreeMap<K, V>> stack;
+		private final PrologTreeMap<K, V> root;
+		private final Deque<PrologTreeMap<K, V>> stack;
 
 		public AbstractIterator() {
-			stack = new ArrayDeque<TreeMap<K, V>>();
-			TreeMap<K, V> ptr = root = TreeMap.this;
+			stack = new ArrayDeque<PrologTreeMap<K, V>>();
+			PrologTreeMap<K, V> ptr = root = PrologTreeMap.this;
 			while (ptr != null && !ptr.isEmpty()) {
 				stack.push(ptr);
 				ptr = ptr.left;
@@ -429,7 +429,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 
 			stack.clear();
 
-			TreeMap<K, V> ptr = root;
+			PrologTreeMap<K, V> ptr = root;
 			ptr.remove(last.key);
 
 			while (ptr != null && !ptr.isEmpty()) {
@@ -448,7 +448,7 @@ public class TreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, 
 			canRemove = true;
 
 			last = stack.pop();
-			TreeMap<K, V> ptr = last.right;
+			PrologTreeMap<K, V> ptr = last.right;
 			while (ptr != null && !ptr.isEmpty()) {
 				stack.push(ptr);
 				ptr = ptr.left;

@@ -17,13 +17,13 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.util.Map;
 
-public final class Maps {
+final class PrologMaps {
 
-	private Maps() {
+	private PrologMaps() {
 	}
 
 	/**
@@ -36,7 +36,7 @@ public final class Maps {
 	 * @return the object
 	 */
 	public static <K extends Comparable<? super K>, V> Map<K, V> treeMap() {
-		return new TreeMap<K, V>();
+		return new PrologTreeMap<K, V>();
 	}
 
 	/**
@@ -49,7 +49,7 @@ public final class Maps {
 	 * @return the object
 	 */
 	public static <K extends Comparable<? super K>, V> Map<K, V> treeMap(Map<K, V> m) {
-		return new TreeMap<K, V>(m);
+		return new PrologTreeMap<K, V>(m);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public final class Maps {
 	 * @return the object
 	 */
 	public static <K, V> Map<K, V> hashMap() {
-		return new HashMap<K, V>();
+		return new PrologHashMap<K, V>();
 	}
 
 	/**
@@ -77,7 +77,7 @@ public final class Maps {
 	 * @return the object
 	 */
 	public static <K, V> Map<K, V> hashMap(int capacity) {
-		return new HashMap<K, V>(capacity);
+		return new PrologHashMap<K, V>(capacity);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public final class Maps {
 	 * @return the object
 	 */
 	public static <K, V> Map<K, V> hashMap(Map<? extends K, ? extends V> m) {
-		return new HashMap<K, V>(m);
+		return new PrologHashMap<K, V>(m);
 	}
 
 }

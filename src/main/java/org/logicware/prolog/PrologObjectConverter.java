@@ -48,9 +48,6 @@ import org.logicware.ObjectConverter;
 import org.logicware.util.JavaLists;
 import org.logicware.util.JavaMaps;
 import org.logicware.util.JavaSets;
-import org.logicware.util.Lists;
-import org.logicware.util.Maps;
-import org.logicware.util.Sets;
 
 public final class PrologObjectConverter extends AbstractConverter<PrologTerm> implements ObjectConverter<PrologTerm> {
 
@@ -172,16 +169,16 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			}
 
 			// collections transformations
-			if (structureClass == org.logicware.util.ArrayList.class) {
-				return JavaLists.arrayList((org.logicware.util.ArrayList<?>) object);
-			} else if (structureClass == org.logicware.util.HashMap.class) {
-				return JavaMaps.hashMap((org.logicware.util.HashMap<?, ?>) object);
-			} else if (structureClass == org.logicware.util.HashSet.class) {
-				return JavaSets.hashSet((org.logicware.util.HashSet<?>) object);
-			} else if (structureClass == org.logicware.util.TreeMap.class) {
-				return JavaMaps.treeMap((org.logicware.util.TreeMap) object);
-			} else if (structureClass == org.logicware.util.TreeSet.class) {
-				return JavaSets.treeSet((org.logicware.util.TreeSet) object);
+			if (structureClass == org.logicware.prolog.PrologArrayList.class) {
+				return JavaLists.arrayList((org.logicware.prolog.PrologArrayList<?>) object);
+			} else if (structureClass == org.logicware.prolog.PrologHashMap.class) {
+				return JavaMaps.hashMap((org.logicware.prolog.PrologHashMap<?, ?>) object);
+			} else if (structureClass == org.logicware.prolog.PrologHashSet.class) {
+				return JavaSets.hashSet((org.logicware.prolog.PrologHashSet<?>) object);
+			} else if (structureClass == org.logicware.prolog.PrologTreeMap.class) {
+				return JavaMaps.treeMap((org.logicware.prolog.PrologTreeMap) object);
+			} else if (structureClass == org.logicware.prolog.PrologTreeSet.class) {
+				return JavaSets.treeSet((org.logicware.prolog.PrologTreeSet) object);
 			}
 
 			return object;
@@ -229,19 +226,19 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		// collections transformations
 		else if (object instanceof ArrayList) {
 			ArrayList<?> l = (ArrayList<?>) object;
-			return toTerm(Lists.arrayList(l));
+			return toTerm(PrologLists.arrayList(l));
 		} else if (object instanceof HashMap) {
 			HashMap<?, ?> m = (HashMap<?, ?>) object;
-			return toTerm(Maps.hashMap(m));
+			return toTerm(PrologMaps.hashMap(m));
 		} else if (object instanceof HashSet) {
 			HashSet<?> s = (HashSet<?>) object;
-			return toTerm(Sets.hashSet(s));
+			return toTerm(PrologSets.hashSet(s));
 		} else if (object instanceof TreeMap) {
 			TreeMap m = (TreeMap) object;
-			return toTerm(Maps.treeMap(m));
+			return toTerm(PrologMaps.treeMap(m));
 		} else if (object instanceof TreeSet) {
 			TreeSet s = (TreeSet) object;
-			return toTerm(Sets.treeSet(s));
+			return toTerm(PrologSets.treeSet(s));
 		}
 
 		// structure default case

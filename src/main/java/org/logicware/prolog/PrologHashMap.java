@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
@@ -28,20 +28,20 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-public class HashMap<K, V> extends AbstractMap<K, V> {
+class PrologHashMap<K, V> extends AbstractMap<K, V> {
 
 	private int size;
 	private HashEntry<K, V>[] table;
 
-	public HashMap() {
+	public PrologHashMap() {
 		this(16);
 	}
 
-	public HashMap(int initialCapacity) {
+	public PrologHashMap(int initialCapacity) {
 		table = new HashEntry[initialCapacity];
 	}
 
-	public HashMap(Map<? extends K, ? extends V> m) {
+	public PrologHashMap(Map<? extends K, ? extends V> m) {
 		this(m.size());
 		putAll(m);
 	}
@@ -81,7 +81,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		HashMap<?, ?> other = (HashMap<?, ?>) obj;
+		PrologHashMap<?, ?> other = (PrologHashMap<?, ?>) obj;
 		if (size != other.size)
 			return false;
 		return Arrays.equals(table, other.table);

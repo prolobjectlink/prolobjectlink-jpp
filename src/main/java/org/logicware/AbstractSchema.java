@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
@@ -36,7 +37,6 @@ import org.logicware.logging.LoggerUtils;
 import org.logicware.prolog.PrologDatabaseFunction;
 import org.logicware.prolog.PrologDatabaseView;
 import org.logicware.prolog.PrologProvider;
-import org.logicware.util.ArrayList;
 
 public abstract class AbstractSchema implements Schema {
 

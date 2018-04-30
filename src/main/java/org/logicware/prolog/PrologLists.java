@@ -17,14 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.util.Collection;
 import java.util.List;
 
-public final class Lists {
+ final class PrologLists {
 
-	private Lists() {
+	private PrologLists() {
 	}
 
 	/**
@@ -35,7 +35,7 @@ public final class Lists {
 	 * @return the object
 	 */
 	public static <T> List<T> arrayList() {
-		return new ArrayList<T>();
+		return new PrologArrayList<T>();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public final class Lists {
 	 * @return the object
 	 */
 	public static <T> List<T> arrayList(int capacity) {
-		return new ArrayList<T>(capacity);
+		return new PrologArrayList<T>(capacity);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public final class Lists {
 	 * @return the object
 	 */
 	public static <T> List<T> arrayList(Collection<T> c) {
-		return new ArrayList<T>(c);
+		return new PrologArrayList<T>(c);
 	}
 
 }

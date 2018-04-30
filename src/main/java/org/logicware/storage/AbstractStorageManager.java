@@ -20,6 +20,7 @@
 package org.logicware.storage;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,6 @@ import org.logicware.db.AbstractPersistentContainer;
 import org.logicware.prolog.PrologContainerQuery;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
-import org.logicware.util.ArrayList;
 
 public abstract class AbstractStorageManager extends AbstractPersistentContainer implements StorageManager {
 

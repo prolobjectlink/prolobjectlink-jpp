@@ -20,12 +20,12 @@
 package org.logicware;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.logicware.prolog.PrologEngine;
 import org.logicware.prolog.PrologProvider;
-import org.logicware.util.ArrayList;
 
 public abstract class DatabaseCode extends AbstractElement implements Serializable {
 

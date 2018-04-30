@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
@@ -25,24 +25,24 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
+class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
-	private TreeSet<E> left;
+	private PrologTreeSet<E> left;
 	private E element;
-	private TreeSet<E> right;
+	private PrologTreeSet<E> right;
 
-	public TreeSet() {
+	public PrologTreeSet() {
 	}
 
-	TreeSet(E element) {
+	PrologTreeSet(E element) {
 		this.element = element;
 	}
 
-	public TreeSet(Collection<? extends E> c) {
+	public PrologTreeSet(Collection<? extends E> c) {
 		addAll(c);
 	}
 
-	TreeSet(TreeSet<E> left, E element, TreeSet<E> right) {
+	PrologTreeSet(PrologTreeSet<E> left, E element, PrologTreeSet<E> right) {
 		this(element);
 		this.left = left;
 		this.right = right;
@@ -66,7 +66,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TreeSet<?> other = (TreeSet<?>) obj;
+		PrologTreeSet<?> other = (PrologTreeSet<?>) obj;
 		if (element == null) {
 			if (other.element != null)
 				return false;
@@ -116,7 +116,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 	public boolean add(E e) {
 
-		TreeSet<E> root = this;
+		PrologTreeSet<E> root = this;
 
 		boolean result = false;
 
@@ -124,14 +124,14 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 			if (e.compareTo(element) < 0) {
 				if (root.left == null) {
-					root.left = new TreeSet<E>(e);
+					root.left = new PrologTreeSet<E>(e);
 					result = true;
 				} else {
 					result = root.left.add(e);
 				}
 			} else if (e.compareTo(element) > 0) {
 				if (root.right == null) {
-					root.right = new TreeSet<E>(e);
+					root.right = new PrologTreeSet<E>(e);
 					result = true;
 				} else {
 					result = root.right.add(e);
@@ -156,7 +156,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 		if (o instanceof Comparable) {
 
 			E e = (E) o;
-			TreeSet<E> root = this;
+			PrologTreeSet<E> root = this;
 
 			if (e.compareTo(this.element) < 0) {
 				if (left != null) {
@@ -174,12 +174,12 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 				}
 			} else {
 
-				TreeSet<E> parent = root;
+				PrologTreeSet<E> parent = root;
 
 				if (left != null) {
 
-					TreeSet<E> treeIter = left;
-					TreeSet<E> predeccessor = this;
+					PrologTreeSet<E> treeIter = left;
+					PrologTreeSet<E> predeccessor = this;
 					while (treeIter != null) {
 						parent = predeccessor;
 						predeccessor = treeIter;
@@ -204,8 +204,8 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 				} else if (right != null) {
 
-					TreeSet<E> treeIter = right;
-					TreeSet<E> successor = this;
+					PrologTreeSet<E> treeIter = right;
+					PrologTreeSet<E> successor = this;
 					while (treeIter != null) {
 						successor = treeIter;
 						treeIter = treeIter.left;
@@ -257,19 +257,19 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 		return new TreeSetIterator();
 	}
 
-	protected TreeSet<E> copy() {
-		return new TreeSet<E>(left, element, right);
+	protected PrologTreeSet<E> copy() {
+		return new PrologTreeSet<E>(left, element, right);
 	}
 
-	private int heigh(TreeSet<E> tree) {
+	private int heigh(PrologTreeSet<E> tree) {
 		return tree != null ? 1 + Math.max(heigh(tree.left), heigh(tree.right)) : 0;
 	}
 
-	private void rotateLeft(TreeSet<E> root) {
+	private void rotateLeft(PrologTreeSet<E> root) {
 
-		TreeSet<E> toBeLeft = root.copy();
+		PrologTreeSet<E> toBeLeft = root.copy();
 
-		TreeSet<E> r = toBeLeft.right;
+		PrologTreeSet<E> r = toBeLeft.right;
 		toBeLeft.right = r.left;
 		r.left = toBeLeft;
 
@@ -279,11 +279,11 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 	}
 
-	private void rotateRight(TreeSet<E> root) {
+	private void rotateRight(PrologTreeSet<E> root) {
 
-		TreeSet<E> toBeRight = root.copy();
+		PrologTreeSet<E> toBeRight = root.copy();
 
-		TreeSet<E> l = toBeRight.left;
+		PrologTreeSet<E> l = toBeRight.left;
 		toBeRight.left = l.right;
 		l.right = toBeRight;
 
@@ -293,7 +293,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 	}
 
-	private void fixAfterChange(TreeSet<E> root) {
+	private void fixAfterChange(PrologTreeSet<E> root) {
 
 		if (root != null) {
 
@@ -336,17 +336,17 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 	private class TreeSetIterator implements Iterator<E> {
 
-		private TreeSet<E> last;
+		private PrologTreeSet<E> last;
 
 		// check illegal state
 		private boolean canRemove;
 
-		private final TreeSet<E> root;
-		private final Deque<TreeSet<E>> stack;
+		private final PrologTreeSet<E> root;
+		private final Deque<PrologTreeSet<E>> stack;
 
 		public TreeSetIterator() {
-			stack = new ArrayDeque<TreeSet<E>>();
-			TreeSet<E> ptr = root = TreeSet.this;
+			stack = new ArrayDeque<PrologTreeSet<E>>();
+			PrologTreeSet<E> ptr = root = PrologTreeSet.this;
 
 			while (ptr != null && !ptr.isEmpty()) {
 				stack.push(ptr);
@@ -367,7 +367,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 			canRemove = true;
 
 			last = stack.pop();
-			TreeSet<E> ptr = last.right;
+			PrologTreeSet<E> ptr = last.right;
 			while (ptr != null && !ptr.isEmpty()) {
 				stack.push(ptr);
 				ptr = ptr.left;
@@ -385,7 +385,7 @@ public class TreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 			stack.clear();
 
-			TreeSet<E> ptr = root;
+			PrologTreeSet<E> ptr = root;
 			ptr.remove(last.element);
 
 			while (ptr != null && !ptr.isEmpty()) {

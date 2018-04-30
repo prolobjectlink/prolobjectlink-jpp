@@ -17,14 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.util.Collection;
 import java.util.Set;
 
-public final class Sets {
+ final class PrologSets {
 
-	private Sets() {
+	private PrologSets() {
 	}
 
 	/**
@@ -35,7 +35,7 @@ public final class Sets {
 	 * @return the object
 	 */
 	public static <T extends Comparable<? super T>> Set<T> treeSet() {
-		return new TreeSet<T>();
+		return new PrologTreeSet<T>();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public final class Sets {
 	 * @return the object
 	 */
 	public static <T extends Comparable<? super T>> Set<T> treeSet(Collection<? extends T> c) {
-		return new TreeSet<T>(c);
+		return new PrologTreeSet<T>(c);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public final class Sets {
 	 * @return the object
 	 */
 	public static <T> Set<T> hashSet() {
-		return new HashSet<T>();
+		return new PrologHashSet<T>();
 	}
 
 	/**
@@ -72,7 +72,7 @@ public final class Sets {
 	 * @return the object
 	 */
 	public static <T> Set<T> hashSet(int capacity) {
-		return new HashSet<T>(capacity);
+		return new PrologHashSet<T>(capacity);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public final class Sets {
 	 * @return the object
 	 */
 	public static <T> Set<T> hashSet(Collection<? extends T> c) {
-		return new HashSet<T>(c);
+		return new PrologHashSet<T>(c);
 	}
 
 }

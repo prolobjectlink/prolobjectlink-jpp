@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -27,21 +27,21 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
+class PrologArrayList<E> extends AbstractCollection<E> implements List<E> {
 
 	private int size;
 	private Object[] elements;
 
-	public ArrayList() {
+	public PrologArrayList() {
 		this(10);
 	}
 
-	public ArrayList(int capacity) {
+	public PrologArrayList(int capacity) {
 		checkCapacity(capacity);
 		elements = new Object[capacity];
 	}
 
-	public ArrayList(Collection<E> c) {
+	public PrologArrayList(Collection<E> c) {
 		elements = c.toArray();
 		size = elements.length;
 
@@ -110,7 +110,7 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ArrayList<?> other = (ArrayList<?>) obj;
+		PrologArrayList<?> other = (PrologArrayList<?>) obj;
 		if (size != other.size)
 			return false;
 		return Arrays.equals(elements, other.elements);
@@ -270,14 +270,14 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 		@Override
 		public E get(int index) {
 			checkIndex(index);
-			return (E) ArrayList.this.elements[offset + index];
+			return (E) PrologArrayList.this.elements[offset + index];
 		}
 
 		@Override
 		public E set(int index, E element) {
 			checkIndex(index);
-			E oldValue = (E) ArrayList.this.elements[offset + index];
-			ArrayList.this.elements[offset + index] = element;
+			E oldValue = (E) PrologArrayList.this.elements[offset + index];
+			PrologArrayList.this.elements[offset + index] = element;
 			return oldValue;
 		}
 
@@ -363,8 +363,8 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 			return size == other.size;
 		}
 
-		private ArrayList<E> getOuterType() {
-			return ArrayList.this;
+		private PrologArrayList<E> getOuterType() {
+			return PrologArrayList.this;
 		}
 
 	}
@@ -431,12 +431,12 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 		}
 
 		public void set(E e) {
-			ArrayList.this.set(nextIndex, e);
+			PrologArrayList.this.set(nextIndex, e);
 		}
 
 		public void add(E e) {
 			int i = nextIndex - 1;
-			ArrayList.this.add(i, e);
+			PrologArrayList.this.add(i, e);
 		}
 
 	}

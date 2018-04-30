@@ -17,27 +17,27 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class HashSet<E> extends AbstractSet<E> {
+ class PrologHashSet<E> extends AbstractSet<E> {
 
 	private int size;
 	private Object[] table;
 
-	public HashSet() {
+	public PrologHashSet() {
 		this(16);
 	}
 
-	public HashSet(int initialCapacity) {
+	public PrologHashSet(int initialCapacity) {
 		table = new Object[initialCapacity];
 	}
 
-	public HashSet(Collection<? extends E> c) {
+	public PrologHashSet(Collection<? extends E> c) {
 		this(c.size());
 		addAll(c);
 	}
@@ -86,7 +86,7 @@ public class HashSet<E> extends AbstractSet<E> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		HashSet<?> other = (HashSet<?>) obj;
+		PrologHashSet<?> other = (PrologHashSet<?>) obj;
 		if (size != other.size)
 			return false;
 		return Arrays.equals(table, other.table);

@@ -17,22 +17,22 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * @see HashSet
- * @see TreeSet
- * @see ArrayList
+ * @see PrologHashSet
+ * @see PrologTreeSet
+ * @see PrologArrayList
  * @author Jose Zalacain
  * @since 1.0
  * @param <E>
  *            generic object type
  */
-public abstract class AbstractCollection<E> implements Collection<E> {
+abstract class AbstractCollection<E> implements Collection<E> {
 
 	public AbstractCollection() {
 	}

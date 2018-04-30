@@ -17,14 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
 import java.util.Iterator;
 import java.util.Map;
 
 /**
- * @see HashMap
- * @see TreeMap
+ * @see PrologHashMap
+ * @see PrologTreeMap
  * @author Jose Zalacain
  * @since 1.0
  * @param <K>
@@ -32,7 +32,7 @@ import java.util.Map;
  * @param <V>
  *            generic object type for value
  */
-public abstract class AbstractMap<K, V> implements Map<K, V> {
+abstract class AbstractMap<K, V> implements Map<K, V> {
 
 	public AbstractMap() {
 	}
