@@ -27,24 +27,26 @@ import org.logicware.DatabaseUser;
 import org.logicware.HierarchicalDatabase;
 import org.logicware.ObjectConverter;
 import org.logicware.Settings;
+import org.logicware.StorageMode;
 import org.logicware.db.AbstractHerarchicalDatabase;
 
 public class PrologHerarchicalDatabase extends AbstractHerarchicalDatabase implements HierarchicalDatabase {
 
 	public PrologHerarchicalDatabase(PrologProvider provider, Settings properties, ContainerFactory containerFactory,
-			String name, DatabaseUser user) {
+			StorageMode storageMode, String name, DatabaseUser user) {
 		super(provider, containerFactory, name,
 				new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
 				new PrologStorageManager(provider, properties, new PrologObjectConverter(provider),
-						LOCATION + File.separator + name + File.separator + "database", containerFactory));
+						LOCATION + File.separator + name + File.separator + "database", containerFactory, storageMode));
 	}
 
 	public PrologHerarchicalDatabase(PrologProvider provider, Settings properties,
-			ObjectConverter<PrologTerm> converter, ContainerFactory containerFactory, String name, DatabaseUser user) {
+			ObjectConverter<PrologTerm> converter, ContainerFactory containerFactory, StorageMode storageMode,
+			String name, DatabaseUser user) {
 		super(provider, containerFactory, name,
 				new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
 				new PrologStorageManager(provider, properties, converter,
-						LOCATION + File.separator + name + File.separator + "database", containerFactory));
+						LOCATION + File.separator + name + File.separator + "database", containerFactory, storageMode));
 	}
 
 }

@@ -23,6 +23,7 @@ import org.logicware.ContainerFactory;
 import org.logicware.DatabaseUser;
 import org.logicware.HierarchicalDatabase;
 import org.logicware.Settings;
+import org.logicware.StorageMode;
 import org.logicware.RelationalDatabase;
 import org.logicware.prolog.PrologProvider;
 
@@ -36,12 +37,14 @@ public abstract class AbstractContainerFactory implements ContainerFactory {
 		this.provider = provider;
 	}
 
-	public RelationalDatabase createRelationalDatabase(String name, String username, String password) {
-		return createRelationalDatabase(name, new DatabaseUser(username, password));
+	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, String username,
+			String password) {
+		return createRelationalDatabase(storageMode, name, new DatabaseUser(username, password));
 	}
 
-	public HierarchicalDatabase createHierarchicalDatabase(String name, String username, String password) {
-		return createHierarchicalDatabase(name, new DatabaseUser(username, password));
+	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, String username,
+			String password) {
+		return createHierarchicalDatabase(storageMode, name, new DatabaseUser(username, password));
 	}
 
 	public final void setProvider(PrologProvider provider) {

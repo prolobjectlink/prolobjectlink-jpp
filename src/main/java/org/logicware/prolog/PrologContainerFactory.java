@@ -30,6 +30,7 @@ import org.logicware.Schema;
 import org.logicware.Storage;
 import org.logicware.StorageGraph;
 import org.logicware.StorageManager;
+import org.logicware.StorageMode;
 import org.logicware.StoragePool;
 import org.logicware.db.AbstractContainerFactory;
 
@@ -55,20 +56,20 @@ public abstract class PrologContainerFactory extends AbstractContainerFactory im
 		return new PrologStoragePool(getProvider(), getSettings(), path, name, this);
 	}
 
-	public StorageManager createStorageManager(String path) {
-		return new PrologStorageManager(getProvider(), getSettings(), path, this);
+	public StorageManager createStorageManager(String path, StorageMode storageMode) {
+		return new PrologStorageManager(getProvider(), getSettings(), path, this, storageMode);
 	}
 
-	public StorageGraph createStorageGraph(String path, Schema schema) {
-		return new PrologStorageGraph(getProvider(), getSettings(), path, schema, this);
+	public StorageGraph createStorageGraph(String path, Schema schema, StorageMode storageMode) {
+		return new PrologStorageGraph(getProvider(), getSettings(), path, schema, this, storageMode);
 	}
 
-	public RelationalDatabase createRelationalDatabase(String name, DatabaseUser user) {
-		return new PrologRelationalDatabase(getProvider(), getSettings(), this, name, user);
+	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
+		return new PrologRelationalDatabase(getProvider(), getSettings(), this, storageMode, name, user);
 	}
 
-	public HierarchicalDatabase createHierarchicalDatabase(String name, DatabaseUser user) {
-		return new PrologHerarchicalDatabase(getProvider(), getSettings(), this, name, user);
+	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
+		return new PrologHerarchicalDatabase(getProvider(), getSettings(), this, storageMode, name, user);
 	}
 
 }

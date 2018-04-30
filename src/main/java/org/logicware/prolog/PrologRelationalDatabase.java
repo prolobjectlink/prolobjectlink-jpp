@@ -26,27 +26,28 @@ import org.logicware.DatabaseSchema;
 import org.logicware.DatabaseUser;
 import org.logicware.ObjectConverter;
 import org.logicware.Settings;
+import org.logicware.StorageMode;
 import org.logicware.RelationalDatabase;
 import org.logicware.db.AbstractRelationalDatabase;
 
 public final class PrologRelationalDatabase extends AbstractRelationalDatabase implements RelationalDatabase {
 
 	public PrologRelationalDatabase(PrologProvider provider, Settings properties, ContainerFactory containerFactory,
-			String name, DatabaseUser user) {
+			StorageMode storageMode, String name, DatabaseUser user) {
 		super(provider, containerFactory, name,
 				new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
 				new PrologStorageGraph(LOCATION + File.separator + name + File.separator + "database",
 						new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user),
-						properties, provider, containerFactory, new PrologObjectConverter(provider)));
+						properties, provider, containerFactory, new PrologObjectConverter(provider), storageMode));
 	}
 
-	public PrologRelationalDatabase(PrologProvider provider, Settings properties,
-			ObjectConverter<PrologTerm> converter, ContainerFactory containerFactory, String name, DatabaseUser user) {
+	public PrologRelationalDatabase(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
+			ContainerFactory containerFactory, StorageMode storageMode, String name, DatabaseUser user) {
 		super(provider, containerFactory, name,
 				new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
 				new PrologStorageGraph(LOCATION + File.separator + name + File.separator + "database",
 						new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user),
-						properties, provider, containerFactory, converter));
+						properties, provider, containerFactory, converter, storageMode));
 	}
 
 }

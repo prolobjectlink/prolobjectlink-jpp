@@ -33,21 +33,23 @@ public interface ContainerFactory {
 
 	public RelationalCache createRelationalCache(Schema schema);
 
-	public RelationalDatabase createRelationalDatabase(String name, DatabaseUser user);
+	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user);
 
-	public RelationalDatabase createRelationalDatabase(String name, String username, String password);
+	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, String username,
+			String password);
 
 	public HierarchicalCache createHierarchicalCache();
 
-	public HierarchicalDatabase createHierarchicalDatabase(String name, DatabaseUser user);
+	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, DatabaseUser user);
 
-	public HierarchicalDatabase createHierarchicalDatabase(String name, String username, String password);
+	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, String username,
+			String password);
 
-	public StorageManager createStorageManager(String path);
+	public StorageManager createStorageManager(String path, StorageMode storageMode);
 
 	public StoragePool createStoragePool(String path, String name);
 
-	public StorageGraph createStorageGraph(String path, Schema schema);
+	public StorageGraph createStorageGraph(String path, Schema schema, StorageMode storageMode);
 
 	public Storage createStorage(String path);
 

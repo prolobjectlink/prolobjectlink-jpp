@@ -25,6 +25,7 @@ import org.logicware.ObjectConverter;
 import org.logicware.Settings;
 import org.logicware.Storage;
 import org.logicware.StorageManager;
+import org.logicware.StorageMode;
 import org.logicware.VolatileContainer;
 import org.logicware.storage.AbstractStorageManager;
 
@@ -40,13 +41,13 @@ import org.logicware.storage.AbstractStorageManager;
 public class PrologStorageManager extends AbstractStorageManager implements StorageManager {
 
 	public PrologStorageManager(PrologProvider provider, Settings properties, String location,
-			ContainerFactory containerFactory) {
-		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory);
+			ContainerFactory containerFactory, StorageMode storageMode) {
+		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory, storageMode);
 	}
 
 	public PrologStorageManager(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
-			String location, ContainerFactory containerFactory) {
-		super(provider, properties, converter, location, containerFactory);
+			String location, ContainerFactory containerFactory, StorageMode storageMode) {
+		super(provider, properties, converter, location, containerFactory, storageMode);
 	}
 
 }

@@ -30,6 +30,7 @@ import org.logicware.ObjectConverter;
 import org.logicware.Predicate;
 import org.logicware.Settings;
 import org.logicware.StorageGraph;
+import org.logicware.StorageMode;
 import org.logicware.graph.RelationalGraph;
 import org.logicware.storage.AbstractStorageGraph;
 
@@ -38,20 +39,21 @@ public class PrologStorageGraph extends AbstractStorageGraph implements StorageG
 	private final ObjectConverter<PrologTerm> converter;
 
 	public PrologStorageGraph(PrologProvider provider, Settings properties, String location, Schema schema,
-			ContainerFactory containerFactory) {
-		this(location, schema, properties, provider, containerFactory, new PrologObjectConverter(provider));
+			ContainerFactory containerFactory, StorageMode storageMode) {
+		this(location, schema, properties, provider, containerFactory, new PrologObjectConverter(provider),
+				storageMode);
 	}
 
 	public PrologStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
-			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter) {
-		super(location, schema, properties, provider, containerFactory, converter);
+			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter, StorageMode storageMode) {
+		super(location, schema, properties, provider, containerFactory, converter, storageMode);
 		this.converter = converter;
 	}
 
 	public PrologStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
-			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter,
+			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter, StorageMode storageMode,
 			RelationalGraph<Object, Object> graph) {
-		super(location, schema, properties, provider, containerFactory, converter, graph);
+		super(location, schema, properties, provider, containerFactory, converter, storageMode, graph);
 		this.converter = converter;
 	}
 

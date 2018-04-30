@@ -34,6 +34,7 @@ import org.logicware.Query;
 import org.logicware.Settings;
 import org.logicware.Storage;
 import org.logicware.StorageManager;
+import org.logicware.StorageMode;
 import org.logicware.StoragePool;
 import org.logicware.Transaction;
 import org.logicware.TypedQuery;
@@ -45,14 +46,17 @@ import org.logicware.util.ArrayList;
 
 public abstract class AbstractStorageManager extends AbstractPersistentContainer implements StorageManager {
 
+	private final StorageMode storageMode;
 	private final Transaction transaction;
 	private final HashMap<String, PersistentContainer> master;
 
 	protected AbstractStorageManager(PrologProvider provider, Settings properties,
-			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory) {
+			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory,
+			StorageMode storageMode) {
 		super(provider, properties, converter, location, containerFactory);
 		this.master = new HashMap<String, PersistentContainer>();
 		this.transaction = new DefaultTransaction(this);
+		this.storageMode = storageMode;
 	}
 
 	public final void open() {
@@ -185,7 +189,11 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		PersistentContainer container = master.get(key);
 		if (container == null) {
 			String path = locationOf(clazz);
-			container = containerFactory.createStoragePool(path, name);
+			if (storageMode == StorageMode.STORAGE_POOL) {
+				container = containerFactory.createStoragePool(path, name);
+			} else if (storageMode == StorageMode.SINGLE_STORAGE) {
+				container = containerFactory.createStorage(path);
+			}
 			master.put(key, container);
 		}
 		return container;

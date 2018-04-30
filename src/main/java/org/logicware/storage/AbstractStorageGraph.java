@@ -33,6 +33,7 @@ import org.logicware.Schema;
 import org.logicware.Settings;
 import org.logicware.StorageGraph;
 import org.logicware.StorageManager;
+import org.logicware.StorageMode;
 import org.logicware.Transaction;
 import org.logicware.TypedQuery;
 import org.logicware.graph.RelationalGraph;
@@ -43,9 +44,9 @@ import org.logicware.prolog.PrologTerm;
 public abstract class AbstractStorageGraph extends RelationalGraph<Object, Object>
 		implements PersistentContainer, StorageGraph {
 
+	private final Schema schema;
 	private final String location;
 	private final PrologEngine engine;
-	private final Schema schema;
 	private final Settings properties;
 	private final StorageManager storage;
 	private final PrologProvider provider;
@@ -54,8 +55,8 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 	private final ObjectConverter<PrologTerm> converter;
 
 	public AbstractStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
-			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter) {
-		this.storage = containerFactory.createStorageManager(location);
+			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter, StorageMode storageMode) {
+		this.storage = containerFactory.createStorageManager(location, storageMode);
 		this.transaction = new DefaultTransaction(this);
 		this.containerFactory = containerFactory;
 		this.engine = provider.newEngine();
@@ -67,10 +68,10 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 	}
 
 	public AbstractStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
-			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter,
+			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter, StorageMode storageMode,
 			RelationalGraph<Object, Object> graph) {
 		super(graph);
-		this.storage = containerFactory.createStorageManager(location);
+		this.storage = containerFactory.createStorageManager(location, storageMode);
 		this.transaction = new DefaultTransaction(this);
 		this.containerFactory = containerFactory;
 		this.engine = provider.newEngine();

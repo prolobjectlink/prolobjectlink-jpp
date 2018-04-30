@@ -191,12 +191,13 @@ public final class Settings extends AbstractMap<Object, Object>
 		return getContainerFactory().createHierarchicalCache();
 	}
 
-	public HierarchicalDatabase createHierarchicalDatabase(String name, DatabaseUser user) {
-		return getContainerFactory().createHierarchicalDatabase(name, user);
+	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
+		return getContainerFactory().createHierarchicalDatabase(storageMode, name, user);
 	}
 
-	public HierarchicalDatabase createHierarchicalDatabase(String name, String username, String password) {
-		return containerFactory.createHierarchicalDatabase(name, username, password);
+	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, String username,
+			String password) {
+		return containerFactory.createHierarchicalDatabase(storageMode, name, username, password);
 	}
 
 	public Storage createStorage(String location) {
@@ -207,24 +208,25 @@ public final class Settings extends AbstractMap<Object, Object>
 		return getContainerFactory().createStoragePool(poolRoot, poolName);
 	}
 
-	public StorageGraph createStorageGraph(String path, Schema schema) {
-		return containerFactory.createStorageGraph(path, schema);
+	public StorageGraph createStorageGraph(String path, Schema schema, StorageMode storageMode) {
+		return containerFactory.createStorageGraph(path, schema, storageMode);
 	}
 
-	public StorageManager createStorageManager(String root) {
-		return getContainerFactory().createStorageManager(root);
+	public StorageManager createStorageManager(String path, StorageMode storageMode) {
+		return getContainerFactory().createStorageManager(path, storageMode);
 	}
 
 	public RelationalCache createRelationalCache(Schema schema) {
 		return containerFactory.createRelationalCache(schema);
 	}
 
-	public RelationalDatabase createRelationalDatabase(String name, DatabaseUser user) {
-		return getContainerFactory().createRelationalDatabase(name, user);
+	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
+		return getContainerFactory().createRelationalDatabase(storageMode, name, user);
 	}
 
-	public RelationalDatabase createRelationalDatabase(String name, String username, String password) {
-		return containerFactory.createRelationalDatabase(name, username, password);
+	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, String username,
+			String password) {
+		return containerFactory.createRelationalDatabase(storageMode, name, username, password);
 	}
 
 	public void setProvider(PrologProvider provider) {
