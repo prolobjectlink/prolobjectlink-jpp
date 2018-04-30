@@ -27,21 +27,17 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public final class JDBCDriver implements Driver {
+public abstract class JDBCDriver implements Driver {
 
 	private static final int MAJOR = 1;
 	private static final int MINOR = 0;
 
 	static final String URL_PREFIX = "jdbc:prolobjectlink:store:";
-	public static final String JPI_PROVIDER_PROPERTY = "org.logicware.prolobjectlink.jpi.provider";
-	// private static final ObjectReflector REFLECTOR = new ObjectReflector();
 
 	public Connection connect(String url, Properties info) throws SQLException {
 		url = url.replace(JDBCDriver.URL_PREFIX, "");
-		// String c = String.valueOf(info.getProperty(JPI_PROVIDER_PROPERTY));
-		// PrologProvider provider = PrologFactory.newProvider(c);
-		// PrologEngine engine = provider.newEngine();
-		return new JDBCConnection(url, info);
+		// TODO
+		return null;
 	}
 
 	public boolean acceptsURL(String url) throws SQLException {

@@ -35,6 +35,7 @@ import static org.logicware.prolog.PrologTermType.VARIABLE_TYPE;
 import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -168,8 +169,13 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 
 			}
 
-			// collections transformations
-			if (structureClass == org.logicware.prolog.PrologArrayList.class) {
+			// java.util.date transformations
+			if (structureClass == org.logicware.prolog.PrologDate.class) {
+				return new Date(((PrologDate) object).getTime());
+			}
+
+			// java.util.collections transformations
+			else if (structureClass == org.logicware.prolog.PrologArrayList.class) {
 				return JavaLists.arrayList((org.logicware.prolog.PrologArrayList<?>) object);
 			} else if (structureClass == org.logicware.prolog.PrologHashMap.class) {
 				return JavaMaps.hashMap((org.logicware.prolog.PrologHashMap<?, ?>) object);
@@ -223,7 +229,12 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			return provider.newList(toTermsArray((Object[]) object));
 		}
 
-		// collections transformations
+		// java.util.date transformations
+		else if (object instanceof Date) {
+			return toTerm(new PrologDate(((Date) object).getTime()));
+		}
+
+		// java.util.collections transformations
 		else if (object instanceof ArrayList) {
 			ArrayList<?> l = (ArrayList<?>) object;
 			return toTerm(PrologLists.arrayList(l));

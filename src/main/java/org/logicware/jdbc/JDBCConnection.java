@@ -40,7 +40,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public final class JDBCConnection extends JDBCWrapper implements Connection {
+public abstract class JDBCConnection extends JDBCWrapper implements Connection {
 
 	//
 	private final String url;

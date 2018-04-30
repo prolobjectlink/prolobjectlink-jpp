@@ -17,17 +17,17 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.util;
+package org.logicware.prolog;
 
-public final class DateTime implements Comparable<DateTime> {
+final class PrologDate implements Comparable<PrologDate> {
 
 	private long time;
 
-	public DateTime() {
+	public PrologDate() {
 		this(System.currentTimeMillis());
 	}
 
-	public DateTime(long time) {
+	public PrologDate(long time) {
 		this.time = time;
 	}
 
@@ -39,15 +39,15 @@ public final class DateTime implements Comparable<DateTime> {
 		return new java.util.Date(time);
 	}
 
-	public boolean before(DateTime dateTime) {
+	public boolean before(PrologDate dateTime) {
 		return compareTo(dateTime) < 0;
 	}
 
-	public boolean after(DateTime dateTime) {
+	public boolean after(PrologDate dateTime) {
 		return compareTo(dateTime) > 0;
 	}
 
-	public int compareTo(DateTime o) {
+	public int compareTo(PrologDate o) {
 		int t = time > o.time ? 1 : 0;
 		return time < o.time ? -1 : t;
 	}
@@ -73,7 +73,7 @@ public final class DateTime implements Comparable<DateTime> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DateTime other = (DateTime) obj;
+		PrologDate other = (PrologDate) obj;
 		return time == other.time;
 	}
 
