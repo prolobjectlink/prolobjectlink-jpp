@@ -34,12 +34,23 @@ import static org.logicware.prolog.PrologTermType.VARIABLE_TYPE;
 
 import java.lang.reflect.Field;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.logicware.AbstractConverter;
 import org.logicware.ClassNotFoundError;
 import org.logicware.ObjectConverter;
+import org.logicware.util.JavaLists;
+import org.logicware.util.JavaMaps;
+import org.logicware.util.JavaSets;
+import org.logicware.util.Lists;
+import org.logicware.util.Maps;
+import org.logicware.util.Sets;
 
 public final class PrologObjectConverter extends AbstractConverter<PrologTerm> implements ObjectConverter<PrologTerm> {
 
@@ -170,6 +181,20 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 				throw new ClassNotFoundError(className, e);
 			}
 
+			// collections transformations
+			if (object instanceof org.logicware.util.ArrayList) {
+				return JavaLists.arrayList((org.logicware.util.ArrayList<?>) object);
+			} else if (object instanceof org.logicware.util.HashMap) {
+				return JavaMaps.hashMap((org.logicware.util.HashMap<?, ?>) object);
+			} else if (object instanceof org.logicware.util.HashSet) {
+				return JavaSets.hashSet((org.logicware.util.HashSet<?>) object);
+			} else if (object instanceof org.logicware.util.TreeMap) {
+				return JavaMaps.treeMap((org.logicware.util.TreeMap) object);
+			} else if (object instanceof org.logicware.util.TreeSet) {
+				return JavaSets.treeSet((org.logicware.util.TreeSet) object);
+			}
+			//
+
 			return object;
 
 		default:
@@ -207,10 +232,31 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			return provider.newDouble((Double) object);
 		}
 
-		//
+		// object array
 		else if (object instanceof Object[]) {
 			return provider.newList(toTermsArray((Object[]) object));
-		} else {
+		}
+
+		// collections transformations
+		else if (object instanceof ArrayList) {
+			ArrayList<?> l = (ArrayList<?>) object;
+			return toTerm(Lists.arrayList(l));
+		} else if (object instanceof HashMap) {
+			HashMap<?, ?> m = (HashMap<?, ?>) object;
+			return toTerm(Maps.hashMap(m));
+		} else if (object instanceof HashSet) {
+			HashSet<?> s = (HashSet<?>) object;
+			return toTerm(Sets.hashSet(s));
+		} else if (object instanceof TreeMap) {
+			TreeMap m = (TreeMap) object;
+			return toTerm(Maps.treeMap(m));
+		} else if (object instanceof TreeSet) {
+			TreeSet s = (TreeSet) object;
+			return toTerm(Sets.treeSet(s));
+		}
+		//
+
+		else {
 			return toStructure(object.getClass(), object);
 		}
 

@@ -34,7 +34,16 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 	private HashEntry<K, V>[] table;
 
 	public HashMap() {
-		table = new HashEntry[16];
+		this(16);
+	}
+
+	public HashMap(int initialCapacity) {
+		table = new HashEntry[initialCapacity];
+	}
+
+	public HashMap(Map<? extends K, ? extends V> m) {
+		this(m.size());
+		putAll(m);
 	}
 
 	private int indexOf(int hash) {

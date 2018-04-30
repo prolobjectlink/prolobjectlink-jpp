@@ -30,11 +30,15 @@ public class HashSet<E> extends AbstractSet<E> {
 	private Object[] table;
 
 	public HashSet() {
-		table = new Object[16];
+		this(16);
+	}
+
+	public HashSet(int initialCapacity) {
+		table = new Object[initialCapacity];
 	}
 
 	public HashSet(Collection<? extends E> c) {
-		this();
+		this(c.size());
 		addAll(c);
 	}
 
