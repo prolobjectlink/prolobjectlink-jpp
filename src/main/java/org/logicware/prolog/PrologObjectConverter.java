@@ -123,14 +123,13 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			return toObjectsArray(prologTerm.getArguments());
 		case STRUCTURE_TYPE:
 
-			System.out.println(prologTerm.getFunctor());
-
+			// getting class from structure
 			Class<?> structureClass = toClass(prologTerm);
 
 			//
 			Object object = null;
 
-			// getting class from class map
+			// getting class from structure
 			Class<?> classPtr = structureClass;
 
 			// creating new instance
@@ -172,6 +171,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 
 			}
 
+			// collections transformations
 			if (structureClass == org.logicware.util.ArrayList.class) {
 				return JavaLists.arrayList((org.logicware.util.ArrayList<?>) object);
 			} else if (structureClass == org.logicware.util.HashMap.class) {
@@ -243,10 +243,13 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			TreeSet s = (TreeSet) object;
 			return toTerm(Sets.treeSet(s));
 		}
-		//
 
+		// structure default case
 		else {
-			return toStructure(object.getClass(), object);
+
+			PrologStructure structure = toStructure(object.getClass(), object);
+
+			return structure;
 		}
 
 	}
