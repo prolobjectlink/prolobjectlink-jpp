@@ -135,41 +135,41 @@ public abstract class AbstractTerm extends AbstractWrapper implements PrologTerm
 		return functor;
 	}
 
-	public final <K extends PrologTerm> K toTerm(Object o, Class<K> from) {
+	protected final <K extends PrologTerm> K toTerm(Object o, Class<K> from) {
 		return provider.toTerm(o, from);
 	}
 
-	public final <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from) {
+	protected final <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from) {
 		return provider.toTermArray(os, from);
 	}
 
-	public final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
+	protected final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
 		return provider.toTermMatrix(oss, from);
 	}
 
-	public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
+	protected final <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
 			Class<K> from) {
 		return provider.toTermMap(map, from);
 	}
 
-	public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
-			Class<K> from) {
+	protected final <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(
+			Map<String, V>[] map, Class<K> from) {
 		return provider.toTermMapArray(map, from);
 	}
 
-	public final <K> K fromTerm(PrologTerm term, Class<K> to) {
+	protected final <K> K fromTerm(PrologTerm term, Class<K> to) {
 		return provider.fromTerm(term, to);
 	}
 
-	public final <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to) {
+	protected final <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to) {
 		return provider.fromTermArray(terms, to);
 	}
 
-	public final <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to) {
+	protected final <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to) {
 		return provider.fromTerm(head, body, to);
 	}
 
-	public /* final */ PrologTerm getArgument(int index) {
+	public PrologTerm getArgument(int index) {
 		PrologTerm[] array = getArguments();
 		checkIndex(index, array.length);
 		return array[index];

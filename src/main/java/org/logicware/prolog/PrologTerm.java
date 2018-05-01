@@ -230,24 +230,6 @@ public interface PrologTerm extends Wrapper, Comparable<PrologTerm> {
 
 	public String toString();
 
-	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
-			Class<K> from);
-
-	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
-			Class<K> from);
-
-	public <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from);
-
-	public <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from);
-
-	public <K extends PrologTerm> K toTerm(Object o, Class<K> from);
-
-	public <K> K fromTerm(PrologTerm term, Class<K> to);
-
-	public <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to);
-
-	public <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to);
-
 	public PrologProvider getProvider();
 
 }

@@ -27,9 +27,9 @@ import org.logicware.AbstractWrapper;
 public abstract class AbstractQuery extends AbstractWrapper implements PrologQuery {
 
 	// engine for execute queries
-	protected final PrologEngine engine;
+	protected final AbstractEngine engine;
 
-	public AbstractQuery(PrologEngine engine) {
+	public AbstractQuery(AbstractEngine engine) {
 		this.engine = engine;
 	}
 
@@ -45,33 +45,33 @@ public abstract class AbstractQuery extends AbstractWrapper implements PrologQue
 		return engine.toTerm(o, from);
 	}
 
-	public final <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from) {
+	protected final <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from) {
 		return engine.toTermArray(os, from);
 	}
 
-	public final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
+	protected final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
 		return engine.toTermMatrix(oss, from);
 	}
 
-	public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
+	protected final <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
 			Class<K> from) {
 		return engine.toTermMap(map, from);
 	}
 
-	public final <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
-			Class<K> from) {
+	protected final <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(
+			Map<String, V>[] map, Class<K> from) {
 		return engine.toTermMapArray(map, from);
 	}
 
-	public final <K> K fromTerm(PrologTerm term, Class<K> to) {
+	protected final <K> K fromTerm(PrologTerm term, Class<K> to) {
 		return engine.fromTerm(term, to);
 	}
 
-	public final <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to) {
+	protected final <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to) {
 		return engine.fromTermArray(terms, to);
 	}
 
-	public final <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to) {
+	protected final <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to) {
 		return engine.fromTerm(head, body, to);
 	}
 

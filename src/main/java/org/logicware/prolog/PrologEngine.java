@@ -356,24 +356,6 @@ public interface PrologEngine extends Platform, Iterable<PrologClause> {
 
 	public List<Map<String, PrologTerm>> queryAll(PrologTerm... goal);
 
-	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm>[] toTermMapArray(Map<String, V>[] map,
-			Class<K> from);
-
-	public <K extends PrologTerm, V extends Object> Map<String, PrologTerm> toTermMap(Map<String, V> map,
-			Class<K> from);
-
-	public <K extends PrologTerm> K[][] toTermMatrix(Object[][] oss, Class<K[][]> from);
-
-	public <K extends PrologTerm> K[] toTermArray(Object[] os, Class<K[]> from);
-
-	public <K extends PrologTerm> K toTerm(Object o, Class<K> from);
-
-	public <K> K fromTerm(PrologTerm term, Class<K> to);
-
-	public <K> K[] fromTermArray(PrologTerm[] terms, Class<K[]> to);
-
-	public <K> K fromTerm(PrologTerm head, PrologTerm[] body, Class<K> to);
-
 	/**
 	 * Define an operator in the wrapped prolog engine with priority priority
 	 * between 0 and 1200 and associativity determined by specifier according to
