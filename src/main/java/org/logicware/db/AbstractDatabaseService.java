@@ -21,6 +21,8 @@ package org.logicware.db;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.logicware.ContainerFactory;
 import org.logicware.DatabaseEngine;
 import org.logicware.DatabaseUser;
@@ -173,6 +175,11 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 
 	public void defragment() {
 		engine.defragment();
+	}
+
+	public final EntityManager geEntityManager() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

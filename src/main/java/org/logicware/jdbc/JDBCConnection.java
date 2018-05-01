@@ -25,6 +25,7 @@ import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.Driver;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
 import java.sql.SQLClientInfoException;
@@ -35,46 +36,59 @@ import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public abstract class JDBCConnection extends JDBCWrapper implements Connection {
+import org.logicware.DatabaseService;
+
+public final class JDBCConnection extends JDBCWrapper implements Connection {
 
 	//
 	private final String url;
-	private final Properties info;
+	private final Driver driver;
+	private Properties info;
 
 	//
+	private boolean closed;
+	private int holdability;
 	private boolean readOnly;
 	private boolean autoCommit;
+	private int isolationLevel;
 
+	//
+	private final DatabaseService database;
+
+	//
+	private final List<Savepoint> savepoints = new ArrayList<Savepoint>();
+
+	//
 	private Map<String, Class<?>> typeMap = new HashMap<String, Class<?>>();
 
-	JDBCConnection(String url, Properties info) {
+	public JDBCConnection(String url, Properties info, Driver driver, DatabaseService database) {
+		this.database = database;
+		this.driver = driver;
 		this.info = info;
 		this.url = url;
 	}
 
 	public Statement createStatement() throws SQLException {
-		// TODO use to refactoring sql query lower case i.e.
-		return null;
+		throw new SQLFeatureNotSupportedException("createStatement()");
 	}
 
 	public PreparedStatement prepareStatement(String sql) throws SQLException {
-		// TODO use to refactoring sql query lower case i.e.
-		return null;
+		throw new SQLFeatureNotSupportedException("prepareStatement(String sql)");
 	}
 
 	public CallableStatement prepareCall(String sql) throws SQLException {
-		// TODO use to refactoring sql query lower case i.e.
-		return null;
+		throw new SQLFeatureNotSupportedException("prepareCall(String sql)");
 	}
 
 	public String nativeSQL(String sql) throws SQLException {
-		// TODO use to refactoring sql query lower case i.e.
-		return null;
+		throw new SQLFeatureNotSupportedException("nativeSQL(String sql)");
 	}
 
 	public void setAutoCommit(boolean autoCommit) throws SQLException {
@@ -86,21 +100,23 @@ public abstract class JDBCConnection extends JDBCWrapper implements Connection {
 	}
 
 	public void commit() throws SQLException {
-		// TODO Auto-generated method stub
-
+		for (Savepoint savepoint : savepoints) {
+			if (savepoint instanceof JDBCSavepoint) {
+				((JDBCSavepoint) savepoint).commit();
+			}
+		}
 	}
 
-	/**
-	 * Consult the file loading persistent data and removing from memory all
-	 * changes
-	 */
 	public void rollback() throws SQLException {
-		// TODO Auto-generated method stub
-
+		for (Savepoint savepoint : savepoints) {
+			if (savepoint instanceof JDBCSavepoint) {
+				((JDBCSavepoint) savepoint).rollback();
+			}
+		}
 	}
 
 	public DatabaseMetaData getMetaData() throws SQLException {
-		throw new SQLFeatureNotSupportedException("getMetaData()");
+		return new JDBCMetadata(database.getSchema(), driver, this);
 	}
 
 	public void setReadOnly(boolean readOnly) throws SQLException {
@@ -112,49 +128,42 @@ public abstract class JDBCConnection extends JDBCWrapper implements Connection {
 	}
 
 	public void setCatalog(String catalog) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLFeatureNotSupportedException("setCatalog(String catalog)");
 	}
 
 	public String getCatalog() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getCatalog()");
 	}
 
 	public void setTransactionIsolation(int level) throws SQLException {
-		// TODO Auto-generated method stub
-
+		this.isolationLevel = level;
 	}
 
 	public int getTransactionIsolation() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		return isolationLevel;
 	}
 
 	public SQLWarning getWarnings() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getWarnings()");
 	}
 
 	public void clearWarnings() throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLFeatureNotSupportedException("clearWarnings()");
 	}
 
 	public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("createStatement(int resultSetType, int resultSetConcurrency) ");
 	}
 
 	public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)
 			throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException(
+				"prepareStatement(String sql, int resultSetType, int resultSetConcurrency)");
 	}
 
 	public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException(
+				"prepareCall(String sql, int resultSetType, int resultSetConcurrency)");
 	}
 
 	public Map<String, Class<?>> getTypeMap() throws SQLException {
@@ -166,121 +175,113 @@ public abstract class JDBCConnection extends JDBCWrapper implements Connection {
 	}
 
 	public void setHoldability(int holdability) throws SQLException {
-		// TODO Auto-generated method stub
-
+		this.holdability = holdability;
 	}
 
 	public int getHoldability() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		return holdability;
 	}
 
 	public Savepoint setSavepoint() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return setSavepoint("" + System.currentTimeMillis() + "");
 	}
 
 	public Savepoint setSavepoint(String name) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Savepoint savepoint = new JDBCSavepoint(savepoints.size(), name, database.getTransaction());
+		savepoints.add(savepoint);
+		return savepoint;
 	}
 
 	public void rollback(Savepoint savepoint) throws SQLException {
-		// TODO Auto-generated method stub
-
+		// int index=Collections.binarySearch(savepoints, savepoint);
+		for (int i = savepoints.indexOf(savepoint) + 1; i < savepoints.size(); i++) {
+			Savepoint oldSavepoint = savepoints.remove(i);
+			if (oldSavepoint instanceof JDBCSavepoint) {
+				JDBCSavepoint sp = (JDBCSavepoint) oldSavepoint;
+				sp.rollback();
+			}
+		}
 	}
 
 	public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-		// TODO Auto-generated method stub
-
+		// int index=Collections.binarySearch(savepoints, savepoint);
+		for (int i = savepoints.indexOf(savepoint); i < savepoints.size(); i++) {
+			savepoints.remove(i);
+		}
 	}
 
 	public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)
 			throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException(
+				"createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)");
 	}
 
 	public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency,
 			int resultSetHoldability) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException(
+				"prepareStatement(String sql, int resultSetType, int resultSetConcurrency,int resultSetHoldability)");
 	}
 
 	public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency,
 			int resultSetHoldability) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException(
+				"prepareCall(String sql, int resultSetType, int resultSetConcurrency,int resultSetHoldability)");
 	}
 
 	public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public Clob createClob() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public Blob createBlob() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public NClob createNClob() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public SQLXML createSQLXML() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public boolean isValid(int timeout) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public void setClientInfo(String name, String value) throws SQLClientInfoException {
-		// TODO Auto-generated method stub
-
+		info.setProperty(name, value);
 	}
 
 	public void setClientInfo(Properties properties) throws SQLClientInfoException {
-		// TODO Auto-generated method stub
-
+		this.info = properties;
 	}
 
 	public String getClientInfo(String name) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return info.getProperty(name);
 	}
 
 	public Properties getClientInfo() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return info;
 	}
 
 	public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public void setSchema(String schema) throws SQLException {
@@ -292,22 +293,15 @@ public abstract class JDBCConnection extends JDBCWrapper implements Connection {
 	}
 
 	public void abort(Executor executor) throws SQLException {
+		throw new SQLFeatureNotSupportedException("abort(Executor executor)");
 	}
 
 	public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	public int getNetworkTimeout() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public Properties getInfo() {
-		return info;
+		throw new SQLFeatureNotSupportedException("getSchema()");
 	}
 
 	@Override
@@ -340,14 +334,12 @@ public abstract class JDBCConnection extends JDBCWrapper implements Connection {
 		return true;
 	}
 
-	public void close() throws SQLException {
-		// TODO Auto-generated method stub
-
+	public boolean isClosed() throws SQLException {
+		return closed;
 	}
 
-	public boolean isClosed() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+	public void close() throws SQLException {
+		closed = true;
 	}
 
 }

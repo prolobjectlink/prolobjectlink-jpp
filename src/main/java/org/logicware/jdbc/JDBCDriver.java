@@ -27,6 +27,8 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.logicware.DatabaseService;
+
 public abstract class JDBCDriver implements Driver {
 
 	private static final int MAJOR = 1;
@@ -36,8 +38,9 @@ public abstract class JDBCDriver implements Driver {
 
 	public Connection connect(String url, Properties info) throws SQLException {
 		url = url.replace(JDBCDriver.URL_PREFIX, "");
-		// TODO
-		return null;
+		DatabaseService database = null;
+		// FIXME
+		return new JDBCConnection(url, info, this, database);
 	}
 
 	public boolean acceptsURL(String url) throws SQLException {

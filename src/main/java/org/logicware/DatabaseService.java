@@ -19,7 +19,11 @@
  */
 package org.logicware;
 
+import javax.persistence.EntityManager;
+
 public interface DatabaseService extends DatabaseEngine {
+
+	public EntityManager geEntityManager();
 
 	public DatabaseMode getMode();
 

@@ -50,7 +50,7 @@ public interface VolatileContainer extends Container {
 	public <O> List<O> findAll(Class<O> clazz);
 
 	public <O> List<O> findAll(Predicate<O> predicate);
-	
+
 	/**
 	 * Remove all object of given class from the cache.
 	 * 

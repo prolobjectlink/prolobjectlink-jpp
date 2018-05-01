@@ -22,11 +22,10 @@ package org.logicware.prolog;
 import java.util.Map;
 
 import org.logicware.AbstractWrapper;
-import org.logicware.IndexOutOfBoundError;
 
 public abstract class AbstractTerm extends AbstractWrapper implements PrologTerm {
 
-	protected /* final */ int type;
+	protected int type;
 	protected final PrologProvider provider;
 
 	public AbstractTerm(PrologProvider provider) {
@@ -36,84 +35,6 @@ public abstract class AbstractTerm extends AbstractWrapper implements PrologTerm
 	public AbstractTerm(int type, PrologProvider provider) {
 		this.type = type;
 		this.provider = provider;
-	}
-
-	protected final void assertList() {
-		if (!isList()) {
-			throw new ListExpectedError(this);
-		}
-	}
-
-	protected final void assertAtom() {
-		if (!isAtom()) {
-			throw new AtomExpectedError(this);
-		}
-	}
-
-	protected final void assertFloat() {
-		if (!isFloat()) {
-			throw new FloatExpectedError(this);
-		}
-	}
-
-	protected final void assertLong() {
-		if (!isLong()) {
-			throw new LongExpectedError(this);
-		}
-	}
-
-	protected final void assertDouble() {
-		if (!isDouble()) {
-			throw new DoubleExpectedError(this);
-		}
-	}
-
-	protected final void assertInteger() {
-		if (!isInteger()) {
-			throw new IntegerExpectedError(this);
-		}
-	}
-
-	protected final void assertNumber() {
-		if (!isNumber()) {
-			throw new NumberExpectedError(this);
-		}
-	}
-
-	protected final void assertVariable() {
-		if (!isVariable()) {
-			throw new VariableExpectedError(this);
-		}
-	}
-
-	protected final void assertAtomic() {
-		if (!isAtomic()) {
-			throw new AtomicExpectedError(this);
-		}
-	}
-
-	protected final void assertCompound() {
-		if (!isCompound()) {
-			throw new CompoundExpectedError(this);
-		}
-	}
-
-	protected final void assertStructure() {
-		if (!isStructure()) {
-			throw new StructureExpectedError(this);
-		}
-	}
-
-	protected final void assertHasArity() {
-		if (!isCompound() && !isAtom() && !isEmptyList()) {
-			throw new ArityError(this);
-		}
-	}
-
-	protected final void assertHasFunctor() {
-		if (!isCompound() && !isAtom() && !isEmptyList()) {
-			throw new FunctorError(this);
-		}
 	}
 
 	protected final void checkIndex(int index) {

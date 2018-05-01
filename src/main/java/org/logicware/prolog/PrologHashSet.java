@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
- class PrologHashSet<E> extends AbstractSet<E> {
+class PrologHashSet<E> extends AbstractSet<E> {
 
 	private int size;
 	private Object[] table;

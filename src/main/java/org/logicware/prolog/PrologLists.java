@@ -22,7 +22,7 @@ package org.logicware.prolog;
 import java.util.Collection;
 import java.util.List;
 
- final class PrologLists {
+final class PrologLists {
 
 	private PrologLists() {
 	}

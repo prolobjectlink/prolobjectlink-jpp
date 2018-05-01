@@ -25,13 +25,11 @@ import java.sql.Wrapper;
 public class JDBCWrapper implements Wrapper {
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return iface.cast(this);
 	}
 
 	public boolean isWrapperFor(Class<?> iface) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		return iface.isInstance(this);
 	}
 
 }

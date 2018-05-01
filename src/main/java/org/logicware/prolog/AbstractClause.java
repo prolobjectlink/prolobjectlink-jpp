@@ -91,7 +91,7 @@ public abstract class AbstractClause implements PrologClause {
 	public final PrologTerm[] getBodyArray() {
 		PrologTerm ptr = getBody();
 		List<PrologTerm> terms = new ArrayList<PrologTerm>();
-		while (ptr.isCompound() && ptr.hasIndicator(",", 2)) {
+		while (ptr != null && ptr.isCompound() && ptr.hasIndicator(",", 2)) {
 			terms.add(ptr.getArgument(0));
 			ptr = ptr.getArgument(1);
 		}

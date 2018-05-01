@@ -28,10 +28,10 @@ import java.io.IOException;
 import org.logicware.logging.LoggerUtils;
 
 /**
- * File filter for filter files in document pools. The documents to filter are
- * files that end with a number that indicate the pool index. Used when document
- * pool open the entire pool and need filter pool files in a pool root directory
- * that have lock files and pool files.
+ * File filter for filter files in storage pools. The storages files to filter
+ * are files that end with a number that indicate the pool index. Used when
+ * document pool open the entire pool and need filter pool files in a pool root
+ * directory that have lock files and pool files.
  * 
  * @author Jose Zalacain
  * @since 1.0

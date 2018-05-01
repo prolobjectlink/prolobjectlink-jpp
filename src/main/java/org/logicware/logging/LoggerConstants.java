@@ -53,7 +53,9 @@ public enum LoggerConstants {
 
 	NO_SUCH_METHOD_ERROR("No such method error"),
 
-	SECURITY_ERROR("Security error ");
+	SECURITY_ERROR("Security error "),
+
+	SQL_ERROR("SQL error ");
 
 	private final String name;
 

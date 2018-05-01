@@ -22,7 +22,7 @@ package org.logicware.prolog;
 import java.util.Collection;
 import java.util.Set;
 
- final class PrologSets {
+final class PrologSets {
 
 	private PrologSets() {
 	}

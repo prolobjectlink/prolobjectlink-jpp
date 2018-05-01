@@ -21,20 +21,31 @@ package org.logicware.jdbc;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.Driver;
 import java.sql.ResultSet;
 import java.sql.RowIdLifetime;
 import java.sql.SQLException;
 
+import org.logicware.Schema;
+
 public class JDBCMetadata extends JDBCWrapper implements DatabaseMetaData {
 
+	private final Schema schema;
+	private final Driver driver;
+	private final Connection connection;
+
+	public JDBCMetadata(Schema schema, Driver driver, Connection connection) {
+		this.connection = connection;
+		this.schema = schema;
+		this.driver = driver;
+	}
+
 	public boolean allProceduresAreCallable() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public boolean allTablesAreSelectable() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public String getURL() throws SQLException {
@@ -48,8 +59,7 @@ public class JDBCMetadata extends JDBCWrapper implements DatabaseMetaData {
 	}
 
 	public boolean isReadOnly() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		return connection.isReadOnly();
 	}
 
 	public boolean nullsAreSortedHigh() throws SQLException {
@@ -83,33 +93,27 @@ public class JDBCMetadata extends JDBCWrapper implements DatabaseMetaData {
 	}
 
 	public String getDriverName() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return driver.toString();
 	}
 
 	public String getDriverVersion() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return driver.getMajorVersion() + "." + driver.getMinorVersion();
 	}
 
 	public int getDriverMajorVersion() {
-		// TODO Auto-generated method stub
-		return 0;
+		return driver.getMajorVersion();
 	}
 
 	public int getDriverMinorVersion() {
-		// TODO Auto-generated method stub
-		return 0;
+		return driver.getMinorVersion();
 	}
 
 	public boolean usesLocalFiles() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public boolean usesLocalFilePerTable() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public boolean supportsMixedCaseIdentifiers() throws SQLException {
@@ -278,37 +282,30 @@ public class JDBCMetadata extends JDBCWrapper implements DatabaseMetaData {
 	}
 
 	public boolean supportsMinimumSQLGrammar() throws SQLException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean supportsCoreSQLGrammar() throws SQLException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean supportsExtendedSQLGrammar() throws SQLException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean supportsANSI92EntryLevelSQL() throws SQLException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean supportsANSI92IntermediateSQL() throws SQLException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean supportsANSI92FullSQL() throws SQLException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean supportsIntegrityEnhancementFacility() throws SQLException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -778,8 +775,7 @@ public class JDBCMetadata extends JDBCWrapper implements DatabaseMetaData {
 	}
 
 	public Connection getConnection() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return connection;
 	}
 
 	public boolean supportsSavepoints() throws SQLException {
