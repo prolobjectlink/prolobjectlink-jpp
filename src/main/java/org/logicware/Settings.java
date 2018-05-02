@@ -19,31 +19,41 @@
  */
 package org.logicware;
 
+import static org.logicware.provider.PersistenceXmlParser.XML;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.persistence.spi.PersistenceUnitInfo;
+
 import org.logicware.logging.LoggerConstants;
 import org.logicware.logging.LoggerUtils;
 import org.logicware.prolog.PrologProvider;
+import org.logicware.provider.PersistenceXmlParser;
 
 public final class Settings extends AbstractMap<Object, Object>
 		implements Map<Object, Object>, ContainerFactory, SaveLoad<Settings> {
 
+	protected URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);
+
 	public static final String PROVIDER = Settings.class.getPackage().getName().concat(".prologProvider");
 	public static final String FACTORY = Settings.class.getPackage().getName().concat(".containerFactory");
-	public static final String XML = "etc" + File.separator + "settings.xml";
+	public static final String CONFIG = "etc" + File.separator + "settings.xml";
 	public static final String PASSWORD = "javax.persistence.jdbc.password";
 	public static final String DRIVER = "javax.persistence.jdbc.driver";
 	public static final String USER = "javax.persistence.jdbc.user";
 	public static final String URL = "javax.persistence.jdbc.url";
 
+	private Map<String, PersistenceUnitInfo> units = new HashMap<String, PersistenceUnitInfo>();
 	private ContainerFactory containerFactory;
 	private PrologProvider prologProvider;
 	private Properties properties;
@@ -52,6 +62,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		containerFactory = s.containerFactory;
 		prologProvider = s.prologProvider;
 		properties = s.properties;
+		units = s.units;
 	}
 
 	// TODO minimize code instructions on constructors
@@ -65,6 +76,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
+		units = new PersistenceXmlParser().parsePersistenceXml(persistenceXml);
 	}
 
 	public Settings(String driver, PrologProvider provider) {
@@ -77,6 +89,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
+		units = new PersistenceXmlParser().parsePersistenceXml(persistenceXml);
 	}
 
 	public Settings(Class<? extends ContainerFactory> driver, Class<? extends PrologProvider> provider) {
@@ -88,6 +101,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
+		units = new PersistenceXmlParser().parsePersistenceXml(persistenceXml);
 	}
 
 	public Settings(String driver, Class<? extends PrologProvider> provider) {
@@ -100,6 +114,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
+		units = new PersistenceXmlParser().parsePersistenceXml(persistenceXml);
 	}
 
 	public Settings(Class<? extends ContainerFactory> driver, String provider) {
@@ -112,6 +127,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
+		units = new PersistenceXmlParser().parsePersistenceXml(persistenceXml);
 	}
 
 	public Settings(String driver, String provider) {
@@ -125,16 +141,21 @@ public final class Settings extends AbstractMap<Object, Object>
 		containerFactory.setSettings(this);
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
+		units = new PersistenceXmlParser().parsePersistenceXml(persistenceXml);
 	}
 
 	public ContainerFactory getContainerFactory() {
 		return containerFactory;
 	}
 
+	public Map<String, PersistenceUnitInfo> getPersistenceUnits() {
+		return units;
+	}
+
 	public Settings load() {
 		try {
 			ObjectReflector o = new ObjectReflector();
-			properties.loadFromXML(new FileInputStream(XML));
+			properties.loadFromXML(new FileInputStream(CONFIG));
 			String driver = properties.getProperty(FACTORY);
 			String provider = properties.getProperty(PROVIDER);
 			Class<?> clazzDriver = ReflectionUtils.classForName(driver);
@@ -143,6 +164,7 @@ public final class Settings extends AbstractMap<Object, Object>
 			containerFactory = (ContainerFactory) o.newInstance(clazzDriver);
 			containerFactory.setProvider(prologProvider);
 			containerFactory.setSettings(this);
+			units = new PersistenceXmlParser().parsePersistenceXml(persistenceXml);
 		} catch (FileNotFoundException e) {
 			LoggerUtils.error(getClass(), LoggerConstants.FILE_NOT_FOUND, e);
 		} catch (IOException e) {
@@ -155,7 +177,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		try {
 			properties.put(PROVIDER, prologProvider.getClass().getName());
 			properties.put(FACTORY, containerFactory.getClass().getName());
-			properties.storeToXML(new FileOutputStream(XML), null);
+			properties.storeToXML(new FileOutputStream(CONFIG), null);
 		} catch (IOException e) {
 			LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR, e);
 		}
