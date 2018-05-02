@@ -1,0 +1,51 @@
+/*
+ * #%L
+ * prolobjectlink-db
+ * %%
+ * Copyright (C) 2012 - 2018 Logicware Project
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package org.logicware.pdb.graph;
+
+import org.logicware.pdb.Direction;
+import org.logicware.pdb.GraphEdge;
+
+public abstract class AbstractGraphEdge<E> extends AbstractGraphElement<E> implements GraphEdge<E> {
+
+	private final Direction direction;
+
+	public AbstractGraphEdge(E element, Direction direction) {
+		super(element);
+		this.direction = direction;
+	}
+
+	public final Class<?> getFromVertexElementClass() {
+		return getFrom().getElementClass();
+	}
+
+	public final Class<?> getToVertexElementClass() {
+		return getTo().getElementClass();
+	}
+
+	public final Direction getDirection() {
+		return direction;
+	}
+
+	@Override
+	public String toString() {
+		return "---[" + getElement() + "]---";
+	}
+
+}

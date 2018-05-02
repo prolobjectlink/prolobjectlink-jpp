@@ -53,6 +53,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.ow2.asm</groupId>
 			<artifactId>asm</artifactId>
 			<version>6.0</version>
@@ -66,11 +71,6 @@
 			<groupId>org.ow2.asm</groupId>
 			<artifactId>asm-analysis</artifactId>
 			<version>6.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.logicware</groupId>
-			<artifactId>prolobjectlink</artifactId>
-			<version>[1.0.0, )</version>
 		</dependency>
 	</dependencies>
 
