@@ -36,6 +36,7 @@ import org.logicware.pdb.ObjectReflector;
 import org.logicware.pdb.PersistenceError;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.ProcedureInvokationError;
+import org.logicware.pdb.ReflectionUtils;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.UpdateError;
@@ -147,28 +148,11 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 	}
 
 	public final List<Class<?>> classesOf(String string) {
-		PrologTerm[] prologTerms = converter.toTermsArray(string);
-		return classesOf(prologTerms);
+		return classesOf(converter.toTermsArray(string));
 	}
 
 	public final List<Class<?>> classesOf(PrologTerm[] prologTerms) {
-		List<Class<?>> classList = new ArrayList<Class<?>>();
-		for (int i = 0; i < prologTerms.length; i++) {
-			PrologTerm prologTerm = prologTerms[i];
-			if (prologTerm.isStructure() && !prologTerm.isEvaluable()) {
-				String functor = prologTerms[i].getFunctor();
-				String className = removeQuoted(functor);
-				try {
-					Class<?> clazz = Class.forName(className);
-					if (clazz != null) {
-						classList.add(clazz);
-					}
-				} catch (ClassNotFoundException e) {
-					throw new ClassNotFoundError(functor, e);
-				}
-			}
-		}
-		return classList;
+		return classesOf(prologTerms, new ArrayList<Class<?>>());
 	}
 
 	public final Object[] solutionOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
@@ -220,6 +204,25 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 	protected final PrologQuery prologQueryOf(Object object, Map<String, PrologTerm> map) {
 		PrologTerm goal = converter.toTerm(object, map);
 		return engine.query(goal);
+	}
+
+	protected final List<Class<?>> classesOf(PrologTerm[] prologTerms, List<Class<?>> classList) {
+		for (int i = 0; i < prologTerms.length; i++) {
+			PrologTerm prologTerm = prologTerms[i];
+			if (prologTerm.isStructure()) {
+				String functor = prologTerms[i].getFunctor();
+				PrologTerm[] args = prologTerm.getArguments();
+				if (!prologTerm.isEvaluable()) {
+					String className = removeQuoted(functor);
+					Class<?> clazz = ReflectionUtils.classForName(className);
+					if (!classList.contains(clazz)) {
+						classList.add(clazz);
+					}
+				}
+				classesOf(args, classList);
+			}
+		}
+		return classList;
 	}
 
 	protected final String removeQuoted(String functor) {

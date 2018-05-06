@@ -86,6 +86,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final Object find(String string) throws NonSolutionError {
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			Object object = storage.find(string);
 			if (object != null) {
@@ -96,6 +97,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final Object find(String functor, Object... args) throws NonSolutionError {
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			Object object = storage.find(functor, args);
 			if (object != null) {
@@ -106,6 +108,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> O find(O o) throws NonSolutionError {
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			O object = storage.find(o);
 			if (object != null) {
@@ -116,6 +119,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> O find(Class<O> clazz) throws NonSolutionError {
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			O object = storage.find(clazz);
 			if (object != null) {
@@ -126,6 +130,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> O find(Predicate<O> predicate) throws NonSolutionError {
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			O object = storage.find(predicate);
 			if (object != null) {
@@ -136,6 +141,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final List<Object> findAll(String string) {
+		checkActiveTransaction(transaction);
 		List<Object> list = Collections.synchronizedList(new ArrayList<Object>());
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
@@ -145,6 +151,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final List<Object> findAll(String functor, Object... args) {
+		checkActiveTransaction(transaction);
 		List<Object> list = Collections.synchronizedList(new ArrayList<Object>());
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
@@ -154,6 +161,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> List<O> findAll(O o) {
+		checkActiveTransaction(transaction);
 		List<O> list = Collections.synchronizedList(new ArrayList<O>());
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
@@ -163,6 +171,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> List<O> findAll(Class<O> clazz) {
+		checkActiveTransaction(transaction);
 		List<O> list = Collections.synchronizedList(new ArrayList<O>());
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
@@ -172,6 +181,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> List<O> findAll(Predicate<O> predicate) {
+		checkActiveTransaction(transaction);
 		List<O> list = Collections.synchronizedList(new ArrayList<O>());
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
@@ -181,6 +191,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final boolean contains(String string) {
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			if (storage.contains(string)) {
 				return true;
@@ -190,6 +201,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> boolean contains(O object) {
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			if (storage.contains(object)) {
 				return true;
@@ -199,6 +211,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> boolean contains(Class<O> clazz) {
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			if (storage.contains(clazz)) {
 				return true;
@@ -208,6 +221,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> boolean contains(Predicate<O> predicate) {
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			if (storage.contains(predicate)) {
 				return true;
@@ -217,6 +231,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final boolean contains(String functor, int arity) {
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			if (storage.contains(functor, arity)) {
 				return true;
@@ -245,6 +260,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final void clear() {
+		checkActiveTransaction(transaction);
 		for (Storage s : storages) {
 			s.clear();
 		}
@@ -252,7 +268,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final <O> void insert(O... facts) {
-		open();
+		checkActiveTransaction(transaction);
 		int index = getPoolSize();
 		String root = getLocation();
 		String path = root + SEPARATOR + name + "." + index;
@@ -266,7 +282,6 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		} else {
 			lastStorage.insert(facts);
 		}
-		flush();
 	}
 
 	// FIXME pool add method
@@ -304,15 +319,13 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	// }
 
 	public final <O> void update(O match, O merge) {
-		open();
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			storage.update(match, merge);
 		}
-		flush();
 	}
 
 	public final <O> void delete(O... facts) {
-		open();
 		for (Storage storage : storages) {
 			storage.delete(facts);
 		}
@@ -321,17 +334,15 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 			defragment();
 			counter = 0;
 		}
-		flush();
 	}
 
 	public final void delete(Class<?> clazz) {
-		open();
+		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			storage.delete(clazz);
 		}
 		defragment();
 		counter = 0;
-		flush();
 	}
 
 	public final void include(String path) {
@@ -349,6 +360,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final Collection<Class<?>> classes() {
+		checkActiveTransaction(transaction);
 		List<Class<?>> c = new ArrayList<Class<?>>();
 		for (Storage storage : storages) {
 			c.addAll(storage.classes());

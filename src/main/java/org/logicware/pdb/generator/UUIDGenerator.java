@@ -2,7 +2,7 @@
  * #%L
  * prolobjectlink-db
  * %%
- * Copyright (C) 2012 - 2017 Logicware Project
+ * Copyright (C) 2012 - 2018 Logicware Project
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,20 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb;
+package org.logicware.pdb.generator;
 
-/**
- * @deprecated RETURN NULL instead
- * @author jzalacain
- *
- */
-@Deprecated
-public class NonSolutionError extends Exception {
+import java.util.UUID;
 
-	private static final long serialVersionUID = 8801603216803755048L;
+public final class UUIDGenerator extends AbstractIdGenerator<UUID> {
 
-	/**
-	 * @deprecated RETURN NULL instead
-	 * @author jzalacain
-	 *
-	 */
-	@Deprecated
-	public NonSolutionError() {
-		super("The query no have any solution");
+	private static final long serialVersionUID = -6657592370387129719L;
+
+	public UUIDGenerator(Class<?> clazz) {
+		super(UUID.randomUUID(), clazz);
+	}
+
+	public UUID generateId() {
+		return setValue(UUID.randomUUID());
 	}
 
 }

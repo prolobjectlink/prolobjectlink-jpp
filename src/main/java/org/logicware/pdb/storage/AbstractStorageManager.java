@@ -68,7 +68,13 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		if (objects != null && objects.length > 0) {
 			Class<?> clazz = objects.getClass();
 			Class<?> type = clazz.getComponentType();
-			containerOf(type).insert(objects);
+			PersistentContainer c = containerOf(type);
+			if (c != null) {
+				c.getTransaction().begin();
+				c.insert(objects);
+				c.getTransaction().commit();
+				c.getTransaction().close();
+			}
 		}
 	}
 
@@ -76,7 +82,13 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		checkActiveTransaction(transaction);
 		checkReplacementObject(match, update);
 		Class<?> clazz = match.getClass();
-		containerOf(clazz).update(match, update);
+		PersistentContainer c = containerOf(clazz);
+		if (c != null) {
+			c.getTransaction().begin();
+			c.update(match, update);
+			c.getTransaction().commit();
+			c.getTransaction().close();
+		}
 	}
 
 	public final <O> void delete(O... objects) {
@@ -84,18 +96,30 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		if (objects != null && objects.length > 0) {
 			Class<?> clazz = objects.getClass();
 			Class<?> type = clazz.getComponentType();
-			containerOf(type).delete(objects);
+			PersistentContainer c = containerOf(type);
+			if (c != null) {
+				c.getTransaction().begin();
+				c.delete(objects);
+				c.getTransaction().commit();
+				c.getTransaction().close();
+			}
 		}
 	}
 
 	public final void delete(Class<?> clazz) {
 		checkActiveTransaction(transaction);
-		containerOf(clazz).delete(clazz);
-		String path = locationOf(clazz);
-		File fileLock = new File(path + ".lock");
-		File file = new File(path);
-		if (file.delete()) {
-			fileLock.deleteOnExit();
+		PersistentContainer c = containerOf(clazz);
+		if (c != null) {
+			c.getTransaction().begin();
+			c.delete(clazz);
+			c.getTransaction().commit();
+			c.getTransaction().close();
+			String path = locationOf(clazz);
+			File fileLock = new File(path + ".lock");
+			File file = new File(path);
+			if (file.delete()) {
+				fileLock.deleteOnExit();
+			}
 		}
 	}
 
@@ -104,7 +128,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		List<Class<?>> classes = classesOf(string);
 		for (Class<?> clazz : classes) {
 			PersistentContainer pc = containerOf(clazz);
-			if (pc instanceof StoragePool) {
+			if (pc != null && pc instanceof StoragePool) {
 				StoragePool sp = (StoragePool) pc;
 				sp.getTransaction().begin();
 				List<Storage> storages = sp.getStorages();
@@ -120,22 +144,57 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 
 	public final <O> boolean contains(O o) {
 		checkActiveTransaction(transaction);
-		return containerOf(classOf(o)).contains(o);
+		Class<O> type = classOf(o);
+		PersistentContainer c = containerOf(type);
+		if (c != null) {
+			c.getTransaction().begin();
+			boolean chk = c.contains(o);
+			c.getTransaction().commit();
+			c.getTransaction().close();
+			return chk;
+		}
+		return false;
 	}
 
 	public final <O> boolean contains(Class<O> clazz) {
 		checkActiveTransaction(transaction);
-		return containerOf(clazz).contains(clazz);
+		PersistentContainer c = containerOf(clazz);
+		if (c != null) {
+			c.getTransaction().begin();
+			boolean chk = c.contains(clazz);
+			c.getTransaction().commit();
+			c.getTransaction().close();
+			return chk;
+		}
+		return false;
 	}
 
 	public final <O> boolean contains(Predicate<O> predicate) {
 		checkActiveTransaction(transaction);
-		return containerOf(classOf(predicate)).contains(predicate);
+		Class<O> type = classOf(predicate);
+		PersistentContainer c = containerOf(type);
+		if (c != null) {
+			c.getTransaction().begin();
+			boolean chk = c.contains(predicate);
+			c.getTransaction().commit();
+			c.getTransaction().close();
+			return chk;
+		}
+		return false;
 	}
 
 	public final boolean contains(String f, int a) {
 		checkActiveTransaction(transaction);
-		return containerOf(classOf(f, a)).contains(removeQuoted(f), a);
+		Class<?> type = classOf(f, a);
+		PersistentContainer c = containerOf(type);
+		if (c != null) {
+			c.getTransaction().begin();
+			boolean chk = c.contains(f, a);
+			c.getTransaction().commit();
+			c.getTransaction().close();
+			return chk;
+		}
+		return false;
 	}
 
 	public final Query createQuery(String string) {
@@ -161,22 +220,65 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 
 	public final <O> TypedQuery<O> createQuery(O o) {
 		checkActiveTransaction(transaction);
-		return containerOf(classOf(o)).createQuery(o);
+		Class<O> type = classOf(o);
+		PersistentContainer c = containerOf(type);
+		if (c != null) {
+			c.getTransaction().begin();
+			TypedQuery<O> q = c.createQuery(o);
+			c.getTransaction().commit();
+			c.getTransaction().close();
+			return q;
+		}
+
+		// TODO create and use an empty query
+		return null;
 	}
 
 	public final <O> TypedQuery<O> createQuery(Class<O> clazz) {
 		checkActiveTransaction(transaction);
-		return containerOf(clazz).createQuery(clazz);
+		PersistentContainer c = containerOf(clazz);
+		if (c != null) {
+			c.getTransaction().begin();
+			TypedQuery<O> q = c.createQuery(clazz);
+			c.getTransaction().commit();
+			c.getTransaction().close();
+			return q;
+		}
+
+		// TODO create and use an empty query
+		return null;
 	}
 
 	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
 		checkActiveTransaction(transaction);
-		return containerOf(classOf(predicate)).createQuery(predicate);
+		Class<O> type = classOf(predicate);
+		PersistentContainer c = containerOf(type);
+		if (c != null) {
+			c.getTransaction().begin();
+			TypedQuery<O> q = c.createQuery(predicate);
+			c.getTransaction().commit();
+			c.getTransaction().close();
+			return q;
+		}
+
+		// TODO create and use an empty query
+		return null;
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
 		checkActiveTransaction(transaction);
-		return containerOf(classOf(functor, args.length)).createProcedureQuery(functor, args);
+		Class<?> type = classOf(functor, args.length);
+		PersistentContainer c = containerOf(type);
+		if (c != null) {
+			c.getTransaction().begin();
+			ProcedureQuery q = c.createProcedureQuery(functor, args);
+			c.getTransaction().commit();
+			c.getTransaction().close();
+			return q;
+		}
+
+		// TODO create and use an empty query
+		return null;
 	}
 
 	public final Transaction getTransaction() {
@@ -222,7 +324,9 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		int s = master.size();
 		List<Class<?>> l = new ArrayList<Class<?>>(s);
 		for (PersistentContainer c : master.values()) {
+			c.getTransaction().begin();
 			l.addAll(c.classes());
+			c.getTransaction().close();
 		}
 		return l;
 	}
@@ -236,15 +340,21 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	public final void clear() {
 		checkActiveTransaction(transaction);
 		for (PersistentContainer c : master.values()) {
+			c.getTransaction().begin();
 			c.clear();
+			c.getTransaction().commit();
+			c.getTransaction().close();
 		}
 		master.clear();
 	}
 
 	public final void close() {
 		for (PersistentContainer c : master.values()) {
+			c.getTransaction().begin();
 			c.clear();
 			c.close();
+			c.getTransaction().commit();
+			c.getTransaction().close();
 		}
 		master.clear();
 		open = false;

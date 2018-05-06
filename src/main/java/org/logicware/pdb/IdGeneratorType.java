@@ -2,7 +2,7 @@
  * #%L
  * prolobjectlink-db
  * %%
- * Copyright (C) 2012 - 2017 Logicware Project
+ * Copyright (C) 2012 - 2018 Logicware Project
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,24 +19,8 @@
  */
 package org.logicware.pdb;
 
-/**
- * @deprecated RETURN NULL instead
- * @author jzalacain
- *
- */
-@Deprecated
-public class NonSolutionError extends Exception {
+public enum IdGeneratorType {
 
-	private static final long serialVersionUID = 8801603216803755048L;
-
-	/**
-	 * @deprecated RETURN NULL instead
-	 * @author jzalacain
-	 *
-	 */
-	@Deprecated
-	public NonSolutionError() {
-		super("The query no have any solution");
-	}
+	INCREMENT, UUID, TIMESTAMP
 
 }

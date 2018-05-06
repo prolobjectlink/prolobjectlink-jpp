@@ -2,7 +2,7 @@
  * #%L
  * prolobjectlink-db
  * %%
- * Copyright (C) 2012 - 2017 Logicware Project
+ * Copyright (C) 2012 - 2018 Logicware Project
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,18 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb;
+package org.logicware.pdb.generator;
 
-/**
- * @deprecated RETURN NULL instead
- * @author jzalacain
- *
- */
-@Deprecated
-public class NonSolutionError extends Exception {
+public final class IncrementGenerator extends AbstractIdGenerator<Long> {
 
-	private static final long serialVersionUID = 8801603216803755048L;
+	private static final long serialVersionUID = -1092978742941263445L;
 
-	/**
-	 * @deprecated RETURN NULL instead
-	 * @author jzalacain
-	 *
-	 */
-	@Deprecated
-	public NonSolutionError() {
-		super("The query no have any solution");
+	public IncrementGenerator(Class<?> clazz) {
+		super(0L, clazz);
+	}
+
+	public Long generateId() {
+		return setValue(getValue() + 1);
 	}
 
 }

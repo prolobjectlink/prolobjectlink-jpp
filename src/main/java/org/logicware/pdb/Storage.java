@@ -29,6 +29,9 @@ import java.util.List;
  */
 public interface Storage extends PersistentContainer {
 
+	// TODO REMOVE throws NonSolutionError IN FIND METHODS RETURN NULL IF NOT
+	// EXIST
+
 	public Object find(String string) throws NonSolutionError;
 
 	public Object find(String functor, Object... args) throws NonSolutionError;
