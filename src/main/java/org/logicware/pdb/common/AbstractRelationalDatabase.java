@@ -156,13 +156,19 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 	}
 
 	public final DatabaseEngine create() {
+		// TODO add others functions files e.g triggers
+		new File(getBaseLocation() + "/functions.pl");
+		new File(getBaseLocation() + "/views.pl");
 		getSchema().flush();
 		return this;
 	}
 
-	public final void drop() {
-		// TODO Auto-generated method stub
-
+	public final DatabaseEngine drop() {
+		storage.clear();
+		storage.flush();
+		getSchema().clear();
+		getSchema().flush();
+		return this;
 	}
 
 	public final void flush() {
@@ -177,6 +183,7 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 	}
 
 	public final void clear() {
+		storage.clear();
 		getSchema().clear();
 		storage.clear();
 	}

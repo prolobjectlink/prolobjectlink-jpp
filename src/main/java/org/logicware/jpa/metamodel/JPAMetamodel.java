@@ -30,8 +30,6 @@ import javax.persistence.metamodel.MappedSuperclassType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.Type;
 
-import org.logicware.pdb.Schema;
-
 public final class JPAMetamodel implements Metamodel {
 
 	private final Map<Class<?>, Type<?>> types;

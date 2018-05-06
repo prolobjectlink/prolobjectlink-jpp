@@ -23,9 +23,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -142,7 +140,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 
 	public final List<Object> findAll(String string) {
 		checkActiveTransaction(transaction);
-		List<Object> list = Collections.synchronizedList(new ArrayList<Object>());
+		List<Object> list = new ArrayList<Object>();
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
 			list.addAll(storage.findAll(string));
@@ -152,7 +150,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 
 	public final List<Object> findAll(String functor, Object... args) {
 		checkActiveTransaction(transaction);
-		List<Object> list = Collections.synchronizedList(new ArrayList<Object>());
+		List<Object> list = new ArrayList<Object>();
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
 			list.addAll(storage.findAll(functor, args));
@@ -162,7 +160,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 
 	public final <O> List<O> findAll(O o) {
 		checkActiveTransaction(transaction);
-		List<O> list = Collections.synchronizedList(new ArrayList<O>());
+		List<O> list = new ArrayList<O>();
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
 			list.addAll(storage.findAll(o));
@@ -172,7 +170,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 
 	public final <O> List<O> findAll(Class<O> clazz) {
 		checkActiveTransaction(transaction);
-		List<O> list = Collections.synchronizedList(new ArrayList<O>());
+		List<O> list = new ArrayList<O>();
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
 			list.addAll(storage.findAll(clazz));
@@ -182,7 +180,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 
 	public final <O> List<O> findAll(Predicate<O> predicate) {
 		checkActiveTransaction(transaction);
-		List<O> list = Collections.synchronizedList(new ArrayList<O>());
+		List<O> list = new ArrayList<O>();
 		for (int i = 0; i < getStorages().size(); i++) {
 			Storage storage = getStorages().get(i);
 			list.addAll(storage.findAll(predicate));
@@ -437,7 +435,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 
 	protected class StoragePoolProcedureQuery extends AbstractProcedureQuery<Object> implements ProcedureQuery {
 
-		private List<Object> list = Collections.synchronizedList(new ArrayList<Object>());
+		private List<Object> list = new ArrayList<Object>();
 		private final List<ProcedureQuery> queries = new ArrayList<ProcedureQuery>();
 
 		protected StoragePoolProcedureQuery(String functor, String[] arguments) {
@@ -558,7 +556,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 					Object object = procedureQuery.next();
 					if (object instanceof Object[]) {
 						Object[] a = (Object[]) object;
-						list = Collections.synchronizedList(new ArrayList<Object>(a.length));
+						list = new ArrayList<Object>(a.length);
 						for (int i = 0; i < a.length; i++) {
 							list.add(a[i]);
 						}

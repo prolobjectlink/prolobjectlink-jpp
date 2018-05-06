@@ -31,11 +31,8 @@ abstract class AbstractIdGenerator<O extends Serializable> implements IdGenerato
 	private transient Class<?> type;
 	private static final long serialVersionUID = -994987235885802450L;
 
-	private Class<?> classForName(String typeName) {
-		return ReflectionUtils.classForName(typeName);
-	}
-
 	public AbstractIdGenerator(O value, Class<?> type) {
+		assert type != null;
 		this.typeName = type.getName();
 		this.value = value;
 		this.type = type;
@@ -52,7 +49,7 @@ abstract class AbstractIdGenerator<O extends Serializable> implements IdGenerato
 
 	public final Class<?> getType() {
 		if (type == null) {
-			type = classForName(typeName);
+			type = ReflectionUtils.classForName(typeName);
 		}
 		return type;
 	}
@@ -63,7 +60,7 @@ abstract class AbstractIdGenerator<O extends Serializable> implements IdGenerato
 	}
 
 	@Override
-	public final int hashCode() {
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((typeName == null) ? 0 : typeName.hashCode());

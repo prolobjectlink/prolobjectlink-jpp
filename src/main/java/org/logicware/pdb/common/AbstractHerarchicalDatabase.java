@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DatabaseEngine;
-import org.logicware.pdb.DatabaseService;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.HierarchicalDatabase;
 import org.logicware.pdb.PersistentContainer;
@@ -224,13 +223,19 @@ public abstract class AbstractHerarchicalDatabase extends AbstractDatabaseEngine
 	}
 
 	public final DatabaseEngine create() {
+		// TODO add others functions files e.g triggers
+		new File(getBaseLocation() + "/functions.pl");
+		new File(getBaseLocation() + "/views.pl");
 		getSchema().flush();
 		return this;
 	}
 
-	public final void drop() {
-		// TODO Auto-generated method stub
-
+	public final DatabaseEngine drop() {
+		storage.clear();
+		storage.flush();
+		getSchema().clear();
+		getSchema().flush();
+		return this;
 	}
 
 }

@@ -33,14 +33,14 @@ public interface DatabaseEngine extends PersistentContainer {
 
 	public String getBaseLocation();
 
+	public DatabaseUser getOwner();
+
 	public DatabaseEngine create();
+
+	public DatabaseEngine drop();
 
 	public Schema getSchema();
 
-	public DatabaseUser getOwner();
-
 	public String getName();
-
-	public void drop();
 
 }

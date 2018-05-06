@@ -172,7 +172,7 @@ public final class DatabaseClass extends AbstractElement implements Comparable<D
 	}
 
 	public byte[] compile() {
-		ClassWriter cw = new ClassWriter(Opcodes.ASM6);
+		ClassWriter cw = new ClassWriter(Opcodes.ASM5);
 		PrintWriter printWriter = new PrintWriter(System.out);
 		TraceClassVisitor tcv = new TraceClassVisitor(cw, printWriter);
 		CheckClassAdapter cv = new CheckClassAdapter(tcv);

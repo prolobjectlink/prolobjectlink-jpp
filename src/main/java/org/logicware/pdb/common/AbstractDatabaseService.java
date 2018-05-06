@@ -21,6 +21,7 @@ package org.logicware.pdb.common;
 
 import static org.logicware.jpa.spi.JPAPersistenceXmlParser.XML;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -38,13 +39,8 @@ import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DatabaseService;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.ObjectConverter;
-import org.logicware.pdb.PersistentContainer;
-import org.logicware.pdb.Predicate;
-import org.logicware.pdb.ProcedureQuery;
-import org.logicware.pdb.Query;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
-import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.VolatileContainer;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologTerm;
@@ -65,14 +61,6 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 		this.url = url;
 	}
 
-	public AbstractDatabaseService(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
-			ContainerFactory containerFactory, URL url, String name, Schema schema, DatabaseUser owner,
-			VolatileContainer cache) {
-		super(provider, properties, converter, containerFactory, url.getPath(), name, schema, owner);
-		// this.storage = storage;
-		this.url = url;
-	}
-
 	public final URL getURL() {
 		return url;
 	}
@@ -90,14 +78,19 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 	}
 
 	public final DatabaseService create() {
-		// TODO Create functions and views file
+		// TODO add others functions files e.g triggers
+		new File(getBaseLocation() + "/functions.pl");
+		new File(getBaseLocation() + "/views.pl");
 		getSchema().flush();
 		return this;
 	}
 
-	public final void drop() {
+	public final DatabaseService drop() {
 		getSchema().clear();
 		getSchema().flush();
+		clear();
+		flush();
+		return this;
 	}
 
 	public final EntityManager getEntityManager() {

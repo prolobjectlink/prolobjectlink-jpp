@@ -53,6 +53,7 @@ public final class EmbeddedHierarchicalDB extends AbstractPersistentDatabase imp
 				url, name, schema, owner, storage);
 	}
 
+	// TODO think about name and property map newInstance(name,properties)
 	public static final DatabaseService newInstance(String name) {
 		if (embeddedHierarchicalDB == null) {
 			StorageMode mode = StorageMode.STORAGE_POOL;
@@ -68,6 +69,9 @@ public final class EmbeddedHierarchicalDB extends AbstractPersistentDatabase imp
 					} catch (MalformedURLException e) {
 						LoggerUtils.error(EmbeddedHierarchicalDB.class, LoggerConstants.IO_ERROR, e);
 					}
+
+					assert url != null;
+
 					String password = unit.getProperties().getProperty(JPAProperties.PASSWORD);
 					String user = unit.getProperties().getProperty(JPAProperties.USER);
 					DatabaseUser owner = new DatabaseUser(user, password);
