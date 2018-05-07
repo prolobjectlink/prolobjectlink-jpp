@@ -17,29 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.protocol.remdb;
+package org.logicware.pdb;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
+public enum URLContentType {
 
-import org.logicware.pdb.protocol.URLContentType;
-
-public class RemoteURLConnection extends URLConnection {
-
-	protected RemoteURLConnection(URL url) {
-		super(url);
-	}
-
-	@Override
-	public void connect() throws IOException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getContentType() {
-		return URLContentType.REMDB.name();
-	}
+	MEMDB, REMDB;
 
 }

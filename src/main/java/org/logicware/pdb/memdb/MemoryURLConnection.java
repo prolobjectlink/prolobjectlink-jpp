@@ -17,10 +17,36 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.protocol;
+package org.logicware.pdb.memdb;
 
-public enum URLContentType {
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 
-	MEMDB, REMDB;
+import org.logicware.pdb.HierarchicalCache;
+import org.logicware.pdb.URLContentType;
+
+public class MemoryURLConnection extends URLConnection {
+
+	protected MemoryURLConnection(URL url) {
+		super(url);
+	}
+
+	@Override
+	public void connect() throws IOException {
+		// do nothing
+
+	}
+
+	@Override
+	public String getContentType() {
+		return URLContentType.MEMDB.name();
+	}
+
+	@Override
+	public Object getContent() throws IOException {
+		// TODO Auto-generated method stub
+		return super.getContent();
+	}
 
 }

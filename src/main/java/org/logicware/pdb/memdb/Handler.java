@@ -17,36 +17,24 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.protocol.memdb;
+package org.logicware.pdb.memdb;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLStreamHandler;
 
-import org.logicware.pdb.HierarchicalCache;
-import org.logicware.pdb.protocol.URLContentType;
+import org.logicware.pdb.URLContentType;
 
-public class MemoryURLConnection extends URLConnection {
-
-	protected MemoryURLConnection(URL url) {
-		super(url);
-	}
+public class Handler extends URLStreamHandler {
 
 	@Override
-	public void connect() throws IOException {
-		// do nothing
-
-	}
-
-	@Override
-	public String getContentType() {
-		return URLContentType.MEMDB.name();
-	}
-
-	@Override
-	public Object getContent() throws IOException {
-		// TODO Auto-generated method stub
-		return super.getContent();
+	protected URLConnection openConnection(URL u) throws IOException {
+		if (!u.getProtocol().equals(URLContentType.MEMDB.name())) {
+			throw new MalformedURLException("No valid memory URL");
+		}
+		return new MemoryURLConnection(u);
 	}
 
 }
