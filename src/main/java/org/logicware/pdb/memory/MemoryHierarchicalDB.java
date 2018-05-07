@@ -52,7 +52,6 @@ public final class MemoryHierarchicalDB extends AbstractMemoryDatabase implement
 
 	public static final DatabaseService newInstance(String name) {
 		if (memoryHierarchicalDB == null) {
-			// System.setProperty("java.protocol.handler.pkgs","sun.net.www.protocol.memdb");
 			JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
 			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(persistenceXml);
 			for (PersistenceUnitInfo unit : m.values()) {
@@ -61,6 +60,7 @@ public final class MemoryHierarchicalDB extends AbstractMemoryDatabase implement
 					Settings settings = new Settings(unit.getProperties().getProperty(JPAProperties.DRIVER));
 					URL url = null;
 					try {
+						System.setProperty("java.protocol.handler.pkgs", "org.logicware.pdb.protocol");
 						url = new URL(unit.getProperties().getProperty(JPAProperties.URL).replace(URL_PREFIX, ""));
 					} catch (MalformedURLException e) {
 						LoggerUtils.error(EmbeddedHierarchicalDB.class, LoggerConstants.IO_ERROR, e);
