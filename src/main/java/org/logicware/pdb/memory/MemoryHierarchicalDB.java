@@ -27,7 +27,6 @@ import javax.persistence.spi.PersistenceUnitInfo;
 
 import org.logicware.jpa.JPAProperties;
 import org.logicware.jpa.spi.JPAPersistenceXmlParser;
-import org.logicware.pdb.DatabaseMode;
 import org.logicware.pdb.DatabaseSchema;
 import org.logicware.pdb.DatabaseService;
 import org.logicware.pdb.DatabaseType;
@@ -53,6 +52,7 @@ public final class MemoryHierarchicalDB extends AbstractMemoryDatabase implement
 
 	public static final DatabaseService newInstance(String name) {
 		if (memoryHierarchicalDB == null) {
+			// System.setProperty("java.protocol.handler.pkgs","sun.net.www.protocol.memdb");
 			JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
 			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(persistenceXml);
 			for (PersistenceUnitInfo unit : m.values()) {
@@ -65,12 +65,13 @@ public final class MemoryHierarchicalDB extends AbstractMemoryDatabase implement
 					} catch (MalformedURLException e) {
 						LoggerUtils.error(EmbeddedHierarchicalDB.class, LoggerConstants.IO_ERROR, e);
 					}
+
+					assert url != null;
+
 					String password = unit.getProperties().getProperty(JPAProperties.PASSWORD);
 					String user = unit.getProperties().getProperty(JPAProperties.USER);
 					DatabaseUser owner = new DatabaseUser(user, password);
-
 					HierarchicalCache cache = settings.createHierarchicalCache();
-
 					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
 					for (String managedClass : unit.getManagedClassNames()) {
 						schema.addClass(ReflectionUtils.classForName(managedClass), "");

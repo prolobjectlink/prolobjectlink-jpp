@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package sun.net.www.protocol.memory;
+package sun.net.www.protocol.memdb;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

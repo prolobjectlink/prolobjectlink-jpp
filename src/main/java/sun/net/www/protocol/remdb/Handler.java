@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package sun.net.www.protocol.remote;
+package sun.net.www.protocol.remdb;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
