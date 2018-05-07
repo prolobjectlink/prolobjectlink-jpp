@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package sun.net.www.protocol.remdb;
+package org.logicware.pdb.protocol.remdb;
 
 import java.io.IOException;
 import java.net.URL;
