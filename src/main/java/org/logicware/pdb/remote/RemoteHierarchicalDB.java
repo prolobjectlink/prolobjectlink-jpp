@@ -31,7 +31,7 @@ import org.logicware.pdb.common.AbstractPersistentDatabase;
 
 public final class RemoteHierarchicalDB extends AbstractPersistentDatabase implements RemoteDatabase {
 
-	private static RemoteHierarchicalDB remoteHierarchicalDB;
+	private static RemoteHierarchicalDB remoteHierarchicalDatabase;
 
 	private RemoteHierarchicalDB(String name, URL url, Schema schema, DatabaseUser owner, PersistentContainer storage) {
 		super(storage.getProvider(), storage.getProperties(), storage.getConverter(), storage.getContainerFactory(),
@@ -39,10 +39,10 @@ public final class RemoteHierarchicalDB extends AbstractPersistentDatabase imple
 	}
 
 	public static final RemoteHierarchicalDB newInstance() {
-		if (remoteHierarchicalDB == null) {
+		if (remoteHierarchicalDatabase == null) {
 			// TODO LOAD ALL FROM PROPERTIES FILE
 		}
-		return remoteHierarchicalDB;
+		return remoteHierarchicalDatabase;
 	}
 
 	public DatabaseMode getMode() {

@@ -20,26 +20,22 @@
 package org.logicware.pdb;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.Executors;
+import java.net.UnknownHostException;
 
-public class DatabaseServer {
+public interface DatabaseServer {
 
-	private static final int N = 100;
-	private static final int PORT = 5370;
+	public void start() throws IOException;
 
-	public static void main(String[] args) throws IOException {
-		ServerSocket socket = new ServerSocket(PORT);
-		while (true) {
-			final Socket connection = socket.accept();
-			Runnable task = new Runnable() {
-				public void run() {
+	public void stop() throws IOException;
 
-					// TODO
-				}
-			};
-			Executors.newFixedThreadPool(N).execute(task);
-		}
-	}
+	public DatabaseServerType getType();
+
+	public boolean isRunning();
+
+	public boolean isDaemon();
+
+	public String getURL() throws UnknownHostException;
+
+	public String getName();
+
 }

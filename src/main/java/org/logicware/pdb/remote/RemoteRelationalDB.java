@@ -31,7 +31,7 @@ import org.logicware.pdb.common.AbstractPersistentDatabase;
 
 public final class RemoteRelationalDB extends AbstractPersistentDatabase implements RemoteDatabase {
 
-	private static RemoteRelationalDB remoteRelationalDB;
+	private static RemoteRelationalDB remoteRelationalDatabase;
 
 	private RemoteRelationalDB(String name, URL url, Schema schema, DatabaseUser owner, PersistentContainer storage) {
 		super(storage.getProvider(), storage.getProperties(), storage.getConverter(), storage.getContainerFactory(),
@@ -39,10 +39,10 @@ public final class RemoteRelationalDB extends AbstractPersistentDatabase impleme
 	}
 
 	public static final RemoteRelationalDB newInstance() {
-		if (remoteRelationalDB == null) {
+		if (remoteRelationalDatabase == null) {
 			// TODO LOAD ALL FROM PROPERTIES FILE
 		}
-		return remoteRelationalDB;
+		return remoteRelationalDatabase;
 	}
 
 	public DatabaseMode getMode() {

@@ -19,6 +19,6 @@
  */
 package org.logicware.pdb;
 
-public class DatabaseClient {
+public interface DatabaseClient {
 
 }
