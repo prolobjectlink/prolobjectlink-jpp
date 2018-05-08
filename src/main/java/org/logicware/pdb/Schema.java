@@ -133,20 +133,6 @@ public interface Schema {
 
 	public DatabaseClass addClass(Class<?> clazz, String comment);
 
-	public Schema addPackage(String packageName, String comment);
-
-	public Schema addPackage(Package pack, String comment);
-
-	public int countPackages();
-
-	public Collection<DatabasePackage> getPackages();
-
-	public boolean containsPackage(String name);
-
-	public DatabasePackage getPackage(String name);
-
-	public Schema removePackage(String name);
-
 	public boolean isJavaLangType(Class<?> type);
 
 	public boolean isSet(Class<?> type);

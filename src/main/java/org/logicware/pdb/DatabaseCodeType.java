@@ -21,7 +21,7 @@ package org.logicware.pdb;
 
 public enum DatabaseCodeType {
 
-	VIEW("View"), FUNCTION("Function");
+	VIEW("View"), FUNCTION("Function"), TRIGGER("Trigger");
 
 	private final String name;
 

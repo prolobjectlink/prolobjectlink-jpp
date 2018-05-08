@@ -19,8 +19,14 @@
  */
 package org.logicware.pdb;
 
-public enum URLContentType {
+import java.util.EventListener;
 
-	MEMPDB, REMPDB;
+public interface Trigger extends EventListener {
+
+	public void onInsert(DatabaseEvent event);
+
+	public void onUpdate(DatabaseEvent event);
+
+	public void onDelete(DatabaseEvent event);
 
 }

@@ -35,7 +35,8 @@ import org.objectweb.asm.Type;
  * @since 1.0
  * 
  */
-public final class DatabaseField extends AbstractElement implements SchemaElement, Comparable<DatabaseField> {
+public final class DatabaseField extends AbstractElement<DatabaseField>
+		implements SchemaElement<DatabaseField>, Comparable<DatabaseField> {
 
 	private int position;
 	private String typeName;

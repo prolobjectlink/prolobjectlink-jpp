@@ -21,7 +21,8 @@ package org.logicware.pdb;
 
 import java.io.Serializable;
 
-public final class DatabaseSequence extends AbstractElement implements Serializable {
+public final class DatabaseSequence extends AbstractElement<DatabaseSequence>
+		implements Serializable, SchemaElement<DatabaseSequence> {
 
 	private int value;
 	private String javaClass;
@@ -72,6 +73,15 @@ public final class DatabaseSequence extends AbstractElement implements Serializa
 		this.javaClass = javaClass.getName();
 	}
 
+	public DatabaseSequence setComment(String comment) {
+		this.comment = comment;
+		return this;
+	}
+
+	public SchemaElementType geElementType() {
+		return SchemaElementType.SEQUENCE;
+	}
+
 	@Override
 	public String toString() {
 		return name;
@@ -110,15 +120,6 @@ public final class DatabaseSequence extends AbstractElement implements Serializa
 		} else if (!name.equals(other.name))
 			return false;
 		return value == other.value;
-	}
-
-	public DatabaseSequence setComment(String comment) {
-		this.comment = comment;
-		return this;
-	}
-
-	public SchemaElementType geElementType() {
-		return SchemaElementType.SEQUENCE;
 	}
 
 }

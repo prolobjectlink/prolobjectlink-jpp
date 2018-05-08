@@ -17,36 +17,22 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.memdb;
+package org.logicware.pdb.prolog;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
+import org.logicware.pdb.DatabaseTrigger;
+import org.logicware.pdb.Schema;
+import org.logicware.pdb.Trigger;
 
-import org.logicware.pdb.HierarchicalCache;
-import org.logicware.pdb.URLContentType;
+public class PrologDatabaseTrigger extends DatabaseTrigger implements Trigger {
 
-public class MemoryURLConnection extends URLConnection {
+	private static final long serialVersionUID = 8732789501214407838L;
 
-	protected MemoryURLConnection(URL url) {
-		super(url);
+	private PrologDatabaseTrigger() {
+		// for internal reflection
 	}
 
-	@Override
-	public void connect() throws IOException {
-		// do nothing
-
-	}
-
-	@Override
-	public String getContentType() {
-		return URLContentType.MEMDB.name();
-	}
-
-	@Override
-	public Object getContent() throws IOException {
-		// TODO Auto-generated method stub
-		return super.getContent();
+	public PrologDatabaseTrigger(String name, String comment, Schema schema, String path, PrologProvider provider) {
+		super(name, comment, schema, path, provider);
 	}
 
 }

@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.remdb;
+package org.logicware.pdb.mempdb;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -31,10 +31,10 @@ public class Handler extends URLStreamHandler {
 
 	@Override
 	protected URLConnection openConnection(URL u) throws IOException {
-		if (!u.getProtocol().equals(URLContentType.REMDB.name())) {
-			throw new MalformedURLException("No valid remote URL");
+		if (!u.getProtocol().equals(URLContentType.MEMPDB.name())) {
+			throw new MalformedURLException("No valid memory URL");
 		}
-		return new RemoteURLConnection(u);
+		return new MemoryURLConnection(u);
 	}
 
 }

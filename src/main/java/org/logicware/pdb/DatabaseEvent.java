@@ -19,8 +19,14 @@
  */
 package org.logicware.pdb;
 
-public enum URLContentType {
+import java.util.EventObject;
 
-	MEMPDB, REMPDB;
+public class DatabaseEvent extends EventObject {
+
+	private static final long serialVersionUID = 392523125971226984L;
+
+	public DatabaseEvent(Object source) {
+		super(source);
+	}
 
 }

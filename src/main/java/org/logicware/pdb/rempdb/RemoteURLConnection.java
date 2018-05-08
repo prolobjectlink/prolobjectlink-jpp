@@ -17,35 +17,29 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb;
+package org.logicware.pdb.rempdb;
 
-public final class DatabasePackage extends AbstractElement implements SchemaElement {
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 
-	private static final long serialVersionUID = 1012619958416382243L;
+import org.logicware.pdb.URLContentType;
 
-	/**
-	 * for internal reflection only
-	 */
-	protected DatabasePackage() {
+public class RemoteURLConnection extends URLConnection {
+
+	protected RemoteURLConnection(URL url) {
+		super(url);
+	}
+
+	@Override
+	public void connect() throws IOException {
+		// TODO Auto-generated method stub
 
 	}
 
-	public DatabasePackage(String name, String comment, Schema schema) {
-		super(name, comment, schema);
-	}
-
-	public DatabasePackage setSchema(Schema schema) {
-		this.schema = schema;
-		return this;
-	}
-
-	public DatabasePackage setComment(String comment) {
-		this.comment = comment;
-		return this;
-	}
-
-	public SchemaElementType geElementType() {
-		return SchemaElementType.PACKAGE;
+	@Override
+	public String getContentType() {
+		return URLContentType.REMPDB.name();
 	}
 
 }

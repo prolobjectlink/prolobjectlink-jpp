@@ -44,7 +44,7 @@ import org.logicware.pdb.logging.LoggerUtils;
 
 public final class MemoryHierarchicalDB extends AbstractMemoryDatabase implements MemoryDatabase {
 
-	private static DatabaseService memoryHierarchicalDB;
+	private static DatabaseService memoryHierarchicalDatabase;
 
 	public MemoryHierarchicalDB(String name, URL url, Schema schema, DatabaseUser owner, HierarchicalCache cache) {
 		super(cache.getProvider(), cache.getProperties(), cache.getConverter(), cache.getContainerFactory(), url, name,
@@ -52,7 +52,7 @@ public final class MemoryHierarchicalDB extends AbstractMemoryDatabase implement
 	}
 
 	public static final DatabaseService newInstance(String name) {
-		if (memoryHierarchicalDB == null) {
+		if (memoryHierarchicalDatabase == null) {
 			JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
 			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(persistenceXml);
 			for (PersistenceUnitInfo unit : m.values()) {
@@ -77,11 +77,11 @@ public final class MemoryHierarchicalDB extends AbstractMemoryDatabase implement
 					for (String managedClass : unit.getManagedClassNames()) {
 						schema.addClass(ReflectionUtils.classForName(managedClass), "");
 					}
-					memoryHierarchicalDB = new MemoryHierarchicalDB(name, url, schema, owner, cache).create();
+					memoryHierarchicalDatabase = new MemoryHierarchicalDB(name, url, schema, owner, cache).create();
 				}
 			}
 		}
-		return memoryHierarchicalDB;
+		return memoryHierarchicalDatabase;
 	}
 
 	public DatabaseType getType() {

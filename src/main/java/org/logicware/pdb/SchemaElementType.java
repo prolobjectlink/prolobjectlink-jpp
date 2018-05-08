@@ -21,6 +21,6 @@ package org.logicware.pdb;
 
 public enum SchemaElementType {
 
-	PACKAGE, CLASS, FIELD, SEQUENCE, FUNCTION, VIEW;
+	PACKAGE, CLASS, FIELD, SEQUENCE, FUNCTION, VIEW, TRIGGER;
 
 }

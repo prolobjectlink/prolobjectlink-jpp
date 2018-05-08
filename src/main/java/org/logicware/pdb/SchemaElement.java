@@ -19,11 +19,11 @@
  */
 package org.logicware.pdb;
 
-public interface SchemaElement {
+public interface SchemaElement<E extends SchemaElement<?>> {
 
-	public SchemaElement setComment(String comment);
+	public E setComment(String comment);
 
-	public SchemaElement setSchema(Schema schema);
+	public E setSchema(Schema schema);
 
 	public SchemaElementType geElementType();
 

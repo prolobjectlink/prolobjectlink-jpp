@@ -20,6 +20,7 @@
 package org.logicware.pdb;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +37,8 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.util.CheckClassAdapter;
 import org.objectweb.asm.util.TraceClassVisitor;
 
-public final class DatabaseClass extends AbstractElement implements Comparable<DatabaseClass> {
+public final class DatabaseClass extends AbstractElement<DatabaseClass>
+		implements Comparable<DatabaseClass>, Serializable, SchemaElement<DatabaseClass> {
 
 	private boolean isView;
 	private String shortName;

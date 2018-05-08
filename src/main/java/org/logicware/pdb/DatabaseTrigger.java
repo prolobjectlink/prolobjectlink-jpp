@@ -23,54 +23,58 @@ import java.io.Serializable;
 
 import org.logicware.pdb.prolog.PrologProvider;
 
-public abstract class DatabaseFunction extends DatabaseCode<DatabaseFunction>
-		implements Serializable, SchemaElement<DatabaseFunction> {
+public class DatabaseTrigger extends DatabaseCode<DatabaseTrigger>
+		implements Serializable, SchemaElement<DatabaseTrigger>, Trigger {
 
-	private static final long serialVersionUID = -4680176548026593510L;
+	private static final long serialVersionUID = -679826331549370975L;
 
-	protected DatabaseFunction() {
+	protected DatabaseTrigger() {
 		// internal reflection
 	}
 
-	public DatabaseFunction(String name, String comment, Schema schema, String path, PrologProvider provider) {
+	public DatabaseTrigger(String name, String comment, Schema schema, String path, PrologProvider provider) {
 		super(name, comment, schema, path, provider);
 	}
 
-	public final DatabaseFunction addParameter(String parameter) {
-		getParameters().add(parameter);
-		return this;
-	}
-
-	public final DatabaseFunction removeParameter(String parameter) {
-		getParameters().remove(parameter);
-		return this;
-	}
-
-	public final DatabaseFunction setSchema(Schema schema) {
-		this.schema = schema;
-		return this;
-	}
-
-	public final DatabaseFunction addInstructions(String code) {
-		instructions.add(code);
-		return this;
-	}
-
-	public DatabaseFunction setComment(String comment) {
+	public DatabaseTrigger setComment(String comment) {
 		this.comment = comment;
 		return this;
 	}
 
+	public DatabaseTrigger setSchema(Schema schema) {
+		this.schema = schema;
+		return this;
+	}
+
 	public SchemaElementType geElementType() {
-		return SchemaElementType.FUNCTION;
+		return SchemaElementType.TRIGGER;
 	}
 
-	@Override
 	public DatabaseCodeType getType() {
-		return DatabaseCodeType.FUNCTION;
+		return DatabaseCodeType.TRIGGER;
 	}
 
-	public final DatabaseFunction save() {
+	public DatabaseTrigger addInstructions(String code) {
+		instructions.add(code);
+		return this;
+	}
+
+	public void onInsert(DatabaseEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void onUpdate(DatabaseEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void onDelete(DatabaseEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public final DatabaseTrigger save() {
 		getEngine().consult(getPath());
 		getEngine().assertz(getCode());
 		getEngine().persist(getPath());

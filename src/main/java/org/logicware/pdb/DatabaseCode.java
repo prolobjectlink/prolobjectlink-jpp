@@ -27,7 +27,7 @@ import java.util.List;
 import org.logicware.pdb.prolog.PrologEngine;
 import org.logicware.pdb.prolog.PrologProvider;
 
-public abstract class DatabaseCode extends AbstractElement implements Serializable {
+public abstract class DatabaseCode<E extends SchemaElement<?>> extends AbstractElement<E> implements Serializable {
 
 	private final String path;
 	private final List<String> parameters;
@@ -97,7 +97,7 @@ public abstract class DatabaseCode extends AbstractElement implements Serializab
 
 	public abstract DatabaseCodeType getType();
 
-	public abstract DatabaseCode addInstructions(String code);
+	public abstract E addInstructions(String code);
 
 	public final List<String> getInstructions() {
 		return instructions;
@@ -123,12 +123,7 @@ public abstract class DatabaseCode extends AbstractElement implements Serializab
 		return provider;
 	}
 
-	public final DatabaseCode save() {
-		getEngine().consult(getPath());
-		getEngine().assertz(getCode());
-		getEngine().persist(getPath());
-		return this;
-	}
+	public abstract E save();
 
 	@Override
 	public final String toString() {
@@ -151,7 +146,7 @@ public abstract class DatabaseCode extends AbstractElement implements Serializab
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DatabaseCode other = (DatabaseCode) obj;
+		DatabaseCode<?> other = (DatabaseCode<?>) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

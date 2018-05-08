@@ -32,9 +32,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.logicware.pdb.graph.RelationalGraph;
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.prolog.PrologDatabaseFunction;
+import org.logicware.pdb.prolog.PrologDatabaseTrigger;
 import org.logicware.pdb.prolog.PrologDatabaseView;
 import org.logicware.pdb.prolog.PrologProvider;
 
@@ -51,7 +50,7 @@ public abstract class AbstractSchema implements Schema {
 	private final Map<String, DatabaseView> views;
 	private final Map<String, DatabaseUser> users;
 	private final Map<String, DatabaseClass> classes;
-	private final Map<String, DatabasePackage> packages;
+	private final Map<String, DatabaseTrigger> triggers;
 	private final Map<String, DatabaseFunction> functions;
 	private final Map<String, DatabaseSequence> sequences;
 
@@ -77,14 +76,16 @@ public abstract class AbstractSchema implements Schema {
 		return new PrologDatabaseFunction(name, comment, this, path1, provider);
 	}
 
+	private DatabaseTrigger newDatabaseTrigger(String name, String comment) {
+		String path0 = location.substring(0, location.lastIndexOf(File.separatorChar));
+		String path1 = path0.replace(File.separatorChar, '/') + "/triggers.pl";
+		return new PrologDatabaseTrigger(name, comment, this, path1, provider);
+	}
+
 	private DatabaseView newDatabaseView(Class<?> target, String comment) {
 		String path0 = location.substring(0, location.lastIndexOf(File.separatorChar));
 		String path1 = path0.replace(File.separatorChar, '/') + "/views.pl";
 		return new PrologDatabaseView(path1, target, comment, this, provider);
-	}
-
-	private DatabasePackage newDatabasePackage(String packageName, String comment) {
-		return new DatabasePackage(packageName, comment, this);
 	}
 
 	private Class<?>[] findClasses(String packageName) throws ClassNotFoundException, IOException {
@@ -136,7 +137,7 @@ public abstract class AbstractSchema implements Schema {
 		this.storage = factory.createStorage(location + File.separator + "metadata" + File.separator + "schema.pl");
 		this.functions = new LinkedHashMap<String, DatabaseFunction>();
 		this.sequences = new LinkedHashMap<String, DatabaseSequence>();
-		this.packages = new LinkedHashMap<String, DatabasePackage>();
+		this.triggers = new LinkedHashMap<String, DatabaseTrigger>();
 		this.classes = new LinkedHashMap<String, DatabaseClass>();
 		this.users = new LinkedHashMap<String, DatabaseUser>();
 		this.views = new LinkedHashMap<String, DatabaseView>();
@@ -193,53 +194,6 @@ public abstract class AbstractSchema implements Schema {
 		Package langPackage = Object.class.getPackage();
 		Package typePackage = type.getPackage();
 		return typePackage.equals(langPackage);
-	}
-
-	public final Schema addPackage(Package pack, String comment) {
-		return addPackage(pack.getName(), comment);
-	}
-
-	public final Schema addPackage(String packageName, String comment) {
-		String packItr = packageName;
-		DatabasePackage p = newDatabasePackage(packItr, comment);
-		try {
-			Class<?>[] classArray = findClasses(packItr);
-			for (int i = 0; i < classArray.length; i++) {
-				Class<?> clazz = classArray[i];
-				Class<?> sc = clazz.getSuperclass();
-				DatabaseClass c = getOrAddClass(clazz);
-				DatabaseClass dbsc = addAbstractClass(sc, "");
-				p = newDatabasePackage(packItr, comment);
-				packages.put(clazz.getPackage().getName(), p);
-				c.setSuperClass(dbsc);
-			}
-		} catch (ClassNotFoundException e) {
-			LoggerUtils.error(getClass(), LoggerConstants.CLASS_NOT_FOUND, e);
-		} catch (IOException e) {
-			LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR, e);
-		}
-		return this;
-	}
-
-	public final Schema removePackage(String name) {
-		packages.remove(name);
-		return this;
-	}
-
-	public final DatabasePackage getPackage(String name) {
-		return packages.get(name);
-	}
-
-	public final boolean containsPackage(String name) {
-		return packages.containsKey(name);
-	}
-
-	public final Collection<DatabasePackage> getPackages() {
-		return packages.values();
-	}
-
-	public final int countPackages() {
-		return packages.size();
 	}
 
 	public final DatabaseClass addClass(Class<?> clazz, String comment) {
@@ -448,6 +402,33 @@ public abstract class AbstractSchema implements Schema {
 		return sequences.size();
 	}
 
+	public final DatabaseTrigger addTrigger(String name, String comment) {
+		DatabaseTrigger t = newDatabaseTrigger(name, comment);
+		triggers.put(name, t);
+		return t;
+	}
+
+	public final Schema removeTrigger(String name) {
+		triggers.remove(name);
+		return this;
+	}
+
+	public final DatabaseTrigger getTrigger(String name) {
+		return triggers.get(name);
+	}
+
+	public final boolean containsTrigger(String name) {
+		return triggers.containsKey(name);
+	}
+
+	public final Collection<DatabaseTrigger> getTriggers() {
+		return triggers.values();
+	}
+
+	public final int countTriggers() {
+		return triggers.size();
+	}
+
 	public final DatabaseView addView(Class<?> target, String comment) {
 		DatabaseView f = newDatabaseView(target, comment);
 		views.put(target.getName(), f);
@@ -624,6 +605,10 @@ public abstract class AbstractSchema implements Schema {
 		for (DatabaseSequence databaseSequence : s) {
 			sequences.put(databaseSequence.getName(), databaseSequence.setSchema(this));
 		}
+		List<DatabaseTrigger> t = storage.findAll(DatabaseTrigger.class);
+		for (DatabaseTrigger databaseTrigger : t) {
+			triggers.put(databaseTrigger.getName(), databaseTrigger.setSchema(this));
+		}
 		List<DatabaseView> v = storage.findAll(DatabaseView.class);
 		for (DatabaseView databaseView : v) {
 			views.put(databaseView.getName(), databaseView.setSchema(this));
@@ -646,6 +631,10 @@ public abstract class AbstractSchema implements Schema {
 		}
 		for (DatabaseSequence sequence : getSequences()) {
 			storage.insert(sequence);
+		}
+		for (DatabaseTrigger trigger : getTriggers()) {
+			storage.insert(trigger);
+			trigger.save();
 		}
 		for (DatabaseView view : getViews()) {
 			storage.insert(view);

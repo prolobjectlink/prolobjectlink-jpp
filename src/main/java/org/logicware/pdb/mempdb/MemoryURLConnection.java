@@ -17,29 +17,36 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.remdb;
+package org.logicware.pdb.mempdb;
 
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.logicware.pdb.HierarchicalCache;
 import org.logicware.pdb.URLContentType;
 
-public class RemoteURLConnection extends URLConnection {
+public class MemoryURLConnection extends URLConnection {
 
-	protected RemoteURLConnection(URL url) {
+	protected MemoryURLConnection(URL url) {
 		super(url);
 	}
 
 	@Override
 	public void connect() throws IOException {
-		// TODO Auto-generated method stub
+		// do nothing
 
 	}
 
 	@Override
 	public String getContentType() {
-		return URLContentType.REMDB.name();
+		return URLContentType.MEMPDB.name();
+	}
+
+	@Override
+	public Object getContent() throws IOException {
+		// TODO Auto-generated method stub
+		return super.getContent();
 	}
 
 }

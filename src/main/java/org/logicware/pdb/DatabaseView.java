@@ -24,7 +24,8 @@ import java.lang.reflect.Field;
 
 import org.logicware.pdb.prolog.PrologProvider;
 
-public abstract class DatabaseView extends DatabaseCode implements Serializable {
+public abstract class DatabaseView extends DatabaseCode<DatabaseView>
+		implements Serializable, SchemaElement<DatabaseView> {
 
 	private transient Class<?> target;
 	private static final long serialVersionUID = 7552979263681672426L;
@@ -81,6 +82,13 @@ public abstract class DatabaseView extends DatabaseCode implements Serializable 
 	@Override
 	public DatabaseCodeType getType() {
 		return DatabaseCodeType.VIEW;
+	}
+
+	public final DatabaseView save() {
+		getEngine().consult(getPath());
+		getEngine().assertz(getCode());
+		getEngine().persist(getPath());
+		return this;
 	}
 
 	@Override

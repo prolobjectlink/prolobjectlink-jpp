@@ -21,7 +21,7 @@ package org.logicware.pdb;
 
 import java.io.Serializable;
 
-public abstract class AbstractElement implements SchemaElement, Serializable {
+public abstract class AbstractElement<E extends SchemaElement<?>> implements SchemaElement<E>, Serializable {
 
 	protected final String name;
 	protected String comment;
@@ -69,7 +69,7 @@ public abstract class AbstractElement implements SchemaElement, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractElement other = (AbstractElement) obj;
+		AbstractElement<?> other = (AbstractElement<?>) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

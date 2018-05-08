@@ -36,17 +36,17 @@ public abstract class JPASelection<X> extends JPATupleElement<X> implements Sele
 		this.expression = expression;
 	}
 
-	public Selection<X> alias(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public boolean isCompoundSelection() {
 		return false;
 	}
 
 	public List<Selection<?>> getCompoundSelectionItems() {
 		return Collections.emptyList();
+	}
+
+	public Selection<X> alias(String name) {
+		this.alias = name;
+		return this;
 	}
 
 }

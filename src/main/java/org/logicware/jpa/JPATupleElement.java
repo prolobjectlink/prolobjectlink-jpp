@@ -23,9 +23,9 @@ import javax.persistence.TupleElement;
 
 public class JPATupleElement<X> implements TupleElement<X> {
 
-	private final X value;
-	private final String alias;
-	private final Class<? extends X> javaType;
+	protected String alias;
+	protected final X value;
+	protected final Class<? extends X> javaType;
 
 	public JPATupleElement(String alias, Class<? extends X> javaType) {
 		this(alias, javaType, null);

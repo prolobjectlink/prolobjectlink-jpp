@@ -45,7 +45,7 @@ import org.logicware.pdb.logging.LoggerUtils;
 
 public final class EmbeddedHierarchicalDB extends AbstractPersistentDatabase implements EmbeddedDatabase {
 
-	private static DatabaseService embeddedHierarchicalDB;
+	private static DatabaseService embeddedHierarchicalDatabase;
 
 	private EmbeddedHierarchicalDB(String name, URL url, Schema schema, DatabaseUser owner,
 			PersistentContainer storage) {
@@ -55,7 +55,7 @@ public final class EmbeddedHierarchicalDB extends AbstractPersistentDatabase imp
 
 	// TODO think about name and property map newInstance(name,properties)
 	public static final DatabaseService newInstance(String name) {
-		if (embeddedHierarchicalDB == null) {
+		if (embeddedHierarchicalDatabase == null) {
 			StorageMode mode = StorageMode.STORAGE_POOL;
 			JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
 			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(persistenceXml);
@@ -80,11 +80,11 @@ public final class EmbeddedHierarchicalDB extends AbstractPersistentDatabase imp
 					for (String managedClass : unit.getManagedClassNames()) {
 						schema.addClass(ReflectionUtils.classForName(managedClass), "");
 					}
-					embeddedHierarchicalDB = new EmbeddedHierarchicalDB(name, url, schema, owner, storage).create();
+					embeddedHierarchicalDatabase = new EmbeddedHierarchicalDB(name, url, schema, owner, storage).create();
 				}
 			}
 		}
-		return embeddedHierarchicalDB;
+		return embeddedHierarchicalDatabase;
 	}
 
 	public DatabaseMode getMode() {
