@@ -19,16 +19,41 @@
  */
 package org.logicware.pdb.server;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class TCPDatabaseThread implements Runnable {
 
-	public TCPDatabaseThread(Socket s, TCPDatabaseServer tcpDatabaseServer, int i) {
-		// TODO Auto-generated constructor stub
+	private static final int BUFSIZE = 32;
+	private final Socket socket;
+
+	public TCPDatabaseThread(Socket socket, int i) {
+		this.socket = socket;
 	}
 
 	public void run() {
-		// TODO Auto-generated method stub
+
+		int recvMsgSize; // Size of received message
+		byte[] byteBuffer = new byte[BUFSIZE]; // Receive buffer
+
+		try {
+
+			System.out.println(
+					"Handling client at " + socket.getInetAddress().getHostAddress() + " on port " + socket.getPort());
+
+			InputStream in = socket.getInputStream();
+			OutputStream out = socket.getOutputStream();
+
+			// Receive until client closes connection, indicated by-i return
+			while ((recvMsgSize = in.read(byteBuffer)) != -1)
+				out.write(byteBuffer, 0, recvMsgSize);
+
+			socket.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 

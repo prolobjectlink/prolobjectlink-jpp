@@ -24,43 +24,105 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
+import org.logicware.pdb.AbstractWrapper;
 import org.logicware.pdb.DatabaseClient;
+import org.logicware.pdb.DatabaseSession;
+import org.logicware.pdb.DefaultTransaction;
+import org.logicware.pdb.Transaction;
+import org.logicware.pdb.logging.LoggerConstants;
+import org.logicware.pdb.logging.LoggerUtils;
 
-public class TCPDatabaseClient implements DatabaseClient {
+public class TCPDatabaseClient extends AbstractWrapper implements DatabaseClient, DatabaseSession {
 
-	public static void main(String[] args) throws IOException {
+	private Socket socket;
+	private final int port;
+	private final String server;
+	private final Transaction transaction;
 
-		// Test for correct # of args
-		if ((args.length < 2) || (args.length > 3))
-			throw new IllegalArgumentException("Parameter(s): <Server> <Word> [<Port>]");
+	private static byte[] byteBuffer;
 
-		while (true) {
+	public TCPDatabaseClient(String server, int port) {
+		this.transaction = new DefaultTransaction(this);
+		this.server = server;
+		this.port = port;
+	}
 
-			String server = args[0];
-			// Server name or IP address
-			// Convert input String to bytes using the default character
-			// encoding
-			byte[] byteBuffer = args[1].getBytes();
-			int servPort = (args.length == 3) ? Integer.parseInt(args[2]) : 7;
-			// Create socket that is connected to server on specified port
-			Socket socket = new Socket(server, servPort);
-			System.out.println("Connected to server...sending echo string");
+	public final void begin() {
+		try {
+			socket = new Socket(server, port);
+		} catch (UnknownHostException e) {
+			LoggerUtils.error(getClass(), LoggerConstants.UNKNOWN_HOST, e);
+		} catch (IOException e) {
+			LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR, e);
+		}
+	}
+
+	public final void commit() {
+
+		System.out.println("Connected to server...sending echo string");
+
+		try {
+
 			InputStream in = socket.getInputStream();
 			OutputStream out = socket.getOutputStream();
-			out.write(byteBuffer); // Send the encoded string to the server
-			// Receive the same string back from the server
-			int totalBytesRcvd = 0; // Total bytes received so far
+			out.write(byteBuffer);
+
 			int bytesRcvd;
-			// Bytes received in last read
+			int totalBytesRcvd = 0;
 			while (totalBytesRcvd < byteBuffer.length) {
 				if ((bytesRcvd = in.read(byteBuffer, totalBytesRcvd, byteBuffer.length - totalBytesRcvd)) == -1)
 					throw new SocketException("Connection closed prematurely");
 				totalBytesRcvd += bytesRcvd;
 			}
-			System.out.println("Received: " + new String(byteBuffer));
-			socket.close(); // Close the socket and its streams
+
+			out.close();
+			in.close();
+
+		} catch (IOException e) {
+			LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR, e);
 		}
+
+		System.out.println("Received: " + new String(byteBuffer));
+	}
+
+	public final void rollback() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public final Transaction geTransaction() {
+		return transaction;
+	}
+
+	public final void close() {
+		if (socket != null) {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				// do nothing
+			} finally {
+				socket = null;
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+
+		// Test for correct # of args
+		if ((args.length < 2) || (args.length > 3))
+			throw new IllegalArgumentException("Parameter(s): <Server> <Word> [<Port>]");
+
+		String server = args[0];
+		int servPort = (args.length == 3) ? Integer.parseInt(args[1]) : 7;
+		byteBuffer = args[2].getBytes();
+
+		TCPDatabaseClient c = new TCPDatabaseClient(server, servPort);
+		c.geTransaction().begin();
+		c.geTransaction().commit();
+		c.geTransaction().close();
+		c.close();
 
 	}
 }

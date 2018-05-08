@@ -100,6 +100,13 @@ public abstract class AbstractEngine extends AbstractPlatform implements PrologE
 		return provider.fromTerm(head, body, to);
 	}
 
+	protected final String removeQuoted(String functor) {
+		if (functor != null && functor.startsWith("\'") && functor.endsWith("\'")) {
+			return functor.substring(1, functor.length() - 1);
+		}
+		return functor;
+	}
+
 	public final Set<PrologClause> getProgramClauses() {
 		Set<PrologClause> c = new LinkedHashSet<PrologClause>();
 		for (Iterator<PrologClause> i = iterator(); i.hasNext();) {

@@ -35,7 +35,6 @@ import org.logicware.pdb.Settings;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.VolatileContainer;
 import org.logicware.pdb.prolog.PrologContainerQuery;
-import org.logicware.pdb.prolog.PrologProcedureQuery;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.prolog.PrologTypedQuery;
@@ -50,6 +49,15 @@ public abstract class AbstractMemoryDatabase extends AbstractDatabaseService imp
 			Schema schema, DatabaseUser owner, VolatileContainer container) {
 		super(provider, properties, converter, containerFactory, url, name, schema, owner);
 		this.storage = container;
+		this.closed = false;
+	}
+
+	public final void backup(String directory, String zipFileName) {
+		// do nothing
+	}
+
+	public final void restore(String directory, String zipFileName) {
+		// do nothing
 	}
 
 	public final String getStorageLocation() {
@@ -113,15 +121,16 @@ public abstract class AbstractMemoryDatabase extends AbstractDatabaseService imp
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
-		return new PrologProcedureQuery("", getProvider(), functor, args);
+		throw new UnsupportedOperationException("createProcedureQuery(String functor, String... args)");
 	}
 
 	public final PersistentContainer containerOf(Class<?> clazz) {
-		return this;
+		throw new UnsupportedOperationException("containerOf(Class<?> clazz)");
 	}
 
 	public final String locationOf(Class<?> clazz) {
-		return "";
+		String location = "/" + clazz.getName().replace('.', '/');
+		return location.substring(0, location.lastIndexOf('/'));
 	}
 
 	public final void include(String path) {
@@ -162,6 +171,10 @@ public abstract class AbstractMemoryDatabase extends AbstractDatabaseService imp
 
 	public final DatabaseMode getMode() {
 		return DatabaseMode.MEMORY;
+	}
+
+	public final MemoryDatabase create() {
+		return this;
 	}
 
 }

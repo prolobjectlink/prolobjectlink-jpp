@@ -51,6 +51,14 @@
 		<downloadUrl>http://www.logicware.org/download</downloadUrl>
 	</distributionManagement>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>1.5</maven.compiler.source>
+		<maven.compiler.target>1.5</maven.compiler.target>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.ow2.asm</groupId>
@@ -168,18 +176,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin> -->
-			<!-- <groupId>org.codehaus.mojo</groupId> -->
-			<!-- <artifactId>appassembler-maven-plugin</artifactId> -->
-			<!-- <configuration> -->
-			<!-- <programs> -->
-			<!-- <program> -->
-			<!-- <mainClass>${project.groupId}.tuprolog.TuPrologEntryPoint</mainClass> -->
-			<!-- <name>jpi-2pl</name> -->
-			<!-- </program> -->
-			<!-- </programs> -->
-			<!-- </configuration> -->
-			<!-- </plugin> -->
 		</plugins>
 	</build>
 
@@ -226,19 +222,6 @@
 					<targetJdk>1.5</targetJdk>
 				</configuration>
 			</plugin>
-
-			<!-- <plugin> -->
-			<!-- <groupId>org.codehaus.mojo</groupId> -->
-			<!-- <artifactId>cobertura-maven-plugin</artifactId> -->
-			<!-- <configuration> -->
-			<!-- <formats> -->
-			<!-- <format>html</format> -->
-			<!-- <format>xml</format> -->
-			<!-- </formats> -->
-			<!-- </configuration> -->
-			<!-- </plugin> -->
-
-
 		</plugins>
 	</reporting>
 

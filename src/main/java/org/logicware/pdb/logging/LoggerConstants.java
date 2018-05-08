@@ -55,7 +55,9 @@ public enum LoggerConstants {
 
 	SECURITY_ERROR("Security error "),
 
-	SQL_ERROR("SQL error ");
+	SQL_ERROR("SQL error "),
+
+	UNKNOWN_HOST("Unknow Host error");
 
 	private final String name;
 

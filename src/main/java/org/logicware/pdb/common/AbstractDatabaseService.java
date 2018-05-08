@@ -21,7 +21,6 @@ package org.logicware.pdb.common;
 
 import static org.logicware.jpa.spi.JPAPersistenceXmlParser.XML;
 
-import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +40,6 @@ import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
-import org.logicware.pdb.VolatileContainer;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologTerm;
 
@@ -75,14 +73,6 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 
 	public final List<Class<?>> classes() {
 		return getSchema().getJavaClasses();
-	}
-
-	public final DatabaseService create() {
-		// TODO add others functions files e.g triggers
-		new File(getBaseLocation() + "/functions.pl");
-		new File(getBaseLocation() + "/views.pl");
-		getSchema().flush();
-		return this;
 	}
 
 	public final DatabaseService drop() {

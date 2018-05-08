@@ -19,9 +19,11 @@
  */
 package org.logicware.pdb.common;
 
+import java.io.File;
 import java.net.URL;
 
 import org.logicware.pdb.ContainerFactory;
+import org.logicware.pdb.DatabaseService;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.PersistentContainer;
@@ -206,6 +208,14 @@ public abstract class AbstractPersistentDatabase extends AbstractDatabaseService
 
 	public final void defragment() {
 		storage.defragment();
+	}
+
+	public DatabaseService create() {
+		// TODO add others functions files e.g triggers
+		new File(getBaseLocation() + "/functions.pl");
+		new File(getBaseLocation() + "/views.pl");
+		getSchema().flush();
+		return this;
 	}
 
 }

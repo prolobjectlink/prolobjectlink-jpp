@@ -75,12 +75,12 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 		this.name = db.getName();
 	}
 
-	public final void backup(String directory, String zipFileName) {
+	public void backup(String directory, String zipFileName) {
 		Backup backup = new Backup(getBaseLocation() + File.separator + getName());
 		backup.createBackup(directory, zipFileName);
 	}
 
-	public final void restore(String directory, String zipFileName) {
+	public void restore(String directory, String zipFileName) {
 		Restore restore = new Restore();
 		restore.restoreBackup(directory, zipFileName);
 	}

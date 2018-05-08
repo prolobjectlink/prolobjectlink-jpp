@@ -23,10 +23,6 @@ public interface DatabaseSession extends Transactional {
 
 	public Transaction geTransaction();
 
-	public DatabaseUser getOwner();
-
-	public DatabaseEngine getDatabase();
-
 	public void close();
 
 }

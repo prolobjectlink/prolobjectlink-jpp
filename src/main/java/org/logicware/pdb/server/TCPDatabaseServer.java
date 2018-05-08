@@ -20,8 +20,6 @@
 package org.logicware.pdb.server;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -41,8 +39,6 @@ public class TCPDatabaseServer implements DatabaseServer {
 	private volatile int nextThreadId;
 	private ServerSocket serverSocket;
 	private final Set<TCPDatabaseThread> running;
-
-	private static final int BUFSIZE = 32;
 
 	public TCPDatabaseServer(int port, boolean isDaemon) {
 		this.running = Collections.synchronizedSet(new HashSet<TCPDatabaseThread>());
@@ -74,48 +70,26 @@ public class TCPDatabaseServer implements DatabaseServer {
 		serverSocket = new ServerSocket(port);
 		String name = Thread.currentThread().getName();
 		while (!stop) {
-			Socket s = serverSocket.accept();
-			TCPDatabaseThread c = new TCPDatabaseThread(s, this, nextThreadId++);
+			Socket clientSocket = serverSocket.accept();
+			TCPDatabaseThread c = new TCPDatabaseThread(clientSocket, nextThreadId++);
 			Thread thread = new Thread(c, name + " thread");
 			thread.setDaemon(isDaemon);
 			thread.start();
 			running.add(c);
 		}
 		serverSocket.close();
+		serverSocket = null;
 	}
 
 	public void stop() throws IOException {
-		if (!stop) {
-			stop = true;
-			if (serverSocket != null) {
-				serverSocket.close();
-				serverSocket = null;
-			}
-		}
+		stop = true;
 	}
 
 	public static void main(String[] args) throws IOException {
 		if (args.length != 1) // Test for correct # of args
 			throw new IllegalArgumentException("Parameter(s): <Port>");
 		int servPort = Integer.parseInt(args[0]);
-		// Create a server socket to accept client connection requests
-		ServerSocket servSock = new ServerSocket(servPort);
-		int recvMsgSize; // Size of received message
-		byte[] byteBuffer = new byte[BUFSIZE]; // Receive buffer
-		for (;;) { // Run forever, accepting and servicing connections
-			Socket clntSock = servSock.accept();
-			// Get client connection
-			System.out.println("Handling client at " + clntSock.getInetAddress().getHostAddress() + " on port "
-					+ clntSock.getPort());
-			InputStream in = clntSock.getInputStream();
-			OutputStream out = clntSock.getOutputStream();
-			// Receive until client closes connection, indicated by-i return
-			while ((recvMsgSize = in.read(byteBuffer)) != -1)
-				out.write(byteBuffer, 0, recvMsgSize);
-			clntSock.close();
-			// Close the socket. We are done with this client!
-		}
-		/* NOT REACHED */
+		new TCPDatabaseServer(servPort, true).start();
 	}
 
 }

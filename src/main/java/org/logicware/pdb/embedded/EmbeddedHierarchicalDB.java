@@ -66,6 +66,9 @@ public final class EmbeddedHierarchicalDB extends AbstractPersistentDatabase imp
 					URL url = null;
 					try {
 						url = new URL(unit.getProperties().getProperty(JPAProperties.URL).replace(URL_PREFIX, ""));
+						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
+							throw new MalformedURLException("The URL path don't have database name at the end");
+						}
 					} catch (MalformedURLException e) {
 						LoggerUtils.error(EmbeddedHierarchicalDB.class, LoggerConstants.IO_ERROR, e);
 					}
@@ -80,7 +83,8 @@ public final class EmbeddedHierarchicalDB extends AbstractPersistentDatabase imp
 					for (String managedClass : unit.getManagedClassNames()) {
 						schema.addClass(ReflectionUtils.classForName(managedClass), "");
 					}
-					embeddedHierarchicalDatabase = new EmbeddedHierarchicalDB(name, url, schema, owner, storage).create();
+					embeddedHierarchicalDatabase = new EmbeddedHierarchicalDB(name, url, schema, owner, storage)
+							.create();
 				}
 			}
 		}
