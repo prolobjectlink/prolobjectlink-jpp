@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.embedded;
+package org.logicware.pdb.embed;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,11 +39,11 @@ import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageManager;
 import org.logicware.pdb.StorageMode;
-import org.logicware.pdb.common.AbstractPersistentDatabase;
+import org.logicware.pdb.common.AbstractEmbeddedDatabase;
 import org.logicware.pdb.logging.LoggerConstants;
 import org.logicware.pdb.logging.LoggerUtils;
 
-public final class EmbeddedHierarchicalDB extends AbstractPersistentDatabase implements EmbeddedDatabase {
+public final class EmbeddedHierarchicalDB extends AbstractEmbeddedDatabase implements EmbeddedDatabase {
 
 	private static DatabaseService embeddedHierarchicalDatabase;
 

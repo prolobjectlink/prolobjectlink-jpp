@@ -17,8 +17,25 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb;
+package org.logicware.pdb.dto;
 
-public interface DatabaseClient {
+import static org.logicware.pdb.DataTransferType.CLEAR;
+
+import org.logicware.pdb.DataTransferObject;
+import org.logicware.pdb.Schema;
+import org.logicware.pdb.common.AbstractDataTransfer;
+
+public class ClearDatabaseDto extends AbstractDataTransfer<Schema, Boolean>
+		implements DataTransferObject<Schema, Boolean> {
+
+	private static final long serialVersionUID = 8733389470492049455L;
+
+	public ClearDatabaseDto(Schema query) {
+		super(CLEAR, query);
+	}
+
+	public ClearDatabaseDto() {
+		this(null);
+	}
 
 }

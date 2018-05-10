@@ -19,6 +19,7 @@
  */
 package org.logicware.pdb;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -94,19 +95,17 @@ import java.util.List;
  * }
  * </pre>
  * 
- * @param <O>
- *            Root object template class
+ * @param <O> Root object template class
  * 
  * @see Query
  * @author Jose Zalacain
  * @since 1.0
  * 
  */
-public interface TypedQuery<O> extends Iterator<O> {
+public interface TypedQuery<O> extends Iterator<O>, Serializable {
 
 	/**
-	 * Return the maximum number of solutions to retrieve by the formulated
-	 * query
+	 * Return the maximum number of solutions to retrieve by the formulated query
 	 * 
 	 * @return maximum number of solutions
 	 * @since 1.0
@@ -116,10 +115,8 @@ public interface TypedQuery<O> extends Iterator<O> {
 	/**
 	 * Fix the maximum number of solutions to retrieve by the formulated query
 	 * 
-	 * @param maxSolution
-	 *            maximum number of solutions
-	 * @return current instance of {@code TypedQuery} with the restriction
-	 *         appended.
+	 * @param maxSolution maximum number of solutions
+	 * @return current instance of {@code TypedQuery} with the restriction appended.
 	 * @since 1.0
 	 */
 	public TypedQuery<O> setMaxSolution(int maxSolution);
@@ -135,10 +132,8 @@ public interface TypedQuery<O> extends Iterator<O> {
 	/**
 	 * Fix the position of the first solution to retrieve.
 	 * 
-	 * @param firstSolution
-	 *            position of the first solution
-	 * @return current instance of {@code TypedQuery} with the restriction
-	 *         appended.
+	 * @param firstSolution position of the first solution
+	 * @return current instance of {@code TypedQuery} with the restriction appended.
 	 * @since 1.0
 	 */
 	public TypedQuery<O> setFirstSolution(int firstSolution);
@@ -153,17 +148,15 @@ public interface TypedQuery<O> extends Iterator<O> {
 	 * </pre>
 	 * 
 	 * @return Return a single solution of the current {@code TypedQuery}
-	 * @throws NonSolutionError
-	 *             throw an exception if not exist any solution object
+	 * @throws NonSolutionError throw an exception if not exist any solution object
 	 * @since 1.0
 	 */
 	public O getSolution() throws NonSolutionError;
 
 	/**
-	 * Return a all solutions of the current {@code TypedQuery}. The solutions
-	 * list object type is in correspondence whit root class type specified in
-	 * the criteria query construction when its is created through
-	 * {@link Storage}.
+	 * Return a all solutions of the current {@code TypedQuery}. The solutions list
+	 * object type is in correspondence whit root class type specified in the
+	 * criteria query construction when its is created through {@link Storage}.
 	 * 
 	 * <pre>
 	 * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).getSolutions();
@@ -176,13 +169,13 @@ public interface TypedQuery<O> extends Iterator<O> {
 
 	/**
 	 * <p>
-	 * Ascendant ordering of all solutions to be returned by the solutions
-	 * methods invocation. The order criterion is base in object hash code. Is
-	 * suggested and very important the {@code Object#hashCode()} implementation
-	 * in the model objects to achieve a corrected solution . The alternation
-	 * with the {@code TypedQuery#orderDescending()} invocation only apply the
-	 * latest ordering method invocation. For example if we want the list of
-	 * stored point in ascendant order:
+	 * Ascendant ordering of all solutions to be returned by the solutions methods
+	 * invocation. The order criterion is base in object hash code. Is suggested and
+	 * very important the {@code Object#hashCode()} implementation in the model
+	 * objects to achieve a corrected solution . The alternation with the
+	 * {@code TypedQuery#orderDescending()} invocation only apply the latest
+	 * ordering method invocation. For example if we want the list of stored point
+	 * in ascendant order:
 	 * </p>
 	 * 
 	 * <pre>
@@ -195,8 +188,7 @@ public interface TypedQuery<O> extends Iterator<O> {
 	 * 
 	 * 
 	 * 
-	 * @return current instance of {@code TypedQuery} with the restriction
-	 *         appended.
+	 * @return current instance of {@code TypedQuery} with the restriction appended.
 	 * @since 1.0
 	 * @see TypedQuery#orderDescending()
 	 * @see TypedQuery#orderBy(Comparator)
@@ -204,13 +196,13 @@ public interface TypedQuery<O> extends Iterator<O> {
 	public TypedQuery<O> orderAscending();
 
 	/**
-	 * Descendant ordering of all solutions to be returned by the solutions
-	 * methods invocation. The order criterion is base in object hash code. Is
-	 * suggested and very important the {@code Object#hashCode()} implementation
-	 * in the model objects to achieve a corrected solution . The alternation
-	 * with the {@code TypedQuery#orderAscending()} invocation only apply the
-	 * latest ordering method invocation. For example if we want the list of
-	 * stored point in descendant order:
+	 * Descendant ordering of all solutions to be returned by the solutions methods
+	 * invocation. The order criterion is base in object hash code. Is suggested and
+	 * very important the {@code Object#hashCode()} implementation in the model
+	 * objects to achieve a corrected solution . The alternation with the
+	 * {@code TypedQuery#orderAscending()} invocation only apply the latest ordering
+	 * method invocation. For example if we want the list of stored point in
+	 * descendant order:
 	 * 
 	 * <pre>
 	 * List&lt;Point&gt; points = objectContainer.createQuery(Point.class).orderDescending().getSolutions();
@@ -221,8 +213,7 @@ public interface TypedQuery<O> extends Iterator<O> {
 	 * </p>
 	 * 
 	 * 
-	 * @return current instance of {@code TypedQuery} with the restriction
-	 *         appended.
+	 * @return current instance of {@code TypedQuery} with the restriction appended.
 	 * @since 1.0
 	 * @see TypedQuery#orderAscending()
 	 * @see TypedQuery#orderBy(Comparator)
@@ -231,15 +222,15 @@ public interface TypedQuery<O> extends Iterator<O> {
 
 	/**
 	 * <p>
-	 * Ordering of all solutions to be returned by the solutions methods
-	 * invocation by a given comparator implementation. This alternative is
-	 * useful when most specific compare criteria is needed between objects.
+	 * Ordering of all solutions to be returned by the solutions methods invocation
+	 * by a given comparator implementation. This alternative is useful when most
+	 * specific compare criteria is needed between objects.
 	 * </p>
 	 * 
 	 * <p>
 	 * The followed example is equivalent to apply ascending order to point
-	 * solutions based in point identifier. This example return a list with a,
-	 * b, c, d Point class instances objects
+	 * solutions based in point identifier. This example return a list with a, b, c,
+	 * d Point class instances objects
 	 * </p>
 	 * 
 	 * <pre>
@@ -256,11 +247,9 @@ public interface TypedQuery<O> extends Iterator<O> {
 	 * }).getSolutions();
 	 * </pre>
 	 * 
-	 * @param comparator
-	 *            comparator used for compare an ordering solutions to be
-	 *            returned
-	 * @return current instance of {@code TypedQuery} with the restriction
-	 *         appended.
+	 * @param comparator comparator used for compare an ordering solutions to be
+	 *                   returned
+	 * @return current instance of {@code TypedQuery} with the restriction appended.
 	 * @since 1.0
 	 * @see TypedQuery#orderAscending()
 	 * @see TypedQuery#orderDescending()
@@ -277,27 +266,25 @@ public interface TypedQuery<O> extends Iterator<O> {
 
 	/**
 	 * <p>
-	 * Create a new {@code TypedQuery} descending to object store in the
-	 * specified field that match with name parameter and present in the objects
-	 * hold by the query instance. If the specified field is not found in the
-	 * objects hold by the query instance then an exception is raised. This
-	 * operation walk the graph represented by object relationship determined by
-	 * yours field.
+	 * Create a new {@code TypedQuery} descending to object store in the specified
+	 * field that match with name parameter and present in the objects hold by the
+	 * query instance. If the specified field is not found in the objects hold by
+	 * the query instance then an exception is raised. This operation walk the graph
+	 * represented by object relationship determined by yours field.
 	 * </p>
 	 * 
 	 * <p>
-	 * For example suppose a Polygon class is composed by segments objects and
-	 * one segment by points objects and the point by one point identifier. If
-	 * we want all identifiers of the initials points of the initials segments
-	 * from all polygons:
+	 * For example suppose a Polygon class is composed by segments objects and one
+	 * segment by points objects and the point by one point identifier. If we want
+	 * all identifiers of the initials points of the initials segments from all
+	 * polygons:
 	 * </p>
 	 * 
 	 * <pre>
 	 * objectContainer.createQuery(Polygon.class).descend(&quot;segment0&quot;).descend(&quot;point0&quot;).descend(&quot;idp&quot;).getSolutions();
 	 * </pre>
 	 * 
-	 * @param name
-	 *            class field name to descend
+	 * @param name class field name to descend
 	 * @return new instance of {@code TypedQuery} with the restriction appended.
 	 * @since 1.0
 	 */

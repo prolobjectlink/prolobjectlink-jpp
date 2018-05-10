@@ -36,9 +36,8 @@ import org.logicware.pdb.MemoryDatabase;
 import org.logicware.pdb.ReflectionUtils;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
-import org.logicware.pdb.URLContentType;
+import org.logicware.pdb.Protocol;
 import org.logicware.pdb.common.AbstractMemoryDatabase;
-import org.logicware.pdb.embedded.EmbeddedHierarchicalDB;
 import org.logicware.pdb.logging.LoggerConstants;
 import org.logicware.pdb.logging.LoggerUtils;
 
@@ -61,13 +60,13 @@ public final class MemoryHierarchicalDB extends AbstractMemoryDatabase implement
 					Settings settings = new Settings(unit.getProperties().getProperty(JPAProperties.DRIVER));
 					URL url = null;
 					try {
-						System.setProperty("java.protocol.handler.pkgs", URLContentType.class.getPackage().getName());
+						System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
 						url = new URL(unit.getProperties().getProperty(JPAProperties.URL).replace(URL_PREFIX, ""));
 						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
 							throw new MalformedURLException("The URL path don't have database name at the end");
 						}
 					} catch (MalformedURLException e) {
-						LoggerUtils.error(EmbeddedHierarchicalDB.class, LoggerConstants.IO_ERROR, e);
+						LoggerUtils.error(MemoryHierarchicalDB.class, LoggerConstants.IO_ERROR, e);
 					}
 
 					assert url != null;

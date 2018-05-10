@@ -32,8 +32,7 @@ import java.util.List;
 public interface Query extends TypedQuery<Object> {
 
 	/**
-	 * Return the maximum number of solutions to retrieve by the formulated
-	 * query
+	 * Return the maximum number of solutions to retrieve by the formulated query
 	 * 
 	 * @return maximum number of solutions
 	 * @since 1.0
@@ -43,10 +42,8 @@ public interface Query extends TypedQuery<Object> {
 	/**
 	 * Fix the maximum number of solutions to retrieve by the formulated query
 	 * 
-	 * @param maxSolution
-	 *            maximum number of solutions
-	 * @return current instance of {@code TypedQuery} with the restriction
-	 *         appended.
+	 * @param maxSolution maximum number of solutions
+	 * @return current instance of {@code TypedQuery} with the restriction appended.
 	 * @since 1.0
 	 */
 	public Query setMaxSolution(int maxSolution);
@@ -62,10 +59,8 @@ public interface Query extends TypedQuery<Object> {
 	/**
 	 * Fix the position of the first solution to retrieve.
 	 * 
-	 * @param firstSolution
-	 *            position of the first solution
-	 * @return current instance of {@code TypedQuery} with the restriction
-	 *         appended.
+	 * @param firstSolution position of the first solution
+	 * @return current instance of {@code TypedQuery} with the restriction appended.
 	 * @since 1.0
 	 */
 	public Query setFirstSolution(int firstSolution);

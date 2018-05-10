@@ -17,10 +17,24 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb;
+package org.logicware.pdb.dto;
 
-public enum URLContentType {
+import static org.logicware.pdb.DataTransferType.SCHEMA;
 
-	MEMPDB, REMPDB;
+import org.logicware.pdb.DataTransferObject;
+import org.logicware.pdb.Schema;
+import org.logicware.pdb.common.AbstractDataTransfer;
+
+public class GetSchemaDto extends AbstractDataTransfer<Schema, Schema> implements DataTransferObject<Schema, Schema> {
+
+	private static final long serialVersionUID = 4132262055443397931L;
+
+	public GetSchemaDto(Schema query) {
+		super(SCHEMA, query);
+	}
+
+	public GetSchemaDto() {
+		this(null);
+	}
 
 }

@@ -20,8 +20,32 @@
 package org.logicware.pdb;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface DatabaseEngine extends PersistentContainer {
+
+	// TODO REMOVE throws NonSolutionError IN FIND METHODS RETURN NULL IF NOT
+	// EXIST
+
+	public Object find(String string) throws NonSolutionError;
+
+	public Object find(String functor, Object... args) throws NonSolutionError;
+
+	public <O> O find(O o) throws NonSolutionError;
+
+	public <O> O find(Class<O> clazz) throws NonSolutionError;
+
+	public <O> O find(Predicate<O> predicate) throws NonSolutionError;
+
+	public List<Object> findAll(String string);
+
+	public List<Object> findAll(String functor, Object... args);
+
+	public <O> List<O> findAll(O o);
+
+	public <O> List<O> findAll(Class<O> clazz);
+
+	public <O> List<O> findAll(Predicate<O> predicate);
 
 	public Collection<DatabaseRole> getRoles();
 

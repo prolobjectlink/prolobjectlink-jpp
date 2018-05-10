@@ -19,6 +19,8 @@
  */
 package org.logicware.pdb;
 
+import java.io.Serializable;
+
 import org.logicware.pdb.predicate.AndPredicate;
 import org.logicware.pdb.predicate.EqualPredicate;
 import org.logicware.pdb.predicate.FalsePredicate;
@@ -62,8 +64,7 @@ import org.logicware.pdb.predicate.TruePredicate;
  * </pre>
  * 
  * 
- * @param <O>
- *            Object template to be evaluate by {@link Predicate}
+ * @param <O> Object template to be evaluate by {@link Predicate}
  * @author Jose Zalacain
  * @since 1.0
  * @see AndPredicate
@@ -78,17 +79,14 @@ import org.logicware.pdb.predicate.TruePredicate;
  * @see TruePredicate
  * 
  */
-public interface Predicate<O> {
+public interface Predicate<O> extends Serializable {
 
 	/**
-	 * Return true if some object match with the current {@link Predicate}. If
-	 * the object match, will be include in the solution list.
+	 * Return true if some object match with the current {@link Predicate}. If the
+	 * object match, will be include in the solution list.
 	 * 
-	 * @param o
-	 *            possible candidate to be match and include in the solution
-	 *            list.
-	 * @return true if the object match and will be include in the solution
-	 *         list.
+	 * @param o possible candidate to be match and include in the solution list.
+	 * @return true if the object match and will be include in the solution list.
 	 * @since 1.0
 	 */
 	public boolean evaluate(final O o);

@@ -21,6 +21,7 @@ package org.logicware.pdb.prolog;
 
 public final class PredicateIndicator implements PrologIndicator {
 
+	private static final long serialVersionUID = 4354260669799638894L;
 	private final String functor;
 	private final int arity;
 

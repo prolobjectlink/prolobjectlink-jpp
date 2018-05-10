@@ -17,12 +17,22 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb;
+package org.logicware.pdb.dto;
 
-public interface DatabaseSession extends Transactional {
+import static org.logicware.pdb.DataTransferType.INSERT;
 
-	public Transaction geTransaction();
+import java.io.Serializable;
 
-	public void close();
+import org.logicware.pdb.DataTransferObject;
+import org.logicware.pdb.common.AbstractDataTransfer;
+
+public class InsertObjectDto<Q extends Serializable> extends AbstractDataTransfer<Q, Boolean>
+		implements DataTransferObject<Q, Boolean> {
+
+	private static final long serialVersionUID = 8733389470492049455L;
+
+	public InsertObjectDto(Q query) {
+		super(INSERT, query);
+	}
 
 }

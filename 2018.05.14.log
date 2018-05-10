@@ -1,0 +1,72 @@
+[global] ERROR may-14-2018 16:03 class org.logicware.pdb.remote.AbstractRemoteDatabase
+IO_ERROR
+java.net.ConnectException: Connection refused: connect
+java.net.DualStackPlainSocketImpl.connect0(Native Method)
+java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+java.net.Socket.connect(Socket.java:589)
+java.net.Socket.connect(Socket.java:538)
+java.net.Socket.<init>(Socket.java:434)
+java.net.Socket.<init>(Socket.java:211)
+org.logicware.pdb.remote.AbstractRemoteDatabase.begin(AbstractRemoteDatabase.java:83)
+org.logicware.pdb.AbstractTransaction.begin(AbstractTransaction.java:71)
+org.logicware.pdb.remote.AbstractRemoteDatabase.main(AbstractRemoteDatabase.java:424)
+
+[global] ERROR may-14-2018 16:27 class org.logicware.pdb.memory.MemoryHierarchicalDB
+IO_ERROR
+java.net.MalformedURLException: unknown protocol: org.prolobjectlink.remdb
+java.net.URL.<init>(URL.java:600)
+java.net.URL.<init>(URL.java:490)
+java.net.URL.<init>(URL.java:439)
+org.logicware.pdb.remote.AbstractRemoteDatabase.getURL(AbstractRemoteDatabase.java:419)
+org.logicware.pdb.remote.AbstractRemoteDatabase.main(AbstractRemoteDatabase.java:439)
+
+[global] ERROR may-14-2018 16:28 class org.logicware.pdb.memory.MemoryHierarchicalDB
+IO_ERROR
+java.net.MalformedURLException: unknown protocol: org.prolobjectlink.remdb
+java.net.URL.<init>(URL.java:600)
+java.net.URL.<init>(URL.java:490)
+java.net.URL.<init>(URL.java:439)
+org.logicware.pdb.remote.AbstractRemoteDatabase.getURL(AbstractRemoteDatabase.java:419)
+org.logicware.pdb.remote.AbstractRemoteDatabase.main(AbstractRemoteDatabase.java:439)
+
+[global] ERROR may-14-2018 16:31 class org.logicware.pdb.memory.MemoryHierarchicalDB
+IO_ERROR
+java.net.MalformedURLException: unknown protocol: org.prolobjectlink.rempdb
+java.net.URL.<init>(URL.java:600)
+java.net.URL.<init>(URL.java:490)
+java.net.URL.<init>(URL.java:439)
+org.logicware.pdb.remote.AbstractRemoteDatabase.getURL(AbstractRemoteDatabase.java:419)
+org.logicware.pdb.remote.AbstractRemoteDatabase.main(AbstractRemoteDatabase.java:439)
+
+[global] ERROR may-14-2018 16:33 class org.logicware.pdb.memory.MemoryHierarchicalDB
+IO_ERROR
+java.net.MalformedURLException: unknown protocol: org.prolobjectlink.rempdb
+java.net.URL.<init>(URL.java:600)
+java.net.URL.<init>(URL.java:490)
+java.net.URL.<init>(URL.java:439)
+org.logicware.pdb.remote.AbstractRemoteDatabase.getURL(AbstractRemoteDatabase.java:420)
+org.logicware.pdb.remote.AbstractRemoteDatabase.main(AbstractRemoteDatabase.java:442)
+
+[global] ERROR may-14-2018 16:34 class org.logicware.pdb.memory.MemoryHierarchicalDB
+IO_ERROR
+java.net.MalformedURLException: unknown protocol: org.prolobjectlink.rempdb
+java.net.URL.<init>(URL.java:600)
+java.net.URL.<init>(URL.java:490)
+java.net.URL.<init>(URL.java:439)
+org.logicware.pdb.remote.AbstractRemoteDatabase.getURL(AbstractRemoteDatabase.java:421)
+org.logicware.pdb.remote.AbstractRemoteDatabase.main(AbstractRemoteDatabase.java:441)
+
+[global] ERROR may-14-2018 16:36 class org.logicware.pdb.remote.AbstractRemoteDatabase
+IO_ERROR
+java.net.MalformedURLException: unknown protocol: rempdb
+java.net.URL.<init>(URL.java:600)
+java.net.URL.<init>(URL.java:490)
+java.net.URL.<init>(URL.java:439)
+org.logicware.pdb.remote.AbstractRemoteDatabase.getURL(AbstractRemoteDatabase.java:421)
+org.logicware.pdb.remote.AbstractRemoteDatabase.main(AbstractRemoteDatabase.java:440)
+

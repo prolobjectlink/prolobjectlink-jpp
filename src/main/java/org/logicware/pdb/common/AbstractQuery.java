@@ -23,7 +23,7 @@ import org.logicware.pdb.BadPositionError;
 import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.ObjectReflector;
 
-public abstract class AbstractQuery<S> {
+public abstract class AbstractQuery {
 
 	protected final ObjectReflector reflector = new ObjectReflector();
 
@@ -61,7 +61,7 @@ public abstract class AbstractQuery<S> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractQuery<?> other = (AbstractQuery<?>) obj;
+		AbstractQuery other = (AbstractQuery) obj;
 		if (firstSolution != other.firstSolution)
 			return false;
 		return maxSolution == other.maxSolution;

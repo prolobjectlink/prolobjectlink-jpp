@@ -20,22 +20,19 @@
 package org.logicware.pdb;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 public interface DatabaseServer {
 
-	public void start() throws IOException;
+	public void shutdown() throws InterruptedException;
 
-	public void stop() throws IOException;
+	public void startup() throws IOException;
 
 	public DatabaseServerType getType();
 
 	public boolean isRunning();
 
-	public boolean isDaemon();
-
-	public String getURL() throws UnknownHostException;
-
 	public String getName();
+
+	public String getURL();
 
 }

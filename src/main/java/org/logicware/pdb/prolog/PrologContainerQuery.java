@@ -19,6 +19,7 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,18 +33,20 @@ import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.Query;
 import org.logicware.pdb.common.AbstractQuery;
 
-public class PrologContainerQuery extends AbstractQuery<Object> implements Query {
+public class PrologContainerQuery extends AbstractQuery implements Query {
 
 	private int index;
 
-	/** query result list */
-	private List<Object> solution;
+	private ArrayList<Object> solution;
 
 	private AscendantComparator ascendant = new AscendantComparator();
-
 	private DescendantComparator descendant = new DescendantComparator();
 
-	private final class AscendantComparator implements Comparator<Object> {
+	private static final long serialVersionUID = 5670102326238421771L;
+
+	private final class AscendantComparator implements Comparator<Object>, Serializable {
+
+		private static final long serialVersionUID = -6327021886772541537L;
 
 		public int compare(Object o1, Object o2) {
 
@@ -82,7 +85,9 @@ public class PrologContainerQuery extends AbstractQuery<Object> implements Query
 
 	}
 
-	private final class DescendantComparator implements Comparator<Object> {
+	private final class DescendantComparator implements Comparator<Object>, Serializable {
+
+		private static final long serialVersionUID = -4336563430577273554L;
 
 		public int compare(Object o1, Object o2) {
 
@@ -122,7 +127,7 @@ public class PrologContainerQuery extends AbstractQuery<Object> implements Query
 	}
 
 	public PrologContainerQuery(List<Object> solution) {
-		this.solution = solution;
+		this.solution = new ArrayList<Object>(solution);
 	}
 
 	public Query setFirstSolution(int first) {

@@ -17,29 +17,30 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.rempdb;
+package org.logicware.pdb;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
+public enum DataTransferType {
 
-import org.logicware.pdb.Protocol;
+	CREATE,
 
-public class RemoteURLConnection extends URLConnection {
+	DROP,
 
-	protected RemoteURLConnection(URL url) {
-		super(url);
-	}
+	CLEAR,
 
-	@Override
-	public void connect() throws IOException {
-		// TODO Auto-generated method stub
+	DEFRAG,
 
-	}
+	CONSTAINS,
 
-	@Override
-	public String getContentType() {
-		return Protocol.REMPDB.name();
-	}
+	INSERT,
+
+	UPDATE,
+
+	DELETE,
+
+	FIND,
+
+	SCHEMA,
+
+	OWNER;
 
 }

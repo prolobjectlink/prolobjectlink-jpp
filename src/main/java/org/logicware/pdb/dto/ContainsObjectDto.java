@@ -17,29 +17,26 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.rempdb;
+package org.logicware.pdb.dto;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
+import static org.logicware.pdb.DataTransferType.CONSTAINS;
 
-import org.logicware.pdb.Protocol;
+import java.io.Serializable;
 
-public class RemoteURLConnection extends URLConnection {
+import org.logicware.pdb.DataTransferObject;
+import org.logicware.pdb.common.AbstractDataTransfer;
 
-	protected RemoteURLConnection(URL url) {
-		super(url);
+public class ContainsObjectDto<Q extends Serializable> extends AbstractDataTransfer<Q, Boolean>
+		implements DataTransferObject<Q, Boolean> {
+
+	private static final long serialVersionUID = 8733389470492049455L;
+
+	public ContainsObjectDto(Q query) {
+		super(CONSTAINS, query);
 	}
 
-	@Override
-	public void connect() throws IOException {
-		// TODO Auto-generated method stub
+	
 
-	}
-
-	@Override
-	public String getContentType() {
-		return Protocol.REMPDB.name();
-	}
+	
 
 }

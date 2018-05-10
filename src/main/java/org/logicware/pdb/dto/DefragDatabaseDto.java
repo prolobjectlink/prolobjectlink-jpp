@@ -17,29 +17,25 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.rempdb;
+package org.logicware.pdb.dto;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
+import static org.logicware.pdb.DataTransferType.DEFRAG;
 
-import org.logicware.pdb.Protocol;
+import org.logicware.pdb.DataTransferObject;
+import org.logicware.pdb.Schema;
+import org.logicware.pdb.common.AbstractDataTransfer;
 
-public class RemoteURLConnection extends URLConnection {
+public class DefragDatabaseDto extends AbstractDataTransfer<Schema, Boolean>
+		implements DataTransferObject<Schema, Boolean> {
 
-	protected RemoteURLConnection(URL url) {
-		super(url);
+	private static final long serialVersionUID = 8733389470492049455L;
+
+	public DefragDatabaseDto(Schema query) {
+		super(DEFRAG, query);
 	}
 
-	@Override
-	public void connect() throws IOException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getContentType() {
-		return Protocol.REMPDB.name();
+	public DefragDatabaseDto() {
+		this(null);
 	}
 
 }

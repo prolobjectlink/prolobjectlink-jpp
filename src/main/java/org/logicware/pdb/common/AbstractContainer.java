@@ -92,17 +92,6 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 		this.provider = provider;
 	}
 
-	public final List<Object> findAll() {
-		List<Object> list = new ArrayList<Object>();
-		for (PrologClause clause : engine) {
-			if (clause.isFact()) {
-				PrologTerm t = clause.getHead();
-				list.add(converter.toObject(t));
-			}
-		}
-		return list;
-	}
-
 	public final ObjectConverter<PrologTerm> getConverter() {
 		return converter;
 	}
@@ -173,11 +162,9 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 	 * classes extracted from prolog terms array for convert the result obtained
 	 * from prolog query result.
 	 * 
-	 * @param prologTerms
-	 *            prolog terms array to query.
+	 * @param prologTerms prolog terms array to query.
 	 * 
-	 * @param classes
-	 *            classes extracted from prolog terms array.
+	 * @param classes     classes extracted from prolog terms array.
 	 * @return all objects solutions of prologTerms prolog terms array.
 	 */
 	public final List<Object> solutionsOf(PrologTerm[] prologTerms, List<Class<?>> classes) {

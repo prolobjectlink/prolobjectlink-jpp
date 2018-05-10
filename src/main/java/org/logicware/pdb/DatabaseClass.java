@@ -19,7 +19,6 @@
  */
 package org.logicware.pdb;
 
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,12 +29,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.logicware.pdb.util.ASMVersion;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.util.CheckClassAdapter;
-import org.objectweb.asm.util.TraceClassVisitor;
 
 public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		implements Comparable<DatabaseClass>, Serializable, SchemaElement<DatabaseClass> {
@@ -175,12 +173,7 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 
 	public byte[] compile() {
 		ClassWriter cw = new ClassWriter(Opcodes.ASM5);
-		PrintWriter printWriter = new PrintWriter(System.out);
-		TraceClassVisitor tcv = new TraceClassVisitor(cw, printWriter);
-		CheckClassAdapter cv = new CheckClassAdapter(tcv);
-
 		String internalName = name.replace('.', '/');
-
 		String superclass = superClass != null ? //
 				superClass.getName().replace('.', '/') : //
 				Type.getInternalName(Object.class);
@@ -190,14 +183,14 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 			interfaces[i] = superClasses.get(i).name.replace('.', '/');
 		}
 
-		cv.visit(Opcodes.V1_7, Opcodes.ACC_PUBLIC, internalName, null, superclass, interfaces);
+		cw.visit(ASMVersion.getCompatible(), Opcodes.ACC_PUBLIC, internalName, null, superclass, interfaces);
 
 		// Fields Declaration
 		for (DatabaseField field : fields.values()) {
-			field.createField(cv);
+			field.createField(cw);
 		}
 
-		MethodVisitor con = cv.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
+		MethodVisitor con = cw.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
 
 		con.visitCode();
 		con.visitVarInsn(Opcodes.ALOAD, 0);
@@ -209,11 +202,11 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		for (DatabaseField field : fields.values()) {
 			Class<?> type = field.getType();
 			String typeDescriptor = Type.getDescriptor(type);
-			field.createGetter(cv, internalName, typeDescriptor, type);
-			field.createSetter(cv, internalName, typeDescriptor, type);
+			field.createGetter(cw, internalName, typeDescriptor, type);
+			field.createSetter(cw, internalName, typeDescriptor, type);
 		}
 
-		cv.visitEnd();
+		cw.visitEnd();
 
 		return cw.toByteArray();
 	}
@@ -366,13 +359,11 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	}
 
 	/**
-	 * Add a field with your respective type. The created field is not marked
-	 * like primary key.
+	 * Add a field with your respective type. The created field is not marked like
+	 * primary key.
 	 * 
-	 * @param name
-	 *            field name
-	 * @param type
-	 *            type of the field
+	 * @param name field name
+	 * @param type type of the field
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */
@@ -381,15 +372,11 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	}
 
 	/**
-	 * Add a field with your respective type and marked like class's primary
-	 * key.
+	 * Add a field with your respective type and marked like class's primary key.
 	 * 
-	 * @param name
-	 *            field name
-	 * @param type
-	 *            type of the field
-	 * @param primaryKey
-	 *            true if this field is marked like primary key
+	 * @param name       field name
+	 * @param type       type of the field
+	 * @param primaryKey true if this field is marked like primary key
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */
@@ -403,12 +390,9 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	/**
 	 * Add a field of type Collection/Map of given class type
 	 * 
-	 * @param name
-	 *            field name
-	 * @param type
-	 *            type of the field
-	 * @param linkedClass
-	 *            Generic class for collection/Map
+	 * @param name        field name
+	 * @param type        type of the field
+	 * @param linkedClass Generic class for collection/Map
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */
@@ -423,12 +407,9 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	/**
 	 * Add a field of type Collection/Map of given class type
 	 * 
-	 * @param name
-	 *            field name
-	 * @param type
-	 *            type of the field
-	 * @param linkedType
-	 *            Generic class for collection/Map
+	 * @param name       field name
+	 * @param type       type of the field
+	 * @param linkedType Generic class for collection/Map
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */

@@ -20,12 +20,9 @@
 package org.logicware.pdb;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +38,12 @@ public abstract class AbstractSchema implements Schema {
 
 	private int version;
 	private final String location;
-	private final Storage storage;
 	private final DatabaseUser owner;
-	private final PrologProvider provider;
-	private final ContainerFactory containerFactory;
+
+	//
+	private final transient Storage storage;
+	private final transient PrologProvider provider;
+	private final transient ContainerFactory containerFactory;
 
 	//
 	private final Map<String, DatabaseView> views;
@@ -53,6 +52,8 @@ public abstract class AbstractSchema implements Schema {
 	private final Map<String, DatabaseTrigger> triggers;
 	private final Map<String, DatabaseFunction> functions;
 	private final Map<String, DatabaseSequence> sequences;
+
+	private static final long serialVersionUID = 2324575651388389914L;
 
 	private DatabaseClass newDatabaseClass(Class<?> clazz, String comment) {
 		DatabaseClass c = new DatabaseClass(clazz, comment, this);
@@ -86,51 +87,6 @@ public abstract class AbstractSchema implements Schema {
 		String path0 = location.substring(0, location.lastIndexOf(File.separatorChar));
 		String path1 = path0.replace(File.separatorChar, '/') + "/views.pl";
 		return new PrologDatabaseView(path1, target, comment, this, provider);
-	}
-
-	private Class<?>[] findClasses(String packageName) throws ClassNotFoundException, IOException {
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		assert classLoader != null;
-		String path = packageName.replace('.', '/');
-		Enumeration<URL> resources = classLoader.getResources(path);
-		List<File> dirs = new ArrayList<File>();
-		while (resources.hasMoreElements()) {
-			URL resource = resources.nextElement();
-			dirs.add(new File(resource.getFile()));
-		}
-		ArrayList<Class<?>> list = new ArrayList<Class<?>>();
-		for (File directory : dirs) {
-			list.addAll(findClasses(directory, packageName));
-		}
-		return list.toArray(new Class[list.size()]);
-	}
-
-	/**
-	 * Recursive method used to find all classes in a given directory and
-	 * subdirs.
-	 *
-	 * @param directory
-	 *            The base directory
-	 * @param packageName
-	 *            The package name for classes found inside the base directory
-	 * @return The classes
-	 * @throws ClassNotFoundException
-	 */
-	private List<Class<?>> findClasses(File directory, String packageName) throws ClassNotFoundException {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		if (!directory.exists()) {
-			return list;
-		}
-		File[] files = directory.listFiles();
-		for (File file : files) {
-			if (file.isDirectory()) {
-				assert !file.getName().contains(".");
-				list.addAll(findClasses(file, packageName + "." + file.getName()));
-			} else if (file.getName().endsWith(".class")) {
-				list.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
-			}
-		}
-		return list;
 	}
 
 	public AbstractSchema(String location, PrologProvider provider, ContainerFactory factory, DatabaseUser owner) {
@@ -205,8 +161,7 @@ public abstract class AbstractSchema implements Schema {
 	/**
 	 * Add a class to the current schema
 	 * 
-	 * @param className
-	 *            name for the class
+	 * @param className name for the class
 	 * @return database class instance.
 	 * @since 1.0
 	 */
@@ -219,10 +174,8 @@ public abstract class AbstractSchema implements Schema {
 	/**
 	 * Add a class to the current schema and set a parent super class.
 	 * 
-	 * @param className
-	 *            name for the class
-	 * @param superClass
-	 *            parent superclass
+	 * @param className  name for the class
+	 * @param superClass parent superclass
 	 * @return database class instance.
 	 * @since 1.0
 	 */
@@ -235,10 +188,8 @@ public abstract class AbstractSchema implements Schema {
 	/**
 	 * Add a class to the current schema and set a parent super classes.
 	 * 
-	 * @param className
-	 *            name for the class
-	 * @param superClasses
-	 *            parent super classes
+	 * @param className    name for the class
+	 * @param superClasses parent super classes
 	 * @return database class instance
 	 * @since 1.0
 	 */

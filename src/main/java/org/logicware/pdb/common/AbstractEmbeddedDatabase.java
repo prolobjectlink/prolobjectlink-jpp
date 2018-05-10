@@ -36,11 +36,11 @@ import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologTerm;
 
-public abstract class AbstractPersistentDatabase extends AbstractDatabaseService implements PersistentContainer {
+public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService implements PersistentContainer {
 
 	protected PersistentContainer storage;
 
-	public AbstractPersistentDatabase(PrologProvider provider, Settings properties,
+	public AbstractEmbeddedDatabase(PrologProvider provider, Settings properties,
 			ObjectConverter<PrologTerm> converter, ContainerFactory containerFactory, URL url, String name,
 			Schema schema, DatabaseUser owner, PersistentContainer storage) {
 		super(provider, properties, converter, containerFactory, url, name, schema, owner);

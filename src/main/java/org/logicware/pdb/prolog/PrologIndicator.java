@@ -19,7 +19,9 @@
  */
 package org.logicware.pdb.prolog;
 
-public interface PrologIndicator {
+import java.io.Serializable;
+
+public interface PrologIndicator extends Serializable {
 
 	public int getArity();
 

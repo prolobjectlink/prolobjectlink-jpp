@@ -24,7 +24,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.logicware.pdb.HierarchicalCache;
-import org.logicware.pdb.URLContentType;
+import org.logicware.pdb.Protocol;
 
 public class MemoryURLConnection extends URLConnection {
 
@@ -40,7 +40,7 @@ public class MemoryURLConnection extends URLConnection {
 
 	@Override
 	public String getContentType() {
-		return URLContentType.MEMPDB.name();
+		return Protocol.MEMPDB.name();
 	}
 
 	@Override

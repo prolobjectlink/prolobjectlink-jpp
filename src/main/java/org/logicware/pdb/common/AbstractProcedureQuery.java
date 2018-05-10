@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 import org.logicware.pdb.ProcedureQuery;
 
-public abstract class AbstractProcedureQuery<S> extends AbstractQuery<S> implements ProcedureQuery {
+public abstract class AbstractProcedureQuery<S> extends AbstractQuery implements ProcedureQuery {
 
 	// prolog procedure name
 	private final String functor;

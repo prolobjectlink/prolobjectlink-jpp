@@ -21,21 +21,25 @@ package org.logicware.pdb.remote;
 
 import java.net.URL;
 
-import org.logicware.pdb.DatabaseMode;
+import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DatabaseType;
 import org.logicware.pdb.DatabaseUser;
-import org.logicware.pdb.PersistentContainer;
+import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.RemoteDatabase;
 import org.logicware.pdb.Schema;
-import org.logicware.pdb.common.AbstractPersistentDatabase;
+import org.logicware.pdb.Settings;
+import org.logicware.pdb.common.AbstractRemoteDatabase;
+import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.pdb.prolog.PrologTerm;
 
-public final class RemoteHierarchicalDB extends AbstractPersistentDatabase implements RemoteDatabase {
+public final class RemoteHierarchicalDB extends AbstractRemoteDatabase implements RemoteDatabase {
 
 	private static RemoteHierarchicalDB remoteHierarchicalDatabase;
 
-	private RemoteHierarchicalDB(String name, URL url, Schema schema, DatabaseUser owner, PersistentContainer storage) {
-		super(storage.getProvider(), storage.getProperties(), storage.getConverter(), storage.getContainerFactory(),
-				url, name, schema, owner, storage);
+	private RemoteHierarchicalDB(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
+			ContainerFactory containerFactory, URL url, String name, Schema schema, DatabaseUser owner, String server,
+			int port) {
+		super(provider, properties, converter, containerFactory, url, name, schema, owner, server, port);
 	}
 
 	public static final RemoteHierarchicalDB newInstance() {
@@ -43,10 +47,6 @@ public final class RemoteHierarchicalDB extends AbstractPersistentDatabase imple
 			// TODO LOAD ALL FROM PROPERTIES FILE
 		}
 		return remoteHierarchicalDatabase;
-	}
-
-	public DatabaseMode getMode() {
-		return DatabaseMode.REMOTE;
 	}
 
 	public DatabaseType getType() {

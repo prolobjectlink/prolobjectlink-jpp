@@ -75,7 +75,7 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 		return getSchema().getJavaClasses();
 	}
 
-	public final DatabaseService drop() {
+	public DatabaseService drop() {
 		getSchema().clear();
 		getSchema().flush();
 		clear();

@@ -17,29 +17,20 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.rempdb;
+package org.logicware.pdb;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.Serializable;
 
-import org.logicware.pdb.Protocol;
+public interface DataTransferObject<Q extends Serializable, R extends Serializable> extends Serializable {
 
-public class RemoteURLConnection extends URLConnection {
+	public DataTransferType getType();
 
-	protected RemoteURLConnection(URL url) {
-		super(url);
-	}
+	public void setResult(R result);
 
-	@Override
-	public void connect() throws IOException {
-		// TODO Auto-generated method stub
+	public R getResult();
 
-	}
+	public Q getQuery();
 
-	@Override
-	public String getContentType() {
-		return Protocol.REMPDB.name();
-	}
+	public void close();
 
 }

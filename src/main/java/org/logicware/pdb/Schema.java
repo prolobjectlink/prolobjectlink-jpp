@@ -19,13 +19,14 @@
  */
 package org.logicware.pdb;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
 import org.logicware.pdb.graph.RelationalGraph;
 import org.logicware.pdb.prolog.PrologProvider;
 
-public interface Schema {
+public interface Schema extends Serializable {
 
 	public void flush();
 

@@ -25,13 +25,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
 
-import org.logicware.pdb.URLContentType;
+import org.logicware.pdb.Protocol;
 
 public class Handler extends URLStreamHandler {
 
 	@Override
 	protected URLConnection openConnection(URL u) throws IOException {
-		if (!u.getProtocol().equals(URLContentType.MEMPDB.name())) {
+		if (!u.getProtocol().equals(Protocol.MEMPDB.name())) {
 			throw new MalformedURLException("No valid memory URL");
 		}
 		return new MemoryURLConnection(u);

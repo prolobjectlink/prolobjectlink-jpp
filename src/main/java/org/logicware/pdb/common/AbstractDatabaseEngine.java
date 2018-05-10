@@ -20,9 +20,11 @@
 package org.logicware.pdb.common;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.logicware.pdb.ContainerFactory;
@@ -30,7 +32,9 @@ import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseRole;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.DefaultTransaction;
+import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.ObjectConverter;
+import org.logicware.pdb.Predicate;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.Transaction;
@@ -83,6 +87,58 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 	public void restore(String directory, String zipFileName) {
 		Restore restore = new Restore();
 		restore.restoreBackup(directory, zipFileName);
+	}
+
+	public Object find(String string) throws NonSolutionError {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Object find(String functor, Object... args) throws NonSolutionError {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <O> O find(O o) throws NonSolutionError {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <O> O find(Class<O> clazz) throws NonSolutionError {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <O> O find(Predicate<O> predicate) throws NonSolutionError {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Object> findAll(String string) {
+		return createQuery(string).getSolutions();
+	}
+
+	public final List<Object> findAll(String functor, Object... args) {
+		Class<?> clazz = classOf(functor, args.length);
+		Object instance = reflector.newInstance(clazz);
+		Field[] fields = clazz.getDeclaredFields();
+		checkProcedureInvokation(functor, fields, args);
+		for (int i = 0; i < fields.length; i++) {
+			reflector.writeValue(fields[i], instance, args[i]);
+		}
+		return findAll(instance);
+	}
+
+	public <O> List<O> findAll(O o) {
+		return createQuery(o).getSolutions();
+	}
+
+	public <O> List<O> findAll(Class<O> clazz) {
+		return createQuery(clazz).getSolutions();
+	}
+
+	public <O> List<O> findAll(Predicate<O> predicate) {
+		return createQuery(predicate).getSolutions();
 	}
 
 	public final ContainerFactory getContainerFactory() {

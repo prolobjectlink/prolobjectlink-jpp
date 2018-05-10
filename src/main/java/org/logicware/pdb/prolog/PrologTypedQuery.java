@@ -19,6 +19,7 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,21 +33,24 @@ import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.common.AbstractQuery;
 
-public final class PrologTypedQuery<T> extends AbstractQuery<T> implements TypedQuery<T> {
+public final class PrologTypedQuery<T> extends AbstractQuery implements TypedQuery<T> {
 
 	private int index;
 
-	/** query result list */
-	private List<T> solution;
+	private ArrayList<T> solution;
+
+	private static final long serialVersionUID = 7235574065767960027L;
 
 	private AscendantComparator ascendant = new AscendantComparator();
 	private DescendantComparator descendant = new DescendantComparator();
 
 	public PrologTypedQuery(List<T> solution) {
-		this.solution = solution;
+		this.solution = new ArrayList<T>(solution);
 	}
 
-	private final class AscendantComparator implements Comparator<T> {
+	private final class AscendantComparator implements Comparator<T>, Serializable {
+
+		private static final long serialVersionUID = 6808414314975528796L;
 
 		public int compare(T o1, T o2) {
 			if (o1.hashCode() < o2.hashCode()) {
@@ -59,7 +63,9 @@ public final class PrologTypedQuery<T> extends AbstractQuery<T> implements Typed
 
 	}
 
-	private final class DescendantComparator implements Comparator<T> {
+	private final class DescendantComparator implements Comparator<T>, Serializable {
+
+		private static final long serialVersionUID = -1841515805554965199L;
 
 		public int compare(Object o1, Object o2) {
 			if (o1.hashCode() < o2.hashCode()) {
@@ -180,7 +186,7 @@ public final class PrologTypedQuery<T> extends AbstractQuery<T> implements Typed
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PrologTypedQuery other = (PrologTypedQuery) obj;
+		PrologTypedQuery<?> other = (PrologTypedQuery<?>) obj;
 		if (index != other.index)
 			return false;
 		if (solution == null) {

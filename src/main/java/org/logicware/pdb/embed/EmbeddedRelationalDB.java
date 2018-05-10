@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.embedded;
+package org.logicware.pdb.embed;
 
 import java.net.URL;
 
@@ -27,9 +27,9 @@ import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.EmbeddedDatabase;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Schema;
-import org.logicware.pdb.common.AbstractPersistentDatabase;
+import org.logicware.pdb.common.AbstractEmbeddedDatabase;
 
-public final class EmbeddedRelationalDB extends AbstractPersistentDatabase implements EmbeddedDatabase {
+public final class EmbeddedRelationalDB extends AbstractEmbeddedDatabase implements EmbeddedDatabase {
 
 	protected static EmbeddedRelationalDB embeddedRelationalDB;
 

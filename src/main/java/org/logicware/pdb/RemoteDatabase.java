@@ -19,6 +19,6 @@
  */
 package org.logicware.pdb;
 
-public interface RemoteDatabase extends DatabaseService, DatabaseClient {
+public interface RemoteDatabase extends DatabaseService {
 
 }
