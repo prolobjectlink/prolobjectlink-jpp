@@ -22,11 +22,14 @@ package org.logicware.pdb.common;
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.HierarchicalDatabase;
+import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.RelationalDatabase;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.prolog.PrologConverter;
+import org.logicware.pdb.prolog.PrologObjectConverter;
 import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.pdb.prolog.PrologTerm;
 
 public abstract class AbstractContainerFactory implements ContainerFactory {
 
@@ -46,6 +49,10 @@ public abstract class AbstractContainerFactory implements ContainerFactory {
 	public final HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, String username,
 			String password) {
 		return createHierarchicalDatabase(storageMode, name, new DatabaseUser(username, password));
+	}
+
+	public final ObjectConverter<PrologTerm> getObjectConverter() {
+		return new PrologObjectConverter(provider);
 	}
 
 	public final void setProvider(PrologProvider provider) {

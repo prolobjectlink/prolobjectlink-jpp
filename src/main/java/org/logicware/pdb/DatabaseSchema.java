@@ -23,6 +23,8 @@ import org.logicware.pdb.prolog.PrologProvider;
 
 public class DatabaseSchema extends AbstractSchema implements Schema {
 
+	private static final long serialVersionUID = 4131545026648316875L;
+
 	public DatabaseSchema(String location, PrologProvider provider, ContainerFactory factory, DatabaseUser owner) {
 		super(location, provider, factory, owner);
 	}

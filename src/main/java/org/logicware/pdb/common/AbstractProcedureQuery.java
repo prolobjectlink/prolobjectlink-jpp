@@ -23,13 +23,15 @@ import java.util.Arrays;
 
 import org.logicware.pdb.ProcedureQuery;
 
-public abstract class AbstractProcedureQuery<S> extends AbstractQuery implements ProcedureQuery {
+public abstract class AbstractProcedureQuery extends AbstractContainerQuery implements ProcedureQuery {
 
 	// prolog procedure name
 	private final String functor;
 
 	// prolog procedures arguments
 	private final String[] arguments;
+
+	private static final long serialVersionUID = 3865394932385130879L;
 
 	protected AbstractProcedureQuery(String functor, String[] arguments) {
 		this.functor = functor;
@@ -61,7 +63,7 @@ public abstract class AbstractProcedureQuery<S> extends AbstractQuery implements
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractProcedureQuery<?> other = (AbstractProcedureQuery<?>) obj;
+		AbstractProcedureQuery other = (AbstractProcedureQuery) obj;
 		if (!Arrays.equals(arguments, other.arguments))
 			return false;
 		if (functor == null) {

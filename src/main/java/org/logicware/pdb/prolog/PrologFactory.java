@@ -47,13 +47,13 @@ public final class PrologFactory {
 			provider = (PrologProvider) providerClass.newInstance();
 			constructor.setAccessible(false);
 		} catch (InstantiationException e) {
-			LoggerUtils.error(PrologFactory.class, LoggerConstants.INSTANTIATION_ERROR, e);
+			LoggerUtils.error(PrologFactory.class, LoggerConstants.INSTANTIATION, e);
 		} catch (IllegalAccessException e) {
-			LoggerUtils.error(PrologFactory.class, LoggerConstants.ILLEGAL_ACCESS_ERROR, e);
+			LoggerUtils.error(PrologFactory.class, LoggerConstants.ILLEGAL_ACCESS, e);
 		} catch (NoSuchMethodException e) {
-			LoggerUtils.error(PrologFactory.class, LoggerConstants.NO_SUCH_METHOD_ERROR, e);
+			LoggerUtils.error(PrologFactory.class, LoggerConstants.NO_SUCH_METHOD, e);
 		} catch (SecurityException e) {
-			LoggerUtils.error(PrologFactory.class, LoggerConstants.SECURITY_ERROR, e);
+			LoggerUtils.error(PrologFactory.class, LoggerConstants.SECURITY, e);
 		}
 		return provider;
 	}

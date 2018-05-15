@@ -23,7 +23,7 @@ import java.util.logging.Level;
 
 public class LoggerUtils {
 
-	private static final SystemLogger LOGGER = SystemLogger.getInstance();
+	private static final PlatformLogger LOGGER = PlatformLogger.getInstance(Level.ALL);
 
 	public static final void trace(Object sender, Object message) {
 		LOGGER.log(sender, Level.FINEST, message);

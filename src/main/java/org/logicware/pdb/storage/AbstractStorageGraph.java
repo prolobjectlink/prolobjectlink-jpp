@@ -19,6 +19,7 @@
  */
 package org.logicware.pdb.storage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -68,18 +69,17 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 		this.schema = schema;
 	}
 
-	public AbstractStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
-			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter, StorageMode storageMode,
+	public AbstractStorageGraph(String location, Schema schema, Settings properties, StorageMode storageMode,
 			RelationalGraph<Object, Object> graph) {
 		super(graph);
+		this.containerFactory = properties.getContainerFactory();
 		this.storage = containerFactory.createStorageManager(location, storageMode);
+		this.converter = properties.getObjectConverter();
 		this.transaction = new DefaultTransaction(this);
-		this.containerFactory = containerFactory;
+		this.provider = properties.getProvider();
 		this.engine = provider.newEngine();
 		this.properties = properties;
-		this.converter = converter;
 		this.location = location;
-		this.provider = provider;
 		this.schema = schema;
 	}
 
@@ -114,12 +114,12 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 
 	public final List<Object> solutionsOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<Object>();
 	}
 
 	public final Object[] solutionOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Object[0];
 	}
 
 	public final boolean contains(String string) {
@@ -168,7 +168,7 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 	}
 
 	public final void open() {
-		storage.open();
+		storage.begin();
 	}
 
 	public final <O> void insert(O... facts) {
@@ -229,13 +229,11 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 	}
 
 	public final void backup(String directory, String zipFileName) {
-		// TODO Auto-generated method stub
-
+		storage.backup(directory, zipFileName);
 	}
 
 	public final void restore(String directory, String zipFileName) {
-		// TODO Auto-generated method stub
-
+		storage.restore(directory, zipFileName);
 	}
 
 	public final void include(String path) {
@@ -259,7 +257,7 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 	}
 
 	public final void flush() {
-		storage.flush();
+		storage.commit();
 	}
 
 	public final void close() {

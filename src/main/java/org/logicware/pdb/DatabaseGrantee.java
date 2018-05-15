@@ -25,9 +25,9 @@ import java.util.Map;
 
 public abstract class DatabaseGrantee implements Serializable {
 
+	private final Map<DatabaseRole, DatabaseRight> roles;
+	private final Map<DatabaseClass, DatabaseRight> rights;
 	private static final long serialVersionUID = -3671269581803119411L;
-	private transient /* TODO remove transient */final HashMap<DatabaseRole, DatabaseRight> roles;
-	private transient /* TODO remove transient */final HashMap<DatabaseClass, DatabaseRight> rights;
 
 	public DatabaseGrantee() {
 		rights = new HashMap<DatabaseClass, DatabaseRight>();

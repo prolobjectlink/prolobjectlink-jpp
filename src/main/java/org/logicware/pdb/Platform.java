@@ -21,18 +21,16 @@ package org.logicware.pdb;
 
 public interface Platform extends Wrapper {
 
-	public String getOsName();
+	public String getJavaVersion();
 
-	public boolean runOnLinux();
+	public String getJavaVendor();
 
 	public boolean runOnWindows();
 
+	public boolean runOnLinux();
+
 	public boolean runOnOsX();
 
-	public boolean equals(Object obj);
-
-	public int hashCode();
-
-	public String toString();
+	public String getOsName();
 
 }

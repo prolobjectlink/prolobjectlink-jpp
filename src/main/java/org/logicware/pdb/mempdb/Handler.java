@@ -31,7 +31,7 @@ public class Handler extends URLStreamHandler {
 
 	@Override
 	protected URLConnection openConnection(URL u) throws IOException {
-		if (!u.getProtocol().equals(Protocol.MEMPDB.name())) {
+		if (!u.getProtocol().equalsIgnoreCase(Protocol.MEMPDB.name())) {
 			throw new MalformedURLException("No valid memory URL");
 		}
 		return new MemoryURLConnection(u);

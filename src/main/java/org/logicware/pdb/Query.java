@@ -65,35 +65,16 @@ public interface Query extends TypedQuery<Object> {
 	 */
 	public Query setFirstSolution(int firstSolution);
 
-	/**
-	 * @throws NonSolutionError
-	 * 
-	 */
-	public Object getSolution() throws NonSolutionError;
+	public Object getSolution();
 
-	/**
-	 * 
-	 */
 	public List<Object> getSolutions();
 
-	/**
-	 * 
-	 */
 	public Query orderAscending();
 
-	/**
-	 * 
-	 */
 	public Query orderDescending();
 
-	/**
-	 * 
-	 */
 	public Query orderBy(Comparator<Object> comparator);
 
-	/**
-	 * 
-	 */
 	public Query descend(String name);
 
 	/**

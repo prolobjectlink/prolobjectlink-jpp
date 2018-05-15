@@ -23,6 +23,8 @@ import org.logicware.pdb.Predicate;
 
 public final class NotNullPredicate<O> implements Predicate<O> {
 
+	private static final long serialVersionUID = 7660171283594201812L;
+
 	public boolean evaluate(O o) {
 		return o != null;
 	}

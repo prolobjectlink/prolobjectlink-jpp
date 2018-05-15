@@ -43,6 +43,7 @@ import org.logicware.pdb.common.AbstractPersistentContainer;
 import org.logicware.pdb.prolog.PrologContainerQuery;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.pdb.prolog.PrologTypedQuery;
 
 public abstract class AbstractStorageManager extends AbstractPersistentContainer implements StorageManager {
 
@@ -229,9 +230,8 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 			c.getTransaction().close();
 			return q;
 		}
-
-		// TODO create and use an empty query
-		return null;
+		ArrayList<O> s = new ArrayList<O>();
+		return new PrologTypedQuery<O>(s);
 	}
 
 	public final <O> TypedQuery<O> createQuery(Class<O> clazz) {
@@ -244,9 +244,8 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 			c.getTransaction().close();
 			return q;
 		}
-
-		// TODO create and use an empty query
-		return null;
+		ArrayList<O> s = new ArrayList<O>();
+		return new PrologTypedQuery<O>(s);
 	}
 
 	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
@@ -260,9 +259,8 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 			c.getTransaction().close();
 			return q;
 		}
-
-		// TODO create and use an empty query
-		return null;
+		ArrayList<O> s = new ArrayList<O>();
+		return new PrologTypedQuery<O>(s);
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
@@ -333,7 +331,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 
 	public final void flush() {
 		for (PersistentContainer c : master.values()) {
-			c.flush();
+			c.commit();
 		}
 	}
 

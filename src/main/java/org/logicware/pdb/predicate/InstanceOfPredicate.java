@@ -24,6 +24,7 @@ import org.logicware.pdb.Predicate;
 public final class InstanceOfPredicate<O> implements Predicate<O> {
 
 	private final Class<?> clazz;
+	private static final long serialVersionUID = -7929228927004128528L;
 
 	public InstanceOfPredicate(Class<?> clazz) {
 		this.clazz = clazz;

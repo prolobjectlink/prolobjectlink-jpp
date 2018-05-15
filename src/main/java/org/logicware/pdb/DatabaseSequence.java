@@ -21,6 +21,8 @@ package org.logicware.pdb;
 
 import java.io.Serializable;
 
+import org.logicware.pdb.util.JavaReflect;
+
 public final class DatabaseSequence extends AbstractElement<DatabaseSequence>
 		implements Serializable, SchemaElement<DatabaseSequence> {
 
@@ -66,7 +68,7 @@ public final class DatabaseSequence extends AbstractElement<DatabaseSequence>
 	}
 
 	public Class<?> getJavaClass() {
-		return ReflectionUtils.classForName(javaClass);
+		return JavaReflect.classForName(javaClass);
 	}
 
 	public void setJavaClass(Class<?> javaClass) {

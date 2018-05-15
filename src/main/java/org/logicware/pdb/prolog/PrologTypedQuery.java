@@ -28,12 +28,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.logicware.pdb.NoSuchFieldError;
-import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.TypedQuery;
-import org.logicware.pdb.common.AbstractQuery;
+import org.logicware.pdb.common.AbstractContainerQuery;
+import org.logicware.pdb.logging.LoggerConstants;
+import org.logicware.pdb.logging.LoggerUtils;
+import org.logicware.pdb.util.JavaReflect;
 
-public final class PrologTypedQuery<T> extends AbstractQuery implements TypedQuery<T> {
+public final class PrologTypedQuery<T> extends AbstractContainerQuery implements TypedQuery<T> {
 
 	private int index;
 
@@ -79,7 +80,7 @@ public final class PrologTypedQuery<T> extends AbstractQuery implements TypedQue
 	}
 
 	public TypedQuery<T> setFirstSolution(int first) {
-		checkNonNegativePosition(first);
+		checkSolutionAt(first, solution.size());
 		this.firstSolution = first;
 		return this;
 	}
@@ -89,8 +90,7 @@ public final class PrologTypedQuery<T> extends AbstractQuery implements TypedQue
 		return this;
 	}
 
-	public T getSolution() throws NonSolutionError {
-		checkEmptySolution(solution.size());
+	public T getSolution() {
 		checkSolutionAt(firstSolution, solution.size());
 		return solution.get(firstSolution);
 	}
@@ -161,9 +161,9 @@ public final class PrologTypedQuery<T> extends AbstractQuery implements TypedQue
 			Class<?> clazz = object.getClass();
 			try {
 				Field field = clazz.getDeclaredField(name);
-				solutionList.add(reflector.readValue(field, object));
+				solutionList.add(JavaReflect.readValue(field, object));
 			} catch (NoSuchFieldException e) {
-				throw new NoSuchFieldError(name, clazz, e);
+				LoggerUtils.error(getClass(), LoggerConstants.NO_SUCH_FIELD, e);
 			}
 		}
 		return new PrologTypedQuery<Object>(solutionList);

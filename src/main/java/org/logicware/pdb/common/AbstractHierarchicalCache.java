@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.Settings;
@@ -33,6 +32,7 @@ import org.logicware.pdb.VolatileContainer;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologQuery;
 import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.pdb.util.JavaReflect;
 
 public abstract class AbstractHierarchicalCache extends AbstractVolatileContainer implements VolatileContainer {
 
@@ -73,24 +73,24 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		getEngine().abolish(term.getFunctor(), term.getArity());
 	}
 
-	public final Object find(String string) throws NonSolutionError {
+	public final Object find(String string) {
 		PrologTerm[] prologTerms = getConverter().toTermsArray(string);
 		List<Class<?>> classes = classesOf(prologTerms);
 		return solutionOf(prologTerms, classes);
 	}
 
-	public final Object find(String functor, Object... args) throws NonSolutionError {
+	public final Object find(String functor, Object... args) {
 		Class<?> clazz = classOf(functor, args.length);
-		Object instance = reflector.newInstance(clazz);
+		Object instance = JavaReflect.newInstance(clazz);
 		Field[] fields = clazz.getDeclaredFields();
 		checkProcedureInvokation(functor, fields, args);
 		for (int i = 0; i < fields.length; i++) {
-			reflector.writeValue(fields[i], instance, args[i]);
+			JavaReflect.writeValue(fields[i], instance, args[i]);
 		}
 		return find(instance);
 	}
 
-	public final <O> O find(O o) throws NonSolutionError {
+	public final <O> O find(O o) {
 		Map<String, PrologTerm> inspectionMap = new HashMap<String, PrologTerm>();
 		PrologQuery query = prologQueryOf(o, inspectionMap);
 		if (query.hasSolution()) {
@@ -105,23 +105,23 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 				return o;
 			}
 		}
-		throw new NonSolutionError();
+		return null;
 	}
 
-	public final <O> O find(Class<O> clazz) throws NonSolutionError {
+	public final <O> O find(Class<O> clazz) {
 		PrologQuery query = prologQueryOf(clazz);
 		if (query.hasSolution()) {
 			Map<String, PrologTerm> solutionMap = query.oneVariablesSolution();
 			return (O) getConverter().toObject(clazz, solutionMap);
 		}
-		throw new NonSolutionError();
+		return null;
 	}
 
-	public final <O> O find(Predicate<O> query) throws NonSolutionError {
+	public final <O> O find(Predicate<O> query) {
 		List<O> all = findAll(query);
 		if (!all.isEmpty())
 			return all.get(0);
-		throw new NonSolutionError();
+		return null;
 	}
 
 	public final List<Object> findAll(String string) {
@@ -131,11 +131,11 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 
 	public final List<Object> findAll(String functor, Object... args) {
 		Class<?> clazz = classOf(functor, args.length);
-		Object instance = reflector.newInstance(clazz);
+		Object instance = JavaReflect.newInstance(clazz);
 		Field[] fields = clazz.getDeclaredFields();
 		checkProcedureInvokation(functor, fields, args);
 		for (int i = 0; i < fields.length; i++) {
-			reflector.writeValue(fields[i], instance, args[i]);
+			JavaReflect.writeValue(fields[i], instance, args[i]);
 		}
 		return findAll(instance);
 	}
@@ -192,7 +192,7 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 
 	public final List<Class<?>> classes() {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<Class<?>>();
 	}
 
 	public final void evict(Class<?> cls) {

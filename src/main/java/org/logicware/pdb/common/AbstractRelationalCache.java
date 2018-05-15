@@ -19,10 +19,10 @@
  */
 package org.logicware.pdb.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.logicware.pdb.ContainerFactory;
-import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.RelationalCache;
@@ -36,8 +36,8 @@ import org.logicware.pdb.prolog.PrologTerm;
 
 public class AbstractRelationalCache extends RelationalGraph<Object, Object> implements RelationalCache {
 
-	private final PrologEngine engine;
 	private final Schema schema;
+	private final PrologEngine engine;
 	private final Settings properties;
 	private final PrologProvider provider;
 	// private final Transaction transaction;
@@ -89,54 +89,54 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 
 	}
 
-	public final Object find(String string) throws NonSolutionError {
+	public final Object find(String string) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public final Object find(String functor, Object... args) throws NonSolutionError {
+	public final Object find(String functor, Object... args) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public final <O> O find(O o) throws NonSolutionError {
+	public final <O> O find(O o) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public final <O> O find(Class<O> clazz) throws NonSolutionError {
+	public final <O> O find(Class<O> clazz) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public final <O> O find(Predicate<O> predicate) throws NonSolutionError {
+	public final <O> O find(Predicate<O> predicate) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public final List<Object> findAll(String string) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<Object>();
 	}
 
 	public final List<Object> findAll(String functor, Object... args) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<Object>();
 	}
 
 	public final <O> List<O> findAll(O o) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<O>();
 	}
 
 	public final <O> List<O> findAll(Class<O> clazz) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<O>();
 	}
 
 	public final <O> List<O> findAll(Predicate<O> predicate) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<O>();
 	}
 
 	public final void evict(Class<?> cls) {
@@ -190,12 +190,12 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 
 	public final List<Class<?>> classesOf(PrologTerm[] prologTerms) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<Class<?>>();
 	}
 
 	public final List<Class<?>> classesOf(String string) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<Class<?>>();
 	}
 
 	public final <O> Class<O> classOf(Predicate<O> predicate) {
@@ -256,12 +256,12 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 
 	public final List<Object> solutionsOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<Object>();
 	}
 
 	public final Object[] solutionOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Object[0];
 	}
 
 }

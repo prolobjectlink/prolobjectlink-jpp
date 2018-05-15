@@ -31,15 +31,15 @@ public interface VolatileContainer extends Container {
 
 	public <O> void remove(O... facts);
 
-	public Object find(String string) throws NonSolutionError;
+	public Object find(String string);
 
-	public Object find(String functor, Object... args) throws NonSolutionError;
+	public Object find(String functor, Object... args);
 
-	public <O> O find(O o) throws NonSolutionError;
+	public <O> O find(O o);
 
-	public <O> O find(Class<O> clazz) throws NonSolutionError;
+	public <O> O find(Class<O> clazz);
 
-	public <O> O find(Predicate<O> predicate) throws NonSolutionError;
+	public <O> O find(Predicate<O> predicate);
 
 	public List<Object> findAll(String string);
 
@@ -54,8 +54,7 @@ public interface VolatileContainer extends Container {
 	/**
 	 * Remove all object of given class from the cache.
 	 * 
-	 * @param cls
-	 *            entity class
+	 * @param cls entity class
 	 */
 	public void evict(Class<?> cls);
 

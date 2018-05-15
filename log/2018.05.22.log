@@ -1,0 +1,28 @@
+[global] INFO may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseServer
+Prolobjectlink Server is starting...
+[global] INFO may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseServer
+Prolobjectlink Server is started
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+request 0 at 127.0.0.1 on port 49268
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+DatabaseResponse [response=true]
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+request 0 at 127.0.0.1 on port 49269
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+DatabaseResponse [response=void]
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+request 0 at 127.0.0.1 on port 49270
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+DatabaseResponse [response=void]
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+request 0 at 127.0.0.1 on port 49271
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+DatabaseResponse [response=void]
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+request 0 at 127.0.0.1 on port 49272
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+request 0 at 127.0.0.1 on port 49273
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+DatabaseResponse [response=void]
+[global] DEBUG may-22-2018 22:56 class org.logicware.pdb.persistent.RemoteDatabaseThread
+request 0 at 127.0.0.1 on port 49274

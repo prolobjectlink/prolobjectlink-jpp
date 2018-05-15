@@ -24,6 +24,7 @@ import org.logicware.pdb.Predicate;
 public final class NotPredicate<O> implements Predicate<O> {
 
 	private final Predicate<O> predicate;
+	private static final long serialVersionUID = -3150143226853503842L;
 
 	public NotPredicate(Predicate<O> predicate) {
 		this.predicate = predicate;

@@ -21,6 +21,7 @@ package org.logicware.pdb;
 
 import java.io.Serializable;
 
+import org.logicware.pdb.prolog.PrologEngine;
 import org.logicware.pdb.prolog.PrologProvider;
 
 public class DatabaseTrigger extends DatabaseCode<DatabaseTrigger>
@@ -54,11 +55,6 @@ public class DatabaseTrigger extends DatabaseCode<DatabaseTrigger>
 		return DatabaseCodeType.TRIGGER;
 	}
 
-	public DatabaseTrigger addInstructions(String code) {
-		instructions.add(code);
-		return this;
-	}
-
 	public void onInsert(DatabaseEvent event) {
 		// TODO Auto-generated method stub
 
@@ -75,9 +71,13 @@ public class DatabaseTrigger extends DatabaseCode<DatabaseTrigger>
 	}
 
 	public final DatabaseTrigger save() {
-		getEngine().consult(getPath());
-		getEngine().assertz(getCode());
-		getEngine().persist(getPath());
+		PrologEngine engine = getEngine();
+		if (engine != null) {
+			engine.consult(getPath());
+			// TODO CHECK SYNTAX ERROR
+//			engine.assertz(getCode()); 
+			engine.persist(getPath());
+		}
 		return this;
 	}
 

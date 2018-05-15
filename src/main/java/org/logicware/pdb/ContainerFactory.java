@@ -21,6 +21,7 @@ package org.logicware.pdb;
 
 import org.logicware.pdb.prolog.PrologConverter;
 import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.pdb.prolog.PrologTerm;
 
 public interface ContainerFactory {
 
@@ -55,5 +56,7 @@ public interface ContainerFactory {
 	public Storage createStorage(String path);
 
 	public <K> PrologConverter<K> getConverter();
+
+	ObjectConverter<PrologTerm> getObjectConverter();
 
 }

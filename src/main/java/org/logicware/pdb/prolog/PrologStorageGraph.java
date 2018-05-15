@@ -23,7 +23,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import org.logicware.pdb.ClassNotFoundError;
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Predicate;
@@ -32,6 +31,8 @@ import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageGraph;
 import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.graph.RelationalGraph;
+import org.logicware.pdb.logging.LoggerConstants;
+import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.storage.AbstractStorageGraph;
 
 public class PrologStorageGraph extends AbstractStorageGraph implements StorageGraph {
@@ -50,11 +51,10 @@ public class PrologStorageGraph extends AbstractStorageGraph implements StorageG
 		this.converter = converter;
 	}
 
-	public PrologStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
-			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter, StorageMode storageMode,
+	public PrologStorageGraph(String location, Schema schema, Settings properties, StorageMode storageMode,
 			RelationalGraph<Object, Object> graph) {
-		super(location, schema, properties, provider, containerFactory, converter, storageMode, graph);
-		this.converter = converter;
+		super(location, schema, properties, storageMode, graph);
+		this.converter = properties.getObjectConverter();
 	}
 
 	public List<Class<?>> classesOf(PrologTerm[] prologTerms) {
@@ -75,7 +75,11 @@ public class PrologStorageGraph extends AbstractStorageGraph implements StorageG
 			ParameterizedType parameterized = (ParameterizedType) generics[0];
 			Type type = parameterized.getActualTypeArguments()[0];
 			if (!(type instanceof Class<?>)) {
-				throw new ClassNotFoundError("" + type + "");
+				try {
+					throw new ClassNotFoundException("" + type + "");
+				} catch (ClassNotFoundException e) {
+					LoggerUtils.error(getClass(), LoggerConstants.CLASS_NOT_FOUND, e);
+				}
 			}
 			templateClass = (Class<O>) type;
 		}
@@ -90,8 +94,7 @@ public class PrologStorageGraph extends AbstractStorageGraph implements StorageG
 	/**
 	 * Allow known the class of some given object
 	 * 
-	 * @param o
-	 *            object to known your class
+	 * @param o object to known your class
 	 * @return class of object {@code o}
 	 */
 	public final <O> Class<O> classOf(O o) {

@@ -25,14 +25,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.logicware.pdb.NoExecutedError;
-import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.ObjectConverter;
-import org.logicware.pdb.ProcedureArgumentError;
 import org.logicware.pdb.ProcedureQuery;
 import org.logicware.pdb.common.AbstractProcedureQuery;
 
-public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> implements ProcedureQuery {
+public final class PrologProcedureQuery extends AbstractProcedureQuery implements ProcedureQuery {
 
 	private boolean executed;
 
@@ -40,22 +37,24 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 	private final String path;
 
 	// last returned terms
-	private PrologTerm[] returnedTerms;
+	private transient PrologTerm[] returnedTerms;
 
 	// current returned terms
-	private PrologTerm[] currentTerms;
+	private transient PrologTerm[] currentTerms;
 
 	// Prolog query reference
-	private PrologQuery query;
+	private transient PrologQuery query;
 
 	// Prolog engine reference
-	private final PrologEngine engine;
+	private final transient PrologEngine engine;
 
 	// prolog driver
-	private final PrologProvider provider;
+	private final transient PrologProvider provider;
 
-	// Factory for object/term creation
-	private final ObjectConverter<PrologTerm> converter;
+	// converter for object/term creation
+	private final transient ObjectConverter<PrologTerm> converter;
+
+	private static final long serialVersionUID = -4371082961137952685L;
 
 	public PrologProcedureQuery(String path, PrologProvider provider, String functor, String... arguments) {
 		super(functor, arguments);
@@ -92,7 +91,8 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 				return getArgumentValue(i);
 			}
 		}
-		throw new ProcedureArgumentError(getFunctor(), name);
+		throw new IllegalArgumentException(
+				"No register argument '" + name + "' for the procedure '" + getFunctor() + "'");
 	}
 
 	public ProcedureQuery setArgumentValue(int position, Object value) {
@@ -112,7 +112,8 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 				return this;
 			}
 		}
-		throw new ProcedureArgumentError(getFunctor(), name);
+		throw new IllegalArgumentException(
+				"No register argument '" + name + "' for the procedure '" + getFunctor() + "'");
 	}
 
 	public ProcedureQuery execute() {
@@ -150,7 +151,7 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 		return solutions;
 	}
 
-	public Object getSolution() throws NonSolutionError {
+	public Object getSolution() {
 		return next();
 	}
 
@@ -208,7 +209,7 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 
 	public boolean hasNext() {
 		if (!executed) {
-			throw new NoExecutedError(getFunctor(), getArguments().length);
+			throw new IllegalStateException("Call execute method");
 		}
 
 		if (returnedTerms == null && currentTerms != null) {
@@ -222,7 +223,7 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 
 	public Object next() {
 		if (!executed) {
-			throw new NoExecutedError(getFunctor(), getArguments().length);
+			throw new IllegalStateException("Call execute method");
 		}
 
 		if (!hasNext()) {
@@ -239,6 +240,7 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery<Object> i
 		return values;
 	}
 
+	@Override
 	public void remove() {
 		// skip
 		next();

@@ -148,10 +148,9 @@ public interface TypedQuery<O> extends Iterator<O>, Serializable {
 	 * </pre>
 	 * 
 	 * @return Return a single solution of the current {@code TypedQuery}
-	 * @throws NonSolutionError throw an exception if not exist any solution object
 	 * @since 1.0
 	 */
-	public O getSolution() throws NonSolutionError;
+	public O getSolution();
 
 	/**
 	 * Return a all solutions of the current {@code TypedQuery}. The solutions list

@@ -28,12 +28,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.logicware.pdb.NoSuchFieldError;
-import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.Query;
-import org.logicware.pdb.common.AbstractQuery;
+import org.logicware.pdb.common.AbstractContainerQuery;
+import org.logicware.pdb.logging.LoggerConstants;
+import org.logicware.pdb.logging.LoggerUtils;
+import org.logicware.pdb.util.JavaReflect;
 
-public class PrologContainerQuery extends AbstractQuery implements Query {
+public class PrologContainerQuery extends AbstractContainerQuery implements Query {
 
 	private int index;
 
@@ -131,7 +132,7 @@ public class PrologContainerQuery extends AbstractQuery implements Query {
 	}
 
 	public Query setFirstSolution(int first) {
-		checkNonNegativePosition(first);
+		checkSolutionAt(first, solution.size());
 		this.firstSolution = first;
 		return this;
 	}
@@ -141,8 +142,7 @@ public class PrologContainerQuery extends AbstractQuery implements Query {
 		return this;
 	}
 
-	public Object getSolution() throws NonSolutionError {
-		checkEmptySolution(solution.size());
+	public Object getSolution() {
 		checkSolutionAt(firstSolution, solution.size());
 		return solution.get(firstSolution);
 	}
@@ -169,6 +169,7 @@ public class PrologContainerQuery extends AbstractQuery implements Query {
 		return solution.get(index++);
 	}
 
+	@Override
 	public void remove() {
 		// skip
 		next();
@@ -217,9 +218,9 @@ public class PrologContainerQuery extends AbstractQuery implements Query {
 					Class<?> clazz = objectInArray.getClass();
 					try {
 						Field field = clazz.getDeclaredField(name);
-						array[i] = reflector.readValue(field, objectInArray);
+						array[i] = JavaReflect.readValue(field, objectInArray);
 					} catch (NoSuchFieldException e) {
-						throw new NoSuchFieldError(name, clazz, e);
+						LoggerUtils.error(getClass(), LoggerConstants.NO_SUCH_FIELD, e);
 					}
 				}
 				solutionList.add(array);

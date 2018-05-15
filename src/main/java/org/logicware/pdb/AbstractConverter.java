@@ -25,8 +25,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.pdb.util.JavaReflect;
 
-public abstract class AbstractConverter<T> extends ObjectReflector implements ObjectConverter<T> {
+public abstract class AbstractConverter<T> implements ObjectConverter<T> {
 
 	protected final PrologProvider provider;
 
@@ -52,8 +53,7 @@ public abstract class AbstractConverter<T> extends ObjectReflector implements Ob
 	/**
 	 * Return a list with predicate classes present in prolog terms array
 	 * 
-	 * @param terms
-	 *            prolog terms array
+	 * @param terms prolog terms array
 	 * @return array with predicate classes present in prolog terms array
 	 * @since 1.0
 	 */
@@ -82,7 +82,7 @@ public abstract class AbstractConverter<T> extends ObjectReflector implements Ob
 		Class<?> classPtr = clazz;
 
 		// create a new instance from class
-		object = newInstance(classPtr);
+		object = JavaReflect.newInstance(classPtr);
 
 		while (classPtr != Object.class) {
 
@@ -93,7 +93,7 @@ public abstract class AbstractConverter<T> extends ObjectReflector implements Ob
 				Field field = fields[i];
 
 				// check persistence condition
-				if (isPersistent(field) && !isStaticAndFinal(field)) {
+				if (JavaReflect.isPersistent(field) && !JavaReflect.isStaticAndFinal(field)) {
 
 					// field name to be converted in variable name
 					String fieldName = field.getName();
@@ -111,7 +111,7 @@ public abstract class AbstractConverter<T> extends ObjectReflector implements Ob
 					Object value = toObject(prologTerm);
 
 					// write field with argument value
-					writeValue(field, object, value);
+					JavaReflect.writeValue(field, object, value);
 
 				}
 
@@ -147,7 +147,7 @@ public abstract class AbstractConverter<T> extends ObjectReflector implements Ob
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractConverter other = (AbstractConverter) obj;
+		AbstractConverter<?> other = (AbstractConverter<?>) obj;
 		if (provider == null) {
 			if (other.provider != null)
 				return false;

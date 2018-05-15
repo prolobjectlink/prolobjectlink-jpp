@@ -19,7 +19,7 @@
  */
 package org.logicware.pdb.storage;
 
-import static org.logicware.pdb.logging.LoggerConstants.IO_ERROR;
+import static org.logicware.pdb.logging.LoggerConstants.IO;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -49,7 +49,7 @@ final class StoragePoolFileFilter implements FileFilter {
 			String index = name.substring(lastDotIndex + 1);
 			return index.matches(NUMBER_REGEX);
 		} catch (IOException e) {
-			LoggerUtils.error(getClass(), IO_ERROR, e);
+			LoggerUtils.error(getClass(), IO, e);
 		}
 		return false;
 	}

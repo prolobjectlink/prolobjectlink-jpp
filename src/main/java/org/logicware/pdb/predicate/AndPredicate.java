@@ -26,6 +26,8 @@ public class AndPredicate<O> implements Predicate<O> {
 	private final Predicate<O> leftPredicate;
 	private final Predicate<O> rigthPredicate;
 
+	private static final long serialVersionUID = 975420053137371355L;
+
 	public AndPredicate(Predicate<O> leftPredicate, Predicate<O> rigthPredicate) {
 		this.leftPredicate = leftPredicate;
 		this.rigthPredicate = rigthPredicate;

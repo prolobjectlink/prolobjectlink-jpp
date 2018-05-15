@@ -19,8 +19,16 @@
  */
 package org.logicware.pdb;
 
+/**
+ * Supported protocols.
+ * 
+ * Used for locate protocols definitions.
+ * 
+ * @author jzalacain
+ *
+ */
 public enum Protocol {
 
-	MEMPDB, REMPDB;
+	FILE, MEMPDB, REMPDB;
 
 }

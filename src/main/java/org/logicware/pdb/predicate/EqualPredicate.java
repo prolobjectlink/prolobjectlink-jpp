@@ -24,6 +24,7 @@ import org.logicware.pdb.Predicate;
 public final class EqualPredicate<O> implements Predicate<O> {
 
 	private final Object value;
+	private static final long serialVersionUID = 4891812384023288629L;
 
 	public EqualPredicate(Object value) {
 		this.value = value;

@@ -35,7 +35,7 @@ public enum LoggerConstants {
 
 	INDICATOR_NOT_FOUND("Predicate not found for"),
 
-	IO_ERROR("Some error occurs opening the file"),
+	IO("Some error occurs opening the file"),
 
 	ERROR_LOADING_BUILT_INS("Error loading prolog built-ins "),
 
@@ -47,17 +47,23 @@ public enum LoggerConstants {
 
 	FILE_NOT_DELETE("File not delete "),
 
-	INSTANTIATION_ERROR("Instantiation error "),
+	INSTANTIATION("Instantiation error "),
 
-	ILLEGAL_ACCESS_ERROR("Illegal access error "),
+	ILLEGAL_ACCESS("Illegal access error "),
 
-	NO_SUCH_METHOD_ERROR("No such method error"),
+	NO_SUCH_METHOD("No such method error"),
 
-	SECURITY_ERROR("Security error "),
+	SECURITY("Security error "),
 
 	SQL_ERROR("SQL error "),
 
-	UNKNOWN_HOST("Unknow Host error");
+	UNKNOWN_HOST("Unknow Host error"),
+
+	ILLEGAL_ARGUMENT("Illegal argument error"),
+
+	INVOCATION_TARGET("Invocation target error"), 
+	
+	NO_SUCH_FIELD("No such field error");
 
 	private final String name;
 

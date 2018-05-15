@@ -31,9 +31,11 @@ public abstract class DatabaseCode<E extends SchemaElement<?>> extends AbstractE
 
 	private final String path;
 	private final List<String> parameters;
-	private final transient PrologEngine engine;
-	private final transient PrologProvider provider;
-	protected final transient List<String> instructions;
+	private final transient List<String> instructions;
+
+	private transient PrologEngine engine;
+	private transient PrologProvider provider;
+
 	private static final long serialVersionUID = 7552979263681672426L;
 
 	protected DatabaseCode() {
@@ -56,6 +58,7 @@ public abstract class DatabaseCode<E extends SchemaElement<?>> extends AbstractE
 	}
 
 	public final String getDescriptor() {
+		// TODO bad descriptor string. No have comma between parameters
 		StringBuilder builder = new StringBuilder();
 		builder.append(getName());
 		builder.append('(');
@@ -97,7 +100,10 @@ public abstract class DatabaseCode<E extends SchemaElement<?>> extends AbstractE
 
 	public abstract DatabaseCodeType getType();
 
-	public abstract E addInstructions(String code);
+	public E addInstructions(String code) {
+		instructions.add(code);
+		return (E) this;
+	}
 
 	public final List<String> getInstructions() {
 		return instructions;
@@ -119,8 +125,16 @@ public abstract class DatabaseCode<E extends SchemaElement<?>> extends AbstractE
 		return engine;
 	}
 
+	public final void setEngine(PrologEngine engine) {
+		this.engine = engine;
+	}
+
 	public final PrologProvider getProvider() {
 		return provider;
+	}
+
+	public final void setProvider(PrologProvider provider) {
+		this.provider = provider;
 	}
 
 	public abstract E save();

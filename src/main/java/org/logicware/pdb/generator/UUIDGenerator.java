@@ -21,6 +21,8 @@ package org.logicware.pdb.generator;
 
 import java.util.UUID;
 
+import org.logicware.pdb.IdGeneratorType;
+
 public final class UUIDGenerator extends AbstractIdGenerator<UUID> {
 
 	private static final long serialVersionUID = -6657592370387129719L;
@@ -31,6 +33,10 @@ public final class UUIDGenerator extends AbstractIdGenerator<UUID> {
 
 	public UUID generateId() {
 		return setValue(UUID.randomUUID());
+	}
+
+	public IdGeneratorType geIdGeneratorType() {
+		return IdGeneratorType.UUID;
 	}
 
 }

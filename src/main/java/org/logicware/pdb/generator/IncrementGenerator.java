@@ -19,6 +19,8 @@
  */
 package org.logicware.pdb.generator;
 
+import org.logicware.pdb.IdGeneratorType;
+
 public final class IncrementGenerator extends AbstractIdGenerator<Long> {
 
 	private static final long serialVersionUID = -1092978742941263445L;
@@ -29,6 +31,10 @@ public final class IncrementGenerator extends AbstractIdGenerator<Long> {
 
 	public Long generateId() {
 		return setValue(getValue() + 1);
+	}
+
+	public IdGeneratorType geIdGeneratorType() {
+		return IdGeneratorType.INCREMENT;
 	}
 
 }

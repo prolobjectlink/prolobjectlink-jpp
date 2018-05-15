@@ -44,6 +44,26 @@ public abstract class AbstractGraphEdge<E> extends AbstractGraphElement<E> imple
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractGraphEdge<?> other = (AbstractGraphEdge<?>) obj;
+		return direction == other.direction;
+	}
+
+	@Override
 	public String toString() {
 		return "---[" + getElement() + "]---";
 	}

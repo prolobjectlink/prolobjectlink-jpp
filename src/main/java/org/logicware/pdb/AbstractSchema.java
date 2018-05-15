@@ -32,6 +32,7 @@ import org.logicware.pdb.graph.RelationalGraph;
 import org.logicware.pdb.prolog.PrologDatabaseFunction;
 import org.logicware.pdb.prolog.PrologDatabaseTrigger;
 import org.logicware.pdb.prolog.PrologDatabaseView;
+import org.logicware.pdb.prolog.PrologEngine;
 import org.logicware.pdb.prolog.PrologProvider;
 
 public abstract class AbstractSchema implements Schema {
@@ -481,6 +482,10 @@ public abstract class AbstractSchema implements Schema {
 		return provider;
 	}
 
+	public final PrologEngine getEngine() {
+		return storage.getEngine();
+	}
+
 	public final Storage getStorage() {
 		return storage;
 	}
@@ -550,7 +555,10 @@ public abstract class AbstractSchema implements Schema {
 		}
 		List<PrologDatabaseFunction> f = storage.findAll(PrologDatabaseFunction.class);
 		for (DatabaseFunction databaseFunction : f) {
-			functions.put(databaseFunction.getName(), databaseFunction.setSchema(this));
+			databaseFunction.setSchema(this);
+			databaseFunction.setEngine(getEngine());
+			databaseFunction.setProvider(getProvider());
+			functions.put(databaseFunction.getName(), databaseFunction);
 		}
 		List<DatabaseSequence> s = storage.findAll(DatabaseSequence.class);
 		for (DatabaseSequence databaseSequence : s) {
@@ -558,11 +566,17 @@ public abstract class AbstractSchema implements Schema {
 		}
 		List<DatabaseTrigger> t = storage.findAll(DatabaseTrigger.class);
 		for (DatabaseTrigger databaseTrigger : t) {
-			triggers.put(databaseTrigger.getName(), databaseTrigger.setSchema(this));
+			databaseTrigger.setSchema(this);
+			databaseTrigger.setEngine(getEngine());
+			databaseTrigger.setProvider(getProvider());
+			triggers.put(databaseTrigger.getName(), databaseTrigger);
 		}
 		List<DatabaseView> v = storage.findAll(DatabaseView.class);
 		for (DatabaseView databaseView : v) {
-			views.put(databaseView.getName(), databaseView.setSchema(this));
+			databaseView.setSchema(this);
+			databaseView.setEngine(getEngine());
+			databaseView.setProvider(getProvider());
+			views.put(databaseView.getName(), databaseView);
 		}
 		storage.getTransaction().close();
 		return this;

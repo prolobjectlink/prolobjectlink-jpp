@@ -23,9 +23,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.logicware.pdb.HierarchicalCache;
-import org.logicware.pdb.Protocol;
-
 public class MemoryURLConnection extends URLConnection {
 
 	protected MemoryURLConnection(URL url) {
@@ -35,18 +32,6 @@ public class MemoryURLConnection extends URLConnection {
 	@Override
 	public void connect() throws IOException {
 		// do nothing
-
-	}
-
-	@Override
-	public String getContentType() {
-		return Protocol.MEMPDB.name();
-	}
-
-	@Override
-	public Object getContent() throws IOException {
-		// TODO Auto-generated method stub
-		return super.getContent();
 	}
 
 }

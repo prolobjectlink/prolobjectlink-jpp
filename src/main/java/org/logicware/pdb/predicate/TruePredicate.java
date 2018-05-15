@@ -23,6 +23,8 @@ import org.logicware.pdb.Predicate;
 
 public final class TruePredicate<O> implements Predicate<O> {
 
+	private static final long serialVersionUID = -6414387119011360632L;
+
 	public boolean evaluate(final O o) {
 		return true;
 	}

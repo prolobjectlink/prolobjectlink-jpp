@@ -38,8 +38,10 @@ class PrologHashSet<E> extends AbstractSet<E> {
 	}
 
 	public PrologHashSet(Collection<? extends E> c) {
-		this(c.size());
-		addAll(c);
+		if (c != null) {
+			table = new Object[c.size()];
+			addAll(c);
+		}
 	}
 
 	private int indexOf(int hash) {

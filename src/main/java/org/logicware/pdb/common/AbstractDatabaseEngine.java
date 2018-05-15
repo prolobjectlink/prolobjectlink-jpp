@@ -32,16 +32,13 @@ import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseRole;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.DefaultTransaction;
-import org.logicware.pdb.NonSolutionError;
-import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.Transaction;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.tools.Backup;
 import org.logicware.pdb.tools.Restore;
+import org.logicware.pdb.util.JavaReflect;
 
 public abstract class AbstractDatabaseEngine extends AbstractContainer implements DatabaseEngine {
 
@@ -54,13 +51,12 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 	private final Map<String, DatabaseRole> roles;
 	private final ContainerFactory containerFactory;
 
-	public AbstractDatabaseEngine(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
-			ContainerFactory containerFactory, String location, String name, Schema schema, DatabaseUser owner) {
-		super(provider, properties, converter);
+	public AbstractDatabaseEngine(Settings settings, String location, String name, Schema schema, DatabaseUser owner) {
+		super(settings.getProvider(), settings, settings.getObjectConverter());
+		this.containerFactory = settings.getContainerFactory();
 		this.roles = new HashMap<String, DatabaseRole>();
 		this.users = new HashMap<String, DatabaseUser>();
 		this.transaction = new DefaultTransaction(this);
-		this.containerFactory = containerFactory;
 		this.location = location;
 		this.schema = schema;
 		this.owner = owner;
@@ -80,7 +76,7 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 	}
 
 	public void backup(String directory, String zipFileName) {
-		Backup backup = new Backup(getBaseLocation() + File.separator + getName());
+		Backup backup = new Backup(getRootLocation() + File.separator + getName());
 		backup.createBackup(directory, zipFileName);
 	}
 
@@ -89,29 +85,31 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 		restore.restoreBackup(directory, zipFileName);
 	}
 
-	public Object find(String string) throws NonSolutionError {
-		// TODO Auto-generated method stub
-		return null;
+	public Object find(String string) {
+		return createQuery(string).getSolution();
 	}
 
-	public Object find(String functor, Object... args) throws NonSolutionError {
-		// TODO Auto-generated method stub
-		return null;
+	public Object find(String functor, Object... args) {
+		Class<?> clazz = classOf(functor, args.length);
+		Object instance = JavaReflect.newInstance(clazz);
+		Field[] fields = clazz.getDeclaredFields();
+		checkProcedureInvokation(functor, fields, args);
+		for (int i = 0; i < fields.length; i++) {
+			JavaReflect.writeValue(fields[i], instance, args[i]);
+		}
+		return find(instance);
 	}
 
-	public <O> O find(O o) throws NonSolutionError {
-		// TODO Auto-generated method stub
-		return null;
+	public <O> O find(O o) {
+		return createQuery(o).getSolution();
 	}
 
-	public <O> O find(Class<O> clazz) throws NonSolutionError {
-		// TODO Auto-generated method stub
-		return null;
+	public <O> O find(Class<O> clazz) {
+		return createQuery(clazz).getSolution();
 	}
 
-	public <O> O find(Predicate<O> predicate) throws NonSolutionError {
-		// TODO Auto-generated method stub
-		return null;
+	public <O> O find(Predicate<O> predicate) {
+		return createQuery(predicate).getSolution();
 	}
 
 	public List<Object> findAll(String string) {
@@ -120,11 +118,11 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 
 	public final List<Object> findAll(String functor, Object... args) {
 		Class<?> clazz = classOf(functor, args.length);
-		Object instance = reflector.newInstance(clazz);
+		Object instance = JavaReflect.newInstance(clazz);
 		Field[] fields = clazz.getDeclaredFields();
 		checkProcedureInvokation(functor, fields, args);
 		for (int i = 0; i < fields.length; i++) {
-			reflector.writeValue(fields[i], instance, args[i]);
+			JavaReflect.writeValue(fields[i], instance, args[i]);
 		}
 		return findAll(instance);
 	}

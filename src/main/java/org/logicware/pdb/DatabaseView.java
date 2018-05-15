@@ -22,6 +22,7 @@ package org.logicware.pdb;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import org.logicware.pdb.prolog.PrologEngine;
 import org.logicware.pdb.prolog.PrologProvider;
 
 public abstract class DatabaseView extends DatabaseCode<DatabaseView>
@@ -64,12 +65,6 @@ public abstract class DatabaseView extends DatabaseCode<DatabaseView>
 		return this;
 	}
 
-	@Override
-	public final DatabaseView addInstructions(String code) {
-		instructions.add(code);
-		return this;
-	}
-
 	public DatabaseView setComment(String comment) {
 		this.comment = comment;
 		return this;
@@ -85,9 +80,13 @@ public abstract class DatabaseView extends DatabaseCode<DatabaseView>
 	}
 
 	public final DatabaseView save() {
-		getEngine().consult(getPath());
-		getEngine().assertz(getCode());
-		getEngine().persist(getPath());
+		PrologEngine engine = getEngine();
+		if (engine != null) {
+			engine.consult(getPath());
+			// TODO CHECK SYNTAX ERROR
+//			engine.assertz(getCode()); 
+			engine.persist(getPath());
+		}
 		return this;
 	}
 

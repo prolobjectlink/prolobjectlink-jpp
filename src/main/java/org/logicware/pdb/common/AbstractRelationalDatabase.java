@@ -22,7 +22,6 @@ package org.logicware.pdb.common;
 import java.io.File;
 import java.util.List;
 
-import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.PersistentContainer;
@@ -33,22 +32,20 @@ import org.logicware.pdb.RelationalDatabase;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.StorageGraph;
 import org.logicware.pdb.TypedQuery;
-import org.logicware.pdb.prolog.PrologProvider;
 
 public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine implements RelationalDatabase {
 
 	private final StorageGraph storage;
 	protected static final String LOCATION = "dat" + File.separator + "relational";
 
-	public AbstractRelationalDatabase(PrologProvider provider, ContainerFactory containerFactory, String name,
-			Schema schema, DatabaseUser user, StorageGraph storage) {
-		super(provider, storage.getProperties(), storage.getConverter(), containerFactory,
-				LOCATION + File.separator + name + File.separator + "database", name, schema, user);
+	public AbstractRelationalDatabase(String name, Schema schema, DatabaseUser user, StorageGraph storage) {
+		super(storage.getProperties(), LOCATION + File.separator + name + File.separator + "database", name, schema,
+				user);
 		this.storage = storage;
 	}
 
 	public final void open() {
-		storage.open();
+		storage.begin();
 	}
 
 	public final <O> void insert(O... facts) {
@@ -115,7 +112,7 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 		return storage.getLocation();
 	}
 
-	public final String getBaseLocation() {
+	public final String getRootLocation() {
 		return LOCATION;
 	}
 
@@ -125,6 +122,10 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 
 	public final PersistentContainer containerOf(Class<?> clazz) {
 		return storage.containerOf(clazz);
+	}
+
+	public final PersistentContainer getContainer() {
+		return storage;
 	}
 
 	public final String locationOf(Class<?> clazz) {
@@ -156,16 +157,16 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 	}
 
 	public final DatabaseEngine create() {
-		// TODO add others functions files e.g triggers
-		new File(getBaseLocation() + "/functions.pl");
-		new File(getBaseLocation() + "/views.pl");
+		new File(getRootLocation() + "/functions.pl");
+		new File(getRootLocation() + "/triggers.pl");
+		new File(getRootLocation() + "/views.pl");
 		getSchema().flush();
 		return this;
 	}
 
 	public final DatabaseEngine drop() {
 		storage.clear();
-		storage.flush();
+		storage.commit();
 		getSchema().clear();
 		getSchema().flush();
 		return this;
@@ -173,7 +174,7 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 
 	public final void flush() {
 		getSchema().flush();
-		storage.flush();
+		storage.commit();
 	}
 
 	public final void close() {

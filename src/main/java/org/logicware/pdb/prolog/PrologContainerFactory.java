@@ -39,32 +39,33 @@ public abstract class PrologContainerFactory extends AbstractContainerFactory im
 		super(properties, provider);
 	}
 
-	public RelationalCache createRelationalCache(Schema schema) {
+	public final RelationalCache createRelationalCache(Schema schema) {
 		return new PrologRelationalCache(schema, getSettings(), getProvider(), this);
 	}
 
-	public Storage createStorage(String path) {
+	public final Storage createStorage(String path) {
 		return new PrologStorage(getProvider(), getSettings(), path, this);
 	}
 
-	public StoragePool createStoragePool(String path, String name) {
+	public final StoragePool createStoragePool(String path, String name) {
 		return new PrologStoragePool(getProvider(), getSettings(), path, name, this);
 	}
 
-	public StorageManager createStorageManager(String path, StorageMode storageMode) {
+	public final StorageManager createStorageManager(String path, StorageMode storageMode) {
 		return new PrologStorageManager(getProvider(), getSettings(), path, this, storageMode);
 	}
 
-	public StorageGraph createStorageGraph(String path, Schema schema, StorageMode storageMode) {
+	public final StorageGraph createStorageGraph(String path, Schema schema, StorageMode storageMode) {
 		return new PrologStorageGraph(getProvider(), getSettings(), path, schema, this, storageMode);
 	}
 
-	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
-		return new PrologRelationalDatabase(getProvider(), getSettings(), this, storageMode, name, user);
+	public final RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
+		return new PrologRelationalDatabase(getSettings(), storageMode, name, user);
 	}
 
-	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
-		return new PrologHerarchicalDatabase(getProvider(), getSettings(), this, storageMode, name, user);
+	public final HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name,
+			DatabaseUser user) {
+		return new PrologHierarchicalDatabase(getSettings(), storageMode, name, user);
 	}
 
 }

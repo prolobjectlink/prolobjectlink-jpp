@@ -24,6 +24,7 @@ import org.logicware.pdb.Predicate;
 public final class IdentityPredicate<O> implements Predicate<O> {
 
 	private final Object value;
+	private static final long serialVersionUID = -7335575661129495825L;
 
 	public IdentityPredicate(Object value) {
 		this.value = value;

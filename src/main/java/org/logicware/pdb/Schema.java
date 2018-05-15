@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.logicware.pdb.graph.RelationalGraph;
+import org.logicware.pdb.prolog.PrologEngine;
 import org.logicware.pdb.prolog.PrologProvider;
 
 public interface Schema extends Serializable {
@@ -37,6 +38,8 @@ public interface Schema extends Serializable {
 	public RelationalGraph<DatabaseClass, DatabaseClass> getGraph();
 
 	public Storage getStorage();
+
+	public PrologEngine getEngine();
 
 	public PrologProvider getProvider();
 

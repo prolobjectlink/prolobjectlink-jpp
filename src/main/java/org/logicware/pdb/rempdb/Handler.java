@@ -31,7 +31,7 @@ public class Handler extends URLStreamHandler {
 
 	@Override
 	protected URLConnection openConnection(URL u) throws IOException {
-		if (!u.getProtocol().equals(Protocol.REMPDB.name())) {
+		if (!u.getProtocol().equalsIgnoreCase(Protocol.REMPDB.name())) {
 			throw new MalformedURLException("No valid remote URL");
 		}
 		return new RemoteURLConnection(u);

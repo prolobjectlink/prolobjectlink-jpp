@@ -23,9 +23,7 @@ import java.io.IOException;
 
 public interface DatabaseServer {
 
-	public void shutdown() throws InterruptedException;
-
-	public void startup() throws IOException;
+	public void startup() throws IOException, ClassNotFoundException;
 
 	public DatabaseServerType getType();
 
@@ -34,5 +32,7 @@ public interface DatabaseServer {
 	public String getName();
 
 	public String getURL();
+
+	public void shutdown();
 
 }

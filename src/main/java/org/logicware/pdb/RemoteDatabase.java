@@ -21,4 +21,12 @@ package org.logicware.pdb;
 
 public interface RemoteDatabase extends DatabaseService {
 
+	public RemoteDatabase connect(String name);
+
+	public RemoteDatabase create();
+
+	public RemoteDatabase drop();
+
+	public boolean isConnected();
+
 }

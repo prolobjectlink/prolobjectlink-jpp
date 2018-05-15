@@ -20,11 +20,8 @@
 package org.logicware.pdb.prolog;
 
 import org.logicware.pdb.DatabaseFunction;
-import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.ProcedureQuery;
 import org.logicware.pdb.Schema;
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
 
 public final class PrologDatabaseFunction extends DatabaseFunction {
 
@@ -32,6 +29,7 @@ public final class PrologDatabaseFunction extends DatabaseFunction {
 
 	private PrologDatabaseFunction() {
 		// for internal reflection
+		super();
 	}
 
 	public PrologDatabaseFunction(String name, String comment, Schema schema, String path, PrologProvider provider) {
@@ -51,13 +49,9 @@ public final class PrologDatabaseFunction extends DatabaseFunction {
 	}
 
 	public Object execute(Object... arguments) {
+
 		ProcedureQuery p = createProcedureQuery(arguments);
-		try {
-			return p.execute().getSolution();
-		} catch (NonSolutionError e) {
-			LoggerUtils.error(getClass(), LoggerConstants.NON_SOLUTION);
-		}
-		return null;
+		return p.execute().getSolution();
 	}
 
 }

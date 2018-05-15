@@ -42,8 +42,10 @@ class PrologHashMap<K, V> extends AbstractMap<K, V> {
 	}
 
 	public PrologHashMap(Map<? extends K, ? extends V> m) {
-		this(m.size());
-		putAll(m);
+		if (m != null) {
+			table = new HashEntry[m.size()];
+			putAll(m);
+		}
 	}
 
 	private int indexOf(int hash) {

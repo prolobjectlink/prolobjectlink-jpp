@@ -29,18 +29,18 @@ import java.util.List;
  */
 public interface Storage extends PersistentContainer {
 
-	// TODO REMOVE throws NonSolutionError IN FIND METHODS RETURN NULL IF NOT
+	// TODO REMOVE IN FIND METHODS RETURN NULL IF NOT
 	// EXIST
 
-	public Object find(String string) throws NonSolutionError;
+	public Object find(String string);
 
-	public Object find(String functor, Object... args) throws NonSolutionError;
+	public Object find(String functor, Object... args);
 
-	public <O> O find(O o) throws NonSolutionError;
+	public <O> O find(O o);
 
-	public <O> O find(Class<O> clazz) throws NonSolutionError;
+	public <O> O find(Class<O> clazz);
 
-	public <O> O find(Predicate<O> predicate) throws NonSolutionError;
+	public <O> O find(Predicate<O> predicate);
 
 	public List<Object> findAll(String string);
 
@@ -53,11 +53,11 @@ public interface Storage extends PersistentContainer {
 	public <O> List<O> findAll(Predicate<O> predicate);
 
 	/**
-	 * Check that this store have less clauses number in prolog engine that
-	 * given capacity.
+	 * Check that this store have less clauses number in prolog engine that given
+	 * capacity.
 	 * 
-	 * @return true if this store has a clause number lesser than given capacity
-	 *         or false otherwise
+	 * @return true if this store has a clause number lesser than given capacity or
+	 *         false otherwise
 	 * @since 1.0
 	 */
 	public boolean hasCapacity();

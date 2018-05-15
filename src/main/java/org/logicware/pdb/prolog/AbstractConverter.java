@@ -27,8 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.logicware.pdb.ClassNotFoundError;
 import org.logicware.pdb.RuntimeError;
+import org.logicware.pdb.logging.LoggerConstants;
+import org.logicware.pdb.logging.LoggerUtils;
 
 public abstract class AbstractConverter<T> implements PrologConverter<T> {
 
@@ -231,7 +232,11 @@ public abstract class AbstractConverter<T> implements PrologConverter<T> {
 			ParameterizedType parameterized = (ParameterizedType) generics[0];
 			Type type = parameterized.getActualTypeArguments()[0];
 			if (!(type instanceof Class<?>)) {
-				throw new ClassNotFoundError("" + type + "");
+				try {
+					throw new ClassNotFoundException("" + type + "");
+				} catch (ClassNotFoundException e) {
+					LoggerUtils.error(getClass(), LoggerConstants.CLASS_NOT_FOUND, e);
+				}
 			}
 			templateClass = (Class<T>) type;
 		}
@@ -255,7 +260,7 @@ public abstract class AbstractConverter<T> implements PrologConverter<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractConverter<T> other = (AbstractConverter<T>) obj;
+		AbstractConverter<?> other = (AbstractConverter<?>) obj;
 		if (sharedPrologVariables == null) {
 			if (other.sharedPrologVariables != null)
 				return false;

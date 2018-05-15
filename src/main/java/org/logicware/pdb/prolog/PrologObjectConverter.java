@@ -44,10 +44,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.logicware.pdb.AbstractConverter;
-import org.logicware.pdb.ClassNotFoundError;
 import org.logicware.pdb.ObjectConverter;
+import org.logicware.pdb.logging.LoggerConstants;
+import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.util.JavaLists;
 import org.logicware.pdb.util.JavaMaps;
+import org.logicware.pdb.util.JavaReflect;
 import org.logicware.pdb.util.JavaSets;
 
 public final class PrologObjectConverter extends AbstractConverter<PrologTerm> implements ObjectConverter<PrologTerm> {
@@ -83,8 +85,9 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			try {
 				return Class.forName(className);
 			} catch (ClassNotFoundException e) {
-				throw new ClassNotFoundError(className, e);
+				LoggerUtils.error(getClass(), LoggerConstants.CLASS_NOT_FOUND, e);
 			}
+			return null;
 		default:
 			throw new UnknownTermError(prologTerm);
 		}
@@ -131,7 +134,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			Class<?> classPtr = structureClass;
 
 			// creating new instance
-			object = newInstance(classPtr);
+			object = JavaReflect.newInstance(classPtr);
 
 			Deque<Field> stack = new ArrayDeque<Field>();
 
@@ -144,7 +147,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 					Field field = fields[i];
 
 					// check persistence condition
-					if (isPersistent(field) && !isStaticAndFinal(field)) {
+					if (JavaReflect.isPersistent(field) && !JavaReflect.isStaticAndFinal(field)) {
 						stack.push(field);
 					}
 
@@ -165,7 +168,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 				Object value = toObject(prologTerm.getArguments()[i]);
 
 				// write field with argument value
-				writeValue(field, object, value);
+				JavaReflect.writeValue(field, object, value);
 
 			}
 
@@ -318,11 +321,11 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 				for (int i = fields.length - 1; i >= 0; i--) {
 					Field field = fields[i];
 
-					if (isPersistent(field) && !isStaticAndFinal(field)) {
+					if (JavaReflect.isPersistent(field) && !JavaReflect.isStaticAndFinal(field)) {
 
 						String fieldName = field.getName();
 
-						Object argument = readValue(field, object);
+						Object argument = JavaReflect.readValue(field, object);
 
 						// variable name = field name first char in upper case
 						String variableName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
@@ -386,13 +389,13 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 				Field field = fields[i];
 
 				// check persistence condition
-				if (isPersistent(field) && !isStaticAndFinal(field)) {
+				if (JavaReflect.isPersistent(field) && !JavaReflect.isStaticAndFinal(field)) {
 
 					String fieldName = field.getName();
 
 					if (object != null) {
 
-						Object argument = readValue(field, object);
+						Object argument = JavaReflect.readValue(field, object);
 						PrologTerm prologArgument = toTerm(argument);
 						stack.push(prologArgument);
 

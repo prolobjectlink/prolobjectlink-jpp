@@ -26,6 +26,8 @@ public final class OrPredicate<O> implements Predicate<O> {
 	private final Predicate<O> leftPredicate;
 	private final Predicate<O> rigthPredicate;
 
+	private static final long serialVersionUID = 6476411412588653705L;
+
 	public OrPredicate(Predicate<O> leftPredicate, Predicate<O> rigthPredicate) {
 		this.leftPredicate = leftPredicate;
 		this.rigthPredicate = rigthPredicate;

@@ -29,7 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.logicware.pdb.util.ASMVersion;
+import org.logicware.pdb.asm.AsmVersion;
+import org.logicware.pdb.util.JavaReflect;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -183,7 +184,7 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 			interfaces[i] = superClasses.get(i).name.replace('.', '/');
 		}
 
-		cw.visit(ASMVersion.getCompatible(), Opcodes.ACC_PUBLIC, internalName, null, superclass, interfaces);
+		cw.visit(AsmVersion.getCompatible(), Opcodes.ACC_PUBLIC, internalName, null, superclass, interfaces);
 
 		// Fields Declaration
 		for (DatabaseField field : fields.values()) {
@@ -227,7 +228,7 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	}
 
 	public Object newInstance() {
-		return ReflectionUtils.newInstance(javaClass);
+		return JavaReflect.newInstance(javaClass);
 	}
 
 	public Class<?> getJavaClass() {
@@ -390,23 +391,6 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	/**
 	 * Add a field of type Collection/Map of given class type
 	 * 
-	 * @param name        field name
-	 * @param type        type of the field
-	 * @param linkedClass Generic class for collection/Map
-	 * @return the field created and added to this class
-	 * @since 1.0
-	 */
-	@Deprecated
-	public DatabaseField addField(String name, String comment, int position, Class<?> type, DatabaseClass linkedClass) {
-		DatabaseField f = newField(name, comment, position, type);
-		f.setLinkedClass(linkedClass);
-		fields.put(name, f);
-		return f;
-	}
-
-	/**
-	 * Add a field of type Collection/Map of given class type
-	 * 
 	 * @param name       field name
 	 * @param type       type of the field
 	 * @param linkedType Generic class for collection/Map
@@ -515,6 +499,24 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 
 	public SchemaElementType geElementType() {
 		return SchemaElementType.CLASS;
+	}
+	
+	/**
+	 * Add a field of type Collection/Map of given class type
+	 * 
+	 * @param name        field name
+	 * @param type        type of the field
+	 * @param linkedClass Generic class for collection/Map
+	 * @return the field created and added to this class
+	 * @since 1.0
+	 * @deprecated
+	 */
+	@Deprecated
+	public DatabaseField addField(String name, String comment, int position, Class<?> type, DatabaseClass linkedClass) {
+		DatabaseField f = newField(name, comment, position, type);
+		f.setLinkedClass(linkedClass);
+		fields.put(name, f);
+		return f;
 	}
 
 }

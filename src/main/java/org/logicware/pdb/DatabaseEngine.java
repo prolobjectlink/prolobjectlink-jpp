@@ -24,18 +24,15 @@ import java.util.List;
 
 public interface DatabaseEngine extends PersistentContainer {
 
-	// TODO REMOVE throws NonSolutionError IN FIND METHODS RETURN NULL IF NOT
-	// EXIST
+	public Object find(String string);
 
-	public Object find(String string) throws NonSolutionError;
+	public Object find(String functor, Object... args);
 
-	public Object find(String functor, Object... args) throws NonSolutionError;
+	public <O> O find(O o);
 
-	public <O> O find(O o) throws NonSolutionError;
+	public <O> O find(Class<O> clazz);
 
-	public <O> O find(Class<O> clazz) throws NonSolutionError;
-
-	public <O> O find(Predicate<O> predicate) throws NonSolutionError;
+	public <O> O find(Predicate<O> predicate);
 
 	public List<Object> findAll(String string);
 
@@ -51,11 +48,23 @@ public interface DatabaseEngine extends PersistentContainer {
 
 	public Collection<DatabaseUser> getUsers();
 
+	/**
+	 * Return the low level {@link PersistentContainer} held by this
+	 * {@link DatabaseEngine}. Low level {@link PersistentContainer} can be some
+	 * storage object used by this database for persistence operations. In other
+	 * words this method will be returned an instance of
+	 * {@link Storage},{@link StorageGraph},{@link StorageManager},{@link StoragePool}.
+	 * 
+	 * @return low level {@link PersistentContainer}
+	 * @since 1.0
+	 */
+	public PersistentContainer getContainer();
+
 	public String getDatabaseLocation();
 
 	public String getStorageLocation();
 
-	public String getBaseLocation();
+	public String getRootLocation();
 
 	public DatabaseUser getOwner();
 

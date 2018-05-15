@@ -42,12 +42,14 @@ class PrologArrayList<E> extends AbstractCollection<E> implements List<E> {
 	}
 
 	public PrologArrayList(Collection<E> c) {
-		elements = c.toArray();
-		size = elements.length;
+		if (c != null) {
+			elements = c.toArray();
+			size = elements.length;
 
-		// c.toArray might (incorrectly) not return Object[]
-		if (elements.getClass() != Object[].class) {
-			elements = Arrays.copyOf(elements, size, Object[].class);
+			// c.toArray might (incorrectly) not return Object[]
+			if (elements.getClass() != Object[].class) {
+				elements = Arrays.copyOf(elements, size, Object[].class);
+			}
 		}
 	}
 

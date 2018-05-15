@@ -21,10 +21,8 @@ package org.logicware.pdb.prolog;
 
 import java.io.File;
 
-import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DatabaseSchema;
 import org.logicware.pdb.DatabaseUser;
-import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.RelationalDatabase;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageMode;
@@ -32,22 +30,14 @@ import org.logicware.pdb.common.AbstractRelationalDatabase;
 
 public final class PrologRelationalDatabase extends AbstractRelationalDatabase implements RelationalDatabase {
 
-	public PrologRelationalDatabase(PrologProvider provider, Settings properties, ContainerFactory containerFactory,
-			StorageMode storageMode, String name, DatabaseUser user) {
-		super(provider, containerFactory, name,
-				new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
+	public PrologRelationalDatabase(Settings properties, StorageMode storageMode, String name, DatabaseUser user) {
+		super(name, new DatabaseSchema(LOCATION + File.separator + name, properties.getProvider(), properties, user),
+				user,
 				new PrologStorageGraph(LOCATION + File.separator + name + File.separator + "database",
-						new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user),
-						properties, provider, containerFactory, new PrologObjectConverter(provider), storageMode));
-	}
-
-	public PrologRelationalDatabase(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
-			ContainerFactory containerFactory, StorageMode storageMode, String name, DatabaseUser user) {
-		super(provider, containerFactory, name,
-				new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user), user,
-				new PrologStorageGraph(LOCATION + File.separator + name + File.separator + "database",
-						new DatabaseSchema(LOCATION + File.separator + name, provider, containerFactory, user),
-						properties, provider, containerFactory, converter, storageMode));
+						new DatabaseSchema(LOCATION + File.separator + name, properties.getProvider(), properties,
+								user),
+						properties, properties.getProvider(), properties,
+						new PrologObjectConverter(properties.getProvider()), storageMode));
 	}
 
 }

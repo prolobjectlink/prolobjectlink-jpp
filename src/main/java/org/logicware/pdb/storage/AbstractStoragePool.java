@@ -29,11 +29,9 @@ import java.util.Objects;
 
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DefaultTransaction;
-import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Predicate;
-import org.logicware.pdb.ProcedureArgumentError;
 import org.logicware.pdb.ProcedureQuery;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.Storage;
@@ -83,7 +81,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		this.name = name;
 	}
 
-	public final Object find(String string) throws NonSolutionError {
+	public final Object find(String string) {
 		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			Object object = storage.find(string);
@@ -91,10 +89,10 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 				return object;
 			}
 		}
-		throw new NonSolutionError();
+		return null;
 	}
 
-	public final Object find(String functor, Object... args) throws NonSolutionError {
+	public final Object find(String functor, Object... args) {
 		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			Object object = storage.find(functor, args);
@@ -102,10 +100,10 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 				return object;
 			}
 		}
-		throw new NonSolutionError();
+		return null;
 	}
 
-	public final <O> O find(O o) throws NonSolutionError {
+	public final <O> O find(O o) {
 		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			O object = storage.find(o);
@@ -113,10 +111,10 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 				return object;
 			}
 		}
-		throw new NonSolutionError();
+		return null;
 	}
 
-	public final <O> O find(Class<O> clazz) throws NonSolutionError {
+	public final <O> O find(Class<O> clazz) {
 		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			O object = storage.find(clazz);
@@ -124,10 +122,10 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 				return object;
 			}
 		}
-		throw new NonSolutionError();
+		return null;
 	}
 
-	public final <O> O find(Predicate<O> predicate) throws NonSolutionError {
+	public final <O> O find(Predicate<O> predicate) {
 		checkActiveTransaction(transaction);
 		for (Storage storage : storages) {
 			O object = storage.find(predicate);
@@ -135,7 +133,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 				return object;
 			}
 		}
-		throw new NonSolutionError();
+		return null;
 	}
 
 	public final List<Object> findAll(String string) {
@@ -239,22 +237,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final void defragment() {
-		// TODO
-		// String c = File.separator;
-		// backup(getLocation(), name);
-		// String path = getLocation() + c + name;
-		// try {
-		// Files.delete(rootDirectory.toPath());
-		// List<Class<?>> classList = classes();
-		// for (Class<?> clazz : classList) {
-		// insert(findAll(clazz).toArray(new Object[0]));
-		// }
-		// Files.delete(new File(path).toPath());
-		// } catch (Exception e) {
-		// String s = LoggerConstants.IO_ERROR;
-		// LoggerUtils.error(getClass(), s, e);
-		// restore(getLocation(), name);
-		// }
+		// TODO Auto-generated method stub
 	}
 
 	public final void clear() {
@@ -281,40 +264,6 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 			lastStorage.insert(facts);
 		}
 	}
-
-	// FIXME pool add method
-	// public final <O> void insert(O... objects) {
-	//
-	// String root = getLocation();
-	//
-	// int length = objects.length;
-	// if (lastStorage != null) {
-	// int size = lastStorage.getSize();
-	// int newLength = size + length;
-	// if (newLength < storageCapacity) {
-	// lastStorage.insert(objects);
-	// } else if (lastStorage.hasCapacity()) {
-	// int free = storageCapacity - lastStorage.getSize();
-	// O[] array2 = Arrays.copyOfRange(objects, free, length);
-	// O[] array1 = Arrays.copyOf(objects, free);
-	// lastStorage.insert(array1);
-	// insert(array2);
-	// } else {
-	// int index = getPoolSize();
-	// String path = root + SEPARATOR + name + "." + (index + 1);
-	// lastStorage = createStorage(path, storageCapacity);
-	// storages.add(lastStorage);
-	// insert(objects);
-	// }
-	// } else {
-	// int index = getPoolSize();
-	// String path = root + SEPARATOR + name + "." + index;
-	// lastStorage = createStorage(path, storageCapacity);
-	// storages.add(lastStorage);
-	// insert(objects);
-	// }
-	//
-	// }
 
 	public final <O> void update(O match, O merge) {
 		checkActiveTransaction(transaction);
@@ -386,11 +335,11 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 					storages = new ArrayList<Storage>(files.length);
 					if (index.matches(StoragePoolFileFilter.NUMBER_REGEX)) {
 						lastStorage = createStorage(canonical, storageCapacity);
-						lastStorage.open();
+						lastStorage.begin();
 						storages.add(lastStorage);
 					}
 				} catch (IOException e) {
-					LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR, e);
+					LoggerUtils.error(getClass(), LoggerConstants.IO, e);
 				}
 			}
 		}
@@ -428,15 +377,16 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	public final void flush() {
 		for (Storage storage : storages) {
 			if (storage.isDirty()) {
-				storage.flush();
+				storage.commit();
 			}
 		}
 	}
 
-	protected class StoragePoolProcedureQuery extends AbstractProcedureQuery<Object> implements ProcedureQuery {
+	protected class StoragePoolProcedureQuery extends AbstractProcedureQuery implements ProcedureQuery {
 
-		private List<Object> list = new ArrayList<Object>();
-		private final List<ProcedureQuery> queries = new ArrayList<ProcedureQuery>();
+		private ArrayList<Object> list = new ArrayList<Object>();
+		private static final long serialVersionUID = -6828890841047794331L;
+		private final ArrayList<ProcedureQuery> queries = new ArrayList<ProcedureQuery>();
 
 		protected StoragePoolProcedureQuery(String functor, String[] arguments) {
 			super(functor, arguments);
@@ -472,7 +422,8 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 					return getArgumentValue(i);
 				}
 			}
-			throw new ProcedureArgumentError(getFunctor(), name);
+			throw new IllegalArgumentException(
+					"No register argument '" + name + "' for the procedure '" + getFunctor() + "'");
 		}
 
 		public ProcedureQuery setArgumentValue(int position, Object value) {
@@ -500,7 +451,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 			return list;
 		}
 
-		public Object getSolution() throws NonSolutionError {
+		public Object getSolution() {
 			return next();
 		}
 
@@ -566,6 +517,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 			return list.toArray();
 		}
 
+		@Override
 		public void remove() {
 			// skip the current solution
 			next();

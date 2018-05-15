@@ -22,7 +22,7 @@ package org.logicware.pdb.generator;
 import java.io.Serializable;
 
 import org.logicware.pdb.IdGenerator;
-import org.logicware.pdb.ReflectionUtils;
+import org.logicware.pdb.util.JavaReflect;
 
 abstract class AbstractIdGenerator<O extends Serializable> implements IdGenerator<O> {
 
@@ -49,7 +49,7 @@ abstract class AbstractIdGenerator<O extends Serializable> implements IdGenerato
 
 	public final Class<?> getType() {
 		if (type == null) {
-			type = ReflectionUtils.classForName(typeName);
+			type = JavaReflect.classForName(typeName);
 		}
 		return type;
 	}

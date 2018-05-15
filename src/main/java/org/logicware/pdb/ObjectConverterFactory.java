@@ -19,35 +19,17 @@
  */
 package org.logicware.pdb;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.pdb.util.JavaReflect;
 
 public final class ObjectConverterFactory {
 
-	private ObjectConverterFactory() {
+	public static <T> ObjectConverter<T> createConverter(Class<T> cls, PrologProvider provider) {
+		return (ObjectConverter<T>) JavaReflect.newInstance(cls, new Class[] { PrologProvider.class },
+				new PrologProvider[] { provider });
 	}
 
-	public static <T> ObjectConverter<T> createConverter(Class<T> cls, PrologProvider provider) {
-		ObjectConverter<T> converter = null;
-		try {
-			Constructor<?> constructor = cls.getConstructor(PrologProvider.class);
-			converter = (ObjectConverter<T>) constructor.newInstance(provider);
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return converter;
+	private ObjectConverterFactory() {
 	}
 
 }

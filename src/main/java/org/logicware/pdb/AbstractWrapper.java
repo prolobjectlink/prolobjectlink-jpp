@@ -40,7 +40,7 @@ public class AbstractWrapper implements Wrapper {
 		} catch (Exception e) {
 			throw new RuntimeError(
 
-					"Impossible unwrap " + getClass()
+					"Impossible unwrap " + cls
 
 							+ " to " + cls.getName()
 

@@ -22,10 +22,8 @@ package org.logicware.pdb.common;
 import java.io.File;
 import java.net.URL;
 
-import org.logicware.pdb.ContainerFactory;
-import org.logicware.pdb.DatabaseService;
 import org.logicware.pdb.DatabaseUser;
-import org.logicware.pdb.ObjectConverter;
+import org.logicware.pdb.EmbeddedDatabase;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.ProcedureQuery;
@@ -33,18 +31,20 @@ import org.logicware.pdb.Query;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.TypedQuery;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
 
-public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService implements PersistentContainer {
+public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
+		implements PersistentContainer, EmbeddedDatabase {
 
 	protected PersistentContainer storage;
 
-	public AbstractEmbeddedDatabase(PrologProvider provider, Settings properties,
-			ObjectConverter<PrologTerm> converter, ContainerFactory containerFactory, URL url, String name,
-			Schema schema, DatabaseUser owner, PersistentContainer storage) {
-		super(provider, properties, converter, containerFactory, url, name, schema, owner);
+	public AbstractEmbeddedDatabase(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
+			PersistentContainer storage) {
+		super(settings, url, name, schema, owner);
 		this.storage = storage;
+	}
+
+	public final PersistentContainer getContainer() {
+		return storage;
 	}
 
 	public final String getStorageLocation() {
@@ -52,7 +52,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService i
 	}
 
 	public final void open() {
-		storage.open();
+		storage.begin();
 	}
 
 	public final <O> void insert(O... facts) {
@@ -180,7 +180,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService i
 	}
 
 	public final void flush() {
-		storage.flush();
+		storage.commit();
 	}
 
 	public final void clear() {
@@ -210,11 +210,19 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService i
 		storage.defragment();
 	}
 
-	public DatabaseService create() {
-		// TODO add others functions files e.g triggers
-		new File(getBaseLocation() + "/functions.pl");
-		new File(getBaseLocation() + "/views.pl");
+	public final EmbeddedDatabase create() {
+		new File(getRootLocation() + "/functions.pl");
+		new File(getRootLocation() + "/triggers.pl");
+		new File(getRootLocation() + "/views.pl");
 		getSchema().flush();
+		return this;
+	}
+
+	public EmbeddedDatabase drop() {
+		getSchema().clear();
+		getSchema().flush();
+		clear();
+		flush();
 		return this;
 	}
 

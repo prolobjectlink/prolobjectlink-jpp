@@ -19,6 +19,7 @@
  */
 package org.logicware.pdb;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,11 +28,10 @@ import java.util.List;
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface ProcedureQuery extends Iterator<Object> {
+public interface ProcedureQuery extends Iterator<Object>, Serializable {
 
 	/**
-	 * Return the maximum number of solutions to retrieve by the formulated
-	 * query
+	 * Return the maximum number of solutions to retrieve by the formulated query
 	 * 
 	 * @return maximum number of solutions
 	 * @since 1.0
@@ -41,10 +41,8 @@ public interface ProcedureQuery extends Iterator<Object> {
 	/**
 	 * Fix the maximum number of solutions to retrieve by the formulated query
 	 * 
-	 * @param maxSolution
-	 *            maximum number of solutions
-	 * @return current instance of procedure query with the restriction
-	 *         appended.
+	 * @param maxSolution maximum number of solutions
+	 * @return current instance of procedure query with the restriction appended.
 	 * @since 1.0
 	 */
 	public ProcedureQuery setMaxSolution(int maxSolution);
@@ -60,10 +58,8 @@ public interface ProcedureQuery extends Iterator<Object> {
 	/**
 	 * Fix the position of the first solution to retrieve.
 	 * 
-	 * @param firstSolution
-	 *            position of the first solution
-	 * @return current instance of procedure query with the restriction
-	 *         appended.
+	 * @param firstSolution position of the first solution
+	 * @return current instance of procedure query with the restriction appended.
 	 * @since 1.0
 	 */
 	public ProcedureQuery setFirstSolution(int firstSolution);
@@ -80,7 +76,7 @@ public interface ProcedureQuery extends Iterator<Object> {
 
 	public List<Object> getSolutions();
 
-	public Object getSolution() throws NonSolutionError;
+	public Object getSolution();
 
 	public void dispose();
 

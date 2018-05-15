@@ -19,7 +19,7 @@
  */
 package org.logicware.pdb.tools;
 
-import static org.logicware.pdb.logging.LoggerConstants.IO_ERROR;
+import static org.logicware.pdb.logging.LoggerConstants.IO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -89,13 +89,13 @@ public class Restore extends Tool {
 			}
 
 		} catch (IOException e) {
-			LoggerUtils.error(getClass(), IO_ERROR + zipFileName, e);
+			LoggerUtils.error(getClass(), IO + zipFileName, e);
 		} finally {
 			if (zipIn != null) {
 				try {
 					zipIn.close();
 				} catch (IOException e) {
-					LoggerUtils.error(getClass(), IO_ERROR, e);
+					LoggerUtils.error(getClass(), IO, e);
 				}
 			}
 		}

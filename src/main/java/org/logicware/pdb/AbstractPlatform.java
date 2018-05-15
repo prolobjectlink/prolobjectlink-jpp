@@ -60,6 +60,14 @@ public abstract class AbstractPlatform extends AbstractWrapper implements Platfo
 		return copied;
 	}
 
+	public final String getJavaVersion() {
+		return System.getProperty("java.version");
+	}
+
+	public final String getJavaVendor() {
+		return System.getProperty("java.vendor");
+	}
+
 	public final boolean runOnOsX() {
 		return getOsName().indexOf("mac os x", 0) != -1;
 	}
@@ -96,7 +104,7 @@ public abstract class AbstractPlatform extends AbstractWrapper implements Platfo
 			try {
 				Files.delete(x.toPath());
 			} catch (IOException e) {
-				LoggerUtils.error(getClass(), LoggerConstants.IO_ERROR + file, e);
+				LoggerUtils.error(getClass(), LoggerConstants.IO + file, e);
 			}
 		}
 	}

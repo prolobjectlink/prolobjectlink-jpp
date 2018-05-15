@@ -63,10 +63,8 @@ public class LockFile implements Runnable {
 	/**
 	 * Create a new file locking object.
 	 * 
-	 * @param fileName
-	 *            the file name
-	 * @param sleep
-	 *            the number of milliseconds to sleep
+	 * @param fileName the file name
+	 * @param sleep    the number of milliseconds to sleep
 	 */
 	public LockFile(String fileName, Settings settings) {
 		properties = new Properties();
@@ -80,7 +78,27 @@ public class LockFile implements Runnable {
 	public synchronized void lock() {
 		if (!locked) {
 			try {
-				lockFile();
+				generateUniqueId();
+				createParentDirectories();
+				if (file != null && !file.createNewFile()) {
+					waitUntilOld();
+					save();
+					sleep(2 * sleep);
+					checkLockedBefore();
+					boolean deleted = file.delete();
+					if (deleted && !file.createNewFile()) {
+						throw new Exception("Another process was faster");
+					}
+				}
+				save();
+				sleep(SLEEP_GAP);
+				checkLockedBefore();
+				if (file != null) {
+					daemon = new Thread(this, "File Lock Daemon" + file.getPath());
+					daemon.setPriority(Thread.MAX_PRIORITY - 1);
+					daemon.setDaemon(true);
+					daemon.start();
+				}
 				locked = true;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -91,8 +109,8 @@ public class LockFile implements Runnable {
 	}
 
 	/**
-	 * Unlock the file. The watch daemon thread is stopped. This method does
-	 * nothing if the file is already unlocked.
+	 * Unlock the file. The watch daemon thread is stopped. This method does nothing
+	 * if the file is already unlocked.
 	 */
 	public synchronized void unlock() {
 		if (locked) {
@@ -174,30 +192,6 @@ public class LockFile implements Runnable {
 		return properties;
 	}
 
-	private void lockFile() throws Exception {
-		generateUniqueId();
-		createParentDirectories();
-		if (file != null && !file.createNewFile()) {
-			waitUntilOld();
-			save();
-			sleep(2 * sleep);
-			checkLockedBefore();
-			boolean deleted = file.delete();
-			if (deleted && !file.createNewFile()) {
-				throw new Exception("Another process was faster");
-			}
-		}
-		save();
-		sleep(SLEEP_GAP);
-		checkLockedBefore();
-		if (file != null) {
-			daemon = new Thread(this, "File Lock Daemon" + file.getPath());
-			daemon.setPriority(Thread.MAX_PRIORITY - 1);
-			daemon.setDaemon(true);
-			daemon.start();
-		}
-	}
-
 	private void waitUntilOld() {
 		int n = 2 * TIME_GRANULARITY / SLEEP_GAP;
 		for (int i = 0; i < n; i++) {
@@ -243,8 +237,7 @@ public class LockFile implements Runnable {
 	/**
 	 * Get a number of cryptographically secure pseudo random bytes.
 	 * 
-	 * @param len
-	 *            the number of bytes
+	 * @param len the number of bytes
 	 * @return the random bytes
 	 * @throws NoSuchAlgorithmException
 	 */
@@ -263,10 +256,8 @@ public class LockFile implements Runnable {
 	/**
 	 * Convert a byte array to a hex encoded string.
 	 * 
-	 * @param value
-	 *            the byte array
-	 * @param len
-	 *            the number of bytes to encode
+	 * @param value the byte array
+	 * @param len   the number of bytes to encode
 	 * @return the hex encoded string
 	 */
 	private String convertBytesToHex(byte[] value, int len) {

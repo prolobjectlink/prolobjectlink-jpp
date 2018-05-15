@@ -21,6 +21,6 @@ package org.logicware.pdb;
 
 public enum DatabaseType {
 
-	HIERARCHY, RELATIONAL;
+	HIERARCHICAL, RELATIONAL;
 
 }

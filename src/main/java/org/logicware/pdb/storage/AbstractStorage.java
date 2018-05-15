@@ -29,7 +29,6 @@ import java.util.Map;
 
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.LockFile;
-import org.logicware.pdb.NonSolutionError;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Predicate;
@@ -40,6 +39,7 @@ import org.logicware.pdb.prolog.PrologClause;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologQuery;
 import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.pdb.util.JavaReflect;
 
 public abstract class AbstractStorage extends AbstractPersistentContainer implements Storage {
 
@@ -102,24 +102,24 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 		return getEngine().currentPredicate(functor, arity);
 	}
 
-	public final Object find(String string) throws NonSolutionError {
+	public final Object find(String string) {
 		PrologTerm[] prologTerms = getConverter().toTermsArray(string);
 		List<Class<?>> classes = classesOf(prologTerms);
 		return solutionOf(prologTerms, classes);
 	}
 
-	public final Object find(String functor, Object... args) throws NonSolutionError {
+	public final Object find(String functor, Object... args) {
 		Class<?> clazz = classOf(functor, args.length);
-		Object instance = reflector.newInstance(clazz);
+		Object instance = JavaReflect.newInstance(clazz);
 		Field[] fields = clazz.getDeclaredFields();
 		checkProcedureInvokation(functor, fields, args);
 		for (int i = 0; i < fields.length; i++) {
-			reflector.writeValue(fields[i], instance, args[i]);
+			JavaReflect.writeValue(fields[i], instance, args[i]);
 		}
 		return find(instance);
 	}
 
-	public final <O> O find(O o) throws NonSolutionError {
+	public final <O> O find(O o) {
 		Map<String, PrologTerm> inspectionMap = new HashMap<String, PrologTerm>();
 		PrologQuery query = prologQueryOf(o, inspectionMap);
 		if (query.hasSolution()) {
@@ -134,23 +134,23 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 				return o;
 			}
 		}
-		throw new NonSolutionError();
+		return null;
 	}
 
-	public final <O> O find(Class<O> clazz) throws NonSolutionError {
+	public final <O> O find(Class<O> clazz) {
 		PrologQuery query = prologQueryOf(clazz);
 		if (query.hasSolution()) {
 			Map<String, PrologTerm> solutionMap = query.oneVariablesSolution();
 			return (O) getConverter().toObject(clazz, solutionMap);
 		}
-		throw new NonSolutionError();
+		return null;
 	}
 
-	public final <O> O find(Predicate<O> query) throws NonSolutionError {
+	public final <O> O find(Predicate<O> query) {
 		List<O> all = findAll(query);
 		if (!all.isEmpty())
 			return all.get(0);
-		throw new NonSolutionError();
+		return null;
 	}
 
 	public final List<Object> findAll(String string) {
@@ -160,11 +160,11 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 
 	public final List<Object> findAll(String functor, Object... args) {
 		Class<?> clazz = classOf(functor, args.length);
-		Object instance = reflector.newInstance(clazz);
+		Object instance = JavaReflect.newInstance(clazz);
 		Field[] fields = clazz.getDeclaredFields();
 		checkProcedureInvokation(functor, fields, args);
 		for (int i = 0; i < fields.length; i++) {
-			reflector.writeValue(fields[i], instance, args[i]);
+			JavaReflect.writeValue(fields[i], instance, args[i]);
 		}
 		return findAll(instance);
 	}
@@ -223,7 +223,7 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 		Map<String, Class<?>> m = new HashMap<String, Class<?>>();
 		for (PrologClause clause : getEngine()) {
 			String functor = removeQuoted(clause.getFunctor());
-			m.put(functor, reflector.classForName(functor));
+			m.put(functor, JavaReflect.classForName(functor));
 		}
 		return m.values();
 	}

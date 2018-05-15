@@ -28,23 +28,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.PersistenceException;
+
 import org.logicware.pdb.AbstractWrapper;
-import org.logicware.pdb.ClassNotFoundError;
 import org.logicware.pdb.Container;
 import org.logicware.pdb.ObjectConverter;
-import org.logicware.pdb.ObjectReflector;
-import org.logicware.pdb.PersistenceError;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.ProcedureInvokationError;
-import org.logicware.pdb.ReflectionUtils;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.Transaction;
-import org.logicware.pdb.UpdateError;
-import org.logicware.pdb.prolog.PrologClause;
+import org.logicware.pdb.logging.LoggerConstants;
+import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.prolog.PrologEngine;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologQuery;
 import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.pdb.util.JavaReflect;
 
 /**
  * Implementation of interface {@code Container}. Hold an immutable reference to
@@ -83,8 +82,6 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 		classes.add(Object[].class);
 	}
 
-	protected final ObjectReflector reflector = new ObjectReflector();
-
 	protected AbstractContainer(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter) {
 		this.engine = provider.newEngine();
 		this.properties = properties;
@@ -114,9 +111,13 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 
 	public final Class<?> classOf(String functor, int arity) {
 		String className = removeQuoted(functor);
-		Class<?> clazz = reflector.classForName(className);
+		Class<?> clazz = JavaReflect.classForName(className);
 		if (clazz.getDeclaredFields().length != arity) {
-			throw new ClassNotFoundError(className, arity);
+			try {
+				throw new IllegalArgumentException("Non exist " + className + " with " + arity + " fields");
+			} catch (IllegalArgumentException e) {
+				LoggerUtils.error(getClass(), LoggerConstants.ILLEGAL_ARGUMENT, e);
+			}
 		}
 		return clazz;
 	}
@@ -129,7 +130,11 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 			ParameterizedType parameterized = (ParameterizedType) generics[0];
 			Type type = parameterized.getActualTypeArguments()[0];
 			if (!(type instanceof Class<?>)) {
-				throw new ClassNotFoundError("" + type + "");
+				try {
+					throw new ClassNotFoundException("" + type + "");
+				} catch (ClassNotFoundException e) {
+					LoggerUtils.error(getClass(), LoggerConstants.CLASS_NOT_FOUND, e);
+				}
 			}
 			templateClass = (Class<O>) type;
 		}
@@ -201,7 +206,7 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 				PrologTerm[] args = prologTerm.getArguments();
 				if (!prologTerm.isEvaluable()) {
 					String className = removeQuoted(functor);
-					Class<?> clazz = ReflectionUtils.classForName(className);
+					Class<?> clazz = JavaReflect.classForName(className);
 					if (!classList.contains(clazz)) {
 						classList.add(clazz);
 					}
@@ -221,13 +226,14 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 
 	protected final void checkStorableObject(Object object) {
 		if (classes.contains(object.getClass()) || object.getClass().isArray()) {
-			throw new PersistenceError(object);
+			throw new PersistenceException("The object do not belong to persistent class: " + object);
 		}
 	}
 
 	protected final void checkReplacementObject(Object match, Object update) {
 		if (match.getClass() != update.getClass()) {
-			throw new UpdateError(match, update);
+			throw new PersistenceException(
+					"The update object [ " + match + "]class is different to match object [" + update + "]");
 		}
 	}
 

@@ -31,4 +31,6 @@ public interface IdGenerator<O extends Serializable> extends Serializable {
 
 	public abstract Class<?> getType();
 
+	IdGeneratorType geIdGeneratorType();
+
 }

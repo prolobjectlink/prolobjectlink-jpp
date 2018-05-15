@@ -19,7 +19,7 @@
  */
 package org.logicware.pdb.tools;
 
-import static org.logicware.pdb.logging.LoggerConstants.IO_ERROR;
+import static org.logicware.pdb.logging.LoggerConstants.IO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -105,27 +105,27 @@ public class Backup extends Tool {
 			}
 
 		} catch (IOException e) {
-			LoggerUtils.error(getClass(), IO_ERROR, e);
+			LoggerUtils.error(getClass(), IO, e);
 		} finally {
 			if (zipOut != null) {
 				try {
 					zipOut.close();
 				} catch (IOException e) {
-					LoggerUtils.error(getClass(), IO_ERROR, e);
+					LoggerUtils.error(getClass(), IO, e);
 				}
 			}
 			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
-					LoggerUtils.error(getClass(), IO_ERROR, e);
+					LoggerUtils.error(getClass(), IO, e);
 				}
 			}
 			if (in != null) {
 				try {
 					in.close();
 				} catch (IOException e) {
-					LoggerUtils.error(getClass(), IO_ERROR, e);
+					LoggerUtils.error(getClass(), IO, e);
 				}
 			}
 		}

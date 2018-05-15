@@ -19,7 +19,7 @@
  */
 package org.logicware.pdb.common;
 
-import static org.logicware.jpa.spi.JPAPersistenceXmlParser.XML;
+import static org.logicware.pdb.jpa.spi.JPAPersistenceXmlParser.XML;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -28,20 +28,17 @@ import java.util.Map;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.SynchronizationType;
 import javax.persistence.spi.PersistenceUnitInfo;
 
-import org.logicware.jpa.JPAEntityManager;
-import org.logicware.jpa.JPAEntityManagerFactory;
-import org.logicware.jpa.JPAResultSetMapping;
-import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DatabaseService;
 import org.logicware.pdb.DatabaseUser;
-import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.pdb.jpa.JPAEntityManager;
+import org.logicware.pdb.jpa.JPAEntityManagerFactory;
+import org.logicware.pdb.jpa.JPAResultSetMapping;
 
 public abstract class AbstractDatabaseService extends AbstractDatabaseEngine implements DatabaseService {
 
@@ -53,9 +50,8 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 
 	protected Map<String, PersistenceUnitInfo> units = new HashMap<String, PersistenceUnitInfo>();
 
-	public AbstractDatabaseService(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
-			ContainerFactory containerFactory, URL url, String name, Schema schema, DatabaseUser owner) {
-		super(provider, properties, converter, containerFactory, url.getPath(), name, schema, owner);
+	public AbstractDatabaseService(Settings settings, URL url, String name, Schema schema, DatabaseUser owner) {
+		super(settings, url.getPath(), name, schema, owner);
 		this.url = url;
 	}
 
@@ -67,34 +63,15 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 		return getLocation() + "/database";
 	}
 
-	public final String getBaseLocation() {
-		return url.getPath();
-	}
-
-	public final List<Class<?>> classes() {
-		return getSchema().getJavaClasses();
-	}
-
-	public DatabaseService drop() {
-		getSchema().clear();
-		getSchema().flush();
-		clear();
-		flush();
-		return this;
-	}
-
 	public final EntityManager getEntityManager() {
 
 		// TODO FILL ALL MAPS
 
+		// properties map
+		Map map = getProperties().asMap();
+
 		// user defined named queries container
-		Map<String, javax.persistence.Query> namedQueries = new HashMap<String, javax.persistence.Query>();
-
-		// result set mappings for native queries result
-		Map<String, JPAResultSetMapping> resultSetMappings = new HashMap<String, JPAResultSetMapping>();
-
-		//
-		Map<String, EntityGraph<?>> namedEntityGraphs = new HashMap<String, EntityGraph<?>>();
+		Map<String, Query> namedQueries = new HashMap<String, Query>();
 
 		// user defined names for entities
 		Map<String, Class<?>> entityMap = new HashMap<String, Class<?>>();
@@ -103,13 +80,21 @@ public abstract class AbstractDatabaseService extends AbstractDatabaseEngine imp
 		JPAEntityManagerFactory factory = new JPAEntityManagerFactory(this);
 
 		//
-		Settings settings = getProperties();
+		Map<String, EntityGraph<?>> namedEntityGraphs = new HashMap<String, EntityGraph<?>>();
 
-		//
-		Map map = settings.toMap();
+		// result set mappings for native queries result
+		Map<String, JPAResultSetMapping> resultSetMappings = new HashMap<String, JPAResultSetMapping>();
 
 		return new JPAEntityManager(this, factory, SynchronizationType.SYNCHRONIZED, map, entityMap, namedQueries,
 				namedEntityGraphs, resultSetMappings);
+	}
+
+	public final String getRootLocation() {
+		return url.getPath();
+	}
+
+	public final List<Class<?>> classes() {
+		return getSchema().getJavaClasses();
 	}
 
 }

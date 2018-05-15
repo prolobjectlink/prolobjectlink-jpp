@@ -21,6 +21,7 @@ package org.logicware.pdb;
 
 import java.io.Serializable;
 
+import org.logicware.pdb.prolog.PrologEngine;
 import org.logicware.pdb.prolog.PrologProvider;
 
 public abstract class DatabaseFunction extends DatabaseCode<DatabaseFunction>
@@ -51,11 +52,6 @@ public abstract class DatabaseFunction extends DatabaseCode<DatabaseFunction>
 		return this;
 	}
 
-	public final DatabaseFunction addInstructions(String code) {
-		instructions.add(code);
-		return this;
-	}
-
 	public DatabaseFunction setComment(String comment) {
 		this.comment = comment;
 		return this;
@@ -71,9 +67,13 @@ public abstract class DatabaseFunction extends DatabaseCode<DatabaseFunction>
 	}
 
 	public final DatabaseFunction save() {
-		getEngine().consult(getPath());
-		getEngine().assertz(getCode());
-		getEngine().persist(getPath());
+		PrologEngine engine = getEngine();
+		if (engine != null) {
+			engine.consult(getPath());
+			// TODO CHECK SYNTAX ERROR
+//			engine.assertz(getCode()); 
+			engine.persist(getPath());
+		}
 		return this;
 	}
 
