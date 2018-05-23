@@ -30,9 +30,10 @@ import org.logicware.pdb.ProcedureQuery;
 import org.logicware.pdb.Query;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
+import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.VolatileContainer;
-import org.logicware.pdb.common.AbstractDatabaseService;
+import org.logicware.pdb.databse.AbstractDatabaseService;
 import org.logicware.pdb.prolog.PrologContainerQuery;
 import org.logicware.pdb.prolog.PrologTypedQuery;
 
@@ -137,6 +138,11 @@ public abstract class AbstractMemoryDatabase extends AbstractDatabaseService imp
 		getEngine().include(path);
 	}
 
+	public final Transaction getTransaction() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public final boolean isOpen() {
 		return !closed;
 	}
@@ -158,11 +164,11 @@ public abstract class AbstractMemoryDatabase extends AbstractDatabaseService imp
 	}
 
 	public final void commit() {
-		// TODO
+		getTransaction().commit();
 	}
 
 	public final void rollback() {
-		// TODO
+		getTransaction().rollback();
 	}
 
 	public final void defragment() {

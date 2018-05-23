@@ -36,6 +36,8 @@ import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseRequest;
 import org.logicware.pdb.DatabaseResponse;
 import org.logicware.pdb.DatabaseType;
+import org.logicware.pdb.PersistentContainer;
+import org.logicware.pdb.Transaction;
 import org.logicware.pdb.Wrapper;
 import org.logicware.pdb.logging.LoggerConstants;
 import org.logicware.pdb.logging.LoggerUtils;
@@ -97,10 +99,12 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 			// read data from client
 			DatabaseRequest request = unwrap(serverInputStream.readObject(), DatabaseRequest.class);
 
-//			LoggerUtils.debug(getClass(), request);
+			LoggerUtils.debug(getClass(), request);
 
 			// server database operations area
 			// (insert,update,delete,query,...)
+
+			Transaction tx = null;
 
 			switch (request.getType()) {
 			case CONNECT:
@@ -132,6 +136,74 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				String[] args = (String[]) a2;
 				response.set(database.createProcedureQuery(functor, args));
 				break;
+			case CREATE:
+				database.create();
+				response.setVoid();
+				serverOutputStream.writeObject(response);
+				LoggerUtils.debug(getClass(), response);
+				break;
+			case BEGIN:
+				tx = database.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				response.setVoid();
+				serverOutputStream.writeObject(response);
+				LoggerUtils.debug(getClass(), response);
+				break;
+			case DROP:
+				database.drop();
+				break;
+			case CLEAR:
+				database.clear();
+				database.commit();
+				break;
+			case INSERT:
+
+				Class<?> ca = (Class<?>) request.getArgument(0);
+				Serializable[] sa = (Serializable[]) request.getArgument(1);
+				PersistentContainer pc = database.containerOf(ca);
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				pc.insert(sa);
+				tx.commit();
+				tx.close();
+
+				response.setVoid();
+				serverOutputStream.writeObject(response);
+				LoggerUtils.debug(getClass(), response);
+
+				break;
+			case UPDATE:
+				Serializable j = request.getArgument(0);
+				Serializable[] sb = (Serializable[]) j;
+				if (sb.length == 2) {
+					Serializable m = sb[0];
+					Serializable u = sb[1];
+					database.update(m, u);
+					database.commit();
+				}
+				break;
+			case DELETE:
+				Serializable c = request.getArgument(0);
+				database.delete(c);
+				database.commit();
+				break;
+			case INCLUDE:
+				Serializable p = request.getArgument(0);
+				String path = (String) p;
+				Serializable s = request.getArgument(1);
+				StringBuilder pl = (StringBuilder) s;
+				// create file at some location in server
+				String location = "upl" + path;
+				File toBeInclude = new File(location);
+				PrintWriter w = new PrintWriter(toBeInclude);
+				w.write("" + pl + "");
+				w.close();
+				database.include(location);
+				break;
 			case BACKUP:
 				// database.backup(directory, zipFileName);
 				// send back zipFileName
@@ -142,106 +214,22 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				response.setVoid();
 				break;
 			case COMMIT:
-
-				// commit result
+//				database.commit();
 				response.setVoid();
-
-				// write operation result to client
-				serverOutputStream.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
-
-				String activedb = request.getDatabaseName();
-				while (!queue.isEmpty()) {
-
-					DatabaseRequest dbrequest = queue.remove();
-
-					System.out.println(dbrequest);
-					System.out.println(database.getDatabaseLocation());
-					System.out.println(database.getStorageLocation());
-					System.out.println(database.getRootLocation());
-					System.out.println(database.getLocation());
-
-					System.out.println(">> " + queue);
-
-					String dbname = dbrequest.getDatabaseName();
-					if (dbname.equals(activedb) && dbrequest.lessThan(request)) {
-						switch (dbrequest.getType()) {
-						case CREATE:
-							database.create();
-							break;
-						case BEGIN:
-							database.begin();
-							break;
-						case DROP:
-							database.drop();
-							break;
-						case CLEAR:
-							database.clear();
-							database.commit();
-							break;
-						case INSERT:
-							Serializable i = dbrequest.getArgument(0);
-							Serializable[] sa = (Serializable[]) i;
-							for (Serializable serializable : sa) {
-								database.insert(serializable);
-							}
-							database.commit();
-							break;
-						case UPDATE:
-							Serializable j = dbrequest.getArgument(0);
-							Serializable[] sb = (Serializable[]) j;
-							if (sb.length == 2) {
-								Serializable m = sb[0];
-								Serializable u = sb[1];
-								database.update(m, u);
-								database.commit();
-							}
-							break;
-						case DELETE:
-							Serializable c = dbrequest.getArgument(0);
-							database.delete(c);
-							database.commit();
-							break;
-						case INCLUDE:
-							Serializable p = dbrequest.getArgument(0);
-							String path = (String) p;
-							Serializable s = dbrequest.getArgument(1);
-							StringBuilder pl = (StringBuilder) s;
-							// create file at some location in server
-							String location = "upl" + path;
-							File toBeInclude = new File(location);
-							PrintWriter w = new PrintWriter(toBeInclude);
-							w.write("" + pl + "");
-							w.close();
-							database.include(location);
-							break;
-						default:
-							break;
-						}
-
-					}
-
-				}
-				break;
-			case ROLLBACK:
-				// roll back result
-				response.setVoid();
-
-				// write data back to client
 				serverOutputStream.writeObject(response);
 				LoggerUtils.debug(getClass(), response);
 
-				activedb = request.getDatabaseName();
-				for (DatabaseRequest databaseRequest : queue) {
-					if (databaseRequest.getDatabaseName().equals(activedb)) {
-						queue.remove(databaseRequest);
-					}
-				}
+				break;
+			case ROLLBACK:
+//				database.rollback();
+				response.setVoid();
+				serverOutputStream.writeObject(response);
+				LoggerUtils.debug(getClass(), response);
+
 				break;
 			case CLOSE:
-				database.close();
+//				database.close();
 				response.setVoid();
-				// write data back to client
 				serverOutputStream.writeObject(response);
 				LoggerUtils.debug(getClass(), response);
 				break;

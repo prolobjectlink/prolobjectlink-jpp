@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.common;
+package org.logicware.pdb.container;
 
 import java.util.Arrays;
 

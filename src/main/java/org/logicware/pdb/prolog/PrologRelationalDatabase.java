@@ -26,7 +26,7 @@ import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.RelationalDatabase;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageMode;
-import org.logicware.pdb.common.AbstractRelationalDatabase;
+import org.logicware.pdb.databse.AbstractRelationalDatabase;
 
 public final class PrologRelationalDatabase extends AbstractRelationalDatabase implements RelationalDatabase {
 

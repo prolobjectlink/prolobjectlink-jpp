@@ -39,6 +39,14 @@ public final class DatabaseRequest extends AbstractWrapper
 	private DatabaseType dbtype;
 	private final String dbname;
 	private final String server;
+
+	//
+	private String path;
+	private String storage;
+	private StorageMode mode;
+	private String className;
+	//
+
 	private static final int MAX_ARG_NUM = 2;
 	private static final long serialVersionUID = -8793751981186352447L;
 	private final ArrayList<Serializable> arguments = new ArrayList<Serializable>(MAX_ARG_NUM);
@@ -82,6 +90,41 @@ public final class DatabaseRequest extends AbstractWrapper
 	public OperationType getType() {
 		return type;
 	}
+
+	//
+	public final String getPath() {
+		return path;
+	}
+
+	public final void setPath(String path) {
+		this.path = path;
+	}
+
+	public final String getStorage() {
+		return storage;
+	}
+
+	public final void setStorage(String storage) {
+		this.storage = storage;
+	}
+
+	public final StorageMode getMode() {
+		return mode;
+	}
+
+	public final void setMode(StorageMode mode) {
+		this.mode = mode;
+	}
+
+	public final String getClassName() {
+		return className;
+	}
+
+	public final void setClassName(String className) {
+		this.className = className;
+	}
+
+	//
 
 	public boolean addArgument(Serializable e) {
 		return arguments.add(e);

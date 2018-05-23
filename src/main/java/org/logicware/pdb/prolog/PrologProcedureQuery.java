@@ -27,7 +27,7 @@ import java.util.NoSuchElementException;
 
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.ProcedureQuery;
-import org.logicware.pdb.common.AbstractProcedureQuery;
+import org.logicware.pdb.container.AbstractProcedureQuery;
 
 public final class PrologProcedureQuery extends AbstractProcedureQuery implements ProcedureQuery {
 

@@ -34,7 +34,7 @@ import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.Storage;
-import org.logicware.pdb.common.AbstractPersistentContainer;
+import org.logicware.pdb.container.AbstractPersistentContainer;
 import org.logicware.pdb.prolog.PrologClause;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologQuery;

@@ -17,9 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.common;
-
-import java.io.File;
+package org.logicware.pdb.container;
 
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.ObjectConverter;
@@ -40,7 +38,7 @@ public abstract class AbstractPersistentContainer extends AbstractContainer impl
 	private final String location;
 
 	// file system separator
-	protected static final char SEPARATOR = File.separatorChar;
+	protected static final char SEPARATOR = '/';
 
 	// container factory for create containers
 	protected final ContainerFactory containerFactory;
@@ -72,17 +70,15 @@ public abstract class AbstractPersistentContainer extends AbstractContainer impl
 	}
 
 	public final void begin() {
-		open();
+		getTransaction().begin();
 	}
 
 	public final void commit() {
-		flush();
+		getTransaction().commit();
 	}
 
 	public final void rollback() {
-		// roll back open the file
-		// losing all memory data changes
-		open();
+		getTransaction().rollback();
 	}
 
 	public final boolean isOpen() {

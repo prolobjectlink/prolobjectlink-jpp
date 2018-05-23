@@ -20,8 +20,8 @@
 package org.logicware.pdb;
 
 /**
- * Wrapper class that hold under-laying prolog specific classes. Contains two
- * methods for unwrap hold class obtaining a down casting of the wrapper class.
+ * Wrapper class that contains methods for unwrap objects obtaining a down
+ * casting objects from some given class.
  * 
  * @author Jose Zalacain
  * @see AbstractWrapper
@@ -31,14 +31,13 @@ public interface Wrapper {
 
 	/**
 	 * Down cast the current wrapper object to specific given class. Call
-	 * {@code Wrapper#unwrap(Object, Class)} passing like argument this instance
-	 * and the given class. If down casting is not possible raise a
+	 * {@code Wrapper#unwrap(Object, Class)} passing like argument this instance and
+	 * the given class. If down casting is not possible raise a
 	 * {@link RuntimeError}.
 	 * 
-	 * @param cls
-	 *            class to obtain a down cast.
-	 * @throws RuntimeError
-	 *             if down casting is not possible
+	 * @param     <K> type of object to be cast.
+	 * @param cls class of K type to obtain a down cast.
+	 * @throws RuntimeError if down casting is not possible
 	 * @return current instance of type cls.
 	 * @since 1.0
 	 * @see #unwrap(Object, Class)
@@ -46,13 +45,13 @@ public interface Wrapper {
 	<K> K unwrap(Class<K> cls);
 
 	/**
-	 * Down cast a given wrapper object to specific given class. If down casting
-	 * is not possible raise a {@link RuntimeError}.
+	 * Down cast a given wrapper object to specific given class. If down casting is
+	 * not possible raise a {@link RuntimeError}.
 	 * 
-	 * @param cls
-	 *            class to obtain a down cast.
-	 * @throws RuntimeError
-	 *             if down casting is not possible
+	 * @param     <K> type of object to be cast.
+	 * @param o   object to be cast to K type instance
+	 * @param cls class of K type to obtain a down cast.
+	 * @throws RuntimeError if down casting is not possible
 	 * @return current instance of type cls.
 	 * @since 1.0
 	 * @see #unwrap(Class)
@@ -60,13 +59,33 @@ public interface Wrapper {
 	<K> K unwrap(Object o, Class<K> cls);
 
 	/**
+	 * Check if the current object can be down cast to an object of type cls class.
+	 * More formally perform the boolean class method
+	 * {@code Class#isInstance(this)}.
 	 * 
-	 * @param cls
-	 * @return
+	 * @param cls class of to obtain a down cast.
+	 * @return true if the current object can be down cast to an object of type cls
+	 *         class, false if not
 	 * @since 1.0
+	 * @see #unwrap(Class)
+	 * @see #unwrap(Object, Class)
+	 * @see #isWrappedFor(Object, Class)
 	 */
 	boolean isWrappedFor(Class<?> cls);
 
+	/**
+	 * Check if the current object can be down cast to an object of type cls class.
+	 * More formally perform the boolean class method {@code Class#isInstance(o)}.
+	 * 
+	 * @param o   object to be check
+	 * @param cls class of to obtain a down cast.
+	 * @return true if the current object can be down cast to an object of type cls
+	 *         class, false if not
+	 * @since 1.0
+	 * @see #unwrap(Class)
+	 * @see #unwrap(Object, Class)
+	 * @see #isWrappedFor( Class)
+	 */
 	boolean isWrappedFor(Object o, Class<?> cls);
 
 }

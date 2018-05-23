@@ -25,7 +25,8 @@ public abstract class AbstractTransaction extends AbstractWrapper implements Tra
 
 	protected boolean active;
 	private final long timestamp;
-	private final Transactional transactional;
+//	private final Transactional transactional;
+	private final PersistentContainer container;
 
 	private void checkNonActiveTransaction() {
 		if (!isActive()) {
@@ -39,13 +40,13 @@ public abstract class AbstractTransaction extends AbstractWrapper implements Tra
 		}
 	}
 
-	public AbstractTransaction(Transactional transactional, long timestamp) {
-		this.transactional = transactional;
+	public AbstractTransaction(PersistentContainer container, long timestamp) {
+		this.container = container;
 		this.timestamp = timestamp;
 	}
 
-	public final Transactional getTransactional() {
-		return transactional;
+	public final PersistentContainer getContainer() {
+		return container;
 	}
 
 	public final boolean before(Transaction t) {
@@ -68,18 +69,20 @@ public abstract class AbstractTransaction extends AbstractWrapper implements Tra
 
 	public final void begin() {
 		checkActiveTransaction();
-		getTransactional().begin();
+		getContainer().open();
 		active = true;
 	}
 
 	public final void commit() {
 		checkNonActiveTransaction();
-		getTransactional().commit();
+		getContainer().flush();
 	}
 
 	public final void rollback() {
 		checkNonActiveTransaction();
-		getTransactional().rollback();
+		// roll back open the file
+		// losing all memory data changes
+		getContainer().open();
 	}
 
 	public final boolean isActive() {

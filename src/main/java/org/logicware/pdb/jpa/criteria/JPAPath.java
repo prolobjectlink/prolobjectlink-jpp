@@ -75,4 +75,35 @@ public class JPAPath<X> extends JPAExpression<X> implements Path<X> {
 		return null;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((model == null) ? 0 : model.hashCode());
+		result = prime * result + ((pathParent == null) ? 0 : pathParent.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JPAPath<?> other = (JPAPath<?>) obj;
+		if (model == null) {
+			if (other.model != null)
+				return false;
+		} else if (!model.equals(other.model))
+			return false;
+		if (pathParent == null) {
+			if (other.pathParent != null)
+				return false;
+		} else if (!pathParent.equals(other.pathParent))
+			return false;
+		return true;
+	}
+
 }

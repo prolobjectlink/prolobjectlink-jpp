@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.common;
+package org.logicware.pdb.databse;
 
 import static org.logicware.pdb.jpa.spi.JPAPersistenceXmlParser.XML;
 

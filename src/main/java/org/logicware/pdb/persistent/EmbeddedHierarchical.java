@@ -35,7 +35,6 @@ import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageManager;
 import org.logicware.pdb.StorageMode;
-import org.logicware.pdb.common.AbstractEmbeddedDatabase;
 import org.logicware.pdb.jpa.JPAProperties;
 import org.logicware.pdb.jpa.spi.JPAPersistenceXmlParser;
 import org.logicware.pdb.logging.LoggerConstants;

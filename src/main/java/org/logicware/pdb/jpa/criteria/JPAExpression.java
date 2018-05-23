@@ -69,4 +69,29 @@ public class JPAExpression<X> extends JPASelection<X> implements Expression<X> {
 		return null;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((metamodel == null) ? 0 : metamodel.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JPAExpression<?> other = (JPAExpression<?>) obj;
+		if (metamodel == null) {
+			if (other.metamodel != null)
+				return false;
+		} else if (!metamodel.equals(other.metamodel))
+			return false;
+		return true;
+	}
+
 }

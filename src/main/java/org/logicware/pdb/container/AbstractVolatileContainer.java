@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.common;
+package org.logicware.pdb.container;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -34,14 +34,14 @@ import org.logicware.pdb.prolog.PrologQuery;
 import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.util.JavaReflect;
 
-public abstract class AbstractHierarchicalCache extends AbstractVolatileContainer implements VolatileContainer {
+public abstract class AbstractVolatileContainer extends AbstractContainer implements VolatileContainer {
 
-	public AbstractHierarchicalCache(PrologProvider provider, Settings properties,
+	public AbstractVolatileContainer(PrologProvider provider, Settings properties,
 			ObjectConverter<PrologTerm> converter) {
 		super(provider, properties, converter);
 	}
 
-	public final <O> void add(O... facts) {
+	public <O> void add(O... facts) {
 		if (facts != null && facts.length > 0) {
 			for (Object object : facts) {
 				checkStorableObject(object);
@@ -50,7 +50,7 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		}
 	}
 
-	public final <O> void modify(O match, O merge) {
+	public <O> void modify(O match, O merge) {
 		checkStorableObject(match);
 		checkStorableObject(merge);
 		checkReplacementObject(match, merge);
@@ -60,7 +60,7 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		getEngine().assertz(prologMerge);
 	}
 
-	public final <O> void remove(O... facts) {
+	public <O> void remove(O... facts) {
 		if (facts != null && facts.length > 0) {
 			for (Object object : facts) {
 				getEngine().retract(getConverter().toTerm(object));
@@ -68,18 +68,49 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		}
 	}
 
-	public final void remove(Class<?> clazz) {
+	public void remove(Class<?> clazz) {
 		PrologTerm term = getConverter().toTerm(clazz);
 		getEngine().abolish(term.getFunctor(), term.getArity());
 	}
 
-	public final Object find(String string) {
+	public final boolean contains(String string) {
+		return getEngine().contains(string);
+	}
+
+	public final <O> boolean contains(O object) {
+		return getEngine().contains(getConverter().toTerm(object));
+	}
+
+	public final <O> boolean contains(Class<O> clazz) {
+		return getEngine().contains(getConverter().toTerm(clazz));
+	}
+
+	public final <O> boolean contains(Predicate<O> predicate) {
+		Class<O> clazz = classOf(predicate);
+		PrologQuery query = prologQueryOf(clazz);
+		if (query.hasSolution()) {
+			Map<String, PrologTerm>[] solutionsMap = query.allVariablesSolutions();
+			for (int i = 0; i < solutionsMap.length; i++) {
+				O solution = (O) getConverter().toObject(clazz, solutionsMap[i]);
+				if (predicate.evaluate(solution)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public final boolean contains(String functor, int arity) {
+		return getEngine().currentPredicate(functor, arity);
+	}
+
+	public Object find(String string) {
 		PrologTerm[] prologTerms = getConverter().toTermsArray(string);
 		List<Class<?>> classes = classesOf(prologTerms);
 		return solutionOf(prologTerms, classes);
 	}
 
-	public final Object find(String functor, Object... args) {
+	public Object find(String functor, Object... args) {
 		Class<?> clazz = classOf(functor, args.length);
 		Object instance = JavaReflect.newInstance(clazz);
 		Field[] fields = clazz.getDeclaredFields();
@@ -90,7 +121,7 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		return find(instance);
 	}
 
-	public final <O> O find(O o) {
+	public <O> O find(O o) {
 		Map<String, PrologTerm> inspectionMap = new HashMap<String, PrologTerm>();
 		PrologQuery query = prologQueryOf(o, inspectionMap);
 		if (query.hasSolution()) {
@@ -108,7 +139,7 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		return null;
 	}
 
-	public final <O> O find(Class<O> clazz) {
+	public <O> O find(Class<O> clazz) {
 		PrologQuery query = prologQueryOf(clazz);
 		if (query.hasSolution()) {
 			Map<String, PrologTerm> solutionMap = query.oneVariablesSolution();
@@ -117,19 +148,19 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		return null;
 	}
 
-	public final <O> O find(Predicate<O> query) {
+	public <O> O find(Predicate<O> query) {
 		List<O> all = findAll(query);
 		if (!all.isEmpty())
 			return all.get(0);
 		return null;
 	}
 
-	public final List<Object> findAll(String string) {
+	public List<Object> findAll(String string) {
 		PrologTerm[] prologTerms = getConverter().toTermsArray(string);
 		return solutionsOf(prologTerms, classesOf(prologTerms));
 	}
 
-	public final List<Object> findAll(String functor, Object... args) {
+	public List<Object> findAll(String functor, Object... args) {
 		Class<?> clazz = classOf(functor, args.length);
 		Object instance = JavaReflect.newInstance(clazz);
 		Field[] fields = clazz.getDeclaredFields();
@@ -140,7 +171,7 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		return findAll(instance);
 	}
 
-	public final <O> List<O> findAll(O o) {
+	public <O> List<O> findAll(O o) {
 		Map<String, PrologTerm> inspectionMap = new HashMap<String, PrologTerm>();
 		PrologTerm goal = getConverter().toTerm(o, inspectionMap);
 		PrologQuery query = getEngine().query(goal);
@@ -165,7 +196,7 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		return solutionSet;
 	}
 
-	public final <O> List<O> findAll(Class<O> clazz) {
+	public <O> List<O> findAll(Class<O> clazz) {
 		PrologQuery query = prologQueryOf(clazz);
 		List<O> solutionSet = new ArrayList<O>();
 		if (query.hasSolution()) {
@@ -178,7 +209,7 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		return solutionSet;
 	}
 
-	public final <O> List<O> findAll(Predicate<O> predicate) {
+	public <O> List<O> findAll(Predicate<O> predicate) {
 		List<O> selection = new ArrayList<O>();
 		Class<O> toBeFound = classOf(predicate);
 		List<O> allObjects = findAll(toBeFound);
@@ -190,20 +221,7 @@ public abstract class AbstractHierarchicalCache extends AbstractVolatileContaine
 		return selection;
 	}
 
-	public final List<Class<?>> classes() {
-		// TODO Auto-generated method stub
-		return new ArrayList<Class<?>>();
-	}
-
-	public final void evict(Class<?> cls) {
-		remove(cls);
-	}
-
-	public final void evictAll() {
-		clear();
-	}
-
-	public final void clear() {
+	public void clear() {
 		getEngine().dispose();
 	}
 

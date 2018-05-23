@@ -40,6 +40,7 @@ import java.net.URL;
 import org.logicware.pdb.DatabaseMode;
 import org.logicware.pdb.DatabaseRequest;
 import org.logicware.pdb.DatabaseUser;
+import org.logicware.pdb.DefaultTransaction;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.ProcedureQuery;
@@ -47,8 +48,9 @@ import org.logicware.pdb.Query;
 import org.logicware.pdb.RemoteDatabase;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
+import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
-import org.logicware.pdb.common.AbstractDatabaseService;
+import org.logicware.pdb.databse.AbstractDatabaseService;
 import org.logicware.pdb.prolog.PrologClause;
 import org.logicware.pdb.prolog.PrologEngine;
 import org.logicware.pdb.prolog.PrologProvider;
@@ -56,11 +58,13 @@ import org.logicware.pdb.prolog.PrologProvider;
 public abstract class RemoteDatabaseClient extends AbstractDatabaseService implements RemoteDatabase {
 
 	private boolean connected = false;
+	private final Transaction transaction;
 	private final DatabaseRequest activeRequest;
 
 	RemoteDatabaseClient(Settings settings, URL url, String name, Schema schema, DatabaseUser owner) {
 		super(settings, url, name, schema, owner);
 		this.activeRequest = new DatabaseRequest(url.getHost(), url.getPort(), name, getType());
+		this.transaction = new DefaultTransaction(this);
 	}
 
 	public final PersistentContainer getContainer() {
@@ -111,10 +115,7 @@ public abstract class RemoteDatabaseClient extends AbstractDatabaseService imple
 	}
 
 	public final <O> void insert(O... os) {
-		activeRequest.clearArguments();
-		activeRequest.setType(INSERT);
-		activeRequest.addArgument(os);
-		activeRequest.send();
+		add(os.getClass().getComponentType(), os);
 	}
 
 	public final <O> void update(O match, O update) {
@@ -257,6 +258,10 @@ public abstract class RemoteDatabaseClient extends AbstractDatabaseService imple
 		engine.dispose();
 	}
 
+	public Transaction getTransaction() {
+		return transaction;
+	}
+
 	public final void begin() {
 		activeRequest.clearArguments();
 		activeRequest.setType(BEGIN);
@@ -283,6 +288,24 @@ public abstract class RemoteDatabaseClient extends AbstractDatabaseService imple
 
 	public final DatabaseMode getMode() {
 		return DatabaseMode.REMOTE;
+	}
+
+	/**
+	 * Prepare the active request for insert an object values array of some given
+	 * component type class in server database. This method is internal use only.
+	 * The component type class is needed in the server because in the server the
+	 * received object class is unknown.
+	 * 
+	 * @param cl component type class of value array.
+	 * @param os object values array
+	 * @since 1.0
+	 */
+	private <O> void add(Class<?> cl, O... os) {
+		activeRequest.clearArguments();
+		activeRequest.setType(INSERT);
+		activeRequest.addArgument(cl);
+		activeRequest.addArgument(os);
+		activeRequest.send();
 	}
 
 }

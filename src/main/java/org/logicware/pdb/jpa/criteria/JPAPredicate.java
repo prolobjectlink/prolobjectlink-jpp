@@ -55,4 +55,32 @@ public class JPAPredicate extends JPAExpression<Boolean> implements Predicate {
 		return null;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((expressions == null) ? 0 : expressions.hashCode());
+		result = prime * result + ((operator == null) ? 0 : operator.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JPAPredicate other = (JPAPredicate) obj;
+		if (expressions == null) {
+			if (other.expressions != null)
+				return false;
+		} else if (!expressions.equals(other.expressions))
+			return false;
+		if (operator != other.operator)
+			return false;
+		return true;
+	}
+
 }

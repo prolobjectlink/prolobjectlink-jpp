@@ -35,6 +35,6 @@ public interface Transaction extends Transactional, Comparable<Transaction>, Clo
 
 	public boolean before(Transaction t);
 
-	public Transactional getTransactional();
+	public PersistentContainer getContainer();
 
 }

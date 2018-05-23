@@ -17,45 +17,42 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.common;
+package org.logicware.pdb.databse;
 
 import java.io.File;
-import java.net.URL;
+import java.util.List;
 
+import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseUser;
-import org.logicware.pdb.EmbeddedDatabase;
+import org.logicware.pdb.DefaultTransaction;
+import org.logicware.pdb.HierarchicalDatabase;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.ProcedureQuery;
 import org.logicware.pdb.Query;
 import org.logicware.pdb.Schema;
-import org.logicware.pdb.Settings;
+import org.logicware.pdb.StorageManager;
+import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 
-public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
-		implements PersistentContainer, EmbeddedDatabase {
+public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngine implements HierarchicalDatabase {
 
-	protected PersistentContainer storage;
+	private final StorageManager storage;
+	private final Transaction transaction;
+	protected static final String LOCATION = "dat" + SEPARATOR + "hierarchical";
 
-	public AbstractEmbeddedDatabase(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
-			PersistentContainer storage) {
-		super(settings, url, name, schema, owner);
+	public AbstractHierarchicalDatabase(String name, Schema schema, DatabaseUser user, StorageManager storage) {
+		super(storage.getProperties(), LOCATION + SEPARATOR + name + SEPARATOR + "database", name, schema, user);
+		this.transaction = new DefaultTransaction(this);
 		this.storage = storage;
 	}
 
-	public final PersistentContainer getContainer() {
-		return storage;
-	}
-
-	public final String getStorageLocation() {
-		return storage.getLocation();
-	}
-
 	public final void open() {
-		storage.begin();
+		storage.open();
 	}
 
 	public final <O> void insert(O... facts) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		storage.insert(facts);
 		storage.getTransaction().commit();
@@ -63,6 +60,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final <O> void update(O match, O update) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		storage.update(match, update);
 		storage.getTransaction().commit();
@@ -70,6 +68,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final void delete(Class<?> clazz) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		storage.delete(clazz);
 		storage.getTransaction().commit();
@@ -77,6 +76,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final <O> void delete(O... facts) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		storage.delete(facts);
 		storage.getTransaction().commit();
@@ -84,6 +84,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final boolean contains(String string) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		boolean b = storage.contains(string);
 		storage.getTransaction().commit();
@@ -92,6 +93,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final <O> boolean contains(O object) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		boolean b = storage.contains(object);
 		storage.getTransaction().commit();
@@ -100,6 +102,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final <O> boolean contains(Class<O> clazz) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		boolean b = storage.contains(clazz);
 		storage.getTransaction().commit();
@@ -108,6 +111,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final <O> boolean contains(Predicate<O> predicate) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		boolean b = storage.contains(predicate);
 		storage.getTransaction().commit();
@@ -116,6 +120,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final boolean contains(String functor, int arity) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		boolean b = storage.contains(functor, arity);
 		storage.getTransaction().commit();
@@ -124,6 +129,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final Query createQuery(String string) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		Query q = storage.createQuery(string);
 		storage.getTransaction().commit();
@@ -132,6 +138,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final <O> TypedQuery<O> createQuery(O o) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		TypedQuery<O> q = storage.createQuery(o);
 		storage.getTransaction().commit();
@@ -140,6 +147,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final <O> TypedQuery<O> createQuery(Class<O> clazz) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		TypedQuery<O> q = storage.createQuery(clazz);
 		storage.getTransaction().commit();
@@ -148,6 +156,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final <O> TypedQuery<O> createQuery(Predicate<O> predicate) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		TypedQuery<O> q = storage.createQuery(predicate);
 		storage.getTransaction().commit();
@@ -156,6 +165,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
+		checkActiveTransaction(transaction);
 		storage.getTransaction().begin();
 		ProcedureQuery pq = storage.createProcedureQuery(functor, args);
 		storage.getTransaction().commit();
@@ -167,12 +177,36 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 		return storage.containerOf(clazz);
 	}
 
+	public final PersistentContainer getContainer() {
+		return storage;
+	}
+
 	public final String locationOf(Class<?> clazz) {
 		return storage.locationOf(clazz);
 	}
 
+	public final String getDatabaseLocation() {
+		return getLocation() + File.separator + "database";
+	}
+
+	public final String getStorageLocation() {
+		return storage.getLocation();
+	}
+
+	public final String getRootLocation() {
+		return LOCATION;
+	}
+
 	public final void include(String path) {
 		storage.include(path);
+	}
+
+	public final Transaction getTransaction() {
+		return transaction;
+	}
+
+	public final List<Class<?>> classes() {
+		return getSchema().getJavaClasses();
 	}
 
 	public final boolean isOpen() {
@@ -180,7 +214,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final void flush() {
-		storage.commit();
+		storage.flush();
 	}
 
 	public final void clear() {
@@ -191,26 +225,29 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 	}
 
 	public final void close() {
+		if (transaction.isActive()) {
+			transaction.close();
+		}
 		storage.close();
 	}
 
 	public final void begin() {
-		storage.begin();
+		getTransaction().begin();
 	}
 
 	public final void commit() {
-		storage.commit();
+		getTransaction().commit();
 	}
 
 	public final void rollback() {
-		storage.rollback();
+		getTransaction().rollback();
 	}
 
 	public final void defragment() {
 		storage.defragment();
 	}
 
-	public final EmbeddedDatabase create() {
+	public final DatabaseEngine create() {
 		new File(getRootLocation() + "/functions.pl");
 		new File(getRootLocation() + "/triggers.pl");
 		new File(getRootLocation() + "/views.pl");
@@ -218,11 +255,11 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
 		return this;
 	}
 
-	public EmbeddedDatabase drop() {
+	public final DatabaseEngine drop() {
+		storage.clear();
+		storage.commit();
 		getSchema().clear();
 		getSchema().flush();
-		clear();
-		flush();
 		return this;
 	}
 

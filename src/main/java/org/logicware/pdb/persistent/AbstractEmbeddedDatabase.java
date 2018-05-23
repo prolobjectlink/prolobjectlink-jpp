@@ -17,31 +17,40 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.common;
+package org.logicware.pdb.persistent;
 
 import java.io.File;
-import java.util.List;
+import java.net.URL;
 
-import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseUser;
-import org.logicware.pdb.HierarchicalDatabase;
+import org.logicware.pdb.EmbeddedDatabase;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.ProcedureQuery;
 import org.logicware.pdb.Query;
 import org.logicware.pdb.Schema;
-import org.logicware.pdb.StorageManager;
+import org.logicware.pdb.Settings;
+import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
+import org.logicware.pdb.databse.AbstractDatabaseService;
 
-public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngine implements HierarchicalDatabase {
+public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseService
+		implements PersistentContainer, EmbeddedDatabase {
 
-	private final StorageManager storage;
-	protected static final String LOCATION = "dat" + File.separator + "hierarchical";
+	private final PersistentContainer storage;
 
-	public AbstractHierarchicalDatabase(String name, Schema schema, DatabaseUser user, StorageManager storage) {
-		super(storage.getProperties(), LOCATION + File.separator + name + File.separator + "database", name, schema,
-				user);
+	AbstractEmbeddedDatabase(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
+			PersistentContainer storage) {
+		super(settings, url, name, schema, owner);
 		this.storage = storage;
+	}
+
+	public final PersistentContainer getContainer() {
+		return storage;
+	}
+
+	public final String getStorageLocation() {
+		return storage.getLocation();
 	}
 
 	public final void open() {
@@ -160,32 +169,16 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 		return storage.containerOf(clazz);
 	}
 
-	public final PersistentContainer getContainer() {
-		return storage;
-	}
-
 	public final String locationOf(Class<?> clazz) {
 		return storage.locationOf(clazz);
-	}
-
-	public final String getDatabaseLocation() {
-		return getLocation() + File.separator + "database";
-	}
-
-	public final String getStorageLocation() {
-		return storage.getLocation();
-	}
-
-	public final String getRootLocation() {
-		return LOCATION;
 	}
 
 	public final void include(String path) {
 		storage.include(path);
 	}
 
-	public final List<Class<?>> classes() {
-		return getSchema().getJavaClasses();
+	public final Transaction getTransaction() {
+		return storage.getTransaction();
 	}
 
 	public final boolean isOpen() {
@@ -223,7 +216,7 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 		storage.defragment();
 	}
 
-	public final DatabaseEngine create() {
+	public final EmbeddedDatabase create() {
 		new File(getRootLocation() + "/functions.pl");
 		new File(getRootLocation() + "/triggers.pl");
 		new File(getRootLocation() + "/views.pl");
@@ -231,11 +224,11 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 		return this;
 	}
 
-	public final DatabaseEngine drop() {
-		storage.clear();
-		storage.commit();
+	public EmbeddedDatabase drop() {
 		getSchema().clear();
 		getSchema().flush();
+		clear();
+		flush();
 		return this;
 	}
 

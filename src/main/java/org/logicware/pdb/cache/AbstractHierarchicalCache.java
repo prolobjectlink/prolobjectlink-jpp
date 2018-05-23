@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.common;
+package org.logicware.pdb.cache;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -29,19 +29,20 @@ import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.VolatileContainer;
+import org.logicware.pdb.container.AbstractVolatileContainer;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologQuery;
 import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.util.JavaReflect;
 
-public abstract class AbstractVolatileContainer extends AbstractContainer implements VolatileContainer {
+public abstract class AbstractHierarchicalCache extends AbstractVolatileContainer implements VolatileContainer {
 
-	public AbstractVolatileContainer(PrologProvider provider, Settings properties,
+	public AbstractHierarchicalCache(PrologProvider provider, Settings properties,
 			ObjectConverter<PrologTerm> converter) {
 		super(provider, properties, converter);
 	}
 
-	public <O> void add(O... facts) {
+	public final <O> void add(O... facts) {
 		if (facts != null && facts.length > 0) {
 			for (Object object : facts) {
 				checkStorableObject(object);
@@ -50,7 +51,7 @@ public abstract class AbstractVolatileContainer extends AbstractContainer implem
 		}
 	}
 
-	public <O> void modify(O match, O merge) {
+	public final <O> void modify(O match, O merge) {
 		checkStorableObject(match);
 		checkStorableObject(merge);
 		checkReplacementObject(match, merge);
@@ -60,7 +61,7 @@ public abstract class AbstractVolatileContainer extends AbstractContainer implem
 		getEngine().assertz(prologMerge);
 	}
 
-	public <O> void remove(O... facts) {
+	public final <O> void remove(O... facts) {
 		if (facts != null && facts.length > 0) {
 			for (Object object : facts) {
 				getEngine().retract(getConverter().toTerm(object));
@@ -68,49 +69,18 @@ public abstract class AbstractVolatileContainer extends AbstractContainer implem
 		}
 	}
 
-	public void remove(Class<?> clazz) {
+	public final void remove(Class<?> clazz) {
 		PrologTerm term = getConverter().toTerm(clazz);
 		getEngine().abolish(term.getFunctor(), term.getArity());
 	}
 
-	public final boolean contains(String string) {
-		return getEngine().contains(string);
-	}
-
-	public final <O> boolean contains(O object) {
-		return getEngine().contains(getConverter().toTerm(object));
-	}
-
-	public final <O> boolean contains(Class<O> clazz) {
-		return getEngine().contains(getConverter().toTerm(clazz));
-	}
-
-	public final <O> boolean contains(Predicate<O> predicate) {
-		Class<O> clazz = classOf(predicate);
-		PrologQuery query = prologQueryOf(clazz);
-		if (query.hasSolution()) {
-			Map<String, PrologTerm>[] solutionsMap = query.allVariablesSolutions();
-			for (int i = 0; i < solutionsMap.length; i++) {
-				O solution = (O) getConverter().toObject(clazz, solutionsMap[i]);
-				if (predicate.evaluate(solution)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	public final boolean contains(String functor, int arity) {
-		return getEngine().currentPredicate(functor, arity);
-	}
-
-	public Object find(String string) {
+	public final Object find(String string) {
 		PrologTerm[] prologTerms = getConverter().toTermsArray(string);
 		List<Class<?>> classes = classesOf(prologTerms);
 		return solutionOf(prologTerms, classes);
 	}
 
-	public Object find(String functor, Object... args) {
+	public final Object find(String functor, Object... args) {
 		Class<?> clazz = classOf(functor, args.length);
 		Object instance = JavaReflect.newInstance(clazz);
 		Field[] fields = clazz.getDeclaredFields();
@@ -121,7 +91,7 @@ public abstract class AbstractVolatileContainer extends AbstractContainer implem
 		return find(instance);
 	}
 
-	public <O> O find(O o) {
+	public final <O> O find(O o) {
 		Map<String, PrologTerm> inspectionMap = new HashMap<String, PrologTerm>();
 		PrologQuery query = prologQueryOf(o, inspectionMap);
 		if (query.hasSolution()) {
@@ -139,7 +109,7 @@ public abstract class AbstractVolatileContainer extends AbstractContainer implem
 		return null;
 	}
 
-	public <O> O find(Class<O> clazz) {
+	public final <O> O find(Class<O> clazz) {
 		PrologQuery query = prologQueryOf(clazz);
 		if (query.hasSolution()) {
 			Map<String, PrologTerm> solutionMap = query.oneVariablesSolution();
@@ -148,19 +118,19 @@ public abstract class AbstractVolatileContainer extends AbstractContainer implem
 		return null;
 	}
 
-	public <O> O find(Predicate<O> query) {
+	public final <O> O find(Predicate<O> query) {
 		List<O> all = findAll(query);
 		if (!all.isEmpty())
 			return all.get(0);
 		return null;
 	}
 
-	public List<Object> findAll(String string) {
+	public final List<Object> findAll(String string) {
 		PrologTerm[] prologTerms = getConverter().toTermsArray(string);
 		return solutionsOf(prologTerms, classesOf(prologTerms));
 	}
 
-	public List<Object> findAll(String functor, Object... args) {
+	public final List<Object> findAll(String functor, Object... args) {
 		Class<?> clazz = classOf(functor, args.length);
 		Object instance = JavaReflect.newInstance(clazz);
 		Field[] fields = clazz.getDeclaredFields();
@@ -171,7 +141,7 @@ public abstract class AbstractVolatileContainer extends AbstractContainer implem
 		return findAll(instance);
 	}
 
-	public <O> List<O> findAll(O o) {
+	public final <O> List<O> findAll(O o) {
 		Map<String, PrologTerm> inspectionMap = new HashMap<String, PrologTerm>();
 		PrologTerm goal = getConverter().toTerm(o, inspectionMap);
 		PrologQuery query = getEngine().query(goal);
@@ -196,7 +166,7 @@ public abstract class AbstractVolatileContainer extends AbstractContainer implem
 		return solutionSet;
 	}
 
-	public <O> List<O> findAll(Class<O> clazz) {
+	public final <O> List<O> findAll(Class<O> clazz) {
 		PrologQuery query = prologQueryOf(clazz);
 		List<O> solutionSet = new ArrayList<O>();
 		if (query.hasSolution()) {
@@ -209,7 +179,7 @@ public abstract class AbstractVolatileContainer extends AbstractContainer implem
 		return solutionSet;
 	}
 
-	public <O> List<O> findAll(Predicate<O> predicate) {
+	public final <O> List<O> findAll(Predicate<O> predicate) {
 		List<O> selection = new ArrayList<O>();
 		Class<O> toBeFound = classOf(predicate);
 		List<O> allObjects = findAll(toBeFound);
@@ -221,7 +191,20 @@ public abstract class AbstractVolatileContainer extends AbstractContainer implem
 		return selection;
 	}
 
-	public void clear() {
+	public final List<Class<?>> classes() {
+		// TODO Auto-generated method stub
+		return new ArrayList<Class<?>>();
+	}
+
+	public final void evict(Class<?> cls) {
+		remove(cls);
+	}
+
+	public final void evictAll() {
+		clear();
+	}
+
+	public final void clear() {
 		getEngine().dispose();
 	}
 

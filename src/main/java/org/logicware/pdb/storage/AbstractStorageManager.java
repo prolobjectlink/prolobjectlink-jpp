@@ -39,7 +39,8 @@ import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.StoragePool;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
-import org.logicware.pdb.common.AbstractPersistentContainer;
+import org.logicware.pdb.container.AbstractPersistentContainer;
+import org.logicware.pdb.container.DummyProcedureQuery;
 import org.logicware.pdb.prolog.PrologContainerQuery;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologTerm;
@@ -274,9 +275,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 			c.getTransaction().close();
 			return q;
 		}
-
-		// TODO create and use an empty query
-		return null;
+		return new DummyProcedureQuery(functor, args);
 	}
 
 	public final Transaction getTransaction() {
@@ -331,7 +330,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 
 	public final void flush() {
 		for (PersistentContainer c : master.values()) {
-			c.commit();
+			c.flush();
 		}
 	}
 

@@ -52,4 +52,29 @@ public class JPAInPredicate<X> extends JPAPredicate implements In<X> {
 		return this;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((leftExpression == null) ? 0 : leftExpression.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JPAInPredicate<?> other = (JPAInPredicate<?>) obj;
+		if (leftExpression == null) {
+			if (other.leftExpression != null)
+				return false;
+		} else if (!leftExpression.equals(other.leftExpression))
+			return false;
+		return true;
+	}
+
 }

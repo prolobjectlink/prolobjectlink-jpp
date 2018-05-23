@@ -21,8 +21,8 @@ package org.logicware.pdb;
 
 public class DefaultTransaction extends AbstractTransaction implements Transaction {
 
-	public DefaultTransaction(Transactional transactional) {
-		super(transactional, System.currentTimeMillis());
+	public DefaultTransaction(PersistentContainer container) {
+		super(container, System.currentTimeMillis());
 	}
 
 }

@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.common;
+package org.logicware.pdb.cache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -188,6 +188,16 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 		return engine;
 	}
 
+	public final List<Object> solutionsOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
+		// TODO Auto-generated method stub
+		return new ArrayList<Object>();
+	}
+
+	public final Object[] solutionOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
+		// TODO Auto-generated method stub
+		return new Object[0];
+	}
+
 	public final List<Class<?>> classesOf(PrologTerm[] prologTerms) {
 		// TODO Auto-generated method stub
 		return new ArrayList<Class<?>>();
@@ -254,14 +264,41 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 		return schema;
 	}
 
-	public final List<Object> solutionsOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
-		// TODO Auto-generated method stub
-		return new ArrayList<Object>();
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((properties == null) ? 0 : properties.hashCode());
+		result = prime * result + ((provider == null) ? 0 : provider.hashCode());
+		result = prime * result + ((schema == null) ? 0 : schema.hashCode());
+		return result;
 	}
 
-	public final Object[] solutionOf(PrologTerm[] prologTerms, List<Class<?>> classes) {
-		// TODO Auto-generated method stub
-		return new Object[0];
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractRelationalCache other = (AbstractRelationalCache) obj;
+		if (properties == null) {
+			if (other.properties != null)
+				return false;
+		} else if (!properties.equals(other.properties))
+			return false;
+		if (provider == null) {
+			if (other.provider != null)
+				return false;
+		} else if (!provider.equals(other.provider))
+			return false;
+		if (schema == null) {
+			if (other.schema != null)
+				return false;
+		} else if (!schema.equals(other.schema))
+			return false;
+		return true;
 	}
 
 }

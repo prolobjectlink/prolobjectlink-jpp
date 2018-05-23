@@ -212,4 +212,53 @@ public class JPAFrom<Z, X> extends JPAPath<X> implements From<Z, X> {
 		return null;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((correlatedParent == null) ? 0 : correlatedParent.hashCode());
+		result = prime * result + ((fetches == null) ? 0 : fetches.hashCode());
+		result = prime * result + (isFetch ? 1231 : 1237);
+		result = prime * result + (isJoin ? 1231 : 1237);
+		result = prime * result + ((joins == null) ? 0 : joins.hashCode());
+		result = prime * result + ((managedType == null) ? 0 : managedType.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JPAFrom<?, ?> other = (JPAFrom<?, ?>) obj;
+		if (correlatedParent == null) {
+			if (other.correlatedParent != null)
+				return false;
+		} else if (!correlatedParent.equals(other.correlatedParent))
+			return false;
+		if (fetches == null) {
+			if (other.fetches != null)
+				return false;
+		} else if (!fetches.equals(other.fetches))
+			return false;
+		if (isFetch != other.isFetch)
+			return false;
+		if (isJoin != other.isJoin)
+			return false;
+		if (joins == null) {
+			if (other.joins != null)
+				return false;
+		} else if (!joins.equals(other.joins))
+			return false;
+		if (managedType == null) {
+			if (other.managedType != null)
+				return false;
+		} else if (!managedType.equals(other.managedType))
+			return false;
+		return true;
+	}
+
 }

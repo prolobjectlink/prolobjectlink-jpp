@@ -19,23 +19,20 @@
  */
 package org.logicware.pdb.prolog;
 
-import java.io.File;
-
 import org.logicware.pdb.DatabaseSchema;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.HierarchicalDatabase;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageMode;
-import org.logicware.pdb.common.AbstractHierarchicalDatabase;
+import org.logicware.pdb.databse.AbstractHierarchicalDatabase;
 
 public class PrologHierarchicalDatabase extends AbstractHierarchicalDatabase implements HierarchicalDatabase {
 
 	public PrologHierarchicalDatabase(Settings properties, StorageMode storageMode, String name, DatabaseUser user) {
-		super(name, new DatabaseSchema(LOCATION + File.separator + name, properties.getProvider(), properties, user),
-				user,
+		super(name, new DatabaseSchema(LOCATION + SEPARATOR + name, properties.getProvider(), properties, user), user,
 				new PrologStorageManager(properties.getProvider(), properties,
 						new PrologObjectConverter(properties.getProvider()),
-						LOCATION + File.separator + name + File.separator + "database", properties, storageMode));
+						LOCATION + SEPARATOR + name + SEPARATOR + "database", properties, storageMode));
 	}
 
 }

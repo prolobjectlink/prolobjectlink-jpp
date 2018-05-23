@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.logicware.pdb.Query;
-import org.logicware.pdb.common.AbstractContainerQuery;
+import org.logicware.pdb.container.AbstractContainerQuery;
 import org.logicware.pdb.logging.LoggerConstants;
 import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.util.JavaReflect;

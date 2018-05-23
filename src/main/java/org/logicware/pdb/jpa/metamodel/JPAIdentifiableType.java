@@ -98,4 +98,47 @@ public abstract class JPAIdentifiableType<X> extends JPAManagedType<X> implement
 		idAttributes.add(idAttribute);
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((idAttributes == null) ? 0 : idAttributes.hashCode());
+		result = prime * result + ((idType == null) ? 0 : idType.hashCode());
+		result = prime * result + ((superType == null) ? 0 : superType.hashCode());
+		result = prime * result + ((versionAttribute == null) ? 0 : versionAttribute.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JPAIdentifiableType<?> other = (JPAIdentifiableType<?>) obj;
+		if (idAttributes == null) {
+			if (other.idAttributes != null)
+				return false;
+		} else if (!idAttributes.equals(other.idAttributes))
+			return false;
+		if (idType == null) {
+			if (other.idType != null)
+				return false;
+		} else if (!idType.equals(other.idType))
+			return false;
+		if (superType == null) {
+			if (other.superType != null)
+				return false;
+		} else if (!superType.equals(other.superType))
+			return false;
+		if (versionAttribute == null) {
+			if (other.versionAttribute != null)
+				return false;
+		} else if (!versionAttribute.equals(other.versionAttribute))
+			return false;
+		return true;
+	}
+
 }

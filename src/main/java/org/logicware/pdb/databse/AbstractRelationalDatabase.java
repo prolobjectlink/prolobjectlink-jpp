@@ -17,13 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.common;
+package org.logicware.pdb.databse;
 
 import java.io.File;
 import java.util.List;
 
 import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseUser;
+import org.logicware.pdb.DefaultTransaction;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.ProcedureQuery;
@@ -31,16 +32,19 @@ import org.logicware.pdb.Query;
 import org.logicware.pdb.RelationalDatabase;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.StorageGraph;
+import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 
 public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine implements RelationalDatabase {
 
 	private final StorageGraph storage;
+	private final Transaction transaction;
 	protected static final String LOCATION = "dat" + File.separator + "relational";
 
 	public AbstractRelationalDatabase(String name, Schema schema, DatabaseUser user, StorageGraph storage) {
 		super(storage.getProperties(), LOCATION + File.separator + name + File.separator + "database", name, schema,
 				user);
+		this.transaction = new DefaultTransaction(this);
 		this.storage = storage;
 	}
 
@@ -120,6 +124,10 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 		storage.include(path);
 	}
 
+	public final Transaction getTransaction() {
+		return transaction;
+	}
+
 	public final PersistentContainer containerOf(Class<?> clazz) {
 		return storage.containerOf(clazz);
 	}
@@ -178,6 +186,9 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 	}
 
 	public final void close() {
+		if (transaction.isActive()) {
+			transaction.close();
+		}
 		getSchema().clear();
 		storage.clear();
 		storage.close();

@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.common;
+package org.logicware.pdb.databse;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -31,11 +31,10 @@ import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseRole;
 import org.logicware.pdb.DatabaseUser;
-import org.logicware.pdb.DefaultTransaction;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
-import org.logicware.pdb.Transaction;
+import org.logicware.pdb.container.AbstractContainer;
 import org.logicware.pdb.tools.Backup;
 import org.logicware.pdb.tools.Restore;
 import org.logicware.pdb.util.JavaReflect;
@@ -46,17 +45,17 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 	private final Schema schema;
 	private final String location;
 	private final DatabaseUser owner;
-	private final Transaction transaction;
+	protected static final char SEPARATOR = '/';
 	private final Map<String, DatabaseUser> users;
 	private final Map<String, DatabaseRole> roles;
 	private final ContainerFactory containerFactory;
+
 
 	public AbstractDatabaseEngine(Settings settings, String location, String name, Schema schema, DatabaseUser owner) {
 		super(settings.getProvider(), settings, settings.getObjectConverter());
 		this.containerFactory = settings.getContainerFactory();
 		this.roles = new HashMap<String, DatabaseRole>();
 		this.users = new HashMap<String, DatabaseUser>();
-		this.transaction = new DefaultTransaction(this);
 		this.location = location;
 		this.schema = schema;
 		this.owner = owner;
@@ -67,7 +66,7 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 		super(db.getProvider(), db.getProperties(), db.getConverter());
 		this.roles = new HashMap<String, DatabaseRole>();
 		this.users = new HashMap<String, DatabaseUser>();
-		this.transaction = new DefaultTransaction(this);
+//		this.transaction = new DefaultTransaction(this);
 		this.containerFactory = db.getContainerFactory();
 		this.location = db.getLocation();
 		this.schema = db.getSchema();
@@ -141,10 +140,6 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 
 	public final ContainerFactory getContainerFactory() {
 		return containerFactory;
-	}
-
-	public final Transaction getTransaction() {
-		return transaction;
 	}
 
 	public final String getLocation() {

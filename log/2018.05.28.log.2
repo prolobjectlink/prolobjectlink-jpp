@@ -1,0 +1,128 @@
+[global] DEBUG may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+Sended: DatabaseRequest [timestamp=1527534359821, type=CONNECT, dbtype=HIERARCHICAL, dbname=test, arguments=[]]
+[global] DEBUG may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+Received: DatabaseResponse [response=true]
+[global] DEBUG may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+Sended: DatabaseRequest [timestamp=1527534360169, type=CREATE, dbtype=HIERARCHICAL, dbname=test, arguments=[]]
+[global] DEBUG may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+Received: DatabaseResponse [response=void]
+[global] DEBUG may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+Sended: DatabaseRequest [timestamp=1527534360184, type=BEGIN, dbtype=HIERARCHICAL, dbname=test, arguments=[]]
+[global] DEBUG may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+Received: DatabaseResponse [response=void]
+[global] DEBUG may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+Sended: DatabaseRequest [timestamp=1527534360200, type=INSERT, dbtype=HIERARCHICAL, dbname=test, arguments=[class org.logicware.domain.geometry.Point, [Lorg.logicware.domain.geometry.Point;@47d384ee]]
+[global] ERROR may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+IO
+java.net.SocketException: Connection reset
+java.net.SocketInputStream.read(SocketInputStream.java:210)
+java.net.SocketInputStream.read(SocketInputStream.java:141)
+java.net.SocketInputStream.read(SocketInputStream.java:224)
+java.io.ObjectInputStream$PeekInputStream.peek(ObjectInputStream.java:2598)
+java.io.ObjectInputStream$BlockDataInputStream.peek(ObjectInputStream.java:2905)
+java.io.ObjectInputStream$BlockDataInputStream.peekByte(ObjectInputStream.java:2915)
+java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1502)
+java.io.ObjectInputStream.readObject(ObjectInputStream.java:422)
+org.logicware.pdb.DatabaseRequest.send(DatabaseRequest.java:226)
+org.logicware.pdb.persistent.RemoteDatabaseClient.add(RemoteDatabaseClient.java:308)
+org.logicware.pdb.persistent.RemoteDatabaseClient.insert(RemoteDatabaseClient.java:118)
+org.logicware.performance.TuPrologClient.main(TuPrologClient.java:34)
+
+[global] ERROR may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+IO
+java.net.ConnectException: Connection refused: connect
+java.net.DualStackPlainSocketImpl.connect0(Native Method)
+java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+java.net.Socket.connect(Socket.java:589)
+java.net.Socket.connect(Socket.java:538)
+java.net.Socket.<init>(Socket.java:434)
+java.net.Socket.<init>(Socket.java:211)
+org.logicware.pdb.DatabaseRequest.send(DatabaseRequest.java:215)
+org.logicware.pdb.persistent.RemoteDatabaseClient.commit(RemoteDatabaseClient.java:274)
+org.logicware.pdb.persistent.RemoteDatabaseClient.flush(RemoteDatabaseClient.java:237)
+org.logicware.pdb.AbstractTransaction.commit(AbstractTransaction.java:78)
+org.logicware.performance.TuPrologClient.main(TuPrologClient.java:35)
+
+[global] ERROR may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+IO
+java.net.ConnectException: Connection refused: connect
+java.net.DualStackPlainSocketImpl.connect0(Native Method)
+java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+java.net.Socket.connect(Socket.java:589)
+java.net.Socket.connect(Socket.java:538)
+java.net.Socket.<init>(Socket.java:434)
+java.net.Socket.<init>(Socket.java:211)
+org.logicware.pdb.DatabaseRequest.send(DatabaseRequest.java:215)
+org.logicware.pdb.persistent.RemoteDatabaseClient.add(RemoteDatabaseClient.java:308)
+org.logicware.pdb.persistent.RemoteDatabaseClient.insert(RemoteDatabaseClient.java:118)
+org.logicware.performance.TuPrologClient.main(TuPrologClient.java:40)
+
+[global] ERROR may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+IO
+java.net.ConnectException: Connection refused: connect
+java.net.DualStackPlainSocketImpl.connect0(Native Method)
+java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+java.net.Socket.connect(Socket.java:589)
+java.net.Socket.connect(Socket.java:538)
+java.net.Socket.<init>(Socket.java:434)
+java.net.Socket.<init>(Socket.java:211)
+org.logicware.pdb.DatabaseRequest.send(DatabaseRequest.java:215)
+org.logicware.pdb.persistent.RemoteDatabaseClient.commit(RemoteDatabaseClient.java:274)
+org.logicware.pdb.persistent.RemoteDatabaseClient.flush(RemoteDatabaseClient.java:237)
+org.logicware.pdb.AbstractTransaction.commit(AbstractTransaction.java:78)
+org.logicware.performance.TuPrologClient.main(TuPrologClient.java:41)
+
+[global] ERROR may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+IO
+java.net.ConnectException: Connection refused: connect
+java.net.DualStackPlainSocketImpl.connect0(Native Method)
+java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+java.net.Socket.connect(Socket.java:589)
+java.net.Socket.connect(Socket.java:538)
+java.net.Socket.<init>(Socket.java:434)
+java.net.Socket.<init>(Socket.java:211)
+org.logicware.pdb.DatabaseRequest.send(DatabaseRequest.java:215)
+org.logicware.pdb.persistent.RemoteDatabaseClient.add(RemoteDatabaseClient.java:308)
+org.logicware.pdb.persistent.RemoteDatabaseClient.insert(RemoteDatabaseClient.java:118)
+org.logicware.performance.TuPrologClient.main(TuPrologClient.java:46)
+
+[global] ERROR may-28-2018 15:06 class org.logicware.pdb.DatabaseRequest
+IO
+java.net.ConnectException: Connection refused: connect
+java.net.DualStackPlainSocketImpl.connect0(Native Method)
+java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+java.net.Socket.connect(Socket.java:589)
+java.net.Socket.connect(Socket.java:538)
+java.net.Socket.<init>(Socket.java:434)
+java.net.Socket.<init>(Socket.java:211)
+org.logicware.pdb.DatabaseRequest.send(DatabaseRequest.java:215)
+org.logicware.pdb.persistent.RemoteDatabaseClient.commit(RemoteDatabaseClient.java:274)
+org.logicware.pdb.persistent.RemoteDatabaseClient.flush(RemoteDatabaseClient.java:237)
+org.logicware.pdb.AbstractTransaction.commit(AbstractTransaction.java:78)
+org.logicware.performance.TuPrologClient.main(TuPrologClient.java:47)
+
