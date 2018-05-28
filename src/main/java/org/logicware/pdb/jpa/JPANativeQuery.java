@@ -26,7 +26,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.logicware.pdb.DatabaseService;
+import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.util.JavaReflect;
@@ -37,7 +37,7 @@ public final class JPANativeQuery extends JPAQuery implements Query {
 
 	// TODO OPTIMIZE SAME CODE BLOCKS
 
-	public JPANativeQuery(DatabaseService database, String qlString) {
+	public JPANativeQuery(DatabaseEngine database, String qlString) {
 		super(database, qlString);
 		ObjectConverter<PrologTerm> converter = database.getConverter();
 		PrologTerm[] prologTerms = converter.toTermsArray(qlString);
@@ -65,7 +65,7 @@ public final class JPANativeQuery extends JPAQuery implements Query {
 
 	}
 
-	public JPANativeQuery(DatabaseService database, String qlString, Class<?> resultClass) {
+	public JPANativeQuery(DatabaseEngine database, String qlString, Class<?> resultClass) {
 		super(database, qlString, resultClass);
 		ObjectConverter<PrologTerm> converter = database.getConverter();
 		PrologTerm[] prologTerms = converter.toTermsArray(qlString);
@@ -86,7 +86,7 @@ public final class JPANativeQuery extends JPAQuery implements Query {
 
 	}
 
-	public JPANativeQuery(DatabaseService database, String qlString, JPAResultSetMapping resultSetMapping) {
+	public JPANativeQuery(DatabaseEngine database, String qlString, JPAResultSetMapping resultSetMapping) {
 		super(database, qlString);
 		this.resultSetMapping = resultSetMapping;
 		ObjectConverter<PrologTerm> converter = database.getConverter();

@@ -30,11 +30,10 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class PlatformLogger {
+import org.logicware.pdb.AbstractPlatform;
+import org.logicware.pdb.Platform;
 
-	private static final String LOGGER_ROOT = "META-INF/";
-	private static final String LOGGER_BASE_NAME = "logger.properties";
-	private static final String LOGGER_REF = LOGGER_ROOT + LOGGER_BASE_NAME;
+public final class PlatformLogger extends AbstractPlatform implements Platform {
 
 	private static final String MESSAGE = "Logger File Handler can't be created";
 	private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -51,7 +50,7 @@ public final class PlatformLogger {
 		}
 		FileHandler file = null;
 		try {
-			File xyz = new File(Thread.currentThread().getContextClassLoader().getResource(LOGGER_REF).toURI());
+			File xyz = new File(PlatformLogger.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			rootlogger.log(Level.FINEST, "Logger Properties Configuration File: {0}", xyz);
 			if (xyz.getCanonicalPath().contains("\\target\\classes\\")// Window
 					|| xyz.getCanonicalPath().contains("/target/classes/")) { // Linux

@@ -58,7 +58,7 @@ import javax.persistence.metamodel.MappedSuperclassType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.Type;
 
-import org.logicware.pdb.DatabaseService;
+import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.jpa.metamodel.JPAAttribute;
 import org.logicware.pdb.jpa.metamodel.JPABasicType;
 import org.logicware.pdb.jpa.metamodel.JPACollectionAttribute;
@@ -87,7 +87,7 @@ public final class JPAEntityManagerFactory implements EntityManagerFactory {
 	private Cache cache;
 
 	//
-	private final DatabaseService database;
+	private final DatabaseEngine database;
 
 	// property key-value map
 	private Map<String, Object> properties;
@@ -107,7 +107,7 @@ public final class JPAEntityManagerFactory implements EntityManagerFactory {
 	// result set mappings for native queries result
 	private final Map<String, JPAResultSetMapping> resultSetMappings = new LinkedHashMap<String, JPAResultSetMapping>();
 
-	public JPAEntityManagerFactory(DatabaseService database) {
+	public JPAEntityManagerFactory(DatabaseEngine database) {
 		this.persistenceUnitUtil = new JPAPersistenceUnitUtil();
 		this.cache = new JPACache(database, persistenceUnitUtil);
 		this.database = database;

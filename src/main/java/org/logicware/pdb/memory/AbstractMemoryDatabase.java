@@ -19,7 +19,17 @@
  */
 package org.logicware.pdb.memory;
 
+import static org.logicware.pdb.jpa.spi.JPAPersistenceXmlParser.XML;
+
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import javax.persistence.SynchronizationType;
+import javax.persistence.spi.PersistenceUnitInfo;
 
 import org.logicware.pdb.DatabaseMode;
 import org.logicware.pdb.DatabaseUser;
@@ -33,20 +43,71 @@ import org.logicware.pdb.Settings;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.VolatileContainer;
-import org.logicware.pdb.databse.AbstractDatabaseService;
+import org.logicware.pdb.databse.AbstractDatabaseEngine;
+import org.logicware.pdb.jpa.JPAEntityManager;
+import org.logicware.pdb.jpa.JPAEntityManagerFactory;
+import org.logicware.pdb.jpa.JPAResultSetMapping;
 import org.logicware.pdb.prolog.PrologContainerQuery;
 import org.logicware.pdb.prolog.PrologTypedQuery;
 
-public abstract class AbstractMemoryDatabase extends AbstractDatabaseService implements MemoryDatabase {
+public abstract class AbstractMemoryDatabase extends AbstractDatabaseEngine implements MemoryDatabase {
 
+	private final URL url;
 	private boolean closed;
-	protected final VolatileContainer storage;
+	private final VolatileContainer storage;
+	private final Map<String, PersistenceUnitInfo> units = new HashMap<String, PersistenceUnitInfo>();
 
-	protected AbstractMemoryDatabase(Settings properties, URL url, String name, Schema schema, DatabaseUser owner,
+	protected static final String URL_PREFIX = "jdbc:prolobjectlink:";
+	protected static final URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);
+
+	AbstractMemoryDatabase(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
 			VolatileContainer container) {
-		super(properties, url, name, schema, owner);
+		super(settings, url.getPath(), name, schema, owner);
 		this.storage = container;
 		this.closed = false;
+		this.url = url;
+	}
+
+	public final URL getURL() {
+		return url;
+	}
+
+	public final String getDatabaseLocation() {
+		return getLocation() + "/database";
+	}
+
+	public final EntityManager getEntityManager() {
+
+		// TODO FILL ALL MAPS
+
+		// properties map
+		Map map = getProperties().asMap();
+
+		// user defined names for entities
+		Map<String, Class<?>> entityMap = new HashMap<String, Class<?>>();
+
+		//
+		JPAEntityManagerFactory factory = new JPAEntityManagerFactory(this);
+
+		//
+		Map<String, EntityGraph<?>> namedEntityGraphs = new HashMap<String, EntityGraph<?>>();
+
+		// result set mappings for native queries result
+		Map<String, JPAResultSetMapping> resultSetMappings = new HashMap<String, JPAResultSetMapping>();
+
+		// user defined named queries container
+		Map<String, javax.persistence.Query> namedQueries = new HashMap<String, javax.persistence.Query>();
+
+		return new JPAEntityManager(this, factory, SynchronizationType.SYNCHRONIZED, map, entityMap, namedQueries,
+				namedEntityGraphs, resultSetMappings);
+	}
+
+	public final String getRootLocation() {
+		return url.getPath();
+	}
+
+	public final List<Class<?>> classes() {
+		return getSchema().getJavaClasses();
 	}
 
 	public final void backup(String directory, String zipFileName) {

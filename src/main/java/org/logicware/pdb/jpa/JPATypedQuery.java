@@ -29,14 +29,11 @@ import javax.persistence.Parameter;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
-import org.logicware.pdb.DatabaseService;
-import org.logicware.pdb.ObjectConverter;
-import org.logicware.pdb.prolog.PrologEngine;
-import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.pdb.DatabaseEngine;
 
 public class JPATypedQuery<X> extends JPAQuery implements TypedQuery<X> {
 
-	JPATypedQuery(DatabaseService database, String qlString, Class<X> resultClass) {
+	JPATypedQuery(DatabaseEngine database, String qlString, Class<X> resultClass) {
 		super(database, qlString, resultClass);
 	}
 

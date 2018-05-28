@@ -20,9 +20,14 @@
 package org.logicware.pdb.databse;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.logicware.pdb.DatabaseEngine;
+import org.logicware.pdb.DatabaseMode;
+import org.logicware.pdb.DatabaseType;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.DefaultTransaction;
 import org.logicware.pdb.PersistentContainer;
@@ -199,5 +204,27 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 		getSchema().clear();
 		storage.clear();
 	}
+
+	public EntityManager getEntityManager() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public DatabaseMode getMode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public DatabaseType getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public URL getURL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 
 }

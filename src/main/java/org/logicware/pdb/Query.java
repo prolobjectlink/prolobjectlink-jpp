@@ -25,7 +25,6 @@ import java.util.List;
 /**
  * 
  * @see TypedQuery
- * @see ConstraintQuery
  * @author Jose Zalacain
  * @since 1.0
  */

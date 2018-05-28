@@ -21,7 +21,6 @@ package org.logicware.pdb.memory;
 
 import java.net.URL;
 
-import org.logicware.pdb.DatabaseService;
 import org.logicware.pdb.DatabaseType;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.MemoryDatabase;
@@ -30,13 +29,13 @@ import org.logicware.pdb.VolatileContainer;
 
 public final class MemoryRelational extends AbstractMemoryDatabase implements MemoryDatabase {
 
-	private static DatabaseService memoryRelationalDB;
+	private static MemoryDatabase memoryRelationalDB;
 
 	private MemoryRelational(String name, URL url, Schema schema, DatabaseUser owner, VolatileContainer storage) {
 		super(storage.getProperties(), url, name, schema, owner, storage);
 	}
 
-	public static final DatabaseService newInstance(String name) {
+	public static final MemoryDatabase newInstance(String name) {
 		if (memoryRelationalDB == null) {
 			// TODO LOAD ALL FROM PROPERTIES FILE
 		}

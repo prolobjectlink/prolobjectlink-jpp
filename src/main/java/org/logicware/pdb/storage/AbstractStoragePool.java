@@ -245,7 +245,6 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		for (Storage s : storages) {
 			s.clear();
 		}
-		storages.clear();
 	}
 
 	public final <O> void insert(O... facts) {

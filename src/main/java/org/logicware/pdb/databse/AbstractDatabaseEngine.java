@@ -19,7 +19,6 @@
  */
 package org.logicware.pdb.databse;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,6 +49,8 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 	private final Map<String, DatabaseRole> roles;
 	private final ContainerFactory containerFactory;
 
+	private static final Backup backuper = new Backup();
+	private static final Restore restorer = new Restore();
 
 	public AbstractDatabaseEngine(Settings settings, String location, String name, Schema schema, DatabaseUser owner) {
 		super(settings.getProvider(), settings, settings.getObjectConverter());
@@ -66,7 +67,6 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 		super(db.getProvider(), db.getProperties(), db.getConverter());
 		this.roles = new HashMap<String, DatabaseRole>();
 		this.users = new HashMap<String, DatabaseUser>();
-//		this.transaction = new DefaultTransaction(this);
 		this.containerFactory = db.getContainerFactory();
 		this.location = db.getLocation();
 		this.schema = db.getSchema();
@@ -75,13 +75,12 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 	}
 
 	public void backup(String directory, String zipFileName) {
-		Backup backup = new Backup(getRootLocation() + File.separator + getName());
-		backup.createBackup(directory, zipFileName);
+		String path = getRootLocation() + SEPARATOR + getName();
+		backuper.createBackup(path, directory, zipFileName);
 	}
 
 	public void restore(String directory, String zipFileName) {
-		Restore restore = new Restore();
-		restore.restoreBackup(directory, zipFileName);
+		restorer.restoreBackup(directory, zipFileName);
 	}
 
 	public Object find(String string) {

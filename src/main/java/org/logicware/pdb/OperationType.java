@@ -19,6 +19,16 @@
  */
 package org.logicware.pdb;
 
+/**
+ * Operation code type to be interpreted by the remote server when this received
+ * a request. Support all database operations and the additional no operation
+ * (NOOP) operation type. NOOP is use when the active request is initialized and
+ * replaced when another operation type is send to server.
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ *
+ */
 public enum OperationType {
 
 	NOOP,
@@ -27,9 +37,13 @@ public enum OperationType {
 
 	CREATE, DROP,
 
-	INSERT, UPDATE, DELETE, CLEAR,
+	INSERT, UPDATE, DELETE_CLASS, DELETE_ARRAY, CLEAR,
 
-	CONSTAINS, QUERY, PROCEDURE,
+	CONSTAINS_STRING, CONSTAINS_OBJECT, CONSTAINS_CLASS, CONSTAINS_PREDICATE, CONSTAINS_INDICATOR,
+
+	QUERY_STRING, QUERY_OBJECT, QUERY_CLASS, QUERY_PREDICATE,
+
+	PROCEDURE,
 
 	BEGIN, COMMIT, ROLLBACK,
 

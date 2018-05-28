@@ -30,7 +30,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.StoredProcedureQuery;
 import javax.persistence.TemporalType;
 
-import org.logicware.pdb.DatabaseService;
+import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.ProcedureQuery;
 
 public final class JPAStoredProcedureQuery extends JPAQuery implements StoredProcedureQuery {
@@ -39,19 +39,19 @@ public final class JPAStoredProcedureQuery extends JPAQuery implements StoredPro
 	private final String procedureName;
 	private final String[] resultSetMappings;
 
-	public JPAStoredProcedureQuery(DatabaseService database, String procedureName) {
+	public JPAStoredProcedureQuery(DatabaseEngine database, String procedureName) {
 		this(database, procedureName, new Class<?>[] { Object[].class }, null);
 	}
 
-	public JPAStoredProcedureQuery(DatabaseService database, String procedureName, Class<?>[] resultClasses) {
+	public JPAStoredProcedureQuery(DatabaseEngine database, String procedureName, Class<?>[] resultClasses) {
 		this(database, procedureName, resultClasses, null);
 	}
 
-	public JPAStoredProcedureQuery(DatabaseService database, String procedureName, String[] resultSetMappings) {
+	public JPAStoredProcedureQuery(DatabaseEngine database, String procedureName, String[] resultSetMappings) {
 		this(database, procedureName, new Class<?>[] { Object[].class }, resultSetMappings);
 	}
 
-	public JPAStoredProcedureQuery(DatabaseService database, String procedureName, Class<?>[] resultClasses,
+	public JPAStoredProcedureQuery(DatabaseEngine database, String procedureName, Class<?>[] resultClasses,
 			String[] resultSetMappings) {
 		super(database, procedureName, resultClasses);
 		this.procedureName = procedureName;

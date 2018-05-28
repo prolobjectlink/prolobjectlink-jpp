@@ -57,7 +57,7 @@ import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.ProviderUtil;
 
-import org.logicware.pdb.DatabaseService;
+import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Settings;
@@ -89,7 +89,7 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 	private static final ProviderUtil PROVIDER_UTIL = new JPAProviderUtil();
 
 	private final Map<String, PersistenceUnitInfo> persistenceUnits;
-	private DatabaseService database;
+	private DatabaseEngine database;
 
 	public JPAPersistenceProvider() {
 		URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);
@@ -140,7 +140,7 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 
 	}
 
-	protected abstract DatabaseService createDatabase(String provider, String name, Settings settings, String url,
+	protected abstract DatabaseEngine createDatabase(String provider, String name, Settings settings, String url,
 			DatabaseUser user);
 
 	public abstract String getJavaPrologIntefaceProviderName();

@@ -19,6 +19,10 @@
  */
 package org.logicware.pdb;
 
-public interface MemoryDatabase extends DatabaseService {
+public interface MemoryDatabase extends DatabaseEngine {
+
+	public MemoryDatabase create();
+
+	public MemoryDatabase drop();
 
 }

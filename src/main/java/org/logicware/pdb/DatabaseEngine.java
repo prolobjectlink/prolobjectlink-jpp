@@ -19,8 +19,11 @@
  */
 package org.logicware.pdb;
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
+
+import javax.persistence.EntityManager;
 
 public interface DatabaseEngine extends PersistentContainer {
 
@@ -75,5 +78,13 @@ public interface DatabaseEngine extends PersistentContainer {
 	public Schema getSchema();
 
 	public String getName();
+	
+	public EntityManager getEntityManager();
+
+	public DatabaseMode getMode();
+
+	public DatabaseType getType();
+
+	public URL getURL();
 
 }

@@ -38,7 +38,7 @@ import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.Tuple;
 
-import org.logicware.pdb.DatabaseService;
+import org.logicware.pdb.DatabaseEngine;
 
 /**
  * 
@@ -69,17 +69,17 @@ public class JPAQuery implements Query {
 	protected FlushModeType flushMode = FlushModeType.AUTO;
 	protected LockModeType lockMode = LockModeType.NONE;
 
-	protected final DatabaseService database;
+	protected final DatabaseEngine database;
 
-	public JPAQuery(DatabaseService database, String qlString) {
+	public JPAQuery(DatabaseEngine database, String qlString) {
 		this(database, qlString, Object[].class);
 	}
 
-	public JPAQuery(DatabaseService database, String qlString, Class<?> resultClass) {
+	public JPAQuery(DatabaseEngine database, String qlString, Class<?> resultClass) {
 		this(database, qlString, new Class<?>[] { resultClass });
 	}
 
-	public JPAQuery(DatabaseService database, String qlString, Class<?>[] resultClasses) {
+	public JPAQuery(DatabaseEngine database, String qlString, Class<?>[] resultClasses) {
 		this.parameters = new ArrayList<Parameter<?>>();
 		this.hints = new HashMap<String, Object>();
 		this.resultClasses = resultClasses;

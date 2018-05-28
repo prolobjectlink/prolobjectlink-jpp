@@ -111,9 +111,9 @@ public final class JavaReflect {
 
 	/**
 	 * Find some constructor for create an empty instance. This method create an
-	 * object instance under critical situations. They can be non-empty declared
+	 * object instance under critical situations. There are non-empty declared
 	 * constructor, restricted access for alternative constructor with any number
-	 * and type of parameter. The alternative constructor with any number and type
+	 * and type of parameters. The alternative constructor with any number and type
 	 * of parameter will be create with an array with the default value (0 for
 	 * primitive types, false for boolean and null for any class type). This is the
 	 * way for invoke {@link Constructor#newInstance(Object...)}. The public empty
@@ -127,28 +127,24 @@ public final class JavaReflect {
 	public static Object newInstance(Class<?> clazz) {
 		Object instance = null;
 		Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-		for (Constructor<?> constructor : constructors) {
-			try {
-
-				Class<?>[] classes = constructor.getParameterTypes();
-				Object[] arguments = new Object[classes.length];
-				for (int i = 0; i < classes.length; i++) {
-					if (classes[i] == String.class) {
-						arguments[i] = "";
-					} else if (classes[i] == boolean.class) {
-						arguments[i] = false;
-					} else if (classes[i].isPrimitive()) {
-						arguments[i] = 0;
-					}
+		if (constructors.length > 0) {
+			Constructor<?> constructor = constructors[0];
+			Class<?>[] classes = constructor.getParameterTypes();
+			Object[] arguments = new Object[classes.length];
+			for (int i = 0; i < classes.length; i++) {
+				if (classes[i] == String.class) {
+					arguments[i] = "";
+				} else if (classes[i] == boolean.class) {
+					arguments[i] = false;
+				} else if (classes[i].isPrimitive()) {
+					arguments[i] = 0;
 				}
+			}
+			try {
 
 				doAccessibleIfNeed(constructor);
 				instance = constructor.newInstance(arguments);
 				undoAccessibleIfNeed(constructor);
-
-				if (instance != null) {
-					return instance;
-				}
 
 			} catch (InstantiationException e) {
 				LoggerUtils.error(JavaReflect.class, LoggerConstants.INSTANTIATION, e);

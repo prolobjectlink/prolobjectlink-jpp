@@ -23,17 +23,17 @@ import java.util.List;
 
 import javax.persistence.PersistenceUnitUtil;
 
-import org.logicware.pdb.DatabaseService;
+import org.logicware.pdb.DatabaseEngine;
 
 public abstract class JPAAbstractContainer {
 
 	//
-	protected final DatabaseService database;
+	protected final DatabaseEngine database;
 
 	//
 	protected final PersistenceUnitUtil persistenceUnitUtil;
 
-	protected JPAAbstractContainer(DatabaseService database, PersistenceUnitUtil persistenceUnitUtil) {
+	protected JPAAbstractContainer(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
 		this.persistenceUnitUtil = persistenceUnitUtil;
 		this.database = database;
 	}

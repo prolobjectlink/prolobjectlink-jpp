@@ -32,31 +32,19 @@ import java.util.Queue;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.logicware.pdb.AbstractPlatform;
 import org.logicware.pdb.logging.LoggerUtils;
 
-public class Backup extends Tool {
-
-	private String db;
-
-	/**
-	 * Create an backup tool object
-	 * 
-	 * @param path
-	 *            the database path
-	 */
-	public Backup(String path) {
-		this.db = path;
-	}
+public class Backup extends AbstractPlatform {
 
 	/**
 	 * Create backs up database file.
 	 * 
-	 * @param zipFileName
-	 *            the name of the target backup file (including path)
-	 * @param directory
-	 *            the destiny directory name
+	 * @param path        the path to copy into zip backup file
+	 * @param zipFileName the name of the target backup file (including path)
+	 * @param directory   the destiny directory name
 	 */
-	public void createBackup(String directory, String zipFileName) {
+	public void createBackup(String db, String directory, String zipFileName) {
 
 		File filePtr = null;
 		InputStream in = null;
@@ -131,4 +119,5 @@ public class Backup extends Tool {
 		}
 
 	}
+
 }

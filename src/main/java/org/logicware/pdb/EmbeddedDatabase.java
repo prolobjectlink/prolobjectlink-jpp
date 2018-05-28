@@ -19,6 +19,10 @@
  */
 package org.logicware.pdb;
 
-public interface EmbeddedDatabase extends DatabaseService {
+public interface EmbeddedDatabase extends DatabaseEngine {
+
+	public EmbeddedDatabase create();
+
+	public EmbeddedDatabase drop();
 
 }

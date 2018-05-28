@@ -43,6 +43,9 @@ public abstract class AbstractPersistentContainer extends AbstractContainer impl
 	// container factory for create containers
 	protected final ContainerFactory containerFactory;
 
+	private static final Backup backuper = new Backup();
+	private static final Restore restorer = new Restore();
+
 	protected AbstractPersistentContainer(PrologProvider provider, Settings properties,
 			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory) {
 		super(provider, properties, converter);
@@ -56,13 +59,11 @@ public abstract class AbstractPersistentContainer extends AbstractContainer impl
 	}
 
 	public final void backup(String directory, String zipFileName) {
-		Backup backup = new Backup(getLocation());
-		backup.createBackup(directory, zipFileName);
+		backuper.createBackup(getLocation(), directory, zipFileName);
 	}
 
 	public final void restore(String directory, String zipFileName) {
-		Restore restore = new Restore();
-		restore.restoreBackup(directory, zipFileName);
+		restorer.restoreBackup(directory, zipFileName);
 	}
 
 	public final String getLocation() {

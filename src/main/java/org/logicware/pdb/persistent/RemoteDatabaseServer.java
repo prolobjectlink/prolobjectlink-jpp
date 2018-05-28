@@ -21,7 +21,6 @@ package org.logicware.pdb.persistent;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.BindException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -86,10 +85,8 @@ public final class RemoteDatabaseServer extends AbstractPlatform implements Plat
 						shutdown();
 					}
 				});
-			} catch (BindException e) {
-				// already in use
-			} catch (IOException e1) {
-				LoggerUtils.error(getClass(), LoggerConstants.IO, e1);
+			} catch (IOException e) {
+				LoggerUtils.error(getClass(), LoggerConstants.IO, e);
 			}
 		}
 	}

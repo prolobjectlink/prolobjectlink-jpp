@@ -25,13 +25,13 @@ import javax.persistence.Cache;
 import javax.persistence.PersistenceException;
 import javax.persistence.PersistenceUnitUtil;
 
-import org.logicware.pdb.DatabaseService;
+import org.logicware.pdb.DatabaseEngine;
 
 public final class JPACache extends JPAAbstractContainer implements Cache {
 
 	// TODO implement a cache map and release database use
 
-	JPACache(DatabaseService database, PersistenceUnitUtil persistenceUnitUtil) {
+	JPACache(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
 		super(database, persistenceUnitUtil);
 	}
 

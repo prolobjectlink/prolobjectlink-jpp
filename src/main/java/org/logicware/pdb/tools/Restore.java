@@ -29,17 +29,16 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.logicware.pdb.AbstractPlatform;
 import org.logicware.pdb.logging.LoggerUtils;
 
-public class Restore extends Tool {
+public class Restore extends AbstractPlatform {
 
 	/**
 	 * Restore database files.
 	 * 
-	 * @param zipFileName
-	 *            the name of the backup file
-	 * @param directory
-	 *            the directory name to be restored
+	 * @param zipFileName the name of the backup file
+	 * @param directory   the directory name to be restored
 	 */
 	public void restoreBackup(String directory, String zipFileName) {
 

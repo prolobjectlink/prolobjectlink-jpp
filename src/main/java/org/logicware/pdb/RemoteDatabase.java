@@ -19,7 +19,7 @@
  */
 package org.logicware.pdb;
 
-public interface RemoteDatabase extends DatabaseService {
+public interface RemoteDatabase extends DatabaseEngine {
 
 	public RemoteDatabase connect(String name);
 

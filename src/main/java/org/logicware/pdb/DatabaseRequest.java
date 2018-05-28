@@ -39,14 +39,6 @@ public final class DatabaseRequest extends AbstractWrapper
 	private DatabaseType dbtype;
 	private final String dbname;
 	private final String server;
-
-	//
-	private String path;
-	private String storage;
-	private StorageMode mode;
-	private String className;
-	//
-
 	private static final int MAX_ARG_NUM = 2;
 	private static final long serialVersionUID = -8793751981186352447L;
 	private final ArrayList<Serializable> arguments = new ArrayList<Serializable>(MAX_ARG_NUM);
@@ -90,41 +82,6 @@ public final class DatabaseRequest extends AbstractWrapper
 	public OperationType getType() {
 		return type;
 	}
-
-	//
-	public final String getPath() {
-		return path;
-	}
-
-	public final void setPath(String path) {
-		this.path = path;
-	}
-
-	public final String getStorage() {
-		return storage;
-	}
-
-	public final void setStorage(String storage) {
-		this.storage = storage;
-	}
-
-	public final StorageMode getMode() {
-		return mode;
-	}
-
-	public final void setMode(StorageMode mode) {
-		this.mode = mode;
-	}
-
-	public final String getClassName() {
-		return className;
-	}
-
-	public final void setClassName(String className) {
-		this.className = className;
-	}
-
-	//
 
 	public boolean addArgument(Serializable e) {
 		return arguments.add(e);
@@ -214,22 +171,22 @@ public final class DatabaseRequest extends AbstractWrapper
 
 			socket = new Socket(server, port);
 
-			ObjectInputStream clientInputStream = new ObjectInputStream(socket.getInputStream());
-			ObjectOutputStream clientOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
+			ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
 
 			LoggerUtils.debug(getClass(), "Sended: " + this);
 
 			// client send data object
-			clientOutputStream.writeObject(this);
+			os.writeObject(this);
 
 			// client received data object
-			DatabaseResponse response = unwrap(clientInputStream.readObject(), DatabaseResponse.class);
+			DatabaseResponse response = unwrap(is.readObject(), DatabaseResponse.class);
 
 			// handle result
 			LoggerUtils.debug(getClass(), "Received: " + response);
 
-			clientOutputStream.close();
-			clientInputStream.close();
+			os.close();
+			is.close();
 
 			if (response != null) {
 				return response.get();

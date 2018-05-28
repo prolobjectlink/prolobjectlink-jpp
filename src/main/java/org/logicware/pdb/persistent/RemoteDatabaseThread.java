@@ -26,8 +26,6 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -37,10 +35,15 @@ import org.logicware.pdb.DatabaseRequest;
 import org.logicware.pdb.DatabaseResponse;
 import org.logicware.pdb.DatabaseType;
 import org.logicware.pdb.PersistentContainer;
+import org.logicware.pdb.Predicate;
+import org.logicware.pdb.Query;
 import org.logicware.pdb.Transaction;
+import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.Wrapper;
 import org.logicware.pdb.logging.LoggerConstants;
 import org.logicware.pdb.logging.LoggerUtils;
+import org.logicware.pdb.tools.Backup;
+import org.logicware.pdb.tools.Restore;
 
 public final class RemoteDatabaseThread extends AbstractWrapper implements Runnable, Wrapper {
 
@@ -48,8 +51,9 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 	private Socket socket;
 	private DatabaseEngine database;
 	private RemoteDatabaseServer server;
+	private static final Backup backuper = new Backup();
+	private static final Restore restorer = new Restore();
 	private final EnumMap<DatabaseType, Map<String, DatabaseEngine>> dbTypes;
-	private static Deque<DatabaseRequest> queue = new ArrayDeque<DatabaseRequest>();
 
 	RemoteDatabaseThread(int id, Socket socket, RemoteDatabaseServer server) {
 		this.dbTypes = new EnumMap<DatabaseType, Map<String, DatabaseEngine>>(DatabaseType.class);
@@ -89,25 +93,31 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 			LoggerUtils.debug(getClass(), "request " + id + " at " + socket.getInetAddress().getHostAddress()
 					+ " on port " + socket.getPort());
 
-//			LoggerUtils.debug(getClass(), ">> " + queue);
-
 			DatabaseResponse response = new DatabaseResponse();
 
-			ObjectOutputStream serverOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream serverInputStream = new ObjectInputStream(socket.getInputStream());
+			ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
 
 			// read data from client
-			DatabaseRequest request = unwrap(serverInputStream.readObject(), DatabaseRequest.class);
+			DatabaseRequest request = unwrap(is.readObject(), DatabaseRequest.class);
 
 			LoggerUtils.debug(getClass(), request);
 
 			// server database operations area
 			// (insert,update,delete,query,...)
 
+			String dir = null;
+			String zip = null;
+			String string = null;
+			boolean exist = false;
+			Class<?> clazz = null;
 			Transaction tx = null;
+			Predicate<?> p = null;
+			Serializable[] sa = null;
+			PersistentContainer pc = null;
 
 			switch (request.getType()) {
-			case CONNECT:
+			case CONNECT: // OK
 				DatabaseType t = request.getDatabaseType();
 				Map<String, DatabaseEngine> dbs = dbTypes.get(t);
 				database = dbs.get(request.getDatabaseName());
@@ -116,53 +126,46 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				} else {
 					response.set(true);
 				}
-				// write data back to client
-				LoggerUtils.debug(getClass(), response);
-				serverOutputStream.writeObject(response);
-				break;
-			case CONSTAINS:
-				Serializable a = request.getArgument(0);
-				boolean b = database.contains(a);
-				response.set(b);
-				break;
-			case QUERY:
-				Serializable k1 = request.getArgument(0);
-				response.set(database.createQuery(k1));
-				break;
-			case PROCEDURE:
-				Serializable a1 = request.getArgument(0);
-				Serializable a2 = request.getArgument(1);
-				String functor = (String) a1;
-				String[] args = (String[]) a2;
-				response.set(database.createProcedureQuery(functor, args));
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
 				break;
 			case CREATE:
 				database.create();
 				response.setVoid();
-				serverOutputStream.writeObject(response);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case CLEAR:
+				tx = database.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				database.clear();
+				tx.commit();
+				tx.close();
+				response.setVoid();
+				os.writeObject(response);
 				LoggerUtils.debug(getClass(), response);
 				break;
-			case BEGIN:
+			case DROP:
+				database.drop();
+				response.setVoid();
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case BEGIN: // OK
 				tx = database.getTransaction();
 				if (!tx.isActive()) {
 					tx.begin();
 				}
 				response.setVoid();
-				serverOutputStream.writeObject(response);
-				LoggerUtils.debug(getClass(), response);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
 				break;
-			case DROP:
-				database.drop();
-				break;
-			case CLEAR:
-				database.clear();
-				database.commit();
-				break;
-			case INSERT:
-
-				Class<?> ca = (Class<?>) request.getArgument(0);
-				Serializable[] sa = (Serializable[]) request.getArgument(1);
-				PersistentContainer pc = database.containerOf(ca);
+			case INSERT: // OK
+				clazz = (Class<?>) request.getArgument(0);
+				sa = (Serializable[]) request.getArgument(1);
+				pc = database.containerOf(clazz);
 				tx = pc.getTransaction();
 				if (!tx.isActive()) {
 					tx.begin();
@@ -170,86 +173,256 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				pc.insert(sa);
 				tx.commit();
 				tx.close();
-
 				response.setVoid();
-				serverOutputStream.writeObject(response);
-				LoggerUtils.debug(getClass(), response);
-
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
 				break;
-			case UPDATE:
-				Serializable j = request.getArgument(0);
-				Serializable[] sb = (Serializable[]) j;
-				if (sb.length == 2) {
-					Serializable m = sb[0];
-					Serializable u = sb[1];
-					database.update(m, u);
-					database.commit();
+			case UPDATE: // OK
+				clazz = (Class<?>) request.getArgument(0);
+				sa = (Serializable[]) request.getArgument(1);
+				if (sa.length == 2) {
+					pc = database.containerOf(clazz);
+					tx = pc.getTransaction();
+					if (!tx.isActive()) {
+						tx.begin();
+					}
+					pc.update(sa[0], sa[1]);
+					tx.commit();
+					tx.close();
 				}
+				response.setVoid();
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
 				break;
-			case DELETE:
-				Serializable c = request.getArgument(0);
-				database.delete(c);
-				database.commit();
+			case DELETE_ARRAY: // OK
+				clazz = (Class<?>) request.getArgument(0);
+				sa = (Serializable[]) request.getArgument(1);
+				pc = database.containerOf(clazz);
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				pc.delete(sa);
+				tx.commit();
+				tx.close();
+				response.setVoid();
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case DELETE_CLASS:// OK
+				clazz = (Class<?>) request.getArgument(0);
+				pc = database.containerOf(clazz);
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				pc.delete(clazz);
+				tx.commit();
+				tx.close();
+				response.setVoid();
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case QUERY_STRING: // OK
+				string = (String) request.getArgument(0);
+				pc = database.getContainer();
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				Query k = pc.createQuery(string);
+				tx.commit();
+				tx.close();
+				response.set(k);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case QUERY_OBJECT: // OK
+				Object s = request.getArgument(0);
+				pc = database.getContainer();
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				TypedQuery<?> u = pc.createQuery(s);
+				tx.commit();
+				tx.close();
+				response.set(u);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case QUERY_CLASS: // OK
+				clazz = (Class<?>) request.getArgument(0);
+				pc = database.containerOf(clazz);
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				TypedQuery<?> q = pc.createQuery(clazz);
+				tx.commit();
+				tx.close();
+				response.set(q);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case QUERY_PREDICATE: // OK
+				clazz = (Class<?>) request.getArgument(0);
+				p = (Predicate<?>) request.getArgument(1);
+				pc = database.containerOf(clazz);
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				q = pc.createQuery(p);
+				tx.commit();
+				tx.close();
+				response.set(q);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case PROCEDURE:
+				Serializable a1 = request.getArgument(0);
+				Serializable a2 = request.getArgument(1);
+				String functor = (String) a1;
+				String[] args = (String[]) a2;
+				response.set(database.createProcedureQuery(functor, args));
+				os.writeObject(response);
+				LoggerUtils.debug(getClass(), response);
+				break;
+			case CONSTAINS_STRING: // OK
+				string = (String) request.getArgument(0);
+				pc = database.getContainer();
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				exist = pc.contains(string);
+				tx.commit();
+				tx.close();
+				response.set(exist);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case CONSTAINS_OBJECT: // OK
+				Object h = request.getArgument(0);
+				pc = database.getContainer();
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				exist = pc.contains(h);
+				tx.commit();
+				tx.close();
+				response.set(exist);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case CONSTAINS_CLASS: // OK
+				clazz = (Class<?>) request.getArgument(0);
+				pc = database.containerOf(clazz);
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				exist = pc.contains(clazz);
+				tx.commit();
+				tx.close();
+				response.set(exist);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case CONSTAINS_PREDICATE: // OK
+				clazz = (Class<?>) request.getArgument(0);
+				p = (Predicate<?>) request.getArgument(1);
+				pc = database.containerOf(clazz);
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				exist = pc.contains(p);
+				tx.commit();
+				tx.close();
+				response.set(exist);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
+				break;
+			case CONSTAINS_INDICATOR: // OK
+				string = (String) request.getArgument(0);
+				int arity = (Integer) request.getArgument(1);
+				pc = database.getContainer();
+				tx = pc.getTransaction();
+				if (!tx.isActive()) {
+					tx.begin();
+				}
+				exist = pc.contains(string, arity);
+				tx.commit();
+				tx.close();
+				response.set(exist);
+				os.writeObject(response);
+//				LoggerUtils.debug(getClass(), response);
 				break;
 			case INCLUDE:
-				Serializable p = request.getArgument(0);
-				String path = (String) p;
-				Serializable s = request.getArgument(1);
-				StringBuilder pl = (StringBuilder) s;
+				String path = (String) request.getArgument(0);
+				StringBuilder pl = (StringBuilder) request.getArgument(1);
 				// create file at some location in server
 				String location = "upl" + path;
 				File toBeInclude = new File(location);
 				PrintWriter w = new PrintWriter(toBeInclude);
 				w.write("" + pl + "");
 				w.close();
-				database.include(location);
-				break;
-			case BACKUP:
-				// database.backup(directory, zipFileName);
-				// send back zipFileName
-				break;
-			case RESTORE:
-				// get client backup
-				// database.restore(directory, zipFileName);
+				database.getContainer().include(location);
 				response.setVoid();
-				break;
-			case COMMIT:
-//				database.commit();
-				response.setVoid();
-				serverOutputStream.writeObject(response);
+				os.writeObject(response);
 				LoggerUtils.debug(getClass(), response);
-
 				break;
-			case ROLLBACK:
-//				database.rollback();
+			case BACKUP: // OK
+				dir = (String) request.getArgument(0);
+				zip = (String) request.getArgument(1);
+				String dbname = request.getDatabaseName();
+				String a = database.getStorageLocation();
+				String b = a.substring(0, a.indexOf(dbname));
+				backuper.createBackup(b, dir, zip);
 				response.setVoid();
-				serverOutputStream.writeObject(response);
+				os.writeObject(response);
 				LoggerUtils.debug(getClass(), response);
-
 				break;
-			case CLOSE:
-//				database.close();
+			case RESTORE: // OK
+				dir = (String) request.getArgument(0);
+				zip = (String) request.getArgument(1);
+				restorer.restoreBackup(dir, zip);
 				response.setVoid();
-				serverOutputStream.writeObject(response);
+				os.writeObject(response);
+				LoggerUtils.debug(getClass(), response);
+				break;
+			case COMMIT: // OK don't do any thing
+				response.setVoid();
+				os.writeObject(response);
+				LoggerUtils.debug(getClass(), response);
+				break;
+			case ROLLBACK: // ???
+				// TODO i need save every db change
+				// and over roll-back request
+				// load every db change and restore
+				// before state. I need a change log.
+				database.rollback();
+				response.setVoid();
+				os.writeObject(response);
+				LoggerUtils.debug(getClass(), response);
+				break;
+			case CLOSE: // ??? No effect occurs
+				database.close();
+				response.setVoid();
+				os.writeObject(response);
 				LoggerUtils.debug(getClass(), response);
 				break;
 			default:
-
-				queue.add(request);
-
-				// request add result
-				response.setVoid();
-
-				// write data back to client
-				serverOutputStream.writeObject(response);
-				LoggerUtils.debug(getClass(), response);
 
 				break;
 			}
 
 			// close in/out streams
-			serverInputStream.close();
-			serverOutputStream.close();
+			is.close();
+			os.close();
 
 		} catch (IOException e) {
 			LoggerUtils.error(getClass(), LoggerConstants.IO, e);

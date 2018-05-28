@@ -40,7 +40,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.pdb.DatabaseService;
+import org.logicware.pdb.DatabaseEngine;
 
 public class JPAEntityManager extends JPAAbstractContainer implements EntityManager {
 
@@ -73,7 +73,7 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	//
 	private final EntityTransaction entityTransaction;
 
-	public JPAEntityManager(DatabaseService database, JPAEntityManagerFactory managerFactory,
+	public JPAEntityManager(DatabaseEngine database, JPAEntityManagerFactory managerFactory,
 			SynchronizationType synchronizationType, Map properties, Map<String, Class<?>> entityMap,
 			Map<String, Query> namedQueries, Map<String, EntityGraph<?>> namedEntityGraphs,
 			Map<String, JPAResultSetMapping> resultSetMappings) {

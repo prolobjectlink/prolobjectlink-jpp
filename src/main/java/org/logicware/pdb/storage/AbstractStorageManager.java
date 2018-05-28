@@ -45,6 +45,7 @@ import org.logicware.pdb.prolog.PrologContainerQuery;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.prolog.PrologTypedQuery;
+import org.logicware.pdb.util.JavaLists;
 
 public abstract class AbstractStorageManager extends AbstractPersistentContainer implements StorageManager {
 
@@ -318,8 +319,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	}
 
 	public final Collection<Class<?>> classes() {
-		int s = master.size();
-		List<Class<?>> l = new ArrayList<Class<?>>(s);
+		List<Class<?>> l = JavaLists.arrayList(master.size());
 		for (PersistentContainer c : master.values()) {
 			c.getTransaction().begin();
 			l.addAll(c.classes());
@@ -337,21 +337,20 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	public final void clear() {
 		checkActiveTransaction(transaction);
 		for (PersistentContainer c : master.values()) {
-			c.getTransaction().begin();
+			c.begin();
 			c.clear();
-			c.getTransaction().commit();
-			c.getTransaction().close();
+			c.commit();
+			c.close();
 		}
 		master.clear();
 	}
 
 	public final void close() {
 		for (PersistentContainer c : master.values()) {
-			c.getTransaction().begin();
+			c.begin();
 			c.clear();
+			c.commit();
 			c.close();
-			c.getTransaction().commit();
-			c.getTransaction().close();
 		}
 		master.clear();
 		open = false;

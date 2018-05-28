@@ -17,20 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb;
+package org.logicware.pdb.asm;
 
-import java.net.URL;
+import org.objectweb.asm.commons.Remapper;
 
-import javax.persistence.EntityManager;
-
-public interface DatabaseService extends DatabaseEngine {
-
-	public EntityManager getEntityManager();
-
-	public DatabaseMode getMode();
-
-	public DatabaseType getType();
-
-	public URL getURL();
+public class InterfaceRemapper extends Remapper {
 
 }
