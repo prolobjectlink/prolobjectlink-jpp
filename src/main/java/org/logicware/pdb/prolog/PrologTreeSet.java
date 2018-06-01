@@ -31,14 +31,14 @@ class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 	private E element;
 	private PrologTreeSet<E> right;
 
-	public PrologTreeSet() {
+	PrologTreeSet() {
 	}
 
 	PrologTreeSet(E element) {
 		this.element = element;
 	}
 
-	public PrologTreeSet(Collection<? extends E> c) {
+	PrologTreeSet(Collection<? extends E> c) {
 		addAll(c);
 	}
 

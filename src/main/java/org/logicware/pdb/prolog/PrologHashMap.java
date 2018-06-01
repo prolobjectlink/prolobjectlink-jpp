@@ -33,15 +33,15 @@ class PrologHashMap<K, V> extends AbstractMap<K, V> {
 	private int size;
 	private HashEntry<K, V>[] table;
 
-	public PrologHashMap() {
+	PrologHashMap() {
 		this(16);
 	}
 
-	public PrologHashMap(int initialCapacity) {
+	PrologHashMap(int initialCapacity) {
 		table = new HashEntry[initialCapacity];
 	}
 
-	public PrologHashMap(Map<? extends K, ? extends V> m) {
+	PrologHashMap(Map<? extends K, ? extends V> m) {
 		if (m != null) {
 			table = new HashEntry[m.size()];
 			putAll(m);

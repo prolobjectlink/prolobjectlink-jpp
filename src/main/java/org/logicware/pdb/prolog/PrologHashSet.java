@@ -29,15 +29,15 @@ class PrologHashSet<E> extends AbstractSet<E> {
 	private int size;
 	private Object[] table;
 
-	public PrologHashSet() {
+	PrologHashSet() {
 		this(16);
 	}
 
-	public PrologHashSet(int initialCapacity) {
+	PrologHashSet(int initialCapacity) {
 		table = new Object[initialCapacity];
 	}
 
-	public PrologHashSet(Collection<? extends E> c) {
+	PrologHashSet(Collection<? extends E> c) {
 		if (c != null) {
 			table = new Object[c.size()];
 			addAll(c);
@@ -53,22 +53,6 @@ class PrologHashSet<E> extends AbstractSet<E> {
 			key = table[i] != null ? table[i] : null;
 		}
 		return i;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
-	}
-
-	public Object[] getTable() {
-		return table;
-	}
-
-	public void setTable(Object[] table) {
-		this.table = table;
 	}
 
 	@Override

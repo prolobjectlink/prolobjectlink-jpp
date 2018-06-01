@@ -39,6 +39,7 @@ import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -173,21 +174,26 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			}
 
 			// java.util.date transformations
-			if (structureClass == org.logicware.pdb.prolog.PrologDate.class) {
-				return new Date(((PrologDate) object).getTime());
+			if (structureClass == PrologDate.class) {
+				return ((PrologDate) object).getJavaUtilDate();
+			}
+
+			// java.util.locale transformations
+			else if (structureClass == PrologLocale.class) {
+				return ((PrologLocale) object).getJavaUtilLocale();
 			}
 
 			// java.util.collections transformations
-			else if (structureClass == org.logicware.pdb.prolog.PrologArrayList.class) {
-				return JavaLists.arrayList((org.logicware.pdb.prolog.PrologArrayList<?>) object);
-			} else if (structureClass == org.logicware.pdb.prolog.PrologHashMap.class) {
-				return JavaMaps.hashMap((org.logicware.pdb.prolog.PrologHashMap<?, ?>) object);
-			} else if (structureClass == org.logicware.pdb.prolog.PrologHashSet.class) {
-				return JavaSets.hashSet((org.logicware.pdb.prolog.PrologHashSet<?>) object);
-			} else if (structureClass == org.logicware.pdb.prolog.PrologTreeMap.class) {
-				return JavaMaps.treeMap((org.logicware.pdb.prolog.PrologTreeMap) object);
-			} else if (structureClass == org.logicware.pdb.prolog.PrologTreeSet.class) {
-				return JavaSets.treeSet((org.logicware.pdb.prolog.PrologTreeSet) object);
+			else if (structureClass == PrologArrayList.class) {
+				return JavaLists.arrayList((PrologArrayList<?>) object);
+			} else if (structureClass == PrologHashMap.class) {
+				return JavaMaps.hashMap((PrologHashMap<?, ?>) object);
+			} else if (structureClass == PrologHashSet.class) {
+				return JavaSets.hashSet((PrologHashSet<?>) object);
+			} else if (structureClass == PrologTreeMap.class) {
+				return JavaMaps.treeMap((PrologTreeMap) object);
+			} else if (structureClass == PrologTreeSet.class) {
+				return JavaSets.treeSet((PrologTreeSet) object);
 			}
 
 			return object;
@@ -234,7 +240,12 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 
 		// java.util.date transformations
 		else if (object instanceof Date) {
-			return toTerm(new PrologDate(((Date) object).getTime()));
+			return toTerm(new PrologDate(((Date) object)));
+		}
+
+		// java.util.locale transformations
+		else if (object instanceof Locale) {
+			return toTerm(new PrologLocale(((Locale) object)));
 		}
 
 		// java.util.collections transformations
@@ -258,9 +269,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		// structure default case
 		else {
 
-			PrologStructure structure = toStructure(object.getClass(), object);
-
-			return structure;
+			return toStructure(object.getClass(), object);
 		}
 
 	}

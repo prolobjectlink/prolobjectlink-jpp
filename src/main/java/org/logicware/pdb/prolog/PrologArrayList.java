@@ -32,16 +32,16 @@ class PrologArrayList<E> extends AbstractCollection<E> implements List<E> {
 	private int size;
 	private Object[] elements;
 
-	public PrologArrayList() {
+	PrologArrayList() {
 		this(10);
 	}
 
-	public PrologArrayList(int capacity) {
+	PrologArrayList(int capacity) {
 		checkCapacity(capacity);
 		elements = new Object[capacity];
 	}
 
-	public PrologArrayList(Collection<E> c) {
+	PrologArrayList(Collection<E> c) {
 		if (c != null) {
 			elements = c.toArray();
 			size = elements.length;

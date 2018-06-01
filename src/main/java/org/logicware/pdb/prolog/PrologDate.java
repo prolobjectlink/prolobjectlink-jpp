@@ -19,31 +19,37 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.util.Date;
+
 final class PrologDate implements Comparable<PrologDate> {
 
 	private long time;
 
-	public PrologDate() {
+	PrologDate() {
 		this(System.currentTimeMillis());
 	}
 
-	public PrologDate(long time) {
+	PrologDate(long time) {
 		this.time = time;
 	}
 
-	public long getTime() {
+	PrologDate(Date date) {
+		this.time = date.getTime();
+	}
+
+	long getTime() {
 		return time;
 	}
 
-	public java.util.Date getJavaUtilDate() {
-		return new java.util.Date(time);
+	Date getJavaUtilDate() {
+		return new Date(time);
 	}
 
-	public boolean before(PrologDate dateTime) {
+	boolean before(PrologDate dateTime) {
 		return compareTo(dateTime) < 0;
 	}
 
-	public boolean after(PrologDate dateTime) {
+	boolean after(PrologDate dateTime) {
 		return compareTo(dateTime) > 0;
 	}
 
@@ -54,7 +60,7 @@ final class PrologDate implements Comparable<PrologDate> {
 
 	@Override
 	public String toString() {
-		return getJavaUtilDate().toString();
+		return "" + getJavaUtilDate() + "";
 	}
 
 	@Override

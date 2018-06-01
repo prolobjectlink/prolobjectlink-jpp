@@ -36,14 +36,14 @@ class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V
 	private V value;
 	private PrologTreeMap<K, V> right;
 
-	public PrologTreeMap() {
+	PrologTreeMap() {
 	}
 
-	public PrologTreeMap(Map<K, V> map) {
+	PrologTreeMap(Map<K, V> map) {
 		putAll(map);
 	}
 
-	public PrologTreeMap(K key, V value) {
+	PrologTreeMap(K key, V value) {
 		this.key = key;
 		this.value = value;
 	}
