@@ -20,10 +20,6 @@
 package org.logicware.pdb.databse;
 
 import java.io.File;
-import java.net.URL;
-import java.util.List;
-
-import javax.persistence.EntityManager;
 
 import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseMode;
@@ -40,12 +36,26 @@ import org.logicware.pdb.StorageManager;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 
+/**
+ * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
+ *             RemoteHierarchical} instead
+ * @author Jose Zalacain
+ *
+ */
+@Deprecated
 public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngine implements HierarchicalDatabase {
 
 	private final StorageManager storage;
 	private final Transaction transaction;
 	protected static final String LOCATION = "dat" + SEPARATOR + "hierarchical";
 
+	/**
+	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
+	 *             RemoteHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public AbstractHierarchicalDatabase(String name, Schema schema, DatabaseUser user, StorageManager storage) {
 		super(storage.getProperties(), LOCATION + SEPARATOR + name + SEPARATOR + "database", name, schema, user);
 		this.transaction = new DefaultTransaction(this);
@@ -190,16 +200,8 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 		return storage.locationOf(clazz);
 	}
 
-	public final String getDatabaseLocation() {
-		return getLocation() + File.separator + "database";
-	}
-
 	public final String getStorageLocation() {
 		return storage.getLocation();
-	}
-
-	public final String getRootLocation() {
-		return LOCATION;
 	}
 
 	public final void include(String path) {
@@ -208,10 +210,6 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 
 	public final Transaction getTransaction() {
 		return transaction;
-	}
-
-	public final List<Class<?>> classes() {
-		return getSchema().getJavaClasses();
 	}
 
 	public final boolean isOpen() {
@@ -268,26 +266,12 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 		return this;
 	}
 
-	public EntityManager getEntityManager() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public DatabaseMode getMode() {
-		// TODO Auto-generated method stub
-		return null;
+		return DatabaseMode.EMBEDDED;
 	}
 
 	public DatabaseType getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return DatabaseType.HIERARCHICAL;
 	}
-
-	public URL getURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
 
 }

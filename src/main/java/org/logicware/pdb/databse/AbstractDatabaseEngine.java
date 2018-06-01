@@ -19,12 +19,22 @@
  */
 package org.logicware.pdb.databse;
 
+import static org.logicware.pdb.jpa.spi.JPAPersistenceXmlParser.XML;
+
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.SynchronizationType;
+import javax.persistence.spi.PersistenceUnitInfo;
 
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DatabaseEngine;
@@ -34,12 +44,18 @@ import org.logicware.pdb.Predicate;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.container.AbstractContainer;
+import org.logicware.pdb.jpa.JPAEntityManager;
+import org.logicware.pdb.jpa.JPAEntityManagerFactory;
+import org.logicware.pdb.jpa.JPAResultSetMapping;
+import org.logicware.pdb.logging.LoggerConstants;
+import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.tools.Backup;
 import org.logicware.pdb.tools.Restore;
 import org.logicware.pdb.util.JavaReflect;
 
 public abstract class AbstractDatabaseEngine extends AbstractContainer implements DatabaseEngine {
 
+	private URL url;
 	private final String name;
 	private final Schema schema;
 	private final String location;
@@ -48,19 +64,43 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 	private final Map<String, DatabaseUser> users;
 	private final Map<String, DatabaseRole> roles;
 	private final ContainerFactory containerFactory;
+	private final Map<String, PersistenceUnitInfo> units;
 
 	private static final Backup backuper = new Backup();
 	private static final Restore restorer = new Restore();
 
+	protected static final String URL_PREFIX = "jdbc:prolobjectlink:";
+	protected static final URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);
+
 	public AbstractDatabaseEngine(Settings settings, String location, String name, Schema schema, DatabaseUser owner) {
 		super(settings.getProvider(), settings, settings.getObjectConverter());
+		this.units = new HashMap<String, PersistenceUnitInfo>();
 		this.containerFactory = settings.getContainerFactory();
 		this.roles = new HashMap<String, DatabaseRole>();
 		this.users = new HashMap<String, DatabaseUser>();
+		try {
+			this.url = new URL("file:/" + location);
+		} catch (MalformedURLException e) {
+			LoggerUtils.error(getClass(), LoggerConstants.IO, e);
+			this.url = null;
+		}
 		this.location = location;
 		this.schema = schema;
 		this.owner = owner;
 		this.name = name;
+	}
+
+	public AbstractDatabaseEngine(Settings settings, URL url, String name, Schema schema, DatabaseUser owner) {
+		super(settings.getProvider(), settings, settings.getObjectConverter());
+		this.units = new HashMap<String, PersistenceUnitInfo>();
+		this.containerFactory = settings.getContainerFactory();
+		this.roles = new HashMap<String, DatabaseRole>();
+		this.users = new HashMap<String, DatabaseUser>();
+		this.location = url.getPath();
+		this.schema = schema;
+		this.owner = owner;
+		this.name = name;
+		this.url = url;
 	}
 
 	public AbstractDatabaseEngine(DatabaseEngine db) {
@@ -68,15 +108,16 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 		this.roles = new HashMap<String, DatabaseRole>();
 		this.users = new HashMap<String, DatabaseUser>();
 		this.containerFactory = db.getContainerFactory();
+		this.units = db.getPersistenceUnits();
 		this.location = db.getLocation();
 		this.schema = db.getSchema();
 		this.owner = db.getOwner();
 		this.name = db.getName();
+		this.url = db.getURL();
 	}
 
 	public void backup(String directory, String zipFileName) {
-		String path = getRootLocation() + SEPARATOR + getName();
-		backuper.createBackup(path, directory, zipFileName);
+		backuper.createBackup(getLocation(), directory, zipFileName);
 	}
 
 	public void restore(String directory, String zipFileName) {
@@ -166,6 +207,52 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 
 	public final String getName() {
 		return name;
+	}
+
+	public final Map<String, PersistenceUnitInfo> getPersistenceUnits() {
+		return units;
+	}
+
+	public final EntityManager getEntityManager() {
+
+		// TODO FILL ALL MAPS
+
+		// properties map
+		Map map = getProperties().asMap();
+
+		// user defined named queries container
+		Map<String, Query> namedQueries = new HashMap<String, Query>();
+
+		// user defined names for entities
+		Map<String, Class<?>> entityMap = new HashMap<String, Class<?>>();
+
+		//
+		JPAEntityManagerFactory factory = new JPAEntityManagerFactory(this);
+
+		//
+		Map<String, EntityGraph<?>> namedEntityGraphs = new HashMap<String, EntityGraph<?>>();
+
+		// result set mappings for native queries result
+		Map<String, JPAResultSetMapping> resultSetMappings = new HashMap<String, JPAResultSetMapping>();
+
+		return new JPAEntityManager(this, factory, SynchronizationType.SYNCHRONIZED, map, entityMap, namedQueries,
+				namedEntityGraphs, resultSetMappings);
+	}
+
+	public final String getRootLocation() {
+		return url.getPath();
+	}
+
+	public final List<Class<?>> classes() {
+		return getSchema().getJavaClasses();
+	}
+
+	public final String getDatabaseLocation() {
+		return getLocation() + SEPARATOR + "database";
+	}
+
+	public final URL getURL() {
+		return url;
 	}
 
 }

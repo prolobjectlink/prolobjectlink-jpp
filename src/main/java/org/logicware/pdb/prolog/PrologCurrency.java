@@ -2,7 +2,7 @@
  * #%L
  * prolobjectlink-db
  * %%
- * Copyright (C) 2012 - 2017 Logicware Project
+ * Copyright (C) 2012 - 2018 Logicware Project
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,51 +19,44 @@
  */
 package org.logicware.pdb.prolog;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.util.Currency;
+import java.util.Locale;
 
-final class PrologDate implements Comparable<PrologDate> {
+final class PrologCurrency implements Serializable {
 
-	private long time;
+	private final String code;
 
-	PrologDate() {
-		this(System.currentTimeMillis());
+	private static final long serialVersionUID = 5609314716803501225L;
+	private static final transient Locale locale = Locale.getDefault();
+	private static final transient Currency currency = Currency.getInstance(locale);
+
+	PrologCurrency() {
+		this.code = currency.getCurrencyCode();
 	}
 
-	PrologDate(long time) {
-		this.time = time;
+	PrologCurrency(String code) {
+		this.code = code;
 	}
 
-	long getTime() {
-		return time;
+	final String getCurrencyCode() {
+		return code;
 	}
 
-	Date getJavaUtilDate() {
-		return new Date(time);
-	}
-
-	boolean before(PrologDate dateTime) {
-		return compareTo(dateTime) < 0;
-	}
-
-	boolean after(PrologDate dateTime) {
-		return compareTo(dateTime) > 0;
-	}
-
-	public int compareTo(PrologDate o) {
-		int t = time > o.time ? 1 : 0;
-		return time < o.time ? -1 : t;
+	final Currency getJavaUtilCurrency() {
+		return Currency.getInstance(code);
 	}
 
 	@Override
 	public String toString() {
-		return "" + getJavaUtilDate() + "";
+		return "" + getJavaUtilCurrency() + "";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (time ^ (time >>> 32));
+		result = prime * result + ((code == null) ? 0 : code.hashCode());
 		return result;
 	}
 
@@ -75,8 +68,13 @@ final class PrologDate implements Comparable<PrologDate> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PrologDate other = (PrologDate) obj;
-		return time == other.time;
+		PrologCurrency other = (PrologCurrency) obj;
+		if (code == null) {
+			if (other.code != null)
+				return false;
+		} else if (!code.equals(other.code))
+			return false;
+		return true;
 	}
 
 }

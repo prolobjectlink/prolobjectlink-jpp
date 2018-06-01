@@ -20,10 +20,6 @@
 package org.logicware.pdb.databse;
 
 import java.io.File;
-import java.net.URL;
-import java.util.List;
-
-import javax.persistence.EntityManager;
 
 import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseMode;
@@ -39,13 +35,28 @@ import org.logicware.pdb.Schema;
 import org.logicware.pdb.StorageGraph;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
+import org.logicware.pdb.memory.MemoryRelational;
 
+/**
+ * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
+ *             RemoteRelationalHierarchical} instead
+ * @author Jose Zalacain
+ *
+ */
+@Deprecated
 public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine implements RelationalDatabase {
 
 	private final StorageGraph storage;
 	private final Transaction transaction;
 	protected static final String LOCATION = "dat" + File.separator + "relational";
 
+	/**
+	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public AbstractRelationalDatabase(String name, Schema schema, DatabaseUser user, StorageGraph storage) {
 		super(storage.getProperties(), LOCATION + File.separator + name + File.separator + "database", name, schema,
 				user);
@@ -113,20 +124,8 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 		return storage.createProcedureQuery(functor, args);
 	}
 
-	public final String getDatabaseLocation() {
-		return getLocation() + File.separator + "database";
-	}
-
 	public final String getStorageLocation() {
 		return storage.getLocation();
-	}
-
-	public final String getRootLocation() {
-		return LOCATION;
-	}
-
-	public final void include(String path) {
-		storage.include(path);
 	}
 
 	public final Transaction getTransaction() {
@@ -149,8 +148,8 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 		storage.defragment();
 	}
 
-	public final List<Class<?>> classes() {
-		return getSchema().getJavaClasses();
+	public final void include(String path) {
+		storage.include(path);
 	}
 
 	public final void begin() {
@@ -205,26 +204,12 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 		storage.clear();
 	}
 
-	public EntityManager getEntityManager() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public DatabaseMode getMode() {
-		// TODO Auto-generated method stub
-		return null;
+		return DatabaseMode.EMBEDDED;
 	}
 
 	public DatabaseType getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return DatabaseType.RELATIONAL;
 	}
-
-	public URL getURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
 
 }

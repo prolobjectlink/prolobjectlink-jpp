@@ -19,6 +19,13 @@
  */
 package org.logicware.pdb;
 
+/**
+ * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
+ *             RemoteRelationalHierarchical} instead
+ * @author Jose Zalacain
+ *
+ */
+@Deprecated
 public interface RelationalDatabase extends DatabaseEngine {
 
 }

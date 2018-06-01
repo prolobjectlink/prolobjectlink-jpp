@@ -28,8 +28,22 @@ import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.databse.AbstractRelationalDatabase;
 
+/**
+ * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
+ *             RemoteRelationalHierarchical} instead
+ * @author Jose Zalacain
+ *
+ */
+@Deprecated
 public final class PrologRelationalDatabase extends AbstractRelationalDatabase implements RelationalDatabase {
 
+	/**
+	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public PrologRelationalDatabase(Settings properties, StorageMode storageMode, String name, DatabaseUser user) {
 		super(name, new DatabaseSchema(LOCATION + File.separator + name, properties.getProvider(), properties, user),
 				user,

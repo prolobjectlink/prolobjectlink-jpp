@@ -59,10 +59,24 @@ public abstract class PrologContainerFactory extends AbstractContainerFactory im
 		return new PrologStorageGraph(getProvider(), getSettings(), path, schema, this, storageMode);
 	}
 
+	/**
+	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public final RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
 		return new PrologRelationalDatabase(getSettings(), storageMode, name, user);
 	}
 
+	/**
+	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
+	 *             RemoteHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public final HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name,
 			DatabaseUser user) {
 		return new PrologHierarchicalDatabase(getSettings(), storageMode, name, user);

@@ -136,10 +136,24 @@ public final class Settings extends AbstractMap<Object, Object>
 		return getContainerFactory().createHierarchicalCache();
 	}
 
+	/**
+	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
+	 *             RemoteHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
 		return getContainerFactory().createHierarchicalDatabase(storageMode, name, user);
 	}
 
+	/**
+	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
+	 *             RemoteHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, String username,
 			String password) {
 		return containerFactory.createHierarchicalDatabase(storageMode, name, username, password);
@@ -165,10 +179,24 @@ public final class Settings extends AbstractMap<Object, Object>
 		return containerFactory.createRelationalCache(schema);
 	}
 
+	/**
+	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
 		return getContainerFactory().createRelationalDatabase(storageMode, name, user);
 	}
 
+	/**
+	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, String username,
 			String password) {
 		return containerFactory.createRelationalDatabase(storageMode, name, username, password);

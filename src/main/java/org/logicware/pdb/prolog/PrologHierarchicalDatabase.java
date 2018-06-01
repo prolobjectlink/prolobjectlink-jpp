@@ -26,8 +26,22 @@ import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.databse.AbstractHierarchicalDatabase;
 
+/**
+ * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
+ *             RemoteHierarchical} instead
+ * @author Jose Zalacain
+ *
+ */
+@Deprecated
 public class PrologHierarchicalDatabase extends AbstractHierarchicalDatabase implements HierarchicalDatabase {
 
+	/**
+	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
+	 *             RemoteHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public PrologHierarchicalDatabase(Settings properties, StorageMode storageMode, String name, DatabaseUser user) {
 		super(name, new DatabaseSchema(LOCATION + SEPARATOR + name, properties.getProvider(), properties, user), user,
 				new PrologStorageManager(properties.getProvider(), properties,

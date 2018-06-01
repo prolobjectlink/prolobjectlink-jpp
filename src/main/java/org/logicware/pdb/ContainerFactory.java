@@ -35,15 +35,43 @@ public interface ContainerFactory {
 
 	public RelationalCache createRelationalCache(Schema schema);
 
+	/**
+	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user);
 
+	/**
+	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, String username,
 			String password);
 
 	public HierarchicalCache createHierarchicalCache();
 
+	/**
+	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
+	 *             RemoteHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, DatabaseUser user);
 
+	/**
+	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
+	 *             RemoteHierarchical} instead
+	 * @author Jose Zalacain
+	 *
+	 */
+	@Deprecated
 	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, String username,
 			String password);
 

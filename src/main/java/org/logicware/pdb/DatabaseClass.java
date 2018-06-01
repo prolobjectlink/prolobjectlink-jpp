@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.logicware.pdb.asm.AsmVersion;
 import org.logicware.pdb.util.JavaReflect;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -49,6 +48,20 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	private final Map<String, DatabaseField> fields;
 	private transient DatabaseField primaryKeyField;
 	private static final long serialVersionUID = -8770366199140961351L;
+	private static final Map<String, Integer> versionMap = new HashMap<String, Integer>();
+
+	static {
+
+		versionMap.put("1.1", Opcodes.V1_1);
+		versionMap.put("1.2", Opcodes.V1_2);
+		versionMap.put("1.3", Opcodes.V1_3);
+		versionMap.put("1.4", Opcodes.V1_4);
+		versionMap.put("1.5", Opcodes.V1_5);
+		versionMap.put("1.6", Opcodes.V1_6);
+		versionMap.put("1.7", Opcodes.V1_7);
+		versionMap.put("1.8", Opcodes.V1_8);
+
+	}
 
 	private DatabaseField newField(String name, String comment, int position, Class<?> type) {
 		return new DatabaseField(name, comment, position, type, schema, this);
@@ -184,18 +197,22 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 			interfaces[i] = superClasses.get(i).name.replace('.', '/');
 		}
 
-		cw.visit(AsmVersion.getCompatible(), Opcodes.ACC_PUBLIC, internalName, null, superclass, interfaces);
+		String javaVersion = System.getProperty("java.version");
+		javaVersion = javaVersion.substring(0, javaVersion.lastIndexOf('.'));
+		cw.visit(versionMap.get(javaVersion), Opcodes.ACC_PUBLIC, internalName, null, superclass, interfaces);
 
 		// Fields Declaration
 		for (DatabaseField field : fields.values()) {
 			field.createField(cw);
 		}
 
-		MethodVisitor con = cw.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
+		MethodVisitor con = cw.visitMethod(Opcodes.ACC_PUBLIC, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), null,
+				null);
 
 		con.visitCode();
 		con.visitVarInsn(Opcodes.ALOAD, 0);
-		con.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+		con.visitMethodInsn(Opcodes.INVOKESPECIAL, Type.getInternalName(Object.class), "<init>",
+				Type.getMethodDescriptor(Type.VOID_TYPE), false);
 		con.visitInsn(Opcodes.RETURN);
 		con.visitMaxs(1, 1);
 
@@ -500,7 +517,7 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	public SchemaElementType geElementType() {
 		return SchemaElementType.CLASS;
 	}
-	
+
 	/**
 	 * Add a field of type Collection/Map of given class type
 	 * 

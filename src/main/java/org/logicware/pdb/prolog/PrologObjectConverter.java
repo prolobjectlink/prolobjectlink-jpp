@@ -35,6 +35,7 @@ import static org.logicware.pdb.prolog.PrologTermType.VARIABLE_TYPE;
 import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
@@ -183,6 +184,11 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 				return ((PrologLocale) object).getJavaUtilLocale();
 			}
 
+			// java.util.currency transformations
+			else if (structureClass == PrologCurrency.class) {
+				return ((PrologCurrency) object).getJavaUtilCurrency();
+			}
+
 			// java.util.collections transformations
 			else if (structureClass == PrologArrayList.class) {
 				return JavaLists.arrayList((PrologArrayList<?>) object);
@@ -240,12 +246,23 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 
 		// java.util.date transformations
 		else if (object instanceof Date) {
-			return toTerm(new PrologDate(((Date) object)));
+			return toTerm(new PrologDate(((Date) object).getTime()));
 		}
 
 		// java.util.locale transformations
 		else if (object instanceof Locale) {
-			return toTerm(new PrologLocale(((Locale) object)));
+			Locale locale = (Locale) object;
+			String l = locale.getLanguage();
+			String c = locale.getCountry();
+			String v = locale.getVariant();
+			return toTerm(new PrologLocale(l,c,v));
+		}
+
+		// java.util.currency transformations
+		else if (object instanceof Currency) {
+			Currency currency = (Currency) object;
+			String c = currency.getCurrencyCode();
+			return toTerm(new PrologCurrency(c));
 		}
 
 		// java.util.collections transformations

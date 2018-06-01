@@ -23,14 +23,6 @@ import static org.logicware.pdb.jpa.spi.JPAPersistenceXmlParser.XML;
 
 import java.io.File;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
-import javax.persistence.SynchronizationType;
-import javax.persistence.spi.PersistenceUnitInfo;
 
 import org.logicware.pdb.DatabaseUser;
 import org.logicware.pdb.EmbeddedDatabase;
@@ -43,67 +35,19 @@ import org.logicware.pdb.Settings;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.databse.AbstractDatabaseEngine;
-import org.logicware.pdb.jpa.JPAEntityManager;
-import org.logicware.pdb.jpa.JPAEntityManagerFactory;
-import org.logicware.pdb.jpa.JPAResultSetMapping;
 
 public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseEngine
 		implements PersistentContainer, EmbeddedDatabase {
 
-	private final URL url;
 	private final PersistentContainer storage;
-	private Map<String, PersistenceUnitInfo> units = new HashMap<String, PersistenceUnitInfo>();
 
 	protected static final String URL_PREFIX = "jdbc:prolobjectlink:";
 	protected static final URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);
 
 	AbstractEmbeddedDatabase(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
 			PersistentContainer storage) {
-		super(settings, url.getPath(), name, schema, owner);
+		super(settings, url, name, schema, owner);
 		this.storage = storage;
-		this.url = url;
-	}
-
-	public final URL getURL() {
-		return url;
-	}
-
-	public final String getDatabaseLocation() {
-		return getLocation() + "/database";
-	}
-
-	public final EntityManager getEntityManager() {
-
-		// TODO FILL ALL MAPS
-
-		// properties map
-		Map map = getProperties().asMap();
-
-		// user defined names for entities
-		Map<String, Class<?>> entityMap = new HashMap<String, Class<?>>();
-
-		//
-		JPAEntityManagerFactory factory = new JPAEntityManagerFactory(this);
-
-		//
-		Map<String, EntityGraph<?>> namedEntityGraphs = new HashMap<String, EntityGraph<?>>();
-
-		// result set mappings for native queries result
-		Map<String, JPAResultSetMapping> resultSetMappings = new HashMap<String, JPAResultSetMapping>();
-
-		// user defined named queries container
-		Map<String, javax.persistence.Query> namedQueries = new HashMap<String, javax.persistence.Query>();
-
-		return new JPAEntityManager(this, factory, SynchronizationType.SYNCHRONIZED, map, entityMap, namedQueries,
-				namedEntityGraphs, resultSetMappings);
-	}
-
-	public final String getRootLocation() {
-		return url.getPath();
-	}
-
-	public final List<Class<?>> classes() {
-		return getSchema().getJavaClasses();
 	}
 
 	public final PersistentContainer getContainer() {

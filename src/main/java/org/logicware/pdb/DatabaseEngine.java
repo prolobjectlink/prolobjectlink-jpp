@@ -22,8 +22,10 @@ package org.logicware.pdb;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.spi.PersistenceUnitInfo;
 
 public interface DatabaseEngine extends PersistentContainer {
 
@@ -86,5 +88,7 @@ public interface DatabaseEngine extends PersistentContainer {
 	public DatabaseType getType();
 
 	public URL getURL();
+
+	Map<String, PersistenceUnitInfo> getPersistenceUnits();
 
 }
