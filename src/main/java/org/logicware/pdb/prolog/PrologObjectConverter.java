@@ -33,6 +33,8 @@ import static org.logicware.pdb.prolog.PrologTermType.TRUE_TYPE;
 import static org.logicware.pdb.prolog.PrologTermType.VARIABLE_TYPE;
 
 import java.lang.reflect.Field;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -179,6 +181,16 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 				return ((PrologDate) object).getJavaUtilDate();
 			}
 
+			// java.sql.time transformations
+			else if (structureClass == Time.class) {
+				return ((PrologTime) object).getJavaSqlTime();
+			}
+
+			// java.sql.time transformations
+			else if (structureClass == Timestamp.class) {
+				return ((PrologTimestamp) object).getJavaSqlTimestamp();
+			}
+
 			// java.util.locale transformations
 			else if (structureClass == PrologLocale.class) {
 				return ((PrologLocale) object).getJavaUtilLocale();
@@ -249,13 +261,23 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			return toTerm(new PrologDate(((Date) object).getTime()));
 		}
 
+		// java.sql.time transformations
+		else if (object instanceof Time) {
+			return toTerm(new PrologTime(((Time) object).getTime()));
+		}
+
+		// java.sql.timestamp transformations
+		else if (object instanceof Timestamp) {
+			return toTerm(new PrologTime(((Timestamp) object).getTime()));
+		}
+
 		// java.util.locale transformations
 		else if (object instanceof Locale) {
 			Locale locale = (Locale) object;
 			String l = locale.getLanguage();
 			String c = locale.getCountry();
 			String v = locale.getVariant();
-			return toTerm(new PrologLocale(l,c,v));
+			return toTerm(new PrologLocale(l, c, v));
 		}
 
 		// java.util.currency transformations

@@ -19,14 +19,15 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.io.Serializable;
 import java.util.Date;
 
-final class PrologDate implements Comparable<PrologDate> {
+class PrologDate implements Serializable, Comparable<PrologDate> {
 
-	private long time;
+	private static final long serialVersionUID = 3615154738795726113L;
+	private long time = System.currentTimeMillis();
 
-	PrologDate() {
-		this(System.currentTimeMillis());
+	public PrologDate() {
 	}
 
 	PrologDate(long time) {
