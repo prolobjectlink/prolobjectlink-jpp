@@ -272,7 +272,7 @@ class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V
 
 	protected PrologTreeMap<K, V> getEntry(Object key) {
 		if (key instanceof Comparable) {
-			K k = (K) key;
+			Comparable<K> k = (Comparable<K>) key;
 			if (k.compareTo(this.key) < 0) {
 				if (left != null) {
 					return left.getEntry(key);

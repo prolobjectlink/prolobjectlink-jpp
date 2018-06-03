@@ -155,8 +155,8 @@ class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 		if (o instanceof Comparable) {
 
-			E e = (E) o;
 			PrologTreeSet<E> root = this;
+			Comparable<E> e = (Comparable<E>) o;
 
 			if (e.compareTo(this.element) < 0) {
 				if (left != null) {

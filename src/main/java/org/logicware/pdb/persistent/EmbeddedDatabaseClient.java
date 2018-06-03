@@ -36,7 +36,7 @@ import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.databse.AbstractDatabaseEngine;
 
-public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseEngine
+public abstract class EmbeddedDatabaseClient extends AbstractDatabaseEngine
 		implements PersistentContainer, EmbeddedDatabase {
 
 	private final PersistentContainer storage;
@@ -44,7 +44,7 @@ public abstract class AbstractEmbeddedDatabase extends AbstractDatabaseEngine
 	protected static final String URL_PREFIX = "jdbc:prolobjectlink:";
 	protected static final URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);
 
-	AbstractEmbeddedDatabase(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
+	EmbeddedDatabaseClient(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
 			PersistentContainer storage) {
 		super(settings, url, name, schema, owner);
 		this.storage = storage;

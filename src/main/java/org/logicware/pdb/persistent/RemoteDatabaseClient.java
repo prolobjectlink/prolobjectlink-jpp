@@ -291,7 +291,7 @@ public abstract class RemoteDatabaseClient extends AbstractDatabaseEngine implem
 		engine.dispose();
 	}
 
-	public Transaction getTransaction() {
+	public final Transaction getTransaction() {
 		return transaction;
 	}
 

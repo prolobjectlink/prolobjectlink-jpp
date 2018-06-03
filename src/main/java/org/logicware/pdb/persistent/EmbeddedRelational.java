@@ -28,7 +28,7 @@ import org.logicware.pdb.EmbeddedDatabase;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Schema;
 
-public final class EmbeddedRelational extends AbstractEmbeddedDatabase implements EmbeddedDatabase {
+public final class EmbeddedRelational extends EmbeddedDatabaseClient implements EmbeddedDatabase {
 
 	protected static EmbeddedRelational embeddedRelationalDB;
 

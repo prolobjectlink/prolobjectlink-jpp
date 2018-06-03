@@ -51,6 +51,9 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 
 	private final StorageMode storageMode;
 	private final Transaction transaction;
+
+	// private final IdentityHashMap<Class<?>, PersistentContainer> master;
+	// TODO replace this hash map by identity hash map with class key
 	private final HashMap<String, PersistentContainer> master;
 
 	protected AbstractStorageManager(PrologProvider provider, Settings properties,

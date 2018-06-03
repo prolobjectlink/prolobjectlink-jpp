@@ -30,7 +30,7 @@ import java.util.Arrays;
 import org.logicware.pdb.logging.LoggerConstants;
 import org.logicware.pdb.logging.LoggerUtils;
 
-public final class JavaReflect {
+public class JavaReflect {
 
 	public static boolean isFinal(Field field) {
 		int modifiers = field.getModifiers();
@@ -299,7 +299,7 @@ public final class JavaReflect {
 		return ret;
 	}
 
-	private JavaReflect() {
+	protected JavaReflect() {
 	}
 
 }

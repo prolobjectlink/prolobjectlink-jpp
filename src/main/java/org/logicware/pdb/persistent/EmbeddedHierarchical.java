@@ -42,7 +42,7 @@ import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.memory.MemoryHierarchical;
 import org.logicware.pdb.util.JavaReflect;
 
-public final class EmbeddedHierarchical extends AbstractEmbeddedDatabase implements EmbeddedDatabase {
+public final class EmbeddedHierarchical extends EmbeddedDatabaseClient implements EmbeddedDatabase {
 
 	private static EmbeddedDatabase embeddedHierarchicalDatabase;
 
