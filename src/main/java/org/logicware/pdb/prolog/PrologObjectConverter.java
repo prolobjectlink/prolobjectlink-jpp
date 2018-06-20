@@ -37,6 +37,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Deque;
@@ -201,6 +202,11 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 				return ((PrologCurrency) object).getJavaUtilCurrency();
 			}
 
+			// java.util.calendar transformations
+			else if (structureClass == PrologCalendar.class) {
+				return ((PrologCalendar) object).getJavaUtilCalendar();
+			}
+
 			// java.util.collections transformations
 			else if (structureClass == PrologArrayList.class) {
 				return JavaLists.arrayList((PrologArrayList<?>) object);
@@ -285,6 +291,22 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			Currency currency = (Currency) object;
 			String c = currency.getCurrencyCode();
 			return toTerm(new PrologCurrency(c));
+		}
+
+		// java.util.currency transformations
+		else if (object instanceof Calendar) {
+			Calendar c = (Calendar) object;
+			int minimalDaysInFirstWeek = c.getMinimalDaysInFirstWeek();
+			int firstDayOfWeek = c.getFirstDayOfWeek();
+			int[] fields = new int[Calendar.FIELD_COUNT];
+			for (int i = 0; i < fields.length; i++) {
+				fields[i] = c.get(i);
+			}
+			String calendarType = c.getCalendarType();
+			long timeInMillis = c.getTimeInMillis();
+			boolean lenient = c.isLenient();
+			return toTerm(new PrologCalendar(timeInMillis, fields, calendarType, lenient, firstDayOfWeek,
+					minimalDaysInFirstWeek));
 		}
 
 		// java.util.collections transformations
