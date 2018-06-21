@@ -20,7 +20,7 @@
 
 package org.logicware.pdb.util;
 
-public final class JavaAssert {
+public final class JavaAsserts {
 
 	public static <T> T notNull(T object) {
 		if (object == null) {
@@ -36,6 +36,20 @@ public final class JavaAssert {
 		return object;
 	}
 
+	public static <T> T requireNotNull(T object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
+		return object;
+	}
+
+	public static <T> T requireNotNull(T object, String message) {
+		if (object == null) {
+			throw new IllegalArgumentException(message);
+		}
+		return object;
+	}
+
 	public static int checkIndex(int index, int size) {
 		return checkIndex(index, size, "");
 	}
@@ -47,6 +61,6 @@ public final class JavaAssert {
 		return index;
 	}
 
-	private JavaAssert() {
+	private JavaAsserts() {
 	}
 }
