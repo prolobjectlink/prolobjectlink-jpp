@@ -46,14 +46,36 @@ public class PrologCalendar implements Serializable {
 
 	private static final Builder builder = new Calendar.Builder();
 	private static final long serialVersionUID = 2227564537660293384L;
+	private static final int[] indexes = new int[Calendar.FIELD_COUNT];
+
+	static {
+		indexes[Calendar.ERA] = Calendar.ERA;
+		indexes[Calendar.YEAR] = Calendar.YEAR;
+		indexes[Calendar.MONTH] = Calendar.MONTH;
+		indexes[Calendar.WEEK_OF_YEAR] = Calendar.WEEK_OF_YEAR;
+		indexes[Calendar.WEEK_OF_MONTH] = Calendar.WEEK_OF_MONTH;
+		indexes[Calendar.DAY_OF_MONTH] = Calendar.DAY_OF_MONTH;
+		indexes[Calendar.DAY_OF_YEAR] = Calendar.DAY_OF_YEAR;
+		indexes[Calendar.DAY_OF_WEEK] = Calendar.DAY_OF_WEEK;
+		indexes[Calendar.DAY_OF_WEEK_IN_MONTH] = Calendar.DAY_OF_WEEK_IN_MONTH;
+		indexes[Calendar.AM_PM] = Calendar.AM_PM;
+		indexes[Calendar.HOUR] = Calendar.HOUR;
+		indexes[Calendar.HOUR_OF_DAY] = Calendar.HOUR_OF_DAY;
+		indexes[Calendar.MINUTE] = Calendar.ERA;
+		indexes[Calendar.SECOND] = Calendar.ERA;
+		indexes[Calendar.MILLISECOND] = Calendar.ERA;
+		indexes[Calendar.ZONE_OFFSET] = Calendar.ZONE_OFFSET;
+		indexes[Calendar.DST_OFFSET] = Calendar.ZONE_OFFSET;
+	}
 
 	PrologCalendar() {
 		Calendar c = Calendar.getInstance();
 		minimalDaysInFirstWeek = c.getMinimalDaysInFirstWeek();
 		firstDayOfWeek = c.getFirstDayOfWeek();
-		fields = new int[Calendar.FIELD_COUNT];
-		for (int i = 0; i < fields.length; i++) {
-			fields[i] = c.get(i);
+		fields = new int[Calendar.FIELD_COUNT * 2];
+		for (int i = 0; i < Calendar.FIELD_COUNT; i++) {
+			fields[i] = indexes[i];
+			fields[i + 1] = c.get(i);
 		}
 		calendarType = c.getCalendarType();
 		timeInMillis = c.getTimeInMillis();
@@ -71,11 +93,11 @@ public class PrologCalendar implements Serializable {
 	}
 
 	final Calendar getJavaUtilCalendar() {
-		builder.setWeekDefinition(firstDayOfWeek, minimalDaysInFirstWeek);
-		builder.setCalendarType(calendarType);
+//		builder.setWeekDefinition(firstDayOfWeek, minimalDaysInFirstWeek);
+//		builder.setCalendarType(calendarType);
 		builder.setInstant(timeInMillis);
-		builder.setLenient(lenient);
-		builder.setFields(fields);
+//		builder.setLenient(lenient);
+//		builder.setFields(fields);
 		return builder.build();
 	}
 
