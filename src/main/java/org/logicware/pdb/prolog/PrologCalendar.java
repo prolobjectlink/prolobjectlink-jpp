@@ -20,7 +20,6 @@
 package org.logicware.pdb.prolog;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Calendar.Builder;
 import java.util.Locale;
@@ -37,76 +36,43 @@ import java.util.TimeZone;
  */
 public class PrologCalendar implements Serializable {
 
-	private final long timeInMillis;
-	private final int[] fields;
-	private final String calendarType;
 	private final boolean lenient;
+	private final long timeInMillis;
+	private final String calendarType;
 	private final int firstDayOfWeek;
 	private final int minimalDaysInFirstWeek;
 
 	private static final Builder builder = new Calendar.Builder();
-	private static final long serialVersionUID = 2227564537660293384L;
-	private static final int[] indexes = new int[Calendar.FIELD_COUNT];
-
-	static {
-		indexes[Calendar.ERA] = Calendar.ERA;
-		indexes[Calendar.YEAR] = Calendar.YEAR;
-		indexes[Calendar.MONTH] = Calendar.MONTH;
-		indexes[Calendar.WEEK_OF_YEAR] = Calendar.WEEK_OF_YEAR;
-		indexes[Calendar.WEEK_OF_MONTH] = Calendar.WEEK_OF_MONTH;
-		indexes[Calendar.DAY_OF_MONTH] = Calendar.DAY_OF_MONTH;
-		indexes[Calendar.DAY_OF_YEAR] = Calendar.DAY_OF_YEAR;
-		indexes[Calendar.DAY_OF_WEEK] = Calendar.DAY_OF_WEEK;
-		indexes[Calendar.DAY_OF_WEEK_IN_MONTH] = Calendar.DAY_OF_WEEK_IN_MONTH;
-		indexes[Calendar.AM_PM] = Calendar.AM_PM;
-		indexes[Calendar.HOUR] = Calendar.HOUR;
-		indexes[Calendar.HOUR_OF_DAY] = Calendar.HOUR_OF_DAY;
-		indexes[Calendar.MINUTE] = Calendar.ERA;
-		indexes[Calendar.SECOND] = Calendar.ERA;
-		indexes[Calendar.MILLISECOND] = Calendar.ERA;
-		indexes[Calendar.ZONE_OFFSET] = Calendar.ZONE_OFFSET;
-		indexes[Calendar.DST_OFFSET] = Calendar.ZONE_OFFSET;
-	}
+	private static final long serialVersionUID = -1810532253972577393L;
 
 	PrologCalendar() {
 		Calendar c = Calendar.getInstance();
 		minimalDaysInFirstWeek = c.getMinimalDaysInFirstWeek();
 		firstDayOfWeek = c.getFirstDayOfWeek();
-		fields = new int[Calendar.FIELD_COUNT * 2];
-		for (int i = 0; i < Calendar.FIELD_COUNT; i++) {
-			fields[i] = indexes[i];
-			fields[i + 1] = c.get(i);
-		}
 		calendarType = c.getCalendarType();
 		timeInMillis = c.getTimeInMillis();
 		lenient = c.isLenient();
 	}
 
-	PrologCalendar(long timeInMillis, int[] fields, String calendarType, boolean lenient, int firstDayOfWeek,
+	PrologCalendar(boolean lenient, long timeInMillis, String calendarType, int firstDayOfWeek,
 			int minimalDaysInFirstWeek) {
-		this.timeInMillis = timeInMillis;
-		this.fields = fields;
-		this.calendarType = calendarType;
 		this.lenient = lenient;
+		this.timeInMillis = timeInMillis;
+		this.calendarType = calendarType;
 		this.firstDayOfWeek = firstDayOfWeek;
 		this.minimalDaysInFirstWeek = minimalDaysInFirstWeek;
 	}
 
 	final Calendar getJavaUtilCalendar() {
-//		builder.setWeekDefinition(firstDayOfWeek, minimalDaysInFirstWeek);
-//		builder.setCalendarType(calendarType);
+		builder.setWeekDefinition(firstDayOfWeek, minimalDaysInFirstWeek);
+		builder.setCalendarType(calendarType);
 		builder.setInstant(timeInMillis);
-//		builder.setLenient(lenient);
-//		builder.setFields(fields);
+		builder.setLenient(lenient);
 		return builder.build();
 	}
 
 	final long getTimeInMillis() {
 		return timeInMillis;
-	}
-
-	final int[] getFields() {
-		return fields;
 	}
 
 	final String getCalendarType() {
@@ -135,7 +101,6 @@ public class PrologCalendar implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((calendarType == null) ? 0 : calendarType.hashCode());
-		result = prime * result + Arrays.hashCode(fields);
 		result = prime * result + firstDayOfWeek;
 		result = prime * result + (lenient ? 1231 : 1237);
 		result = prime * result + minimalDaysInFirstWeek;
@@ -156,8 +121,6 @@ public class PrologCalendar implements Serializable {
 			if (other.calendarType != null)
 				return false;
 		} else if (!calendarType.equals(other.calendarType))
-			return false;
-		if (!Arrays.equals(fields, other.fields))
 			return false;
 		if (firstDayOfWeek != other.firstDayOfWeek)
 			return false;

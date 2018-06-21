@@ -293,20 +293,16 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			return toTerm(new PrologCurrency(c));
 		}
 
-		// java.util.currency transformations
+		// java.util.calendar transformations
 		else if (object instanceof Calendar) {
 			Calendar c = (Calendar) object;
 			int minimalDaysInFirstWeek = c.getMinimalDaysInFirstWeek();
 			int firstDayOfWeek = c.getFirstDayOfWeek();
-			int[] fields = new int[Calendar.FIELD_COUNT];
-			for (int i = 0; i < fields.length; i++) {
-				fields[i] = c.get(i);
-			}
 			String calendarType = c.getCalendarType();
 			long timeInMillis = c.getTimeInMillis();
 			boolean lenient = c.isLenient();
-			return toTerm(new PrologCalendar(timeInMillis, fields, calendarType, lenient, firstDayOfWeek,
-					minimalDaysInFirstWeek));
+			return toTerm(
+					new PrologCalendar(lenient, timeInMillis, calendarType, firstDayOfWeek, minimalDaysInFirstWeek));
 		}
 
 		// java.util.collections transformations
