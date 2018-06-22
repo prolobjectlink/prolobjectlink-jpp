@@ -52,6 +52,7 @@ import org.logicware.pdb.AbstractConverter;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.logging.LoggerConstants;
 import org.logicware.pdb.logging.LoggerUtils;
+import org.logicware.pdb.util.Assertions;
 import org.logicware.pdb.util.JavaLists;
 import org.logicware.pdb.util.JavaMaps;
 import org.logicware.pdb.util.JavaReflect;
@@ -369,6 +370,10 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			// retrieve object class
 			Class<?> classPtr = object.getClass();
 
+			// check non empty attribute class or non persistent fields
+			classPtr = Assertions.persistent(classPtr, "Non persistent " + classPtr);
+			classPtr = Assertions.nonStaticFinal(classPtr, "Non persistent " + classPtr);
+
 			// stack for resolve prolog structure arguments order
 			Deque<PrologTerm> stack = new ArrayDeque<PrologTerm>();
 
@@ -438,6 +443,10 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 	private PrologStructure toStructure(Class<?> clazz, Object object) {
 
 		Class<?> classPtr = clazz;
+
+		// check non empty attribute class or non persistent fields
+		classPtr = Assertions.persistent(classPtr, "Non persistent " + classPtr);
+		classPtr = Assertions.nonStaticFinal(classPtr, "Non persistent " + classPtr);
 
 		// stack for resolve prolog structure arguments order
 		Deque<PrologTerm> stack = new ArrayDeque<PrologTerm>();

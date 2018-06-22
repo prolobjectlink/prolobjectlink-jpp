@@ -19,9 +19,10 @@
  */
 package org.logicware.pdb.generator;
 
+import org.logicware.pdb.IdGenerator;
 import org.logicware.pdb.IdGeneratorType;
 
-public final class TimestampGenerator extends AbstractIdGenerator<Long> {
+public final class TimestampGenerator extends AbstractIdGenerator<Long> implements IdGenerator<Long> {
 
 	private static final long serialVersionUID = 7830482991999467963L;
 

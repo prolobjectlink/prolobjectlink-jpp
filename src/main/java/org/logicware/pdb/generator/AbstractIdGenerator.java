@@ -22,6 +22,7 @@ package org.logicware.pdb.generator;
 import java.io.Serializable;
 
 import org.logicware.pdb.IdGenerator;
+import org.logicware.pdb.util.Assertions;
 import org.logicware.pdb.util.JavaReflect;
 
 abstract class AbstractIdGenerator<O extends Serializable> implements IdGenerator<O> {
@@ -32,7 +33,7 @@ abstract class AbstractIdGenerator<O extends Serializable> implements IdGenerato
 	private static final long serialVersionUID = -994987235885802450L;
 
 	public AbstractIdGenerator(O value, Class<?> type) {
-		assert type != null;
+		type = Assertions.requireNotNull(type);
 		this.typeName = type.getName();
 		this.value = value;
 		this.type = type;

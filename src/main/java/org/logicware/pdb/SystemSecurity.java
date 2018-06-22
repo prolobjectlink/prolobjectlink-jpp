@@ -22,14 +22,11 @@ package org.logicware.pdb;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 import org.logicware.pdb.logging.LoggerConstants;
 import org.logicware.pdb.logging.LoggerUtils;
 
 public class SystemSecurity {
-
-	private static final SecureRandom sr = new SecureRandom();
 
 	public static String md5(String text) {
 		StringBuilder hashword = new StringBuilder();
@@ -65,51 +62,6 @@ public class SystemSecurity {
 			hashword.append(hashword);
 		}
 		return "" + hashword + "";
-	}
-
-	public static String randomCharString() {
-		return randomCharString(32);
-	}
-
-	private static String randomCharString(int count) {
-
-		int start = ' ';
-		int end = 'z' + 1;
-		int gap = end - start;
-		char[] buffer = new char[count];
-
-		while (count-- != 0) {
-			char ch = (char) (sr.nextInt(gap) + start);
-			if (Character.isLetter(ch)) {
-				if (ch >= 56320 && ch <= 57343) {
-					if (count == 0) {
-						count++;
-					} else {
-						// low surrogate, insert high surrogate after putting it in
-						buffer[count] = ch;
-						count--;
-						buffer[count] = (char) (55296 + sr.nextInt(128));
-					}
-				} else if (ch >= 55296 && ch <= 56191) {
-					if (count == 0) {
-						count++;
-					} else {
-						// high surrogate, insert low surrogate before putting it in
-						buffer[count] = (char) (56320 + sr.nextInt(128));
-						count--;
-						buffer[count] = ch;
-					}
-				} else if (ch >= 56192 && ch <= 56319) {
-					// private high surrogate, no effing clue, so skip it
-					count++;
-				} else {
-					buffer[count] = ch;
-				}
-			} else {
-				count++;
-			}
-		}
-		return new String(buffer);
 	}
 
 	private SystemSecurity() {

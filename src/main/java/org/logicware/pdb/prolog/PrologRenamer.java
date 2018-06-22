@@ -22,7 +22,7 @@ package org.logicware.pdb.prolog;
 import java.lang.reflect.Field;
 
 import org.logicware.pdb.Renamer;
-import org.logicware.pdb.util.JavaAsserts;
+import org.logicware.pdb.util.Assertions;
 import org.logicware.pdb.util.JavaReflect;
 import org.logicware.pdb.util.JavaStrings;
 
@@ -33,7 +33,7 @@ final class PrologRenamer extends AbstractRenamer implements Renamer {
 	}
 
 	public final PrologVariable toVariable(Field field) {
-		Field workField = JavaAsserts.requireNotNull(field);
+		Field workField = Assertions.requireNotNull(field);
 		Class<?> workClass = workField.getDeclaringClass();
 		String className = workClass.getName();
 		String name = className.replace('.', '_');
@@ -56,10 +56,10 @@ final class PrologRenamer extends AbstractRenamer implements Renamer {
 	}
 
 	public final Field toField(String name) {
-		String workName = JavaAsserts.requireNotNull(name);
+		String workName = Assertions.requireNotNull(name);
 		Class<?> workClass = getVariableMap().get(workName);
 		String message = name + "don't belong to any class field";
-		workClass = JavaAsserts.notNull(workClass, message);
+		workClass = Assertions.notNull(workClass, message);
 		String className = workClass.getName();
 		className = className.replace('.', '_') + "_";
 		String target = JavaStrings.toUpperCase(className);
