@@ -27,6 +27,8 @@ import java.util.NoSuchElementException;
 
 class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
+	private static final long serialVersionUID = 6033570255958454303L;
+
 	private PrologTreeSet<E> left;
 	private E element;
 	private PrologTreeSet<E> right;

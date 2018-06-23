@@ -31,6 +31,8 @@ import java.util.Set;
 
 class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V> implements Map.Entry<K, V> {
 
+	private static final long serialVersionUID = -2244940649007449299L;
+
 	private PrologTreeMap<K, V> left;
 	private K key;
 	private V value;

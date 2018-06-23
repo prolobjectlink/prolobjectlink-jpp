@@ -27,10 +27,11 @@ import java.util.Set;
  * @see PrologTreeSet
  * @author Jose Zalacain
  * @since 1.0
- * @param <E>
- *            generic object type
+ * @param <E> generic object type
  */
 abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
+
+	private static final long serialVersionUID = 7705401669354067376L;
 
 	public AbstractSet() {
 	}

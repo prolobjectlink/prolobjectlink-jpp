@@ -19,6 +19,7 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -27,12 +28,12 @@ import java.util.Map;
  * @see PrologTreeMap
  * @author Jose Zalacain
  * @since 1.0
- * @param <K>
- *            generic object type for key
- * @param <V>
- *            generic object type for value
+ * @param <K> generic object type for key
+ * @param <V> generic object type for value
  */
-abstract class AbstractMap<K, V> implements Map<K, V> {
+abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
+
+	private static final long serialVersionUID = 6977777072929966719L;
 
 	public AbstractMap() {
 	}

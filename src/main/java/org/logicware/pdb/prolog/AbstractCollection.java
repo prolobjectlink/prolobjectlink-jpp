@@ -19,6 +19,7 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
@@ -29,10 +30,11 @@ import java.util.Iterator;
  * @see PrologArrayList
  * @author Jose Zalacain
  * @since 1.0
- * @param <E>
- *            generic object type
+ * @param <E> generic object type
  */
-abstract class AbstractCollection<E> implements Collection<E> {
+abstract class AbstractCollection<E> implements Collection<E>, Serializable {
+
+	private static final long serialVersionUID = 1217111971532658016L;
 
 	public AbstractCollection() {
 	}

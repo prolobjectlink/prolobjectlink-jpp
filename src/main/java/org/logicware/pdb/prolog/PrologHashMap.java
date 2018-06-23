@@ -32,6 +32,7 @@ class PrologHashMap<K, V> extends AbstractMap<K, V> {
 
 	private int size;
 	private HashEntry<K, V>[] table;
+	private static final long serialVersionUID = -5488211660761949073L;
 
 	PrologHashMap() {
 		this(16);

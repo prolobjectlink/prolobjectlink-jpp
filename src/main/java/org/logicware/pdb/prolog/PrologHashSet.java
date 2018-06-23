@@ -28,6 +28,7 @@ class PrologHashSet<E> extends AbstractSet<E> {
 
 	private int size;
 	private Object[] table;
+	private static final long serialVersionUID = -3134064473893957230L;
 
 	PrologHashSet() {
 		this(16);

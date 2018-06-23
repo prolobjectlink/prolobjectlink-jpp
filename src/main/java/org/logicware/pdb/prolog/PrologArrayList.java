@@ -31,6 +31,7 @@ class PrologArrayList<E> extends AbstractCollection<E> implements List<E> {
 
 	private int size;
 	private Object[] elements;
+	private static final long serialVersionUID = -5316210117663296419L;
 
 	PrologArrayList() {
 		this(10);
