@@ -46,11 +46,34 @@ public final class Settings extends AbstractMap<Object, Object>
 
 	public static final String PROVIDER = Settings.class.getPackage().getName().concat(".prologProvider");
 	public static final String FACTORY = Settings.class.getPackage().getName().concat(".containerFactory");
+	public static final String SECRET = Settings.class.getPackage().getName().concat(".password");
+	public static final String USER = Settings.class.getPackage().getName().concat(".user");
+
+	public static final String STORAGE = Settings.class.getPackage().getName().concat(".storage.mode");
+	public static final String TIME_GRANULARITY = Settings.class.getPackage().getName().concat(".lock.granularity");
+	public static final String SLEEP_GAP = Settings.class.getPackage().getName().concat(".lock.timegap");
+	public static final String LOCK_SLEEP = Settings.class.getPackage().getName().concat(".lock.sleep");
+
 	public static final String CONFIG = "etc" + File.separator + "prolobjectlink.xml";
+
+	public static final String DEFAULT_USER = "sa";
+	public static final String DEFAULT_SECRET = "";
+
+	private static final int DEFAULT_TIME_GRANULARITY = 80;
+	private static final int DEFAULT_LOCK_SLEEP = 40;
+	private static final int DEFAULT_SLEEP_GAP = 1;
 
 	private ContainerFactory containerFactory;
 	private PrologProvider prologProvider;
+	private StorageMode storageMode;
 	private Properties properties;
+
+	private String username;
+	private String password;
+
+	private int time_granularity;
+	private int lock_sleep;
+	private int sleep_gap;
 
 	public Settings() {
 
@@ -68,9 +91,21 @@ public final class Settings extends AbstractMap<Object, Object>
 		this.properties = new Properties();
 		this.containerFactory = containerFactory;
 		this.containerFactory.setSettings(this);
+		this.time_granularity = DEFAULT_TIME_GRANULARITY;
+		this.lock_sleep = DEFAULT_LOCK_SLEEP;
+		this.sleep_gap = DEFAULT_SLEEP_GAP;
+		this.storageMode = StorageMode.STORAGE_POOL;
+		this.password = DEFAULT_SECRET;
+		this.username = DEFAULT_USER;
 		prologProvider = containerFactory.getProvider();
 		properties.put(PROVIDER, prologProvider.getClass().getName());
 		properties.put(FACTORY, containerFactory.getClass().getName());
+		properties.put(TIME_GRANULARITY, DEFAULT_TIME_GRANULARITY);
+		properties.put(STORAGE, StorageMode.STORAGE_POOL);
+		properties.put(LOCK_SLEEP, DEFAULT_LOCK_SLEEP);
+		properties.put(SLEEP_GAP, DEFAULT_SLEEP_GAP);
+		properties.put(SECRET, DEFAULT_SECRET);
+		properties.put(USER, DEFAULT_USER);
 	}
 
 	public ContainerFactory getContainerFactory() {
@@ -84,6 +119,19 @@ public final class Settings extends AbstractMap<Object, Object>
 			String provider = properties.getProperty(PROVIDER);
 			Class<?> clazzDriver = JavaReflect.classForName(driver);
 			Class<?> clazzProvider = JavaReflect.classForName(provider);
+
+			this.time_granularity = Integer
+					.valueOf((String) properties.getOrDefault(TIME_GRANULARITY, DEFAULT_TIME_GRANULARITY));
+			this.lock_sleep = Integer.valueOf((String) properties.getOrDefault(LOCK_SLEEP, DEFAULT_LOCK_SLEEP));
+			this.sleep_gap = Integer.valueOf((String) properties.getOrDefault(SLEEP_GAP, DEFAULT_SLEEP_GAP));
+			this.password = properties.getProperty(SECRET, DEFAULT_SECRET);
+			this.username = properties.getProperty(USER, DEFAULT_USER);
+			String storage = properties.getProperty(STORAGE);
+			if (storage.equals("" + StorageMode.SINGLE_STORAGE + "")) {
+				this.storageMode = StorageMode.SINGLE_STORAGE;
+			} else {
+				this.storageMode = StorageMode.STORAGE_POOL;
+			}
 			prologProvider = (PrologProvider) JavaReflect.newInstance(clazzProvider);
 			containerFactory = (ContainerFactory) JavaReflect.newInstance(clazzDriver);
 			containerFactory.setProvider(prologProvider);
@@ -100,6 +148,12 @@ public final class Settings extends AbstractMap<Object, Object>
 		try {
 			properties.put(PROVIDER, prologProvider.getClass().getName());
 			properties.put(FACTORY, containerFactory.getClass().getName());
+			properties.put(TIME_GRANULARITY, "" + time_granularity + "");
+			properties.put(LOCK_SLEEP, "" + lock_sleep + "");
+			properties.put(SLEEP_GAP, "" + sleep_gap + "");
+			properties.put(STORAGE, "" + storageMode + "");
+			properties.put(SECRET, password);
+			properties.put(USER, username);
 			properties.storeToXML(new FileOutputStream(CONFIG), null);
 		} catch (IOException e) {
 			LoggerUtils.error(getClass(), LoggerConstants.IO, e);
@@ -240,6 +294,54 @@ public final class Settings extends AbstractMap<Object, Object>
 
 	public Map<Object, Object> asMap() {
 		return this;
+	}
+
+	public final StorageMode getStorageMode() {
+		return storageMode;
+	}
+
+	public final void setStorageMode(StorageMode storageMode) {
+		this.storageMode = storageMode;
+	}
+
+	public final String getUsername() {
+		return username;
+	}
+
+	public final void setUsername(String username) {
+		this.username = username;
+	}
+
+	public final String getPassword() {
+		return password;
+	}
+
+	public final void setPassword(String password) {
+		this.password = password;
+	}
+
+	public final int getTimeGranularity() {
+		return time_granularity;
+	}
+
+	public final void setTimeGranularity(int time_granularity) {
+		this.time_granularity = time_granularity;
+	}
+
+	public final int getLockSleep() {
+		return lock_sleep;
+	}
+
+	public final void setLockSleep(int lock_sleep) {
+		this.lock_sleep = lock_sleep;
+	}
+
+	public final int getSleepGap() {
+		return sleep_gap;
+	}
+
+	public final void setSleepGap(int sleep_gap) {
+		this.sleep_gap = sleep_gap;
 	}
 
 }
