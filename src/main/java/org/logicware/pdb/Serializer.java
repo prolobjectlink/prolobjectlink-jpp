@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.util;
+package org.logicware.pdb;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -25,9 +25,9 @@ import java.lang.reflect.Field;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import org.logicware.pdb.DynamicClassLoader;
 import org.logicware.pdb.logging.LoggerConstants;
 import org.logicware.pdb.logging.LoggerUtils;
+import org.logicware.pdb.util.JavaReflect;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
