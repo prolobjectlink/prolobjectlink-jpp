@@ -36,10 +36,8 @@ public interface Graph<V, E> {
 	/**
 	 * Return the adjacent vertex from/out given vertex and incident edge.
 	 * 
-	 * @param vertex
-	 *            from/out vertex to find the adjacent vertex.
-	 * @param edge
-	 *            incident edge.
+	 * @param vertex from/out vertex to find the adjacent vertex.
+	 * @param edge   incident edge.
 	 * @return adjacent vertex.
 	 * @since 1.0
 	 */
@@ -69,11 +67,11 @@ public interface Graph<V, E> {
 
 	public Iterable<GraphVertex<V>> getVertices();
 
-	public int countEdges();
+	public boolean equals(Object obj);
 
 	public int countVertices();
 
-	public boolean equals(Object obj);
+	public int countEdges();
 
 	public int hashCode();
 

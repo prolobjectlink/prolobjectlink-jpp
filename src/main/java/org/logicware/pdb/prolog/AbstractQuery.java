@@ -19,7 +19,9 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.logicware.pdb.AbstractWrapper;
@@ -41,7 +43,7 @@ public abstract class AbstractQuery extends AbstractWrapper implements PrologQue
 		return engine.getProvider();
 	}
 
-	public final <K extends PrologTerm> K toTerm(Object o, Class<K> from) {
+	protected final <K extends PrologTerm> K toTerm(Object o, Class<K> from) {
 		return engine.toTerm(o, from);
 	}
 
@@ -49,7 +51,7 @@ public abstract class AbstractQuery extends AbstractWrapper implements PrologQue
 		return engine.toTermArray(os, from);
 	}
 
-	protected final <K extends PrologTerm> K[][] toTermTable(Object[][] oss, Class<K[][]> from) {
+	protected final <K extends PrologTerm> K[][] toTermMatrix(Object[][] oss, Class<K[][]> from) {
 		return engine.toTermMatrix(oss, from);
 	}
 
@@ -75,6 +77,33 @@ public abstract class AbstractQuery extends AbstractWrapper implements PrologQue
 		return engine.fromTerm(head, body, to);
 	}
 
+	protected final boolean contains(List<Map<String, PrologTerm>> maps, Map<String, PrologTerm> map) {
+		for (Map<String, PrologTerm> m : maps) {
+			if (m.equals(map)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected final boolean contains(Map<String, PrologTerm>[] maps, Map<String, PrologTerm> map) {
+		for (Map<String, PrologTerm> m : maps) {
+			if (m.equals(map)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected final boolean contains(List<PrologTerm[]> arrays, PrologTerm[] array) {
+		for (PrologTerm[] a : arrays) {
+			if (Arrays.equals(a, array)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public final Iterator<PrologTerm[]> iterator() {
 		return new PrologQueryIterator(this);
 	}
@@ -86,12 +115,11 @@ public abstract class AbstractQuery extends AbstractWrapper implements PrologQue
 	public final PrologTerm[] next() {
 		// don't check has next
 		// don't raise NoSuchElementException
-		// need a deep revision in wrapped engines
 		return nextSolution();
 	}
 
 	public final void remove() {
-		// skip
+		// skip invoking next
 		nextSolution();
 	}
 

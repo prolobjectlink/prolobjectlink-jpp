@@ -59,51 +59,6 @@ public class Serializer extends JavaReflect {
 	private static final ClassLoader loader = currentThread.getContextClassLoader();
 	private static final Map<Class<?>, Class<?>> cachedClasses = new IdentityHashMap<Class<?>, Class<?>>();
 
-	public static <O> Class<O> makeClass(O object) {
-
-		// get the object default class
-		Class<?> clazz = object.getClass();
-
-		// check serialized contention
-		Class<?>[] ifaces = clazz.getInterfaces();
-		for (int i = 0; i < ifaces.length; i++) {
-			if (ifaces[i] == Serializable.class) {
-				return (Class<O>) clazz;
-			}
-		}
-
-		// load modified class if is defined
-		Class<?> newClass = cachedClasses.get(clazz);
-		if (newClass == null) {
-
-			//
-			LoggerUtils.debug(Serializer.class, "LOADING... " + clazz);
-
-			// gets an input stream to read the byte code of the class
-			String resource = Type.getInternalName(clazz) + ".class";
-			InputStream is = loader.getResourceAsStream(resource);
-
-			// adapts the class on the fly (runtime)
-			// add serializable interface implementation
-			// add generated serialVersionUID field
-			try {
-				ClassWriter cw = new ClassWriter(Opcodes.ASM5);
-				SerialVersionUIDAdder sv = new SerialVersionUIDAdder(cw);
-				SerializableAdder serializableAdder = new SerializableAdder(sv);
-				new ClassReader(is).accept(serializableAdder, 0);
-				newClass = classLoader.defineClass(clazz.getName(), cw.toByteArray());
-				cachedClasses.put(clazz, newClass);
-			} catch (Exception e) {
-				LoggerUtils.error(Serializer.class, LoggerConstants.CLASS_NOT_FOUND, e);
-			}
-
-			//
-			LoggerUtils.debug(Serializer.class, "LOADED " + clazz);
-		}
-
-		return (Class<O>) newClass;
-	}
-
 	/**
 	 * Get the serialized version of object class creating a new serialized instance
 	 * of the given object and copy all value from the given object to the
@@ -142,6 +97,51 @@ public class Serializer extends JavaReflect {
 			x[i] = make(objects[i]);
 		}
 		return x;
+	}
+
+	public static <O> Class<O> makeClass(O object) {
+	
+		// get the object default class
+		Class<?> clazz = object.getClass();
+	
+		// check serialized contention
+		Class<?>[] ifaces = clazz.getInterfaces();
+		for (int i = 0; i < ifaces.length; i++) {
+			if (ifaces[i] == Serializable.class) {
+				return (Class<O>) clazz;
+			}
+		}
+	
+		// load modified class if is defined
+		Class<?> newClass = cachedClasses.get(clazz);
+		if (newClass == null) {
+	
+			//
+			LoggerUtils.debug(Serializer.class, "LOADING... " + clazz);
+	
+			// gets an input stream to read the byte code of the class
+			String resource = Type.getInternalName(clazz) + ".class";
+			InputStream is = loader.getResourceAsStream(resource);
+	
+			// adapts the class on the fly (runtime)
+			// add serializable interface implementation
+			// add generated serialVersionUID field
+			try {
+				ClassWriter cw = new ClassWriter(Opcodes.ASM5);
+				SerialVersionUIDAdder sv = new SerialVersionUIDAdder(cw);
+				SerializableAdder serializableAdder = new SerializableAdder(sv);
+				new ClassReader(is).accept(serializableAdder, 0);
+				newClass = classLoader.defineClass(clazz.getName(), cw.toByteArray());
+				cachedClasses.put(clazz, newClass);
+			} catch (Exception e) {
+				LoggerUtils.error(Serializer.class, LoggerConstants.CLASS_NOT_FOUND, e);
+			}
+	
+			//
+			LoggerUtils.debug(Serializer.class, "LOADED " + clazz);
+		}
+	
+		return (Class<O>) newClass;
 	}
 
 	private static class SerializableAdder extends ClassVisitor {

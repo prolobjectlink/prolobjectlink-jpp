@@ -25,11 +25,15 @@ public class JavaStrings {
 
 	private static final Random r = new Random();
 
-	public static String randomCharString() {
+	public static String randomCharString32() {
 		return randomCharString(32);
 	}
 
-	private static String randomCharString(int count) {
+	public static String randomCharString64() {
+		return randomCharString(64);
+	}
+
+	public static String randomCharString(int count) {
 
 		int start = ' ';
 		int end = 'z' + 1;

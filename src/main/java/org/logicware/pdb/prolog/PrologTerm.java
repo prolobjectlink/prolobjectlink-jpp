@@ -19,8 +19,6 @@
  */
 package org.logicware.pdb.prolog;
 
-import java.util.Map;
-
 import org.logicware.pdb.Wrapper;
 
 /**
@@ -40,13 +38,11 @@ public interface PrologTerm extends Wrapper, Comparable<PrologTerm> {
 	public String getIndicator();
 
 	/**
-	 * True if term has an indicator with the format functor/arity that match
-	 * with the given functor and arity.
+	 * True if term has an indicator with the format functor/arity that match with
+	 * the given functor and arity.
 	 * 
-	 * @param functor
-	 *            term functor
-	 * @param arity
-	 *            term arity
+	 * @param functor term functor
+	 * @param arity   term arity
 	 * @return True if term has an indicator functor/arity.
 	 * @since 1.0
 	 */
@@ -77,8 +73,8 @@ public interface PrologTerm extends Wrapper, Comparable<PrologTerm> {
 	public boolean isNumber();
 
 	/**
-	 * True if this Term is a single precision floating point number, false in
-	 * other case
+	 * True if this Term is a single precision floating point number, false in other
+	 * case
 	 * 
 	 * @return whether this Term represents a single precision floating point
 	 *         number, false in other case
@@ -95,8 +91,8 @@ public interface PrologTerm extends Wrapper, Comparable<PrologTerm> {
 	public boolean isInteger();
 
 	/**
-	 * True if this Term is a double precision floating point number, false in
-	 * other case
+	 * True if this Term is a double precision floating point number, false in other
+	 * case
 	 * 
 	 * @return whether this Term represents a double precision floating point
 	 *         number, false in other case
@@ -107,8 +103,8 @@ public interface PrologTerm extends Wrapper, Comparable<PrologTerm> {
 	/**
 	 * True if this Term is a large integer number, false in other case
 	 * 
-	 * @return whether this Term represents a large integer number, false in
-	 *         other case
+	 * @return whether this Term represents a large integer number, false in other
+	 *         case
 	 * @since 1.0
 	 */
 	public boolean isLong();
@@ -138,8 +134,7 @@ public interface PrologTerm extends Wrapper, Comparable<PrologTerm> {
 	public boolean isStructure();
 
 	/**
-	 * True if this Term is a nil term (null term for prolog), false in other
-	 * case
+	 * True if this Term is a nil term (null term for prolog), false in other case
 	 * 
 	 * @return whether this Term is a nil term
 	 * @since 1.0
@@ -180,9 +175,9 @@ public interface PrologTerm extends Wrapper, Comparable<PrologTerm> {
 	public boolean isEvaluable();
 
 	/**
-	 * Return current term instance if current term is not a variable or is a
-	 * free variable term. If current term is a variable bound term then return
-	 * the linked term hold by this variable after dereferencing.
+	 * Return current term instance if current term is not a variable or is a free
+	 * variable term. If current term is a variable bound term then return the
+	 * linked term hold by this variable after dereferencing.
 	 * 
 	 * @return return a dereferencing term if current term is bound variable,
 	 *         current term in otherwise
@@ -203,23 +198,21 @@ public interface PrologTerm extends Wrapper, Comparable<PrologTerm> {
 	public PrologTerm getArgument(int index);
 
 	/**
-	 * Check that two terms (x and y) unify. Prolog unification algorithm is
-	 * based on three principals rules:
+	 * Check that two terms (x and y) unify. Prolog unification algorithm is based
+	 * on three principals rules:
 	 * <ul>
-	 * <li>If x and y are atomics constants then x and y unify only if they are
-	 * same object.</li>
+	 * <li>If x and y are atomics constants then x and y unify only if they are same
+	 * object.</li>
 	 * <li>If x is a variable and y is anything then they unify and x is
-	 * instantiated to y. Conversely, if y is a variable then this is
-	 * instantiated to x.</li>
+	 * instantiated to y. Conversely, if y is a variable then this is instantiated
+	 * to x.</li>
 	 * <li>If x and y are structured terms then unify only if they match (equals
 	 * funtor and arity) and all their correspondents arguments unify.</li>
 	 * </ul>
 	 * 
 	 * 
-	 * @param term
-	 *            the term to unify with the current term
-	 * @return true if the specified term unify whit the current term, false if
-	 *         not
+	 * @param term the term to unify with the current term
+	 * @return true if the specified term unify whit the current term, false if not
 	 * @since 1.0
 	 */
 	public boolean unify(PrologTerm term);
