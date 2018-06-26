@@ -52,6 +52,20 @@ public final class Assertions {
 		return object;
 	}
 
+	public static <T> T requireNotEqualsRef(T target, T refernce) {
+		if (target == refernce) {
+			throw new IllegalArgumentException();
+		}
+		return target;
+	}
+
+	public static <T> T requireNotEqualsRef(T target, T refernce, String message) {
+		if (target == refernce) {
+			throw new IllegalArgumentException(message);
+		}
+		return target;
+	}
+
 	public static int checkIndex(int index, int size) {
 		return checkIndex(index, size, "");
 	}

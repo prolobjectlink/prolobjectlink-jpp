@@ -19,32 +19,46 @@
  */
 package org.logicware.pdb;
 
-public class ArrayStack extends AbstractArrayStack<Object> implements Stack<Object> {
+import java.util.ArrayList;
+import java.util.EmptyStackException;
 
-	private static final long serialVersionUID = 3241683391580275887L;
+public class AbstractArrayStack<T> extends ArrayList<T> implements Stack<T> {
 
-	@Override
-	public Object push(Object item) {
-		// TODO Auto-generated method stub
-		return null;
+	private static final long serialVersionUID = -3930074030361556686L;
+
+	public AbstractArrayStack() {
+		super();
 	}
 
-	@Override
-	public Object pop() {
-		// TODO Auto-generated method stub
-		return null;
+	public AbstractArrayStack(int initialSize) {
+		super(initialSize);
 	}
 
-	@Override
-	public Object peek() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean empty() {
-		// TODO Auto-generated method stub
-		return false;
+		return isEmpty();
+	}
+
+	public T peek() {
+		int n = size();
+		if (n <= 0) {
+			throw new EmptyStackException();
+		} else {
+			return get(n - 1);
+		}
+	}
+
+	public T pop() {
+		int n = size();
+		if (n <= 0) {
+			throw new EmptyStackException();
+		} else {
+			return remove(n - 1);
+		}
+	}
+
+	public T push(T item) {
+		add(item);
+		return item;
 	}
 
 }

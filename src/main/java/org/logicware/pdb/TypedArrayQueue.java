@@ -19,8 +19,10 @@
  */
 package org.logicware.pdb;
 
-public class TypedArrayStack<T> extends AbstractArrayStack<T> implements Stack<T> {
+import java.util.Queue;
 
-	private static final long serialVersionUID = -6769914163671435871L;
+public class TypedArrayQueue<E> extends AbstractArrayQueue<E> implements Queue<E> {
+
+	private static final long serialVersionUID = 8659174251748733801L;
 
 }
