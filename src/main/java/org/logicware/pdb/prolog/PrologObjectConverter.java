@@ -35,12 +35,10 @@ import static org.logicware.pdb.prolog.PrologTermType.VARIABLE_TYPE;
 import java.lang.reflect.Field;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -50,6 +48,8 @@ import java.util.TreeSet;
 
 import org.logicware.pdb.AbstractConverter;
 import org.logicware.pdb.ObjectConverter;
+import org.logicware.pdb.Stack;
+import org.logicware.pdb.TypedArrayStack;
 import org.logicware.pdb.logging.LoggerConstants;
 import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.util.Assertions;
@@ -142,7 +142,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			// creating new instance
 			object = JavaReflect.newInstance(classPtr);
 
-			Deque<Field> stack = new ArrayDeque<Field>();
+			Stack<Field> stack = new TypedArrayStack<Field>();
 
 			while (classPtr != null && classPtr != Object.class) {
 
@@ -375,7 +375,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			classPtr = Assertions.nonStaticFinal(classPtr, "Non persistent " + classPtr);
 
 			// stack for resolve prolog structure arguments order
-			Deque<PrologTerm> stack = new ArrayDeque<PrologTerm>();
+			Stack<PrologTerm> stack = new TypedArrayStack<PrologTerm>();
 
 			// class name to convert in predicate functor
 			String className = classPtr.getName();
@@ -449,7 +449,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		classPtr = Assertions.nonStaticFinal(classPtr, "Non persistent " + classPtr);
 
 		// stack for resolve prolog structure arguments order
-		Deque<PrologTerm> stack = new ArrayDeque<PrologTerm>();
+		Stack<PrologTerm> stack = new TypedArrayStack<PrologTerm>();
 
 		// class name to convert in predicate functor
 		String functor = "'" + classPtr.getName() + "'";

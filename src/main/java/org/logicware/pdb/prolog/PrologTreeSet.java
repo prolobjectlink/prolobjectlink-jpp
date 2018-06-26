@@ -19,11 +19,12 @@
  */
 package org.logicware.pdb.prolog;
 
-import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import org.logicware.pdb.Stack;
+import org.logicware.pdb.TypedArrayStack;
 
 class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
@@ -344,10 +345,10 @@ class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 		private boolean canRemove;
 
 		private final PrologTreeSet<E> root;
-		private final Deque<PrologTreeSet<E>> stack;
+		private final Stack<PrologTreeSet<E>> stack;
 
 		public TreeSetIterator() {
-			stack = new ArrayDeque<PrologTreeSet<E>>();
+			stack = new TypedArrayStack<PrologTreeSet<E>>();
 			PrologTreeSet<E> ptr = root = PrologTreeSet.this;
 
 			while (ptr != null && !ptr.isEmpty()) {
