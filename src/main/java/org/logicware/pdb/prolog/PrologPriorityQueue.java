@@ -17,48 +17,20 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb;
+package org.logicware.pdb.prolog;
 
-import java.util.ArrayList;
-import java.util.EmptyStackException;
+import java.util.Queue;
 
-public class AbstractArrayStack<T> extends ArrayList<T> implements Stack<T> {
+public class PrologPriorityQueue<E> extends AbstractQueue<E> implements Queue<E> {
 
-	private static final long serialVersionUID = -3930074030361556686L;
+	private static final long serialVersionUID = 3504970123155287504L;
 
-	public AbstractArrayStack() {
+	PrologPriorityQueue() {
 		super();
 	}
 
-	public AbstractArrayStack(int capacity) {
+	PrologPriorityQueue(int capacity) {
 		super(capacity);
-	}
-
-	public boolean empty() {
-		return isEmpty();
-	}
-
-	public T peek() {
-		int n = size();
-		if (n <= 0) {
-			throw new EmptyStackException();
-		} else {
-			return get(n - 1);
-		}
-	}
-
-	public T pop() {
-		int n = size();
-		if (n <= 0) {
-			throw new EmptyStackException();
-		} else {
-			return remove(n - 1);
-		}
-	}
-
-	public T push(T item) {
-		add(item);
-		return item;
 	}
 
 }

@@ -17,20 +17,21 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb;
+package org.logicware.pdb.prolog;
 
-import java.util.ArrayList;
 import java.util.EmptyStackException;
 
-public class AbstractArrayStack<T> extends ArrayList<T> implements Stack<T> {
+import org.logicware.pdb.Stack;
 
-	private static final long serialVersionUID = -3930074030361556686L;
+public class PrologStack<E> extends PrologArrayList<E> implements Stack<E> {
 
-	public AbstractArrayStack() {
+	private static final long serialVersionUID = 5252181262129160650L;
+
+	PrologStack() {
 		super();
 	}
 
-	public AbstractArrayStack(int capacity) {
+	PrologStack(int capacity) {
 		super(capacity);
 	}
 
@@ -38,7 +39,7 @@ public class AbstractArrayStack<T> extends ArrayList<T> implements Stack<T> {
 		return isEmpty();
 	}
 
-	public T peek() {
+	public E peek() {
 		int n = size();
 		if (n <= 0) {
 			throw new EmptyStackException();
@@ -47,7 +48,7 @@ public class AbstractArrayStack<T> extends ArrayList<T> implements Stack<T> {
 		}
 	}
 
-	public T pop() {
+	public E pop() {
 		int n = size();
 		if (n <= 0) {
 			throw new EmptyStackException();
@@ -56,9 +57,8 @@ public class AbstractArrayStack<T> extends ArrayList<T> implements Stack<T> {
 		}
 	}
 
-	public T push(T item) {
+	public E push(E item) {
 		add(item);
 		return item;
 	}
-
 }

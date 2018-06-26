@@ -21,6 +21,8 @@ package org.logicware.pdb.prolog;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 final class PrologLists {
 
@@ -28,10 +30,29 @@ final class PrologLists {
 	}
 
 	/**
+	 * Creates a new empty stack.
+	 * 
+	 * @return an empty stack.
+	 * @since 1.0
+	 */
+	public static <T> PrologStack<T> stack() {
+		return new PrologStack<T>();
+	}
+
+	/**
+	 * Creates a new empty vector
+	 * 
+	 * @return an empty stack
+	 * @since 1.0
+	 */
+	public static <T> PrologVector<T> vector() {
+		return new PrologVector<T>();
+	}
+
+	/**
 	 * Create a new org.logicware.util.ArrayList.
 	 * 
-	 * @param <T>
-	 *            the type
+	 * @param <T> the type
 	 * @return the object
 	 */
 	public static <T> List<T> arrayList() {
@@ -41,10 +62,8 @@ final class PrologLists {
 	/**
 	 * Create a new org.logicware.util.ArrayList.
 	 * 
-	 * @param <T>
-	 *            the type
-	 * @param capacity
-	 *            the initial capacity
+	 * @param          <T> the type
+	 * @param capacity the initial capacity
 	 * @return the object
 	 */
 	public static <T> List<T> arrayList(int capacity) {
@@ -54,14 +73,34 @@ final class PrologLists {
 	/**
 	 * Create a new org.logicware.util.ArrayList.
 	 * 
-	 * @param <T>
-	 *            the type
-	 * @param c
-	 *            the collection
+	 * @param   <T> the type
+	 * @param c the collection
 	 * @return the object
 	 */
 	public static <T> List<T> arrayList(Collection<T> c) {
 		return new PrologArrayList<T>(c);
+	}
+
+	/**
+	 * Creates a new empty priority queue of natural order items.
+	 * 
+	 * @return an empty priority queue of natural order items.
+	 * @since 1.0
+	 */
+	public static <T> Queue<T> priorityQueue() {
+		return new PrologPriorityQueue<T>();
+	}
+
+	/**
+	 * Creates a new empty priority queue of natural order items and specified
+	 * capacity.
+	 * 
+	 * @return an empty priority queue of natural order items and specified
+	 *         capacity.
+	 * @since 1.0
+	 */
+	public static <T> Queue<T> priorityQueue(int capacity) {
+		return new PrologPriorityQueue<T>(capacity);
 	}
 
 }

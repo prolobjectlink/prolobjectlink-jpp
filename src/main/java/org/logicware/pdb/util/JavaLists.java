@@ -22,6 +22,10 @@ package org.logicware.pdb.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.Vector;
 
 public final class JavaLists {
 
@@ -29,11 +33,31 @@ public final class JavaLists {
 	}
 
 	/**
+	 * Creates a new empty stack.
+	 * 
+	 * @return an empty stack.
+	 * @since 1.0
+	 */
+	public static <T> Stack<T> stack() {
+		return new Stack<T>();
+	}
+
+	/**
+	 * Creates a new empty vector
+	 * 
+	 * @return an empty stack
+	 * @since 1.0
+	 */
+	public static <T> Vector<T> vector() {
+		return new Vector<T>();
+	}
+
+	/**
 	 * Create a new java.util.ArrayList.
 	 * 
-	 * @param <T>
-	 *            the type
+	 * @param <T> the type
 	 * @return the object
+	 * @since 1.0
 	 */
 	public static <T> List<T> arrayList() {
 		return new ArrayList<T>();
@@ -42,11 +66,10 @@ public final class JavaLists {
 	/**
 	 * Create a new java.util.ArrayList.
 	 * 
-	 * @param <T>
-	 *            the type
-	 * @param capacity
-	 *            the initial capacity
+	 * @param          <T> the type
+	 * @param capacity the initial capacity
 	 * @return the object
+	 * @since 1.0
 	 */
 	public static <T> List<T> arrayList(int capacity) {
 		return new ArrayList<T>(capacity);
@@ -55,14 +78,35 @@ public final class JavaLists {
 	/**
 	 * Create a new java.util.ArrayList.
 	 * 
-	 * @param <T>
-	 *            the type
-	 * @param c
-	 *            the collection
+	 * @param   <T> the type
+	 * @param c the collection
 	 * @return the object
+	 * @since 1.0
 	 */
 	public static <T> List<T> arrayList(Collection<T> c) {
 		return new ArrayList<T>(c);
+	}
+
+	/**
+	 * Creates a new empty priority queue of natural order items.
+	 * 
+	 * @return an empty priority queue of natural order items.
+	 * @since 1.0
+	 */
+	public static <T> Queue<T> priorityQueue() {
+		return new PriorityQueue<T>();
+	}
+
+	/**
+	 * Creates a new empty priority queue of natural order items and specified
+	 * capacity.
+	 * 
+	 * @return an empty priority queue of natural order items and specified
+	 *         capacity.
+	 * @since 1.0
+	 */
+	public static <T> Queue<T> priorityQueue(int capacity) {
+		return new PriorityQueue<T>(capacity);
 	}
 
 }

@@ -17,48 +17,53 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb;
+package org.logicware.pdb.prolog;
 
-import java.util.ArrayList;
-import java.util.EmptyStackException;
+import java.util.NoSuchElementException;
+import java.util.Queue;
 
-public class AbstractArrayStack<T> extends ArrayList<T> implements Stack<T> {
+abstract class AbstractQueue<E> extends PrologArrayList<E> implements Queue<E> {
 
-	private static final long serialVersionUID = -3930074030361556686L;
+	private static final long serialVersionUID = -3472285760926699928L;
 
-	public AbstractArrayStack() {
+	AbstractQueue() {
 		super();
 	}
 
-	public AbstractArrayStack(int capacity) {
+	AbstractQueue(int capacity) {
 		super(capacity);
 	}
 
-	public boolean empty() {
-		return isEmpty();
+	public boolean offer(E e) {
+		return add(e);
 	}
 
-	public T peek() {
-		int n = size();
-		if (n <= 0) {
-			throw new EmptyStackException();
-		} else {
-			return get(n - 1);
+	public E remove() {
+		if (isEmpty()) {
+			throw new NoSuchElementException();
 		}
+		return remove(0);
 	}
 
-	public T pop() {
-		int n = size();
-		if (n <= 0) {
-			throw new EmptyStackException();
-		} else {
-			return remove(n - 1);
+	public E poll() {
+		if (!isEmpty()) {
+			return remove(0);
 		}
+		return null;
 	}
 
-	public T push(T item) {
-		add(item);
-		return item;
+	public E element() {
+		if (isEmpty()) {
+			throw new NoSuchElementException();
+		}
+		return get(0);
+	}
+
+	public E peek() {
+		if (!isEmpty()) {
+			return get(0);
+		}
+		return null;
 	}
 
 }

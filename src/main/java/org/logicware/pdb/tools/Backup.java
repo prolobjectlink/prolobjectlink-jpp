@@ -27,12 +27,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.logicware.pdb.AbstractPlatform;
+import org.logicware.pdb.TypedArrayQueue;
 import org.logicware.pdb.logging.LoggerUtils;
 
 public class Backup extends AbstractPlatform {
@@ -68,7 +68,7 @@ public class Backup extends AbstractPlatform {
 			zipOut.setComment("Prolobjectlink Database Backup File");
 
 			//
-			Queue<File> queue = new ArrayDeque<File>();
+			Queue<File> queue = new TypedArrayQueue<File>();
 
 			queue.offer(new File(db));
 			while (!queue.isEmpty()) {
