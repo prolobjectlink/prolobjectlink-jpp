@@ -65,7 +65,7 @@ public abstract class AbstractGraphEdge<E> extends AbstractGraphElement<E> imple
 
 	@Override
 	public String toString() {
-		return "---[" + getElement() + "]---";
+		return "" + getElement() + "";
 	}
 
 }

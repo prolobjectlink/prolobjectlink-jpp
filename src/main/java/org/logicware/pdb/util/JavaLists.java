@@ -21,6 +21,7 @@ package org.logicware.pdb.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -42,6 +43,14 @@ public final class JavaLists {
 		return new Stack<T>();
 	}
 
+	public static <T> Stack<T> stack(Collection<T> c) {
+		Stack<T> stack = new Stack<T>();
+		for (T t : c) {
+			stack.push(t);
+		}
+		return stack;
+	}
+
 	/**
 	 * Creates a new empty vector
 	 * 
@@ -50,6 +59,10 @@ public final class JavaLists {
 	 */
 	public static <T> Vector<T> vector() {
 		return new Vector<T>();
+	}
+
+	public static <T> Vector<T> vector(Collection<T> c) {
+		return new Vector<T>(c);
 	}
 
 	/**
@@ -87,6 +100,14 @@ public final class JavaLists {
 		return new ArrayList<T>(c);
 	}
 
+	public static <T> List<T> linkedList() {
+		return new LinkedList<T>();
+	}
+
+	public static <T> List<T> linkedList(Collection<T> c) {
+		return new LinkedList<T>(c);
+	}
+
 	/**
 	 * Creates a new empty priority queue of natural order items.
 	 * 
@@ -107,6 +128,10 @@ public final class JavaLists {
 	 */
 	public static <T> Queue<T> priorityQueue(int capacity) {
 		return new PriorityQueue<T>(capacity);
+	}
+
+	public static <T> Queue<T> priorityQueue(Collection<T> c) {
+		return new PriorityQueue<T>(c);
 	}
 
 }

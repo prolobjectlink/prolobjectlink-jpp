@@ -19,6 +19,8 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.io.Serializable;
+
 import org.logicware.pdb.Wrapper;
 
 /**
@@ -26,7 +28,7 @@ import org.logicware.pdb.Wrapper;
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface PrologTerm extends Wrapper, Comparable<PrologTerm> {
+public interface PrologTerm extends Wrapper, Comparable<PrologTerm>, Serializable {
 
 	/**
 	 * Gets the term indicator represented by one string with the format

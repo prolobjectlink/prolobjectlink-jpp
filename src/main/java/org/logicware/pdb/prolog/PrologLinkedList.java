@@ -19,58 +19,41 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.ListIterator;
 
-public class PrologLinkedList<E> extends AbstractSequential<E> implements List<E> {
+public class PrologLinkedList<E> extends AbstractLinkedList<E> implements List<E> {
 
-	private int size;
-	private E element;
-	private PrologLinkedList<E> next;
-	private static final long serialVersionUID = 2812221898884199941L;
+	private static final long serialVersionUID = 2370240611871530505L;
 
-	public int size() {
-		return size;
+	/**
+	 * Create new empty list
+	 */
+	PrologLinkedList() {
 	}
 
-	public boolean add(E e) {
-		// TODO Auto-generated method stub
-		return false;
+	/**
+	 * Create new list with element and empty tail
+	 * 
+	 * @param e first element
+	 * @since 1.0
+	 */
+	PrologLinkedList(E e) {
+		super(e);
 	}
 
-	public boolean remove(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+	/**
+	 * Create new list with element and next reference
+	 * 
+	 * @param e first element
+	 * @since 1.0
+	 */
+	PrologLinkedList(E e, AbstractLinkedList<E> next) {
+		super(next);
 	}
 
-	public void clear() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public int indexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int lastIndexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public ListIterator<E> listIterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ListIterator<E> listIterator(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<E> subList(int fromIndex, int toIndex) {
-		// TODO Auto-generated method stub
-		return null;
+	PrologLinkedList(Collection<? extends E> c) {
+		super(c);
 	}
 
 }

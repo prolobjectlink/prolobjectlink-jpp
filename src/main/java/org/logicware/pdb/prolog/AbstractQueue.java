@@ -19,6 +19,7 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
@@ -32,6 +33,10 @@ abstract class AbstractQueue<E> extends PrologArrayList<E> implements Queue<E> {
 
 	AbstractQueue(int capacity) {
 		super(capacity);
+	}
+
+	AbstractQueue(Collection<E> c) {
+		super(c);
 	}
 
 	public boolean offer(E e) {

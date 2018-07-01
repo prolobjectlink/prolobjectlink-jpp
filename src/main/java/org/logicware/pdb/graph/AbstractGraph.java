@@ -21,6 +21,7 @@ package org.logicware.pdb.graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.logicware.pdb.Direction;
@@ -34,10 +35,8 @@ import org.logicware.pdb.graph.DirectedGraph.GenericGraphVertex;
  * 
  * @author Jose Zalacain
  *
- * @param <V>
- *            vertex element type
- * @param <E>
- *            edge element type
+ * @param <V> vertex element type
+ * @param <E> edge element type
  * 
  * @since 1.0
  * @see DirectedGraph
@@ -145,34 +144,40 @@ public abstract class AbstractGraph<V, E> implements Graph<V, E> {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (GraphVertex<V> v : vertices) {
-			sb.append("Vertex " + v.getElement() + "\n");
-			sb.append("\t[outgoing]");
-			sb.append("\t" + countOutEdges(v) + " adjacent vertices:\n");
-			for (GraphEdge<E> e : outEdges(v)) {
-				sb.append("\t\t");
-				GraphVertex<V> adjacent = getVertex(v, e);
-				if (adjacent != null) {
-					sb.append(String.format("(node %s to node %s via edge %s)", v.getElement(), adjacent.getElement(),
-							e.getElement()));
-					sb.append("\n");
+		Iterator<GraphEdge<E>> ei = edges.iterator();
+		Iterator<GraphVertex<V>> vi = vertices.iterator();
+		sb.append('[');
+
+		// vertices
+		sb.append('[');
+		if (vi.hasNext()) {
+			while (vi.hasNext()) {
+				GraphVertex<V> v = vi.next();
+				sb.append(v);
+				if (vi.hasNext()) {
+					sb.append(',');
+					sb.append(' ');
 				}
 			}
-			sb.append("\n");
-			sb.append("\t[incoming]");
-			sb.append("\t" + countInEdges(v) + " adjacent vertices:\n");
-			for (GraphEdge<E> e : inEdges(v)) {
-				sb.append("\t\t");
-				GraphVertex<V> adjacent = getVertex(v, e);
-				if (adjacent != null) {
-					sb.append(String.format("(node %s to node %s via edge %s)", adjacent.getElement(), v.getElement(),
-							e.getElement()));
-					sb.append("\n");
-				}
-			}
-			sb.append("\n");
 		}
 
+		sb.append(']');
+		sb.append(',');
+
+		// edges
+		sb.append('[');
+		if (ei.hasNext()) {
+			while (ei.hasNext()) {
+				GraphEdge<E> e = ei.next();
+				sb.append(e);
+				if (vi.hasNext()) {
+					sb.append(',');
+					sb.append(' ');
+				}
+			}
+		}
+		sb.append(']');
+		sb.append(']');
 		return "" + sb + "";
 	}
 

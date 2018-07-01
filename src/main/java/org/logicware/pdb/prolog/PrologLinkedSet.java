@@ -20,50 +20,44 @@
 package org.logicware.pdb.prolog;
 
 import java.util.Collection;
-import java.util.EmptyStackException;
+import java.util.Iterator;
+import java.util.Set;
 
-import org.logicware.pdb.Stack;
+public class PrologLinkedSet<E extends PrologTerm> extends AbstractSet<E> implements Set<E> {
 
-public class PrologStack<E> extends PrologArrayList<E> implements Stack<E> {
+	private int size;
+	private final PrologLinkedList<E> elements;
+	private static final long serialVersionUID = 3122037421156085866L;
 
-	private static final long serialVersionUID = 5252181262129160650L;
-
-	PrologStack() {
-		super();
+	public PrologLinkedSet() {
+		this(new PrologLinkedList<E>());
 	}
 
-	PrologStack(int capacity) {
-		super(capacity);
+	public PrologLinkedSet(Collection<? extends E> c) {
+		elements = new PrologLinkedList<E>(c);
 	}
 
-	PrologStack(Collection<E> c) {
-		super(c);
+	public boolean add(E arg0) {
+		size = size + 1;
+		return elements.add(arg0);
 	}
 
-	public boolean empty() {
-		return isEmpty();
+	public void clear() {
+		elements.clear();
+		size = 0;
 	}
 
-	public E peek() {
-		int n = size();
-		if (n <= 0) {
-			throw new EmptyStackException();
-		} else {
-			return get(n - 1);
-		}
+	public Iterator<E> iterator() {
+		return elements.iterator();
 	}
 
-	public E pop() {
-		int n = size();
-		if (n <= 0) {
-			throw new EmptyStackException();
-		} else {
-			return remove(n - 1);
-		}
+	public boolean remove(Object arg0) {
+		size = size - 1;
+		return elements.remove(arg0);
 	}
 
-	public E push(E item) {
-		add(item);
-		return item;
+	public int size() {
+		return size;
 	}
+
 }

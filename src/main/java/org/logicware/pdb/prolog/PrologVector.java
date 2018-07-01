@@ -19,10 +19,23 @@
  */
 package org.logicware.pdb.prolog;
 
+import java.util.Collection;
 import java.util.List;
 
 public class PrologVector<E> extends PrologArrayList<E> implements List<E> {
 
 	private static final long serialVersionUID = 7418761991254432525L;
+
+	PrologVector() {
+		super();
+	}
+
+	PrologVector(int capacity) {
+		super(capacity);
+	}
+
+	PrologVector(Collection<E> c) {
+		super(c);
+	}
 
 }

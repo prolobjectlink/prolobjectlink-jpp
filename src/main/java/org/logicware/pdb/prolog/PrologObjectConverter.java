@@ -41,10 +41,13 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import org.logicware.pdb.AbstractConverter;
 import org.logicware.pdb.ObjectConverter;
@@ -209,8 +212,16 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			}
 
 			// java.util.collections transformations
-			else if (structureClass == PrologArrayList.class) {
+			else if (structureClass == PrologVector.class) {
+				return JavaLists.vector((PrologVector<?>) object);
+			} else if (structureClass == PrologStack.class) {
+				return JavaLists.stack((PrologStack<?>) object);
+			} else if (structureClass == PrologArrayList.class) {
 				return JavaLists.arrayList((PrologArrayList<?>) object);
+			} else if (structureClass == PrologLinkedList.class) {
+				return JavaLists.linkedList((PrologLinkedList<?>) object);
+			} else if (structureClass == PrologPriorityQueue.class) {
+				return JavaLists.priorityQueue((PrologPriorityQueue<?>) object);
 			} else if (structureClass == PrologHashMap.class) {
 				return JavaMaps.hashMap((PrologHashMap<?, ?>) object);
 			} else if (structureClass == PrologHashSet.class) {
@@ -307,9 +318,21 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		}
 
 		// java.util.collections transformations
-		else if (object instanceof ArrayList) {
+		else if (object instanceof Vector) {
+			Vector<?> l = (Vector<?>) object;
+			return toTerm(PrologLists.vector(l));
+		} else if (object instanceof java.util.Stack) {
+			java.util.Stack<?> l = (java.util.Stack<?>) object;
+			return toTerm(PrologLists.stack(l));
+		} else if (object instanceof ArrayList) {
 			ArrayList<?> l = (ArrayList<?>) object;
 			return toTerm(PrologLists.arrayList(l));
+		} else if (object instanceof LinkedList) {
+			LinkedList<?> l = (LinkedList<?>) object;
+			return toTerm(PrologLists.linkedList(l));
+		} else if (object instanceof PriorityQueue) {
+			PriorityQueue<?> l = (PriorityQueue<?>) object;
+			return toTerm(PrologLists.priorityQueue(l));
 		} else if (object instanceof HashMap) {
 			HashMap<?, ?> m = (HashMap<?, ?>) object;
 			return toTerm(PrologMaps.hashMap(m));

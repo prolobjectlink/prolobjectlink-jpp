@@ -40,7 +40,7 @@ public abstract class AbstractGraphVertex<V> extends AbstractGraphElement<V> imp
 
 	@Override
 	public String toString() {
-		return "(" + getElement() + ")";
+		return "" + getElement() + "";
 	}
 
 }

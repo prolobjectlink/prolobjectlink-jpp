@@ -21,7 +21,6 @@ package org.logicware.pdb.prolog;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 final class PrologLists {
@@ -39,6 +38,10 @@ final class PrologLists {
 		return new PrologStack<T>();
 	}
 
+	public static <T> PrologStack<T> stack(Collection<T> c) {
+		return new PrologStack<T>(c);
+	}
+
 	/**
 	 * Creates a new empty vector
 	 * 
@@ -47,6 +50,10 @@ final class PrologLists {
 	 */
 	public static <T> PrologVector<T> vector() {
 		return new PrologVector<T>();
+	}
+
+	public static <T> PrologVector<T> vector(Collection<T> c) {
+		return new PrologVector<T>(c);
 	}
 
 	/**
@@ -81,6 +88,14 @@ final class PrologLists {
 		return new PrologArrayList<T>(c);
 	}
 
+	public static <T> List<T> linkedList() {
+		return new PrologLinkedList<T>();
+	}
+
+	public static <T> List<T> linkedList(Collection<T> c) {
+		return new PrologLinkedList<T>(c);
+	}
+
 	/**
 	 * Creates a new empty priority queue of natural order items.
 	 * 
@@ -101,6 +116,10 @@ final class PrologLists {
 	 */
 	public static <T> Queue<T> priorityQueue(int capacity) {
 		return new PrologPriorityQueue<T>(capacity);
+	}
+
+	public static <T> Queue<T> priorityQueue(Collection<T> c) {
+		return new PrologPriorityQueue<T>(c);
 	}
 
 }

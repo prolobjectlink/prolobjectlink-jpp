@@ -19,23 +19,8 @@
  */
 package org.logicware.pdb.prolog;
 
-import java.util.Collection;
-import java.util.Queue;
+import java.util.Map.Entry;
 
-public class PrologPriorityQueue<E> extends AbstractQueue<E> implements Queue<E> {
-
-	private static final long serialVersionUID = 3504970123155287504L;
-
-	PrologPriorityQueue() {
-		super();
-	}
-
-	PrologPriorityQueue(int capacity) {
-		super(capacity);
-	}
-
-	PrologPriorityQueue(Collection<E> c) {
-		super(c);
-	}
+public interface PrologEntry<K, V> extends Entry<K, V> {
 
 }

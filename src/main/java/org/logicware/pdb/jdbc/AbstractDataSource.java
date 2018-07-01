@@ -17,25 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.prolog;
+package org.logicware.pdb.jdbc;
 
-import java.util.Collection;
-import java.util.Queue;
+import javax.sql.DataSource;
 
-public class PrologPriorityQueue<E> extends AbstractQueue<E> implements Queue<E> {
-
-	private static final long serialVersionUID = 3504970123155287504L;
-
-	PrologPriorityQueue() {
-		super();
-	}
-
-	PrologPriorityQueue(int capacity) {
-		super(capacity);
-	}
-
-	PrologPriorityQueue(Collection<E> c) {
-		super(c);
-	}
+abstract class AbstractDataSource implements DataSource {
 
 }

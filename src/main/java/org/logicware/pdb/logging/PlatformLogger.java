@@ -36,7 +36,7 @@ import org.logicware.pdb.Platform;
 public final class PlatformLogger extends AbstractPlatform implements Platform {
 
 	private static final String MESSAGE = "Logger File Handler can't be created";
-	private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	static PlatformLogger getInstance(Level level) {
 		LOGGER.setLevel(level);

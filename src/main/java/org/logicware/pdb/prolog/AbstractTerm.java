@@ -25,8 +25,9 @@ import org.logicware.pdb.AbstractWrapper;
 
 public abstract class AbstractTerm extends AbstractWrapper implements PrologTerm {
 
-	protected int type;
-	protected final PrologProvider provider;
+	protected transient int type;
+	protected final transient PrologProvider provider;
+	private static final long serialVersionUID = 5120097310010352242L;
 
 	public AbstractTerm(PrologProvider provider) {
 		this(0, provider);
