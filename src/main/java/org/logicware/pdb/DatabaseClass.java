@@ -72,7 +72,7 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	}
 
 	public DatabaseClass(Class<?> javaClass, String comment, Schema schema) {
-		this(javaClass.getName(), comment, javaClass, schema);
+		this(javaClass != null ? javaClass.getName() : "", comment, javaClass, schema);
 	}
 
 	public DatabaseClass(String name, String comment, Class<?> javaClass, Schema schema) {

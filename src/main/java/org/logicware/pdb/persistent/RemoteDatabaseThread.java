@@ -127,13 +127,13 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 					response.set(true);
 				}
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case CREATE:
 				database.create();
 				response.setVoid();
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case CLEAR:
 				tx = database.getTransaction();
@@ -151,7 +151,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				database.drop();
 				response.setVoid();
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case BEGIN: // OK
 				tx = database.getTransaction();
@@ -160,7 +160,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				}
 				response.setVoid();
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case INSERT: // OK
 				clazz = (Class<?>) request.getArgument(0);
@@ -175,7 +175,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.setVoid();
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case UPDATE: // OK
 				clazz = (Class<?>) request.getArgument(0);
@@ -192,7 +192,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				}
 				response.setVoid();
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case DELETE_ARRAY: // OK
 				clazz = (Class<?>) request.getArgument(0);
@@ -207,7 +207,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.setVoid();
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case DELETE_CLASS:// OK
 				clazz = (Class<?>) request.getArgument(0);
@@ -221,7 +221,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.setVoid();
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case QUERY_STRING: // OK
 				string = (String) request.getArgument(0);
@@ -235,7 +235,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.set(k);
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case QUERY_OBJECT: // OK
 				Object s = request.getArgument(0);
@@ -249,7 +249,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.set(u);
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case QUERY_CLASS: // OK
 				clazz = (Class<?>) request.getArgument(0);
@@ -263,7 +263,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.set(q);
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case QUERY_PREDICATE: // OK
 				clazz = (Class<?>) request.getArgument(0);
@@ -278,7 +278,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.set(q);
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case PROCEDURE:
 				Serializable a1 = request.getArgument(0);
@@ -301,7 +301,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.set(exist);
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case CONSTAINS_OBJECT: // OK
 				Object h = request.getArgument(0);
@@ -315,7 +315,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.set(exist);
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case CONSTAINS_CLASS: // OK
 				clazz = (Class<?>) request.getArgument(0);
@@ -329,7 +329,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.set(exist);
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case CONSTAINS_PREDICATE: // OK
 				clazz = (Class<?>) request.getArgument(0);
@@ -344,7 +344,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.set(exist);
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case CONSTAINS_INDICATOR: // OK
 				string = (String) request.getArgument(0);
@@ -359,7 +359,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 				tx.close();
 				response.set(exist);
 				os.writeObject(response);
-//				LoggerUtils.debug(getClass(), response);
+				LoggerUtils.debug(getClass(), response);
 				break;
 			case INCLUDE:
 				String path = (String) request.getArgument(0);

@@ -24,6 +24,13 @@ import java.util.Random;
 public class JavaStrings {
 
 	private static final Random r = new Random();
+	private static final String ALPHANUM =
+
+			"abcdefghijklmnopqrstuvwxyz"
+
+					+ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+					+ "1234567890";
 
 	public static String randomCharString32() {
 		return randomCharString(32);
@@ -33,45 +40,15 @@ public class JavaStrings {
 		return randomCharString(64);
 	}
 
-	public static String randomCharString(int count) {
-
-		int start = ' ';
-		int end = 'z' + 1;
-		int gap = end - start;
-		char[] buffer = new char[count];
-
-		while (count-- != 0) {
-			char ch = (char) (r.nextInt(gap) + start);
-			if (Character.isLetter(ch)) {
-				if (ch >= 56320 && ch <= 57343) {
-					if (count == 0) {
-						count++;
-					} else {
-						// low surrogate, insert high surrogate after putting it in
-						buffer[count] = ch;
-						count--;
-						buffer[count] = (char) (55296 + r.nextInt(128));
-					}
-				} else if (ch >= 55296 && ch <= 56191) {
-					if (count == 0) {
-						count++;
-					} else {
-						// high surrogate, insert low surrogate before putting it in
-						buffer[count] = (char) (56320 + r.nextInt(128));
-						count--;
-						buffer[count] = ch;
-					}
-				} else if (ch >= 56192 && ch <= 56319) {
-					// private high surrogate, no effing clue, so skip it
-					count++;
-				} else {
-					buffer[count] = ch;
-				}
-			} else {
-				count++;
-			}
+	public static String randomCharString(int length) {
+		StringBuilder b = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			int n = r.nextInt(ALPHANUM.length());
+			int number = n - 1 == -1 ? n : n - 1;
+			char ch = ALPHANUM.charAt(number);
+			b.append(ch);
 		}
-		return new String(buffer);
+		return "" + b + "";
 	}
 
 	public static String toUpperCase(String target) {

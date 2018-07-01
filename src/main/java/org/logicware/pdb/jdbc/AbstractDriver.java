@@ -67,6 +67,11 @@ public abstract class AbstractDriver extends AbstractProvider implements PrologD
 		return dis;
 	}
 
+	public final boolean acceptsURL(String url) throws SQLException {
+		return url.startsWith("jdbc:prolobjectlink:rempdb:") || url.startsWith("jdbc:prolobjectlink:mempdb:")
+				|| url.startsWith("jdbc:prolobjectlink:file:");
+	}
+
 	public final int getMajorVersion() {
 		return MAJOR;
 	}
@@ -103,8 +108,9 @@ public abstract class AbstractDriver extends AbstractProvider implements PrologD
 		if (provider == null) {
 			if (other.provider != null)
 				return false;
-		} else if (!provider.equals(other.provider))
+		} else if (!provider.equals(other.provider)) {
 			return false;
+		}
 		return true;
 	}
 

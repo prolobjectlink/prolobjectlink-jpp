@@ -121,8 +121,9 @@ public abstract class AbstractProvider implements PrologProvider {
 		if (converter == null) {
 			if (other.converter != null)
 				return false;
-		} else if (!converter.equals(other.converter))
+		} else if (!converter.equals(other.converter)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -34,10 +34,9 @@ import java.util.TimeZone;
  * @author Jose Zalacain
  * @since 1.0
  */
-public class PrologCalendar implements Serializable {
+public class PrologCalendar extends AbstractTemporal implements Serializable {
 
 	private final boolean lenient;
-	private final long timeInMillis;
 	private final String calendarType;
 	private final int firstDayOfWeek;
 	private final int minimalDaysInFirstWeek;
@@ -46,33 +45,25 @@ public class PrologCalendar implements Serializable {
 	private static final long serialVersionUID = -1810532253972577393L;
 
 	PrologCalendar() {
+		super(Calendar.getInstance().getTimeInMillis());
 		Calendar c = Calendar.getInstance();
 		minimalDaysInFirstWeek = c.getMinimalDaysInFirstWeek();
 		firstDayOfWeek = c.getFirstDayOfWeek();
 		calendarType = c.getCalendarType();
-		timeInMillis = c.getTimeInMillis();
 		lenient = c.isLenient();
 	}
 
 	PrologCalendar(boolean lenient, long timeInMillis, String calendarType, int firstDayOfWeek,
 			int minimalDaysInFirstWeek) {
+		super(timeInMillis);
 		this.lenient = lenient;
-		this.timeInMillis = timeInMillis;
 		this.calendarType = calendarType;
 		this.firstDayOfWeek = firstDayOfWeek;
 		this.minimalDaysInFirstWeek = minimalDaysInFirstWeek;
 	}
 
-	final Calendar getJavaUtilCalendar() {
-		builder.setWeekDefinition(firstDayOfWeek, minimalDaysInFirstWeek);
-		builder.setCalendarType(calendarType);
-		builder.setInstant(timeInMillis);
-		builder.setLenient(lenient);
-		return builder.build();
-	}
-
 	final long getTimeInMillis() {
-		return timeInMillis;
+		return getTime();
 	}
 
 	final String getCalendarType() {
@@ -104,7 +95,6 @@ public class PrologCalendar implements Serializable {
 		result = prime * result + firstDayOfWeek;
 		result = prime * result + (lenient ? 1231 : 1237);
 		result = prime * result + minimalDaysInFirstWeek;
-		result = prime * result + (int) (timeInMillis ^ (timeInMillis >>> 32));
 		return result;
 	}
 
@@ -126,9 +116,15 @@ public class PrologCalendar implements Serializable {
 			return false;
 		if (lenient != other.lenient)
 			return false;
-		if (minimalDaysInFirstWeek != other.minimalDaysInFirstWeek)
-			return false;
-		return timeInMillis == other.timeInMillis;
+		return minimalDaysInFirstWeek == other.minimalDaysInFirstWeek;
+	}
+
+	public Calendar getJavaUtilCalendar() {
+		builder.setWeekDefinition(firstDayOfWeek, minimalDaysInFirstWeek);
+		builder.setCalendarType(calendarType);
+		builder.setInstant(getTime());
+		builder.setLenient(lenient);
+		return builder.build();
 	}
 
 }

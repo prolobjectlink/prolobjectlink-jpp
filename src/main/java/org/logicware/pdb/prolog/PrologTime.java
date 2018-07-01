@@ -22,62 +22,24 @@ package org.logicware.pdb.prolog;
 import java.io.Serializable;
 import java.sql.Time;
 
-public class PrologTime implements Serializable, Comparable<PrologTime> {
+public class PrologTime extends AbstractTemporal implements Serializable {
 
 	private static final long serialVersionUID = 6887337378900675097L;
-	private long time = System.currentTimeMillis();
 
 	public PrologTime() {
 	}
 
 	PrologTime(long time) {
-		this.time = time;
-	}
-
-	long getTime() {
-		return time;
+		super(time);
 	}
 
 	Time getJavaSqlTime() {
-		return new Time(time);
-	}
-
-	boolean before(PrologTime time) {
-		return compareTo(time) < 0;
-	}
-
-	boolean after(PrologTime dateTime) {
-		return compareTo(dateTime) > 0;
-	}
-
-	public int compareTo(PrologTime o) {
-		int k = time > o.time ? 1 : 0;
-		return time < o.time ? -1 : k;
+		return new Time(getTime());
 	}
 
 	@Override
-	public final String toString() {
-		return "" + time + "";
-	}
-
-	@Override
-	public final int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (time ^ (time >>> 32));
-		return result;
-	}
-
-	@Override
-	public final boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PrologTime other = (PrologTime) obj;
-		return time == other.time;
+	public String toString() {
+		return "" + getJavaSqlTime() + "";
 	}
 
 }

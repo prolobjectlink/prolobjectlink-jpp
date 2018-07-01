@@ -73,9 +73,9 @@ public final class Settings extends AbstractMap<Object, Object>
 	private String username;
 	private String password;
 
-	private int time_granularity;
-	private int lock_sleep;
-	private int sleep_gap;
+	private int timeGranularity;
+	private int lockSleep;
+	private int sleepGap;
 	private int port;
 
 	public Settings() {
@@ -94,9 +94,9 @@ public final class Settings extends AbstractMap<Object, Object>
 		this.properties = new Properties();
 		this.containerFactory = containerFactory;
 		this.containerFactory.setSettings(this);
-		this.time_granularity = DEFAULT_TIME_GRANULARITY;
-		this.lock_sleep = DEFAULT_LOCK_SLEEP;
-		this.sleep_gap = DEFAULT_SLEEP_GAP;
+		this.timeGranularity = DEFAULT_TIME_GRANULARITY;
+		this.lockSleep = DEFAULT_LOCK_SLEEP;
+		this.sleepGap = DEFAULT_SLEEP_GAP;
 		this.storageMode = StorageMode.STORAGE_POOL;
 		this.password = DEFAULT_SECRET;
 		this.username = DEFAULT_USER;
@@ -125,10 +125,10 @@ public final class Settings extends AbstractMap<Object, Object>
 			Class<?> clazzDriver = JavaReflect.classForName(driver);
 			Class<?> clazzProvider = JavaReflect.classForName(provider);
 
-			this.time_granularity = Integer
+			this.timeGranularity = Integer
 					.valueOf((String) properties.getOrDefault(TIME_GRANULARITY, DEFAULT_TIME_GRANULARITY));
-			this.lock_sleep = Integer.valueOf((String) properties.getOrDefault(LOCK_SLEEP, DEFAULT_LOCK_SLEEP));
-			this.sleep_gap = Integer.valueOf((String) properties.getOrDefault(SLEEP_GAP, DEFAULT_SLEEP_GAP));
+			this.lockSleep = Integer.valueOf((String) properties.getOrDefault(LOCK_SLEEP, DEFAULT_LOCK_SLEEP));
+			this.sleepGap = Integer.valueOf((String) properties.getOrDefault(SLEEP_GAP, DEFAULT_SLEEP_GAP));
 			this.port = Integer.valueOf((String) properties.getOrDefault(PORT, DEFAULT_PORT));
 			this.password = properties.getProperty(SECRET, DEFAULT_SECRET);
 			this.username = properties.getProperty(USER, DEFAULT_USER);
@@ -155,9 +155,9 @@ public final class Settings extends AbstractMap<Object, Object>
 		try {
 			properties.put(PROVIDER, prologProvider.getClass().getName());
 			properties.put(FACTORY, containerFactory.getClass().getName());
-			properties.put(TIME_GRANULARITY, "" + time_granularity + "");
-			properties.put(LOCK_SLEEP, "" + lock_sleep + "");
-			properties.put(SLEEP_GAP, "" + sleep_gap + "");
+			properties.put(TIME_GRANULARITY, "" + timeGranularity + "");
+			properties.put(LOCK_SLEEP, "" + lockSleep + "");
+			properties.put(SLEEP_GAP, "" + sleepGap + "");
 			properties.put(STORAGE, "" + storageMode + "");
 			properties.put(PORT, "" + port + "");
 			properties.put(SECRET, password);
@@ -189,8 +189,9 @@ public final class Settings extends AbstractMap<Object, Object>
 		if (properties == null) {
 			if (other.properties != null)
 				return false;
-		} else if (!properties.equals(other.properties))
+		} else if (!properties.equals(other.properties)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -329,27 +330,27 @@ public final class Settings extends AbstractMap<Object, Object>
 	}
 
 	public final int getTimeGranularity() {
-		return time_granularity;
+		return timeGranularity;
 	}
 
-	public final void setTimeGranularity(int time_granularity) {
-		this.time_granularity = time_granularity;
+	public final void setTimeGranularity(int timeGranularity) {
+		this.timeGranularity = timeGranularity;
 	}
 
 	public final int getLockSleep() {
-		return lock_sleep;
+		return lockSleep;
 	}
 
-	public final void setLockSleep(int lock_sleep) {
-		this.lock_sleep = lock_sleep;
+	public final void setLockSleep(int lockSleep) {
+		this.lockSleep = lockSleep;
 	}
 
 	public final int getSleepGap() {
-		return sleep_gap;
+		return sleepGap;
 	}
 
-	public final void setSleepGap(int sleep_gap) {
-		this.sleep_gap = sleep_gap;
+	public final void setSleepGap(int sleepGap) {
+		this.sleepGap = sleepGap;
 	}
 
 	public final int getPort() {

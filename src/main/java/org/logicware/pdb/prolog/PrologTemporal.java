@@ -20,26 +20,9 @@
 package org.logicware.pdb.prolog;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
-public class PrologTimestamp extends PrologTime implements Serializable {
+public interface PrologTemporal extends Serializable, Comparable<PrologTemporal> {
 
-	private static final long serialVersionUID = -8891452396204474393L;
-
-	public PrologTimestamp() {
-	}
-
-	PrologTimestamp(long time) {
-		super(time);
-	}
-
-	Timestamp getJavaSqlTimestamp() {
-		return new Timestamp(getTime());
-	}
-
-	@Override
-	public String toString() {
-		return "" + getJavaSqlTimestamp() + "";
-	}
+	long getTime();
 
 }
