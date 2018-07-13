@@ -31,8 +31,8 @@ import java.io.Closeable;
 public interface PersistentContainer extends Closeable, Restorable, Container, Transactional, Defragtable {
 
 	/**
-	 * Open all file resources associated to this {@link PersistentContainer}
-	 * and set ready to operate.
+	 * Open all file resources associated to this {@link PersistentContainer} and
+	 * set ready to operate.
 	 * 
 	 * @since 1.0
 	 *
@@ -44,8 +44,7 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	/**
 	 * Bulk insertion for non null and non empty objects array
 	 * 
-	 * @param objects
-	 *            objects arrays
+	 * @param objects objects arrays
 	 */
 	public <O> void insert(O... facts);
 
@@ -56,7 +55,7 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	/**
 	 * bulk deletion for non null objects array
 	 * 
-	 * @param <O>
+	 * @param         <O>
 	 * @param objects
 	 */
 	public <O> void delete(O... facts);
@@ -65,12 +64,11 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 
 	/**
 	 * <p>
-	 * Query builded from a string with standard prolog syntax. The string query
-	 * is translated to prolog terms and passed to the prolog engine for to be
-	 * resolved. The predicate classes present in the prolog string will be
-	 * store for resolve and return instances of those classes as result of
-	 * querying and build predicates classes from result obtained of the prolog
-	 * engine.
+	 * Query builded from a string with standard prolog syntax. The string query is
+	 * translated to prolog terms and passed to the prolog engine for to be
+	 * resolved. The predicate classes present in the prolog string will be store
+	 * for resolve and return instances of those classes as result of querying and
+	 * build predicates classes from result obtained of the prolog engine.
 	 * 
 	 * <pre>
 	 * query = pm.createQuery(&quot;point(Idp, X, Y)&quot;);
@@ -80,9 +78,9 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * </p>
 	 * 
 	 * <p>
-	 * The string query allow the arithmetic comparison and term comparison but
-	 * this operators will not be resolve to predicate classes. Only will be
-	 * resolve predicate class that was specified in the configuration.
+	 * The string query allow the arithmetic comparison and term comparison but this
+	 * operators will not be resolve to predicate classes. Only will be resolve
+	 * predicate class that was specified in the configuration.
 	 * 
 	 * <pre>
 	 * query = pm.createQuery(&quot;point(Idp, X, Y), X =:= 3.5, Y =:= 10.14&quot;);
@@ -104,13 +102,12 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * 
 	 * <p>
 	 * Waring with equals variables in different class. This cause that in the
-	 * translated prolog query this variables can be instantiated with a value
-	 * that not is the same expected value for different predicate classes or
-	 * not return the expected query result.
+	 * translated prolog query this variables can be instantiated with a value that
+	 * not is the same expected value for different predicate classes or not return
+	 * the expected query result.
 	 * </p>
 	 * 
-	 * @param string
-	 *            string with standard prolog syntax.
+	 * @param string string with standard prolog syntax.
 	 * @return Query builded from a string with standard prolog syntax.
 	 * @since 1.0
 	 * @see PredicateManager#createQuery(S)
@@ -120,21 +117,20 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 
 	/**
 	 * <p>
-	 * Query by Example implementation. This query is builded from a template
-	 * Object object obtaining from this term the most general prolog Object
-	 * term using reflection and and passed to the predicate context for to be
-	 * resolved. In most general Object (or predicate) resolution the values of
-	 * the fields are conserved and fields with null values are substituting by
-	 * the variable name specified on field argument annotations. This process
-	 * is named inspection. The inspection process find three variants for
-	 * resolve the term to query.
+	 * Query by Example implementation. This query is builded from a template Object
+	 * object obtaining from this term the most general prolog Object term using
+	 * reflection and and passed to the predicate context for to be resolved. In
+	 * most general Object (or predicate) resolution the values of the fields are
+	 * conserved and fields with null values are substituting by the variable name
+	 * specified on field argument annotations. This process is named inspection.
+	 * The inspection process find three variants for resolve the term to query.
 	 * 
 	 * </p>
 	 * <p>
 	 * 
-	 * <li>If the Object term are fully instantiated only one solution is
-	 * possible and will be a new Object term obtained from the predicate
-	 * context that is equals to the template object.</li>
+	 * <li>If the Object term are fully instantiated only one solution is possible
+	 * and will be a new Object term obtained from the predicate context that is
+	 * equals to the template object.</li>
 	 * 
 	 * <pre>
 	 * query = pm.createQuery(new Point(new Atom(&quot;a&quot;), new Float(3.5), new Float(10.14)));
@@ -146,11 +142,11 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * ?-point(a, 3.5, 10.14).
 	 * </pre>
 	 * 
-	 * <li>If the Object term are fully empty (all field are null values) the
-	 * query will be formulated from the most general Object term using as
-	 * prolog variables names the names specified on fields arguments
-	 * annotations. The solution for this query variant will be builded for all
-	 * Object that match with the most general relation obtained</li>
+	 * <li>If the Object term are fully empty (all field are null values) the query
+	 * will be formulated from the most general Object term using as prolog
+	 * variables names the names specified on fields arguments annotations. The
+	 * solution for this query variant will be builded for all Object that match
+	 * with the most general relation obtained</li>
 	 * 
 	 * <pre>
 	 * query = pm.createQuery(new Point());
@@ -182,8 +178,7 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * 
 	 * </p>
 	 * 
-	 * @param o
-	 *            object template
+	 * @param o object template
 	 * @return TypedQuery builded from a object template.
 	 * @since 1.0
 	 * @see Storage#createQuery(Class)
@@ -193,14 +188,13 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 
 	/**
 	 * Query builded from a Object class. The most general prolog Object term is
-	 * obtaining and resolved. In most general Object (or predicate) resolution
-	 * only terms used for build the query are the variables names specified on
-	 * field argument annotations. In other words create a query from a Object
-	 * class is always equivalent to query with the most general predicate. This
-	 * query way will have the same result of the Query by example with an
-	 * object template with fully empty. The solution for this query variant
-	 * will be builded for all Object that match with the most general relation
-	 * obtained
+	 * obtaining and resolved. In most general Object (or predicate) resolution only
+	 * terms used for build the query are the variables names specified on field
+	 * argument annotations. In other words create a query from a Object class is
+	 * always equivalent to query with the most general predicate. This query way
+	 * will have the same result of the Query by example with an object template
+	 * with fully empty. The solution for this query variant will be builded for all
+	 * Object that match with the most general relation obtained
 	 * 
 	 * <pre>
 	 * query = pm.createQuery(Point.class);
@@ -214,8 +208,7 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * ?-segment(Ips, Point0, Point1).
 	 * </pre>
 	 * 
-	 * @param clazz
-	 *            class for build the query
+	 * @param clazz class for build the query
 	 * @return TypedQuery builded from a Object class
 	 * @since 1.0
 	 * @see Storage#createQuery(O)
@@ -234,11 +227,10 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	public ContainerFactory getContainerFactory();
 
 	/**
-	 * Include to the held engine the code from given prolog source file located
-	 * at string path
+	 * Include to the held engine the code from given prolog source file located at
+	 * string path
 	 * 
-	 * @param path
-	 *            prolog source file location
+	 * @param path prolog source file location
 	 * @since 1.0
 	 */
 	public void include(String path);
@@ -256,8 +248,8 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * Check if the current {@link PersistentContainer} instance is ready for
 	 * operate
 	 * 
-	 * @return true if {@link PersistentContainer} instance is ready and false
-	 *         in otherwise.
+	 * @return true if {@link PersistentContainer} instance is ready and false in
+	 *         otherwise.
 	 * @since 1.0
 	 * @deprecated use {@code transaction is active}
 	 */

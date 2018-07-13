@@ -301,8 +301,9 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 		if (location == null) {
 			if (other.location != null)
 				return false;
-		} else if (!location.equals(other.location))
+		} else if (!location.equals(other.location)) {
 			return false;
+		}
 		return true;
 	}
 

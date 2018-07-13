@@ -23,6 +23,8 @@ import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Settings;
+import org.logicware.pdb.law.LogAheadWriterManager;
+import org.logicware.pdb.law.LogAheadWriterRecord;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.tools.Backup;

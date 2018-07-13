@@ -19,6 +19,21 @@
  */
 package org.logicware.pdb;
 
+import org.logicware.pdb.law.LogAheadWriterManager;
+import org.logicware.pdb.law.LogAheadWriterRecord;
+
 public interface StorageManager extends PersistentContainer {
+
+	LogAheadWriterManager getTransactionLog();
+
+	void saveTransactionLog();
+
+	void clearTransactionLog();
+
+	boolean containsTransactionLog(LogAheadWriterRecord record);
+
+	boolean removeTransactionLog(LogAheadWriterRecord record);
+
+	boolean addTransactionLog(LogAheadWriterRecord record);
 
 }

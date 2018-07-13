@@ -41,6 +41,8 @@ import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.container.AbstractPersistentContainer;
 import org.logicware.pdb.container.DummyProcedureQuery;
+import org.logicware.pdb.law.LogAheadWriterManager;
+import org.logicware.pdb.law.LogAheadWriterRecord;
 import org.logicware.pdb.prolog.PrologContainerQuery;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologTerm;
@@ -56,10 +58,13 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	// TODO replace this hash map by identity hash map with class key
 	private final HashMap<String, PersistentContainer> master;
 
+	private final LogAheadWriterManager transactionLog;
+
 	protected AbstractStorageManager(PrologProvider provider, Settings properties,
 			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory,
 			StorageMode storageMode) {
 		super(provider, properties, converter, location, containerFactory);
+		this.transactionLog = new LogAheadWriterManager(containerFactory);
 		this.master = new HashMap<String, PersistentContainer>();
 		this.transaction = new DefaultTransaction(this);
 		this.storageMode = storageMode;
@@ -280,6 +285,30 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 			return q;
 		}
 		return new DummyProcedureQuery(functor, args);
+	}
+
+	public final LogAheadWriterManager getTransactionLog() {
+		return transactionLog;
+	}
+
+	public final boolean addTransactionLog(LogAheadWriterRecord record) {
+		return transactionLog.add(record);
+	}
+
+	public final boolean removeTransactionLog(LogAheadWriterRecord record) {
+		return transactionLog.remove(record);
+	}
+
+	public final boolean containsTransactionLog(LogAheadWriterRecord record) {
+		return transactionLog.contains(record);
+	}
+
+	public final void clearTransactionLog() {
+		transactionLog.clear();
+	}
+
+	public final void saveTransactionLog() {
+		transactionLog.saveAll();
 	}
 
 	public final Transaction getTransaction() {
