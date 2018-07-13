@@ -35,7 +35,6 @@ import org.logicware.pdb.Schema;
 import org.logicware.pdb.StorageGraph;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
-import org.logicware.pdb.memory.MemoryRelational;
 
 /**
  * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
@@ -164,6 +163,10 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 		storage.rollback();
 	}
 
+	public boolean isActive() {
+		return storage.isActive();
+	}
+
 	public final boolean isOpen() {
 		return storage.isOpen();
 	}
@@ -182,6 +185,10 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 		getSchema().clear();
 		getSchema().flush();
 		return this;
+	}
+
+	public final boolean exist() {
+		return getSchema().countUsers() > 0;
 	}
 
 	public final void flush() {
@@ -204,11 +211,11 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 		storage.clear();
 	}
 
-	public DatabaseMode getMode() {
+	public final DatabaseMode getMode() {
 		return DatabaseMode.EMBEDDED;
 	}
 
-	public DatabaseType getType() {
+	public final DatabaseType getType() {
 		return DatabaseType.RELATIONAL;
 	}
 

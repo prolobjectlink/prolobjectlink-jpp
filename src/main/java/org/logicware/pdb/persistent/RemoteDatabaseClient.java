@@ -19,6 +19,8 @@
  */
 package org.logicware.pdb.persistent;
 
+import static org.logicware.pdb.OperationType.EXIST;
+import static org.logicware.pdb.OperationType.ACTIVE;
 import static org.logicware.pdb.OperationType.BACKUP;
 import static org.logicware.pdb.OperationType.BEGIN;
 import static org.logicware.pdb.OperationType.CLEAR;
@@ -126,6 +128,12 @@ public abstract class RemoteDatabaseClient extends AbstractDatabaseEngine implem
 		activeRequest.setType(DROP);
 		activeRequest.send();
 		return this;
+	}
+
+	public final boolean exist() {
+		activeRequest.clearArguments();
+		activeRequest.setType(EXIST);
+		return activeRequest.send();
 	}
 
 	public final void open() {
@@ -311,6 +319,12 @@ public abstract class RemoteDatabaseClient extends AbstractDatabaseEngine implem
 		activeRequest.clearArguments();
 		activeRequest.setType(ROLLBACK);
 		activeRequest.send();
+	}
+
+	public final boolean isActive() {
+		activeRequest.clearArguments();
+		activeRequest.setType(ACTIVE);
+		return activeRequest.send();
 	}
 
 	public final void close() {

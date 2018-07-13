@@ -219,7 +219,7 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 		return selection;
 	}
 
-	public Collection<Class<?>> classes() {
+	public final Collection<Class<?>> classes() {
 		Map<String, Class<?>> m = new HashMap<String, Class<?>>();
 		for (PrologClause clause : getEngine()) {
 			String functor = removeQuoted(clause.getFunctor());

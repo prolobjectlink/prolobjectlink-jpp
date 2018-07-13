@@ -276,6 +276,10 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 		open();
 	}
 
+	public boolean isActive() {
+		return getTransaction().isActive();
+	}
+
 	@Override
 	public String toString() {
 		return "AbstractStorageGraph [location=" + location + "]";

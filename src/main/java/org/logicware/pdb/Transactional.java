@@ -23,6 +23,8 @@ import java.io.Closeable;
 
 public interface Transactional extends Wrapper, Closeable {
 
+	public boolean isActive();
+
 	public void begin();
 
 	public void commit();

@@ -217,6 +217,10 @@ public abstract class EmbeddedDatabaseClient extends AbstractDatabaseEngine
 		storage.rollback();
 	}
 
+	public final boolean isActive() {
+		return storage.isActive();
+	}
+
 	public final void defragment() {
 		storage.defragment();
 	}
@@ -229,12 +233,16 @@ public abstract class EmbeddedDatabaseClient extends AbstractDatabaseEngine
 		return this;
 	}
 
-	public EmbeddedDatabase drop() {
+	public final EmbeddedDatabase drop() {
 		getSchema().clear();
 		getSchema().flush();
 		clear();
 		flush();
 		return this;
+	}
+
+	public final boolean exist() {
+		return getSchema().countUsers() > 0;
 	}
 
 }

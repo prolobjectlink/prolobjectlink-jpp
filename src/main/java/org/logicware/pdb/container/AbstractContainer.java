@@ -189,13 +189,11 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 	}
 
 	protected final PrologQuery prologQueryOf(Class<?> clazz) {
-		PrologTerm goal = converter.toTerm(clazz);
-		return engine.query(goal);
+		return engine.query(converter.toTerm(clazz));
 	}
 
 	protected final PrologQuery prologQueryOf(Object object, Map<String, PrologTerm> map) {
-		PrologTerm goal = converter.toTerm(object, map);
-		return engine.query(goal);
+		return engine.query(converter.toTerm(object, map));
 	}
 
 	protected final List<Class<?>> classesOf(PrologTerm[] prologTerms, List<Class<?>> classList) {

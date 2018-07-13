@@ -171,6 +171,10 @@ public abstract class AbstractMemoryDatabase extends AbstractDatabaseEngine impl
 		getTransaction().rollback();
 	}
 
+	public boolean isActive() {
+		return getTransaction().isActive();
+	}
+
 	public final void defragment() {
 		// do nothing
 	}
@@ -183,8 +187,12 @@ public abstract class AbstractMemoryDatabase extends AbstractDatabaseEngine impl
 		return this;
 	}
 
-	public MemoryDatabase drop() {
+	public final MemoryDatabase drop() {
 		return this;
+	}
+
+	public final boolean exist() {
+		return getSchema().countUsers() > 0;
 	}
 
 }

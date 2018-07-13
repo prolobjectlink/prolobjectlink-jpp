@@ -25,7 +25,6 @@ public abstract class AbstractTransaction extends AbstractWrapper implements Tra
 
 	protected boolean active;
 	private final long timestamp;
-//	private final Transactional transactional;
 	private final PersistentContainer container;
 
 	private void checkNonActiveTransaction() {

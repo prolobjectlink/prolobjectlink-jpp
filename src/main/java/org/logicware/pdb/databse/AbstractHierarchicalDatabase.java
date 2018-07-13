@@ -246,6 +246,10 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 		getTransaction().rollback();
 	}
 
+	public boolean isActive() {
+		return getTransaction().isActive();
+	}
+
 	public final void defragment() {
 		storage.defragment();
 	}
@@ -266,11 +270,15 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 		return this;
 	}
 
-	public DatabaseMode getMode() {
+	public final boolean exist() {
+		return getSchema().countUsers() > 0;
+	}
+
+	public final DatabaseMode getMode() {
 		return DatabaseMode.EMBEDDED;
 	}
 
-	public DatabaseType getType() {
+	public final DatabaseType getType() {
 		return DatabaseType.HIERARCHICAL;
 	}
 

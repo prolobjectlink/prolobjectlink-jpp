@@ -376,6 +376,9 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	public final void flush() {
 		for (Storage storage : storages) {
 			if (storage.isDirty()) {
+				if (!storage.isActive()) {
+					storage.begin();
+				}
 				storage.commit();
 			}
 		}

@@ -77,10 +77,12 @@ public interface DatabaseEngine extends PersistentContainer {
 
 	public DatabaseEngine drop();
 
+	public boolean exist();
+
 	public Schema getSchema();
 
 	public String getName();
-	
+
 	public EntityManager getEntityManager();
 
 	public DatabaseMode getMode();
