@@ -22,7 +22,7 @@ package org.logicware.pdb.storage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 
 import org.logicware.pdb.ContainerFactory;
@@ -53,19 +53,15 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 
 	private final StorageMode storageMode;
 	private final Transaction transaction;
-
-	// private final IdentityHashMap<Class<?>, PersistentContainer> master;
-	// TODO replace this hash map by identity hash map with class key
-	private final HashMap<String, PersistentContainer> master;
-
 	private final LogAheadWriterManager transactionLog;
+	private final IdentityHashMap<Class<?>, PersistentContainer> master;
 
 	protected AbstractStorageManager(PrologProvider provider, Settings properties,
 			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory,
 			StorageMode storageMode) {
 		super(provider, properties, converter, location, containerFactory);
 		this.transactionLog = new LogAheadWriterManager(containerFactory);
-		this.master = new HashMap<String, PersistentContainer>();
+		this.master = new IdentityHashMap<Class<?>, PersistentContainer>();
 		this.transaction = new DefaultTransaction(this);
 		this.storageMode = storageMode;
 	}
@@ -287,10 +283,6 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		return new DummyProcedureQuery(functor, args);
 	}
 
-	public final LogAheadWriterManager getTransactionLog() {
-		return transactionLog;
-	}
-
 	public final boolean addTransactionLog(LogAheadWriterRecord record) {
 		return transactionLog.add(record);
 	}
@@ -301,6 +293,10 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 
 	public final boolean containsTransactionLog(LogAheadWriterRecord record) {
 		return transactionLog.contains(record);
+	}
+
+	public final LogAheadWriterManager getTransactionLog() {
+		return transactionLog;
 	}
 
 	public final void clearTransactionLog() {
@@ -316,17 +312,16 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	}
 
 	public final PersistentContainer containerOf(Class<?> clazz) {
-		String key = clazz.getName();
-		String name = clazz.getSimpleName();
-		PersistentContainer container = master.get(key);
+		PersistentContainer container = master.get(clazz);
 		if (container == null) {
 			String path = locationOf(clazz);
 			if (storageMode == StorageMode.STORAGE_POOL) {
+				String name = clazz.getSimpleName();
 				container = containerFactory.createStoragePool(path, name);
 			} else if (storageMode == StorageMode.SINGLE_STORAGE) {
 				container = containerFactory.createStorage(path);
 			}
-			master.put(key, container);
+			master.put(clazz, container);
 		}
 		return container;
 	}
