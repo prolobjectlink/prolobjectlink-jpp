@@ -23,8 +23,8 @@ import java.io.FileFilter;
 import java.util.List;
 
 /**
- * Document container that have many documents with limited clauses storage in a
- * located root folder.
+ * Container folder that have many single storages with limited clauses for each
+ * storage in a located root folder.
  * 
  * @author Jose Zalacain
  * @since 1.0

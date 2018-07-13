@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DefaultTransaction;
@@ -41,8 +42,6 @@ import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.container.AbstractPersistentContainer;
 import org.logicware.pdb.container.DummyProcedureQuery;
-import org.logicware.pdb.law.LogAheadWriterManager;
-import org.logicware.pdb.law.LogAheadWriterRecord;
 import org.logicware.pdb.prolog.PrologContainerQuery;
 import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.prolog.PrologTerm;
@@ -53,15 +52,15 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 
 	private final StorageMode storageMode;
 	private final Transaction transaction;
-	private final LogAheadWriterManager transactionLog;
 	private final IdentityHashMap<Class<?>, PersistentContainer> master;
+	private final IdentityHashMap<Class<?>, PersistentContainer> logger;
 
 	protected AbstractStorageManager(PrologProvider provider, Settings properties,
 			ObjectConverter<PrologTerm> converter, String location, ContainerFactory containerFactory,
 			StorageMode storageMode) {
 		super(provider, properties, converter, location, containerFactory);
-		this.transactionLog = new LogAheadWriterManager(containerFactory);
 		this.master = new IdentityHashMap<Class<?>, PersistentContainer>();
+		this.logger = new IdentityHashMap<Class<?>, PersistentContainer>();
 		this.transaction = new DefaultTransaction(this);
 		this.storageMode = storageMode;
 	}
@@ -135,7 +134,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		List<Class<?>> classes = classesOf(string);
 		for (Class<?> clazz : classes) {
 			PersistentContainer pc = containerOf(clazz);
-			if (pc != null && pc instanceof StoragePool) {
+			if (pc instanceof StoragePool) {
 				StoragePool sp = (StoragePool) pc;
 				sp.getTransaction().begin();
 				List<Storage> storages = sp.getStorages();
@@ -283,35 +282,20 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		return new DummyProcedureQuery(functor, args);
 	}
 
-	public final boolean addTransactionLog(LogAheadWriterRecord record) {
-		return transactionLog.add(record);
-	}
-
-	public final boolean removeTransactionLog(LogAheadWriterRecord record) {
-		return transactionLog.remove(record);
-	}
-
-	public final boolean containsTransactionLog(LogAheadWriterRecord record) {
-		return transactionLog.contains(record);
-	}
-
-	public final LogAheadWriterManager getTransactionLog() {
-		return transactionLog;
-	}
-
-	public final void clearTransactionLog() {
-		transactionLog.clear();
-	}
-
-	public final void saveTransactionLog() {
-		transactionLog.saveAll();
-	}
-
 	public final Transaction getTransaction() {
 		return transaction;
 	}
 
+	/**
+	 * @deprecated Use {@link #containerOf(Class, Map)},{@link #masterOf(Class)}
+	 *             instead
+	 */
+	@Deprecated
 	public final PersistentContainer containerOf(Class<?> clazz) {
+		return masterOf(clazz);
+	}
+
+	public final PersistentContainer masterOf(Class<?> clazz) {
 		PersistentContainer container = master.get(clazz);
 		if (container == null) {
 			String path = locationOf(clazz);
@@ -322,6 +306,21 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 				container = containerFactory.createStorage(path);
 			}
 			master.put(clazz, container);
+		}
+		return container;
+	}
+
+	public final PersistentContainer loggerOf(Class<?> clazz) {
+		PersistentContainer container = logger.get(clazz);
+		if (container == null) {
+			String path = locationOf(clazz);
+			if (storageMode == StorageMode.STORAGE_POOL) {
+				String name = clazz.getSimpleName();
+				container = containerFactory.createStoragePool(path, name + "-log");
+			} else if (storageMode == StorageMode.SINGLE_STORAGE) {
+				container = containerFactory.createStorage(path + "-log");
+			}
+			logger.put(clazz, container);
 		}
 		return container;
 	}

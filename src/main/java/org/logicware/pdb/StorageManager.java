@@ -19,21 +19,23 @@
  */
 package org.logicware.pdb;
 
-import org.logicware.pdb.law.LogAheadWriterManager;
-import org.logicware.pdb.law.LogAheadWriterRecord;
-
+/**
+ * Storage Manager is a file system manager to store data. Is an specification
+ * of of {@link PersistentContainer} that manage many file and data folders. The
+ * storage manager have two mode {@link Storage} and {@link StoragePool}
+ * indicate by {@link StorageMode}. Single storage can be more faster for few
+ * data. Storage pool distribute all data in short data file limited by data
+ * number.
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ * @see Storage
+ * @see StoragePool
+ */
 public interface StorageManager extends PersistentContainer {
 
-	public boolean containsTransactionLog(LogAheadWriterRecord record);
+	PersistentContainer loggerOf(Class<?> clazz);
 
-	public boolean removeTransactionLog(LogAheadWriterRecord record);
-
-	public boolean addTransactionLog(LogAheadWriterRecord record);
-
-	public LogAheadWriterManager getTransactionLog();
-
-	public void clearTransactionLog();
-
-	public void saveTransactionLog();
+	PersistentContainer masterOf(Class<?> clazz);
 
 }
