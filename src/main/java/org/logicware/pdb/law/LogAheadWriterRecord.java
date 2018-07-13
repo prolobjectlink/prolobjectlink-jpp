@@ -21,17 +21,21 @@ package org.logicware.pdb.law;
 
 import java.io.Serializable;
 
+import org.logicware.pdb.OperationType;
+
 public final class LogAheadWriterRecord implements Comparable<LogAheadWriterRecord>, Serializable {
 
 	private static final long serialVersionUID = 6467074863113661503L;
+	private final OperationType type;
 	private final Class<?> clazz;
 	private final Object record;
 	private final long time;
 
-	public LogAheadWriterRecord(Class<?> clazz, Object record) {
+	public LogAheadWriterRecord(OperationType type, Class<?> clazz, Object record) {
 		this.time = System.currentTimeMillis();
 		this.record = record;
 		this.clazz = clazz;
+		this.type = type;
 	}
 
 	public final Object getRecord() {
