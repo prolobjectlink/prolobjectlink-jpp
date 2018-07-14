@@ -27,6 +27,8 @@ import org.logicware.pdb.ProcedureQuery;
 
 public final class DummyProcedureQuery extends AbstractProcedureQuery implements ProcedureQuery {
 
+	private static final Object[] emptyArray = new Object[0];
+	private static final List<Object> empty = new ArrayList<Object>();
 	private static final long serialVersionUID = 2982433009696455329L;
 
 	public DummyProcedureQuery(String functor, String[] arguments) {
@@ -52,23 +54,14 @@ public final class DummyProcedureQuery extends AbstractProcedureQuery implements
 	}
 
 	public Object getArgumentValue(int position) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getArgumentValue(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		checkSolutionAt(position, empty.size());
+		return getArguments()[position];
 	}
 
 	public ProcedureQuery setArgumentValue(int position, Object value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ProcedureQuery setArgumentValue(String name, Object value) {
-		// TODO Auto-generated method stub
-		return null;
+		checkSolutionAt(position, empty.size());
+		empty.set(position, value);
+		return this;
 	}
 
 	public ProcedureQuery execute() {
@@ -76,11 +69,11 @@ public final class DummyProcedureQuery extends AbstractProcedureQuery implements
 	}
 
 	public List<Object> getSolutions() {
-		return new ArrayList<Object>();
+		return empty;
 	}
 
 	public Object getSolution() {
-		return null;
+		return emptyArray;
 	}
 
 	public void dispose() {

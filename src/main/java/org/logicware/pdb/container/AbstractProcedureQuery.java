@@ -46,6 +46,29 @@ public abstract class AbstractProcedureQuery extends AbstractContainerQuery impl
 		return arguments;
 	}
 
+	public final Object getArgumentValue(String name) {
+		for (int i = 0; i < getArguments().length; i++) {
+			String argumentName = getArguments()[i];
+			if (argumentName.equals(name)) {
+				return getArgumentValue(i);
+			}
+		}
+		throw new IllegalArgumentException(
+				"No register argument '" + name + "' for the procedure '" + getFunctor() + "'");
+	}
+
+	public final ProcedureQuery setArgumentValue(String name, Object value) {
+		for (int i = 0; i < getArguments().length; i++) {
+			String argumentName = getArguments()[i];
+			if (argumentName.equals(name)) {
+				setArgumentValue(i, value);
+				return this;
+			}
+		}
+		throw new IllegalArgumentException(
+				"No register argument '" + name + "' for the procedure '" + getFunctor() + "'");
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

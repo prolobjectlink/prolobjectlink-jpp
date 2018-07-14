@@ -318,7 +318,7 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 		return lock.islock();
 	}
 
-	public void defragment() {
+	public final void defragment() {
 		// do nothing
 	}
 
@@ -333,6 +333,7 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 	}
 
 	public final void close() {
+		getTransaction().close();
 		getEngine().dispose();
 		open = false;
 	}

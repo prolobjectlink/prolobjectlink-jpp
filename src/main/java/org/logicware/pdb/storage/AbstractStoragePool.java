@@ -315,6 +315,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	}
 
 	public final void close() {
+		getTransaction().close();
 		for (Storage s : storages) {
 			s.clear();
 			s.close();
@@ -417,27 +418,9 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 			return list.get(position);
 		}
 
-		public Object getArgumentValue(String name) {
-			for (int i = 0; i < getArguments().length; i++) {
-				String argumentName = getArguments()[i];
-				if (argumentName.equals(name)) {
-					return getArgumentValue(i);
-				}
-			}
-			throw new IllegalArgumentException(
-					"No register argument '" + name + "' for the procedure '" + getFunctor() + "'");
-		}
-
 		public ProcedureQuery setArgumentValue(int position, Object value) {
 			for (ProcedureQuery procedureQuery : queries) {
 				procedureQuery.setArgumentValue(position, value);
-			}
-			return this;
-		}
-
-		public ProcedureQuery setArgumentValue(String name, Object value) {
-			for (ProcedureQuery procedureQuery : queries) {
-				procedureQuery.setArgumentValue(name, value);
 			}
 			return this;
 		}

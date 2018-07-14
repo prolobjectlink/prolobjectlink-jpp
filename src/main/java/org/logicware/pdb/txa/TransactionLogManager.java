@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.law;
+package org.logicware.pdb.txa;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,17 +27,17 @@ import java.util.List;
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.PersistentContainer;
 
-public final class LogAheadWriterManager implements Iterable<LogAheadWriterRecord> {
+public final class TransactionLogManager implements Iterable<TransactionLogRecord> {
 
 	private final PersistentContainer container;
 	private final ContainerFactory containerFactory;
-	private final List<LogAheadWriterRecord> records;
+	private final List<TransactionLogRecord> records;
 
-	public LogAheadWriterManager(ContainerFactory containerFactory) {
-		this(containerFactory, new ArrayList<LogAheadWriterRecord>());
+	public TransactionLogManager(ContainerFactory containerFactory) {
+		this(containerFactory, new ArrayList<TransactionLogRecord>());
 	}
 
-	public LogAheadWriterManager(ContainerFactory containerFactory, List<LogAheadWriterRecord> records) {
+	public TransactionLogManager(ContainerFactory containerFactory, List<TransactionLogRecord> records) {
 		this.container = containerFactory.createStorage("log/transaction-log.pl");
 		this.containerFactory = containerFactory;
 		this.records = records;
@@ -51,16 +51,16 @@ public final class LogAheadWriterManager implements Iterable<LogAheadWriterRecor
 		return containerFactory;
 	}
 
-	public final List<LogAheadWriterRecord> getRecords() {
+	public final List<TransactionLogRecord> getRecords() {
 		return records;
 	}
 
-	public final void save(LogAheadWriterRecord from, LogAheadWriterRecord to) {
+	public final void save(TransactionLogRecord from, TransactionLogRecord to) {
 		save(from.getTime(), to.getTime());
 	}
 
 	public final void save(long from, long to) {
-		for (LogAheadWriterRecord record : records) {
+		for (TransactionLogRecord record : records) {
 			long recordTime = record.getTime();
 			if (recordTime > from && recordTime < to) {
 				container.insert(record);
@@ -72,19 +72,19 @@ public final class LogAheadWriterManager implements Iterable<LogAheadWriterRecor
 		save(0, System.currentTimeMillis());
 	}
 
-	public final boolean add(LogAheadWriterRecord record) {
+	public final boolean add(TransactionLogRecord record) {
 		return records.add(record);
 	}
 
-	public final boolean remove(LogAheadWriterRecord record) {
+	public final boolean remove(TransactionLogRecord record) {
 		return records.remove(record);
 	}
 
-	public final boolean contains(LogAheadWriterRecord record) {
+	public final boolean contains(TransactionLogRecord record) {
 		return records.contains(record);
 	}
 
-	public Iterator<LogAheadWriterRecord> iterator() {
+	public Iterator<TransactionLogRecord> iterator() {
 		return records.iterator();
 	}
 

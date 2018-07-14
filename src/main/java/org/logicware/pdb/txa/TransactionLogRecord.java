@@ -17,13 +17,13 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.law;
+package org.logicware.pdb.txa;
 
 import java.io.Serializable;
 
 import org.logicware.pdb.OperationType;
 
-public final class LogAheadWriterRecord implements Comparable<LogAheadWriterRecord>, Serializable {
+public final class TransactionLogRecord implements Comparable<TransactionLogRecord>, Serializable {
 
 	private static final long serialVersionUID = 6467074863113661503L;
 	private final OperationType type;
@@ -31,7 +31,7 @@ public final class LogAheadWriterRecord implements Comparable<LogAheadWriterReco
 	private final Object record;
 	private final long time;
 
-	public LogAheadWriterRecord(OperationType type, Class<?> clazz, Object record) {
+	public TransactionLogRecord(OperationType type, Class<?> clazz, Object record) {
 		this.time = System.currentTimeMillis();
 		this.record = record;
 		this.clazz = clazz;
@@ -72,7 +72,7 @@ public final class LogAheadWriterRecord implements Comparable<LogAheadWriterReco
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		LogAheadWriterRecord other = (LogAheadWriterRecord) obj;
+		TransactionLogRecord other = (TransactionLogRecord) obj;
 		if (record == null) {
 			if (other.record != null)
 				return false;
@@ -82,7 +82,7 @@ public final class LogAheadWriterRecord implements Comparable<LogAheadWriterReco
 		return time == other.time;
 	}
 
-	public int compareTo(LogAheadWriterRecord o) {
+	public int compareTo(TransactionLogRecord o) {
 		if (time > o.time) {
 			return (int) Math.abs(time - o.time);
 		} else if (time < o.time) {

@@ -84,17 +84,6 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery implement
 		return converter.toObject(currentTerms[position]);
 	}
 
-	public Object getArgumentValue(String name) {
-		for (int i = 0; i < getArguments().length; i++) {
-			String argumentName = getArguments()[i];
-			if (argumentName.equals(name)) {
-				return getArgumentValue(i);
-			}
-		}
-		throw new IllegalArgumentException(
-				"No register argument '" + name + "' for the procedure '" + getFunctor() + "'");
-	}
-
 	public ProcedureQuery setArgumentValue(int position, Object value) {
 		checkSolutionAt(position, currentTerms.length);
 		if (returnedTerms != null) {
@@ -102,18 +91,6 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery implement
 		}
 		currentTerms[position] = converter.toTerm(value);
 		return this;
-	}
-
-	public ProcedureQuery setArgumentValue(String name, Object value) {
-		for (int i = 0; i < getArguments().length; i++) {
-			String argumentName = getArguments()[i];
-			if (argumentName.equals(name)) {
-				setArgumentValue(i, value);
-				return this;
-			}
-		}
-		throw new IllegalArgumentException(
-				"No register argument '" + name + "' for the procedure '" + getFunctor() + "'");
 	}
 
 	public ProcedureQuery execute() {
@@ -197,13 +174,15 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery implement
 		if (path == null) {
 			if (other.path != null)
 				return false;
-		} else if (!path.equals(other.path))
+		} else if (!path.equals(other.path)) {
 			return false;
+		}
 		if (query == null) {
 			if (other.query != null)
 				return false;
-		} else if (!query.equals(other.query))
+		} else if (!query.equals(other.query)) {
 			return false;
+		}
 		return Arrays.equals(returnedTerms, other.returnedTerms);
 	}
 
