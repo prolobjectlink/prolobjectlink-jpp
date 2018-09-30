@@ -17,32 +17,42 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.txa;
+package org.logicware.pdb.savepoint;
 
 import java.io.Serializable;
 
 import org.logicware.pdb.OperationType;
 
-public final class TransactionLogRecord implements Comparable<TransactionLogRecord>, Serializable {
+public final class SavePointRecord implements Comparable<SavePointRecord>, Serializable {
 
 	private static final long serialVersionUID = 6467074863113661503L;
-	private final OperationType type;
+	private final OperationType commitType;
+	private final OperationType rollbackType;
 	private final Class<?> clazz;
 	private final Object record;
 	private final long time;
 
-	public TransactionLogRecord(OperationType type, Class<?> clazz, Object record) {
+	public SavePointRecord(OperationType commitType, OperationType rollbackType, Class<?> clazz, Object record) {
 		this.time = System.currentTimeMillis();
+		this.rollbackType = rollbackType;
+		this.commitType = commitType;
 		this.record = record;
 		this.clazz = clazz;
-		this.type = type;
+	}
+
+	public final OperationType getCommitType() {
+		return commitType;
+	}
+
+	public final OperationType getRollbackType() {
+		return rollbackType;
 	}
 
 	public final Object getRecord() {
 		return record;
 	}
 
-	public final Class<?> getClazz() {
+	public final Class<?> getRecordClass() {
 		return clazz;
 	}
 
@@ -52,7 +62,7 @@ public final class TransactionLogRecord implements Comparable<TransactionLogReco
 
 	@Override
 	public String toString() {
-		return "LogAheadWriterRecord [record=" + record + "]";
+		return "SavePointRecord [record=" + record + "]";
 	}
 
 	@Override
@@ -72,7 +82,7 @@ public final class TransactionLogRecord implements Comparable<TransactionLogReco
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TransactionLogRecord other = (TransactionLogRecord) obj;
+		SavePointRecord other = (SavePointRecord) obj;
 		if (record == null) {
 			if (other.record != null)
 				return false;
@@ -82,7 +92,7 @@ public final class TransactionLogRecord implements Comparable<TransactionLogReco
 		return time == other.time;
 	}
 
-	public int compareTo(TransactionLogRecord o) {
+	public int compareTo(SavePointRecord o) {
 		if (time > o.time) {
 			return (int) Math.abs(time - o.time);
 		} else if (time < o.time) {
