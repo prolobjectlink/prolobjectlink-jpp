@@ -24,6 +24,8 @@ import org.logicware.pdb.HierarchicalCache;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.cache.AbstractHierarchicalCache;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public abstract class PrologHierarchicalCache extends AbstractHierarchicalCache implements HierarchicalCache {
 

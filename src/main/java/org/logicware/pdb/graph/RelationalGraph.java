@@ -30,7 +30,7 @@ import org.logicware.pdb.Graph;
 import org.logicware.pdb.GraphEdge;
 import org.logicware.pdb.GraphVertex;
 import org.logicware.pdb.RelationalEdge;
-import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.prolog.PrologTerm;
 
 public class RelationalGraph<V, R> extends DirectedGraph<V, R> implements Graph<V, R> {
 

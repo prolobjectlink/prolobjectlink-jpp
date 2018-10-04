@@ -19,18 +19,18 @@
  */
 package org.logicware.pdb.prolog;
 
-import static org.logicware.pdb.prolog.PrologTermType.ATOM_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.DOUBLE_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.EMPTY_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.FALSE_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.FLOAT_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.INTEGER_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.LIST_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.LONG_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.NIL_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.STRUCTURE_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.TRUE_TYPE;
-import static org.logicware.pdb.prolog.PrologTermType.VARIABLE_TYPE;
+import static org.logicware.prolog.PrologTermType.ATOM_TYPE;
+import static org.logicware.prolog.PrologTermType.DOUBLE_TYPE;
+import static org.logicware.prolog.PrologTermType.EMPTY_TYPE;
+import static org.logicware.prolog.PrologTermType.FALSE_TYPE;
+import static org.logicware.prolog.PrologTermType.FLOAT_TYPE;
+import static org.logicware.prolog.PrologTermType.INTEGER_TYPE;
+import static org.logicware.prolog.PrologTermType.LIST_TYPE;
+import static org.logicware.prolog.PrologTermType.LONG_TYPE;
+import static org.logicware.prolog.PrologTermType.NIL_TYPE;
+import static org.logicware.prolog.PrologTermType.STRUCTURE_TYPE;
+import static org.logicware.prolog.PrologTermType.TRUE_TYPE;
+import static org.logicware.prolog.PrologTermType.VARIABLE_TYPE;
 
 import java.lang.reflect.Field;
 import java.sql.Time;
@@ -51,15 +51,24 @@ import java.util.Vector;
 
 import org.logicware.pdb.AbstractConverter;
 import org.logicware.pdb.ObjectConverter;
-import org.logicware.pdb.Stack;
-import org.logicware.pdb.TypedArrayStack;
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.util.Assertions;
 import org.logicware.pdb.util.JavaLists;
 import org.logicware.pdb.util.JavaMaps;
 import org.logicware.pdb.util.JavaReflect;
 import org.logicware.pdb.util.JavaSets;
+import org.logicware.platform.Stack;
+import org.logicware.platform.ArrayStack;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
+import org.logicware.prolog.PrologDouble;
+import org.logicware.prolog.PrologFloat;
+import org.logicware.prolog.PrologInteger;
+import org.logicware.prolog.PrologLong;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologStructure;
+import org.logicware.prolog.PrologTerm;
+import org.logicware.prolog.PrologVariable;
+import org.logicware.prolog.UnknownTermError;
 
 public final class PrologObjectConverter extends AbstractConverter<PrologTerm> implements ObjectConverter<PrologTerm> {
 
@@ -145,7 +154,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			// creating new instance
 			object = JavaReflect.newInstance(classPtr);
 
-			Stack<Field> stack = new TypedArrayStack<Field>();
+			Stack<Field> stack = new ArrayStack<Field>();
 
 			while (classPtr != null && classPtr != Object.class) {
 
@@ -398,7 +407,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			classPtr = Assertions.nonStaticFinal(classPtr, "Non persistent " + classPtr);
 
 			// stack for resolve prolog structure arguments order
-			Stack<PrologTerm> stack = new TypedArrayStack<PrologTerm>();
+			Stack<PrologTerm> stack = new ArrayStack<PrologTerm>();
 
 			// class name to convert in predicate functor
 			String className = classPtr.getName();
@@ -472,7 +481,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		classPtr = Assertions.nonStaticFinal(classPtr, "Non persistent " + classPtr);
 
 		// stack for resolve prolog structure arguments order
-		Stack<PrologTerm> stack = new TypedArrayStack<PrologTerm>();
+		Stack<PrologTerm> stack = new ArrayStack<PrologTerm>();
 
 		// class name to convert in predicate functor
 		String functor = "'" + classPtr.getName() + "'";

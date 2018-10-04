@@ -43,10 +43,10 @@ import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.container.AbstractPersistentContainer;
 import org.logicware.pdb.container.DummyProcedureQuery;
 import org.logicware.pdb.prolog.PrologContainerQuery;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.prolog.PrologTypedQuery;
 import org.logicware.pdb.util.JavaLists;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public abstract class AbstractStorageManager extends AbstractPersistentContainer implements StorageManager {
 

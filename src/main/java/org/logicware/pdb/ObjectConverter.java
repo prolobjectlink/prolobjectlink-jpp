@@ -21,7 +21,7 @@ package org.logicware.pdb;
 
 import java.util.Map;
 
-import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.prolog.PrologProvider;
 
 public interface ObjectConverter<T> {
 

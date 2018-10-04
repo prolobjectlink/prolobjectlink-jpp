@@ -37,10 +37,10 @@ import org.logicware.pdb.StorageManager;
 import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.jpa.JPAProperties;
 import org.logicware.pdb.jpa.spi.JPAPersistenceXmlParser;
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.memory.MemoryHierarchical;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
 
 public final class EmbeddedHierarchical extends EmbeddedDatabaseClient implements EmbeddedDatabase {
 

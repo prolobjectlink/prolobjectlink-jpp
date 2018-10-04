@@ -21,6 +21,8 @@ package org.logicware.pdb;
 
 import java.util.Queue;
 
+import org.logicware.platform.AbstractArrayQueue;
+
 public class ArrayQueue extends AbstractArrayQueue<Object> implements Queue<Object> {
 
 	private static final long serialVersionUID = 539174077460237185L;

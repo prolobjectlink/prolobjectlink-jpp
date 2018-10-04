@@ -23,8 +23,8 @@ import javax.persistence.AttributeConverter;
 
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.prolog.PrologObjectConverter;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public final class JPAAttributeConverter implements AttributeConverter<Object, PrologTerm> {
 

@@ -23,8 +23,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
 
 public class SystemSecurity {
 

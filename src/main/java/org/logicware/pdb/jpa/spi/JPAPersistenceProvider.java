@@ -75,11 +75,11 @@ import org.logicware.pdb.jpa.JPAProviderUtil;
 import org.logicware.pdb.jpa.JPAQuery;
 import org.logicware.pdb.jpa.JPAResultSetMapping;
 import org.logicware.pdb.jpa.JPAStoredProcedureQuery;
-import org.logicware.pdb.prolog.PrologEngine;
 import org.logicware.pdb.prolog.PrologObjectConverter;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.prolog.PrologEngine;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public abstract class JPAPersistenceProvider implements PersistenceProvider {
 

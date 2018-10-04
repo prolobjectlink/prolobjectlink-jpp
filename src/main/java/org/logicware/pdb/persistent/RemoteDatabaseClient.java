@@ -65,9 +65,9 @@ import org.logicware.pdb.Settings;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.databse.AbstractDatabaseEngine;
-import org.logicware.pdb.prolog.PrologClause;
-import org.logicware.pdb.prolog.PrologEngine;
-import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.prolog.PrologClause;
+import org.logicware.prolog.PrologEngine;
+import org.logicware.prolog.PrologProvider;
 
 public abstract class RemoteDatabaseClient extends AbstractDatabaseEngine implements RemoteDatabase {
 

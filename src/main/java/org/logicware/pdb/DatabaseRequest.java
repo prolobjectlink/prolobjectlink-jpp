@@ -27,8 +27,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
+import org.logicware.platform.AbstractWrapper;
+import org.logicware.platform.Wrapper;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
 
 public final class DatabaseRequest extends AbstractWrapper
 		implements Wrapper, Serializable, Comparable<DatabaseRequest> {

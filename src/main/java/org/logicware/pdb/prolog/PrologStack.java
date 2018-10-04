@@ -22,7 +22,7 @@ package org.logicware.pdb.prolog;
 import java.util.Collection;
 import java.util.EmptyStackException;
 
-import org.logicware.pdb.Stack;
+import org.logicware.platform.Stack;
 
 public class PrologStack<E> extends PrologArrayList<E> implements Stack<E> {
 

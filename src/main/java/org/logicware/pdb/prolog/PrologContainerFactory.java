@@ -32,6 +32,7 @@ import org.logicware.pdb.StorageManager;
 import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.StoragePool;
 import org.logicware.pdb.container.AbstractContainerFactory;
+import org.logicware.prolog.PrologProvider;
 
 public abstract class PrologContainerFactory extends AbstractContainerFactory implements ContainerFactory {
 

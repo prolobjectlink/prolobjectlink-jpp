@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.logicware.pdb.prolog.PrologEngine;
-import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.prolog.PrologEngine;
+import org.logicware.prolog.PrologProvider;
 
 public abstract class DatabaseCode<E extends SchemaElement<?>> extends AbstractElement<E> implements Serializable {
 

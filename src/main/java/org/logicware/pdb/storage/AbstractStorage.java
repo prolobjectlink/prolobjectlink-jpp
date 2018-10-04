@@ -35,11 +35,11 @@ import org.logicware.pdb.Predicate;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.Storage;
 import org.logicware.pdb.container.AbstractPersistentContainer;
-import org.logicware.pdb.prolog.PrologClause;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologQuery;
-import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.prolog.PrologClause;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologQuery;
+import org.logicware.prolog.PrologTerm;
 
 public abstract class AbstractStorage extends AbstractPersistentContainer implements Storage {
 

@@ -19,6 +19,8 @@
  */
 package org.logicware.pdb;
 
+import org.logicware.platform.Wrapper;
+
 public interface RelationalCache extends VolatileContainer, Wrapper {
 
 	public ContainerFactory getContainerFactory();

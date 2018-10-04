@@ -27,8 +27,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
 
 public class JavaReflect {
 

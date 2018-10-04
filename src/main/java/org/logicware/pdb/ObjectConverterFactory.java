@@ -19,8 +19,8 @@
  */
 package org.logicware.pdb;
 
-import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.prolog.PrologProvider;
 
 public final class ObjectConverterFactory {
 

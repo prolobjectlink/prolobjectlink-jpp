@@ -30,20 +30,20 @@ import java.util.Set;
 
 import javax.persistence.PersistenceException;
 
-import org.logicware.pdb.AbstractWrapper;
 import org.logicware.pdb.Container;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.ProcedureInvokationError;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.Transaction;
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
-import org.logicware.pdb.prolog.PrologEngine;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologQuery;
-import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.platform.AbstractWrapper;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
+import org.logicware.prolog.PrologEngine;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologQuery;
+import org.logicware.prolog.PrologTerm;
 
 /**
  * Implementation of interface {@code Container}. Hold an immutable reference to

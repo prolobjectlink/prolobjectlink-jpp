@@ -21,6 +21,8 @@ package org.logicware.pdb;
 
 import java.io.Closeable;
 
+import org.logicware.platform.Wrapper;
+
 public interface Transactional extends Wrapper, Closeable {
 
 	public boolean isActive();

@@ -30,7 +30,6 @@ import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.ProcedureQuery;
 import org.logicware.pdb.Query;
-import org.logicware.pdb.RuntimeError;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageGraph;
@@ -39,9 +38,10 @@ import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.graph.RelationalGraph;
-import org.logicware.pdb.prolog.PrologEngine;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.platform.RuntimeError;
+import org.logicware.prolog.PrologEngine;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public abstract class AbstractStorageGraph extends RelationalGraph<Object, Object>
 		implements PersistentContainer, StorageGraph {

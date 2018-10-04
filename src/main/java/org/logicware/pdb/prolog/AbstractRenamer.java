@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.logicware.pdb.Renamer;
+import org.logicware.prolog.PrologProvider;
 
 abstract class AbstractRenamer implements Renamer {
 

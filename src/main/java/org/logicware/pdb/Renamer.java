@@ -22,8 +22,8 @@ package org.logicware.pdb;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologVariable;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologVariable;
 
 /**
  * Attribute renamer to prevent variable clashes in prolog queries. Basically

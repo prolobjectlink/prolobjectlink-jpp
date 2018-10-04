@@ -47,11 +47,11 @@ import org.logicware.pdb.container.AbstractContainer;
 import org.logicware.pdb.jpa.JPAEntityManager;
 import org.logicware.pdb.jpa.JPAEntityManagerFactory;
 import org.logicware.pdb.jpa.JPAResultSetMapping;
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.tools.Backup;
 import org.logicware.pdb.tools.Restore;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
 
 public abstract class AbstractDatabaseEngine extends AbstractContainer implements DatabaseEngine {
 

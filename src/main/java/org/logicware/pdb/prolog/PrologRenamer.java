@@ -25,6 +25,8 @@ import org.logicware.pdb.Renamer;
 import org.logicware.pdb.util.Assertions;
 import org.logicware.pdb.util.JavaReflect;
 import org.logicware.pdb.util.JavaStrings;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologVariable;
 
 final class PrologRenamer extends AbstractRenamer implements Renamer {
 

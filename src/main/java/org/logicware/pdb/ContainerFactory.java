@@ -19,9 +19,9 @@
  */
 package org.logicware.pdb;
 
-import org.logicware.pdb.prolog.PrologConverter;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.prolog.PrologConverter;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public interface ContainerFactory {
 

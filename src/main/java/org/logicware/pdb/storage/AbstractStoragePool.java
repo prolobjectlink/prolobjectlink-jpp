@@ -39,10 +39,10 @@ import org.logicware.pdb.StoragePool;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.container.AbstractPersistentContainer;
 import org.logicware.pdb.container.AbstractProcedureQuery;
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public abstract class AbstractStoragePool extends AbstractPersistentContainer implements StoragePool {
 

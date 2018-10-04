@@ -19,7 +19,7 @@
  */
 package org.logicware.pdb.tools;
 
-import static org.logicware.pdb.logging.LoggerConstants.IO;
+import static org.logicware.platform.logging.LoggerConstants.IO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,8 +29,8 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.logicware.pdb.AbstractPlatform;
-import org.logicware.pdb.logging.LoggerUtils;
+import org.logicware.platform.AbstractPlatform;
+import org.logicware.platform.logging.LoggerUtils;
 
 public class Restore extends AbstractPlatform {
 

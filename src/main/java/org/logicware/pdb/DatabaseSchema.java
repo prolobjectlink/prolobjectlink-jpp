@@ -19,7 +19,7 @@
  */
 package org.logicware.pdb;
 
-import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.prolog.PrologProvider;
 
 public class DatabaseSchema extends AbstractSchema implements Schema {
 

@@ -32,12 +32,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
-import org.logicware.pdb.prolog.PrologConverter;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
+import org.logicware.prolog.PrologConverter;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public final class Settings extends AbstractMap<Object, Object>
 		implements Map<Object, Object>, ContainerFactory, SaveLoad<Settings> {

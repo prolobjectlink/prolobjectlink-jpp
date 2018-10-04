@@ -28,8 +28,8 @@ import javax.persistence.Query;
 
 import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.ObjectConverter;
-import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.prolog.PrologTerm;
 
 public final class JPANativeQuery extends JPAQuery implements Query {
 

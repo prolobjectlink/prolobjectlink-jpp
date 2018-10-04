@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.logicware.prolog.PrologTerm;
+
 public class PrologLinkedSet<E extends PrologTerm> extends AbstractSet<E> implements Set<E> {
 
 	private int size;

@@ -26,6 +26,8 @@ import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.cache.AbstractRelationalCache;
 import org.logicware.pdb.graph.RelationalGraph;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public final class PrologRelationalCache extends AbstractRelationalCache implements RelationalCache {
 

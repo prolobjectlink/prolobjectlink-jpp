@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.logicware.pdb.Stack;
-import org.logicware.pdb.TypedArrayStack;
+import org.logicware.platform.Stack;
+import org.logicware.platform.ArrayStack;
 
 class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V> implements Map.Entry<K, V> {
 
@@ -412,7 +412,7 @@ class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V
 		private final Stack<PrologTreeMap<K, V>> stack;
 
 		public AbstractIterator() {
-			stack = new TypedArrayStack<PrologTreeMap<K, V>>();
+			stack = new ArrayStack<PrologTreeMap<K, V>>();
 			PrologTreeMap<K, V> ptr = root = PrologTreeMap.this;
 			while (ptr != null && !ptr.isEmpty()) {
 				stack.push(ptr);

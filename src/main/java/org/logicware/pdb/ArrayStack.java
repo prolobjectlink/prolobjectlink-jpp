@@ -19,6 +19,9 @@
  */
 package org.logicware.pdb;
 
+import org.logicware.platform.AbstractArrayStack;
+import org.logicware.platform.Stack;
+
 public class ArrayStack extends AbstractArrayStack<Object> implements Stack<Object> {
 
 	private static final long serialVersionUID = 3241683391580275887L;

@@ -29,10 +29,10 @@ import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Predicate;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.VolatileContainer;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologQuery;
-import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologQuery;
+import org.logicware.prolog.PrologTerm;
 
 public abstract class AbstractVolatileContainer extends AbstractContainer implements VolatileContainer {
 

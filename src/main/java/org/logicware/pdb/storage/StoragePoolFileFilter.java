@@ -19,13 +19,13 @@
  */
 package org.logicware.pdb.storage;
 
-import static org.logicware.pdb.logging.LoggerConstants.IO;
+import static org.logicware.platform.logging.LoggerConstants.IO;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 
-import org.logicware.pdb.logging.LoggerUtils;
+import org.logicware.platform.logging.LoggerUtils;
 
 /**
  * File filter for filter files in storage pools. The storages files to filter

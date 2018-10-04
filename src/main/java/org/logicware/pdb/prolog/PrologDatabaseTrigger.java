@@ -22,6 +22,7 @@ package org.logicware.pdb.prolog;
 import org.logicware.pdb.DatabaseTrigger;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Trigger;
+import org.logicware.prolog.PrologProvider;
 
 public class PrologDatabaseTrigger extends DatabaseTrigger implements Trigger {
 

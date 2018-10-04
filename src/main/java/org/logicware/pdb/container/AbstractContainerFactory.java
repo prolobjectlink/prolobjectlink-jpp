@@ -26,10 +26,10 @@ import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.RelationalDatabase;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageMode;
-import org.logicware.pdb.prolog.PrologConverter;
 import org.logicware.pdb.prolog.PrologObjectConverter;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologTerm;
+import org.logicware.prolog.PrologConverter;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public abstract class AbstractContainerFactory implements ContainerFactory {
 

@@ -35,9 +35,9 @@ import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.jpa.JPAProperties;
 import org.logicware.pdb.jpa.spi.JPAPersistenceXmlParser;
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
 
 public final class MemoryHierarchical extends AbstractMemoryDatabase implements MemoryDatabase {
 

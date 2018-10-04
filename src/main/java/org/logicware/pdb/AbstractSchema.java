@@ -32,8 +32,8 @@ import org.logicware.pdb.graph.RelationalGraph;
 import org.logicware.pdb.prolog.PrologDatabaseFunction;
 import org.logicware.pdb.prolog.PrologDatabaseTrigger;
 import org.logicware.pdb.prolog.PrologDatabaseView;
-import org.logicware.pdb.prolog.PrologEngine;
-import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.prolog.PrologEngine;
+import org.logicware.prolog.PrologProvider;
 
 public abstract class AbstractSchema implements Schema {
 

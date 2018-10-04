@@ -31,9 +31,11 @@ import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageGraph;
 import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.graph.RelationalGraph;
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.storage.AbstractStorageGraph;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public class PrologStorageGraph extends AbstractStorageGraph implements StorageGraph {
 

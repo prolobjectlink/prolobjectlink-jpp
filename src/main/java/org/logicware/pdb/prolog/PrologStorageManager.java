@@ -28,6 +28,8 @@ import org.logicware.pdb.StorageManager;
 import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.VolatileContainer;
 import org.logicware.pdb.storage.AbstractStorageManager;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 /**
  * Prolog {@link StorageManager} implementation

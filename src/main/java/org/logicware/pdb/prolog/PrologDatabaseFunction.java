@@ -22,6 +22,7 @@ package org.logicware.pdb.prolog;
 import org.logicware.pdb.DatabaseFunction;
 import org.logicware.pdb.ProcedureQuery;
 import org.logicware.pdb.Schema;
+import org.logicware.prolog.PrologProvider;
 
 public final class PrologDatabaseFunction extends DatabaseFunction {
 

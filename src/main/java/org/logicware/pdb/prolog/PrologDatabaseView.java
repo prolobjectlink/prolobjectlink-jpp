@@ -21,6 +21,7 @@ package org.logicware.pdb.prolog;
 
 import org.logicware.pdb.DatabaseView;
 import org.logicware.pdb.Schema;
+import org.logicware.prolog.PrologProvider;
 
 public final class PrologDatabaseView extends DatabaseView {
 

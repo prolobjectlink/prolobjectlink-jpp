@@ -21,8 +21,8 @@ package org.logicware.pdb;
 
 import java.io.Serializable;
 
-import org.logicware.pdb.prolog.PrologEngine;
-import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.prolog.PrologEngine;
+import org.logicware.prolog.PrologProvider;
 
 public abstract class DatabaseFunction extends DatabaseCode<DatabaseFunction>
 		implements Serializable, SchemaElement<DatabaseFunction> {

@@ -31,23 +31,23 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.logicware.pdb.AbstractPlatform;
 import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseSchema;
 import org.logicware.pdb.DatabaseServer;
 import org.logicware.pdb.DatabaseServerType;
 import org.logicware.pdb.DatabaseType;
 import org.logicware.pdb.DatabaseUser;
-import org.logicware.pdb.Platform;
 import org.logicware.pdb.Protocol;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageGraph;
 import org.logicware.pdb.StorageManager;
 import org.logicware.pdb.StorageMode;
-import org.logicware.pdb.logging.LoggerConstants;
-import org.logicware.pdb.logging.LoggerUtils;
 import org.logicware.pdb.util.JavaMaps;
+import org.logicware.platform.AbstractPlatform;
+import org.logicware.platform.Platform;
+import org.logicware.platform.logging.LoggerConstants;
+import org.logicware.platform.logging.LoggerUtils;
 
 public final class RemoteDatabaseServer extends AbstractPlatform implements Platform, DatabaseServer {
 

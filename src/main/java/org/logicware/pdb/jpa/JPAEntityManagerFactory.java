@@ -72,8 +72,8 @@ import org.logicware.pdb.jpa.metamodel.JPAMappedSuperclassType;
 import org.logicware.pdb.jpa.metamodel.JPAMetamodel;
 import org.logicware.pdb.jpa.metamodel.JPASetAttribute;
 import org.logicware.pdb.jpa.metamodel.JPASingularAttribute;
-import org.logicware.pdb.prolog.PrologTerm;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.prolog.PrologTerm;
 
 /**
  * EntityManagerFactory implementation

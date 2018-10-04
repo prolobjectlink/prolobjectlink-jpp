@@ -29,6 +29,8 @@ import org.logicware.pdb.Storage;
 import org.logicware.pdb.StoragePool;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.storage.AbstractStoragePool;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public class PrologStoragePool extends AbstractStoragePool implements StoragePool {
 

@@ -21,6 +21,8 @@ package org.logicware.pdb.prolog;
 
 import java.sql.Driver;
 
+import org.logicware.prolog.PrologProvider;
+
 public interface PrologDriver extends PrologProvider, Driver {
 
 }

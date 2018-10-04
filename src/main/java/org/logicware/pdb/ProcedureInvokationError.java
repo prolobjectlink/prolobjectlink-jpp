@@ -19,6 +19,8 @@
  */
 package org.logicware.pdb;
 
+import org.logicware.platform.RuntimeError;
+
 public final class ProcedureInvokationError extends RuntimeError {
 
 	private static final long serialVersionUID = -1926528417397697548L;

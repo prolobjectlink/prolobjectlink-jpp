@@ -24,8 +24,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.logicware.pdb.graph.RelationalGraph;
-import org.logicware.pdb.prolog.PrologEngine;
-import org.logicware.pdb.prolog.PrologProvider;
+import org.logicware.prolog.PrologEngine;
+import org.logicware.prolog.PrologProvider;
 
 public interface Schema extends Serializable {
 

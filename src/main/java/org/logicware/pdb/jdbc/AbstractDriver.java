@@ -27,21 +27,21 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import org.logicware.pdb.logging.PlatformLogger;
-import org.logicware.pdb.prolog.AbstractProvider;
-import org.logicware.pdb.prolog.PrologAtom;
-import org.logicware.pdb.prolog.PrologConverter;
-import org.logicware.pdb.prolog.PrologDouble;
 import org.logicware.pdb.prolog.PrologDriver;
-import org.logicware.pdb.prolog.PrologEngine;
-import org.logicware.pdb.prolog.PrologFloat;
-import org.logicware.pdb.prolog.PrologInteger;
-import org.logicware.pdb.prolog.PrologList;
-import org.logicware.pdb.prolog.PrologLong;
-import org.logicware.pdb.prolog.PrologProvider;
-import org.logicware.pdb.prolog.PrologStructure;
-import org.logicware.pdb.prolog.PrologTerm;
-import org.logicware.pdb.prolog.PrologVariable;
+import org.logicware.platform.logging.PlatformLogger;
+import org.logicware.prolog.AbstractProvider;
+import org.logicware.prolog.PrologAtom;
+import org.logicware.prolog.PrologConverter;
+import org.logicware.prolog.PrologDouble;
+import org.logicware.prolog.PrologEngine;
+import org.logicware.prolog.PrologFloat;
+import org.logicware.prolog.PrologInteger;
+import org.logicware.prolog.PrologList;
+import org.logicware.prolog.PrologLong;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologStructure;
+import org.logicware.prolog.PrologTerm;
+import org.logicware.prolog.PrologVariable;
 
 public abstract class AbstractDriver extends AbstractProvider implements PrologDriver {
 

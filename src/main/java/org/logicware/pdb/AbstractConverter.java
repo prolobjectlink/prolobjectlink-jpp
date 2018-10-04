@@ -24,8 +24,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.logicware.pdb.prolog.PrologProvider;
 import org.logicware.pdb.util.JavaReflect;
+import org.logicware.prolog.PrologProvider;
 
 public abstract class AbstractConverter<T> implements ObjectConverter<T> {
 

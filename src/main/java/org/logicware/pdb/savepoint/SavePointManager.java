@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.logicware.pdb.AbstractWrapper;
 import org.logicware.pdb.PersistentContainer;
 import org.logicware.pdb.Storage;
+import org.logicware.platform.AbstractWrapper;
 
 public final class SavePointManager extends AbstractWrapper implements Iterable<SavePointRecord> {
 

@@ -31,6 +31,8 @@ import org.logicware.pdb.Storage;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.storage.AbstractStorage;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
 public final class PrologStorage extends AbstractStorage implements Storage {
 
