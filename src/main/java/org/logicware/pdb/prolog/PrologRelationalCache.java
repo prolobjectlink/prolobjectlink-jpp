@@ -22,10 +22,10 @@ package org.logicware.pdb.prolog;
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.RelationalCache;
+import org.logicware.pdb.RelationalGraph;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
 import org.logicware.pdb.cache.AbstractRelationalCache;
-import org.logicware.pdb.graph.RelationalGraph;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
 

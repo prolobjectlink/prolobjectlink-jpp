@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.pdb.graph;
+package org.logicware.pdb;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,11 +25,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import org.logicware.pdb.Direction;
-import org.logicware.pdb.Graph;
-import org.logicware.pdb.GraphEdge;
-import org.logicware.pdb.GraphVertex;
-import org.logicware.pdb.RelationalEdge;
+import org.logicware.graph.AbstractGraphEdge;
+import org.logicware.graph.DirectedGraph;
+import org.logicware.graph.RelationalType;
+import org.logicware.platform.Direction;
+import org.logicware.platform.Graph;
+import org.logicware.platform.GraphEdge;
+import org.logicware.platform.GraphVertex;
 import org.logicware.prolog.PrologTerm;
 
 public class RelationalGraph<V, R> extends DirectedGraph<V, R> implements Graph<V, R> {
@@ -59,8 +61,7 @@ public class RelationalGraph<V, R> extends DirectedGraph<V, R> implements Graph<
 	 * 
 	 * @author Jose Zalacain
 	 *
-	 * @param <R>
-	 *            involved relation object type
+	 * @param <R> involved relation object type
 	 * @since 1.0
 	 */
 	public abstract class AbstractRelationEdge extends AbstractGraphEdge<R> implements RelationalEdge<R> {

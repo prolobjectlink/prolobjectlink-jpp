@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-import org.logicware.pdb.graph.RelationalGraph;
 import org.logicware.prolog.PrologEngine;
 import org.logicware.prolog.PrologProvider;
 
