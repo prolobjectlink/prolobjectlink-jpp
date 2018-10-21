@@ -34,7 +34,6 @@ import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

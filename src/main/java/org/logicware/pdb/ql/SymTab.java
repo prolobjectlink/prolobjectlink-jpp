@@ -20,7 +20,8 @@
 
 package org.logicware.pdb.ql;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 /**
  *

@@ -22,7 +22,6 @@ package org.logicware.pdb.jpa.spi;
 import java.util.Map;
 import java.util.Properties;
 
-import org.logicware.pdb.Settings;
 import org.logicware.pdb.jpa.JPAProperties;
 
 public final class JPAPersistenceProperties extends Properties {

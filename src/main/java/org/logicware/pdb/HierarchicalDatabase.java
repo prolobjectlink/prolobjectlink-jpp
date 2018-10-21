@@ -19,10 +19,6 @@
  */
 package org.logicware.pdb;
 
-import org.logicware.pdb.memory.MemoryHierarchical;
-import org.logicware.pdb.persistent.EmbeddedHierarchical;
-import org.logicware.pdb.persistent.RemoteHierarchical;
-
 /**
  * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
  *             RemoteHierarchical} instead

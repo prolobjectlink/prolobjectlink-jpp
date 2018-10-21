@@ -174,14 +174,6 @@ public abstract class AbstractDriver extends AbstractProvider implements PrologD
 		return provider.newLong(value);
 	}
 
-	public final PrologVariable newVariable() {
-		return provider.newVariable();
-	}
-
-	public final PrologVariable newVariable(String name) {
-		return provider.newVariable(name);
-	}
-
 	public final PrologVariable newVariable(int position) {
 		return provider.newVariable(position);
 	}

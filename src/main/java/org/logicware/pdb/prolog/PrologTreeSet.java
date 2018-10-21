@@ -23,8 +23,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.logicware.platform.Stack;
 import org.logicware.platform.ArrayStack;
+import org.logicware.platform.Stack;
 
 class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 

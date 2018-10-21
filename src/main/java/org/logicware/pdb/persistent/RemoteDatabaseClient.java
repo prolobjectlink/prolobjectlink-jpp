@@ -19,7 +19,6 @@
  */
 package org.logicware.pdb.persistent;
 
-import static org.logicware.pdb.OperationType.EXIST;
 import static org.logicware.pdb.OperationType.ACTIVE;
 import static org.logicware.pdb.OperationType.BACKUP;
 import static org.logicware.pdb.OperationType.BEGIN;
@@ -37,6 +36,7 @@ import static org.logicware.pdb.OperationType.DEFRAG;
 import static org.logicware.pdb.OperationType.DELETE_ARRAY;
 import static org.logicware.pdb.OperationType.DELETE_CLASS;
 import static org.logicware.pdb.OperationType.DROP;
+import static org.logicware.pdb.OperationType.EXIST;
 import static org.logicware.pdb.OperationType.INCLUDE;
 import static org.logicware.pdb.OperationType.INSERT;
 import static org.logicware.pdb.OperationType.PROCEDURE;
