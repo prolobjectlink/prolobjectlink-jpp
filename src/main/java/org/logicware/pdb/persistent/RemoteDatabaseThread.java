@@ -29,6 +29,10 @@ import java.net.Socket;
 import java.util.EnumMap;
 import java.util.Map;
 
+import org.logicware.AbstractWrapper;
+import org.logicware.Wrapper;
+import org.logicware.logging.LoggerConstants;
+import org.logicware.logging.LoggerUtils;
 import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseRequest;
 import org.logicware.pdb.DatabaseResponse;
@@ -40,10 +44,6 @@ import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.tools.Backup;
 import org.logicware.pdb.tools.Restore;
-import org.logicware.platform.AbstractWrapper;
-import org.logicware.platform.Wrapper;
-import org.logicware.platform.logging.LoggerConstants;
-import org.logicware.platform.logging.LoggerUtils;
 
 public final class RemoteDatabaseThread extends AbstractWrapper implements Runnable, Wrapper {
 

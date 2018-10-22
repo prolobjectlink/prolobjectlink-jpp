@@ -25,9 +25,9 @@ import java.lang.reflect.Field;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+import org.logicware.logging.LoggerConstants;
+import org.logicware.logging.LoggerUtils;
 import org.logicware.pdb.util.JavaReflect;
-import org.logicware.platform.logging.LoggerConstants;
-import org.logicware.platform.logging.LoggerUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;

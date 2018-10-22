@@ -25,6 +25,8 @@ import java.util.Map;
 
 import javax.persistence.spi.PersistenceUnitInfo;
 
+import org.logicware.logging.LoggerConstants;
+import org.logicware.logging.LoggerUtils;
 import org.logicware.pdb.DatabaseSchema;
 import org.logicware.pdb.DatabaseType;
 import org.logicware.pdb.DatabaseUser;
@@ -36,8 +38,6 @@ import org.logicware.pdb.jpa.JPAProperties;
 import org.logicware.pdb.jpa.spi.JPAPersistenceXmlParser;
 import org.logicware.pdb.memory.MemoryHierarchical;
 import org.logicware.pdb.util.JavaReflect;
-import org.logicware.platform.logging.LoggerConstants;
-import org.logicware.platform.logging.LoggerUtils;
 
 public final class RemoteHierarchical extends RemoteDatabaseClient implements RemoteDatabase {
 

@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import org.logicware.logging.LoggerConstants;
+import org.logicware.logging.LoggerUtils;
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DefaultTransaction;
 import org.logicware.pdb.ObjectConverter;
@@ -39,8 +41,6 @@ import org.logicware.pdb.StoragePool;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.container.AbstractPersistentContainer;
 import org.logicware.pdb.container.AbstractProcedureQuery;
-import org.logicware.platform.logging.LoggerConstants;
-import org.logicware.platform.logging.LoggerUtils;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
 

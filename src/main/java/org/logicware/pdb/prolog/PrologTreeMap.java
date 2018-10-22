@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.logicware.platform.ArrayStack;
-import org.logicware.platform.Stack;
+import org.logicware.ArrayStack;
+import org.logicware.Stack;
 
 class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V> implements Map.Entry<K, V> {
 

@@ -21,7 +21,7 @@ package org.logicware.pdb;
 
 import java.util.Date;
 
-import org.logicware.platform.AbstractWrapper;
+import org.logicware.AbstractWrapper;
 
 public abstract class AbstractTransaction extends AbstractWrapper implements Transaction {
 

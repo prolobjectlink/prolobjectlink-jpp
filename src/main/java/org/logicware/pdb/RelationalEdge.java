@@ -21,7 +21,7 @@ package org.logicware.pdb;
 
 import java.util.Map;
 
-import org.logicware.platform.GraphEdge;
+import org.logicware.GraphEdge;
 import org.logicware.prolog.PrologTerm;
 
 public interface RelationalEdge<R> extends GraphEdge<R> {

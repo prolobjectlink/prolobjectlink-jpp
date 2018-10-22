@@ -19,7 +19,7 @@
  */
 package org.logicware.pdb.tools;
 
-import static org.logicware.platform.logging.LoggerConstants.IO;
+import static org.logicware.logging.LoggerConstants.IO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,9 +31,9 @@ import java.util.Queue;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.logicware.platform.AbstractPlatform;
-import org.logicware.platform.ArrayQueue;
-import org.logicware.platform.logging.LoggerUtils;
+import org.logicware.AbstractPlatform;
+import org.logicware.ArrayQueue;
+import org.logicware.logging.LoggerUtils;
 
 public class Backup extends AbstractPlatform {
 

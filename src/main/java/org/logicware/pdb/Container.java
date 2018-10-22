@@ -24,7 +24,7 @@ import java.util.List;
 
 import javax.naming.spi.ObjectFactory;
 
-import org.logicware.platform.Wrapper;
+import org.logicware.Wrapper;
 import org.logicware.prolog.PrologEngine;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;

@@ -36,6 +36,8 @@ import javax.persistence.Query;
 import javax.persistence.SynchronizationType;
 import javax.persistence.spi.PersistenceUnitInfo;
 
+import org.logicware.logging.LoggerConstants;
+import org.logicware.logging.LoggerUtils;
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DatabaseEngine;
 import org.logicware.pdb.DatabaseRole;
@@ -50,8 +52,6 @@ import org.logicware.pdb.jpa.JPAResultSetMapping;
 import org.logicware.pdb.tools.Backup;
 import org.logicware.pdb.tools.Restore;
 import org.logicware.pdb.util.JavaReflect;
-import org.logicware.platform.logging.LoggerConstants;
-import org.logicware.platform.logging.LoggerUtils;
 
 public abstract class AbstractDatabaseEngine extends AbstractContainer implements DatabaseEngine {
 

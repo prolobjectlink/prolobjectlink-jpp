@@ -27,8 +27,8 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.logicware.logging.PlatformLogger;
 import org.logicware.pdb.prolog.PrologDriver;
-import org.logicware.platform.logging.PlatformLogger;
 import org.logicware.prolog.AbstractProvider;
 import org.logicware.prolog.PrologAtom;
 import org.logicware.prolog.PrologConverter;

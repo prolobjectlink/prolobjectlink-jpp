@@ -23,6 +23,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.logicware.logging.LoggerConstants;
+import org.logicware.logging.LoggerUtils;
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Predicate;
@@ -32,8 +34,6 @@ import org.logicware.pdb.Settings;
 import org.logicware.pdb.StorageGraph;
 import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.storage.AbstractStorageGraph;
-import org.logicware.platform.logging.LoggerConstants;
-import org.logicware.platform.logging.LoggerUtils;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
 

@@ -22,6 +22,7 @@ package org.logicware.pdb.cache;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.logicware.RuntimeError;
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.ObjectConverter;
 import org.logicware.pdb.Predicate;
@@ -29,7 +30,6 @@ import org.logicware.pdb.RelationalCache;
 import org.logicware.pdb.RelationalGraph;
 import org.logicware.pdb.Schema;
 import org.logicware.pdb.Settings;
-import org.logicware.platform.RuntimeError;
 import org.logicware.prolog.PrologEngine;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;

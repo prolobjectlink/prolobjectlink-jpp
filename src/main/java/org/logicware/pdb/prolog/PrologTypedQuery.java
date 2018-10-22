@@ -28,11 +28,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.logicware.logging.LoggerConstants;
+import org.logicware.logging.LoggerUtils;
 import org.logicware.pdb.TypedQuery;
 import org.logicware.pdb.container.AbstractContainerQuery;
 import org.logicware.pdb.util.JavaReflect;
-import org.logicware.platform.logging.LoggerConstants;
-import org.logicware.platform.logging.LoggerUtils;
 
 public final class PrologTypedQuery<T> extends AbstractContainerQuery implements TypedQuery<T> {
 

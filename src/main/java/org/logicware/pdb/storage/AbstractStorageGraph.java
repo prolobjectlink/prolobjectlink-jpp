@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.logicware.RuntimeError;
 import org.logicware.pdb.ContainerFactory;
 import org.logicware.pdb.DefaultTransaction;
 import org.logicware.pdb.ObjectConverter;
@@ -38,7 +39,6 @@ import org.logicware.pdb.StorageManager;
 import org.logicware.pdb.StorageMode;
 import org.logicware.pdb.Transaction;
 import org.logicware.pdb.TypedQuery;
-import org.logicware.platform.RuntimeError;
 import org.logicware.prolog.PrologEngine;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;

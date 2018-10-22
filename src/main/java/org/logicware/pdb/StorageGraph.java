@@ -19,8 +19,8 @@
  */
 package org.logicware.pdb;
 
-import org.logicware.platform.Graph;
-import org.logicware.platform.Wrapper;
+import org.logicware.Graph;
+import org.logicware.Wrapper;
 
 public interface StorageGraph extends Graph<Object, Object>, PersistentContainer, Wrapper, Defragtable {
 

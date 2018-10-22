@@ -28,10 +28,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.logicware.Direction;
 import org.logicware.pdb.prolog.PrologDatabaseFunction;
 import org.logicware.pdb.prolog.PrologDatabaseTrigger;
 import org.logicware.pdb.prolog.PrologDatabaseView;
-import org.logicware.platform.Direction;
 import org.logicware.prolog.PrologEngine;
 import org.logicware.prolog.PrologProvider;
 

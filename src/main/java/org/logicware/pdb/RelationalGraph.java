@@ -25,13 +25,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import org.logicware.Direction;
+import org.logicware.Graph;
+import org.logicware.GraphEdge;
+import org.logicware.GraphVertex;
 import org.logicware.graph.AbstractGraphEdge;
 import org.logicware.graph.DirectedGraph;
 import org.logicware.graph.RelationalType;
-import org.logicware.platform.Direction;
-import org.logicware.platform.Graph;
-import org.logicware.platform.GraphEdge;
-import org.logicware.platform.GraphVertex;
 import org.logicware.prolog.PrologTerm;
 
 public class RelationalGraph<V, R> extends DirectedGraph<V, R> implements Graph<V, R> {

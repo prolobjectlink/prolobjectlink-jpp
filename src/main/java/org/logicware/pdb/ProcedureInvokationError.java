@@ -19,7 +19,7 @@
  */
 package org.logicware.pdb;
 
-import org.logicware.platform.RuntimeError;
+import org.logicware.RuntimeError;
 
 public final class ProcedureInvokationError extends RuntimeError {
 

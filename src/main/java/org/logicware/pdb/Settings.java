@@ -32,9 +32,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.logicware.logging.LoggerConstants;
+import org.logicware.logging.LoggerUtils;
 import org.logicware.pdb.util.JavaReflect;
-import org.logicware.platform.logging.LoggerConstants;
-import org.logicware.platform.logging.LoggerUtils;
 import org.logicware.prolog.PrologConverter;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
