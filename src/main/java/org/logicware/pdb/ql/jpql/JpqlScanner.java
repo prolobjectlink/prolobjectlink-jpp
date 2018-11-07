@@ -22,9 +22,8 @@
 
 package org.logicware.pdb.ql.jpql;
 
-import org.logicware.pdb.ql.SymTab;
-import org.logicware.pdb.ql.SymtabEntry;
-import org.logicware.pdb.ql.sym;
+import org.logicware.pdb.ql.SymbolEntry;
+import org.logicware.pdb.ql.SymbolTable;
 
 import java_cup.runtime.Symbol;
 
@@ -36,7 +35,7 @@ import java_cup.runtime.Symbol;
  */
  
 
-public class JpqlScanner implements java_cup.runtime.Scanner, sym {
+public class JpqlScanner implements java_cup.runtime.Scanner, JpqlSymbols {
 
   /** This character denotes the end of file */
   public static final int YYEOF = -1;
@@ -296,9 +295,9 @@ public class JpqlScanner implements java_cup.runtime.Scanner, sym {
 
   /* user code: */
 
-   SymTab symtab;
+  SymbolTable symtab;
 
-   public void setSymtab(SymTab symtab) {
+   public void setSymtab(SymbolTable symtab) {
     this.symtab = symtab; 
   }
 
@@ -711,7 +710,7 @@ public class JpqlScanner implements java_cup.runtime.Scanner, sym {
           }
         case 25: break;
         case 3: 
-          { symtab.enter(yytext(),new SymtabEntry(yytext(),yyline));
+          { symtab.enter(yytext(),new SymbolEntry(yytext(),yyline));
                         return sym(ID,yytext());
           }
         case 26: break;

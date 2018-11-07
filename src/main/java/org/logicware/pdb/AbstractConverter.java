@@ -124,7 +124,7 @@ public abstract class AbstractConverter<T> implements ObjectConverter<T> {
 	}
 
 	public final T[] toTermsArray(String string) {
-		return (T[]) provider.parsePrologTerms(string);
+		return (T[]) provider.parseTerms(string);
 	}
 
 	public final PrologProvider getProvider() {

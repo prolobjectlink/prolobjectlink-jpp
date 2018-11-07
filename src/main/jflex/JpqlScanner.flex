@@ -20,9 +20,8 @@
 
 package org.logicware.pdb.ql.jpql;
 
-import org.logicware.pdb.ql.SymTab;
-import org.logicware.pdb.ql.SymtabEntry;
-import org.logicware.pdb.ql.sym;
+import org.logicware.pdb.ql.SymbolEntry;
+import org.logicware.pdb.ql.SymbolTable;
 
 import java_cup.runtime.Symbol;
 
@@ -40,7 +39,7 @@ import java_cup.runtime.Symbol;
 %public
 %class JpqlScanner
 %cup
-%implements sym
+%implements JpqlSymbols
 
 %char
 %line
@@ -50,9 +49,9 @@ import java_cup.runtime.Symbol;
 
 %{ 
 
-   SymTab symtab;
+  SymbolTable symtab;
 
-   public void setSymtab(SymTab symtab) {
+   public void setSymtab(SymbolTable symtab) {
     this.symtab = symtab; 
   }
 
@@ -107,7 +106,7 @@ documentationComment = "/*" "*"+ [^/*] ~"*/"
     "then"          { return sym(THEN); }
     "else"          { return sym(ELSE); }
     "fi"            { return sym(FI); }
-    [a-z]+          { symtab.enter(yytext(),new SymtabEntry(yytext(),yyline));
+    [a-z]+          { symtab.enter(yytext(),new SymbolEntry(yytext(),yyline));
                         return sym(ID,yytext()); }
     [0-9]+          { return sym(NUMBER,yytext()); }
     ","             { return sym(COMMA); }

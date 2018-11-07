@@ -20,50 +20,50 @@
 
 package org.logicware.pdb.ql;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *
  * @author Jose Zalacain
  */
-public class SymTab {
-	Hashtable h; // contains the liste of words
-					// key: String, value: SymtabEntry
+public class SymbolTable {
 
-	SymTab pred; // predecessor symbol table (if exists)
+	SymbolTable pred; // predecessor symbol table (if exists)
+	Map<String, SymbolEntry> table;
 
-	public SymTab() {
+	public SymbolTable() {
 		this(null);
 	}
 
-	public SymTab(SymTab p) {
-		h = new Hashtable();
+	public SymbolTable(SymbolTable p) {
+		table = new HashMap<String, SymbolEntry>();
 		pred = p;
 	}
 
-	public boolean enter(String s, SymtabEntry e) {
+	public boolean enter(String s, SymbolEntry e) {
 		Object value = lookup(s);
-		h.put(s, e);
+		table.put(s, e);
 		return (value == null);
 	}
 
-	public SymtabEntry lookup(String s) {
-		Object value = h.get(s);
+	public SymbolEntry lookup(String s) {
+		SymbolEntry value = table.get(s);
 		if (value == null && pred != null)
 			value = pred.lookup(s);
-		return ((SymtabEntry) value);
+		return value;
 	}
 
 	@Override
 	public String toString() { // for output with print
 		String res = "symbol table\n=============\n";
-		Enumeration e = h.keys();
+		Iterator<String> e = table.keySet().iterator();
 		String key;
 
-		while (e.hasMoreElements()) {
-			key = (String) e.nextElement();
-			res += key + "   \t" + h.get(key) + "\n";
+		while (e.hasNext()) {
+			key = e.next();
+			res += key + "   \t" + table.get(key) + "\n";
 		}
 
 		if (pred != null)
@@ -72,6 +72,6 @@ public class SymTab {
 	}
 
 	public int size() {
-		return (h.size());
+		return (table.size());
 	}
 }

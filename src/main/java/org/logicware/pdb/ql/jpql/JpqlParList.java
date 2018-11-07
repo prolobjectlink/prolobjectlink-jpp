@@ -17,33 +17,25 @@
  * limitations under the License.
  * #L%
  */
+package org.logicware.pdb.ql.jpql;
 
-package org.logicware.pdb.ql;
+import org.logicware.pdb.ql.AbstractParList;
+import org.logicware.pdb.ql.Ident;
+import org.logicware.pdb.ql.ParList;
 
-/**
- *
- * @author Jose Zalacain
- */
-public class SymtabEntry {
+public class JpqlParList extends AbstractParList implements ParList {
 
-    String name;
-    int lineno;
+	public JpqlParList(Ident i) {
+		super(i);
+	}
 
-    public SymtabEntry(String v, int line) {
-        name = v;
-        lineno = line;
-    }
+	public JpqlParList(ParList p, Ident i) {
+		super(p, i);
+	}
 
-    public int kind() {
-        return UNKNOWN;
-    }
+	public String compile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public String toString() {
-        return ("unknown " + name);
-    }
-    static final int UNKNOWN = 12;
-    static final int VAR = 13;
-    static final int FUN = 14;
 }
-

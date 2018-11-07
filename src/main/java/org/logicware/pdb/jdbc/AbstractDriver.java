@@ -142,12 +142,12 @@ public abstract class AbstractDriver extends AbstractProvider implements PrologD
 		return provider.prologEmpty();
 	}
 
-	public final PrologTerm parsePrologTerm(String term) {
-		return provider.parsePrologTerm(term);
+	public final PrologTerm parseTerm(String term) {
+		return provider.parseTerm(term);
 	}
 
-	public final PrologTerm[] parsePrologTerms(String stringTerms) {
-		return provider.parsePrologTerms(stringTerms);
+	public final PrologTerm[] parseTerms(String stringTerms) {
+		return provider.parseTerms(stringTerms);
 	}
 
 	public final PrologEngine newEngine() {
