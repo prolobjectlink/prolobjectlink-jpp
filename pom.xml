@@ -62,24 +62,25 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.ow2.asm</groupId>
-			<artifactId>asm-all</artifactId>
-			<version>5.2</version>
-		</dependency>
-		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>javax.persistence</artifactId>
+			<!-- <scope>provided</scope> -->
 			<version>2.1.0</version>
 		</dependency>
 		<dependency>
-			<groupId>edu.princeton.cup</groupId>
-			<artifactId>java-cup</artifactId>
-			<version>10k</version>
+			<groupId>org.logicware</groupId>
+			<artifactId>prolobjectlink-asm</artifactId>
+			<version>[1.0.0, )</version>
 		</dependency>
 		<dependency>
 			<groupId>org.logicware</groupId>
 			<artifactId>prolobjectlink-jpi</artifactId>
 			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.logicware</groupId>
+			<artifactId>prolobjectlink-jcq-jpql</artifactId>
+			<version>[1.0.0, )</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -180,60 +181,6 @@
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>de.jflex</groupId>
-				<artifactId>jflex-maven-plugin</artifactId>
-				<version>1.6.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<verbose>true</verbose>
-							<outputDirectory>${basedir}/src/main/java/</outputDirectory>
-							<lexDefinitions>
-								<lexDefinition>src/main/jflex</lexDefinition>
-							</lexDefinitions>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.6</version>
-				<executions>
-					<execution>
-						<id>generate</id>
-						<phase>generate-sources</phase>
-						<configuration>
-							<target name="generate" description="Generate Parser">
-								<echo message="Generating..." />
-								<java classpath="${basedir}/lib/java-cup-10k.jar"
-									classname="java_cup.Main">
-									<arg value="-interface" />
-									<arg value="-parser" />
-									<arg value="JpqlParser" />
-									<arg value="-symbols" />
-									<arg value="JpqlSymbols" />
-									<arg value="${basedir}/src/main/cup/JpqlParser.cup" />
-								</java>
-								<copy file="JpqlParser.java"
-									todir="${basedir}/src/main/java/org/logicware/pdb/ql/jpql" />
-								<copy file="JpqlSymbols.java"
-									todir="${basedir}/src/main/java/org/logicware/pdb/ql/jpql" />
-								<delete file="JpqlSymbols.java" />
-								<delete file="JpqlParser.java" />
-								<echo message="Generated" />
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
 						</goals>
 					</execution>
 				</executions>
