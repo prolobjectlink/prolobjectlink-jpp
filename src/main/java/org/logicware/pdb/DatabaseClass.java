@@ -30,10 +30,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.logicware.pdb.util.JavaReflect;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
+import org.logicware.asm.ClassWriter;
+import org.logicware.asm.MethodVisitor;
+import org.logicware.asm.Opcodes;
+import org.logicware.asm.Type;
 
 public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		implements Comparable<DatabaseClass>, Serializable, SchemaElement<DatabaseClass> {

@@ -28,12 +28,12 @@ import java.util.Map;
 import org.logicware.logging.LoggerConstants;
 import org.logicware.logging.LoggerUtils;
 import org.logicware.pdb.util.JavaReflect;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.SerialVersionUIDAdder;
+import org.logicware.asm.ClassReader;
+import org.logicware.asm.ClassVisitor;
+import org.logicware.asm.ClassWriter;
+import org.logicware.asm.Opcodes;
+import org.logicware.asm.Type;
+import org.logicware.asm.commons.SerialVersionUIDAdder;
 
 /**
  * This class make {@link Serializable} an object if the object type is not
