@@ -309,7 +309,11 @@ public class JpqlFactory {
 		return null;
 	}
 
-	public static TreeNode newLOCATE(TreeNode e) {
+	public static TreeNode newLOCATE(TreeNode s1, TreeNode s2) {
+		return newLOCATE(s1, s2, null);
+	}
+
+	public static TreeNode newLOCATE(TreeNode s1, TreeNode s2, TreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -389,17 +393,12 @@ public class JpqlFactory {
 		return null;
 	}
 
-	public static TreeNode newString(String value) {
+	public static TreeNode newNegative(boolean negative) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static TreeNode newDate(Object date) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static TreeNode newBoolean(boolean value) {
+	public static TreeNode newLiteral(TreeNode l) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -418,17 +417,46 @@ public class JpqlFactory {
 		return null;
 	}
 
-	public static TreeNode newNegative(boolean negative) {
+	public static TreeNode newString(String value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static TreeNode newTrimCharacter(String s) {
+	public static TreeNode newDate(Object date) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static TreeNode newEscapeCharacter(String s) {
+	public static TreeNode newBoolean(boolean value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newPattern(TreeNode value) {
+		return newPattern(value, null);
+	}
+
+	public static TreeNode newPattern(TreeNode value, TreeNode esc) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newEscapeCharacter(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newTrimCharacter(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newOrderByExtension(TreeNode agg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newOrderBy(List<TreeNode> l) {
 		// TODO Auto-generated method stub
 		return null;
 	}

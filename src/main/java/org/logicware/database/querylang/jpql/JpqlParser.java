@@ -26,7 +26,6 @@ import java.util.List;
 import org.logicware.RuntimeError;
 import org.logicware.database.querylang.Parser;
 import org.logicware.database.querylang.Scanner;
-import org.logicware.database.querylang.SymbolEntry;
 import org.logicware.database.querylang.TreeNode;
 
 /**
@@ -34,13 +33,10 @@ import org.logicware.database.querylang.TreeNode;
  * @author Jose Zalacain
  * @since 1.0
  */
-public class JpqlParser extends JpqlSymbols implements Parser {
-
-	private SymbolEntry current;
-	private final Scanner scanner;
+public class JpqlParser extends JpqlChecker implements Parser {
 
 	public JpqlParser(Scanner scanner) {
-		this.scanner = scanner;
+		super(scanner);
 	}
 
 	public TreeNode parseQuery() {
@@ -1089,7 +1085,37 @@ public class JpqlParser extends JpqlSymbols implements Parser {
 	}
 
 	private TreeNode locate() {
-		// TODO Auto-generated method stub
+		if (current.sym == LOCATE) {
+			current = scanner.next();
+			if (current.sym == LPAR) {
+				current = scanner.next();
+				TreeNode s1 = stringExpression();
+				if (current.sym == COMMA) {
+					current = scanner.next();
+					TreeNode s2 = stringExpression();
+					if (current.sym == COMMA) {
+						current = scanner.next();
+						TreeNode exp = arithmeticExpression();
+						if (current.sym == RPAR) {
+							current = scanner.next();
+						} else {
+							throw syntaxError();
+						}
+						return JpqlFactory.newLOCATE(s1, s2, exp);
+					}
+					if (current.sym == RPAR) {
+						current = scanner.next();
+					} else {
+						throw syntaxError();
+					}
+					return JpqlFactory.newLOCATE(s1, s2);
+				} else {
+					throw syntaxError();
+				}
+			} else {
+				throw syntaxError();
+			}
+		}
 		return null;
 	}
 
@@ -1185,18 +1211,33 @@ public class JpqlParser extends JpqlSymbols implements Parser {
 	}
 
 	private TreeNode orderByClause() {
-		// TODO Auto-generated method stub
-		return null;
+		if (current.sym == ORDER) {
+			current = scanner.next();
+			if (current.sym == BY) {
+				current = scanner.next();
+				List<TreeNode> l = newList();
+				l.add(orderByItem());
+				while (current.sym == COMMA) {
+					current = scanner.next();
+					l.add(orderByItem());
+				}
+				return JpqlFactory.newOrderBy(l);
+			} else {
+				throw syntaxError();
+			}
+		} else {
+			throw syntaxError();
+		}
 	}
 
-	private TreeNode orderbyItem() {
+	private TreeNode orderByItem() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	private TreeNode orderbyExtension() {
-		// TODO Auto-generated method stub
-		return null;
+		TreeNode agg = aggregateSelectExpression();
+		return JpqlFactory.newOrderByExtension(agg);
 	}
 
 	private TreeNode abstractSchemaName() {
@@ -1230,90 +1271,61 @@ public class JpqlParser extends JpqlSymbols implements Parser {
 	}
 
 	private TreeNode pathComponent() {
-		current = scanner.next();
-//		t = <NEW>
-//		| t = <ALL>
-//		| t = <ANY>
-//		| t = <EXISTS>
-//		| t = <SOME>
-//		| t = <EMPTY>
-//		| t = <ASC>
-//		| t = <DESC>
-//		| t = <ORDER>
-//		| t = <IS>
-//		| t = <MEMBER>
-//		| t = <OF>
-//		| t = <LIKE>
-//		| t = <ESCAPE>
-//		| t = <BETWEEN>
-//		| t = <NULL>
-//		| t = <AVG>
-//		| t = <MIN>
-//		| t = <MAX>
-//		| t = <SUM>
-//		| t = <COUNT>
-//		| t = <OR>
-//		| t = <AND>
-//		| t = <NOT>
-//		| t = <CONCAT>
-//		| t = <SUBSTRING>
-//		| t = <TRIM>
-//		| t = <LOWER>
-//		| t = <UPPER>
-//		| t = <LEADING>
-//		| t = <TRAILING>
-//		| t = <BOTH>
-//		| t = <LENGTH>
-//		| t = <LOCATE>
-//		| t = <ABS>
-//		| t = <SQRT>
-//		| t = <MOD>
-//		| t = <SIZE>
-//		| t = <CURRENT_DATE>
-//		| t = <CURRENT_TIME>
-//		| t = <CURRENT_TIMESTAMP>
-//		| t = <SELECT>
-//		| t = <DISTINCT>
-//		| t = <FROM>
-//		| t = <UPDATE>
-//		| t = <DELETE>
-//		| t = <WHERE>
-//		| t = <GROUP>
-//		| t = <BY>
-//		| t = <HAVING>
-//		| t = <AS>
-//		| t = <LEFT>
-//		| t = <OUTER>
-//		| t = <INNER>
-//		| t = <JOIN>
-//		| t = <FETCH>
-//		| t = <IN>
-//		| t = <SET>
-//		| t = <OBJECT>
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-//		| t = <IDENTIFIER>
-		if (current.sym == IDENTIFIER) {
-			String id = "" + current.value + "";
+	private TreeNode literal() {
+		TreeNode l = null;
+		int key = current.sym;
+		switch (key) {
+		case FLOATING_POINT_LITERAL:
 			current = scanner.next();
-			return JpqlFactory.newIdentifier(id);
-		}
+			l = decimalLiteral();
+			break;
+		case INTEGER_LITERAL:
+			current = scanner.next();
+			l = integerLiteral();
+			break;
+		case FALSE:
+		case TRUE:
+			current = scanner.next();
+			l = booleanLiteral();
+			break;
+		case STRING_LITERAL:
+			current = scanner.next();
+			l = stringLiteral();
+			break;
 
-//		| t = <CASE>
-//		| t = <COALESCE>
-//		| t = <NULLIF>
-//		| t = <WHEN>
-//		| t = <THEN>
-//		| t = <ELSE>
-//		| t = <END>
-//		| t = <KEY>
-//		| t = <VALUE>
-//		| t = <ENTRY>
-//		| t = <INDEX>
-//		| t = <TYPE>
-//		| t = <CLASS>
-		else {
-			throw JpqlFactory.syntaxError(getClass(), current);
+		// string literal 2
+		// case STRING_LITERAL:
+		// current = scanner.next();
+		// l = stringLiteral();
+		// break;
+
+		// enum literal
+		// case STRING_LITERAL:
+		// current = scanner.next();
+		// l = stringLiteral();
+		// break;
+
+		case DATE:
+			current = scanner.next();
+			l = dateLiteral();
+			break;
+
+		case TIMESTAMP:
+			current = scanner.next();
+			l = timestampLiteral();
+			break;
+
+		// time literal
+		default:
+			current = scanner.next();
+			l = timeLiteral();
+			break;
 		}
+		return JpqlFactory.newLiteral(l);
 	}
 
 	private TreeNode numericLiteral() {
@@ -1419,8 +1431,10 @@ public class JpqlParser extends JpqlSymbols implements Parser {
 	}
 
 	private TreeNode collectionValuedInputParameter() {
-		// TODO Auto-generated method stub
-		return null;
+		if (current.sym == QUESTION) {
+			return positionalInputParameter();
+		}
+		return namedInputParameter();
 	}
 
 	private TreeNode positionalInputParameter() {
@@ -1438,8 +1452,32 @@ public class JpqlParser extends JpqlSymbols implements Parser {
 	}
 
 	private TreeNode patternValue() {
-		// TODO Auto-generated method stub
-		return null;
+		TreeNode value = null;
+		int key = current.sym;
+		switch (key) {
+		case QUESTION:
+			current = scanner.next();
+			value = positionalInputParameter();
+			break;
+		case COLON:
+			current = scanner.next();
+			value = namedInputParameter();
+			break;
+		case STRING_LITERAL:
+			current = scanner.next();
+			value = stringLiteral();
+			break;
+		default:
+			current = scanner.next();
+			value = stringLiteral2();
+			break;
+		}
+		if (current.sym == ESCAPE) {
+			current = scanner.next();
+			TreeNode esc = escapeCharacter();
+			return JpqlFactory.newPattern(value, esc);
+		}
+		return JpqlFactory.newPattern(value);
 	}
 
 	private TreeNode escapeCharacter() {
