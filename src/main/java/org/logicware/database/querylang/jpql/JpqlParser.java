@@ -23,7 +23,6 @@ package org.logicware.database.querylang.jpql;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.logicware.RuntimeError;
 import org.logicware.database.querylang.Parser;
 import org.logicware.database.querylang.Scanner;
 import org.logicware.database.querylang.TreeNode;
@@ -171,8 +170,20 @@ public class JpqlParser extends JpqlChecker implements Parser {
 	}
 
 	private TreeNode innerJoin() {
-		// TODO Auto-generated method stub
-		return null;
+		if (current.sym == INNER) {
+			current = scanner.next();
+		}
+		if (current.sym == JOIN) {
+			current = scanner.next();
+			TreeNode path = path();
+			if (current.sym == AS) {
+				current = scanner.next();
+			}
+			TreeNode var = identificationVariable();
+			return JpqlFactory.newInnerJoin(path, var);
+		} else {
+			throw syntaxError();
+		}
 	}
 
 	private TreeNode collectionMemberDeclaration() {
@@ -198,23 +209,75 @@ public class JpqlParser extends JpqlChecker implements Parser {
 	}
 
 	private TreeNode outerJoin() {
-		// TODO Auto-generated method stub
-		return null;
+		if (current.sym == LEFT) {
+			current = scanner.next();
+			if (current.sym == OUTER) {
+				current = scanner.next();
+			}
+			if (current.sym == JOIN) {
+				current = scanner.next();
+				TreeNode path = path();
+				if (current.sym == AS) {
+					current = scanner.next();
+				}
+				TreeNode var = identificationVariable();
+				return JpqlFactory.newOuterJoin(path, var);
+			} else {
+				throw syntaxError();
+			}
+		} else {
+			throw syntaxError();
+		}
 	}
 
 	private TreeNode fetchJoin() {
-		// TODO Auto-generated method stub
-		return null;
+		TreeNode f = null;
+		if (current.sym == LEFT) {
+			f = outerFetchJoin();
+		} else {
+			f = innerFetchJoin();
+		}
+		return JpqlFactory.newFetchJoin(f);
 	}
 
 	private TreeNode outerFetchJoin() {
-		// TODO Auto-generated method stub
-		return null;
+		if (current.sym == LEFT) {
+			current = scanner.next();
+			if (current.sym == OUTER) {
+				current = scanner.next();
+			}
+			if (current.sym == JOIN) {
+				current = scanner.next();
+				if (current.sym == FETCH) {
+					current = scanner.next();
+					TreeNode p = path();
+					return JpqlFactory.newOuterFetchJoin(p);
+				} else {
+					throw syntaxError();
+				}
+			} else {
+				throw syntaxError();
+			}
+		} else {
+			throw syntaxError();
+		}
 	}
 
 	private TreeNode innerFetchJoin() {
-		// TODO Auto-generated method stub
-		return null;
+		if (current.sym == INNER) {
+			current = scanner.next();
+		}
+		if (current.sym == JOIN) {
+			current = scanner.next();
+			if (current.sym == FETCH) {
+				TreeNode path = path();
+				return JpqlFactory.newInnerFetchJoin(path);
+			} else {
+				throw syntaxError();
+			}
+		} else {
+			throw syntaxError();
+		}
 	}
 
 	private TreeNode path() {
@@ -226,11 +289,13 @@ public class JpqlParser extends JpqlChecker implements Parser {
 	private TreeNode updateClause() {
 		current = scanner.next();
 		TreeNode from = fromItem();
-		// TODO subquery_from_clause
 		if (current.sym == SET) {
+			current = scanner.next();
 			TreeNode set = setClause();
+			return JpqlFactory.newUpdateClause(from, set);
+		} else {
+			throw syntaxError();
 		}
-		return null;
 	}
 
 	private TreeNode setClause() {
@@ -891,8 +956,19 @@ public class JpqlParser extends JpqlChecker implements Parser {
 	}
 
 	private TreeNode datetimeExpression() {
-		// TODO Auto-generated method stub
-		return null;
+		TreeNode s = null;
+		if (current.sym == LPAR) {
+			current = scanner.next();
+			s = subQuery();
+			if (current.sym == RPAR) {
+				current = scanner.next();
+			} else {
+				throw syntaxError();
+			}
+		} else {
+			s = datetimePrimary();
+		}
+		return JpqlFactory.newDatetimeExpression(s);
 	}
 
 	private TreeNode datetimePrimary() {
@@ -901,13 +977,35 @@ public class JpqlParser extends JpqlChecker implements Parser {
 	}
 
 	private TreeNode booleanValue() {
-		// TODO Auto-generated method stub
-		return null;
+		TreeNode v = null;
+		if (current.sym == LPAR) {
+			current = scanner.next();
+			v = subQuery();
+			if (current.sym == RPAR) {
+				current = scanner.next();
+			} else {
+				throw syntaxError();
+			}
+		} else {
+			v = path();
+		}
+		return JpqlFactory.newBooleanValue(v);
 	}
 
 	private TreeNode booleanExpression() {
-		// TODO Auto-generated method stub
-		return null;
+		TreeNode s = null;
+		if (current.sym == LPAR) {
+			current = scanner.next();
+			s = subQuery();
+			if (current.sym == RPAR) {
+				current = scanner.next();
+			} else {
+				throw syntaxError();
+			}
+		} else {
+			s = booleanPrimary();
+		}
+		return JpqlFactory.newBooleanExpression(s);
 	}
 
 	private TreeNode booleanPrimary() {
@@ -936,8 +1034,23 @@ public class JpqlParser extends JpqlChecker implements Parser {
 	}
 
 	private TreeNode entityBeanExpression() {
-		// TODO Auto-generated method stub
-		return null;
+		int key = current.sym;
+		TreeNode v = null;
+		switch (key) {
+		case QUESTION:
+			current = scanner.next();
+			v = positionalInputParameter();
+			break;
+		case COLON:
+			current = scanner.next();
+			v = namedInputParameter();
+			break;
+		default:
+			current = scanner.next();
+			v = entityBeanValue();
+			break;
+		}
+		return JpqlFactory.newEntityBeanExpression(v);
 	}
 
 	private TreeNode functionsReturningStrings() {
@@ -1498,16 +1611,6 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		} else {
 			throw syntaxError();
 		}
-	}
-
-	///////////////////////////////////////////////////////////////
-
-	private List<TreeNode> newList() {
-		return new LinkedList<TreeNode>();
-	}
-
-	private RuntimeError syntaxError() {
-		return JpqlFactory.syntaxError(getClass(), current);
 	}
 
 }

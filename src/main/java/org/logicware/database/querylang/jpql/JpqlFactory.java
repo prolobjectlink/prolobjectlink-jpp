@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.logicware.RuntimeError;
+import org.logicware.database.querylang.Parser;
 import org.logicware.database.querylang.SymbolEntry;
 import org.logicware.database.querylang.TreeNode;
 import org.logicware.database.querylang.ast.QueryDate;
@@ -50,8 +51,8 @@ public class JpqlFactory {
 		return new QueryIdent(id);
 	}
 
-	public static RuntimeError syntaxError(Class<? extends JpqlParser> cls, SymbolEntry current) {
-		return new RuntimeError(cls, "Syntax Error at " + current.getLine() + ":" + current.getColumn());
+	public static RuntimeError syntaxError(Class<? extends Parser> class1, SymbolEntry current) {
+		return new RuntimeError(class1, "Syntax Error at " + current.getLine() + ":" + current.getColumn());
 	}
 
 	public static TreeNode newAbstractSchema(List<TreeNode> l) {
@@ -457,6 +458,56 @@ public class JpqlFactory {
 	}
 
 	public static TreeNode newOrderBy(List<TreeNode> l) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newEntityBeanExpression(TreeNode value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newDatetimeExpression(TreeNode s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newBooleanValue(TreeNode v) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newBooleanExpression(TreeNode s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newInnerJoin(TreeNode path, TreeNode var) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newOuterJoin(TreeNode path, TreeNode var) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newFetchJoin(TreeNode fetch) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newOuterFetchJoin(TreeNode path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newInnerFetchJoin(TreeNode path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newUpdateClause(TreeNode from, TreeNode set) {
 		// TODO Auto-generated method stub
 		return null;
 	}
