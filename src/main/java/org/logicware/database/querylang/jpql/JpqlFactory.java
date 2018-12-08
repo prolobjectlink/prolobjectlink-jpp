@@ -19,16 +19,19 @@
  */
 package org.logicware.database.querylang.jpql;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.logicware.RuntimeError;
 import org.logicware.database.querylang.SymbolEntry;
 import org.logicware.database.querylang.TreeNode;
+import org.logicware.database.querylang.ast.QueryDate;
 import org.logicware.database.querylang.ast.QueryFrom;
 import org.logicware.database.querylang.ast.QueryIdent;
 import org.logicware.database.querylang.ast.QueryNumber;
 import org.logicware.database.querylang.ast.QueryParList;
+import org.logicware.database.querylang.ast.QueryTimestamp;
 
 public class JpqlFactory {
 
@@ -246,6 +249,186 @@ public class JpqlFactory {
 	}
 
 	public static TreeNode newAllOrAny(TreeNode exp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newSelectExtension(TreeNode scalar) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newConstructorExpression(TreeNode className, TreeNode parameters) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newEntityTypeLiteral(TreeNode variable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newExistsExpression(boolean not, TreeNode subquery) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newDelete(TreeNode from) {
+		return newDelete(from, null);
+	}
+
+	public static TreeNode newDateTimeFunction(TreeNode exp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newDelete(TreeNode from, TreeNode where) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newCurrentTimestamp(long time) {
+		return new QueryTimestamp(time);
+	}
+
+	public static TreeNode newCurrentTime(long time) {
+		return newCurrentTimestamp(time);
+	}
+
+	public static TreeNode newCurrentDate(long time) {
+		return new QueryDate(new Date(time));
+	}
+
+	public static TreeNode newNumericFunction(TreeNode exp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newLENGTH(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newLOCATE(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newABS(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newSQRT(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newMOD(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newSIZE(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newINDEX(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newStringFunction(TreeNode exp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newCONCAT(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newSUBSTRING(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newTRIM(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newLOWER(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newUPPER(TreeNode e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newTrimSpecification(TreeNode exp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newLeadingSpec(TreeNode exp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newTrailingSpec(TreeNode exp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newBothSpec(TreeNode exp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newString(String value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newDate(Object date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newBoolean(boolean value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newNumeric(TreeNode exp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newInteger(TreeNode negative, Number number) {
+		return null;
+	}
+
+	public static TreeNode newDecimal(TreeNode negative, Number number) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newNegative(boolean negative) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newTrimCharacter(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static TreeNode newEscapeCharacter(String s) {
 		// TODO Auto-generated method stub
 		return null;
 	}

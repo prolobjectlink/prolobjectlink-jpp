@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.logicware.prolog.PrologProvider;
 
-public interface ObjectConverter<T> {
+public interface ObjectConverter<T> extends ObjectSerializer<T> {
 
 	public String removeApices(String functor);
 
