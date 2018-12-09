@@ -5,7 +5,7 @@
 	<groupId>org.logicware</groupId>
 	<artifactId>prolobjectlink-jpp</artifactId>
 	<version>1.0.0</version>
-	<name>prolobjectlink-db</name>
+	<name>prolobjectlink-jpp</name>
 	<description>Prolobjectlink Database API</description>
 
 	<url>http://www.logicware.org</url>
