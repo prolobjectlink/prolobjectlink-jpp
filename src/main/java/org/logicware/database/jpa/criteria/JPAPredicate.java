@@ -25,13 +25,13 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.metamodel.Metamodel;
 
-public class JPAPredicate extends JPAExpression<Boolean> implements Predicate {
+public class JPAPredicate extends JpaExpression<Boolean> implements Predicate {
 
 	protected final List expressions;
 	protected final BooleanOperator operator;
 
-	public JPAPredicate(String alias, Class<? extends Boolean> javaType, Expression<Boolean> expression,
-			Metamodel metamodel, BooleanOperator operator, List<Expression<Boolean>> expressions) {
+	public JPAPredicate(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
+			BooleanOperator operator, List<Expression<?>> expressions) {
 		super(alias, javaType, expression, metamodel);
 		this.operator = operator;
 		this.expressions = expressions;

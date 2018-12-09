@@ -30,7 +30,7 @@ import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 
-public class JPAPath<X> extends JPAExpression<X> implements Path<X> {
+public class JPAPath<X> extends JpaExpression<X> implements Path<X> {
 
 	protected final Path<?> pathParent;
 	protected final Bindable<X> model;

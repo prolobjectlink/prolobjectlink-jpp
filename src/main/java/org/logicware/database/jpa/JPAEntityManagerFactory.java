@@ -59,6 +59,7 @@ import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.Type;
 
 import org.logicware.database.DatabaseEngine;
+import org.logicware.database.jpa.criteria.JpaCriteriaBuilder;
 import org.logicware.database.jpa.metamodel.JPAAttribute;
 import org.logicware.database.jpa.metamodel.JPABasicType;
 import org.logicware.database.jpa.metamodel.JPACollectionAttribute;
@@ -131,7 +132,7 @@ public final class JPAEntityManagerFactory implements EntityManagerFactory {
 	}
 
 	public CriteriaBuilder getCriteriaBuilder() {
-		throw new UnsupportedOperationException("getCriteriaBuilder()");
+		return new JpaCriteriaBuilder();
 	}
 
 	public Metamodel getMetamodel() {

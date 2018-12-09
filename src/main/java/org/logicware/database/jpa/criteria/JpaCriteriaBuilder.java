@@ -1,0 +1,730 @@
+package org.logicware.database.jpa.criteria;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.persistence.Tuple;
+import javax.persistence.criteria.CollectionJoin;
+import javax.persistence.criteria.CompoundSelection;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.ListJoin;
+import javax.persistence.criteria.MapJoin;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
+import javax.persistence.criteria.SetJoin;
+import javax.persistence.criteria.Subquery;
+import javax.persistence.metamodel.Metamodel;
+
+import org.logicware.database.jpa.criteria.predicate.JpaAndPredicate;
+import org.logicware.database.jpa.criteria.predicate.JpaBetweenPredicate;
+import org.logicware.database.jpa.criteria.predicate.JpaEqual;
+import org.logicware.database.jpa.criteria.predicate.JpaIsEmpty;
+import org.logicware.database.jpa.criteria.predicate.JpaIsFalsePredicate;
+import org.logicware.database.jpa.criteria.predicate.JpaIsMember;
+import org.logicware.database.jpa.criteria.predicate.JpaIsNotEmpty;
+import org.logicware.database.jpa.criteria.predicate.JpaIsNotMember;
+import org.logicware.database.jpa.criteria.predicate.JpaIsTruePredicate;
+import org.logicware.database.jpa.criteria.predicate.JpaLike;
+import org.logicware.database.jpa.criteria.predicate.JpaNotEqual;
+import org.logicware.database.jpa.criteria.predicate.JpaNotLike;
+import org.logicware.database.jpa.criteria.predicate.JpaNotNullPredicate;
+import org.logicware.database.jpa.criteria.predicate.JpaNotPredicate;
+import org.logicware.database.jpa.criteria.predicate.JpaNullPredicate;
+import org.logicware.database.jpa.criteria.predicate.JpaOrPredicate;
+import org.logicware.database.util.JavaLists;
+
+public final class JpaCriteriaBuilder implements CriteriaBuilder {
+
+	private Metamodel metamodel;
+
+	public JpaCriteriaBuilder() {
+	}
+
+	public CriteriaQuery<Object> createQuery() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <T> CriteriaQuery<T> createQuery(Class<T> resultClass) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public CriteriaQuery<Tuple> createTupleQuery() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <T> CriteriaUpdate<T> createCriteriaUpdate(Class<T> targetEntity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <T> CriteriaDelete<T> createCriteriaDelete(Class<T> targetEntity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <Y> CompoundSelection<Y> construct(Class<Y> resultClass, Selection<?>... selections) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public CompoundSelection<Tuple> tuple(Selection<?>... selections) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public CompoundSelection<Object[]> array(Selection<?>... selections) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Order asc(Expression<?> x) {
+		return new JPAOrder(x, true);
+	}
+
+	public Order desc(Expression<?> x) {
+		return new JPAOrder(x, false);
+	}
+
+	public <N extends Number> Expression<Double> avg(Expression<N> x) {
+		return new JpaAvg<Double>(x.getAlias(), Double.class, x, metamodel);
+	}
+
+	public <N extends Number> Expression<N> sum(Expression<N> x) {
+		return new JpaSum<N>(x.getAlias(), (Class<? extends N>) Number.class, x, metamodel);
+	}
+
+	public Expression<Long> sumAsLong(Expression<Integer> x) {
+		return new JpaSum<Long>(x.getAlias(), Long.class, x, metamodel);
+	}
+
+	public Expression<Double> sumAsDouble(Expression<Float> x) {
+		return new JpaSum<Double>(x.getAlias(), Double.class, x, metamodel);
+	}
+
+	public <N extends Number> Expression<N> max(Expression<N> x) {
+		return new JpaMax<N>(x.getAlias(), (Class<? extends N>) Number.class, x, metamodel);
+	}
+
+	public <N extends Number> Expression<N> min(Expression<N> x) {
+		return new JpaMin<N>(x.getAlias(), (Class<? extends N>) Number.class, x, metamodel);
+	}
+
+	public <X extends Comparable<? super X>> Expression<X> greatest(Expression<X> x) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <X extends Comparable<? super X>> Expression<X> least(Expression<X> x) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Expression<Long> count(Expression<?> x) {
+		return new JpaCount<Long>(x.getAlias(), Long.class, x, metamodel);
+	}
+
+	public Expression<Long> countDistinct(Expression<?> x) {
+		return new JpaCountDistinct<Long>(x.getAlias(), Long.class, x, metamodel);
+	}
+
+	public Predicate exists(Subquery<?> subquery) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <Y> Expression<Y> all(Subquery<Y> subquery) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <Y> Expression<Y> some(Subquery<Y> subquery) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <Y> Expression<Y> any(Subquery<Y> subquery) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Predicate and(Expression<Boolean> x, Expression<Boolean> y) {
+		return and(x, y);
+	}
+
+	public Predicate and(Predicate... restrictions) {
+		List<Expression<?>> exps = JavaLists.arrayList();
+		for (Predicate predicate : restrictions) {
+			exps.add(predicate);
+		}
+		return new JpaAndPredicate("", Boolean.class, null, metamodel, exps);
+	}
+
+	public Predicate or(Expression<Boolean> x, Expression<Boolean> y) {
+		return or(x, y);
+	}
+
+	public Predicate or(Predicate... restrictions) {
+		return new JpaOrPredicate("", Boolean.class, null, metamodel, newList(restrictions));
+	}
+
+	public Predicate not(Expression<Boolean> restriction) {
+		return new JpaNotPredicate("", Boolean.class, restriction, metamodel, newList());
+	}
+
+	public Predicate conjunction() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Predicate disjunction() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Predicate isTrue(Expression<Boolean> x) {
+		return new JpaIsTruePredicate(x.getAlias(), Boolean.class, x, metamodel, null, null);
+	}
+
+	public Predicate isFalse(Expression<Boolean> x) {
+		return new JpaIsFalsePredicate(x.getAlias(), Boolean.class, x, metamodel, null, null);
+	}
+
+	public Predicate isNull(Expression<?> x) {
+		return new JpaNullPredicate(null, Boolean.class, x, metamodel, null, null);
+	}
+
+	public Predicate isNotNull(Expression<?> x) {
+		return new JpaNotNullPredicate(null, Boolean.class, x, metamodel, null, null);
+	}
+
+	public Predicate equal(Expression<?> x, Expression<?> y) {
+		return new JpaEqual("", Boolean.class, null, metamodel, newList(x, y));
+	}
+
+	public Predicate equal(Expression<?> x, Object y) {
+		return new JpaEqual("", Boolean.class, null, metamodel, newList(x, new JpaObject<Object>(y, Object.class)));
+	}
+
+	public Predicate notEqual(Expression<?> x, Expression<?> y) {
+		return new JpaNotEqual("", Boolean.class, null, metamodel, newList(x, y));
+	}
+
+	public Predicate notEqual(Expression<?> x, Object y) {
+		return new JpaNotEqual("", Boolean.class, null, metamodel, newList(x, new JpaObject<Object>(y, Object.class)));
+	}
+
+	public <Y extends Comparable<? super Y>> Predicate greaterThan(Expression<? extends Y> x,
+			Expression<? extends Y> y) {
+		return new JpaGreaterThan("", Boolean.class, null, metamodel, newList(x, y));
+	}
+
+	public <Y extends Comparable<? super Y>> Predicate greaterThan(Expression<? extends Y> x, Y y) {
+		return new JpaGreaterThan("", Boolean.class, null, metamodel,
+				newList(x, new JpaObject(y, (Class<? extends Y>) Comparable.class)));
+	}
+
+	public <Y extends Comparable<? super Y>> Predicate greaterThanOrEqualTo(Expression<? extends Y> x,
+			Expression<? extends Y> y) {
+		return new JpaGreaterEqual("", Boolean.class, null, metamodel, newList(x, y));
+	}
+
+	public <Y extends Comparable<? super Y>> Predicate greaterThanOrEqualTo(Expression<? extends Y> x, Y y) {
+		return new JpaGreaterEqual("", Boolean.class, null, metamodel,
+				newList(x, new JpaObject(y, (Class<? extends Y>) Comparable.class)));
+	}
+
+	public <Y extends Comparable<? super Y>> Predicate lessThan(Expression<? extends Y> x, Expression<? extends Y> y) {
+		return new JpaLessThan("", Boolean.class, null, metamodel, newList(x, y));
+	}
+
+	public <Y extends Comparable<? super Y>> Predicate lessThan(Expression<? extends Y> x, Y y) {
+		return new JpaLessThan("", Boolean.class, null, metamodel,
+				newList(x, new JpaObject(y, (Class<? extends Y>) Comparable.class)));
+	}
+
+	public <Y extends Comparable<? super Y>> Predicate lessThanOrEqualTo(Expression<? extends Y> x,
+			Expression<? extends Y> y) {
+		return new JpaLessEqual("", Boolean.class, null, metamodel, newList(x, y));
+	}
+
+	public <Y extends Comparable<? super Y>> Predicate lessThanOrEqualTo(Expression<? extends Y> x, Y y) {
+		return new JpaLessEqual("", Boolean.class, null, metamodel,
+				newList(x, new JpaObject(y, (Class<? extends Y>) Comparable.class)));
+	}
+
+	public <Y extends Comparable<? super Y>> Predicate between(Expression<? extends Y> v, Expression<? extends Y> x,
+			Expression<? extends Y> y) {
+		return new JpaBetweenPredicate(null, Boolean.class, v, metamodel, null, newList(x, y));
+	}
+
+	public <Y extends Comparable<? super Y>> Predicate between(Expression<? extends Y> v, Y x, Y y) {
+		return new JpaBetweenPredicate(null, Boolean.class, v, metamodel, null,
+				newList(new JpaObject<Y>(x, (Class<? extends Y>) Comparable.class),
+						new JpaObject<Y>(y, (Class<? extends Y>) Comparable.class)));
+	}
+
+	public Predicate gt(Expression<? extends Number> x, Expression<? extends Number> y) {
+		return new JpaGreaterThan(null, Boolean.class, null, metamodel, newList(x, y));
+	}
+
+	public Predicate gt(Expression<? extends Number> x, Number y) {
+		return new JpaGreaterThan(null, Boolean.class, null, metamodel,
+				newList(x, new JpaObject<Number>(y, Number.class)));
+	}
+
+	public Predicate ge(Expression<? extends Number> x, Expression<? extends Number> y) {
+		return new JpaGreaterEqual(null, Boolean.class, null, metamodel, newList(x, y));
+	}
+
+	public Predicate ge(Expression<? extends Number> x, Number y) {
+		return new JpaGreaterEqual(null, Boolean.class, null, metamodel,
+				newList(x, new JpaObject<Number>(y, Number.class)));
+	}
+
+	public Predicate lt(Expression<? extends Number> x, Expression<? extends Number> y) {
+		return new JpaLessThan(null, Boolean.class, null, metamodel, newList(x, y));
+	}
+
+	public Predicate lt(Expression<? extends Number> x, Number y) {
+		return new JpaLessThan(null, Boolean.class, null, metamodel,
+				newList(x, new JpaObject<Number>(y, Number.class)));
+	}
+
+	public Predicate le(Expression<? extends Number> x, Expression<? extends Number> y) {
+		return new JpaLessEqual(null, Boolean.class, null, metamodel, newList(x, y));
+	}
+
+	public Predicate le(Expression<? extends Number> x, Number y) {
+		return new JpaLessEqual(null, Boolean.class, null, metamodel,
+				newList(x, new JpaObject<Number>(y, Number.class)));
+	}
+
+	public <N extends Number> Expression<N> neg(Expression<N> x) {
+		return new JpaNegative<N>(null, (Class<? extends N>) Number.class, x, metamodel);
+	}
+
+	public <N extends Number> Expression<N> abs(Expression<N> x) {
+		return new JpaAbs<N>(x.getAlias(), (Class<? extends N>) Number.class, x, metamodel);
+	}
+
+	public <N extends Number> Expression<N> sum(Expression<? extends N> x, Expression<? extends N> y) {
+		return new JpaPlus<N>(null, (Class<? extends N>) Number.class, x, y, metamodel);
+	}
+
+	public <N extends Number> Expression<N> sum(Expression<? extends N> x, N y) {
+		return new JpaPlus<N>(null, (Class<? extends N>) Number.class, x,
+				new JpaObject<N>(y, (Class<? extends N>) Number.class), metamodel);
+	}
+
+	public <N extends Number> Expression<N> sum(N x, Expression<? extends N> y) {
+		return new JpaPlus<N>(null, (Class<? extends N>) Number.class,
+				new JpaObject<N>(x, (Class<? extends N>) Number.class), y, metamodel);
+	}
+
+	public <N extends Number> Expression<N> prod(Expression<? extends N> x, Expression<? extends N> y) {
+		return new JpaTimes<N>(null, (Class<? extends N>) Number.class, x, y, metamodel);
+	}
+
+	public <N extends Number> Expression<N> prod(Expression<? extends N> x, N y) {
+		return new JpaTimes<N>(null, (Class<? extends N>) Number.class, x,
+				new JpaObject<N>(y, (Class<? extends N>) Number.class), metamodel);
+	}
+
+	public <N extends Number> Expression<N> prod(N x, Expression<? extends N> y) {
+		return new JpaTimes<N>(null, (Class<? extends N>) Number.class,
+				new JpaObject<N>(x, (Class<? extends N>) Number.class), y, metamodel);
+	}
+
+	public <N extends Number> Expression<N> diff(Expression<? extends N> x, Expression<? extends N> y) {
+		return new JpaMinus<N>(null, (Class<? extends N>) Number.class, x, y, metamodel);
+	}
+
+	public <N extends Number> Expression<N> diff(Expression<? extends N> x, N y) {
+		return new JpaMinus<N>(null, (Class<? extends N>) Number.class, x,
+				new JpaObject<N>(y, (Class<? extends N>) Number.class), metamodel);
+	}
+
+	public <N extends Number> Expression<N> diff(N x, Expression<? extends N> y) {
+		return new JpaMinus<N>(null, (Class<? extends N>) Number.class,
+				new JpaObject<N>(x, (Class<? extends N>) Number.class), y, metamodel);
+	}
+
+	public Expression<Number> quot(Expression<? extends Number> x, Expression<? extends Number> y) {
+		return new JpaDiv<Number>(null, Number.class, x, y, metamodel);
+	}
+
+	public Expression<Number> quot(Expression<? extends Number> x, Number y) {
+		return new JpaDiv<Number>(null, Number.class, x, new JpaObject<Number>(y, Number.class), metamodel);
+	}
+
+	public Expression<Number> quot(Number x, Expression<? extends Number> y) {
+		return new JpaDiv<Number>(null, Number.class, new JpaObject<Number>(x, Number.class), y, metamodel);
+	}
+
+	public Expression<Integer> mod(Expression<Integer> x, Expression<Integer> y) {
+		return new JpaMod<Integer>(null, Integer.class, x, y, metamodel);
+	}
+
+	public Expression<Integer> mod(Expression<Integer> x, Integer y) {
+		return new JpaMod<Integer>(null, Integer.class, x, new JpaObject<Integer>(y, Integer.class), metamodel);
+	}
+
+	public Expression<Integer> mod(Integer x, Expression<Integer> y) {
+		return new JpaMod<Integer>(null, Integer.class, new JpaObject<Integer>(x, Integer.class), y, metamodel);
+	}
+
+	public Expression<Double> sqrt(Expression<? extends Number> x) {
+		return new JpaSqrt<Double>(null, Double.class, x, metamodel);
+	}
+
+	public Expression<Long> toLong(Expression<? extends Number> number) {
+		return new JpaTypeCast<Long>(null, Long.class, number, metamodel);
+	}
+
+	public Expression<Integer> toInteger(Expression<? extends Number> number) {
+		return new JpaTypeCast<Integer>(null, Integer.class, number, metamodel);
+	}
+
+	public Expression<Float> toFloat(Expression<? extends Number> number) {
+		return new JpaTypeCast<Float>(null, Float.class, number, metamodel);
+	}
+
+	public Expression<Double> toDouble(Expression<? extends Number> number) {
+		return new JpaTypeCast<Double>(null, Double.class, number, metamodel);
+	}
+
+	public Expression<BigDecimal> toBigDecimal(Expression<? extends Number> number) {
+		return new JpaTypeCast<BigDecimal>(null, BigDecimal.class, number, metamodel);
+	}
+
+	public Expression<BigInteger> toBigInteger(Expression<? extends Number> number) {
+		return new JpaTypeCast<BigInteger>(null, BigInteger.class, number, metamodel);
+	}
+
+	public Expression<String> toString(Expression<Character> character) {
+		return new JpaTypeCast<String>(null, String.class, character, metamodel);
+	}
+
+	public <T> Expression<T> literal(T value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <T> Expression<T> nullLiteral(Class<T> resultClass) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <T> ParameterExpression<T> parameter(Class<T> paramClass) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <T> ParameterExpression<T> parameter(Class<T> paramClass, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <C extends Collection<?>> Predicate isEmpty(Expression<C> collection) {
+		return new JpaIsEmpty(null, Boolean.class, collection, metamodel, null, newList());
+	}
+
+	public <C extends Collection<?>> Predicate isNotEmpty(Expression<C> collection) {
+		return new JpaIsNotEmpty(null, Boolean.class, collection, metamodel, null, newList());
+	}
+
+	public <C extends Collection<?>> Expression<Integer> size(Expression<C> collection) {
+		return new JpaSize<Integer>(null, Integer.class, collection, metamodel);
+	}
+
+	public <C extends Collection<?>> Expression<Integer> size(C collection) {
+		return new JpaSize<Integer>(null, Integer.class,
+				new JpaObject<C>(collection, (Class<? extends C>) Collection.class), metamodel);
+	}
+
+	public <E, C extends Collection<E>> Predicate isMember(Expression<E> elem, Expression<C> collection) {
+		return new JpaIsMember(null, Boolean.class, elem, metamodel, null, newList(collection));
+	}
+
+	public <E, C extends Collection<E>> Predicate isMember(E elem, Expression<C> collection) {
+		return new JpaIsMember(null, Boolean.class, new JpaObject<E>(elem, (Class<? extends E>) Collection.class),
+				metamodel, null, newList(collection));
+	}
+
+	public <E, C extends Collection<E>> Predicate isNotMember(Expression<E> elem, Expression<C> collection) {
+		return new JpaIsNotMember(null, Boolean.class, elem, metamodel, null, newList(collection));
+	}
+
+	public <E, C extends Collection<E>> Predicate isNotMember(E elem, Expression<C> collection) {
+		return new JpaIsNotMember(null, Boolean.class, new JpaObject<E>(elem, (Class<? extends E>) Collection.class),
+				metamodel, null, newList(collection));
+	}
+
+	public <V, M extends Map<?, V>> Expression<Collection<V>> values(M map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <K, M extends Map<K, ?>> Expression<Set<K>> keys(M map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Predicate like(Expression<String> x, Expression<String> pattern) {
+		return new JpaLike(null, Boolean.class, null, metamodel, newList(x, pattern));
+	}
+
+	public Predicate like(Expression<String> x, String pattern) {
+		return new JpaLike(null, Boolean.class, null, metamodel, newList(x, new JpaString(pattern)));
+	}
+
+	public Predicate like(Expression<String> x, Expression<String> pattern, Expression<Character> escapeChar) {
+		return new JpaLike(null, Boolean.class, null, metamodel, newList(x, pattern, escapeChar));
+	}
+
+	public Predicate like(Expression<String> x, Expression<String> pattern, char escapeChar) {
+		return new JpaLike(null, Boolean.class, null, metamodel, newList(x, pattern, new JpaCharacter(escapeChar)));
+	}
+
+	public Predicate like(Expression<String> x, String pattern, Expression<Character> escapeChar) {
+		return new JpaLike(null, Boolean.class, null, metamodel, newList(x, new JpaString(pattern), escapeChar));
+	}
+
+	public Predicate like(Expression<String> x, String pattern, char escapeChar) {
+		return new JpaLike(null, Boolean.class, null, metamodel,
+				newList(x, new JpaString(pattern), new JpaCharacter(escapeChar)));
+	}
+
+	public Predicate notLike(Expression<String> x, Expression<String> pattern) {
+		return new JpaNotLike(null, Boolean.class, null, metamodel, newList(x, pattern));
+	}
+
+	public Predicate notLike(Expression<String> x, String pattern) {
+		return new JpaNotLike(null, Boolean.class, null, metamodel, newList(x, new JpaString(pattern)));
+	}
+
+	public Predicate notLike(Expression<String> x, Expression<String> pattern, Expression<Character> escapeChar) {
+		return new JpaNotLike(null, Boolean.class, null, metamodel, newList(x, pattern, escapeChar));
+	}
+
+	public Predicate notLike(Expression<String> x, Expression<String> pattern, char escapeChar) {
+		return new JpaNotLike(null, Boolean.class, null, metamodel, newList(x, pattern, new JpaCharacter(escapeChar)));
+	}
+
+	public Predicate notLike(Expression<String> x, String pattern, Expression<Character> escapeChar) {
+		return new JpaNotLike(null, Boolean.class, null, metamodel, newList(x, new JpaString(pattern), escapeChar));
+	}
+
+	public Predicate notLike(Expression<String> x, String pattern, char escapeChar) {
+		return new JpaNotLike(null, Boolean.class, null, metamodel,
+				newList(x, new JpaString(pattern), new JpaCharacter(escapeChar)));
+	}
+
+	public Expression<String> concat(Expression<String> x, Expression<String> y) {
+		return new JpaConcat<String>(null, String.class, x, y, metamodel);
+	}
+
+	public Expression<String> concat(Expression<String> x, String y) {
+		return new JpaConcat<String>(null, String.class, x, new JpaString(y), metamodel);
+	}
+
+	public Expression<String> concat(String x, Expression<String> y) {
+		return new JpaConcat<String>(null, String.class, new JpaString(x), y, metamodel);
+	}
+
+	public Expression<String> substring(Expression<String> x, Expression<Integer> from) {
+		return new JpaSubstring<String>(null, String.class, x, from, metamodel);
+	}
+
+	public Expression<String> substring(Expression<String> x, int from) {
+		return new JpaSubstring<String>(null, String.class, x, new JpaInterger(from), metamodel);
+	}
+
+	public Expression<String> substring(Expression<String> x, Expression<Integer> from, Expression<Integer> len) {
+		return new JpaSubstring<String>(null, String.class, x, from, len, metamodel);
+	}
+
+	public Expression<String> substring(Expression<String> x, int from, int len) {
+		return new JpaSubstring<String>(null, String.class, x, new JpaInterger(from), new JpaInterger(len), metamodel);
+	}
+
+	public Expression<String> trim(Expression<String> x) {
+		return new JpaTrim<String>(null, String.class, x, metamodel);
+	}
+
+	public Expression<String> trim(Trimspec ts, Expression<String> x) {
+		return new JpaTrim<String>(null, String.class, x, ts, metamodel);
+	}
+
+	public Expression<String> trim(Expression<Character> t, Expression<String> x) {
+		return new JpaTrim<String>(null, String.class, x, t, metamodel);
+	}
+
+	public Expression<String> trim(Trimspec ts, Expression<Character> t, Expression<String> x) {
+		return new JpaTrim<String>(null, String.class, x, ts, t, metamodel);
+	}
+
+	public Expression<String> trim(char t, Expression<String> x) {
+		return new JpaTrim<String>(null, String.class, x, new JpaCharacter(t), metamodel);
+	}
+
+	public Expression<String> trim(Trimspec ts, char t, Expression<String> x) {
+		return new JpaTrim<String>(null, String.class, x, ts, new JpaCharacter(t), metamodel);
+	}
+
+	public Expression<String> lower(Expression<String> x) {
+		return new JpaLower<String>(x.getAlias(), String.class, x, metamodel);
+	}
+
+	public Expression<String> upper(Expression<String> x) {
+		return new JpaUpper<String>(x.getAlias(), String.class, x, metamodel);
+	}
+
+	public Expression<Integer> length(Expression<String> x) {
+		return new JpaLength<Integer>(x.getAlias(), Integer.class, x, metamodel);
+	}
+
+	public Expression<Integer> locate(Expression<String> x, Expression<String> pattern) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Expression<Integer> locate(Expression<String> x, String pattern) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Expression<Integer> locate(Expression<String> x, Expression<String> pattern, Expression<Integer> from) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Expression<Integer> locate(Expression<String> x, String pattern, int from) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Expression<Date> currentDate() {
+		Expression<?> date = new JpaDate(System.currentTimeMillis());
+		return new JpaCurrentDate<Date>("", Date.class, date, metamodel);
+	}
+
+	public Expression<Timestamp> currentTimestamp() {
+		Expression<?> timestap = new JpaTimestamp(System.currentTimeMillis());
+		return new JpaCurrentTimestamp<Timestamp>("", Timestamp.class, timestap, metamodel);
+	}
+
+	public Expression<Time> currentTime() {
+		Expression<?> time = new JpaTime(System.currentTimeMillis());
+		return new JpaCurrentTime<Time>("", Time.class, time, metamodel);
+	}
+
+	public <T> In<T> in(Expression<? extends T> expression) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <Y> Expression<Y> coalesce(Expression<? extends Y> x, Expression<? extends Y> y) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <Y> Expression<Y> coalesce(Expression<? extends Y> x, Y y) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <Y> Expression<Y> nullif(Expression<Y> x, Expression<?> y) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <Y> Expression<Y> nullif(Expression<Y> x, Y y) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <T> Coalesce<T> coalesce() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <C, R> SimpleCase<C, R> selectCase(Expression<? extends C> expression) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <R> Case<R> selectCase() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <T> Expression<T> function(String name, Class<T> type, Expression<?>... args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <X, T, V extends T> Join<X, V> treat(Join<X, T> join, Class<V> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <X, T, E extends T> CollectionJoin<X, E> treat(CollectionJoin<X, T> join, Class<E> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <X, T, E extends T> SetJoin<X, E> treat(SetJoin<X, T> join, Class<E> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <X, T, E extends T> ListJoin<X, E> treat(ListJoin<X, T> join, Class<E> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <X, K, T, V extends T> MapJoin<X, K, V> treat(MapJoin<X, K, T> join, Class<V> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <X, T extends X> Path<T> treat(Path<X> path, Class<T> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <X, T extends X> Root<T> treat(Root<X> root, Class<T> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	protected List<Expression<?>> newList(Expression<?>... expressions) {
+		ArrayList<Expression<?>> list = new ArrayList<Expression<?>>();
+		for (Expression<?> exp : expressions) {
+			list.add(exp);
+		}
+		return list;
+	}
+
+}

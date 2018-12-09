@@ -27,12 +27,12 @@ import javax.persistence.metamodel.Metamodel;
 
 import org.logicware.database.jpa.criteria.JPAPredicate;
 
-public class JPAInPredicate<X> extends JPAPredicate implements In<X> {
+public class JpaInPredicate<X> extends JPAPredicate implements In<X> {
 
 	private final Expression<X> leftExpression;
 
-	public JPAInPredicate(String alias, Class<? extends Boolean> javaType, Expression<Boolean> expression,
-			Metamodel metamodel, BooleanOperator operator, List<Expression<Boolean>> expressions,
+	public JpaInPredicate(String alias, Class<? extends Boolean> javaType, Expression<?> expression,
+			Metamodel metamodel, BooleanOperator operator, List<Expression<?>> expressions,
 			Expression<X> leftExpression) {
 		super(alias, javaType, expression, metamodel, operator, expressions);
 		this.leftExpression = leftExpression;
@@ -68,7 +68,7 @@ public class JPAInPredicate<X> extends JPAPredicate implements In<X> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAInPredicate<?> other = (JPAInPredicate<?>) obj;
+		JpaInPredicate<?> other = (JpaInPredicate<?>) obj;
 		if (leftExpression == null) {
 			if (other.leftExpression != null)
 				return false;

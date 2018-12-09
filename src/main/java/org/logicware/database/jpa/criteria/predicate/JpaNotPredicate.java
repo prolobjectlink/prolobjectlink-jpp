@@ -26,11 +26,11 @@ import javax.persistence.metamodel.Metamodel;
 
 import org.logicware.database.jpa.criteria.JPAPredicate;
 
-public final class JPANotPredicate extends JPAPredicate {
+public final class JpaNotPredicate extends JPAPredicate {
 
-	public JPANotPredicate(String alias, Class<? extends Boolean> javaType, Expression<Boolean> expression,
-			Metamodel metamodel, BooleanOperator operator, List<Expression<Boolean>> expressions) {
-		super(alias, javaType, expression, metamodel, operator, expressions);
+	public JpaNotPredicate(String alias, Class<? extends Boolean> javaType, Expression<?> expression,
+			Metamodel metamodel, List<Expression<?>> expressions) {
+		super(alias, javaType, expression, metamodel, null, expressions);
 	}
 
 }

@@ -32,9 +32,9 @@ public class JPATupleElement<X> implements TupleElement<X> {
 	}
 
 	public JPATupleElement(String alias, Class<? extends X> javaType, X value) {
+		this.javaType = javaType;
 		this.value = value;
 		this.alias = alias;
-		this.javaType = javaType;
 	}
 
 	public Class<? extends X> getJavaType() {

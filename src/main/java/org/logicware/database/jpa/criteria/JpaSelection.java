@@ -19,37 +19,41 @@
  */
 package org.logicware.database.jpa.criteria;
 
+import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Selection;
 
-public class JPACompoundSelection<X> extends JPASelection<X> implements CompoundSelection<X> {
+import org.logicware.database.jpa.JPATupleElement;
 
-	protected List<Selection<?>> subSelections;
+public abstract class JpaSelection<X> extends JPATupleElement<X> implements Selection<X> {
 
-	public JPACompoundSelection(String alias, Class<? extends X> javaType, Expression<X> expression,
-			List<Selection<?>> subSelections) {
-		super(alias, javaType, expression);
-		this.subSelections = subSelections;
+	protected Expression<?> expression;
+
+	public JpaSelection(String alias, Class<? extends X> javaType, Expression<?> expression) {
+		super(alias, javaType);
+		this.expression = expression;
 	}
 
-	@Override
 	public boolean isCompoundSelection() {
-		return true;
+		return false;
 	}
 
-	@Override
 	public List<Selection<?>> getCompoundSelectionItems() {
-		return subSelections;
+		return Collections.emptyList();
+	}
+
+	public Selection<X> alias(String name) {
+		this.alias = name;
+		return this;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((subSelections == null) ? 0 : subSelections.hashCode());
+		result = prime * result + ((expression == null) ? 0 : expression.hashCode());
 		return result;
 	}
 
@@ -61,11 +65,11 @@ public class JPACompoundSelection<X> extends JPASelection<X> implements Compound
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPACompoundSelection<?> other = (JPACompoundSelection<?>) obj;
-		if (subSelections == null) {
-			if (other.subSelections != null)
+		JpaSelection<?> other = (JpaSelection<?>) obj;
+		if (expression == null) {
+			if (other.expression != null)
 				return false;
-		} else if (!subSelections.equals(other.subSelections))
+		} else if (!expression.equals(other.expression))
 			return false;
 		return true;
 	}

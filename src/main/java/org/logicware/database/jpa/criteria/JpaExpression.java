@@ -25,23 +25,24 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.metamodel.Metamodel;
 
-public class JPAExpression<X> extends JPASelection<X> implements Expression<X> {
+import org.logicware.database.jpa.criteria.predicate.JpaNotNullPredicate;
+import org.logicware.database.jpa.criteria.predicate.JpaNullPredicate;
+
+public abstract class JpaExpression<X> extends JpaSelection<X> implements Expression<X> {
 
 	protected final Metamodel metamodel;
 
-	public JPAExpression(String alias, Class<? extends X> javaType, Expression<X> expression, Metamodel metamodel) {
+	public JpaExpression(String alias, Class<? extends X> javaType, Expression<?> expression, Metamodel metamodel) {
 		super(alias, javaType, expression);
 		this.metamodel = metamodel;
 	}
 
 	public Predicate isNull() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaNullPredicate(null, Boolean.class, expression, metamodel, null, null);
 	}
 
 	public Predicate isNotNull() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaNotNullPredicate(null, Boolean.class, expression, metamodel, null, null);
 	}
 
 	public Predicate in(Object... values) {
@@ -85,12 +86,13 @@ public class JPAExpression<X> extends JPASelection<X> implements Expression<X> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAExpression<?> other = (JPAExpression<?>) obj;
+		JpaExpression<?> other = (JpaExpression<?>) obj;
 		if (metamodel == null) {
 			if (other.metamodel != null)
 				return false;
-		} else if (!metamodel.equals(other.metamodel))
+		} else if (!metamodel.equals(other.metamodel)) {
 			return false;
+		}
 		return true;
 	}
 

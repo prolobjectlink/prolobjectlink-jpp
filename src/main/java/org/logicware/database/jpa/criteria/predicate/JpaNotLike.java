@@ -26,11 +26,11 @@ import javax.persistence.metamodel.Metamodel;
 
 import org.logicware.database.jpa.criteria.JPAPredicate;
 
-public class JPAAndPredicate extends JPAPredicate {
+public class JpaNotLike extends JPAPredicate {
 
-	public JPAAndPredicate(String alias, Class<? extends Boolean> javaType, Expression<Boolean> expression,
-			Metamodel metamodel, List<Expression<Boolean>> expressions) {
-		super(alias, javaType, expression, metamodel, BooleanOperator.AND, expressions);
+	public JpaNotLike(String alias, Class<? extends Boolean> javaType, Expression<?> expression,
+			Metamodel metamodel, List<Expression<?>> expressions) {
+		super(alias, javaType, expression, metamodel, BooleanOperator.OR, expressions);
 	}
 
 }
