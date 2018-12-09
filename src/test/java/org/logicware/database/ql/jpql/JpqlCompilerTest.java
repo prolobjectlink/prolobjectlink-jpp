@@ -1,6 +1,6 @@
 /*
  * #%L
- * prolobjectlink-jcq-jpql
+ * prolobjectlink-db
  * %%
  * Copyright (C) 2012 - 2018 Logicware Project
  * %%
@@ -23,6 +23,7 @@ import java.util.HashSet;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.logicware.database.querylang.jpql.JpqlCompiler;
 
@@ -37,16 +38,20 @@ public class JpqlCompilerTest {
 	}
 
 	@Test
+	@Ignore
 	public final void testCompileJPABench1() {
-		System.out.println(JpqlCompiler.treeNode(new HashSet<String>(), "SELECT o FROM Order o WHERE o.id >= :firstId"));
+		System.out
+				.println(JpqlCompiler.treeNode(new HashSet<String>(), "SELECT o FROM Order o WHERE o.id >= :firstId"));
 	}
 
 	@Test
+	@Ignore
 	public final void testCompileJPABench2() {
 		System.out.println(JpqlCompiler.treeNode(new HashSet<String>(), "SELECT COUNT(o) FROM Order o"));
 	}
 
 	@Test
+	@Ignore
 	public final void testCompileJPABench3() {
 		System.out.println(JpqlCompiler.treeNode(new HashSet<String>(),
 				"SELECT o FROM Order o WHERE MOD(o.id, :graphSize) = 1 AND o.id >= :firstId"));

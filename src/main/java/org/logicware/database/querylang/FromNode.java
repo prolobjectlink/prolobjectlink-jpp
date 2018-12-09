@@ -1,6 +1,6 @@
 /*
  * #%L
- * prolobjectlink-jcq
+ * prolobjectlink-db
  * %%
  * Copyright (C) 2012 - 2018 Logicware Project
  * %%
