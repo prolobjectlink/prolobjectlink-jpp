@@ -43,7 +43,7 @@ public class JpaTrim<X> extends JpaFunctionExpression<X> implements Expression<X
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JpaTrim<X> other = (JpaTrim<X>) obj;
+		JpaTrim<?> other = (JpaTrim<?>) obj;
 		if (character == null) {
 			if (other.character != null)
 				return false;

@@ -32,7 +32,7 @@ public abstract class JpaNumber<N extends Number> extends JpaExpression<N> imple
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JpaNumber other = (JpaNumber) obj;
+		JpaNumber<?> other = (JpaNumber<?>) obj;
 		if (number == null) {
 			if (other.number != null)
 				return false;

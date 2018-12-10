@@ -19,16 +19,17 @@ import javax.persistence.criteria.Subquery;
 
 public class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquery<T>, Selection<T>, Expression<T> {
 
+	private String alias;
 	private Class<T> javaType;
 
-	public JpaSubQuery(Predicate restriction, Class<T> type) {
+	public JpaSubQuery(Expression<Boolean> restriction, Class<T> type) {
 		super(restriction);
 		this.javaType = type;
 	}
 
 	public Selection<T> alias(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		alias = name;
+		return this;
 	}
 
 	public boolean isCompoundSelection() {
@@ -46,8 +47,7 @@ public class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquery<T>, 
 	}
 
 	public String getAlias() {
-		// TODO Auto-generated method stub
-		return null;
+		return alias;
 	}
 
 	public Predicate isNull() {

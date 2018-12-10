@@ -1,14 +1,22 @@
 package org.logicware.database.jpa.criteria;
 
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CommonAbstractCriteria;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Subquery;
 
-public class JpaAbstractCriteria implements CommonAbstractCriteria {
+import org.logicware.AbstractWrapper;
 
-	private final Predicate restriction;
+public class JpaAbstractCriteria extends AbstractWrapper implements CommonAbstractCriteria {
+
+	protected Expression<Boolean> restriction;
 
 	public JpaAbstractCriteria(Predicate restriction) {
+		this.restriction = restriction;
+	}
+
+	public JpaAbstractCriteria(Expression<Boolean> restriction) {
 		this.restriction = restriction;
 	}
 
@@ -17,7 +25,10 @@ public class JpaAbstractCriteria implements CommonAbstractCriteria {
 	}
 
 	public Predicate getRestriction() {
-		return restriction;
+		if (!(restriction instanceof Predicate)) {
+			throw new PersistenceException("Imposible unwrap " + restriction.getClass() + "to" + Predicate.class);
+		}
+		return (Predicate) restriction;
 	}
 
 }

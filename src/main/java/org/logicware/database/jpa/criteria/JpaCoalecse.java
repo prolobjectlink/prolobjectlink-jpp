@@ -46,7 +46,7 @@ public class JpaCoalecse<X> extends JpaExpression<X> implements Coalesce<X> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JpaCoalecse<X> other = (JpaCoalecse<X>) obj;
+		JpaCoalecse<?> other = (JpaCoalecse<?>) obj;
 		if (right == null) {
 			if (other.right != null)
 				return false;

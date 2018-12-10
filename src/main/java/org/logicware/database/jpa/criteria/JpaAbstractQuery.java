@@ -12,7 +12,7 @@ import javax.persistence.metamodel.EntityType;
 
 public class JpaAbstractQuery<T> extends JpaAbstractCriteria implements AbstractQuery<T> {
 
-	public JpaAbstractQuery(Predicate restriction) {
+	public JpaAbstractQuery(Expression<Boolean> restriction) {
 		super(restriction);
 	}
 

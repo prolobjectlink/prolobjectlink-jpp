@@ -9,11 +9,29 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Selection;
+import javax.persistence.metamodel.Metamodel;
 
 public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements CriteriaQuery<T> {
 
+	private final Metamodel metamodel;
+	private final Class<T> resultClass;
+
+	public JpaCriteriaQuery(Metamodel metamodel) {
+		this(null, null, metamodel);
+	}
+
 	public JpaCriteriaQuery(Predicate restriction) {
+		this(restriction, null, null);
+	}
+
+	public JpaCriteriaQuery(Predicate restriction, Class<T> resultClass, Metamodel metamodel) {
 		super(restriction);
+		this.metamodel = metamodel;
+		this.resultClass = resultClass;
+	}
+
+	public JpaCriteriaQuery(Class<T> resultClass, Metamodel metamodel) {
+		this(null, resultClass, metamodel);
 	}
 
 	public CriteriaQuery<T> select(Selection<? extends T> selection) {

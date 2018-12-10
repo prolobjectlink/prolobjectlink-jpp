@@ -12,8 +12,8 @@ public class JpaLocate<X> extends JpaFunctionExpression<X> implements Expression
 		this(alias, javaType, x, from, null, metamodel);
 	}
 
-	public JpaLocate(String alias, Class<? extends X> javaType, Expression<?> x, Expression<?> from,
-			Expression<?> len, Metamodel metamodel) {
+	public JpaLocate(String alias, Class<? extends X> javaType, Expression<?> x, Expression<?> from, Expression<?> len,
+			Metamodel metamodel) {
 		super(alias, javaType, x, "SUBSTRING", from, metamodel);
 		this.length = len;
 	}
@@ -34,7 +34,7 @@ public class JpaLocate<X> extends JpaFunctionExpression<X> implements Expression
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JpaLocate<X> other = (JpaLocate<X>) obj;
+		JpaLocate<?> other = (JpaLocate<?>) obj;
 		if (length == null) {
 			if (other.length != null)
 				return false;

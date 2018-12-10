@@ -34,7 +34,7 @@ public class JpaSubstring<X> extends JpaFunctionExpression<X> implements Express
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JpaSubstring<X> other = (JpaSubstring<X>) obj;
+		JpaSubstring<?> other = (JpaSubstring<?>) obj;
 		if (length == null) {
 			if (other.length != null)
 				return false;

@@ -132,7 +132,7 @@ public final class JPAEntityManagerFactory implements EntityManagerFactory {
 	}
 
 	public CriteriaBuilder getCriteriaBuilder() {
-		return new JpaCriteriaBuilder();
+		return new JpaCriteriaBuilder(getMetamodel());
 	}
 
 	public Metamodel getMetamodel() {

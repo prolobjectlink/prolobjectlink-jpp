@@ -34,6 +34,7 @@ import javax.persistence.metamodel.Metamodel;
 import org.logicware.database.jpa.criteria.predicate.JpaAndPredicate;
 import org.logicware.database.jpa.criteria.predicate.JpaBetweenPredicate;
 import org.logicware.database.jpa.criteria.predicate.JpaEqual;
+import org.logicware.database.jpa.criteria.predicate.JpaExist;
 import org.logicware.database.jpa.criteria.predicate.JpaIsEmpty;
 import org.logicware.database.jpa.criteria.predicate.JpaIsFalsePredicate;
 import org.logicware.database.jpa.criteria.predicate.JpaIsMember;
@@ -52,49 +53,42 @@ import org.logicware.database.util.JavaReflect;
 
 public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBuilder {
 
-	private Metamodel metamodel;
+	private final Metamodel metamodel;
 
-	public JpaCriteriaBuilder() {
+	public JpaCriteriaBuilder(Metamodel metamodel) {
+		this.metamodel = metamodel;
 	}
 
 	public CriteriaQuery<Object> createQuery() {
-		// TODO Auto-generated method stub
-		return null;
+		return createQuery(Object.class);
 	}
 
 	public <T> CriteriaQuery<T> createQuery(Class<T> resultClass) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaCriteriaQuery<T>(resultClass, metamodel);
 	}
 
 	public CriteriaQuery<Tuple> createTupleQuery() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaCriteriaQuery<Tuple>(null, metamodel);
 	}
 
 	public <T> CriteriaUpdate<T> createCriteriaUpdate(Class<T> targetEntity) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaCriteriaUpdate<T>(targetEntity, metamodel);
 	}
 
 	public <T> CriteriaDelete<T> createCriteriaDelete(Class<T> targetEntity) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaCriteriaDelete<T>(targetEntity, metamodel);
 	}
 
 	public <Y> CompoundSelection<Y> construct(Class<Y> resultClass, Selection<?>... selections) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaCompoundSelection<Y>(null, resultClass, null, selections);
 	}
 
 	public CompoundSelection<Tuple> tuple(Selection<?>... selections) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaCompoundSelection<Tuple>(null, Tuple.class, null, selections);
 	}
 
 	public CompoundSelection<Object[]> array(Selection<?>... selections) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaCompoundSelection<Object[]>(null, Object[].class, null, selections);
 	}
 
 	public Order asc(Expression<?> x) {
@@ -130,13 +124,11 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public <X extends Comparable<? super X>> Expression<X> greatest(Expression<X> x) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaGreatest<X>(null, (Class<? extends X>) Object.class, x, metamodel);
 	}
 
 	public <X extends Comparable<? super X>> Expression<X> least(Expression<X> x) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaLeast<X>(null, (Class<? extends X>) Object.class, x, metamodel);
 	}
 
 	public Expression<Long> count(Expression<?> x) {
@@ -148,23 +140,19 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public Predicate exists(Subquery<?> subquery) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaExist(null, Boolean.class, subquery, metamodel, null, newList());
 	}
 
 	public <Y> Expression<Y> all(Subquery<Y> subquery) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaAll<Y>(null, (Class<? extends Y>) Object.class, subquery, metamodel);
 	}
 
 	public <Y> Expression<Y> some(Subquery<Y> subquery) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaSome<Y>(null, (Class<? extends Y>) Object.class, subquery, metamodel);
 	}
 
 	public <Y> Expression<Y> any(Subquery<Y> subquery) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaAny<Y>(null, (Class<? extends Y>) Object.class, subquery, metamodel);
 	}
 
 	public Predicate and(Expression<Boolean> x, Expression<Boolean> y) {
@@ -426,23 +414,21 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public <T> Expression<T> literal(T value) {
-		// TODO Auto-generated method stub
-		return null;
+		Class<T> cls = JavaReflect.classOf(value);
+		JpaObject<T> obj = new JpaObject<T>(value, cls);
+		return new JpaLiteral<T>(null, cls, obj, metamodel);
 	}
 
 	public <T> Expression<T> nullLiteral(Class<T> resultClass) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaLiteral<T>(null, (Class<? extends T>) Object.class, null, metamodel);
 	}
 
 	public <T> ParameterExpression<T> parameter(Class<T> paramClass) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaParameterExpression(null, paramClass, null, metamodel);
 	}
 
 	public <T> ParameterExpression<T> parameter(Class<T> paramClass, String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaParameterExpression(name, paramClass, null, metamodel);
 	}
 
 	public <C extends Collection<?>> Predicate isEmpty(Expression<C> collection) {
@@ -481,13 +467,11 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public <V, M extends Map<?, V>> Expression<Collection<V>> values(M map) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaValues<V>(null, (Class<? extends Collection<V>>) Object.class, null, metamodel, map);
 	}
 
 	public <K, M extends Map<K, ?>> Expression<Set<K>> keys(M map) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaKeys<K>(null, (Class<? extends Set<K>>) Object.class, null, metamodel, map);
 	}
 
 	public Predicate like(Expression<String> x, Expression<String> pattern) {

@@ -32,7 +32,7 @@ public abstract class JpaArithmeticExpression<X> extends JpaExpression<X> implem
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JpaArithmeticExpression<X> other = (JpaArithmeticExpression<X>) obj;
+		JpaArithmeticExpression<?> other = (JpaArithmeticExpression<?>) obj;
 		if (operator == null) {
 			if (other.operator != null)
 				return false;

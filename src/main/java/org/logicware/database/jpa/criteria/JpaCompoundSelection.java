@@ -19,6 +19,7 @@
  */
 package org.logicware.database.jpa.criteria;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.criteria.CompoundSelection;
@@ -27,10 +28,10 @@ import javax.persistence.criteria.Selection;
 
 public class JpaCompoundSelection<X> extends JpaSelection<X> implements CompoundSelection<X> {
 
-	protected List<Selection<?>> subSelections;
+	protected Selection<?>[] subSelections;
 
 	public JpaCompoundSelection(String alias, Class<? extends X> javaType, Expression<X> expression,
-			List<Selection<?>> subSelections) {
+			Selection<?>[] subSelections) {
 		super(alias, javaType, expression);
 		this.subSelections = subSelections;
 	}
@@ -42,14 +43,14 @@ public class JpaCompoundSelection<X> extends JpaSelection<X> implements Compound
 
 	@Override
 	public List<Selection<?>> getCompoundSelectionItems() {
-		return subSelections;
+		return Arrays.asList(subSelections);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((subSelections == null) ? 0 : subSelections.hashCode());
+		result = prime * result + Arrays.hashCode(subSelections);
 		return result;
 	}
 
@@ -62,12 +63,7 @@ public class JpaCompoundSelection<X> extends JpaSelection<X> implements Compound
 		if (getClass() != obj.getClass())
 			return false;
 		JpaCompoundSelection<?> other = (JpaCompoundSelection<?>) obj;
-		if (subSelections == null) {
-			if (other.subSelections != null)
-				return false;
-		} else if (!subSelections.equals(other.subSelections))
-			return false;
-		return true;
+		return Arrays.equals(subSelections, other.subSelections);
 	}
 
 }
