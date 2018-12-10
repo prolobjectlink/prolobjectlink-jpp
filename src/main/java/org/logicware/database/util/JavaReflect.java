@@ -99,6 +99,10 @@ public class JavaReflect {
 		}
 	}
 
+	public static <O> Class<O> classOf(O o) {
+		return (Class<O>) o.getClass();
+	}
+
 	public static Class<?> classForName(String className) {
 		Class<?> clazz = null;
 		try {

@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +48,9 @@ import org.logicware.database.jpa.criteria.predicate.JpaNotPredicate;
 import org.logicware.database.jpa.criteria.predicate.JpaNullPredicate;
 import org.logicware.database.jpa.criteria.predicate.JpaOrPredicate;
 import org.logicware.database.util.JavaLists;
+import org.logicware.database.util.JavaReflect;
 
-public final class JpaCriteriaBuilder implements CriteriaBuilder {
+public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBuilder {
 
 	private Metamodel metamodel;
 
@@ -98,11 +98,11 @@ public final class JpaCriteriaBuilder implements CriteriaBuilder {
 	}
 
 	public Order asc(Expression<?> x) {
-		return new JPAOrder(x, true);
+		return new JpaOrder(x, true);
 	}
 
 	public Order desc(Expression<?> x) {
-		return new JPAOrder(x, false);
+		return new JpaOrder(x, false);
 	}
 
 	public <N extends Number> Expression<Double> avg(Expression<N> x) {
@@ -605,23 +605,19 @@ public final class JpaCriteriaBuilder implements CriteriaBuilder {
 	}
 
 	public Expression<Integer> locate(Expression<String> x, Expression<String> pattern) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaLocate<Integer>(null, Integer.class, x, pattern, metamodel);
 	}
 
 	public Expression<Integer> locate(Expression<String> x, String pattern) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaLocate<Integer>(null, Integer.class, x, new JpaString(pattern), metamodel);
 	}
 
 	public Expression<Integer> locate(Expression<String> x, Expression<String> pattern, Expression<Integer> from) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaLocate<Integer>(null, Integer.class, x, pattern, from, metamodel);
 	}
 
 	public Expression<Integer> locate(Expression<String> x, String pattern, int from) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaLocate<Integer>(null, Integer.class, x, new JpaString(pattern), new JpaInterger(from), metamodel);
 	}
 
 	public Expression<Date> currentDate() {
@@ -640,48 +636,39 @@ public final class JpaCriteriaBuilder implements CriteriaBuilder {
 	}
 
 	public <T> In<T> in(Expression<? extends T> expression) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaIn(null, Object.class, expression, metamodel, null, newList());
 	}
 
 	public <Y> Expression<Y> coalesce(Expression<? extends Y> x, Expression<? extends Y> y) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaCoalecse<Y>(null, (Class<? extends Y>) Object.class, x, y, metamodel);
 	}
 
 	public <Y> Expression<Y> coalesce(Expression<? extends Y> x, Y y) {
-		// TODO Auto-generated method stub
-		return null;
+		return coalesce(x, new JpaObject<Y>(y, (Class<? extends Y>) Object.class));
 	}
 
 	public <Y> Expression<Y> nullif(Expression<Y> x, Expression<?> y) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaNullIf<Y>(null, (Class<? extends Y>) Object.class, x, y, metamodel);
 	}
 
 	public <Y> Expression<Y> nullif(Expression<Y> x, Y y) {
-		// TODO Auto-generated method stub
-		return null;
+		return nullif(x, new JpaObject<Y>(y, JavaReflect.classOf(y)));
 	}
 
 	public <T> Coalesce<T> coalesce() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaCoalecse(null, (Class<? extends T>) Object.class, metamodel);
 	}
 
 	public <C, R> SimpleCase<C, R> selectCase(Expression<? extends C> expression) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaSimpleCase(null, JavaReflect.classOf(expression.getJavaType()), expression, metamodel);
 	}
 
 	public <R> Case<R> selectCase() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaCase(null, (Class<? extends R>) Object.class, metamodel);
 	}
 
 	public <T> Expression<T> function(String name, Class<T> type, Expression<?>... args) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaFunction<T>(name, type, args, metamodel);
 	}
 
 	public <X, T, V extends T> Join<X, V> treat(Join<X, T> join, Class<V> type) {
@@ -716,15 +703,11 @@ public final class JpaCriteriaBuilder implements CriteriaBuilder {
 
 	public <X, T extends X> Root<T> treat(Root<X> root, Class<T> type) {
 		// TODO Auto-generated method stub
+//		Set<Join<T, ?>> joins = JavaSets.linkedHashSet();
+//		Set<Join<T, ?>> fetches = JavaSets.linkedHashSet();
+//		return new JpaRoot<T>(null, type, root, metamodel, root, model,
+//				metamodel.managedType(type), joins, fetches, false, false, root);
 		return null;
-	}
-
-	protected List<Expression<?>> newList(Expression<?>... expressions) {
-		ArrayList<Expression<?>> list = new ArrayList<Expression<?>>();
-		for (Expression<?> exp : expressions) {
-			list.add(exp);
-		}
-		return list;
 	}
 
 }

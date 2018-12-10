@@ -30,12 +30,12 @@ import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 
-public class JPAPath<X> extends JpaExpression<X> implements Path<X> {
+public class JpaPath<X> extends JpaExpression<X> implements Path<X> {
 
 	protected final Path<?> pathParent;
 	protected final Bindable<X> model;
 
-	public JPAPath(String alias, Class<? extends X> javaType, Expression<X> expression, Metamodel metamodel,
+	public JpaPath(String alias, Class<? extends X> javaType, Expression<X> expression, Metamodel metamodel,
 			Path<?> pathParent, Bindable<X> model) {
 		super(alias, javaType, expression, metamodel);
 		this.pathParent = pathParent;
@@ -92,7 +92,7 @@ public class JPAPath<X> extends JpaExpression<X> implements Path<X> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAPath<?> other = (JPAPath<?>) obj;
+		JpaPath<?> other = (JpaPath<?>) obj;
 		if (model == null) {
 			if (other.model != null)
 				return false;

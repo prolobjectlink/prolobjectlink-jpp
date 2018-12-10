@@ -32,9 +32,9 @@ import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
 
-public class JPARoot<X> extends JPAFrom<X, X> implements Root<X> {
+public class JpaRoot<X> extends JPAFrom<X, X> implements Root<X> {
 
-	public JPARoot(String alias, Class<? extends X> javaType, Expression<X> expression, Metamodel metamodel,
+	public JpaRoot(String alias, Class<? extends X> javaType, Expression<X> expression, Metamodel metamodel,
 			Path<?> pathParent, Bindable<X> model, ManagedType<X> managedType, Set<Join<X, ?>> joins,
 			Set<Fetch<X, ?>> fetches, boolean isJoin, boolean isFetch, From<X, X> correlatedParent) {
 		super(alias, javaType, expression, metamodel, pathParent, model, managedType, joins, fetches, isJoin, isFetch,

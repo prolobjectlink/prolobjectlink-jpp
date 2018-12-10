@@ -41,7 +41,7 @@ import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 
-public class JPAFrom<Z, X> extends JPAPath<X> implements From<Z, X> {
+public class JPAFrom<Z, X> extends JpaPath<X> implements From<Z, X> {
 
 	protected ManagedType<X> managedType;
 	protected Set<Join<X, ?>> joins;

@@ -24,9 +24,9 @@ import java.util.List;
 import javax.persistence.criteria.Expression;
 import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.database.jpa.criteria.JPAPredicate;
+import org.logicware.database.jpa.criteria.JpaPredicate;
 
-public abstract class JpaComparablePredicate extends JPAPredicate {
+public abstract class JpaComparablePredicate extends JpaPredicate {
 
 	public JpaComparablePredicate(String alias, Class<? extends Boolean> javaType,
 			Expression<? extends Comparable<?>> expression, Metamodel metamodel, List<Expression<?>> expressions) {

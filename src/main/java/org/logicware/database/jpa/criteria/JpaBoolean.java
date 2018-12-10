@@ -2,9 +2,9 @@ package org.logicware.database.jpa.criteria;
 
 import javax.persistence.criteria.Predicate;
 
-import org.logicware.database.jpa.criteria.JPAPredicate;
+import org.logicware.database.jpa.criteria.JpaPredicate;
 
-public abstract class JpaBoolean extends JPAPredicate implements Predicate {
+public abstract class JpaBoolean extends JpaPredicate implements Predicate {
 
 	protected final Boolean bool;
 

@@ -24,9 +24,9 @@ import java.util.List;
 import javax.persistence.criteria.Expression;
 import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.database.jpa.criteria.JPAPredicate;
+import org.logicware.database.jpa.criteria.JpaPredicate;
 
-public class JpaIsNotMember extends JPAPredicate {
+public class JpaIsNotMember extends JpaPredicate {
 
 	public JpaIsNotMember(String alias, Class<? extends Boolean> javaType, Expression<?> expression,
 			Metamodel metamodel, BooleanOperator operator, List<Expression<?>> expressions) {

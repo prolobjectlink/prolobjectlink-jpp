@@ -25,9 +25,9 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.Expression;
 import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.database.jpa.criteria.JPAPredicate;
+import org.logicware.database.jpa.criteria.JpaPredicate;
 
-public class JpaInPredicate<X> extends JPAPredicate implements In<X> {
+public class JpaInPredicate<X> extends JpaPredicate implements In<X> {
 
 	private final Expression<X> leftExpression;
 

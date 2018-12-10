@@ -24,9 +24,9 @@ import java.util.List;
 import javax.persistence.criteria.Expression;
 import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.database.jpa.criteria.JPAPredicate;
+import org.logicware.database.jpa.criteria.JpaPredicate;
 
-public class JpaConjuntion extends JPAPredicate {
+public class JpaConjuntion extends JpaPredicate {
 
 	public JpaConjuntion(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
 			List<Expression<?>> expressions) {

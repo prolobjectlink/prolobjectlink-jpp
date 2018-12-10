@@ -25,12 +25,12 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.metamodel.Metamodel;
 
-public class JPAPredicate extends JpaExpression<Boolean> implements Predicate {
+public class JpaPredicate extends JpaExpression<Boolean> implements Predicate {
 
 	protected final List expressions;
 	protected final BooleanOperator operator;
 
-	public JPAPredicate(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
+	public JpaPredicate(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
 			BooleanOperator operator, List<Expression<?>> expressions) {
 		super(alias, javaType, expression, metamodel);
 		this.operator = operator;
@@ -72,7 +72,7 @@ public class JPAPredicate extends JpaExpression<Boolean> implements Predicate {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAPredicate other = (JPAPredicate) obj;
+		JpaPredicate other = (JpaPredicate) obj;
 		if (expressions == null) {
 			if (other.expressions != null)
 				return false;

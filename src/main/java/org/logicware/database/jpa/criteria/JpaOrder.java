@@ -22,22 +22,22 @@ package org.logicware.database.jpa.criteria;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 
-public class JPAOrder implements Order {
+public class JpaOrder implements Order {
 
 	protected final boolean isAscending;
 	protected final Expression<?> expression;
 
-	public JPAOrder(Expression<?> expression) {
+	public JpaOrder(Expression<?> expression) {
 		this(expression, true);
 	}
 
-	public JPAOrder(Expression<?> expression, boolean isAscending) {
+	public JpaOrder(Expression<?> expression, boolean isAscending) {
 		this.expression = expression;
 		this.isAscending = isAscending;
 	}
 
 	public Order reverse() {
-		return new JPAOrder(expression, !isAscending);
+		return new JpaOrder(expression, !isAscending);
 	}
 
 	public boolean isAscending() {

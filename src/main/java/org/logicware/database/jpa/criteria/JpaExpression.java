@@ -46,28 +46,23 @@ public abstract class JpaExpression<X> extends JpaSelection<X> implements Expres
 	}
 
 	public Predicate in(Object... values) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaIn(null, Boolean.class, null, metamodel, null, newList(values));
 	}
 
 	public Predicate in(Expression<?>... values) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaIn(null, Boolean.class, null, metamodel, null, newList(values));
 	}
 
 	public Predicate in(Collection<?> values) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaIn(null, Boolean.class, null, metamodel, null, newList(values));
 	}
 
 	public Predicate in(Expression<Collection<?>> values) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaIn(null, Boolean.class, values, metamodel, null, newList());
 	}
 
 	public <Y> Expression<Y> as(Class<Y> type) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaAs<Y>(null, type, null, metamodel);
 	}
 
 	@Override

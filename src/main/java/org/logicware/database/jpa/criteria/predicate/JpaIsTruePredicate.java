@@ -24,9 +24,9 @@ import java.util.List;
 import javax.persistence.criteria.Expression;
 import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.database.jpa.criteria.JPAPredicate;
+import org.logicware.database.jpa.criteria.JpaPredicate;
 
-public class JpaIsTruePredicate extends JPAPredicate {
+public class JpaIsTruePredicate extends JpaPredicate {
 
 	public JpaIsTruePredicate(String alias, Class<? extends Boolean> javaType, Expression<?> expression,
 			Metamodel metamodel, BooleanOperator operator, List<Expression<?>> expressions) {
