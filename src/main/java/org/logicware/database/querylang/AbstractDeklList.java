@@ -23,8 +23,9 @@ package org.logicware.database.querylang;
 import java.util.Iterator;
 
 import org.logicware.AbstractIterator;
+import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
 
-public abstract class AbstractDeklList extends AbstractTreeNode implements DeklList {
+public abstract class AbstractDeklList extends JpaAbstractWrapper implements DeklList {
 
 	Dekl dekl; // declaration
 	DeklList dekllist; // rest list (optional null)

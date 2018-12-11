@@ -24,12 +24,14 @@
  */
 package org.logicware.database.querylang;
 
+import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
+
 /**
  * 
  * @author Jose Zalacain
  * @since 1.0
  */
-public abstract class AbstractProgram extends AbstractTreeNode implements Program {
+public abstract class AbstractProgram extends JpaAbstractWrapper implements Program {
 
 	ParList parlist; // input variables
 	DeklList dekllist; // function declarations

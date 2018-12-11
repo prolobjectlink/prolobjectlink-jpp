@@ -237,13 +237,15 @@ public class JpaFrom<Z, X> extends JpaPath<X> implements From<Z, X> {
 		if (correlatedParent == null) {
 			if (other.correlatedParent != null)
 				return false;
-		} else if (!correlatedParent.equals(other.correlatedParent))
+		} else if (!correlatedParent.equals(other.correlatedParent)) {
 			return false;
+		}
 		if (fetches == null) {
 			if (other.fetches != null)
 				return false;
-		} else if (!fetches.equals(other.fetches))
+		} else if (!fetches.equals(other.fetches)) {
 			return false;
+		}
 		if (isFetch != other.isFetch)
 			return false;
 		if (isJoin != other.isJoin)
@@ -251,13 +253,15 @@ public class JpaFrom<Z, X> extends JpaPath<X> implements From<Z, X> {
 		if (joins == null) {
 			if (other.joins != null)
 				return false;
-		} else if (!joins.equals(other.joins))
+		} else if (!joins.equals(other.joins)) {
 			return false;
+		}
 		if (managedType == null) {
 			if (other.managedType != null)
 				return false;
-		} else if (!managedType.equals(other.managedType))
+		} else if (!managedType.equals(other.managedType)) {
 			return false;
+		}
 		return true;
 	}
 

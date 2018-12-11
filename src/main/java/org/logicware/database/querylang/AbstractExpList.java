@@ -22,13 +22,14 @@ package org.logicware.database.querylang;
 import java.util.Iterator;
 
 import org.logicware.AbstractIterator;
+import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
 
 /**
  * 
  * @author Jose Zalacain
  * @since 1.0
  */
-public abstract class AbstractExpList extends AbstractTreeNode implements ExpList {
+public abstract class AbstractExpList extends JpaAbstractWrapper implements ExpList {
 
 	Exp exp; // expression of this list node
 	ExpList explist; // next list element (optional null)

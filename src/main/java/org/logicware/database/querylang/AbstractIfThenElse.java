@@ -19,12 +19,14 @@
  */
 package org.logicware.database.querylang;
 
+import org.logicware.database.jpa.criteria.JpaTreeNode;
+
 /**
  *
  * @author Jose Zalacain
  * @since 1.0
  */
-public abstract class AbstractIfThenElse extends AbstractExp implements TreeNode {
+public abstract class AbstractIfThenElse extends AbstractExp implements JpaTreeNode {
 
 	BoolExp boolexp; // condition
 	Exp exp1; // then branch

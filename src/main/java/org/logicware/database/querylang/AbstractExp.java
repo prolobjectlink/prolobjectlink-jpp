@@ -20,6 +20,8 @@
 
 package org.logicware.database.querylang;
 
-public abstract class AbstractExp extends AbstractTreeNode implements Exp {
+import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
+
+public abstract class AbstractExp extends JpaAbstractWrapper implements Exp {
 
 }

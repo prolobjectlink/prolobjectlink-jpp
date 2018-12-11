@@ -19,6 +19,8 @@
  */
 package org.logicware.database.querylang;
 
-public interface ExpList extends TreeNode, Iterable<ExpList> {
+import org.logicware.database.jpa.criteria.JpaTreeNode;
+
+public interface ExpList extends JpaTreeNode, Iterable<ExpList> {
 
 }

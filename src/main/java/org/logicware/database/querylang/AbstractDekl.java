@@ -20,11 +20,13 @@
 
 package org.logicware.database.querylang;
 
+import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
+
 /**
  *
  * @author Jose Zalacain
  */
-public abstract class AbstractDekl extends AbstractTreeNode implements Dekl {
+public abstract class AbstractDekl extends JpaAbstractWrapper implements Dekl {
 
 	Ident ident; // identifier
 	ParList parlist; // liste of parameter

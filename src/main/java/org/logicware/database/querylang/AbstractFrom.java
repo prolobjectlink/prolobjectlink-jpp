@@ -22,15 +22,18 @@ package org.logicware.database.querylang;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AbstractFrom extends AbstractTreeNode implements TreeNode {
+import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
+import org.logicware.database.jpa.criteria.JpaTreeNode;
 
-	List<TreeNode> declarations = new LinkedList<TreeNode>();
+public abstract class AbstractFrom extends JpaAbstractWrapper implements JpaTreeNode {
 
-	public AbstractFrom(List<TreeNode> declarations) {
+	List<JpaTreeNode> declarations = new LinkedList<JpaTreeNode>();
+
+	public AbstractFrom(List<JpaTreeNode> declarations) {
 		this.declarations = declarations;
 	}
 
-	public AbstractFrom(TreeNode declaration) {
+	public AbstractFrom(JpaTreeNode declaration) {
 		this.declarations.add(declaration);
 	}
 

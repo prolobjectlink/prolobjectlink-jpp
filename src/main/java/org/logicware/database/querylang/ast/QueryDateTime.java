@@ -23,7 +23,6 @@ import java.util.Date;
 
 import org.logicware.database.querylang.AbstractDateTime;
 import org.logicware.database.querylang.DateTime;
-import org.logicware.database.querylang.SymbolTable;
 
 /**
  *
@@ -37,7 +36,7 @@ public class QueryDateTime extends AbstractDateTime implements DateTime {
 	}
 
 	@Override
-	public String compile(SymbolTable symbols) {
+	public String compile() {
 		return "'" + date + "'";
 	}
 

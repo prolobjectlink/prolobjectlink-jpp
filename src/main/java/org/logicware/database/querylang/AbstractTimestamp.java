@@ -19,12 +19,14 @@
  */
 package org.logicware.database.querylang;
 
+import org.logicware.database.jpa.criteria.JpaTreeNode;
+
 /**
  *
  * @author Jose Zalacain
  * @since 1.0
  */
-public abstract class AbstractTimestamp extends AbstractExp implements TreeNode {
+public abstract class AbstractTimestamp extends AbstractExp implements JpaTreeNode {
 
 	protected long timestamp;
 

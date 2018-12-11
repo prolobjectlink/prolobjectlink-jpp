@@ -19,7 +19,9 @@
  */
 package org.logicware.database.querylang;
 
-public interface ParList extends TreeNode, Iterable<TreeNode> {
+import org.logicware.database.jpa.criteria.JpaTreeNode;
+
+public interface ParList extends JpaTreeNode, Iterable<JpaTreeNode> {
 
 	public int arity();
 

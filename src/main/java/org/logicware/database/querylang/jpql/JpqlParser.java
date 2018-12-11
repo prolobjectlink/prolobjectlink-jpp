@@ -23,9 +23,9 @@ package org.logicware.database.querylang.jpql;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.logicware.database.jpa.criteria.JpaTreeNode;
 import org.logicware.database.querylang.Parser;
 import org.logicware.database.querylang.Scanner;
-import org.logicware.database.querylang.TreeNode;
 
 /**
  * 
@@ -38,7 +38,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		super(scanner);
 	}
 
-	public TreeNode parseQuery() {
+	public JpaTreeNode parseQuery() {
 		current = scanner.next();
 		if (current.sym == SELECT) {
 			return selectStatement();
@@ -51,13 +51,13 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode selectStatement() {
-		TreeNode where = null;
-		TreeNode group = null;
-		TreeNode having = null;
-		TreeNode order = null;
-		TreeNode select = selectClause();
-		TreeNode from = fromClause();
+	private JpaTreeNode selectStatement() {
+		JpaTreeNode where = null;
+		JpaTreeNode group = null;
+		JpaTreeNode having = null;
+		JpaTreeNode order = null;
+		JpaTreeNode select = selectClause();
+		JpaTreeNode from = fromClause();
 		if (current.sym == WHERE) {
 			where = whereClause();
 		}
@@ -77,24 +77,24 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		);
 	}
 
-	private TreeNode updateStatement() {
-		TreeNode update = updateClause();
+	private JpaTreeNode updateStatement() {
+		JpaTreeNode update = updateClause();
 		if (current.sym == WHERE) {
-			TreeNode where = whereClause();
+			JpaTreeNode where = whereClause();
 			return JpqlFactory.newUpdate(update, where);
 		}
 		return update;
 	}
 
-	private TreeNode deleteStatement() {
+	private JpaTreeNode deleteStatement() {
 		if (current.sym == DELETE) {
 			current = scanner.next();
 			if (current.sym == FROM) {
 				current = scanner.next();
-				TreeNode f = fromItem();
+				JpaTreeNode f = fromItem();
 				if (current.sym == WHERE) {
 					current = scanner.next();
-					TreeNode w = whereClause();
+					JpaTreeNode w = whereClause();
 					return JpqlFactory.newDelete(f, w);
 				}
 				return JpqlFactory.newDelete(f);
@@ -106,12 +106,12 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode fromClause() {
+	private JpaTreeNode fromClause() {
 		if (current.sym == FROM) {
 			current = scanner.next();
 
-			List<TreeNode> vars = new LinkedList<TreeNode>();
-			TreeNode var = identificationVariableDeclaration();
+			List<JpaTreeNode> vars = new LinkedList<JpaTreeNode>();
+			JpaTreeNode var = identificationVariableDeclaration();
 			vars.add(var);
 
 			// collection_member_declaration
@@ -132,25 +132,25 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode identificationVariableDeclaration() {
+	private JpaTreeNode identificationVariableDeclaration() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode fromItem() {
-		TreeNode type = abstractSchemaName();
+	private JpaTreeNode fromItem() {
+		JpaTreeNode type = abstractSchemaName();
 		if (current.sym == AS) {
 			current = scanner.next();
-			TreeNode var = identificationVariable();
+			JpaTreeNode var = identificationVariable();
 			return JpqlFactory.newFromItem(type, var);
 		}
-		TreeNode var = identificationVariable();
+		JpaTreeNode var = identificationVariable();
 		return JpqlFactory.newFromItem(var);
 	}
 
-	private TreeNode subQueryFromClause() {
+	private JpaTreeNode subQueryFromClause() {
 		current = scanner.next();
-		List<TreeNode> l = newList();
+		List<JpaTreeNode> l = newList();
 		l.add(subQueryFromItem());
 		while (current.sym == COMMA) {
 			current = scanner.next();
@@ -159,42 +159,42 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newSubQueryFrom(l);
 	}
 
-	private TreeNode subselectIdentificationVariableDeclaration() {
+	private JpaTreeNode subselectIdentificationVariableDeclaration() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode subQueryFromItem() {
+	private JpaTreeNode subQueryFromItem() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode innerJoin() {
+	private JpaTreeNode innerJoin() {
 		if (current.sym == INNER) {
 			current = scanner.next();
 		}
 		if (current.sym == JOIN) {
 			current = scanner.next();
-			TreeNode path = path();
+			JpaTreeNode path = path();
 			if (current.sym == AS) {
 				current = scanner.next();
 			}
-			TreeNode var = identificationVariable();
+			JpaTreeNode var = identificationVariable();
 			return JpqlFactory.newInnerJoin(path, var);
 		} else {
 			throw syntaxError();
 		}
 	}
 
-	private TreeNode collectionMemberDeclaration() {
+	private JpaTreeNode collectionMemberDeclaration() {
 		current = scanner.next();
 		if (current.sym == LPAR) {
 			current = scanner.next();
 			if (current.sym == KEY || current.sym == VALUE) {
-				TreeNode path = qualifiedPath();
+				JpaTreeNode path = qualifiedPath();
 				return JpqlFactory.newCollMemberDekl(path);
 			} else {
-				TreeNode path = path();
+				JpaTreeNode path = path();
 				return JpqlFactory.newCollMemberDekl(path);
 			}
 		}
@@ -204,11 +204,11 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == AS) {
 			current = scanner.next();
 		}
-		TreeNode var = identificationVariable();
+		JpaTreeNode var = identificationVariable();
 		return JpqlFactory.newCollMemberDekl(var);
 	}
 
-	private TreeNode outerJoin() {
+	private JpaTreeNode outerJoin() {
 		if (current.sym == LEFT) {
 			current = scanner.next();
 			if (current.sym == OUTER) {
@@ -216,11 +216,11 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			}
 			if (current.sym == JOIN) {
 				current = scanner.next();
-				TreeNode path = path();
+				JpaTreeNode path = path();
 				if (current.sym == AS) {
 					current = scanner.next();
 				}
-				TreeNode var = identificationVariable();
+				JpaTreeNode var = identificationVariable();
 				return JpqlFactory.newOuterJoin(path, var);
 			} else {
 				throw syntaxError();
@@ -230,8 +230,8 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode fetchJoin() {
-		TreeNode f = null;
+	private JpaTreeNode fetchJoin() {
+		JpaTreeNode f = null;
 		if (current.sym == LEFT) {
 			f = outerFetchJoin();
 		} else {
@@ -240,7 +240,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newFetchJoin(f);
 	}
 
-	private TreeNode outerFetchJoin() {
+	private JpaTreeNode outerFetchJoin() {
 		if (current.sym == LEFT) {
 			current = scanner.next();
 			if (current.sym == OUTER) {
@@ -250,7 +250,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				current = scanner.next();
 				if (current.sym == FETCH) {
 					current = scanner.next();
-					TreeNode p = path();
+					JpaTreeNode p = path();
 					return JpqlFactory.newOuterFetchJoin(p);
 				} else {
 					throw syntaxError();
@@ -263,14 +263,14 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode innerFetchJoin() {
+	private JpaTreeNode innerFetchJoin() {
 		if (current.sym == INNER) {
 			current = scanner.next();
 		}
 		if (current.sym == JOIN) {
 			current = scanner.next();
 			if (current.sym == FETCH) {
-				TreeNode path = path();
+				JpaTreeNode path = path();
 				return JpqlFactory.newInnerFetchJoin(path);
 			} else {
 				throw syntaxError();
@@ -280,26 +280,26 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode path() {
-		TreeNode id = identificationVariable();
-		TreeNode rest = pathComponent();
+	private JpaTreeNode path() {
+		JpaTreeNode id = identificationVariable();
+		JpaTreeNode rest = pathComponent();
 		return JpqlFactory.newPath(id, rest);
 	}
 
-	private TreeNode updateClause() {
+	private JpaTreeNode updateClause() {
 		current = scanner.next();
-		TreeNode from = fromItem();
+		JpaTreeNode from = fromItem();
 		if (current.sym == SET) {
 			current = scanner.next();
-			TreeNode set = setClause();
+			JpaTreeNode set = setClause();
 			return JpqlFactory.newUpdateClause(from, set);
 		} else {
 			throw syntaxError();
 		}
 	}
 
-	private TreeNode setClause() {
-		List<TreeNode> l = newList();
+	private JpaTreeNode setClause() {
+		List<JpaTreeNode> l = newList();
 		l.add(updateItem());
 		while (current.sym == COMMA) {
 			current = scanner.next();
@@ -308,31 +308,31 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newSet(l);
 	}
 
-	private TreeNode updateItem() {
-		TreeNode path = path();
+	private JpaTreeNode updateItem() {
+		JpaTreeNode path = path();
 		if (current.sym == EQ) {
 			current = scanner.next();
-			TreeNode value = newValue();
+			JpaTreeNode value = newValue();
 			return JpqlFactory.newUpdateItem(path, value);
 		} else {
 			throw syntaxError();
 		}
 	}
 
-	private TreeNode newValue() {
+	private JpaTreeNode newValue() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode simpleEntityExpression() {
+	private JpaTreeNode simpleEntityExpression() {
 		if (current.sym == QUESTION || current.sym == COLON) {
 			return inputParameter();
 		}
 		return identificationVariable();
 	}
 
-	private TreeNode selectClause() {
-		TreeNode exp = null;
+	private JpaTreeNode selectClause() {
+		JpaTreeNode exp = null;
 		current = scanner.next();
 		if (current.sym == DISTINCT) {
 			exp = selectExpressions();
@@ -342,8 +342,8 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return exp;
 	}
 
-	private TreeNode simpleSelectClause() {
-		TreeNode exp = null;
+	private JpaTreeNode simpleSelectClause() {
+		JpaTreeNode exp = null;
 		current = scanner.next();
 		if (current.sym == DISTINCT) {
 			exp = selectExpressions();
@@ -353,8 +353,8 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return exp;
 	}
 
-	private TreeNode selectExpressions() {
-		List<TreeNode> l = newList();
+	private JpaTreeNode selectExpressions() {
+		List<JpaTreeNode> l = newList();
 		l.add(selectExpression());
 		while (current.sym == COMMA) {
 			current = scanner.next();
@@ -363,18 +363,18 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newExpressions(l);
 	}
 
-	private TreeNode selectExpression() {
+	private JpaTreeNode selectExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode selectExtension() {
-		TreeNode scalar = scalarFunction();
+	private JpaTreeNode selectExtension() {
+		JpaTreeNode scalar = scalarFunction();
 		return JpqlFactory.newSelectExtension(scalar);
 	}
 
-	private TreeNode subSelectExpressions() {
-		List<TreeNode> l = newList();
+	private JpaTreeNode subSelectExpressions() {
+		List<JpaTreeNode> l = newList();
 		l.add(subSelectExpression());
 		while (current.sym == COMMA) {
 			current = scanner.next();
@@ -383,24 +383,24 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newExpressions(l);
 	}
 
-	private TreeNode subSelectExpression() {
+	private JpaTreeNode subSelectExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode constructorExpression() {
+	private JpaTreeNode constructorExpression() {
 		if (current.sym == NEW) {
 			current = scanner.next();
-			TreeNode cn = className();
-			TreeNode ps = constructorParameters();
+			JpaTreeNode cn = className();
+			JpaTreeNode ps = constructorParameters();
 			return JpqlFactory.newConstructorExpression(cn, ps);
 		} else {
 			throw syntaxError();
 		}
 	}
 
-	private TreeNode className() {
-		List<TreeNode> l = newList();
+	private JpaTreeNode className() {
+		List<JpaTreeNode> l = newList();
 		l.add(identificationVariable());
 		while (current.sym == DOT) {
 			current = scanner.next();
@@ -409,11 +409,11 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newClassName(l);
 	}
 
-	private TreeNode constructorParameters() {
+	private JpaTreeNode constructorParameters() {
 		current = scanner.next();
 		if (current.sym == LPAR) {
 			current = scanner.next();
-			List<TreeNode> l = newList();
+			List<JpaTreeNode> l = newList();
 			l.add(constructorParameter());
 			while (current.sym == COMMA) {
 				current = scanner.next();
@@ -429,14 +429,14 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newParameters(newList());
 	}
 
-	private TreeNode constructorParameter() {
+	private JpaTreeNode constructorParameter() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode aggregateSelectExpression() {
+	private JpaTreeNode aggregateSelectExpression() {
 		int key = current.sym;
-		TreeNode aggregate = null;
+		JpaTreeNode aggregate = null;
 		switch (key) {
 		case AVG:
 			aggregate = avg();
@@ -463,56 +463,56 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode aggregatePath() {
+	private JpaTreeNode aggregatePath() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode distinctPath() {
+	private JpaTreeNode distinctPath() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode count() {
+	private JpaTreeNode count() {
 		current = scanner.next();
-		TreeNode path = aggregatePath();
+		JpaTreeNode path = aggregatePath();
 		return JpqlFactory.newCOUNT(path);
 	}
 
-	private TreeNode avg() {
+	private JpaTreeNode avg() {
 		current = scanner.next();
-		TreeNode path = aggregatePath();
+		JpaTreeNode path = aggregatePath();
 		return JpqlFactory.newAVG(path);
 	}
 
-	private TreeNode max() {
+	private JpaTreeNode max() {
 		current = scanner.next();
-		TreeNode path = aggregatePath();
+		JpaTreeNode path = aggregatePath();
 		return JpqlFactory.newMAX(path);
 	}
 
-	private TreeNode min() {
+	private JpaTreeNode min() {
 		current = scanner.next();
-		TreeNode path = aggregatePath();
+		JpaTreeNode path = aggregatePath();
 		return JpqlFactory.newMIN(path);
 	}
 
-	private TreeNode sum() {
+	private JpaTreeNode sum() {
 		current = scanner.next();
-		TreeNode path = aggregatePath();
+		JpaTreeNode path = aggregatePath();
 		return JpqlFactory.newSUM(path);
 	}
 
-	private TreeNode whereClause() {
+	private JpaTreeNode whereClause() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode groupByClause() {
+	private JpaTreeNode groupByClause() {
 		current = scanner.next();
 		if (current.sym == BY) {
 			current = scanner.next();
-			List<TreeNode> l = newList();
+			List<JpaTreeNode> l = newList();
 			l.add(groupByItem());
 			while (current.sym == COMMA) {
 				current = scanner.next();
@@ -524,28 +524,28 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode groupByItem() {
+	private JpaTreeNode groupByItem() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode groupByExtension() {
+	private JpaTreeNode groupByExtension() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode havingClause() {
+	private JpaTreeNode havingClause() {
 		current = scanner.next();
-		TreeNode exp = conditionalExpression();
+		JpaTreeNode exp = conditionalExpression();
 		return JpqlFactory.newHaving(exp);
 	}
 
-	private TreeNode subQuery() {
-		TreeNode where = null;
-		TreeNode group = null;
-		TreeNode having = null;
-		TreeNode select = simpleSelectClause();
-		TreeNode from = subQueryFromClause();
+	private JpaTreeNode subQuery() {
+		JpaTreeNode where = null;
+		JpaTreeNode group = null;
+		JpaTreeNode having = null;
+		JpaTreeNode select = simpleSelectClause();
+		JpaTreeNode from = subQueryFromClause();
 		if (current.sym == WHERE) {
 			where = whereClause();
 		}
@@ -562,104 +562,104 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		);
 	}
 
-	private TreeNode conditionalExpression() {
-		TreeNode term = conditionalTerm();
+	private JpaTreeNode conditionalExpression() {
+		JpaTreeNode term = conditionalTerm();
 		current = scanner.next();
 		if (current.sym == OR) {
 			current = scanner.next();
-			TreeNode exp = conditionalExpression();
+			JpaTreeNode exp = conditionalExpression();
 			return JpqlFactory.newCondExp(term, exp);
 		}
 		return JpqlFactory.newCondExp(term);
 	}
 
-	private TreeNode conditionalTerm() {
-		TreeNode factor = conditionalFactor();
+	private JpaTreeNode conditionalTerm() {
+		JpaTreeNode factor = conditionalFactor();
 		current = scanner.next();
 		if (current.sym == AND) {
 			current = scanner.next();
-			TreeNode term = conditionalTerm();
+			JpaTreeNode term = conditionalTerm();
 			return JpqlFactory.newCondTerm(factor, term);
 		}
 		return JpqlFactory.newCondTerm(factor);
 	}
 
-	private TreeNode conditionalFactor() {
+	private JpaTreeNode conditionalFactor() {
 		current = scanner.next();
 		if (current.sym == NOT) {
 			current = scanner.next();
-			TreeNode p = conditionalPrimary();
+			JpaTreeNode p = conditionalPrimary();
 			return JpqlFactory.newCondFactor(true, p);
 		}
-		TreeNode p = conditionalPrimary();
+		JpaTreeNode p = conditionalPrimary();
 		return JpqlFactory.newCondFactor(false, p);
 	}
 
-	private TreeNode conditionalPrimary() {
+	private JpaTreeNode conditionalPrimary() {
 		current = scanner.next();
 		if (current.sym == LPAR) {
 			current = scanner.next();
-			TreeNode e = conditionalExpression();
+			JpaTreeNode e = conditionalExpression();
 			if (current.sym == RPAR) {
 				current = scanner.next();
 				return JpqlFactory.newCondPrimary(e);
 			}
 		}
-		TreeNode e = simpleCondExpression();
+		JpaTreeNode e = simpleCondExpression();
 		return JpqlFactory.newCondPrimary(e);
 	}
 
-	private TreeNode simpleCondExpression() {
+	private JpaTreeNode simpleCondExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode betweenExpression() {
+	private JpaTreeNode betweenExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode inExpression() {
+	private JpaTreeNode inExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode entityTypeLiteral() {
-		TreeNode v = identificationVariable();
+	private JpaTreeNode entityTypeLiteral() {
+		JpaTreeNode v = identificationVariable();
 		return JpqlFactory.newEntityTypeLiteral(v);
 	}
 
-	private TreeNode literalOrParam() {
+	private JpaTreeNode literalOrParam() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode likeExpression() {
+	private JpaTreeNode likeExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode nullComparisonExpression() {
+	private JpaTreeNode nullComparisonExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode emptyCollectionComparisonExpression() {
+	private JpaTreeNode emptyCollectionComparisonExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode collectionMemberExpression() {
+	private JpaTreeNode collectionMemberExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode existsExpression() {
+	private JpaTreeNode existsExpression() {
 		if (current.sym == NOT && current.sym == EXISTS) {
 			current = scanner.next();
 			if (current.sym == LPAR) {
 				current = scanner.next();
-				TreeNode l = subQuery();
+				JpaTreeNode l = subQuery();
 				if (current.sym == RPAR) {
 					current = scanner.next();
 					return JpqlFactory.newExistsExpression(true, l);
@@ -671,7 +671,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			if (current.sym == LPAR) {
 				current = scanner.next();
-				TreeNode l = subQuery();
+				JpaTreeNode l = subQuery();
 				if (current.sym == RPAR) {
 					current = scanner.next();
 					return JpqlFactory.newExistsExpression(false, l);
@@ -683,9 +683,9 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		throw syntaxError();
 	}
 
-	private TreeNode allOrAnyExpression() {
+	private JpaTreeNode allOrAnyExpression() {
 		int key = current.sym;
-		TreeNode exp = null;
+		JpaTreeNode exp = null;
 		switch (key) {
 		case ANY:
 			exp = anyExpression();
@@ -700,11 +700,11 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newAllOrAny(exp);
 	}
 
-	private TreeNode anyExpression() {
+	private JpaTreeNode anyExpression() {
 		current = scanner.next();
 		if (current.sym == LPAR) {
 			current = scanner.next();
-			TreeNode s = subQuery();
+			JpaTreeNode s = subQuery();
 			if (current.sym == RPAR) {
 				current = scanner.next();
 				return JpqlFactory.newANY(s);
@@ -716,11 +716,11 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode someExpression() {
+	private JpaTreeNode someExpression() {
 		current = scanner.next();
 		if (current.sym == LPAR) {
 			current = scanner.next();
-			TreeNode s = subQuery();
+			JpaTreeNode s = subQuery();
 			if (current.sym == RPAR) {
 				current = scanner.next();
 				return JpqlFactory.newSOME(s);
@@ -732,11 +732,11 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode allExpression() {
+	private JpaTreeNode allExpression() {
 		current = scanner.next();
 		if (current.sym == LPAR) {
 			current = scanner.next();
-			TreeNode s = subQuery();
+			JpaTreeNode s = subQuery();
 			if (current.sym == RPAR) {
 				current = scanner.next();
 				return JpqlFactory.newALL(s);
@@ -748,101 +748,101 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode comparisonExpression() {
+	private JpaTreeNode comparisonExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode stringComp() {
+	private JpaTreeNode stringComp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode booleanComp() {
+	private JpaTreeNode booleanComp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode enumComp() {
+	private JpaTreeNode enumComp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode entityComp() {
+	private JpaTreeNode entityComp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode arithmeticComp() {
+	private JpaTreeNode arithmeticComp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode datetimeComp() {
+	private JpaTreeNode datetimeComp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode scalarFunction() {
+	private JpaTreeNode scalarFunction() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode arithmeticPrimary() {
+	private JpaTreeNode arithmeticPrimary() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode arithmeticExpression() {
-		TreeNode term = arithmeticTerm();
+	private JpaTreeNode arithmeticExpression() {
+		JpaTreeNode term = arithmeticTerm();
 		current = scanner.next();
 		if (current.sym == PLUS) {
 			current = scanner.next();
-			TreeNode exp = arithmeticExpression();
+			JpaTreeNode exp = arithmeticExpression();
 			return JpqlFactory.newArithExp(term, exp);
 		}
 		if (current.sym == MINUS) {
 			current = scanner.next();
-			TreeNode exp = arithmeticExpression();
+			JpaTreeNode exp = arithmeticExpression();
 			return JpqlFactory.newArithExp(term, exp);
 		}
 		return JpqlFactory.newArithExp(term);
 	}
 
-	private TreeNode arithmeticTerm() {
-		TreeNode factor = arithmeticFactor();
+	private JpaTreeNode arithmeticTerm() {
+		JpaTreeNode factor = arithmeticFactor();
 		current = scanner.next();
 		if (current.sym == TIMES) {
 			current = scanner.next();
-			TreeNode term = arithmeticTerm();
+			JpaTreeNode term = arithmeticTerm();
 			return JpqlFactory.newArithTerm(factor, term);
 		}
 		if (current.sym == DIV) {
 			current = scanner.next();
-			TreeNode term = arithmeticTerm();
+			JpaTreeNode term = arithmeticTerm();
 			return JpqlFactory.newArithTerm(factor, term);
 		}
 		return JpqlFactory.newArithTerm(factor);
 	}
 
-	private TreeNode arithmeticFactor() {
+	private JpaTreeNode arithmeticFactor() {
 		current = scanner.next();
 		if (current.sym == LPAR) {
 			current = scanner.next();
-			TreeNode exp = conditionalPrimary();
+			JpaTreeNode exp = conditionalPrimary();
 			return JpqlFactory.newArithFactor(exp);
 		}
-		TreeNode p = arithmeticPrimary();
+		JpaTreeNode p = arithmeticPrimary();
 		return JpqlFactory.newArithFactor(p);
 	}
 
-	private TreeNode qualifiedPath() {
+	private JpaTreeNode qualifiedPath() {
 		current = scanner.next();
 		if (current.sym == KEY || current.sym == VALUE) {
-			TreeNode id = identificationVariable();
+			JpaTreeNode id = identificationVariable();
 			return JpqlFactory.newQualifiedPath(id);
 		} else if (current.sym == DOT) {
-			List<TreeNode> l = newList();
+			List<JpaTreeNode> l = newList();
 			l.add(pathComponent());
 			while (current.sym == DOT) {
 				current = scanner.next();
@@ -854,82 +854,82 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode qualifiedIdentificationVariable() {
+	private JpaTreeNode qualifiedIdentificationVariable() {
 		current = scanner.next();
 		if (current.sym == KEY || current.sym == VALUE || current.sym == ENTRY) {
-			TreeNode id = identificationVariable();
+			JpaTreeNode id = identificationVariable();
 			return JpqlFactory.newQualifiedId(id);
 		} else {
 			throw syntaxError();
 		}
 	}
 
-	private TreeNode generalIdentificationVariable() {
+	private JpaTreeNode generalIdentificationVariable() {
 		current = scanner.next();
 		if (current.sym == KEY || current.sym == VALUE) {
-			TreeNode id = identificationVariable();
+			JpaTreeNode id = identificationVariable();
 			return JpqlFactory.newQualifiedId(id);
 		} else {
 			throw syntaxError();
 		}
 	}
 
-	private TreeNode entityTypeComp() {
+	private JpaTreeNode entityTypeComp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode typeDiscriminator() {
+	private JpaTreeNode typeDiscriminator() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode entityTypeExpression() {
+	private JpaTreeNode entityTypeExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode scalarExpression() {
+	private JpaTreeNode scalarExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode caseExpression() {
+	private JpaTreeNode caseExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode generalCaseExpression() {
+	private JpaTreeNode generalCaseExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode whenClause() {
+	private JpaTreeNode whenClause() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode simpleCaseExpression() {
+	private JpaTreeNode simpleCaseExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode simpleWhenClause() {
+	private JpaTreeNode simpleWhenClause() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode coalesceExpression() {
+	private JpaTreeNode coalesceExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode nullifExpression() {
+	private JpaTreeNode nullifExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode negative() {
+	private JpaTreeNode negative() {
 		boolean negative = false;
 		if (current.sym == MINUS) {
 			current = scanner.next();
@@ -940,23 +940,23 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newNegative(negative);
 	}
 
-	private TreeNode stringValue() {
+	private JpaTreeNode stringValue() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode stringExpression() {
+	private JpaTreeNode stringExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode stringPrimary() {
+	private JpaTreeNode stringPrimary() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode datetimeExpression() {
-		TreeNode s = null;
+	private JpaTreeNode datetimeExpression() {
+		JpaTreeNode s = null;
 		if (current.sym == LPAR) {
 			current = scanner.next();
 			s = subQuery();
@@ -971,13 +971,13 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newDatetimeExpression(s);
 	}
 
-	private TreeNode datetimePrimary() {
+	private JpaTreeNode datetimePrimary() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode booleanValue() {
-		TreeNode v = null;
+	private JpaTreeNode booleanValue() {
+		JpaTreeNode v = null;
 		if (current.sym == LPAR) {
 			current = scanner.next();
 			v = subQuery();
@@ -992,8 +992,8 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newBooleanValue(v);
 	}
 
-	private TreeNode booleanExpression() {
-		TreeNode s = null;
+	private JpaTreeNode booleanExpression() {
+		JpaTreeNode s = null;
 		if (current.sym == LPAR) {
 			current = scanner.next();
 			s = subQuery();
@@ -1008,34 +1008,34 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newBooleanExpression(s);
 	}
 
-	private TreeNode booleanPrimary() {
+	private JpaTreeNode booleanPrimary() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode enumExpression() {
+	private JpaTreeNode enumExpression() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode enumPrimary() {
+	private JpaTreeNode enumPrimary() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode enumLiteral() {
+	private JpaTreeNode enumLiteral() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode entityBeanValue() {
+	private JpaTreeNode entityBeanValue() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode entityBeanExpression() {
+	private JpaTreeNode entityBeanExpression() {
 		int key = current.sym;
-		TreeNode v = null;
+		JpaTreeNode v = null;
 		switch (key) {
 		case QUESTION:
 			current = scanner.next();
@@ -1053,9 +1053,9 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newEntityBeanExpression(v);
 	}
 
-	private TreeNode functionsReturningStrings() {
+	private JpaTreeNode functionsReturningStrings() {
 		int key = current.sym;
-		TreeNode exp = null;
+		JpaTreeNode exp = null;
 		switch (key) {
 		case CONCAT:
 			exp = concat();
@@ -1076,27 +1076,27 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newStringFunction(exp);
 	}
 
-	private TreeNode concat() {
+	private JpaTreeNode concat() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode substring() {
+	private JpaTreeNode substring() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode trim() {
+	private JpaTreeNode trim() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode lower() {
+	private JpaTreeNode lower() {
 		if (current.sym == LOWER) {
 			current = scanner.next();
 			if (current.sym == LPAR) {
 				current = scanner.next();
-				TreeNode e = stringExpression();
+				JpaTreeNode e = stringExpression();
 				if (current.sym == RPAR) {
 					current = scanner.next();
 					return JpqlFactory.newLOWER(e);
@@ -1111,12 +1111,12 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode upper() {
+	private JpaTreeNode upper() {
 		if (current.sym == UPPER) {
 			current = scanner.next();
 			if (current.sym == LPAR) {
 				current = scanner.next();
-				TreeNode e = stringExpression();
+				JpaTreeNode e = stringExpression();
 				if (current.sym == RPAR) {
 					current = scanner.next();
 					return JpqlFactory.newUPPER(e);
@@ -1131,9 +1131,9 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode trimSpecification() {
+	private JpaTreeNode trimSpecification() {
 		int key = current.sym;
-		TreeNode exp = null;
+		JpaTreeNode exp = null;
 		switch (key) {
 		case LEADING:
 			exp = JpqlFactory.newLeadingSpec(exp);
@@ -1148,9 +1148,9 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newTrimSpecification(exp);
 	}
 
-	private TreeNode functionsReturningNumerics() {
+	private JpaTreeNode functionsReturningNumerics() {
 		int key = current.sym;
-		TreeNode exp = null;
+		JpaTreeNode exp = null;
 		switch (key) {
 		case LENGTH:
 			exp = length();
@@ -1177,12 +1177,12 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newNumericFunction(exp);
 	}
 
-	private TreeNode length() {
+	private JpaTreeNode length() {
 		if (current.sym == LENGTH) {
 			current = scanner.next();
 			if (current.sym == LPAR) {
 				current = scanner.next();
-				TreeNode e = stringExpression();
+				JpaTreeNode e = stringExpression();
 				if (current.sym == RPAR) {
 					current = scanner.next();
 					return JpqlFactory.newLENGTH(e);
@@ -1197,18 +1197,18 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode locate() {
+	private JpaTreeNode locate() {
 		if (current.sym == LOCATE) {
 			current = scanner.next();
 			if (current.sym == LPAR) {
 				current = scanner.next();
-				TreeNode s1 = stringExpression();
+				JpaTreeNode s1 = stringExpression();
 				if (current.sym == COMMA) {
 					current = scanner.next();
-					TreeNode s2 = stringExpression();
+					JpaTreeNode s2 = stringExpression();
 					if (current.sym == COMMA) {
 						current = scanner.next();
-						TreeNode exp = arithmeticExpression();
+						JpaTreeNode exp = arithmeticExpression();
 						if (current.sym == RPAR) {
 							current = scanner.next();
 						} else {
@@ -1232,12 +1232,12 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return null;
 	}
 
-	private TreeNode abs() {
+	private JpaTreeNode abs() {
 		if (current.sym == ABS) {
 			current = scanner.next();
 			if (current.sym == LPAR) {
 				current = scanner.next();
-				TreeNode e = arithmeticExpression();
+				JpaTreeNode e = arithmeticExpression();
 				if (current.sym == RPAR) {
 					current = scanner.next();
 					return JpqlFactory.newABS(e);
@@ -1252,12 +1252,12 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode sqrt() {
+	private JpaTreeNode sqrt() {
 		if (current.sym == SQRT) {
 			current = scanner.next();
 			if (current.sym == LPAR) {
 				current = scanner.next();
-				TreeNode e = arithmeticExpression();
+				JpaTreeNode e = arithmeticExpression();
 				if (current.sym == RPAR) {
 					current = scanner.next();
 					return JpqlFactory.newSQRT(e);
@@ -1272,22 +1272,22 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode mod() {
+	private JpaTreeNode mod() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode size() {
+	private JpaTreeNode size() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode index() {
+	private JpaTreeNode index() {
 		if (current.sym == INDEX) {
 			current = scanner.next();
 			if (current.sym == LPAR) {
 				current = scanner.next();
-				TreeNode e = identificationVariable();
+				JpaTreeNode e = identificationVariable();
 				if (current.sym == RPAR) {
 					current = scanner.next();
 					return JpqlFactory.newINDEX(e);
@@ -1302,10 +1302,10 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode functionsReturningDatetime() {
+	private JpaTreeNode functionsReturningDatetime() {
 		long time = System.currentTimeMillis();
 		int key = current.sym;
-		TreeNode exp = null;
+		JpaTreeNode exp = null;
 		switch (key) {
 		case CURRENT_TIMESTAMP:
 			current = scanner.next();
@@ -1323,12 +1323,12 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newDateTimeFunction(exp);
 	}
 
-	private TreeNode orderByClause() {
+	private JpaTreeNode orderByClause() {
 		if (current.sym == ORDER) {
 			current = scanner.next();
 			if (current.sym == BY) {
 				current = scanner.next();
-				List<TreeNode> l = newList();
+				List<JpaTreeNode> l = newList();
 				l.add(orderByItem());
 				while (current.sym == COMMA) {
 					current = scanner.next();
@@ -1343,18 +1343,18 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode orderByItem() {
+	private JpaTreeNode orderByItem() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode orderbyExtension() {
-		TreeNode agg = aggregateSelectExpression();
+	private JpaTreeNode orderbyExtension() {
+		JpaTreeNode agg = aggregateSelectExpression();
 		return JpqlFactory.newOrderByExtension(agg);
 	}
 
-	private TreeNode abstractSchemaName() {
-		List<TreeNode> l = newList();
+	private JpaTreeNode abstractSchemaName() {
+		List<JpaTreeNode> l = newList();
 		l.add(pathComponent());
 		while (current.sym == DOT) {
 			current = scanner.next();
@@ -1363,7 +1363,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newAbstractSchema(l);
 	}
 
-	private TreeNode tok() {
+	private JpaTreeNode tok() {
 		if (current.sym == IDENTIFIER) {
 			String id = "" + current.value + "";
 			current = scanner.next();
@@ -1373,7 +1373,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode identificationVariable() {
+	private JpaTreeNode identificationVariable() {
 		if (current.sym == IDENTIFIER) {
 			String id = "" + current.value + "";
 			current = scanner.next();
@@ -1383,13 +1383,13 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode pathComponent() {
+	private JpaTreeNode pathComponent() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode literal() {
-		TreeNode l = null;
+	private JpaTreeNode literal() {
+		JpaTreeNode l = null;
 		int key = current.sym;
 		switch (key) {
 		case FLOATING_POINT_LITERAL:
@@ -1441,8 +1441,8 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newLiteral(l);
 	}
 
-	private TreeNode numericLiteral() {
-		TreeNode exp = null;
+	private JpaTreeNode numericLiteral() {
+		JpaTreeNode exp = null;
 		if (current.sym == INTEGER_LITERAL) {
 			current = scanner.next();
 			exp = integerLiteral();
@@ -1453,8 +1453,8 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		return JpqlFactory.newNumeric(exp);
 	}
 
-	private TreeNode integerLiteral() {
-		TreeNode negative = negative();
+	private JpaTreeNode integerLiteral() {
+		JpaTreeNode negative = negative();
 		if (current.sym == INTEGER_LITERAL) {
 			Integer n = (Integer) current.value;
 			current = scanner.next();
@@ -1464,8 +1464,8 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode decimalLiteral() {
-		TreeNode negative = negative();
+	private JpaTreeNode decimalLiteral() {
+		JpaTreeNode negative = negative();
 		if (current.sym == FLOATING_POINT_LITERAL) {
 			Double n = (Double) current.value;
 			current = scanner.next();
@@ -1475,7 +1475,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode booleanLiteral() {
+	private JpaTreeNode booleanLiteral() {
 		if (current.sym == FALSE) {
 			current = scanner.next();
 			return JpqlFactory.newBoolean(false);
@@ -1487,7 +1487,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode stringLiteral() {
+	private JpaTreeNode stringLiteral() {
 		if (current.sym == STRING_LITERAL) {
 			String s = "" + current.value + "";
 			current = scanner.next();
@@ -1497,12 +1497,12 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode stringLiteral2() {
+	private JpaTreeNode stringLiteral2() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode dateLiteral() {
+	private JpaTreeNode dateLiteral() {
 		if (current.sym == DATE) {
 			Object d = current.value;
 			current = scanner.next();
@@ -1512,12 +1512,12 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode timeLiteral() {
+	private JpaTreeNode timeLiteral() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private TreeNode timestampLiteral() {
+	private JpaTreeNode timestampLiteral() {
 		if (current.sym == TIMESTAMP) {
 			Object d = current.value;
 			current = scanner.next();
@@ -1527,14 +1527,14 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode inputParameter() {
+	private JpaTreeNode inputParameter() {
 		if (current.sym == QUESTION) {
 			return positionalInputParameter();
 		}
 		return namedInputParameter();
 	}
 
-	private TreeNode namedInputParameter() {
+	private JpaTreeNode namedInputParameter() {
 		if (current.sym == COLON) {
 			current = scanner.next();
 			return pathComponent();
@@ -1543,14 +1543,14 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode collectionValuedInputParameter() {
+	private JpaTreeNode collectionValuedInputParameter() {
 		if (current.sym == QUESTION) {
 			return positionalInputParameter();
 		}
 		return namedInputParameter();
 	}
 
-	private TreeNode positionalInputParameter() {
+	private JpaTreeNode positionalInputParameter() {
 		if (current.sym == QUESTION) {
 			current = scanner.next();
 			if (current.sym == INTEGER_LITERAL) {
@@ -1564,8 +1564,8 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode patternValue() {
-		TreeNode value = null;
+	private JpaTreeNode patternValue() {
+		JpaTreeNode value = null;
 		int key = current.sym;
 		switch (key) {
 		case QUESTION:
@@ -1587,13 +1587,13 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 		if (current.sym == ESCAPE) {
 			current = scanner.next();
-			TreeNode esc = escapeCharacter();
+			JpaTreeNode esc = escapeCharacter();
 			return JpqlFactory.newPattern(value, esc);
 		}
 		return JpqlFactory.newPattern(value);
 	}
 
-	private TreeNode escapeCharacter() {
+	private JpaTreeNode escapeCharacter() {
 		if (current.sym == STRING_LITERAL) {
 			String s = "" + current.value + "";
 			current = scanner.next();
@@ -1603,7 +1603,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		}
 	}
 
-	private TreeNode trimCharacter() {
+	private JpaTreeNode trimCharacter() {
 		if (current.sym == STRING_LITERAL) {
 			String s = "" + current.value + "";
 			current = scanner.next();

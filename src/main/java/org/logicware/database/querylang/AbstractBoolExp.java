@@ -20,11 +20,13 @@
 
 package org.logicware.database.querylang;
 
+import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
+
 /**
  *
  * @author Jose Zalacain
  */
-public abstract class AbstractBoolExp extends AbstractTreeNode implements BoolExp {
+public abstract class AbstractBoolExp extends JpaAbstractWrapper implements BoolExp {
 
 	char kind; // '=', '<' and '!' for "<="
 	Exp exp1; // left subexpression

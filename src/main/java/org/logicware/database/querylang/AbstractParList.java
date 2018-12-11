@@ -21,16 +21,19 @@ package org.logicware.database.querylang;
 
 import java.util.List;
 
+import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
+import org.logicware.database.jpa.criteria.JpaTreeNode;
+
 /**
  * 
  * @author Jose Zalacain
  * @since 1.0
  */
-public abstract class AbstractParList extends AbstractTreeNode implements ParList {
+public abstract class AbstractParList extends JpaAbstractWrapper implements ParList {
 
-	protected List<TreeNode> parameters;
+	protected List<JpaTreeNode> parameters;
 
-	public AbstractParList(List<TreeNode> parameters) {
+	public AbstractParList(List<JpaTreeNode> parameters) {
 		this.parameters = parameters;
 	}
 

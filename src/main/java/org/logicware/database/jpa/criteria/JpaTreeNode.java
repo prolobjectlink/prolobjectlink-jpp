@@ -17,15 +17,15 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.database.querylang;
+package org.logicware.database.jpa.criteria;
 
 /**
- * Abstract Syntax Tree
+ * Abstract Syntax Tree Node
  * 
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface TreeNode {
+public interface JpaTreeNode {
 
 	@Override
 	public String toString();
@@ -37,6 +37,6 @@ public interface TreeNode {
 	 * @return Native Query Language
 	 * @since 1.0
 	 */
-	public String compile(SymbolTable symbols);
+	public String compile();
 
 }

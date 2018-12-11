@@ -19,6 +19,8 @@
  */
 package org.logicware.database.querylang;
 
-public interface DeklList extends TreeNode, Iterable<Dekl> {
+import org.logicware.database.jpa.criteria.JpaTreeNode;
+
+public interface DeklList extends JpaTreeNode, Iterable<Dekl> {
 
 }

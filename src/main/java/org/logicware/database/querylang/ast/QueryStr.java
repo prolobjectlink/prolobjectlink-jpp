@@ -21,7 +21,6 @@ package org.logicware.database.querylang.ast;
 
 import org.logicware.database.querylang.AbstractStr;
 import org.logicware.database.querylang.Str;
-import org.logicware.database.querylang.SymbolTable;
 
 public class QueryStr extends AbstractStr implements Str {
 
@@ -30,7 +29,7 @@ public class QueryStr extends AbstractStr implements Str {
 	}
 
 	@Override
-	public String compile(SymbolTable symbols) {
+	public String compile() {
 		return "'" + str + "'";
 	}
 

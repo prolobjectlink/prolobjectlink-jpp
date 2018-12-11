@@ -19,11 +19,13 @@
  */
 package org.logicware.database.querylang;
 
+import org.logicware.database.jpa.criteria.JpaTreeNode;
+
 /**
  * 
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface IfThenElse extends TreeNode {
+public interface IfThenElse extends JpaTreeNode {
 
 }

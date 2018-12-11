@@ -21,23 +21,22 @@ package org.logicware.database.querylang.ast;
 
 import java.util.List;
 
+import org.logicware.database.jpa.criteria.JpaTreeNode;
 import org.logicware.database.querylang.AbstractFrom;
 import org.logicware.database.querylang.FromNode;
-import org.logicware.database.querylang.SymbolTable;
-import org.logicware.database.querylang.TreeNode;
 
 public class QueryFrom extends AbstractFrom implements FromNode {
 
-	public QueryFrom(List<TreeNode> declarations) {
+	public QueryFrom(List<JpaTreeNode> declarations) {
 		super(declarations);
 	}
 
-	public QueryFrom(TreeNode declarations) {
+	public QueryFrom(JpaTreeNode declarations) {
 		super(declarations);
 	}
 
 	@Override
-	public String compile(SymbolTable symbols) {
+	public String compile() {
 		return "FROM";
 	}
 

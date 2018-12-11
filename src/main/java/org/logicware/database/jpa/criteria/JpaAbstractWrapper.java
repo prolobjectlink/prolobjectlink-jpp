@@ -27,7 +27,13 @@ import javax.persistence.criteria.Expression;
 
 import org.logicware.AbstractWrapper;
 
-public abstract class JpaAbstractWrapper extends AbstractWrapper {
+public abstract class JpaAbstractWrapper extends AbstractWrapper implements JpaTreeNode {
+
+	private static final String MESSAGE2 = "Unsupported featured";
+
+	public String compile() {
+		throw new UnsupportedOperationException(MESSAGE2);
+	}
 
 	protected List<Expression<?>> newList(Object... values) {
 		ArrayList<Expression<?>> list = new ArrayList<Expression<?>>(values.length);

@@ -19,6 +19,8 @@
  */
 package org.logicware.database.querylang;
 
-public interface Str extends TreeNode {
+import org.logicware.database.jpa.criteria.JpaTreeNode;
+
+public interface Str extends JpaTreeNode {
 
 }

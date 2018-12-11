@@ -22,17 +22,17 @@ package org.logicware.database.querylang.ast;
 import java.util.Iterator;
 import java.util.List;
 
+import org.logicware.database.jpa.criteria.JpaTreeNode;
 import org.logicware.database.querylang.AbstractParList;
 import org.logicware.database.querylang.ParList;
-import org.logicware.database.querylang.TreeNode;
 
 public class QueryParList extends AbstractParList implements ParList {
 
-	public QueryParList(List<TreeNode> parameters) {
+	public QueryParList(List<JpaTreeNode> parameters) {
 		super(parameters);
 	}
 
-	public Iterator<TreeNode> iterator() {
+	public Iterator<JpaTreeNode> iterator() {
 		return parameters.iterator();
 	}
 

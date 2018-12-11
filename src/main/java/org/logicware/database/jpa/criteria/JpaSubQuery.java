@@ -26,7 +26,9 @@ import java.util.Set;
 import javax.persistence.criteria.AbstractQuery;
 import javax.persistence.criteria.CollectionJoin;
 import javax.persistence.criteria.CommonAbstractCriteria;
+import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.MapJoin;
@@ -39,11 +41,17 @@ import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
 import org.logicware.database.jpa.criteria.predicate.JpaConjuntion;
+import org.logicware.database.jpa.criteria.predicate.JpaNotNullPredicate;
+import org.logicware.database.jpa.criteria.predicate.JpaNullPredicate;
 
 public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquery<T>, Selection<T>, Expression<T> {
 
-	private String alias;
-	private Class<T> javaType;
+	protected String alias;
+	protected Expression<T> selection;
+	protected AbstractQuery<T> parent;
+	protected Set<From<?, ?>> processedJoins;
+	protected Set<Expression<?>> correlations;
+	protected Set<Join<?, ?>> correlatedJoins;
 
 	public JpaSubQuery(Expression<Boolean> restriction, Class<T> type, Metamodel metamodel) {
 		super(restriction, metamodel, type);
@@ -55,8 +63,7 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 	}
 
 	public boolean isCompoundSelection() {
-		// TODO Auto-generated method stub
-		return false;
+		return restriction instanceof CompoundSelection;
 	}
 
 	public List<Selection<?>> getCompoundSelectionItems() {
@@ -65,7 +72,7 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 	}
 
 	public Class<? extends T> getJavaType() {
-		return javaType;
+		return resultType;
 	}
 
 	public String getAlias() {
@@ -73,43 +80,36 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 	}
 
 	public Predicate isNull() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaNullPredicate(null, Boolean.class, this, metamodel, null, null);
 	}
 
 	public Predicate isNotNull() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaNotNullPredicate(null, Boolean.class, this, metamodel, null, null);
 	}
 
 	public Predicate in(Object... values) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaIn(null, Object.class, this, metamodel, null, newList(values));
 	}
 
 	public Predicate in(Expression<?>... values) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaIn(null, Object.class, this, metamodel, null, newList(values));
 	}
 
 	public Predicate in(Collection<?> values) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaIn(null, Object.class, this, metamodel, null, newList(values));
 	}
 
 	public Predicate in(Expression<Collection<?>> values) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaIn(null, Object.class, this, metamodel, null, newList(values));
 	}
 
 	public <X> Expression<X> as(Class<X> type) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Expression<X>) this;
 	}
 
 	public Subquery<T> select(Expression<T> expression) {
-		// TODO Auto-generated method stub
-		return null;
+		selection = expression;
+		return this;
 	}
 
 	public <Y> Root<Y> correlate(Root<Y> parentRoot) {
@@ -143,8 +143,7 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 	}
 
 	public AbstractQuery<?> getParent() {
-		// TODO Auto-generated method stub
-		return null;
+		return parent;
 	}
 
 	public CommonAbstractCriteria getContainingQuery() {
@@ -209,8 +208,7 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 	}
 
 	public Subquery<T> getSelection() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaSubQuery<T>(restriction, resultType, metamodel);
 	}
 
 }

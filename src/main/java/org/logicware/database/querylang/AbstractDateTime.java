@@ -21,7 +21,9 @@ package org.logicware.database.querylang;
 
 import java.util.Date;
 
-public abstract class AbstractDateTime extends AbstractExp implements TreeNode {
+import org.logicware.database.jpa.criteria.JpaTreeNode;
+
+public abstract class AbstractDateTime extends AbstractExp implements JpaTreeNode {
 
 	protected Date date;
 

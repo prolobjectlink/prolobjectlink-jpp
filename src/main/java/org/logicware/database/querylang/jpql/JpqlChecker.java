@@ -23,10 +23,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.logicware.RuntimeError;
+import org.logicware.database.jpa.criteria.JpaTreeNode;
 import org.logicware.database.querylang.Parser;
 import org.logicware.database.querylang.Scanner;
 import org.logicware.database.querylang.SymbolEntry;
-import org.logicware.database.querylang.TreeNode;
 
 public abstract class JpqlChecker extends JpqlSymbols implements Parser {
 
@@ -41,8 +41,8 @@ public abstract class JpqlChecker extends JpqlSymbols implements Parser {
 		return JpqlFactory.syntaxError(getClass(), current);
 	}
 
-	protected List<TreeNode> newList() {
-		return new LinkedList<TreeNode>();
+	protected List<JpaTreeNode> newList() {
+		return new LinkedList<JpaTreeNode>();
 	}
 
 	protected void advance() {

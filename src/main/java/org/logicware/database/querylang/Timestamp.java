@@ -19,6 +19,8 @@
  */
 package org.logicware.database.querylang;
 
-public interface Timestamp extends TreeNode {
+import org.logicware.database.jpa.criteria.JpaTreeNode;
+
+public interface Timestamp extends JpaTreeNode {
 
 }

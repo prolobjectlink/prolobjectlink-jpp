@@ -25,8 +25,8 @@ import java.io.StringReader;
 import java.util.Set;
 
 import org.logicware.RuntimeError;
+import org.logicware.database.jpa.criteria.JpaTreeNode;
 import org.logicware.database.querylang.SymbolTable;
-import org.logicware.database.querylang.TreeNode;
 import org.logicware.logging.LoggerUtils;
 
 /**
@@ -45,8 +45,7 @@ public class JpqlCompiler {
 	 * @since 1.0
 	 */
 	public static String compile(Set<String> builtins, String jpqlStatementQuery) {
-		SymbolTable symbolTable = new SymbolTable(builtins);
-		return treeNode(builtins, jpqlStatementQuery).compile(symbolTable);
+		return treeNode(builtins, jpqlStatementQuery).compile();
 	}
 
 	/**
@@ -56,7 +55,7 @@ public class JpqlCompiler {
 	 * @return Tree node query representation
 	 * @since 1.0
 	 */
-	public static TreeNode treeNode(Set<String> builtins, String jpqlStatementQuery) {
+	public static JpaTreeNode treeNode(Set<String> builtins, String jpqlStatementQuery) {
 		SymbolTable symbolTable = new SymbolTable(builtins);
 		StringReader jpqlReader = new StringReader(jpqlStatementQuery);
 		JpqlScanner scanner = new JpqlScanner(jpqlReader, symbolTable);
