@@ -17,28 +17,28 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.database.querylang.ast;
+package org.logicware.database.jpa.criteria.ast;
 
-import java.util.Date;
+import java.util.List;
 
-import org.logicware.database.querylang.AbstractDateTime;
-import org.logicware.database.querylang.DateTime;
-import org.logicware.database.querylang.SymbolTable;
+import javax.persistence.criteria.Expression;
 
-/**
- *
- * @author Jose Zalacain
- * @since 1.0
- */
-public class QueryDateTime extends AbstractDateTime implements DateTime {
+import org.logicware.Wrapper;
 
-	public QueryDateTime(Date date) {
-		super(date);
+public class JpaOrderBy extends JpaClause implements Wrapper {
+
+	public JpaOrderBy(Expression<?> expression) {
+		expressions.add(expression);
 	}
 
-	@Override
-	public String compile(SymbolTable symbols) {
-		return "'" + date + "'";
+	public JpaOrderBy(Expression<?>... expressions) {
+		for (Expression<?> expression : expressions) {
+			this.expressions.add(expression);
+		}
+	}
+
+	public JpaOrderBy(List<Expression<?>> expressions) {
+		this.expressions = expressions;
 	}
 
 }

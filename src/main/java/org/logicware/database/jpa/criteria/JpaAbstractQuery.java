@@ -29,15 +29,18 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
-import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
-public class JpaAbstractQuery<T> extends JpaAbstractCriteria<T> implements AbstractQuery<T> {
+import org.logicware.database.jpa.criteria.predicate.JpaConjuntion;
+
+public abstract class JpaAbstractQuery<T> extends JpaAbstractCriteria<T> implements AbstractQuery<T> {
 
 	protected boolean distinct;
 	protected Class<T> resultType;
 	protected final Set<Root<?>> roots;
-	protected final List<Expression<?>> groupBy;
+	protected Expression<Boolean> whereClause;
+	protected Expression<Boolean> havingClause;
+	protected List<Expression<?>> groupBy = newList();
 
 	public JpaAbstractQuery(Expression<Boolean> restriction, Metamodel metamodel, Class<T> resultType) {
 		this(restriction, metamodel, false, resultType, new HashSet<Root<?>>(), new ArrayList<Expression<?>>());
@@ -51,38 +54,40 @@ public class JpaAbstractQuery<T> extends JpaAbstractCriteria<T> implements Abstr
 		this.roots = roots;
 	}
 
-	public <X> Root<X> from(Class<X> entityClass) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public <X> Root<X> from(EntityType<X> entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public AbstractQuery<T> where(Expression<Boolean> restriction) {
-		return new JpaWhere<T>(restriction, metamodel, resultType);
+		whereClause = restriction;
+		return this;
 	}
 
 	public AbstractQuery<T> where(Predicate... restrictions) {
-		return new JpaWhere<T>(restrictions, metamodel, resultType);
+		for (Predicate predicate : restrictions) {
+			whereClause = new JpaConjuntion(null, Boolean.class, null, metamodel, newList(restriction, predicate));
+		}
+		return this;
 	}
 
 	public AbstractQuery<T> groupBy(Expression<?>... grouping) {
-		return new JpaGroupBy<T>(grouping, metamodel, resultType);
+		for (Expression<?> expression : grouping) {
+			groupBy.add(expression);
+		}
+		return this;
 	}
 
 	public AbstractQuery<T> groupBy(List<Expression<?>> grouping) {
-		return new JpaGroupBy<T>(grouping, metamodel, resultType);
+		groupBy = grouping;
+		return this;
 	}
 
 	public AbstractQuery<T> having(Expression<Boolean> restriction) {
-		return new JpaHaving<T>(restriction, metamodel, resultType);
+		havingClause = restriction;
+		return this;
 	}
 
 	public AbstractQuery<T> having(Predicate... restrictions) {
-		return new JpaHaving<T>(restrictions, metamodel, resultType);
+		for (Predicate predicate : restrictions) {
+			restriction = new JpaConjuntion(null, Boolean.class, null, metamodel, newList(restriction, predicate));
+		}
+		return this;
 	}
 
 	public AbstractQuery<T> distinct(boolean distinct) {
@@ -104,7 +109,7 @@ public class JpaAbstractQuery<T> extends JpaAbstractCriteria<T> implements Abstr
 	}
 
 	public final Predicate getGroupRestriction() {
-		return unwrap(restriction, Predicate.class);
+		return unwrap(havingClause, Predicate.class);
 	}
 
 	public final boolean isDistinct() {

@@ -17,25 +17,28 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.database.jpa.criteria;
+package org.logicware.database.jpa.criteria.ast;
 
-import javax.persistence.criteria.AbstractQuery;
+import java.util.List;
+
 import javax.persistence.criteria.Expression;
-import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.database.jpa.criteria.predicate.JpaAndPredicate;
+import org.logicware.Wrapper;
 
-public class JpaHaving<T> extends JpaAbstractQuery<T> implements AbstractQuery<T> {
+public class JpaWhere extends JpaClause implements Wrapper {
 
-	public JpaHaving(Expression<Boolean> restriction, Metamodel metamodel, Class<T> resultType) {
-		super(restriction, metamodel, resultType);
+	public JpaWhere(Expression<?> expression) {
+		expressions.add(expression);
 	}
 
-	public JpaHaving(Expression<Boolean>[] restrictions, Metamodel metamodel, Class<T> resultType) {
-		super(null, metamodel, resultType);
-		for (Expression<Boolean> predicate : restrictions) {
-			restriction = new JpaAndPredicate(null, Boolean.class, null, metamodel, newList(restriction, predicate));
+	public JpaWhere(Expression<?>... expressions) {
+		for (Expression<?> expression : expressions) {
+			this.expressions.add(expression);
 		}
+	}
+
+	public JpaWhere(List<Expression<?>> expressions) {
+		this.expressions = expressions;
 	}
 
 }

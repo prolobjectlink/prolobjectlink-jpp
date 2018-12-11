@@ -36,6 +36,12 @@ public class JpaCompoundSelection<X> extends JpaSelection<X> implements Compound
 		this.subSelections = subSelections;
 	}
 
+	public JpaCompoundSelection(String alias, Class<? extends X> javaType, Expression<X> expression,
+			List<Selection<?>> selectionList) {
+		super(alias, javaType, expression);
+		this.subSelections = selectionList.toArray(new JpaSelection[0]);
+	}
+
 	@Override
 	public boolean isCompoundSelection() {
 		return true;

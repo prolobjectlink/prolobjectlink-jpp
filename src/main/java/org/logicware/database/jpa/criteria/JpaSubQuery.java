@@ -35,9 +35,12 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import javax.persistence.criteria.SetJoin;
 import javax.persistence.criteria.Subquery;
+import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
-public class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquery<T>, Selection<T>, Expression<T> {
+import org.logicware.database.jpa.criteria.predicate.JpaConjuntion;
+
+public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquery<T>, Selection<T>, Expression<T> {
 
 	private String alias;
 	private Class<T> javaType;
@@ -109,41 +112,6 @@ public class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquery<T>, 
 		return null;
 	}
 
-	public Subquery<T> where(Expression<Boolean> restriction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Subquery<T> where(Predicate... restrictions) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Subquery<T> groupBy(Expression<?>... grouping) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Subquery<T> groupBy(List<Expression<?>> grouping) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Subquery<T> having(Expression<Boolean> restriction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Subquery<T> having(Predicate... restrictions) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Subquery<T> distinct(boolean distinct) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public <Y> Root<Y> correlate(Root<Y> parentRoot) {
 		// TODO Auto-generated method stub
 		return null;
@@ -184,12 +152,63 @@ public class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquery<T>, 
 		return null;
 	}
 
-	public Expression<T> getSelection() {
+	public Set<Join<?, ?>> getCorrelatedJoins() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Set<Join<?, ?>> getCorrelatedJoins() {
+	public <X> Root<X> from(Class<X> entityClass) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <X> Root<X> from(EntityType<X> entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Subquery<T> where(Expression<Boolean> restriction) {
+		whereClause = restriction;
+		return this;
+	}
+
+	public Subquery<T> where(Predicate... restrictions) {
+		for (Predicate predicate : restrictions) {
+			whereClause = new JpaConjuntion(null, Boolean.class, null, metamodel, newList(restriction, predicate));
+		}
+		return this;
+	}
+
+	public Subquery<T> groupBy(Expression<?>... grouping) {
+		for (Expression<?> expression : grouping) {
+			groupBy.add(expression);
+		}
+		return this;
+	}
+
+	public Subquery<T> groupBy(List<Expression<?>> grouping) {
+		groupBy = grouping;
+		return this;
+	}
+
+	public Subquery<T> having(Expression<Boolean> restriction) {
+		havingClause = restriction;
+		return this;
+	}
+
+	public Subquery<T> having(Predicate... restrictions) {
+		for (Predicate predicate : restrictions) {
+			restriction = new JpaConjuntion(null, Boolean.class, null, metamodel, newList(restriction, predicate));
+		}
+		return this;
+	}
+
+	public Subquery<T> distinct(boolean distinct) {
+		this.distinct = distinct;
+		return this;
+	}
+
+	public Subquery<T> getSelection() {
 		// TODO Auto-generated method stub
 		return null;
 	}
