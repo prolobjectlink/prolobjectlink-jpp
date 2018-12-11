@@ -33,6 +33,8 @@ import javax.persistence.metamodel.Metamodel;
 
 import org.logicware.database.jpa.criteria.predicate.JpaAndPredicate;
 import org.logicware.database.jpa.criteria.predicate.JpaBetweenPredicate;
+import org.logicware.database.jpa.criteria.predicate.JpaConjuntion;
+import org.logicware.database.jpa.criteria.predicate.JpaDisjunction;
 import org.logicware.database.jpa.criteria.predicate.JpaEqual;
 import org.logicware.database.jpa.criteria.predicate.JpaExist;
 import org.logicware.database.jpa.criteria.predicate.JpaIsEmpty;
@@ -180,13 +182,11 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public Predicate conjunction() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaConjuntion(null, Boolean.class, null, metamodel, newList());
 	}
 
 	public Predicate disjunction() {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaDisjunction(null, Boolean.class, null, metamodel, newList());
 	}
 
 	public Predicate isTrue(Expression<Boolean> x) {
