@@ -41,7 +41,7 @@ import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 
-public class JPAFrom<Z, X> extends JpaPath<X> implements From<Z, X> {
+public class JpaFrom<Z, X> extends JpaPath<X> implements From<Z, X> {
 
 	protected ManagedType<X> managedType;
 	protected Set<Join<X, ?>> joins;
@@ -50,7 +50,7 @@ public class JPAFrom<Z, X> extends JpaPath<X> implements From<Z, X> {
 	protected boolean isFetch = false;
 	protected From<Z, X> correlatedParent;
 
-	public JPAFrom(String alias, Class<? extends X> javaType, Expression<X> expression, Metamodel metamodel,
+	public JpaFrom(String alias, Class<? extends X> javaType, Expression<X> expression, Metamodel metamodel,
 			Path<?> pathParent, Bindable<X> model, ManagedType<X> managedType, Set<Join<X, ?>> joins,
 			Set<Fetch<X, ?>> fetches, boolean isJoin, boolean isFetch, From<Z, X> correlatedParent) {
 		super(alias, javaType, expression, metamodel, pathParent, model);
@@ -233,7 +233,7 @@ public class JPAFrom<Z, X> extends JpaPath<X> implements From<Z, X> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAFrom<?, ?> other = (JPAFrom<?, ?>) obj;
+		JpaFrom<?, ?> other = (JpaFrom<?, ?>) obj;
 		if (correlatedParent == null) {
 			if (other.correlatedParent != null)
 				return false;

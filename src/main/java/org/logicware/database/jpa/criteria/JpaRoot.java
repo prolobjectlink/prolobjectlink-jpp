@@ -32,7 +32,7 @@ import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
 
-public class JpaRoot<X> extends JPAFrom<X, X> implements Root<X> {
+public class JpaRoot<X> extends JpaFrom<X, X> implements Root<X> {
 
 	public JpaRoot(String alias, Class<? extends X> javaType, Expression<X> expression, Metamodel metamodel,
 			Path<?> pathParent, Bindable<X> model, ManagedType<X> managedType, Set<Join<X, ?>> joins,

@@ -19,8 +19,9 @@
  */
 package org.logicware.database.querylang.ast;
 
+import java.util.Date;
+
 import org.logicware.database.querylang.AbstractDateTime;
-import org.logicware.database.querylang.Date;
 import org.logicware.database.querylang.DateTime;
 import org.logicware.database.querylang.SymbolTable;
 

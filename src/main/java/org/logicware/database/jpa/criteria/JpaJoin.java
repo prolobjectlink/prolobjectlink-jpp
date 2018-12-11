@@ -35,7 +35,7 @@ import javax.persistence.metamodel.Metamodel;
 
 import org.logicware.database.jpa.criteria.predicate.JpaAndPredicate;
 
-public class JpaJoin<Z, X> extends JPAFrom<Z, X> implements Join<Z, X> {
+public class JpaJoin<Z, X> extends JpaFrom<Z, X> implements Join<Z, X> {
 
 	private final JoinType joinType;
 
@@ -64,8 +64,7 @@ public class JpaJoin<Z, X> extends JPAFrom<Z, X> implements Join<Z, X> {
 	}
 
 	public Attribute<? super Z, ?> getAttribute() {
-		// TODO Auto-generated method stub
-		return null;
+		return (Attribute<? super Z, ?>) model;
 	}
 
 	public From<?, Z> getParent() {
