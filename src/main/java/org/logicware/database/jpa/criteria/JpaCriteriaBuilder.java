@@ -1,3 +1,22 @@
+/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2012 - 2018 Logicware Project
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 package org.logicware.database.jpa.criteria;
 
 import java.math.BigDecimal;
@@ -126,11 +145,11 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public <X extends Comparable<? super X>> Expression<X> greatest(Expression<X> x) {
-		return new JpaGreatest<X>(null, (Class<? extends X>) Object.class, x, metamodel);
+		return new JpaGreatest<X>(null, x.getJavaType(), x, metamodel);
 	}
 
 	public <X extends Comparable<? super X>> Expression<X> least(Expression<X> x) {
-		return new JpaLeast<X>(null, (Class<? extends X>) Object.class, x, metamodel);
+		return new JpaLeast<X>(null, x.getJavaType(), x, metamodel);
 	}
 
 	public Expression<Long> count(Expression<?> x) {
@@ -228,7 +247,7 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 
 	public <Y extends Comparable<? super Y>> Predicate greaterThan(Expression<? extends Y> x, Y y) {
 		return new JpaGreaterThan("", Boolean.class, null, metamodel,
-				newList(x, new JpaObject(y, (Class<? extends Y>) Comparable.class)));
+				newList(x, new JpaObject(y, JavaReflect.classOf(y))));
 	}
 
 	public <Y extends Comparable<? super Y>> Predicate greaterThanOrEqualTo(Expression<? extends Y> x,
@@ -238,7 +257,7 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 
 	public <Y extends Comparable<? super Y>> Predicate greaterThanOrEqualTo(Expression<? extends Y> x, Y y) {
 		return new JpaGreaterEqual("", Boolean.class, null, metamodel,
-				newList(x, new JpaObject(y, (Class<? extends Y>) Comparable.class)));
+				newList(x, new JpaObject(y, JavaReflect.classOf(y))));
 	}
 
 	public <Y extends Comparable<? super Y>> Predicate lessThan(Expression<? extends Y> x, Expression<? extends Y> y) {
@@ -247,7 +266,7 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 
 	public <Y extends Comparable<? super Y>> Predicate lessThan(Expression<? extends Y> x, Y y) {
 		return new JpaLessThan("", Boolean.class, null, metamodel,
-				newList(x, new JpaObject(y, (Class<? extends Y>) Comparable.class)));
+				newList(x, new JpaObject(y, JavaReflect.classOf(y))));
 	}
 
 	public <Y extends Comparable<? super Y>> Predicate lessThanOrEqualTo(Expression<? extends Y> x,
@@ -257,7 +276,7 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 
 	public <Y extends Comparable<? super Y>> Predicate lessThanOrEqualTo(Expression<? extends Y> x, Y y) {
 		return new JpaLessEqual("", Boolean.class, null, metamodel,
-				newList(x, new JpaObject(y, (Class<? extends Y>) Comparable.class)));
+				newList(x, new JpaObject(y, JavaReflect.classOf(y))));
 	}
 
 	public <Y extends Comparable<? super Y>> Predicate between(Expression<? extends Y> v, Expression<? extends Y> x,
@@ -267,8 +286,7 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 
 	public <Y extends Comparable<? super Y>> Predicate between(Expression<? extends Y> v, Y x, Y y) {
 		return new JpaBetweenPredicate(null, Boolean.class, v, metamodel, null,
-				newList(new JpaObject<Y>(x, (Class<? extends Y>) Comparable.class),
-						new JpaObject<Y>(y, (Class<? extends Y>) Comparable.class)));
+				newList(new JpaObject<Y>(x, JavaReflect.classOf(x)), new JpaObject<Y>(y, JavaReflect.classOf(y))));
 	}
 
 	public Predicate gt(Expression<? extends Number> x, Expression<? extends Number> y) {
@@ -444,8 +462,8 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public <C extends Collection<?>> Expression<Integer> size(C collection) {
-		return new JpaSize<Integer>(null, Integer.class,
-				new JpaObject<C>(collection, (Class<? extends C>) Collection.class), metamodel);
+		return new JpaSize<Integer>(null, Integer.class, new JpaObject<C>(collection, JavaReflect.classOf(collection)),
+				metamodel);
 	}
 
 	public <E, C extends Collection<E>> Predicate isMember(Expression<E> elem, Expression<C> collection) {
@@ -453,8 +471,8 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public <E, C extends Collection<E>> Predicate isMember(E elem, Expression<C> collection) {
-		return new JpaIsMember(null, Boolean.class, new JpaObject<E>(elem, (Class<? extends E>) Collection.class),
-				metamodel, null, newList(collection));
+		return new JpaIsMember(null, Boolean.class, new JpaObject<E>(elem, JavaReflect.classOf(elem)), metamodel, null,
+				newList(collection));
 	}
 
 	public <E, C extends Collection<E>> Predicate isNotMember(Expression<E> elem, Expression<C> collection) {
@@ -467,11 +485,13 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public <V, M extends Map<?, V>> Expression<Collection<V>> values(M map) {
-		return new JpaValues<V>(null, (Class<? extends Collection<V>>) Object.class, null, metamodel, map);
+//		return new JpaValues<V>(null, (Class<? extends Collection<V>>) Object.class, null, metamodel, map);
+		return null;
 	}
 
 	public <K, M extends Map<K, ?>> Expression<Set<K>> keys(M map) {
-		return new JpaKeys<K>(null, (Class<? extends Set<K>>) Object.class, null, metamodel, map);
+//		return new JpaKeys<K>(null, (Class<? extends Set<K>>) Object.class, null, metamodel, map);
+		return null;
 	}
 
 	public Predicate like(Expression<String> x, Expression<String> pattern) {
@@ -657,6 +677,10 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 
 	public <X, T, V extends T> Join<X, V> treat(Join<X, T> join, Class<V> type) {
 		// TODO Auto-generated method stub
+//		Set<Join<X, ?>> joins = JavaSets.linkedHashSet();
+//		Set<Fetch<X, ?>> fetches = JavaSets.linkedHashSet();
+//		return new JpaJoin<X, V>(null, type, null, metamodel, join, join.getModel(), metamodel.managedType(type), joins,
+//				fetches, ((JpaJoin<?, ?>) join).isJoin, ((JpaJoin<?, ?>) join).isFetch, join.getJoinType());
 		return null;
 	}
 
