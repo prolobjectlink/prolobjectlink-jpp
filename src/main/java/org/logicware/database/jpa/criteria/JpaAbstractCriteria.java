@@ -19,35 +19,29 @@
  */
 package org.logicware.database.jpa.criteria;
 
-import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CommonAbstractCriteria;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Subquery;
+import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.AbstractWrapper;
-
-public class JpaAbstractCriteria extends AbstractWrapper implements CommonAbstractCriteria {
+public abstract class JpaAbstractCriteria<T> extends JpaAbstractWrapper implements CommonAbstractCriteria {
 
 	protected Expression<Boolean> restriction;
+	protected final Metamodel metamodel;
 
-	public JpaAbstractCriteria(Predicate restriction) {
+	public JpaAbstractCriteria(Expression<Boolean> restriction, Metamodel metamodel, Class<T> targetEntity) {
+		subquery(targetEntity);
 		this.restriction = restriction;
-	}
-
-	public JpaAbstractCriteria(Expression<Boolean> restriction) {
-		this.restriction = restriction;
+		this.metamodel = metamodel;
 	}
 
 	public <U> Subquery<U> subquery(Class<U> type) {
-		return new JpaSubQuery<U>(restriction, type);
+		return new JpaSubQuery<U>(restriction, type, metamodel);
 	}
 
 	public Predicate getRestriction() {
-		if (!(restriction instanceof Predicate)) {
-			throw new PersistenceException("Imposible unwrap " + restriction.getClass() + "to" + Predicate.class);
-		}
-		return (Predicate) restriction;
+		return unwrap(restriction, Predicate.class);
 	}
 
 }

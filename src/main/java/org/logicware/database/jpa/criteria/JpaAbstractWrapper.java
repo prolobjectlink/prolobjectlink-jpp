@@ -25,7 +25,9 @@ import java.util.List;
 
 import javax.persistence.criteria.Expression;
 
-public abstract class JpaAbstract {
+import org.logicware.AbstractWrapper;
+
+public abstract class JpaAbstractWrapper extends AbstractWrapper {
 
 	protected List<Expression<?>> newList(Object... values) {
 		ArrayList<Expression<?>> list = new ArrayList<Expression<?>>(values.length);

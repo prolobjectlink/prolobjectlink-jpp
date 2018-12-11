@@ -19,6 +19,8 @@
  */
 package org.logicware.database.jpa.criteria;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,11 +30,25 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
-public class JpaAbstractQuery<T> extends JpaAbstractCriteria implements AbstractQuery<T> {
+public class JpaAbstractQuery<T> extends JpaAbstractCriteria<T> implements AbstractQuery<T> {
 
-	public JpaAbstractQuery(Expression<Boolean> restriction) {
-		super(restriction);
+	protected boolean distinct;
+	protected Class<T> resultType;
+	protected final Set<Root<?>> roots;
+	protected final List<Expression<?>> groupBy;
+
+	public JpaAbstractQuery(Expression<Boolean> restriction, Metamodel metamodel, Class<T> resultType) {
+		this(restriction, metamodel, false, resultType, new HashSet<Root<?>>(), new ArrayList<Expression<?>>());
+	}
+
+	public JpaAbstractQuery(Expression<Boolean> restriction, Metamodel metamodel, boolean distinct, Class<T> resultType,
+			Set<Root<?>> roots, List<Expression<?>> groupBy) {
+		super(restriction, metamodel, resultType);
+		this.distinct = distinct;
+		this.groupBy = groupBy;
+		this.roots = roots;
 	}
 
 	public <X> Root<X> from(Class<X> entityClass) {
@@ -46,43 +62,36 @@ public class JpaAbstractQuery<T> extends JpaAbstractCriteria implements Abstract
 	}
 
 	public AbstractQuery<T> where(Expression<Boolean> restriction) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaWhere<T>(restriction, metamodel, resultType);
 	}
 
 	public AbstractQuery<T> where(Predicate... restrictions) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaWhere<T>(restrictions, metamodel, resultType);
 	}
 
 	public AbstractQuery<T> groupBy(Expression<?>... grouping) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaGroupBy<T>(grouping, metamodel, resultType);
 	}
 
 	public AbstractQuery<T> groupBy(List<Expression<?>> grouping) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaGroupBy<T>(grouping, metamodel, resultType);
 	}
 
 	public AbstractQuery<T> having(Expression<Boolean> restriction) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaHaving<T>(restriction, metamodel, resultType);
 	}
 
 	public AbstractQuery<T> having(Predicate... restrictions) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaHaving<T>(restrictions, metamodel, resultType);
 	}
 
 	public AbstractQuery<T> distinct(boolean distinct) {
-		// TODO Auto-generated method stub
-		return null;
+		this.distinct = distinct;
+		return this;
 	}
 
-	public Set<Root<?>> getRoots() {
-		// TODO Auto-generated method stub
-		return null;
+	public final Set<Root<?>> getRoots() {
+		return roots;
 	}
 
 	public Selection<T> getSelection() {
@@ -90,24 +99,20 @@ public class JpaAbstractQuery<T> extends JpaAbstractCriteria implements Abstract
 		return null;
 	}
 
-	public List<Expression<?>> getGroupList() {
-		// TODO Auto-generated method stub
-		return null;
+	public final List<Expression<?>> getGroupList() {
+		return groupBy;
 	}
 
-	public Predicate getGroupRestriction() {
-		// TODO Auto-generated method stub
-		return null;
+	public final Predicate getGroupRestriction() {
+		return unwrap(restriction, Predicate.class);
 	}
 
-	public boolean isDistinct() {
-		// TODO Auto-generated method stub
-		return false;
+	public final boolean isDistinct() {
+		return distinct;
 	}
 
-	public Class<T> getResultType() {
-		// TODO Auto-generated method stub
-		return null;
+	public final Class<T> getResultType() {
+		return resultType;
 	}
 
 }

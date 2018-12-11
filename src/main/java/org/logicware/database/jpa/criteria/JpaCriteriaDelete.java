@@ -29,26 +29,13 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
-public final class JpaCriteriaDelete<T> extends JpaAbstractCriteria implements CriteriaDelete<T> {
+public final class JpaCriteriaDelete<T> extends JpaAbstractCriteria<T> implements CriteriaDelete<T> {
 
 	private Root<T> root;
-	private Class<T> targetEntity;
-	private final Metamodel metamodel;
 	private final List<Predicate> predicates = new LinkedList<Predicate>();
 
-	public JpaCriteriaDelete(Class<T> targetEntity, Metamodel metamodel) {
-		this(targetEntity, null, metamodel);
-	}
-
-	public JpaCriteriaDelete(Predicate restriction, Metamodel metamodel) {
-		this(null, restriction, metamodel);
-		predicates.add(restriction);
-	}
-
 	public JpaCriteriaDelete(Class<T> targetEntity, Predicate restriction, Metamodel metamodel) {
-		super(restriction);
-		this.targetEntity = targetEntity;
-		this.metamodel = metamodel;
+		super(restriction, metamodel, targetEntity);
 	}
 
 	public Root<T> from(Class<T> entityClass) {
@@ -65,12 +52,12 @@ public final class JpaCriteriaDelete<T> extends JpaAbstractCriteria implements C
 		return root;
 	}
 
-	public CriteriaDelete<T> where(Expression<Boolean> restriction) {
+	public JpaCriteriaDelete<T> where(Expression<Boolean> restriction) {
 		this.restriction = restriction;
 		return this;
 	}
 
-	public CriteriaDelete<T> where(Predicate... restrictions) {
+	public JpaCriteriaDelete<T> where(Predicate... restrictions) {
 		for (Predicate predicate : restrictions) {
 			predicates.add(predicate);
 		}

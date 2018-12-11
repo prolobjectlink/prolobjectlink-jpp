@@ -21,9 +21,9 @@ package org.logicware.database.jpa;
 
 import javax.persistence.TupleElement;
 
-import org.logicware.database.jpa.criteria.JpaAbstract;
+import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
 
-public class JPATupleElement<X> extends JpaAbstract implements TupleElement<X> {
+public class JPATupleElement<X> extends JpaAbstractWrapper implements TupleElement<X> {
 
 	protected String alias;
 	protected final X value;

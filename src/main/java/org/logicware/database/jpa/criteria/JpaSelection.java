@@ -27,7 +27,7 @@ import javax.persistence.criteria.Selection;
 
 import org.logicware.database.jpa.JPATupleElement;
 
-public abstract class JpaSelection<X> extends JPATupleElement<X> implements Selection<X> {
+public class JpaSelection<X> extends JPATupleElement<X> implements Selection<X> {
 
 	protected Expression<?> expression;
 

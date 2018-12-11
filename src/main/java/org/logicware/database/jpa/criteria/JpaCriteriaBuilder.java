@@ -72,7 +72,7 @@ import org.logicware.database.jpa.criteria.predicate.JpaOrPredicate;
 import org.logicware.database.util.JavaLists;
 import org.logicware.database.util.JavaReflect;
 
-public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBuilder {
+public final class JpaCriteriaBuilder extends JpaAbstractWrapper implements CriteriaBuilder {
 
 	private final Metamodel metamodel;
 
@@ -85,11 +85,11 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public <T> CriteriaQuery<T> createQuery(Class<T> resultClass) {
-		return new JpaCriteriaQuery<T>(resultClass, metamodel);
+		return new JpaCriteriaQuery<T>(null, metamodel, false, resultClass);
 	}
 
 	public CriteriaQuery<Tuple> createTupleQuery() {
-		return new JpaCriteriaQuery<Tuple>(null, metamodel);
+		return new JpaCriteriaQuery<Tuple>(null, metamodel, false, Tuple.class);
 	}
 
 	public <T> CriteriaUpdate<T> createCriteriaUpdate(Class<T> targetEntity) {
@@ -97,7 +97,7 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public <T> CriteriaDelete<T> createCriteriaDelete(Class<T> targetEntity) {
-		return new JpaCriteriaDelete<T>(targetEntity, metamodel);
+		return new JpaCriteriaDelete<T>(targetEntity, null, metamodel);
 	}
 
 	public <Y> CompoundSelection<Y> construct(Class<Y> resultClass, Selection<?>... selections) {
@@ -485,12 +485,12 @@ public final class JpaCriteriaBuilder extends JpaAbstract implements CriteriaBui
 	}
 
 	public <V, M extends Map<?, V>> Expression<Collection<V>> values(M map) {
-//		return new JpaValues<V>(null, (Class<? extends Collection<V>>) Object.class, null, metamodel, map);
+//	TODO	return new JpaValues<V>(null, (Class<? extends Collection<V>>) Object.class, null, metamodel, map);
 		return null;
 	}
 
 	public <K, M extends Map<K, ?>> Expression<Set<K>> keys(M map) {
-//		return new JpaKeys<K>(null, (Class<? extends Set<K>>) Object.class, null, metamodel, map);
+//	TODO	return new JpaKeys<K>(null, (Class<? extends Set<K>>) Object.class, null, metamodel, map);
 		return null;
 	}
 

@@ -35,15 +35,15 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import javax.persistence.criteria.SetJoin;
 import javax.persistence.criteria.Subquery;
+import javax.persistence.metamodel.Metamodel;
 
 public class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquery<T>, Selection<T>, Expression<T> {
 
 	private String alias;
 	private Class<T> javaType;
 
-	public JpaSubQuery(Expression<Boolean> restriction, Class<T> type) {
-		super(restriction);
-		this.javaType = type;
+	public JpaSubQuery(Expression<Boolean> restriction, Class<T> type, Metamodel metamodel) {
+		super(restriction, metamodel, type);
 	}
 
 	public Selection<T> alias(String name) {

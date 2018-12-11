@@ -31,11 +31,9 @@ import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
 
-public final class JpaCriteriaUpdate<T> extends JpaAbstractCriteria implements CriteriaUpdate<T> {
+public final class JpaCriteriaUpdate<T> extends JpaAbstractCriteria<T> implements CriteriaUpdate<T> {
 
 	private Root<T> root;
-	private Class<T> targetEntity;
-	private final Metamodel metamodel;
 	private final List<Predicate> predicates = new LinkedList<Predicate>();
 
 	public JpaCriteriaUpdate(Class<T> targetEntity, Metamodel metamodel) {
@@ -48,9 +46,7 @@ public final class JpaCriteriaUpdate<T> extends JpaAbstractCriteria implements C
 	}
 
 	public JpaCriteriaUpdate(Class<T> targetEntity, Predicate restriction, Metamodel metamodel) {
-		super(restriction);
-		this.targetEntity = targetEntity;
-		this.metamodel = metamodel;
+		super(restriction, metamodel, targetEntity);
 	}
 
 	public Root<T> from(Class<T> entityClass) {
@@ -93,13 +89,15 @@ public final class JpaCriteriaUpdate<T> extends JpaAbstractCriteria implements C
 	}
 
 	public CriteriaUpdate<T> where(Expression<Boolean> restriction) {
-		// TODO Auto-generated method stub
-		return null;
+		this.restriction = restriction;
+		return this;
 	}
 
 	public CriteriaUpdate<T> where(Predicate... restrictions) {
-		// TODO Auto-generated method stub
-		return null;
+		for (Predicate predicate : restrictions) {
+			predicates.add(predicate);
+		}
+		return this;
 	}
 
 }

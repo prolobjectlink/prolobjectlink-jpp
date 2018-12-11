@@ -19,6 +19,8 @@
  */
 package org.logicware.database.jpa.criteria;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,30 +29,19 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import javax.persistence.metamodel.Metamodel;
 
 public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements CriteriaQuery<T> {
 
-	private final Metamodel metamodel;
-	private final Class<T> resultClass;
-
-	public JpaCriteriaQuery(Metamodel metamodel) {
-		this(null, null, metamodel);
+	public JpaCriteriaQuery(Expression<Boolean> restriction, Metamodel metamodel, boolean distinct, Class<T> resultType,
+			Set<Root<?>> roots, List<Expression<?>> groupBy) {
+		super(restriction, metamodel, distinct, resultType, roots, groupBy);
 	}
 
-	public JpaCriteriaQuery(Predicate restriction) {
-		this(restriction, null, null);
-	}
-
-	public JpaCriteriaQuery(Predicate restriction, Class<T> resultClass, Metamodel metamodel) {
-		super(restriction);
-		this.metamodel = metamodel;
-		this.resultClass = resultClass;
-	}
-
-	public JpaCriteriaQuery(Class<T> resultClass, Metamodel metamodel) {
-		this(null, resultClass, metamodel);
+	public JpaCriteriaQuery(Predicate restriction, Metamodel metamodel, boolean b, Class<T> resultClass) {
+		this(restriction, metamodel, b, resultClass, new HashSet<Root<?>>(), new ArrayList<Expression<?>>());
 	}
 
 	public CriteriaQuery<T> select(Selection<? extends T> selection) {
@@ -109,7 +100,7 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	}
 
 	public CriteriaQuery<T> distinct(boolean distinct) {
-		// TODO Auto-generated method stub
+		this.distinct = distinct;
 		return null;
 	}
 
