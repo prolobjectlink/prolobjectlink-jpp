@@ -30,7 +30,7 @@ import javax.persistence.metamodel.MappedSuperclassType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.Type;
 
-public final class JPAMetamodel implements Metamodel {
+public final class JpaMetamodel implements Metamodel {
 
 	private final Map<Class<?>, Type<?>> types;
 	private final Map<Class<?>, EntityType<?>> entities;
@@ -38,7 +38,7 @@ public final class JPAMetamodel implements Metamodel {
 	private final Map<Class<?>, EmbeddableType<?>> embeddables;
 	private final Set<MappedSuperclassType<?>> mappedSuperclasses;
 
-	public JPAMetamodel(Map<Class<?>, EntityType<?>> entities, Map<Class<?>, EmbeddableType<?>> embeddables,
+	public JpaMetamodel(Map<Class<?>, EntityType<?>> entities, Map<Class<?>, EmbeddableType<?>> embeddables,
 			Map<Class<?>, ManagedType<?>> managedTypes, Map<Class<?>, Type<?>> types,
 			Set<MappedSuperclassType<?>> mappedSuperclasses) {
 		this.mappedSuperclasses = mappedSuperclasses;

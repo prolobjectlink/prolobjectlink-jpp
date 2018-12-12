@@ -21,11 +21,11 @@ package org.logicware.database.jpa.metamodel;
 
 import javax.persistence.metamodel.Type;
 
-public abstract class JPAType<X> implements Type<X> {
+public abstract class JpaType<X> implements Type<X> {
 
 	private final Class<X> javaType;
 
-	JPAType(Class<X> javaType) {
+	JpaType(Class<X> javaType) {
 		this.javaType = javaType;
 	}
 
@@ -49,7 +49,7 @@ public abstract class JPAType<X> implements Type<X> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAType<?> other = (JPAType<?>) obj;
+		JpaType<?> other = (JpaType<?>) obj;
 		if (javaType == null) {
 			if (other.javaType != null)
 				return false;

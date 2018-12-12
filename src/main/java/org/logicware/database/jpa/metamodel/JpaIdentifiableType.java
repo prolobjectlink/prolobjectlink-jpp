@@ -26,14 +26,14 @@ import javax.persistence.metamodel.IdentifiableType;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.Type;
 
-public abstract class JPAIdentifiableType<X> extends JPAManagedType<X> implements IdentifiableType<X> {
+public abstract class JpaIdentifiableType<X> extends JpaManagedType<X> implements IdentifiableType<X> {
 
 	private final Type<?> idType;
 	private IdentifiableType<? super X> superType;
 	private SingularAttribute<? super X, ?> versionAttribute;
 	private Set<SingularAttribute<? super X, ?>> idAttributes;
 
-	public JPAIdentifiableType(Class<X> javaType, Type<?> idType) {
+	public JpaIdentifiableType(Class<X> javaType, Type<?> idType) {
 		super(javaType);
 		this.idType = idType;
 		idAttributes = new LinkedHashSet<SingularAttribute<? super X, ?>>();
@@ -117,7 +117,7 @@ public abstract class JPAIdentifiableType<X> extends JPAManagedType<X> implement
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAIdentifiableType<?> other = (JPAIdentifiableType<?>) obj;
+		JpaIdentifiableType<?> other = (JpaIdentifiableType<?>) obj;
 		if (idAttributes == null) {
 			if (other.idAttributes != null)
 				return false;

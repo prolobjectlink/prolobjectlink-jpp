@@ -19,16 +19,16 @@
  */
 package org.logicware.database.jpa.metamodel;
 
-import javax.persistence.metamodel.EmbeddableType;
+import javax.persistence.metamodel.BasicType;
 
-public final class JPAEmbeddableType<X> extends JPAManagedType<X> implements EmbeddableType<X> {
+public final class JpaBasicType<X> extends JpaType<X> implements BasicType<X> {
 
-	public JPAEmbeddableType(Class<X> javaType) {
+	public JpaBasicType(Class<X> javaType) {
 		super(javaType);
 	}
 
 	public PersistenceType getPersistenceType() {
-		return PersistenceType.EMBEDDABLE;
+		return PersistenceType.BASIC;
 	}
 
 }

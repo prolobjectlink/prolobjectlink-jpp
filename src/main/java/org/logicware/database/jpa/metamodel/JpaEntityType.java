@@ -22,11 +22,11 @@ package org.logicware.database.jpa.metamodel;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Type;
 
-public final class JPAEntityType<X> extends JPABindableType<X> implements EntityType<X> {
+public final class JpaEntityType<X> extends JpaBindableType<X> implements EntityType<X> {
 
 	private final String name;
 
-	public JPAEntityType(Class<X> javaType, String name, Type<?> idType) {
+	public JpaEntityType(Class<X> javaType, String name, Type<?> idType) {
 		super(javaType, idType);
 		this.name = name;
 	}
@@ -59,7 +59,7 @@ public final class JPAEntityType<X> extends JPABindableType<X> implements Entity
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAEntityType<?> other = (JPAEntityType<?>) obj;
+		JpaEntityType<?> other = (JpaEntityType<?>) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

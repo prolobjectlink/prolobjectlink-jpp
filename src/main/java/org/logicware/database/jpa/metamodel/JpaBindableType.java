@@ -19,21 +19,17 @@
  */
 package org.logicware.database.jpa.metamodel;
 
-import java.util.Set;
-
-import javax.persistence.metamodel.ManagedType;
-import javax.persistence.metamodel.SetAttribute;
+import javax.persistence.metamodel.Bindable;
 import javax.persistence.metamodel.Type;
 
-public final class JPASetAttribute<X, E> extends JPAPluralAttribute<X, Set<E>, E> implements SetAttribute<X, E> {
+public abstract class JpaBindableType<X> extends JpaIdentifiableType<X> implements Bindable<X> {
 
-	public JPASetAttribute(String name, Type<Set<E>> type, ManagedType<X> managedType, Type<E> elementType,
-			PersistentAttributeType attributeType) {
-		super(name, type, managedType, elementType, attributeType);
+	JpaBindableType(Class<X> javaType, Type<?> idType) {
+		super(javaType, idType);
 	}
 
-	public CollectionType getCollectionType() {
-		return CollectionType.SET;
+	public Class<X> getBindableJavaType() {
+		return getJavaType();
 	}
 
 }

@@ -24,12 +24,12 @@ import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.Type;
 import javax.persistence.metamodel.Type.PersistenceType;
 
-public abstract class JPAPluralAttribute<X, C, E> extends JPAAttribute<X, C> implements PluralAttribute<X, C, E> {
+public abstract class JpaPluralAttribute<X, C, E> extends JpaAttribute<X, C> implements PluralAttribute<X, C, E> {
 
 	protected final Type<E> elementType;
 	protected final PersistentAttributeType attributeType;
 
-	protected JPAPluralAttribute(String name, Type<C> type, ManagedType<X> managedType, Type<E> elementType,
+	protected JpaPluralAttribute(String name, Type<C> type, ManagedType<X> managedType, Type<E> elementType,
 			PersistentAttributeType attributeType) {
 		super(name, type, managedType);
 		this.elementType = elementType;
@@ -77,7 +77,7 @@ public abstract class JPAPluralAttribute<X, C, E> extends JPAAttribute<X, C> imp
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAPluralAttribute<?, ?, ?> other = (JPAPluralAttribute<?, ?, ?>) obj;
+		JpaPluralAttribute<?, ?, ?> other = (JpaPluralAttribute<?, ?, ?>) obj;
 		if (attributeType != other.attributeType)
 			return false;
 		if (elementType == null) {

@@ -19,22 +19,21 @@
  */
 package org.logicware.database.jpa.metamodel;
 
-import java.util.Collection;
+import java.util.List;
 
-import javax.persistence.metamodel.CollectionAttribute;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Type;
 
-public final class JPACollectionAttribute<X, E> extends JPAPluralAttribute<X, Collection<E>, E>
-		implements CollectionAttribute<X, E> {
+public final class JpaListAttribute<X, E> extends JpaPluralAttribute<X, List<E>, E> implements ListAttribute<X, E> {
 
-	public JPACollectionAttribute(String name, Type<Collection<E>> type, ManagedType<X> managedType,
-			Type<E> elementType, PersistentAttributeType attributeType) {
+	public JpaListAttribute(String name, Type<List<E>> type, ManagedType<X> managedType, Type<E> elementType,
+			PersistentAttributeType attributeType) {
 		super(name, type, managedType, elementType, attributeType);
 	}
 
 	public CollectionType getCollectionType() {
-		return CollectionType.COLLECTION;
+		return CollectionType.LIST;
 	}
 
 }

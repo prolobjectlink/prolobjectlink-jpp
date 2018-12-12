@@ -28,13 +28,13 @@ import javax.persistence.metamodel.Type;
 import org.logicware.logging.LoggerConstants;
 import org.logicware.logging.LoggerUtils;
 
-public abstract class JPAAttribute<X, Y> implements Attribute<X, Y> {
+public abstract class JpaAttribute<X, Y> implements Attribute<X, Y> {
 
 	protected final String name;
 	protected final Type<Y> type;
 	protected final ManagedType<X> declaredType;
 
-	protected JPAAttribute(String name, Type<Y> type, ManagedType<X> declaredType) {
+	protected JpaAttribute(String name, Type<Y> type, ManagedType<X> declaredType) {
 		this.name = name;
 		this.type = type;
 		this.declaredType = declaredType;
@@ -83,7 +83,7 @@ public abstract class JPAAttribute<X, Y> implements Attribute<X, Y> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAAttribute<?, ?> other = (JPAAttribute<?, ?>) obj;
+		JpaAttribute<?, ?> other = (JpaAttribute<?, ?>) obj;
 		if (declaredType == null) {
 			if (other.declaredType != null)
 				return false;

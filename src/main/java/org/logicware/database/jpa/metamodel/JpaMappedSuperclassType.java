@@ -19,21 +19,17 @@
  */
 package org.logicware.database.jpa.metamodel;
 
-import java.util.List;
-
-import javax.persistence.metamodel.ListAttribute;
-import javax.persistence.metamodel.ManagedType;
+import javax.persistence.metamodel.MappedSuperclassType;
 import javax.persistence.metamodel.Type;
 
-public final class JPAListAttribute<X, E> extends JPAPluralAttribute<X, List<E>, E> implements ListAttribute<X, E> {
+public final class JpaMappedSuperclassType<X> extends JpaIdentifiableType<X> implements MappedSuperclassType<X> {
 
-	public JPAListAttribute(String name, Type<List<E>> type, ManagedType<X> managedType, Type<E> elementType,
-			PersistentAttributeType attributeType) {
-		super(name, type, managedType, elementType, attributeType);
+	public JpaMappedSuperclassType(Class<X> javaType, Type<?> idType) {
+		super(javaType, idType);
 	}
 
-	public CollectionType getCollectionType() {
-		return CollectionType.LIST;
+	public PersistenceType getPersistenceType() {
+		return PersistenceType.MAPPED_SUPERCLASS;
 	}
 
 }

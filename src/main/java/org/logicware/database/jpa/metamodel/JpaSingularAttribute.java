@@ -24,12 +24,12 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.Type;
 import javax.persistence.metamodel.Type.PersistenceType;
 
-public final class JPASingularAttribute<X, Y> extends JPAAttribute<X, Y> implements SingularAttribute<X, Y> {
+public final class JpaSingularAttribute<X, Y> extends JpaAttribute<X, Y> implements SingularAttribute<X, Y> {
 
 	private boolean id;
 	private boolean version;
 
-	public JPASingularAttribute(String name, Type<Y> javaType, ManagedType<X> managedType) {
+	public JpaSingularAttribute(String name, Type<Y> javaType, ManagedType<X> managedType) {
 		super(name, javaType, managedType);
 	}
 
@@ -105,7 +105,7 @@ public final class JPASingularAttribute<X, Y> extends JPAAttribute<X, Y> impleme
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPASingularAttribute<?, ?> other = (JPASingularAttribute<?, ?>) obj;
+		JpaSingularAttribute<?, ?> other = (JpaSingularAttribute<?, ?>) obj;
 		if (id != other.id)
 			return false;
 		return version == other.version;

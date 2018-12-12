@@ -26,12 +26,12 @@ import javax.persistence.metamodel.MapAttribute;
 import javax.persistence.metamodel.Type;
 import javax.persistence.metamodel.Type.PersistenceType;
 
-public final class JPAMapAttribute<X, K, V> extends JPAPluralAttribute<X, Map<K, V>, V>
+public final class JpaMapAttribute<X, K, V> extends JpaPluralAttribute<X, Map<K, V>, V>
 		implements MapAttribute<X, K, V> {
 
 	private final Type<K> keyType;
 
-	public JPAMapAttribute(String name, Type<Map<K, V>> type, ManagedType<X> managedType, Type<V> elementType,
+	public JpaMapAttribute(String name, Type<Map<K, V>> type, ManagedType<X> managedType, Type<V> elementType,
 			PersistentAttributeType attributeType, Type<K> keyType) {
 		super(name, type, managedType, elementType, attributeType);
 		this.keyType = keyType;
@@ -76,7 +76,7 @@ public final class JPAMapAttribute<X, K, V> extends JPAPluralAttribute<X, Map<K,
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAMapAttribute<?, ?, ?> other = (JPAMapAttribute<?, ?, ?>) obj;
+		JpaMapAttribute<?, ?, ?> other = (JpaMapAttribute<?, ?, ?>) obj;
 		if (keyType == null) {
 			if (other.keyType != null)
 				return false;

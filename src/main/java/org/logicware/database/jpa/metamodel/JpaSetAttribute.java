@@ -19,17 +19,21 @@
  */
 package org.logicware.database.jpa.metamodel;
 
-import javax.persistence.metamodel.MappedSuperclassType;
+import java.util.Set;
+
+import javax.persistence.metamodel.ManagedType;
+import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.Type;
 
-public final class JPAMappedSuperclassType<X> extends JPAIdentifiableType<X> implements MappedSuperclassType<X> {
+public final class JpaSetAttribute<X, E> extends JpaPluralAttribute<X, Set<E>, E> implements SetAttribute<X, E> {
 
-	public JPAMappedSuperclassType(Class<X> javaType, Type<?> idType) {
-		super(javaType, idType);
+	public JpaSetAttribute(String name, Type<Set<E>> type, ManagedType<X> managedType, Type<E> elementType,
+			PersistentAttributeType attributeType) {
+		super(name, type, managedType, elementType, attributeType);
 	}
 
-	public PersistenceType getPersistenceType() {
-		return PersistenceType.MAPPED_SUPERCLASS;
+	public CollectionType getCollectionType() {
+		return CollectionType.SET;
 	}
 
 }

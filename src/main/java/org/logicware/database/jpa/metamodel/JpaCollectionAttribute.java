@@ -19,17 +19,22 @@
  */
 package org.logicware.database.jpa.metamodel;
 
-import javax.persistence.metamodel.Bindable;
+import java.util.Collection;
+
+import javax.persistence.metamodel.CollectionAttribute;
+import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Type;
 
-public abstract class JPABindableType<X> extends JPAIdentifiableType<X> implements Bindable<X> {
+public final class JpaCollectionAttribute<X, E> extends JpaPluralAttribute<X, Collection<E>, E>
+		implements CollectionAttribute<X, E> {
 
-	JPABindableType(Class<X> javaType, Type<?> idType) {
-		super(javaType, idType);
+	public JpaCollectionAttribute(String name, Type<Collection<E>> type, ManagedType<X> managedType,
+			Type<E> elementType, PersistentAttributeType attributeType) {
+		super(name, type, managedType, elementType, attributeType);
 	}
 
-	public Class<X> getBindableJavaType() {
-		return getJavaType();
+	public CollectionType getCollectionType() {
+		return CollectionType.COLLECTION;
 	}
 
 }

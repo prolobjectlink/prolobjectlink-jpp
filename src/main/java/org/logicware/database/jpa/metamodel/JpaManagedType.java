@@ -34,11 +34,11 @@ import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 
-public abstract class JPAManagedType<X> extends JPAType<X> implements ManagedType<X> {
+public abstract class JpaManagedType<X> extends JpaType<X> implements ManagedType<X> {
 
 	private final Map<String, Attribute<X, ?>> attributes;
 
-	public JPAManagedType(Class<X> javaType) {
+	public JpaManagedType(Class<X> javaType) {
 		super(javaType);
 		this.attributes = new LinkedHashMap<String, Attribute<X, ?>>();
 	}
