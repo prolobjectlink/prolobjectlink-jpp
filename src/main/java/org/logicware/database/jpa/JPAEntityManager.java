@@ -19,7 +19,7 @@
  */
 package org.logicware.database.jpa;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +48,9 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 
 	// property key-value map
 	private final Map properties;
+
+	//
+	private boolean joinedTransaction;
 
 	//
 	private final EntityManagerFactory managerFactory;
@@ -245,15 +248,15 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	}
 
 	public <T> TypedQuery<T> createQuery(CriteriaQuery<T> criteriaQuery) {
-		throw new UnsupportedOperationException("createQuery(CriteriaQuery<T>)");
+		return new JPATypedQuery<T>(database, "" + criteriaQuery + "", criteriaQuery.getResultType());
 	}
 
 	public Query createQuery(CriteriaUpdate updateQuery) {
-		throw new UnsupportedOperationException("createQuery(CriteriaUpdate)");
+		return new JPAQuery(database, "" + updateQuery + "");
 	}
 
 	public Query createQuery(CriteriaDelete deleteQuery) {
-		throw new UnsupportedOperationException("createQuery(CriteriaDelete)");
+		return new JPAQuery(database, "" + deleteQuery + "");
 	}
 
 	public <T> TypedQuery<T> createQuery(String qlString, Class<T> resultClass) {
@@ -308,7 +311,7 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	}
 
 	public boolean isJoinedToTransaction() {
-		throw new UnsupportedOperationException("isJoinedToTransaction()");
+		return joinedTransaction;
 	}
 
 	public <T> T unwrap(Class<T> cls) {
@@ -367,7 +370,7 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	}
 
 	public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> entityClass) {
-		List<EntityGraph<? super T>> graphs = new ArrayList<EntityGraph<? super T>>();
+		List<EntityGraph<? super T>> graphs = new LinkedList<EntityGraph<? super T>>();
 		for (EntityGraph<?> entityGraph : namedEntityGraphs.values()) {
 			if (entityGraph instanceof JPAEntityGraph) {
 				JPAEntityGraph<T> logicEntityGraph = (JPAEntityGraph<T>) entityGraph;
