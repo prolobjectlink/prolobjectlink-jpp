@@ -82,7 +82,7 @@ import org.logicware.prolog.PrologTerm;
  * @author Jose Zalacain
  * @since 1.0
  */
-public final class JPAEntityManagerFactory implements EntityManagerFactory {
+public final class JpaEntityManagerFactory implements EntityManagerFactory {
 
 	// second level cache
 	private Cache cache;
@@ -106,11 +106,11 @@ public final class JPAEntityManagerFactory implements EntityManagerFactory {
 	private final Map<String, EntityGraph<?>> namedEntityGraphs = new LinkedHashMap<String, EntityGraph<?>>();
 
 	// result set mappings for native queries result
-	private final Map<String, JPAResultSetMapping> resultSetMappings = new LinkedHashMap<String, JPAResultSetMapping>();
+	private final Map<String, JpaResultSetMapping> resultSetMappings = new LinkedHashMap<String, JpaResultSetMapping>();
 
-	public JPAEntityManagerFactory(DatabaseEngine database) {
-		this.persistenceUnitUtil = new JPAPersistenceUnitUtil();
-		this.cache = new JPACache(database, persistenceUnitUtil);
+	public JpaEntityManagerFactory(DatabaseEngine database) {
+		this.persistenceUnitUtil = new JpaPersistenceUnitUtil();
+		this.cache = new JpaCache(database, persistenceUnitUtil);
 		this.database = database;
 	}
 
@@ -127,7 +127,7 @@ public final class JPAEntityManagerFactory implements EntityManagerFactory {
 	}
 
 	public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
-		return new JPAEntityManager(database, this, synchronizationType, map, entityMap, namedQueries,
+		return new JpaEntityManager(database, this, synchronizationType, map, entityMap, namedQueries,
 				namedEntityGraphs, resultSetMappings);
 	}
 
@@ -186,7 +186,7 @@ public final class JPAEntityManagerFactory implements EntityManagerFactory {
 	}
 
 	public <T> T unwrap(Class<T> cls) {
-		if (cls.equals(JPAEntityManagerFactory.class)) {
+		if (cls.equals(JpaEntityManagerFactory.class)) {
 			return (T) this;
 		}
 		throw new PersistenceException("Impossible  unwrap " + cls.getName());
@@ -196,12 +196,12 @@ public final class JPAEntityManagerFactory implements EntityManagerFactory {
 		entityMap.put(name, clazz);
 	}
 
-	public void addResultSetMapping(JPAResultSetMapping mapping) {
+	public void addResultSetMapping(JpaResultSetMapping mapping) {
 		resultSetMappings.put(mapping.getName(), mapping);
 	}
 
 	public AttributeConverter<Object, PrologTerm> getAttributeConverter() {
-		return new JPAAttributeConverter(database.getProvider());
+		return new JpaAttributeConverter(database.getProvider());
 	}
 
 	private Type<?> getType(Class<?> type, Map<Class<?>, Type<?>> types, Map<Class<?>, EntityType<?>> entities,

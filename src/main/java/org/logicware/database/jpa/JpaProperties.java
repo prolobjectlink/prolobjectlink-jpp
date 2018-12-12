@@ -22,7 +22,7 @@ package org.logicware.database.jpa;
 import java.util.Map;
 import java.util.Properties;
 
-public final class JPAProperties extends Properties {
+public final class JpaProperties extends Properties {
 
 	private static final long serialVersionUID = -2013758241662724837L;
 
@@ -31,7 +31,7 @@ public final class JPAProperties extends Properties {
 	public static final String USER = "javax.persistence.jdbc.user";
 	public static final String PASSWORD = "javax.persistence.jdbc.password";
 
-	public JPAProperties() {
+	public JpaProperties() {
 	}
 
 	/**
@@ -39,7 +39,7 @@ public final class JPAProperties extends Properties {
 	 * 
 	 * @param properties
 	 */
-	public JPAProperties(final Map<String, Object> properties) {
+	public JpaProperties(final Map<String, Object> properties) {
 		if (properties == null) {
 			throw new IllegalStateException("Map properties for entity manager should not be null");
 		} else if (!properties.containsKey(DRIVER)) {

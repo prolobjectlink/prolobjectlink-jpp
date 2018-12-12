@@ -19,21 +19,27 @@
  */
 package org.logicware.database.jpa;
 
-import javax.persistence.spi.LoadState;
-import javax.persistence.spi.ProviderUtil;
+import java.util.List;
 
-public final class JPAProviderUtil implements ProviderUtil {
+import javax.persistence.PersistenceUnitUtil;
 
-	public LoadState isLoadedWithoutReference(Object entity, String attributeName) {
-		return LoadState.UNKNOWN;
+import org.logicware.database.DatabaseEngine;
+
+public abstract class JpaAbstractContainer {
+
+	//
+	protected final DatabaseEngine database;
+
+	//
+	protected final PersistenceUnitUtil persistenceUnitUtil;
+
+	protected JpaAbstractContainer(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
+		this.persistenceUnitUtil = persistenceUnitUtil;
+		this.database = database;
 	}
 
-	public LoadState isLoadedWithReference(Object entity, String attributeName) {
-		return LoadState.UNKNOWN;
-	}
-
-	public LoadState isLoaded(Object entity) {
-		return LoadState.UNKNOWN;
+	protected final <O> List<O> findAll(Class<O> clazz) {
+		return database.createQuery(clazz).getSolutions();
 	}
 
 }

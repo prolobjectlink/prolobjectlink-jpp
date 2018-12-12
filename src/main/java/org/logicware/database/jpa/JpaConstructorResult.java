@@ -21,25 +21,25 @@ package org.logicware.database.jpa;
 
 import java.util.Arrays;
 
-public final class JPAConstructorResult {
+public final class JpaConstructorResult {
 
 	private final Class<?> targetClass;
-	private JPAColumnResult[] columns;
+	private JpaColumnResult[] columns;
 
-	public JPAConstructorResult(Class<?> targetClass) {
-		this(targetClass, new JPAColumnResult[0]);
+	public JpaConstructorResult(Class<?> targetClass) {
+		this(targetClass, new JpaColumnResult[0]);
 	}
 
-	public JPAConstructorResult(Class<?> targetClass, JPAColumnResult[] columns) {
+	public JpaConstructorResult(Class<?> targetClass, JpaColumnResult[] columns) {
 		this.targetClass = targetClass;
 		this.columns = columns;
 	}
 
-	public JPAColumnResult[] getColumns() {
+	public JpaColumnResult[] getColumns() {
 		return columns;
 	}
 
-	public void setColumns(JPAColumnResult[] columns) {
+	public void setColumns(JpaColumnResult[] columns) {
 		this.columns = columns;
 	}
 
@@ -64,7 +64,7 @@ public final class JPAConstructorResult {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAConstructorResult other = (JPAConstructorResult) obj;
+		JpaConstructorResult other = (JpaConstructorResult) obj;
 		if (!Arrays.equals(columns, other.columns))
 			return false;
 		if (targetClass == null) {

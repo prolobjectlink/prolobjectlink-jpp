@@ -25,17 +25,17 @@ import java.util.Map;
 import javax.persistence.AttributeNode;
 import javax.persistence.Subgraph;
 
-public class JPAAttributeNode<T> implements AttributeNode<T> {
+public class JpaAttributeNode<T> implements AttributeNode<T> {
 
 	protected final String attributeName;
 	protected final Map<Class, Subgraph> subgraphs;
 	protected final Map<Class, Subgraph> keySubgraphs;
 
-	public JPAAttributeNode(String attribute) {
+	public JpaAttributeNode(String attribute) {
 		this(attribute, new HashMap<Class, Subgraph>(), new HashMap<Class, Subgraph>());
 	}
 
-	public JPAAttributeNode(String attributeName, Map<Class, Subgraph> subgraphs, Map<Class, Subgraph> keySubgraphs) {
+	public JpaAttributeNode(String attributeName, Map<Class, Subgraph> subgraphs, Map<Class, Subgraph> keySubgraphs) {
 		this.attributeName = attributeName;
 		this.keySubgraphs = keySubgraphs;
 		this.subgraphs = subgraphs;
@@ -53,11 +53,11 @@ public class JPAAttributeNode<T> implements AttributeNode<T> {
 		return keySubgraphs;
 	}
 
-	public void addSubgraph(JPAEntityGraph<?> entityGraph) {
+	public void addSubgraph(JpaEntityGraph<?> entityGraph) {
 		subgraphs.put(entityGraph.getClassType(), entityGraph);
 	}
 
-	public void addKeySubgraph(JPAEntityGraph<?> entityGraphImpl) {
+	public void addKeySubgraph(JpaEntityGraph<?> entityGraphImpl) {
 		keySubgraphs.put(entityGraphImpl.getClassType(), entityGraphImpl);
 	}
 
@@ -85,7 +85,7 @@ public class JPAAttributeNode<T> implements AttributeNode<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAAttributeNode<?> other = (JPAAttributeNode<?>) obj;
+		JpaAttributeNode<?> other = (JpaAttributeNode<?>) obj;
 		if (attributeName == null) {
 			if (other.attributeName != null)
 				return false;

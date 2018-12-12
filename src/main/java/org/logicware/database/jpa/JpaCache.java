@@ -27,11 +27,11 @@ import javax.persistence.PersistenceUnitUtil;
 
 import org.logicware.database.DatabaseEngine;
 
-public final class JPACache extends JPAAbstractContainer implements Cache {
+public final class JpaCache extends JpaAbstractContainer implements Cache {
 
 	// TODO implement a cache map and release database use
 
-	JPACache(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
+	JpaCache(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
 		super(database, persistenceUnitUtil);
 	}
 
@@ -71,7 +71,7 @@ public final class JPACache extends JPAAbstractContainer implements Cache {
 	}
 
 	public <T> T unwrap(Class<T> cls) {
-		if (cls.equals(JPACache.class)) {
+		if (cls.equals(JpaCache.class)) {
 			return (T) this;
 		}
 		throw new PersistenceException("Impossible unwrap to " + cls.getName());

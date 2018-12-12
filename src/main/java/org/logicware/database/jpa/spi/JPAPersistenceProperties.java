@@ -22,7 +22,7 @@ package org.logicware.database.jpa.spi;
 import java.util.Map;
 import java.util.Properties;
 
-import org.logicware.database.jpa.JPAProperties;
+import org.logicware.database.jpa.JpaProperties;
 
 public final class JPAPersistenceProperties extends Properties {
 
@@ -39,30 +39,30 @@ public final class JPAPersistenceProperties extends Properties {
 	public JPAPersistenceProperties(final Map<String, Object> properties) {
 		if (properties == null) {
 			throw new IllegalStateException("Map properties for entity manager should not be null");
-		} else if (!properties.containsKey(JPAProperties.DRIVER)) {
+		} else if (!properties.containsKey(JpaProperties.DRIVER)) {
 			throw new IllegalStateException("DRIVER propertiy for entity manager should not be null or empty");
-		} else if (!properties.containsKey(JPAProperties.URL)) {
+		} else if (!properties.containsKey(JpaProperties.URL)) {
 			throw new IllegalStateException("URL propertiy for entity manager should not be null or empty");
-		} else if (!properties.containsKey(JPAProperties.USER)) {
+		} else if (!properties.containsKey(JpaProperties.USER)) {
 			throw new IllegalStateException("User propertiy for entity manager should not be null or empty");
 		}
 		putAll(properties);
 	}
 
 	public String getDriver() {
-		return getProperty(JPAProperties.DRIVER);
+		return getProperty(JpaProperties.DRIVER);
 	}
 
 	public String getURL() {
-		return getProperty(JPAProperties.URL);
+		return getProperty(JpaProperties.URL);
 	}
 
 	public String getUser() {
-		return getProperty(JPAProperties.USER);
+		return getProperty(JpaProperties.USER);
 	}
 
 	public String getPassword() {
-		return getProperty(JPAProperties.PASSWORD);
+		return getProperty(JpaProperties.PASSWORD);
 	}
 
 }

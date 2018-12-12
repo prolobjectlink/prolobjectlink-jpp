@@ -19,12 +19,12 @@
  */
 package org.logicware.database.jpa;
 
-public final class JPAFieldResult {
+public final class JpaFieldResult {
 
 	private final String name;
 	private final String column;
 
-	public JPAFieldResult(String name, String column) {
+	public JpaFieldResult(String name, String column) {
 		this.name = name;
 		this.column = column;
 	}
@@ -54,7 +54,7 @@ public final class JPAFieldResult {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAFieldResult other = (JPAFieldResult) obj;
+		JpaFieldResult other = (JpaFieldResult) obj;
 		if (column == null) {
 			if (other.column != null)
 				return false;

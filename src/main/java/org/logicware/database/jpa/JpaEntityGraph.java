@@ -31,24 +31,24 @@ import javax.persistence.EntityGraph;
 import javax.persistence.Subgraph;
 import javax.persistence.metamodel.Attribute;
 
-public final class JPAEntityGraph<T> extends JPAAttributeNode<T> implements EntityGraph<T>, Subgraph<T> {
+public final class JpaEntityGraph<T> extends JpaAttributeNode<T> implements EntityGraph<T>, Subgraph<T> {
 
 	private final boolean inmutable;
 	private final Class<T> classType;
 	private final List<AttributeNode<?>> attributeNodes;
 
-	JPAEntityGraph(String graphName) {
+	JpaEntityGraph(String graphName) {
 		this(graphName, null);
 	}
 
-	JPAEntityGraph(String name, Class<T> classType) {
+	JpaEntityGraph(String name, Class<T> classType) {
 		super(name);
 		this.inmutable = false;
 		this.classType = classType;
 		this.attributeNodes = new ArrayList<AttributeNode<?>>();
 	}
 
-	public JPAEntityGraph(String name, Map<Class, Subgraph> subgraphs, Map<Class, Subgraph> keySubgraphs,
+	public JpaEntityGraph(String name, Map<Class, Subgraph> subgraphs, Map<Class, Subgraph> keySubgraphs,
 			boolean allAttributes, List<AttributeNode<?>> attributeNodes, Class<T> classType) {
 		super(name, subgraphs, keySubgraphs);
 		this.attributeNodes = attributeNodes;
@@ -56,7 +56,7 @@ public final class JPAEntityGraph<T> extends JPAAttributeNode<T> implements Enti
 		this.classType = classType;
 	}
 
-	public JPAEntityGraph(Class<T> rootType) {
+	public JpaEntityGraph(Class<T> rootType) {
 		super(null);
 		this.inmutable = false;
 		this.classType = rootType;
@@ -72,7 +72,7 @@ public final class JPAEntityGraph<T> extends JPAAttributeNode<T> implements Enti
 		Set<String> fieldSet = getDeclaredFields();
 		for (String attribute : attributeName) {
 			checkDeclaredField(fieldSet, attribute);
-			attributeNodes.add(new JPAAttributeNode<T>(attribute));
+			attributeNodes.add(new JpaAttributeNode<T>(attribute));
 		}
 	}
 
@@ -82,7 +82,7 @@ public final class JPAEntityGraph<T> extends JPAAttributeNode<T> implements Enti
 		for (Attribute<T, ?> attr : attributes) {
 			String attribute = attr.getName();
 			checkDeclaredField(fieldSet, attribute);
-			attributeNodes.add(new JPAAttributeNode<T>(attribute));
+			attributeNodes.add(new JpaAttributeNode<T>(attribute));
 		}
 	}
 
@@ -99,7 +99,7 @@ public final class JPAEntityGraph<T> extends JPAAttributeNode<T> implements Enti
 	}
 
 	public <X> Subgraph<X> addSubgraph(String attributeName, Class<X> type) {
-		return new JPAEntityGraph<X>(attributeName, type);
+		return new JpaEntityGraph<X>(attributeName, type);
 	}
 
 	public <X> Subgraph<X> addKeySubgraph(Attribute<T, X> attribute) {
@@ -150,7 +150,7 @@ public final class JPAEntityGraph<T> extends JPAAttributeNode<T> implements Enti
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAEntityGraph<?> other = (JPAEntityGraph<?>) obj;
+		JpaEntityGraph<?> other = (JpaEntityGraph<?>) obj;
 		if (inmutable != other.inmutable)
 			return false;
 		if (attributeNodes == null) {

@@ -49,7 +49,7 @@ import org.logicware.logging.LoggerUtils;
  */
 public abstract class JpaAbstractProvider extends AbstractWrapper implements PersistenceProvider {
 
-	protected final ProviderUtil providerUtil = new JPAProviderUtil();
+	protected final ProviderUtil providerUtil = new JpaProviderUtil();
 	protected final JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
 
 	protected static final String SECRET = "javax.persistence.jdbc.password";
@@ -95,7 +95,7 @@ public abstract class JpaAbstractProvider extends AbstractWrapper implements Per
 	public final EntityManagerFactory createContainerEntityManagerFactory(PersistenceUnitInfo info, Map map) {
 		DatabaseEngine database = createDatabaseEngine(info, map);
 		assert database != null;
-		return new JPAEntityManagerFactory(database);
+		return new JpaEntityManagerFactory(database);
 	}
 
 	public final void generateSchema(PersistenceUnitInfo info, Map map) {

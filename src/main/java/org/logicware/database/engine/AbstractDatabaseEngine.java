@@ -44,9 +44,9 @@ import org.logicware.database.Predicate;
 import org.logicware.database.Schema;
 import org.logicware.database.Settings;
 import org.logicware.database.container.AbstractContainer;
-import org.logicware.database.jpa.JPAEntityManager;
-import org.logicware.database.jpa.JPAEntityManagerFactory;
-import org.logicware.database.jpa.JPAResultSetMapping;
+import org.logicware.database.jpa.JpaEntityManager;
+import org.logicware.database.jpa.JpaEntityManagerFactory;
+import org.logicware.database.jpa.JpaResultSetMapping;
 import org.logicware.database.tools.Backup;
 import org.logicware.database.tools.Restore;
 import org.logicware.database.util.JavaReflect;
@@ -227,15 +227,15 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 		Map<String, Class<?>> entityMap = new HashMap<String, Class<?>>();
 
 		//
-		JPAEntityManagerFactory factory = new JPAEntityManagerFactory(this);
+		JpaEntityManagerFactory factory = new JpaEntityManagerFactory(this);
 
 		//
 		Map<String, EntityGraph<?>> namedEntityGraphs = new HashMap<String, EntityGraph<?>>();
 
 		// result set mappings for native queries result
-		Map<String, JPAResultSetMapping> resultSetMappings = new HashMap<String, JPAResultSetMapping>();
+		Map<String, JpaResultSetMapping> resultSetMappings = new HashMap<String, JpaResultSetMapping>();
 
-		return new JPAEntityManager(this, factory, SynchronizationType.SYNCHRONIZED, map, entityMap, namedQueries,
+		return new JpaEntityManager(this, factory, SynchronizationType.SYNCHRONIZED, map, entityMap, namedQueries,
 				namedEntityGraphs, resultSetMappings);
 	}
 

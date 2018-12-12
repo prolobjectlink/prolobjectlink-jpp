@@ -19,27 +19,27 @@
  */
 package org.logicware.database.jpa;
 
-import java.util.List;
+import javax.persistence.AttributeConverter;
 
-import javax.persistence.PersistenceUnitUtil;
+import org.logicware.database.ObjectConverter;
+import org.logicware.database.prolog.PrologObjectConverter;
+import org.logicware.prolog.PrologProvider;
+import org.logicware.prolog.PrologTerm;
 
-import org.logicware.database.DatabaseEngine;
+public final class JpaAttributeConverter implements AttributeConverter<Object, PrologTerm> {
 
-public abstract class JPAAbstractContainer {
+	private final ObjectConverter<PrologTerm> converter;
 
-	//
-	protected final DatabaseEngine database;
-
-	//
-	protected final PersistenceUnitUtil persistenceUnitUtil;
-
-	protected JPAAbstractContainer(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
-		this.persistenceUnitUtil = persistenceUnitUtil;
-		this.database = database;
+	public JpaAttributeConverter(PrologProvider provider) {
+		this.converter = new PrologObjectConverter(provider);
 	}
 
-	protected final <O> List<O> findAll(Class<O> clazz) {
-		return database.createQuery(clazz).getSolutions();
+	public PrologTerm convertToDatabaseColumn(Object attribute) {
+		return converter.toTerm(attribute);
+	}
+
+	public Object convertToEntityAttribute(PrologTerm dbData) {
+		return converter.toObject(dbData);
 	}
 
 }

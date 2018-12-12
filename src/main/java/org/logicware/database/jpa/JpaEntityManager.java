@@ -42,7 +42,7 @@ import javax.persistence.metamodel.Metamodel;
 
 import org.logicware.database.DatabaseEngine;
 
-public class JPAEntityManager extends JPAAbstractContainer implements EntityManager {
+public class JpaEntityManager extends JpaAbstractContainer implements EntityManager {
 
 	private boolean closed;
 
@@ -71,17 +71,17 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	private final Map<String, EntityGraph<?>> namedEntityGraphs;
 
 	// result set mappings for native queries result
-	private final Map<String, JPAResultSetMapping> resultSetMappings;
+	private final Map<String, JpaResultSetMapping> resultSetMappings;
 
 	//
 	private final EntityTransaction entityTransaction;
 
-	public JPAEntityManager(DatabaseEngine database, JPAEntityManagerFactory managerFactory,
+	public JpaEntityManager(DatabaseEngine database, JpaEntityManagerFactory managerFactory,
 			SynchronizationType synchronizationType, Map properties, Map<String, Class<?>> entityMap,
 			Map<String, Query> namedQueries, Map<String, EntityGraph<?>> namedEntityGraphs,
-			Map<String, JPAResultSetMapping> resultSetMappings) {
+			Map<String, JpaResultSetMapping> resultSetMappings) {
 		super(database, managerFactory.getPersistenceUnitUtil());
-		this.entityTransaction = new JPAEntityTransaction(database.getTransaction());
+		this.entityTransaction = new JpaEntityTransaction(database.getTransaction());
 		this.synchronizationType = synchronizationType;
 		this.namedEntityGraphs = namedEntityGraphs;
 		this.resultSetMappings = resultSetMappings;
@@ -244,23 +244,23 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	}
 
 	public Query createQuery(String qlString) {
-		return new JPAQuery(database, qlString);
+		return new JpaQuery(database, qlString);
 	}
 
 	public <T> TypedQuery<T> createQuery(CriteriaQuery<T> criteriaQuery) {
-		return new JPATypedQuery<T>(database, "" + criteriaQuery + "", criteriaQuery.getResultType());
+		return new JpaTypedQuery<T>(database, "" + criteriaQuery + "", criteriaQuery.getResultType());
 	}
 
 	public Query createQuery(CriteriaUpdate updateQuery) {
-		return new JPAQuery(database, "" + updateQuery + "");
+		return new JpaQuery(database, "" + updateQuery + "");
 	}
 
 	public Query createQuery(CriteriaDelete deleteQuery) {
-		return new JPAQuery(database, "" + deleteQuery + "");
+		return new JpaQuery(database, "" + deleteQuery + "");
 	}
 
 	public <T> TypedQuery<T> createQuery(String qlString, Class<T> resultClass) {
-		return new JPATypedQuery<T>(database, qlString, resultClass);
+		return new JpaTypedQuery<T>(database, qlString, resultClass);
 	}
 
 	public Query createNamedQuery(String name) {
@@ -268,22 +268,22 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	}
 
 	public <T> TypedQuery<T> createNamedQuery(String name, Class<T> resultClass) {
-		JPATypedQuery<T> query = namedQueries.get(name).unwrap(JPATypedQuery.class);
+		JpaTypedQuery<T> query = namedQueries.get(name).unwrap(JpaTypedQuery.class);
 		// query.resultClass[0] = resultClass;
 		return query;
 	}
 
 	public Query createNativeQuery(String sqlString) {
-		return new JPANativeQuery(database, sqlString);
+		return new JpaNativeQuery(database, sqlString);
 	}
 
 	public Query createNativeQuery(String sqlString, Class resultClass) {
-		return new JPANativeQuery(database, sqlString, resultClass);
+		return new JpaNativeQuery(database, sqlString, resultClass);
 	}
 
 	public Query createNativeQuery(String sqlString, String resultSetMapping) {
-		JPAResultSetMapping jpaResultSetMapping = resultSetMappings.get(resultSetMapping);
-		return new JPANativeQuery(database, sqlString, jpaResultSetMapping);
+		JpaResultSetMapping jpaResultSetMapping = resultSetMappings.get(resultSetMapping);
+		return new JpaNativeQuery(database, sqlString, jpaResultSetMapping);
 	}
 
 	public StoredProcedureQuery createNamedStoredProcedureQuery(String name) {
@@ -295,15 +295,15 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	}
 
 	public StoredProcedureQuery createStoredProcedureQuery(String procedureName) {
-		return new JPAStoredProcedureQuery(database, procedureName);
+		return new JpaStoredProcedureQuery(database, procedureName);
 	}
 
 	public StoredProcedureQuery createStoredProcedureQuery(String procedureName, Class... resultClasses) {
-		return new JPAStoredProcedureQuery(database, procedureName, resultClasses);
+		return new JpaStoredProcedureQuery(database, procedureName, resultClasses);
 	}
 
 	public StoredProcedureQuery createStoredProcedureQuery(String procedureName, String... resultSetMappings) {
-		return new JPAStoredProcedureQuery(database, procedureName, resultSetMappings);
+		return new JpaStoredProcedureQuery(database, procedureName, resultSetMappings);
 	}
 
 	public void joinTransaction() {
@@ -315,7 +315,7 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	}
 
 	public <T> T unwrap(Class<T> cls) {
-		if (cls.equals(JPAEntityManager.class)) {
+		if (cls.equals(JpaEntityManager.class)) {
 			return (T) this;
 		}
 		throw new PersistenceException("Impossible unwrap to " + cls.getName());
@@ -358,11 +358,11 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	}
 
 	public <T> EntityGraph<T> createEntityGraph(Class<T> rootType) {
-		return new JPAEntityGraph<T>(rootType);
+		return new JpaEntityGraph<T>(rootType);
 	}
 
 	public EntityGraph<?> createEntityGraph(String graphName) {
-		return new JPAEntityGraph<Object>(graphName);
+		return new JpaEntityGraph<Object>(graphName);
 	}
 
 	public EntityGraph<?> getEntityGraph(String graphName) {
@@ -372,8 +372,8 @@ public class JPAEntityManager extends JPAAbstractContainer implements EntityMana
 	public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> entityClass) {
 		List<EntityGraph<? super T>> graphs = new LinkedList<EntityGraph<? super T>>();
 		for (EntityGraph<?> entityGraph : namedEntityGraphs.values()) {
-			if (entityGraph instanceof JPAEntityGraph) {
-				JPAEntityGraph<T> logicEntityGraph = (JPAEntityGraph<T>) entityGraph;
+			if (entityGraph instanceof JpaEntityGraph) {
+				JpaEntityGraph<T> logicEntityGraph = (JpaEntityGraph<T>) entityGraph;
 				if (logicEntityGraph.getClassType().equals(entityClass)) {
 					graphs.add((EntityGraph<? super T>) logicEntityGraph);
 				}

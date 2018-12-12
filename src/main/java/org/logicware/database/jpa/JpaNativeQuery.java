@@ -31,13 +31,13 @@ import org.logicware.database.ObjectConverter;
 import org.logicware.database.util.JavaReflect;
 import org.logicware.prolog.PrologTerm;
 
-public final class JPANativeQuery extends JPAQuery implements Query {
+public final class JpaNativeQuery extends JpaQuery implements Query {
 
-	private JPAResultSetMapping resultSetMapping;
+	private JpaResultSetMapping resultSetMapping;
 
 	// TODO OPTIMIZE SAME CODE BLOCKS
 
-	public JPANativeQuery(DatabaseEngine database, String qlString) {
+	public JpaNativeQuery(DatabaseEngine database, String qlString) {
 		super(database, qlString);
 		ObjectConverter<PrologTerm> converter = database.getConverter();
 		PrologTerm[] prologTerms = converter.toTermsArray(qlString);
@@ -47,7 +47,7 @@ public final class JPANativeQuery extends JPAQuery implements Query {
 			Object result = i.next();
 			if (result instanceof Object[]) {
 				Object[] objects = (Object[]) result;
-				JPATuple tuple = new JPATuple(objects.length);
+				JpaTuple tuple = new JpaTuple(objects.length);
 				for (int j = 0; j < objects.length; j++) {
 					Class<?> clazz = classes.get(j);
 					Object object = objects[j];
@@ -56,7 +56,7 @@ public final class JPANativeQuery extends JPAQuery implements Query {
 						Class<?> javaType = fields[k].getType();
 						String alias = fields[k].getName();
 						Object value = JavaReflect.readValue(fields[k], object);
-						tuple.add(new JPATupleElement<Object>(alias, javaType, value));
+						tuple.add(new JpaTupleElement<Object>(alias, javaType, value));
 					}
 				}
 				tuples.add(tuple);
@@ -65,7 +65,7 @@ public final class JPANativeQuery extends JPAQuery implements Query {
 
 	}
 
-	public JPANativeQuery(DatabaseEngine database, String qlString, Class<?> resultClass) {
+	public JpaNativeQuery(DatabaseEngine database, String qlString, Class<?> resultClass) {
 		super(database, qlString, resultClass);
 		ObjectConverter<PrologTerm> converter = database.getConverter();
 		PrologTerm[] prologTerms = converter.toTermsArray(qlString);
@@ -74,11 +74,11 @@ public final class JPANativeQuery extends JPAQuery implements Query {
 		for (Iterator<?> i = solutions.iterator(); i.hasNext();) {
 			Object result = i.next();
 			Object[] objects = (Object[]) result;
-			JPATuple tuple = new JPATuple(objects.length);
+			JpaTuple tuple = new JpaTuple(objects.length);
 			for (int j = 0; j < objects.length; j++) {
 				if (resultClass.isInstance(objects[j])) {
 					Object object = objects[j];
-					tuple.add(new JPATupleElement<Object>("", resultClass, object));
+					tuple.add(new JpaTupleElement<Object>("", resultClass, object));
 				}
 			}
 			tuples.add(tuple);
@@ -86,7 +86,7 @@ public final class JPANativeQuery extends JPAQuery implements Query {
 
 	}
 
-	public JPANativeQuery(DatabaseEngine database, String qlString, JPAResultSetMapping resultSetMapping) {
+	public JpaNativeQuery(DatabaseEngine database, String qlString, JpaResultSetMapping resultSetMapping) {
 		super(database, qlString);
 		this.resultSetMapping = resultSetMapping;
 		ObjectConverter<PrologTerm> converter = database.getConverter();
@@ -96,7 +96,7 @@ public final class JPANativeQuery extends JPAQuery implements Query {
 		for (Iterator<?> i = solutions.iterator(); i.hasNext();) {
 			Object result = i.next();
 			Object[] objects = (Object[]) result;
-			JPATuple tuple = new JPATuple(objects.length);
+			JpaTuple tuple = new JpaTuple(objects.length);
 			for (int j = 0; j < objects.length; j++) {
 				System.out.println(Arrays.toString(objects));
 			}

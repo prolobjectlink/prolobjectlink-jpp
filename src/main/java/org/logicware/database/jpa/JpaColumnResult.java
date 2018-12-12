@@ -19,12 +19,12 @@
  */
 package org.logicware.database.jpa;
 
-public final class JPAColumnResult {
+public final class JpaColumnResult {
 
 	private final String name;
 	private final Class<?> type;
 
-	public JPAColumnResult(String name, Class<?> type) {
+	public JpaColumnResult(String name, Class<?> type) {
 		this.name = name;
 		this.type = type;
 	}
@@ -54,7 +54,7 @@ public final class JPAColumnResult {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAColumnResult other = (JPAColumnResult) obj;
+		JpaColumnResult other = (JpaColumnResult) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

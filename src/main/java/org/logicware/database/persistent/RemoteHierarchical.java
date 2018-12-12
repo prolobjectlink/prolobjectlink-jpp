@@ -33,7 +33,7 @@ import org.logicware.database.Protocol;
 import org.logicware.database.RemoteDatabase;
 import org.logicware.database.Schema;
 import org.logicware.database.Settings;
-import org.logicware.database.jpa.JPAProperties;
+import org.logicware.database.jpa.JpaProperties;
 import org.logicware.database.jpa.spi.JPAPersistenceXmlParser;
 import org.logicware.database.memory.MemoryHierarchical;
 import org.logicware.database.util.JavaReflect;
@@ -59,11 +59,11 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 			for (PersistenceUnitInfo unit : m.values()) {
 				String unitName = unit.getPersistenceUnitName();
 				if (unitName.equals(name)) {
-					Settings settings = new Settings(unit.getProperties().getProperty(JPAProperties.DRIVER));
+					Settings settings = new Settings(unit.getProperties().getProperty(JpaProperties.DRIVER));
 					URL url = null;
 					try {
 						System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
-						url = new URL(unit.getProperties().getProperty(JPAProperties.URL).replace(URL_PREFIX, ""));
+						url = new URL(unit.getProperties().getProperty(JpaProperties.URL).replace(URL_PREFIX, ""));
 						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
 							throw new MalformedURLException("The URL path don't have database name at the end");
 						}
@@ -73,8 +73,8 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 
 					assert url != null;
 
-					String password = unit.getProperties().getProperty(JPAProperties.PASSWORD);
-					String user = unit.getProperties().getProperty(JPAProperties.USER);
+					String password = unit.getProperties().getProperty(JpaProperties.PASSWORD);
+					String user = unit.getProperties().getProperty(JpaProperties.USER);
 					DatabaseUser owner = new DatabaseUser(user, password);
 					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
 					for (String managedClass : unit.getManagedClassNames()) {
@@ -94,11 +94,11 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 	public static final RemoteDatabase newInstance(PersistenceUnitInfo unit, Map<?, ?> map) {
 		if (remoteHierarchicalDatabase == null) {
 			String name = unit.getPersistenceUnitName();
-			Settings settings = new Settings(unit.getProperties().getProperty(JPAProperties.DRIVER));
+			Settings settings = new Settings(unit.getProperties().getProperty(JpaProperties.DRIVER));
 			URL url = null;
 			try {
 				System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
-				url = new URL(unit.getProperties().getProperty(JPAProperties.URL).replace(URL_PREFIX, ""));
+				url = new URL(unit.getProperties().getProperty(JpaProperties.URL).replace(URL_PREFIX, ""));
 				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
 					throw new MalformedURLException("The URL path don't have database name at the end");
 				}
@@ -108,8 +108,8 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 
 			assert url != null;
 
-			String password = unit.getProperties().getProperty(JPAProperties.PASSWORD);
-			String user = unit.getProperties().getProperty(JPAProperties.USER);
+			String password = unit.getProperties().getProperty(JpaProperties.PASSWORD);
+			String user = unit.getProperties().getProperty(JpaProperties.USER);
 			DatabaseUser owner = new DatabaseUser(user, password);
 			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
 			for (String managedClass : unit.getManagedClassNames()) {

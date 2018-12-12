@@ -21,39 +21,39 @@ package org.logicware.database.jpa;
 
 import java.util.Arrays;
 
-public final class JPAResultSetMapping {
+public final class JpaResultSetMapping {
 
 	private final String name;
-	private final JPAEntityResult[] entities;
+	private final JpaEntityResult[] entities;
 
-	private JPAConstructorResult[] classes;
-	private JPAColumnResult[] columns;
+	private JpaConstructorResult[] classes;
+	private JpaColumnResult[] columns;
 
-	public JPAResultSetMapping(String name, JPAEntityResult[] entities) {
-		this(name, entities, new JPAConstructorResult[0], new JPAColumnResult[0]);
+	public JpaResultSetMapping(String name, JpaEntityResult[] entities) {
+		this(name, entities, new JpaConstructorResult[0], new JpaColumnResult[0]);
 	}
 
-	public JPAResultSetMapping(String name, JPAEntityResult[] entities, JPAConstructorResult[] classes,
-			JPAColumnResult[] columns) {
+	public JpaResultSetMapping(String name, JpaEntityResult[] entities, JpaConstructorResult[] classes,
+			JpaColumnResult[] columns) {
 		this.name = name;
 		this.entities = entities;
 		this.classes = classes;
 		this.columns = columns;
 	}
 
-	public JPAConstructorResult[] getClasses() {
+	public JpaConstructorResult[] getClasses() {
 		return classes;
 	}
 
-	public void setClasses(JPAConstructorResult[] classes) {
+	public void setClasses(JpaConstructorResult[] classes) {
 		this.classes = classes;
 	}
 
-	public JPAColumnResult[] getColumns() {
+	public JpaColumnResult[] getColumns() {
 		return columns;
 	}
 
-	public void setColumns(JPAColumnResult[] columns) {
+	public void setColumns(JpaColumnResult[] columns) {
 		this.columns = columns;
 	}
 
@@ -61,7 +61,7 @@ public final class JPAResultSetMapping {
 		return name;
 	}
 
-	public JPAEntityResult[] getEntities() {
+	public JpaEntityResult[] getEntities() {
 		return entities;
 	}
 
@@ -84,7 +84,7 @@ public final class JPAResultSetMapping {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAResultSetMapping other = (JPAResultSetMapping) obj;
+		JpaResultSetMapping other = (JpaResultSetMapping) obj;
 		if (!Arrays.equals(classes, other.classes))
 			return false;
 		if (!Arrays.equals(columns, other.columns))

@@ -23,11 +23,11 @@ import javax.persistence.EntityTransaction;
 
 import org.logicware.database.Transaction;
 
-public final class JPAEntityTransaction implements EntityTransaction {
+public final class JpaEntityTransaction implements EntityTransaction {
 
 	private final Transaction tx;
 
-	public JPAEntityTransaction(Transaction tx) {
+	public JpaEntityTransaction(Transaction tx) {
 		this.tx = tx;
 	}
 

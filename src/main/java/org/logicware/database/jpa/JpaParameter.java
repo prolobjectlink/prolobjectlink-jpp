@@ -22,7 +22,7 @@ package org.logicware.database.jpa;
 import javax.persistence.Parameter;
 import javax.persistence.ParameterMode;
 
-public final class JPAParameter<T> implements Parameter<T> {
+public final class JpaParameter<T> implements Parameter<T> {
 
 	private Object value;
 	private final String name;
@@ -30,19 +30,19 @@ public final class JPAParameter<T> implements Parameter<T> {
 	private final Class<T> parameterType;
 	private final ParameterMode parameterMode;
 
-	public JPAParameter(String name, Integer position, Class<T> parameterType) {
+	public JpaParameter(String name, Integer position, Class<T> parameterType) {
 		this(name, position, parameterType, ParameterMode.INOUT, null);
 	}
 
-	public JPAParameter(String name, Integer position, Class<T> parameterType, Object value) {
+	public JpaParameter(String name, Integer position, Class<T> parameterType, Object value) {
 		this(name, position, parameterType, ParameterMode.INOUT, value);
 	}
 
-	public JPAParameter(String name, Integer position, Class<T> parameterType, ParameterMode parameterMode) {
+	public JpaParameter(String name, Integer position, Class<T> parameterType, ParameterMode parameterMode) {
 		this(name, position, parameterType, parameterMode, null);
 	}
 
-	public JPAParameter(String name, Integer position, Class<T> parameterType, ParameterMode parameterMode,
+	public JpaParameter(String name, Integer position, Class<T> parameterType, ParameterMode parameterMode,
 			Object value) {
 		this.name = name;
 		this.value = value;
@@ -101,7 +101,7 @@ public final class JPAParameter<T> implements Parameter<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAParameter<?> other = (JPAParameter<?>) obj;
+		JpaParameter<?> other = (JpaParameter<?>) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

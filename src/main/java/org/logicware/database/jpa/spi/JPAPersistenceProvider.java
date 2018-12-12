@@ -61,20 +61,20 @@ import org.logicware.database.DatabaseEngine;
 import org.logicware.database.DatabaseUser;
 import org.logicware.database.ObjectConverter;
 import org.logicware.database.Settings;
-import org.logicware.database.jpa.JPAAttributeNode;
-import org.logicware.database.jpa.JPAColumnResult;
-import org.logicware.database.jpa.JPAConstructorResult;
-import org.logicware.database.jpa.JPAEntityGraph;
-import org.logicware.database.jpa.JPAEntityManagerFactory;
-import org.logicware.database.jpa.JPAEntityResult;
-import org.logicware.database.jpa.JPAFieldResult;
-import org.logicware.database.jpa.JPANativeQuery;
-import org.logicware.database.jpa.JPAParameter;
-import org.logicware.database.jpa.JPAProperties;
-import org.logicware.database.jpa.JPAProviderUtil;
-import org.logicware.database.jpa.JPAQuery;
-import org.logicware.database.jpa.JPAResultSetMapping;
-import org.logicware.database.jpa.JPAStoredProcedureQuery;
+import org.logicware.database.jpa.JpaAttributeNode;
+import org.logicware.database.jpa.JpaColumnResult;
+import org.logicware.database.jpa.JpaConstructorResult;
+import org.logicware.database.jpa.JpaEntityGraph;
+import org.logicware.database.jpa.JpaEntityManagerFactory;
+import org.logicware.database.jpa.JpaEntityResult;
+import org.logicware.database.jpa.JpaFieldResult;
+import org.logicware.database.jpa.JpaNativeQuery;
+import org.logicware.database.jpa.JpaParameter;
+import org.logicware.database.jpa.JpaProperties;
+import org.logicware.database.jpa.JpaProviderUtil;
+import org.logicware.database.jpa.JpaQuery;
+import org.logicware.database.jpa.JpaResultSetMapping;
+import org.logicware.database.jpa.JpaStoredProcedureQuery;
 import org.logicware.database.prolog.PrologObjectConverter;
 import org.logicware.database.util.JavaReflect;
 import org.logicware.prolog.PrologEngine;
@@ -86,7 +86,7 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 	public static final String URL_PREFIX = "jdbc:prolobjectlink:store:";
 	public static final String JPI_PROVIDER_PROPERTY = "org.logicware.jpi.provider";
 	public static final String JPD_DRIVER_PROPERTY = "org.logicware.jpd.driver";
-	private static final ProviderUtil PROVIDER_UTIL = new JPAProviderUtil();
+	private static final ProviderUtil PROVIDER_UTIL = new JpaProviderUtil();
 
 	private final Map<String, PersistenceUnitInfo> persistenceUnits;
 	private DatabaseEngine database;
@@ -105,7 +105,7 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 
 		assert info != null;
 
-		JPAProperties properties = (JPAProperties) info.getProperties();
+		JpaProperties properties = (JpaProperties) info.getProperties();
 
 		if (map != null && !map.isEmpty()) {
 			properties.putAll(map);
@@ -113,10 +113,10 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 
 		// retrieving persistence unit properties
 		// String provider = properties.getPersistenceProviderClassName();
-		String driver = String.valueOf(properties.get(JPAProperties.DRIVER));
-		String url = String.valueOf(properties.get(JPAProperties.URL)).replace(URL_PREFIX, "");
-		String username = String.valueOf(properties.get(JPAProperties.USER));
-		String password = String.valueOf(properties.get(JPAProperties.PASSWORD));
+		String driver = String.valueOf(properties.get(JpaProperties.DRIVER));
+		String url = String.valueOf(properties.get(JpaProperties.URL)).replace(URL_PREFIX, "");
+		String username = String.valueOf(properties.get(JpaProperties.USER));
+		String password = String.valueOf(properties.get(JpaProperties.PASSWORD));
 		PrologProvider prologProvider = createJavaPrologIntefaceProvider();
 		Class<?> objectDriverClass = JavaReflect.classForName(driver);
 		DatabaseUser user = new DatabaseUser(username, password);
@@ -124,7 +124,7 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 		database = createDatabase(info.getPersistenceProviderClassName(), info.getPersistenceUnitName(),
 				new Settings(driver), url, user);
 
-		EntityManagerFactory managerFactory = new JPAEntityManagerFactory(database);
+		EntityManagerFactory managerFactory = new JpaEntityManagerFactory(database);
 
 		List<String> managedClasNames = info.getManagedClassNames();
 		for (String className : managedClasNames) {
@@ -164,9 +164,9 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 		if (clazz.isAnnotationPresent(Entity.class)) {
 			String name = clazz.getAnnotation(Entity.class).name();
 			if (name != null && !name.isEmpty()) {
-				managerFactory.unwrap(JPAEntityManagerFactory.class).addEntity(name, clazz);
+				managerFactory.unwrap(JpaEntityManagerFactory.class).addEntity(name, clazz);
 			} else {
-				managerFactory.unwrap(JPAEntityManagerFactory.class).addEntity(clazz.getSimpleName(), clazz);
+				managerFactory.unwrap(JpaEntityManagerFactory.class).addEntity(clazz.getSimpleName(), clazz);
 			}
 		}
 	}
@@ -240,7 +240,7 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 		String name = namedQuery.name();
 		String qlString = namedQuery.query();
 		LockModeType lockModeType = namedQuery.lockMode();
-		Query query = new JPAQuery(database, qlString);
+		Query query = new JpaQuery(database, qlString);
 		QueryHint[] hints = namedQuery.hints();
 		for (QueryHint queryHint : hints) {
 			query.setHint(queryHint.name(), queryHint.value());
@@ -254,7 +254,7 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 		String query = namedQuery.query();
 		Class<?> resultClass = namedQuery.resultClass();
 		String resultSetMapping = namedQuery.resultSetMapping();
-		Query typedQuery = new JPANativeQuery(database, query, resultClass);
+		Query typedQuery = new JpaNativeQuery(database, query, resultClass);
 		QueryHint[] hints = namedQuery.hints();
 		for (QueryHint queryHint : hints) {
 			typedQuery.setHint(queryHint.name(), queryHint.value());
@@ -270,53 +270,53 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 		ColumnResult[] columns = resultSetMapping.columns();
 
 		// entities
-		JPAEntityResult[] entityResults = new JPAEntityResult[entities.length];
+		JpaEntityResult[] entityResults = new JpaEntityResult[entities.length];
 		for (int i = 0; i < entities.length; i++) {
 			EntityResult entityResult = entities[i];
 			Class<?> entityClass = entityResult.entityClass();
 			FieldResult[] fields = entityResult.fields();
-			JPAFieldResult[] fieldResults = new JPAFieldResult[fields.length];
+			JpaFieldResult[] fieldResults = new JpaFieldResult[fields.length];
 			for (int j = 0; j < fields.length; j++) {
 				FieldResult fieldResult = fields[j];
 				String fname = fieldResult.name();
 				String column = fieldResult.column();
-				JPAFieldResult result = new JPAFieldResult(fname, column);
+				JpaFieldResult result = new JpaFieldResult(fname, column);
 				fieldResults[j] = result;
 			}
-			JPAEntityResult result = new JPAEntityResult(entityClass, fieldResults, "");
+			JpaEntityResult result = new JpaEntityResult(entityClass, fieldResults, "");
 			entityResults[i] = result;
 		}
 
 		// constructors
-		JPAConstructorResult[] classesResults = new JPAConstructorResult[classes.length];
+		JpaConstructorResult[] classesResults = new JpaConstructorResult[classes.length];
 		for (int i = 0; i < classes.length; i++) {
 			ConstructorResult classResult = classes[i];
 			Class<?> targetClass = classResult.targetClass();
 			ColumnResult[] columnResults = classResult.columns();
-			JPAColumnResult[] jpaColumnResults = new JPAColumnResult[columnResults.length];
+			JpaColumnResult[] jpaColumnResults = new JpaColumnResult[columnResults.length];
 			for (int j = 0; j < columnResults.length; j++) {
 				ColumnResult columnResult = columnResults[j];
 				String columnName = columnResult.name();
 				Class<?> type = columnResult.type();
-				JPAColumnResult result = new JPAColumnResult(columnName, type);
+				JpaColumnResult result = new JpaColumnResult(columnName, type);
 				jpaColumnResults[j] = result;
 			}
-			JPAConstructorResult constructorResult = new JPAConstructorResult(targetClass, jpaColumnResults);
+			JpaConstructorResult constructorResult = new JpaConstructorResult(targetClass, jpaColumnResults);
 			classesResults[i] = constructorResult;
 		}
 
 		// columns
-		JPAColumnResult[] jpaColumnResults = new JPAColumnResult[columns.length];
+		JpaColumnResult[] jpaColumnResults = new JpaColumnResult[columns.length];
 		for (int j = 0; j < columns.length; j++) {
 			ColumnResult columnResult = columns[j];
 			String columnName = columnResult.name();
 			Class<?> type = columnResult.type();
-			JPAColumnResult result = new JPAColumnResult(columnName, type);
+			JpaColumnResult result = new JpaColumnResult(columnName, type);
 			jpaColumnResults[j] = result;
 		}
 
-		JPAResultSetMapping mapping = new JPAResultSetMapping(name, entityResults, classesResults, jpaColumnResults);
-		managerFactory.unwrap(JPAEntityManagerFactory.class).addResultSetMapping(mapping);
+		JpaResultSetMapping mapping = new JpaResultSetMapping(name, entityResults, classesResults, jpaColumnResults);
+		managerFactory.unwrap(JpaEntityManagerFactory.class).addResultSetMapping(mapping);
 	}
 
 	private void addNamedEntityGraph(EntityManagerFactory managerFactory, PrologProvider provider, String url,
@@ -330,16 +330,16 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 		List<AttributeNode<?>> attributeNodes = new ArrayList<AttributeNode<?>>(nodes.length);
 		for (NamedAttributeNode namedAttributeNode : nodes) {
 			// TODO SUBGRAPH AND KEYSUBGRAPH
-			AttributeNode<?> attributeNode = new JPAAttributeNode(namedAttributeNode.value());
+			AttributeNode<?> attributeNode = new JpaAttributeNode(namedAttributeNode.value());
 			attributeNodes.add(attributeNode);
 		}
 
-		Map<Class, JPAEntityGraph> subgraphs = new HashMap<Class, JPAEntityGraph>();
-		Map<Class, JPAEntityGraph> subclassSubgraphs = new HashMap<Class, JPAEntityGraph>();
+		Map<Class, JpaEntityGraph> subgraphs = new HashMap<Class, JpaEntityGraph>();
+		Map<Class, JpaEntityGraph> subclassSubgraphs = new HashMap<Class, JpaEntityGraph>();
 
 		// TODO FILL THIS GRAPHS
 
-		JPAEntityGraph<?> entityGraph = new JPAEntityGraph(name, subgraphs, subclassSubgraphs, allAttributes,
+		JpaEntityGraph<?> entityGraph = new JpaEntityGraph(name, subgraphs, subclassSubgraphs, allAttributes,
 				attributeNodes, clazz);
 
 		managerFactory.addNamedEntityGraph(name, entityGraph);
@@ -354,7 +354,7 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 		String[] resultSetMappings = namedStoredProcedureQuery.resultSetMappings();
 		ObjectConverter<PrologTerm> factory = new PrologObjectConverter(provider);
 		PrologEngine engine = provider.newEngine();
-		StoredProcedureQuery storedProcedureQuery = new JPAStoredProcedureQuery(database, procedureName, resultClasses,
+		StoredProcedureQuery storedProcedureQuery = new JpaStoredProcedureQuery(database, procedureName, resultClasses,
 				resultSetMappings);
 
 		QueryHint[] queryHints = namedStoredProcedureQuery.hints();
@@ -368,7 +368,7 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 			String parameterName = storedProcedureParameter.name();
 			ParameterMode parameterMode = storedProcedureParameter.mode();
 			Class<?> parameterType = storedProcedureParameter.type();
-			Parameter<?> parameter = new JPAParameter(parameterName, i, parameterType);
+			Parameter<?> parameter = new JpaParameter(parameterName, i, parameterType);
 			storedProcedureQuery.setParameter(parameter, null);
 		}
 

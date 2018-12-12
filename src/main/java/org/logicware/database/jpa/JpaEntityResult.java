@@ -21,27 +21,27 @@ package org.logicware.database.jpa;
 
 import java.util.Arrays;
 
-public final class JPAEntityResult {
+public final class JpaEntityResult {
 
 	private final Class<?> entityClass;
-	private JPAFieldResult[] fieldResults;
+	private JpaFieldResult[] fieldResults;
 	private String discriminatorColumn;
 
-	public JPAEntityResult(Class<?> entityClass) {
-		this(entityClass, new JPAFieldResult[0], "");
+	public JpaEntityResult(Class<?> entityClass) {
+		this(entityClass, new JpaFieldResult[0], "");
 	}
 
-	public JPAEntityResult(Class<?> entityClass, JPAFieldResult[] fieldResults, String discriminatorColumn) {
+	public JpaEntityResult(Class<?> entityClass, JpaFieldResult[] fieldResults, String discriminatorColumn) {
 		this.entityClass = entityClass;
 		this.fieldResults = fieldResults;
 		this.discriminatorColumn = discriminatorColumn;
 	}
 
-	public JPAFieldResult[] getFieldResults() {
+	public JpaFieldResult[] getFieldResults() {
 		return fieldResults;
 	}
 
-	public void setFieldResults(JPAFieldResult[] fieldResults) {
+	public void setFieldResults(JpaFieldResult[] fieldResults) {
 		this.fieldResults = fieldResults;
 	}
 
@@ -75,7 +75,7 @@ public final class JPAEntityResult {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPAEntityResult other = (JPAEntityResult) obj;
+		JpaEntityResult other = (JpaEntityResult) obj;
 		if (discriminatorColumn == null) {
 			if (other.discriminatorColumn != null)
 				return false;

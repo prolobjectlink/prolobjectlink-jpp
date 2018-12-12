@@ -31,9 +31,9 @@ import javax.persistence.TypedQuery;
 
 import org.logicware.database.DatabaseEngine;
 
-public class JPATypedQuery<X> extends JPAQuery implements TypedQuery<X> {
+public class JpaTypedQuery<X> extends JpaQuery implements TypedQuery<X> {
 
-	JPATypedQuery(DatabaseEngine database, String qlString, Class<X> resultClass) {
+	JpaTypedQuery(DatabaseEngine database, String qlString, Class<X> resultClass) {
 		super(database, qlString, resultClass);
 	}
 

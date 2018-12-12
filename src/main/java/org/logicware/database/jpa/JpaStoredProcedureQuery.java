@@ -33,25 +33,25 @@ import javax.persistence.TemporalType;
 import org.logicware.database.DatabaseEngine;
 import org.logicware.database.ProcedureQuery;
 
-public final class JPAStoredProcedureQuery extends JPAQuery implements StoredProcedureQuery {
+public final class JpaStoredProcedureQuery extends JpaQuery implements StoredProcedureQuery {
 
 	private boolean hasMoreResult;
 	private final String procedureName;
 	private final String[] resultSetMappings;
 
-	public JPAStoredProcedureQuery(DatabaseEngine database, String procedureName) {
+	public JpaStoredProcedureQuery(DatabaseEngine database, String procedureName) {
 		this(database, procedureName, new Class<?>[] { Object[].class }, null);
 	}
 
-	public JPAStoredProcedureQuery(DatabaseEngine database, String procedureName, Class<?>[] resultClasses) {
+	public JpaStoredProcedureQuery(DatabaseEngine database, String procedureName, Class<?>[] resultClasses) {
 		this(database, procedureName, resultClasses, null);
 	}
 
-	public JPAStoredProcedureQuery(DatabaseEngine database, String procedureName, String[] resultSetMappings) {
+	public JpaStoredProcedureQuery(DatabaseEngine database, String procedureName, String[] resultSetMappings) {
 		this(database, procedureName, new Class<?>[] { Object[].class }, resultSetMappings);
 	}
 
-	public JPAStoredProcedureQuery(DatabaseEngine database, String procedureName, Class<?>[] resultClasses,
+	public JpaStoredProcedureQuery(DatabaseEngine database, String procedureName, Class<?>[] resultClasses,
 			String[] resultSetMappings) {
 		super(database, procedureName, resultClasses);
 		this.procedureName = procedureName;
@@ -59,13 +59,13 @@ public final class JPAStoredProcedureQuery extends JPAQuery implements StoredPro
 	}
 
 	public StoredProcedureQuery registerStoredProcedureParameter(int position, Class type, ParameterMode mode) {
-		Parameter<?> parameter = new JPAParameter(WILD_CARD + String.valueOf(position), position, type, mode);
+		Parameter<?> parameter = new JpaParameter(WILD_CARD + String.valueOf(position), position, type, mode);
 		setParameter(parameter, null);
 		return this;
 	}
 
 	public StoredProcedureQuery registerStoredProcedureParameter(String parameterName, Class type, ParameterMode mode) {
-		Parameter<?> parameter = new JPAParameter(parameterName, parameterPosition++, type, mode);
+		Parameter<?> parameter = new JpaParameter(parameterName, parameterPosition++, type, mode);
 		setParameter(parameter, null);
 		return this;
 	}
@@ -77,8 +77,8 @@ public final class JPAStoredProcedureQuery extends JPAQuery implements StoredPro
 
 	public Object getOutputParameterValue(String parameterName) {
 		Parameter<?> parameter = getParameter(parameterName);
-		if (parameter instanceof JPAParameter) {
-			JPAParameter<?> logicParameter = (JPAParameter<?>) parameter;
+		if (parameter instanceof JpaParameter) {
+			JpaParameter<?> logicParameter = (JpaParameter<?>) parameter;
 			ParameterMode mode = logicParameter.getParameterMode();
 			if (mode == ParameterMode.INOUT || mode == ParameterMode.OUT) {
 				return getParameterValue(parameterName);
@@ -105,9 +105,9 @@ public final class JPAStoredProcedureQuery extends JPAQuery implements StoredPro
 		for (int i = 0; i < parametersNumber; i++) {
 			String parameterName = parameters.get(i).getName();
 			Parameter<?> parameter = getParameter(parameterName);
-			if (parameter instanceof JPAParameter) {
+			if (parameter instanceof JpaParameter) {
 				Object parameterValue = dbProcedureQuery.getArgumentValue(parameterName);
-				JPAParameter<?> logicParameter = (JPAParameter<?>) parameter;
+				JpaParameter<?> logicParameter = (JpaParameter<?>) parameter;
 				logicParameter.setValue(parameterValue);
 			}
 		}
@@ -117,18 +117,18 @@ public final class JPAStoredProcedureQuery extends JPAQuery implements StoredPro
 			Object result = e.next();
 			if (result instanceof Object[]) {
 				Object[] objects = (Object[]) result;
-				JPATuple tuple = new JPATuple(objects.length);
+				JpaTuple tuple = new JpaTuple(objects.length);
 
 				// loop to fill each result tuple
 				for (int i = 0; i < objects.length; i++) {
 					Parameter<?> parameter = parameters.get(i);
-					if (parameter instanceof JPAParameter) {
-						JPAParameter<?> logicParameter = (JPAParameter<?>) parameter;
+					if (parameter instanceof JpaParameter) {
+						JpaParameter<?> logicParameter = (JpaParameter<?>) parameter;
 						ParameterMode mode = logicParameter.getParameterMode();
 						if (mode == ParameterMode.INOUT || mode == ParameterMode.OUT) {
 							String parameterName = logicParameter.getName();
 							Object parameterValue = dbProcedureQuery.getArgumentValue(parameterName);
-							JPATupleElement<?> element = new JPATupleElement(parameterName, Object.class,
+							JpaTupleElement<?> element = new JpaTupleElement(parameterName, Object.class,
 									parameterValue);
 							tuple.add(element);
 						}
@@ -151,8 +151,8 @@ public final class JPAStoredProcedureQuery extends JPAQuery implements StoredPro
 	}
 
 	public <T> StoredProcedureQuery setParameter(Parameter<T> param, T value) {
-		if (param instanceof JPAParameter) {
-			JPAParameter<T> parameter = (JPAParameter<T>) param;
+		if (param instanceof JpaParameter) {
+			JpaParameter<T> parameter = (JpaParameter<T>) param;
 			parameter.setValue(value);
 			parameters.add(param);
 		}
@@ -169,7 +169,7 @@ public final class JPAStoredProcedureQuery extends JPAQuery implements StoredPro
 
 	public StoredProcedureQuery setParameter(String name, Object value) {
 		Class<?> valueType = value != null ? value.getClass() : null;
-		parameters.add(new JPAParameter(name, parameterPosition++, valueType, value));
+		parameters.add(new JpaParameter(name, parameterPosition++, valueType, value));
 		return this;
 	}
 
@@ -184,7 +184,7 @@ public final class JPAStoredProcedureQuery extends JPAQuery implements StoredPro
 	public StoredProcedureQuery setParameter(int position, Object value) {
 		String name = WILD_CARD + String.valueOf(position);
 		Class<?> valueType = value != null ? value.getClass() : null;
-		parameters.add(new JPAParameter(name, position, valueType));
+		parameters.add(new JpaParameter(name, position, valueType));
 		return this;
 	}
 

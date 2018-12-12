@@ -28,19 +28,19 @@ import java.util.List;
 import javax.persistence.Tuple;
 import javax.persistence.TupleElement;
 
-public final class JPATuple extends AbstractCollection<TupleElement<?>> implements Tuple, Collection<TupleElement<?>> {
+public final class JpaTuple extends AbstractCollection<TupleElement<?>> implements Tuple, Collection<TupleElement<?>> {
 
 	private final List<TupleElement<?>> elements;
 
-	public JPATuple() {
+	public JpaTuple() {
 		this(new ArrayList<TupleElement<?>>());
 	}
 
-	public JPATuple(int length) {
+	public JpaTuple(int length) {
 		this(new ArrayList<TupleElement<?>>(length));
 	}
 
-	public JPATuple(List<TupleElement<?>> elements) {
+	public JpaTuple(List<TupleElement<?>> elements) {
 		this.elements = elements;
 	}
 
@@ -52,8 +52,8 @@ public final class JPATuple extends AbstractCollection<TupleElement<?>> implemen
 	public <X> X get(TupleElement<X> tupleElement) {
 		if (tupleElement != null) {
 			for (TupleElement<?> element : elements) {
-				if (element.equals(tupleElement) && element instanceof JPATupleElement) {
-					JPATupleElement<X> logicTupleElement = (JPATupleElement<X>) element;
+				if (element.equals(tupleElement) && element instanceof JpaTupleElement) {
+					JpaTupleElement<X> logicTupleElement = (JpaTupleElement<X>) element;
 					return logicTupleElement.getValue();
 				}
 			}
@@ -62,14 +62,14 @@ public final class JPATuple extends AbstractCollection<TupleElement<?>> implemen
 	}
 
 	public <X> X get(String alias, Class<X> type) {
-		return get(new JPATupleElement<X>(alias, type));
+		return get(new JpaTupleElement<X>(alias, type));
 	}
 
 	public Object get(String alias) {
 		if (alias != null) {
 			for (TupleElement<?> element : elements) {
-				if (element.getAlias().equals(alias) && element instanceof JPATupleElement) {
-					JPATupleElement<?> logicTupleElement = (JPATupleElement<?>) element;
+				if (element.getAlias().equals(alias) && element instanceof JpaTupleElement) {
+					JpaTupleElement<?> logicTupleElement = (JpaTupleElement<?>) element;
 					return logicTupleElement.getValue();
 				}
 			}
@@ -101,8 +101,8 @@ public final class JPATuple extends AbstractCollection<TupleElement<?>> implemen
 		Object[] values = new Object[size];
 		for (int i = 0; i < values.length; i++) {
 			TupleElement<?> tupleElement = elements.get(i);
-			if (tupleElement instanceof JPATupleElement) {
-				JPATupleElement<?> logicTupleElement = (JPATupleElement<?>) tupleElement;
+			if (tupleElement instanceof JpaTupleElement) {
+				JpaTupleElement<?> logicTupleElement = (JpaTupleElement<?>) tupleElement;
 				values[i] = logicTupleElement.getValue();
 			}
 		}

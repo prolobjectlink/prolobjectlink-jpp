@@ -23,17 +23,17 @@ import javax.persistence.TupleElement;
 
 import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
 
-public class JPATupleElement<X> extends JpaAbstractWrapper implements TupleElement<X> {
+public class JpaTupleElement<X> extends JpaAbstractWrapper implements TupleElement<X> {
 
 	protected String alias;
 	protected final X value;
 	protected final Class<? extends X> javaType;
 
-	public JPATupleElement(String alias, Class<? extends X> javaType) {
+	public JpaTupleElement(String alias, Class<? extends X> javaType) {
 		this(alias, javaType, null);
 	}
 
-	public JPATupleElement(String alias, Class<? extends X> javaType, X value) {
+	public JpaTupleElement(String alias, Class<? extends X> javaType, X value) {
 		this.javaType = javaType;
 		this.value = value;
 		this.alias = alias;
@@ -73,7 +73,7 @@ public class JPATupleElement<X> extends JpaAbstractWrapper implements TupleEleme
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JPATupleElement<?> other = (JPATupleElement<?>) obj;
+		JpaTupleElement<?> other = (JpaTupleElement<?>) obj;
 		if (alias == null) {
 			if (other.alias != null)
 				return false;

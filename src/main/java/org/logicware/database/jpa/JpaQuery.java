@@ -45,7 +45,7 @@ import org.logicware.database.DatabaseEngine;
  * @author Jose Zalacain
  * 
  */
-public class JPAQuery implements Query {
+public class JpaQuery implements Query {
 
 	/** Fix the first position of result */
 	protected int firstResult = 0;
@@ -71,15 +71,15 @@ public class JPAQuery implements Query {
 
 	protected final DatabaseEngine database;
 
-	public JPAQuery(DatabaseEngine database, String qlString) {
+	public JpaQuery(DatabaseEngine database, String qlString) {
 		this(database, qlString, Object[].class);
 	}
 
-	public JPAQuery(DatabaseEngine database, String qlString, Class<?> resultClass) {
+	public JpaQuery(DatabaseEngine database, String qlString, Class<?> resultClass) {
 		this(database, qlString, new Class<?>[] { resultClass });
 	}
 
-	public JPAQuery(DatabaseEngine database, String qlString, Class<?>[] resultClasses) {
+	public JpaQuery(DatabaseEngine database, String qlString, Class<?>[] resultClasses) {
 		this.parameters = new ArrayList<Parameter<?>>();
 		this.hints = new HashMap<String, Object>();
 		this.resultClasses = resultClasses;
@@ -96,7 +96,7 @@ public class JPAQuery implements Query {
 				// String alias = resultClasses[0].getSimpleName();
 				String alias = "";
 				Class<?> type = resultClasses[0];
-				solutionList.add(tuple.get(new JPATupleElement(alias, type)));
+				solutionList.add(tuple.get(new JpaTupleElement(alias, type)));
 			} else {
 				solutionList.add(tuple.toArray());
 			}
@@ -116,7 +116,7 @@ public class JPAQuery implements Query {
 			// String alias = resultClasses[0].getSimpleName();
 			String alias = "";
 			Class<?> type = resultClasses[0];
-			result = tuples.get(firstResult).get(new JPATupleElement<Object>(alias, type));
+			result = tuples.get(firstResult).get(new JpaTupleElement<Object>(alias, type));
 		} else {
 			result = tuples.get(firstResult).toArray();
 		}
@@ -162,8 +162,8 @@ public class JPAQuery implements Query {
 	}
 
 	public <T> Query setParameter(Parameter<T> param, T value) {
-		if (param instanceof JPAParameter) {
-			JPAParameter<T> parameter = (JPAParameter<T>) param;
+		if (param instanceof JpaParameter) {
+			JpaParameter<T> parameter = (JpaParameter<T>) param;
 			parameter.setValue(value);
 			parameters.add(param);
 		}
@@ -179,7 +179,7 @@ public class JPAQuery implements Query {
 	}
 
 	public Query setParameter(String name, Object value) {
-		parameters.add(new JPAParameter(name, parameterPosition++, value.getClass(), value));
+		parameters.add(new JpaParameter(name, parameterPosition++, value.getClass(), value));
 		return this;
 	}
 
@@ -192,7 +192,7 @@ public class JPAQuery implements Query {
 	}
 
 	public Query setParameter(int position, Object value) {
-		parameters.add(new JPAParameter(String.valueOf(position), position, value.getClass()));
+		parameters.add(new JpaParameter(String.valueOf(position), position, value.getClass()));
 		return this;
 	}
 
@@ -258,8 +258,8 @@ public class JPAQuery implements Query {
 
 	public boolean isBound(Parameter<?> param) {
 		Parameter<?> parameter = parameters.get(param.getPosition());
-		if (parameter instanceof JPAParameter) {
-			JPAParameter<?> logicParameter = (JPAParameter<?>) parameter;
+		if (parameter instanceof JpaParameter) {
+			JpaParameter<?> logicParameter = (JpaParameter<?>) parameter;
 			return logicParameter.getValue() != null;
 		}
 		return false;
@@ -271,8 +271,8 @@ public class JPAQuery implements Query {
 
 	public Object getParameterValue(String name) {
 		Parameter<?> parameter = getParameter(name);
-		if (parameter instanceof JPAParameter) {
-			JPAParameter<?> logicParameter = (JPAParameter<?>) parameter;
+		if (parameter instanceof JpaParameter) {
+			JpaParameter<?> logicParameter = (JpaParameter<?>) parameter;
 			return logicParameter.getValue();
 		}
 		return null;
@@ -280,8 +280,8 @@ public class JPAQuery implements Query {
 
 	public Object getParameterValue(int position) {
 		Parameter<?> parameter = parameters.get(position);
-		if (parameter instanceof JPAParameter) {
-			JPAParameter<?> logicParameter = (JPAParameter<?>) parameter;
+		if (parameter instanceof JpaParameter) {
+			JpaParameter<?> logicParameter = (JpaParameter<?>) parameter;
 			return logicParameter.getValue();
 		}
 		return null;
@@ -306,13 +306,13 @@ public class JPAQuery implements Query {
 	}
 
 	public <T> T unwrap(Class<T> cls) {
-		if (cls.equals(JPAQuery.class)) {
+		if (cls.equals(JpaQuery.class)) {
 			return (T) this;
-		} else if (cls.equals(JPATypedQuery.class)) {
-			if (this instanceof JPATypedQuery) {
+		} else if (cls.equals(JpaTypedQuery.class)) {
+			if (this instanceof JpaTypedQuery) {
 				return (T) this;
 			}
-		} else if ((cls.equals(JPAStoredProcedureQuery.class)) && (this instanceof JPAStoredProcedureQuery)) {
+		} else if ((cls.equals(JpaStoredProcedureQuery.class)) && (this instanceof JpaStoredProcedureQuery)) {
 			return (T) this;
 		}
 		throw new PersistenceException("Impossible unwrap to " + cls.getName());

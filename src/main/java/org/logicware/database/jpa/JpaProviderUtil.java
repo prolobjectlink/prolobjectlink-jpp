@@ -19,27 +19,21 @@
  */
 package org.logicware.database.jpa;
 
-import javax.persistence.AttributeConverter;
+import javax.persistence.spi.LoadState;
+import javax.persistence.spi.ProviderUtil;
 
-import org.logicware.database.ObjectConverter;
-import org.logicware.database.prolog.PrologObjectConverter;
-import org.logicware.prolog.PrologProvider;
-import org.logicware.prolog.PrologTerm;
+public final class JpaProviderUtil implements ProviderUtil {
 
-public final class JPAAttributeConverter implements AttributeConverter<Object, PrologTerm> {
-
-	private final ObjectConverter<PrologTerm> converter;
-
-	public JPAAttributeConverter(PrologProvider provider) {
-		this.converter = new PrologObjectConverter(provider);
+	public LoadState isLoadedWithoutReference(Object entity, String attributeName) {
+		return LoadState.UNKNOWN;
 	}
 
-	public PrologTerm convertToDatabaseColumn(Object attribute) {
-		return converter.toTerm(attribute);
+	public LoadState isLoadedWithReference(Object entity, String attributeName) {
+		return LoadState.UNKNOWN;
 	}
 
-	public Object convertToEntityAttribute(PrologTerm dbData) {
-		return converter.toObject(dbData);
+	public LoadState isLoaded(Object entity) {
+		return LoadState.UNKNOWN;
 	}
 
 }
