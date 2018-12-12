@@ -91,6 +91,6 @@ public interface DatabaseEngine extends PersistentContainer {
 
 	public URL getURL();
 
-	Map<String, PersistenceUnitInfo> getPersistenceUnits();
+	public Map<String, PersistenceUnitInfo> getPersistenceUnits();
 
 }

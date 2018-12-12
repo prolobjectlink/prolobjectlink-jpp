@@ -21,6 +21,8 @@ package org.logicware.database.jpa;
 
 import static org.logicware.database.jpa.spi.JPAPersistenceXmlParser.XML;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
@@ -30,48 +32,87 @@ import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.ProviderUtil;
 
 import org.logicware.AbstractWrapper;
-import org.logicware.database.EmbeddedDatabase;
+import org.logicware.database.DatabaseEngine;
+import org.logicware.database.Protocol;
 import org.logicware.database.jpa.spi.JPAPersistenceXmlParser;
+import org.logicware.database.memory.MemoryHierarchical;
 import org.logicware.database.persistent.EmbeddedHierarchical;
+import org.logicware.database.persistent.RemoteHierarchical;
+import org.logicware.logging.LoggerUtils;
 
+/**
+ * Implementation of {@link PersistenceProvider}. Derived classes just extend
+ * from this abstract class.
+ * 
+ * @author Jose Zalacain
+ * @version 1.0
+ */
 public abstract class JpaAbstractProvider extends AbstractWrapper implements PersistenceProvider {
 
 	protected final ProviderUtil providerUtil = new JPAProviderUtil();
+	protected final JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
 
-	protected final void checkPersistenceUnitExistence(String emName, Map<String, PersistenceUnitInfo> m) {
+	protected static final String SECRET = "javax.persistence.jdbc.password";
+	protected static final String DRIVER = "javax.persistence.jdbc.driver";
+	protected static final String USER = "javax.persistence.jdbc.user";
+	protected static final String URL = "javax.persistence.jdbc.url";
+	protected static final String URL_PREFIX = "jdbc:prolobjectlink:";
+
+	protected final void assertPersistenceUnitExistenceInMapLoadedFromXml(String emName,
+			Map<String, PersistenceUnitInfo> m) {
 		if (m.get(emName) == null) {
 			throw new PersistenceException("There are not persistence unit named " + emName);
 		}
 	}
 
+	private DatabaseEngine createDatabaseEngine(PersistenceUnitInfo info, Map<?, ?> map) {
+		try {
+			DatabaseEngine database = null;
+			String urlString = "" + info.getProperties().get(URL) + "";
+			urlString = urlString.replace(URL_PREFIX, "");
+			String url = new URL(urlString).getProtocol().toUpperCase();
+			if (url.equals("" + Protocol.MEMPDB + "")) {
+				database = MemoryHierarchical.newInstance(info, map);
+			} else if (url.equals("" + Protocol.REMPDB + "")) {
+				database = RemoteHierarchical.newInstance(info, map);
+			} else if (url.equals("" + Protocol.FILE + "")) {
+				database = EmbeddedHierarchical.newInstance(info, map);
+			}
+			return database;
+		} catch (MalformedURLException e) {
+			LoggerUtils.error(getClass(), e);
+		}
+		return null;
+	}
+
 	public final EntityManagerFactory createEntityManagerFactory(String emName, Map map) {
-		JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(loader.getResource(XML));
-		checkPersistenceUnitExistence(emName, m);
-		PersistenceUnitInfo unit = m.get(emName);
-		return createContainerEntityManagerFactory(unit, map);
+		assertPersistenceUnitExistenceInMapLoadedFromXml(emName, m);
+		return createContainerEntityManagerFactory(m.get(emName), map);
 	}
 
 	public final EntityManagerFactory createContainerEntityManagerFactory(PersistenceUnitInfo info, Map map) {
-		EmbeddedDatabase database = EmbeddedHierarchical.newInstance(info.getPersistenceUnitName());
-		System.out.println("Go fine Camilo???");
+		DatabaseEngine database = createDatabaseEngine(info, map);
+		assert database != null;
 		return new JPAEntityManagerFactory(database);
 	}
 
 	public final void generateSchema(PersistenceUnitInfo info, Map map) {
-		// TODO Auto-generated method stub
-
+		DatabaseEngine database = createDatabaseEngine(info, map);
+		assert database != null;
+		database.getSchema().flush();
 	}
 
 	public final boolean generateSchema(String persistenceUnitName, Map map) {
-		JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(loader.getResource(XML));
-		checkPersistenceUnitExistence(persistenceUnitName, m);
+		assertPersistenceUnitExistenceInMapLoadedFromXml(persistenceUnitName, m);
 		PersistenceUnitInfo unit = m.get(persistenceUnitName);
-		generateSchema(unit, map);
-		return true;
+		DatabaseEngine database = createDatabaseEngine(unit, map);
+		assert database != null;
+		database.getSchema().flush();
+		return database.exist();
 	}
 
 	public final ProviderUtil getProviderUtil() {

@@ -21,6 +21,7 @@ package org.logicware.database.persistent;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.spi.PersistenceUnitInfo;
@@ -48,6 +49,10 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 	}
 
 	public static final RemoteDatabase newInstance(String name) {
+		return newInstance(name, new HashMap<Object, Object>());
+	}
+
+	public static final RemoteDatabase newInstance(String name, Map<?, ?> map) {
 		if (remoteHierarchicalDatabase == null) {
 			JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
 			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(persistenceXml);
@@ -82,6 +87,36 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 							"The given name don't match with persistence unit name");
 				}
 			}
+		}
+		return remoteHierarchicalDatabase;
+	}
+
+	public static final RemoteDatabase newInstance(PersistenceUnitInfo unit, Map<?, ?> map) {
+		if (remoteHierarchicalDatabase == null) {
+			String name = unit.getPersistenceUnitName();
+			Settings settings = new Settings(unit.getProperties().getProperty(JPAProperties.DRIVER));
+			URL url = null;
+			try {
+				System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
+				url = new URL(unit.getProperties().getProperty(JPAProperties.URL).replace(URL_PREFIX, ""));
+				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
+					throw new MalformedURLException("The URL path don't have database name at the end");
+				}
+			} catch (MalformedURLException e) {
+				LoggerUtils.error(RemoteHierarchical.class, LoggerConstants.IO, e);
+			}
+
+			assert url != null;
+
+			String password = unit.getProperties().getProperty(JPAProperties.PASSWORD);
+			String user = unit.getProperties().getProperty(JPAProperties.USER);
+			DatabaseUser owner = new DatabaseUser(user, password);
+			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
+			for (String managedClass : unit.getManagedClassNames()) {
+				schema.addClass(JavaReflect.classForName(managedClass), "");
+			}
+			remoteHierarchicalDatabase = new RemoteHierarchical(settings, url, name, schema, owner).connect(name)
+					.create();
 		}
 		return remoteHierarchicalDatabase;
 	}
