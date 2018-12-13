@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.database.jpa.criteria.ast;
+package org.logicware.database.jpa.criteria.jpql;
 
 import java.util.List;
 
@@ -25,19 +25,19 @@ import javax.persistence.criteria.Expression;
 
 import org.logicware.Wrapper;
 
-public class JpaOrderBy extends JpaClause implements Wrapper {
+public class JpqlGroupBy extends JpqlClause implements Wrapper {
 
-	public JpaOrderBy(Expression<?> expression) {
+	public JpqlGroupBy(Expression<?> expression) {
 		expressions.add(expression);
 	}
 
-	public JpaOrderBy(Expression<?>... expressions) {
+	public JpqlGroupBy(Expression<?>... expressions) {
 		for (Expression<?> expression : expressions) {
 			this.expressions.add(expression);
 		}
 	}
 
-	public JpaOrderBy(List<Expression<?>> expressions) {
+	public JpqlGroupBy(List<Expression<?>> expressions) {
 		this.expressions = expressions;
 	}
 

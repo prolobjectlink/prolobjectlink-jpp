@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.database.jpa.criteria.ast;
+package org.logicware.database.jpa.criteria.jpql;
 
 import java.util.List;
 
@@ -25,19 +25,19 @@ import javax.persistence.criteria.Expression;
 
 import org.logicware.Wrapper;
 
-public class JpaHaving extends JpaClause implements Wrapper {
+public class JpqlHaving extends JpqlClause implements Wrapper {
 
-	public JpaHaving(Expression<?> expression) {
+	public JpqlHaving(Expression<?> expression) {
 		expressions.add(expression);
 	}
 
-	public JpaHaving(Expression<?>... expressions) {
+	public JpqlHaving(Expression<?>... expressions) {
 		for (Expression<?> expression : expressions) {
 			this.expressions.add(expression);
 		}
 	}
 
-	public JpaHaving(List<Expression<?>> expressions) {
+	public JpqlHaving(List<Expression<?>> expressions) {
 		this.expressions = expressions;
 	}
 

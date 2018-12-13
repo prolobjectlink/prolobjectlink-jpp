@@ -72,7 +72,7 @@ import org.logicware.database.jpa.criteria.predicate.JpaOrPredicate;
 import org.logicware.database.util.JavaLists;
 import org.logicware.database.util.JavaReflect;
 
-public final class JpaCriteriaBuilder extends JpaAbstractWrapper implements CriteriaBuilder {
+public class JpaCriteriaBuilder extends JpaAbstractWrapper implements CriteriaBuilder {
 
 	private final Metamodel metamodel;
 

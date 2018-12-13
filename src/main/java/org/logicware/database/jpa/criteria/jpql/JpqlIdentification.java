@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.database.jpa.criteria.ast;
+package org.logicware.database.jpa.criteria.jpql;
 
 import javax.persistence.criteria.Expression;
 import javax.persistence.metamodel.Metamodel;
@@ -25,9 +25,9 @@ import javax.persistence.metamodel.Metamodel;
 import org.logicware.database.jpa.criteria.JpaExpression;
 import org.logicware.database.jpa.criteria.JpaTreeNode;
 
-public class JpaIdentification<X> extends JpaExpression<X> implements JpaTreeNode {
+public class JpqlIdentification<X> extends JpaExpression<X> implements JpaTreeNode {
 
-	public JpaIdentification(String alias, Class<? extends X> javaType, Expression<?> expression, Metamodel metamodel) {
+	public JpqlIdentification(String alias, Class<? extends X> javaType, Expression<?> expression, Metamodel metamodel) {
 		super(alias, javaType, expression, metamodel);
 	}
 

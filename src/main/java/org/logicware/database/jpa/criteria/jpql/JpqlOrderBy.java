@@ -17,30 +17,27 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.database.jpa.criteria.ast;
+package org.logicware.database.jpa.criteria.jpql;
 
 import java.util.List;
 
 import javax.persistence.criteria.Expression;
 
 import org.logicware.Wrapper;
-import org.logicware.database.jpa.criteria.JpaAbstractWrapper;
 
-public abstract class JpaClause extends JpaAbstractWrapper implements Wrapper {
+public class JpqlOrderBy extends JpqlClause implements Wrapper {
 
-	protected List<Expression<?>> expressions = newList();
-
-	public JpaClause(Expression<?> expression) {
+	public JpqlOrderBy(Expression<?> expression) {
 		expressions.add(expression);
 	}
 
-	public JpaClause(Expression<?>... expressions) {
+	public JpqlOrderBy(Expression<?>... expressions) {
 		for (Expression<?> expression : expressions) {
 			this.expressions.add(expression);
 		}
 	}
 
-	public JpaClause(List<Expression<?>> expressions) {
+	public JpqlOrderBy(List<Expression<?>> expressions) {
 		this.expressions = expressions;
 	}
 
