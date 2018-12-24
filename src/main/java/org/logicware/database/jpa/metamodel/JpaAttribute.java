@@ -32,12 +32,12 @@ public abstract class JpaAttribute<X, Y> implements Attribute<X, Y> {
 
 	protected final String name;
 	protected final Type<Y> type;
-	protected final ManagedType<X> declaredType;
+	protected final ManagedType<X> ownerType;
 
-	protected JpaAttribute(String name, Type<Y> type, ManagedType<X> declaredType) {
+	protected JpaAttribute(ManagedType<X> ownerType, String name, Type<Y> type) {
+		this.ownerType = ownerType;
 		this.name = name;
 		this.type = type;
-		this.declaredType = declaredType;
 	}
 
 	public String getName() {
@@ -45,7 +45,7 @@ public abstract class JpaAttribute<X, Y> implements Attribute<X, Y> {
 	}
 
 	public ManagedType<X> getDeclaringType() {
-		return declaredType;
+		return ownerType;
 	}
 
 	public Class<Y> getJavaType() {
@@ -55,7 +55,7 @@ public abstract class JpaAttribute<X, Y> implements Attribute<X, Y> {
 	public Member getJavaMember() {
 		Member member = null;
 		try {
-			Class<X> clazz = declaredType.getJavaType();
+			Class<X> clazz = ownerType.getJavaType();
 			member = clazz.getDeclaredField(name);
 		} catch (NoSuchFieldException e) {
 			LoggerUtils.error(getClass(), LoggerConstants.NO_SUCH_FIELD, e);
@@ -69,7 +69,7 @@ public abstract class JpaAttribute<X, Y> implements Attribute<X, Y> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((declaredType == null) ? 0 : declaredType.hashCode());
+		result = prime * result + ((ownerType == null) ? 0 : ownerType.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -84,27 +84,30 @@ public abstract class JpaAttribute<X, Y> implements Attribute<X, Y> {
 		if (getClass() != obj.getClass())
 			return false;
 		JpaAttribute<?, ?> other = (JpaAttribute<?, ?>) obj;
-		if (declaredType == null) {
-			if (other.declaredType != null)
+		if (ownerType == null) {
+			if (other.ownerType != null)
 				return false;
-		} else if (!declaredType.equals(other.declaredType))
+		} else if (!ownerType.equals(other.ownerType)) {
 			return false;
+		}
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		if (type == null) {
 			if (other.type != null)
 				return false;
-		} else if (!type.equals(other.type))
+		} else if (!type.equals(other.type)) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "JPAAttribute [name=" + name + ", type=" + type + ", declaredType=" + declaredType + "]";
+		return "JPAAttribute [name=" + name + ", type=" + type + ", declaredType=" + ownerType + "]";
 	}
 
 }

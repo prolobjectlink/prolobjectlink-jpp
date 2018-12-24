@@ -20,8 +20,7 @@
 package org.logicware.database.jpa.metamodel;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,225 +32,210 @@ import javax.persistence.metamodel.MapAttribute;
 import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.Type;
 
+import org.logicware.database.DatabaseClass;
+import org.logicware.database.DatabaseField;
+import org.logicware.database.Schema;
+
+/**
+ * 
+ * @author Jose Zalacain
+ *
+ * @param <X>
+ * @since 1.0
+ */
 public abstract class JpaManagedType<X> extends JpaType<X> implements ManagedType<X> {
 
-	private final Map<String, Attribute<X, ?>> attributes;
+	protected final DatabaseClass databaseClass;
 
-	public JpaManagedType(Class<X> javaType) {
-		super(javaType);
-		this.attributes = new LinkedHashMap<String, Attribute<X, ?>>();
+	public JpaManagedType(Schema schema, DatabaseClass databaseClass) {
+		super(schema, (Class<X>) databaseClass.getJavaClass());
+		this.databaseClass = databaseClass;
 	}
 
-	public void addAttribute(String name, Attribute<X, ?> attribute) {
-		attributes.put(name, attribute);
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((databaseClass == null) ? 0 : databaseClass.hashCode());
+		return result;
 	}
 
-	public Set<Attribute<? super X, ?>> getAttributes() {
-		Set<Attribute<? super X, ?>> set = new LinkedHashSet<Attribute<? super X, ?>>();
-		Collection<Attribute<X, ?>> collection = attributes.values();
-		for (Attribute<X, ?> attribute : collection) {
-			set.add(attribute);
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JpaManagedType<?> other = (JpaManagedType<?>) obj;
+		if (databaseClass == null) {
+			if (other.databaseClass != null)
+				return false;
+		} else if (!databaseClass.equals(other.databaseClass)) {
+			return false;
 		}
-		return set;
+		return true;
 	}
 
-	public Attribute<? super X, ?> getAttribute(String name) {
-		return getDeclaredAttribute(name);
+	public final Set<Attribute<? super X, ?>> getAttributes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Set<SingularAttribute<? super X, ?>> getSingularAttributes() {
-		Set<SingularAttribute<? super X, ?>> set = new LinkedHashSet<SingularAttribute<? super X, ?>>();
-		Collection<Attribute<X, ?>> collection = attributes.values();
-		for (Attribute<X, ?> attribute : collection) {
-			if (attribute instanceof SingularAttribute) {
-				set.add((SingularAttribute<? super X, ?>) attribute);
-			}
-		}
-		return set;
+	public final Set<Attribute<X, ?>> getDeclaredAttributes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public SingularAttribute<? super X, ?> getSingularAttribute(String name) {
-		return getDeclaredSingularAttribute(name);
-	}
-
-	public <Y> SingularAttribute<? super X, Y> getSingularAttribute(String name, Class<Y> type) {
+	public final <Y> SingularAttribute<? super X, Y> getSingularAttribute(String name, Class<Y> type) {
 		return getDeclaredSingularAttribute(name, type);
 	}
 
-	public Set<PluralAttribute<? super X, ?, ?>> getPluralAttributes() {
-		Set<Attribute<? super X, ?>> allAttributes = getAttributes();
-		Set<PluralAttribute<? super X, ?, ?>> set = new LinkedHashSet<PluralAttribute<? super X, ?, ?>>();
-		for (Attribute<? super X, ?> attribute : allAttributes) {
-			if (attribute.isCollection()) {
-				set.add((PluralAttribute<? super X, ?, ?>) attribute);
-			}
-		}
-		return set;
+	public final <Y> SingularAttribute<X, Y> getDeclaredSingularAttribute(String name, Class<Y> type) {
+		return null;
 	}
 
-	public CollectionAttribute<? super X, ?> getCollection(String name) {
-		return getDeclaredCollection(name);
+	public final Set<SingularAttribute<? super X, ?>> getSingularAttributes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public <E> CollectionAttribute<? super X, E> getCollection(String name, Class<E> elementType) {
+	public final Set<SingularAttribute<X, ?>> getDeclaredSingularAttributes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public final <E> CollectionAttribute<? super X, E> getCollection(String name, Class<E> elementType) {
 		return getDeclaredCollection(name, elementType);
 	}
 
-	public SetAttribute<? super X, ?> getSet(String name) {
-		return getDeclaredSet(name);
+	public final <E> CollectionAttribute<X, E> getDeclaredCollection(String name, Class<E> elementType) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public <E> SetAttribute<? super X, E> getSet(String name, Class<E> elementType) {
+	public final <E> SetAttribute<? super X, E> getSet(String name, Class<E> elementType) {
 		return getDeclaredSet(name, elementType);
 	}
 
-	public ListAttribute<? super X, ?> getList(String name) {
-		return getDeclaredList(name);
+	public final <E> SetAttribute<X, E> getDeclaredSet(String name, Class<E> elementType) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public <E> ListAttribute<? super X, E> getList(String name, Class<E> elementType) {
+	public final <E> ListAttribute<? super X, E> getList(String name, Class<E> elementType) {
 		return getDeclaredList(name, elementType);
 	}
 
-	public MapAttribute<? super X, ?, ?> getMap(String name) {
-		return getDeclaredMap(name);
+	public final <E> ListAttribute<X, E> getDeclaredList(String name, Class<E> elementType) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public <K, V> MapAttribute<? super X, K, V> getMap(String name, Class<K> keyType, Class<V> valueType) {
+	public final <K, V> MapAttribute<? super X, K, V> getMap(String name, Class<K> keyType, Class<V> valueType) {
 		return getDeclaredMap(name, keyType, valueType);
 	}
 
-	public Set<Attribute<X, ?>> getDeclaredAttributes() {
-		Set<Attribute<X, ?>> set = new LinkedHashSet<Attribute<X, ?>>();
-		Collection<Attribute<X, ?>> collection = attributes.values();
-		for (Attribute<X, ?> attribute : collection) {
-			set.add(attribute);
-		}
-		return set;
+	public final <K, V> MapAttribute<X, K, V> getDeclaredMap(String name, Class<K> keyType, Class<V> valueType) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Attribute<X, ?> getDeclaredAttribute(String name) {
-		if (!attributes.containsKey(name)) {
-			throw new IllegalArgumentException("Attribute " + name + " not found  on model " + getJavaType());
-		}
-		return attributes.get(name);
+	public final Set<PluralAttribute<? super X, ?, ?>> getPluralAttributes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Set<SingularAttribute<X, ?>> getDeclaredSingularAttributes() {
-		Set<SingularAttribute<X, ?>> set = new LinkedHashSet<SingularAttribute<X, ?>>();
-		Collection<Attribute<X, ?>> collection = attributes.values();
-		for (Attribute<X, ?> attribute : collection) {
-			if (attribute instanceof SingularAttribute) {
-				set.add((SingularAttribute<X, ?>) attribute);
-			}
-		}
-		return set;
+	public final Set<PluralAttribute<X, ?, ?>> getDeclaredPluralAttributes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public SingularAttribute<X, ?> getDeclaredSingularAttribute(String name) {
-		Attribute<? super X, ?> attribute = getAttribute(name);
-		if (!(attribute instanceof SingularAttribute)) {
-			throw new IllegalArgumentException("No singular attribute " + name + "on model " + getJavaType());
-		}
-		return (SingularAttribute<X, ?>) attribute;
+	public final Attribute<? super X, ?> getAttribute(String name) {
+		return getDeclaredAttribute(name);
 	}
 
-	public <Y> SingularAttribute<X, Y> getDeclaredSingularAttribute(String name, Class<Y> type) {
-		SingularAttribute<? super X, ?> attribute = getSingularAttribute(name);
-		Class<?> javaType = attribute.getType().getJavaType();
-		if (javaType != type) {
-			throw new IllegalArgumentException("Incorrect singular attribute type");
+	public final Attribute<X, ?> getDeclaredAttribute(String name) {
+		DatabaseField att = databaseClass.getField(name);
+		Class<X> cls = (Class<X>) att.getType();
+		Attribute<X, ?> attribute = null;
+		// check basic or managed type
+
+		// check plural attributes
+		if (Collection.class.isAssignableFrom(cls)) {
+			Type<X> type = new JpaBasicType<X>(schema, cls);
+			Type<X> elementType = new JpaBasicType<X>(schema, cls);
+			Type<X> attributeType = new JpaBasicType<X>(schema, cls);
+			Type<X> keyType = new JpaBasicType<X>(schema, cls);
+			attribute = new JpaCollectionAttribute(this, name, type, null, null);
+		} else if (List.class.isAssignableFrom(cls)) {
+			Type<X> type = new JpaBasicType<X>(schema, cls);
+			Type<X> elementType = new JpaBasicType<X>(schema, cls);
+			Type<X> attributeType = new JpaBasicType<X>(schema, cls);
+			Type<X> keyType = new JpaBasicType<X>(schema, cls);
+			attribute = new JpaListAttribute(this, name, type, null, null);
+		} else if (Set.class.isAssignableFrom(cls)) {
+			Type<X> type = new JpaBasicType<X>(schema, cls);
+			Type<X> elementType = new JpaBasicType<X>(schema, cls);
+			Type<X> attributeType = new JpaBasicType<X>(schema, cls);
+			Type<X> keyType = new JpaBasicType<X>(schema, cls);
+			attribute = new JpaSetAttribute(this, name, type, null, null);
+		} else if (Map.class.isAssignableFrom(cls)) {
+			Type<X> type = new JpaBasicType<X>(schema, cls);
+			Type<X> elementType = new JpaBasicType<X>(schema, cls);
+			Type<X> attributeType = new JpaBasicType<X>(schema, cls);
+			Type<X> keyType = new JpaBasicType<X>(schema, cls);
+			attribute = new JpaMapAttribute(this, name, type, null, null, null);
+		} else {
+			Type<X> type = new JpaBasicType<X>(schema, cls);
+			attribute = new JpaSingularAttribute(this, name, type);
 		}
-		return (SingularAttribute<X, Y>) attribute;
+
+		return attribute;
 	}
 
-	public Set<PluralAttribute<X, ?, ?>> getDeclaredPluralAttributes() {
-		Set<Attribute<? super X, ?>> allAttributes = getAttributes();
-		Set<PluralAttribute<X, ?, ?>> set = new LinkedHashSet<PluralAttribute<X, ?, ?>>();
-		for (Attribute<? super X, ?> attribute : allAttributes) {
-			if (attribute.isCollection()) {
-				set.add((PluralAttribute<X, ?, ?>) attribute);
-			}
-		}
-		return set;
+	public final SingularAttribute<? super X, ?> getSingularAttribute(String name) {
+		return getDeclaredSingularAttribute(name);
 	}
 
-	public CollectionAttribute<X, ?> getDeclaredCollection(String name) {
-		Attribute<? super X, ?> attribute = getAttribute(name);
-		if (!(attribute instanceof CollectionAttribute)) {
-			throw new IllegalArgumentException("No collection type attribute " + name + "on model " + getJavaType());
-		}
-		return (CollectionAttribute<X, ?>) attribute;
+	public final SingularAttribute<X, ?> getDeclaredSingularAttribute(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public <E> CollectionAttribute<X, E> getDeclaredCollection(String name, Class<E> elementType) {
-		CollectionAttribute<? super X, ?> collectionAttribute = getCollection(name);
-		Class<?> eType = collectionAttribute.getElementType().getJavaType();
-		if (eType != elementType) {
-			throw new IllegalArgumentException(
-					"Incorrect element type for collection attribute " + name + "on model " + getJavaType());
-		}
-		return (CollectionAttribute<X, E>) collectionAttribute;
+	public final CollectionAttribute<? super X, ?> getCollection(String name) {
+		return getCollection(name);
 	}
 
-	public SetAttribute<X, ?> getDeclaredSet(String name) {
-		Attribute<? super X, ?> attribute = getAttribute(name);
-		if (!(attribute instanceof SetAttribute)) {
-			throw new IllegalArgumentException("No set type attribute " + name + "on model " + getJavaType());
-		}
-		return (SetAttribute<X, ?>) attribute;
+	public final CollectionAttribute<X, ?> getDeclaredCollection(String name) {
+		return getDeclaredCollection(name, null);
 	}
 
-	public <E> SetAttribute<X, E> getDeclaredSet(String name, Class<E> elementType) {
-		SetAttribute<? super X, ?> setAttribute = getSet(name);
-		Class<?> eType = setAttribute.getElementType().getJavaType();
-		if (eType != elementType) {
-			throw new IllegalArgumentException(
-					"Incorrect element type for set attribute " + name + "on model " + getJavaType());
-		}
-		return (SetAttribute<X, E>) setAttribute;
+	public final SetAttribute<? super X, ?> getSet(String name) {
+		return getDeclaredSet(name);
 	}
 
-	public ListAttribute<X, ?> getDeclaredList(String name) {
-		Attribute<? super X, ?> attribute = getAttribute(name);
-		if (!(attribute instanceof ListAttribute)) {
-			throw new IllegalArgumentException("No list type attribute " + name + "on model " + getJavaType());
-		}
-		return (ListAttribute<X, ?>) attribute;
+	public final SetAttribute<X, ?> getDeclaredSet(String name) {
+		return getDeclaredSet(name, null);
 	}
 
-	public <E> ListAttribute<X, E> getDeclaredList(String name, Class<E> elementType) {
-		ListAttribute<? super X, ?> listAttribute = getList(name);
-		Class<?> eType = listAttribute.getElementType().getJavaType();
-		if (eType != elementType) {
-			throw new IllegalArgumentException(
-					"Incorrect element type for list attribute " + name + "on model " + getJavaType());
-		}
-		return (ListAttribute<X, E>) listAttribute;
+	public final ListAttribute<? super X, ?> getList(String name) {
+		return getDeclaredList(name);
 	}
 
-	public MapAttribute<X, ?, ?> getDeclaredMap(String name) {
-		Attribute<? super X, ?> attribute = getAttribute(name);
-		if (!(attribute instanceof MapAttribute)) {
-			throw new IllegalArgumentException("No map type attribute " + name + "on model " + getJavaType());
-		}
-		return (MapAttribute<X, ?, ?>) attribute;
+	public final ListAttribute<X, ?> getDeclaredList(String name) {
+		return getDeclaredList(name, null);
 	}
 
-	public <K, V> MapAttribute<X, K, V> getDeclaredMap(String name, Class<K> keyType, Class<V> valueType) {
-		MapAttribute<? super X, ?, ?> mapAttribute = getMap(name);
-		Class<?> kType = mapAttribute.getKeyType().getJavaType();
-		Class<?> vType = mapAttribute.getElementType().getJavaType();
-		if (kType != keyType) {
-			throw new IllegalArgumentException(
-					"Incorrect key type for map attribute " + name + "on model " + getJavaType());
-		}
-		if (vType != valueType) {
-			throw new IllegalArgumentException(
-					"Incorrect value type for map attribute " + name + "on model " + getJavaType());
-		}
-		return (MapAttribute<X, K, V>) mapAttribute;
+	public final MapAttribute<? super X, ?, ?> getMap(String name) {
+		return getDeclaredMap(name);
+	}
+
+	public final MapAttribute<X, ?, ?> getDeclaredMap(String name) {
+		return getDeclaredMap(name, null, null);
 	}
 
 }

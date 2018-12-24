@@ -21,14 +21,21 @@ package org.logicware.database.jpa.metamodel;
 
 import javax.persistence.metamodel.BasicType;
 
+import org.logicware.database.Schema;
+
 public final class JpaBasicType<X> extends JpaType<X> implements BasicType<X> {
 
-	public JpaBasicType(Class<X> javaType) {
-		super(javaType);
+	public JpaBasicType(Schema schema, Class<X> javaType) {
+		super(schema, javaType);
 	}
 
 	public PersistenceType getPersistenceType() {
 		return PersistenceType.BASIC;
+	}
+
+	@Override
+	public String toString() {
+		return "JpaBasicType [javaType=" + javaType + "]";
 	}
 
 }

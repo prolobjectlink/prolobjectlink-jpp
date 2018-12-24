@@ -28,9 +28,9 @@ import javax.persistence.metamodel.Type;
 public final class JpaCollectionAttribute<X, E> extends JpaPluralAttribute<X, Collection<E>, E>
 		implements CollectionAttribute<X, E> {
 
-	public JpaCollectionAttribute(String name, Type<Collection<E>> type, ManagedType<X> managedType,
-			Type<E> elementType, PersistentAttributeType attributeType) {
-		super(name, type, managedType, elementType, attributeType);
+	public JpaCollectionAttribute(ManagedType<X> ownerType, String name, Type<Collection<E>> type, Type<E> elementType,
+			PersistentAttributeType attributeType) {
+		super(ownerType, name, type, elementType, attributeType);
 	}
 
 	public CollectionType getCollectionType() {

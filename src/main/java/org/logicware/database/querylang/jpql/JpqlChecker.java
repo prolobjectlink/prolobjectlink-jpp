@@ -49,4 +49,12 @@ public abstract class JpqlChecker extends JpqlSymbols implements Parser {
 		current = scanner.next();
 	}
 
+	public boolean hasNext() {
+		return scanner.hasNext();
+	}
+
+	public SymbolEntry next() {
+		return scanner.next();
+	}
+
 }

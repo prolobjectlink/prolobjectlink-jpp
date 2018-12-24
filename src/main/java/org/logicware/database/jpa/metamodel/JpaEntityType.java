@@ -19,16 +19,21 @@
  */
 package org.logicware.database.jpa.metamodel;
 
+import javax.persistence.Entity;
 import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Type;
+
+import org.logicware.database.DatabaseClass;
+import org.logicware.database.Schema;
 
 public final class JpaEntityType<X> extends JpaBindableType<X> implements EntityType<X> {
 
-	private final String name;
+	public JpaEntityType(Schema schema, DatabaseClass databaseClass) {
+		super(schema, databaseClass);
+	}
 
-	public JpaEntityType(Class<X> javaType, String name, Type<?> idType) {
-		super(javaType, idType);
-		this.name = name;
+	@Override
+	public String toString() {
+		return "JpaEntityType [javaType=" + javaType + "]";
 	}
 
 	public PersistenceType getPersistenceType() {
@@ -39,33 +44,14 @@ public final class JpaEntityType<X> extends JpaBindableType<X> implements Entity
 		return BindableType.ENTITY_TYPE;
 	}
 
+	public Class<X> getBindableJavaType() {
+		return getJavaType();
+	}
+
 	public String getName() {
-		return name;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		JpaEntityType<?> other = (JpaEntityType<?>) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+		Class<?> type = getJavaType();
+		String name = type.getAnnotation(Entity.class).name();
+		return name.isEmpty() ? type.getSimpleName() : name;
 	}
 
 }

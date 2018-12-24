@@ -29,9 +29,9 @@ public abstract class JpaPluralAttribute<X, C, E> extends JpaAttribute<X, C> imp
 	protected final Type<E> elementType;
 	protected final PersistentAttributeType attributeType;
 
-	protected JpaPluralAttribute(String name, Type<C> type, ManagedType<X> managedType, Type<E> elementType,
+	public JpaPluralAttribute(ManagedType<X> ownerType, String name, Type<C> type, Type<E> elementType,
 			PersistentAttributeType attributeType) {
-		super(name, type, managedType);
+		super(ownerType, name, type);
 		this.elementType = elementType;
 		this.attributeType = attributeType;
 	}
@@ -83,8 +83,9 @@ public abstract class JpaPluralAttribute<X, C, E> extends JpaAttribute<X, C> imp
 		if (elementType == null) {
 			if (other.elementType != null)
 				return false;
-		} else if (!elementType.equals(other.elementType))
+		} else if (!elementType.equals(other.elementType)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -21,11 +21,15 @@ package org.logicware.database.jpa.metamodel;
 
 import javax.persistence.metamodel.Type;
 
-public abstract class JpaType<X> implements Type<X> {
+import org.logicware.database.Schema;
 
-	private final Class<X> javaType;
+public abstract class JpaType<X> /* extends AbstractWrapper */ implements Type<X> {
 
-	JpaType(Class<X> javaType) {
+	protected final Schema schema;
+	protected final Class<X> javaType;
+
+	public JpaType(Schema schema, Class<X> javaType) {
+		this.schema = schema;
 		this.javaType = javaType;
 	}
 
@@ -38,6 +42,7 @@ public abstract class JpaType<X> implements Type<X> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((javaType == null) ? 0 : javaType.hashCode());
+		result = prime * result + ((schema == null) ? 0 : schema.hashCode());
 		return result;
 	}
 
@@ -53,14 +58,19 @@ public abstract class JpaType<X> implements Type<X> {
 		if (javaType == null) {
 			if (other.javaType != null)
 				return false;
-		} else if (!javaType.equals(other.javaType))
+		} else if (!javaType.equals(other.javaType)) {
 			return false;
+		}
+		if (schema == null) {
+			if (other.schema != null)
+				return false;
+		} else if (!schema.equals(other.schema)) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
-	public String toString() {
-		return "JPAType [javaType=" + javaType + "]";
-	}
+	public abstract String toString();
 
 }

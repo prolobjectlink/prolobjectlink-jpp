@@ -319,11 +319,9 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			Calendar c = (Calendar) object;
 			int minimalDaysInFirstWeek = c.getMinimalDaysInFirstWeek();
 			int firstDayOfWeek = c.getFirstDayOfWeek();
-			String calendarType = c.getCalendarType();
 			long timeInMillis = c.getTimeInMillis();
 			boolean lenient = c.isLenient();
-			return toTerm(
-					new PrologCalendar(lenient, timeInMillis, calendarType, firstDayOfWeek, minimalDaysInFirstWeek));
+			return toTerm(new PrologCalendar(lenient, timeInMillis, firstDayOfWeek, minimalDaysInFirstWeek));
 		}
 
 		// java.util.collections transformations

@@ -20,6 +20,7 @@
 package org.logicware.database;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,6 +29,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.MappedSuperclass;
 
 import org.logicware.asm.ClassWriter;
 import org.logicware.asm.MethodVisitor;
@@ -492,13 +497,15 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		if (fields == null) {
 			if (other.fields != null)
 				return false;
-		} else if (!fields.equals(other.fields))
+		} else if (!fields.equals(other.fields)) {
 			return false;
+		}
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -534,6 +541,49 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		f.setLinkedClass(linkedClass);
 		fields.put(name, f);
 		return f;
+	}
+
+	public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
+		return getJavaClass().isAnnotationPresent(annotationClass);
+	}
+
+	public boolean isMappedSuperclass() {
+		return isAnnotationPresent(MappedSuperclass.class);
+	}
+
+	public boolean isEmbeddable() {
+		return isAnnotationPresent(Embeddable.class);
+	}
+
+	public boolean isEntity() {
+		return isAnnotationPresent(Entity.class);
+	}
+
+	public DatabaseField getIdField() {
+		for (DatabaseField f : getFields()) {
+			if (f.isPrimaryKey()) {
+				return f;
+			}
+		}
+		return null;
+	}
+
+	public DatabaseField getVersionField() {
+		for (DatabaseField f : getFields()) {
+			if (f.isVersion()) {
+				return f;
+			}
+		}
+		return null;
+	}
+
+	public boolean hasVersionField() {
+		for (DatabaseField f : getFields()) {
+			if (f.isVersion()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -19,62 +19,25 @@
  */
 package org.logicware.database.jpa;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Cache;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.PersistenceException;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.Query;
 import javax.persistence.SynchronizationType;
-import javax.persistence.Version;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.Attribute.PersistentAttributeType;
-import javax.persistence.metamodel.EmbeddableType;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.ManagedType;
-import javax.persistence.metamodel.MappedSuperclassType;
 import javax.persistence.metamodel.Metamodel;
-import javax.persistence.metamodel.Type;
 
-import org.logicware.database.DatabaseClass;
 import org.logicware.database.DatabaseEngine;
+import org.logicware.database.Schema;
 import org.logicware.database.jpa.criteria.JpaCriteriaBuilder;
-import org.logicware.database.jpa.metamodel.JpaAttribute;
-import org.logicware.database.jpa.metamodel.JpaBasicType;
-import org.logicware.database.jpa.metamodel.JpaCollectionAttribute;
-import org.logicware.database.jpa.metamodel.JpaEmbeddableType;
-import org.logicware.database.jpa.metamodel.JpaEntityType;
-import org.logicware.database.jpa.metamodel.JpaIdentifiableType;
-import org.logicware.database.jpa.metamodel.JpaListAttribute;
-import org.logicware.database.jpa.metamodel.JpaManagedType;
-import org.logicware.database.jpa.metamodel.JpaMapAttribute;
-import org.logicware.database.jpa.metamodel.JpaMappedSuperclassType;
 import org.logicware.database.jpa.metamodel.JpaMetamodel;
-import org.logicware.database.jpa.metamodel.JpaSetAttribute;
-import org.logicware.database.jpa.metamodel.JpaSingularAttribute;
-import org.logicware.database.util.JavaReflect;
 import org.logicware.prolog.PrologTerm;
 
 /**
@@ -137,15 +100,8 @@ public final class JpaEntityManagerFactory implements EntityManagerFactory {
 	}
 
 	public Metamodel getMetamodel() {
-		Map<Class<?>, Type<?>> types = new LinkedHashMap<Class<?>, Type<?>>();
-		Map<Class<?>, EntityType<?>> entities = new LinkedHashMap<Class<?>, EntityType<?>>();
-		Map<Class<?>, ManagedType<?>> managedTypes = new LinkedHashMap<Class<?>, ManagedType<?>>();
-		Map<Class<?>, EmbeddableType<?>> embeddables = new LinkedHashMap<Class<?>, EmbeddableType<?>>();
-		Set<MappedSuperclassType<?>> mappedSuperclasses = new LinkedHashSet<MappedSuperclassType<?>>();
-		for (Class<?> entityClass : database.getSchema().getJavaClasses()) {
-			getType(entityClass, types, entities, managedTypes, embeddables, mappedSuperclasses);
-		}
-		return new JpaMetamodel(entities, embeddables, managedTypes, types, mappedSuperclasses);
+		Schema s = database.getSchema();
+		return new JpaMetamodel(s);
 	}
 
 	public boolean isOpen() {
@@ -205,208 +161,4 @@ public final class JpaEntityManagerFactory implements EntityManagerFactory {
 		return new JpaAttributeConverter(database.getProvider());
 	}
 
-	private Type<?> getType(Class<?> type, Map<Class<?>, Type<?>> types, Map<Class<?>, EntityType<?>> entities,
-			Map<Class<?>, ManagedType<?>> managedTypes, Map<Class<?>, EmbeddableType<?>> embeddables,
-			Set<MappedSuperclassType<?>> mappedSuperclasses) {
-		if (type.isAnnotationPresent(Entity.class)) {
-			return getEntityType(type, types, entities, managedTypes, embeddables, mappedSuperclasses);
-		} else if (type.isAnnotationPresent(Embeddable.class)) {
-			return getEmbeddableType(type, types, entities, managedTypes, embeddables, mappedSuperclasses);
-		} else if (type.isAnnotationPresent(MappedSuperclass.class)) {
-			return getMappedSupperClassType(type, types, entities, managedTypes, embeddables, mappedSuperclasses);
-		}
-		return getBasicType(type, types);
-	}
-
-	private Type<?> getMappedSupperClassType(Class<?> type, Map<Class<?>, Type<?>> types,
-			Map<Class<?>, EntityType<?>> entities, Map<Class<?>, ManagedType<?>> managedTypes,
-			Map<Class<?>, EmbeddableType<?>> embeddables, Set<MappedSuperclassType<?>> mappedSuperclasses) {
-
-		JpaMappedSuperclassType<?> mappedSuperclassType = new JpaMappedSuperclassType(type,
-				getIdType(type, types, entities, managedTypes, embeddables, mappedSuperclasses));
-		addManagedTypeAttributes(mappedSuperclassType, type, types, entities, managedTypes, embeddables,
-				mappedSuperclasses);
-		managedTypes.put(type, mappedSuperclassType);
-		mappedSuperclasses.add(mappedSuperclassType);
-		types.put(type, mappedSuperclassType);
-		return mappedSuperclassType;
-
-	}
-
-	private Type<?> getEmbeddableType(Class<?> type, Map<Class<?>, Type<?>> types,
-			Map<Class<?>, EntityType<?>> entities, Map<Class<?>, ManagedType<?>> managedTypes,
-			Map<Class<?>, EmbeddableType<?>> embeddables, Set<MappedSuperclassType<?>> mappedSuperclasses) {
-
-		JpaEmbeddableType<?> embeddableType = new JpaEmbeddableType(type);
-		addManagedTypeAttributes(embeddableType, type, types, entities, managedTypes, embeddables, mappedSuperclasses);
-		managedTypes.put(type, embeddableType);
-		embeddables.put(type, embeddableType);
-		types.put(type, embeddableType);
-		return embeddableType;
-
-	}
-
-	private Type<?> getEntityType(Class<?> type, Map<Class<?>, Type<?>> types, Map<Class<?>, EntityType<?>> entities,
-			Map<Class<?>, ManagedType<?>> managedTypes, Map<Class<?>, EmbeddableType<?>> embeddables,
-			Set<MappedSuperclassType<?>> mappedSuperclasses) {
-
-		String name = getEntityName(type);
-		JpaEntityType<?> entityType = new JpaEntityType(type, name,
-				getIdType(type, types, entities, managedTypes, embeddables, mappedSuperclasses));
-		addManagedTypeAttributes(entityType, type, types, entities, managedTypes, embeddables, mappedSuperclasses);
-		managedTypes.put(type, entityType);
-		entities.put(type, entityType);
-		types.put(type, entityType);
-		return entityType;
-
-	}
-
-	private String getEntityName(Class<?> type) {
-		String name = type.getAnnotation(Entity.class).name();
-		return name.isEmpty() ? type.getSimpleName() : name;
-	}
-
-	private Type<?> getBasicType(Class<?> type, Map<Class<?>, Type<?>> types) {
-		JpaBasicType<?> basicType = new JpaBasicType(type);
-		types.put(type, basicType);
-		return basicType;
-	}
-
-	private void addManagedTypeAttributes(JpaManagedType<?> managedType, Class<?> type, Map<Class<?>, Type<?>> types,
-			Map<Class<?>, EntityType<?>> entities, Map<Class<?>, ManagedType<?>> managedTypes,
-			Map<Class<?>, EmbeddableType<?>> embeddables, Set<MappedSuperclassType<?>> mappedSuperclasses) {
-
-		Field[] managedTypeFields = type.getDeclaredFields();
-		for (Field field : managedTypeFields) {
-			Attribute attribute = getAttribute(field, managedType, types, entities, managedTypes, embeddables,
-					mappedSuperclasses);
-			managedType.addAttribute(field.getName(), attribute);
-			if (managedType instanceof JpaIdentifiableType) {
-				JpaIdentifiableType identifiableType = (JpaIdentifiableType) managedType;
-				markIdentifiableAttributes(field, attribute, identifiableType);
-			}
-		}
-
-	}
-
-	private void markIdentifiableAttributes(Field field, Attribute attribute, JpaIdentifiableType identifiableType) {
-		if (field.isAnnotationPresent(Id.class) || field.isAnnotationPresent(EmbeddedId.class)) {
-			if (!attribute.isCollection()) {
-				JpaSingularAttribute singularAttribute = (JpaSingularAttribute) attribute;
-				identifiableType.addIdAttribute(singularAttribute);
-				singularAttribute.markLikeId();
-			}
-		}
-
-		if (field.isAnnotationPresent(Version.class)) {
-			if (!attribute.isCollection()) {
-				JpaSingularAttribute singularAttribute = (JpaSingularAttribute) attribute;
-				identifiableType.addIdAttribute(singularAttribute);
-				singularAttribute.markLikeVersion();
-			}
-		}
-	}
-
-	private JpaAttribute getAttribute(Field field, ManagedType<?> managedType, Map<Class<?>, Type<?>> types,
-			Map<Class<?>, EntityType<?>> entities, Map<Class<?>, ManagedType<?>> managedTypes,
-			Map<Class<?>, EmbeddableType<?>> embeddables, Set<MappedSuperclassType<?>> mappedSuperclasses) {
-
-		String fieldName = field.getName();
-		Class<?> fieldType = field.getType();
-
-		PersistentAttributeType attributeType = getPersistentAttributeType(field);
-
-		if (fieldType == Collection.class) { // collection attribute
-			Type<?> elementType = getElementType(field, types, entities, managedTypes, embeddables, mappedSuperclasses);
-			return new JpaCollectionAttribute(fieldName,
-					getType(fieldType, types, entities, managedTypes, embeddables, mappedSuperclasses), managedType,
-					elementType, attributeType);
-		} else if (fieldType == Set.class) { // set attribute
-			Type<?> elementType = getElementType(field, types, entities, managedTypes, embeddables, mappedSuperclasses);
-			return new JpaSetAttribute(fieldName,
-					getType(fieldType, types, entities, managedTypes, embeddables, mappedSuperclasses), managedType,
-					elementType, attributeType);
-		} else if (fieldType == List.class) { // list attribute
-			Type<?> elementType = getElementType(field, types, entities, managedTypes, embeddables, mappedSuperclasses);
-			return new JpaListAttribute(fieldName,
-					getType(fieldType, types, entities, managedTypes, embeddables, mappedSuperclasses), managedType,
-					elementType, attributeType);
-		} else if (fieldType == Map.class) { // map attribute
-			Type<?> keyType = getKeyType(field, types, entities, managedTypes, embeddables, mappedSuperclasses);
-			Type<?> valueType = getValueType(field, types, entities, managedTypes, embeddables, mappedSuperclasses);
-			return new JpaMapAttribute(fieldName,
-					getType(fieldType, types, entities, managedTypes, embeddables, mappedSuperclasses), managedType,
-					valueType, attributeType, keyType);
-		}
-		return new JpaSingularAttribute(fieldName,
-				getType(fieldType, types, entities, managedTypes, embeddables, mappedSuperclasses), managedType);
-	}
-
-	private PersistentAttributeType getPersistentAttributeType(Field field) {
-		if (field.isAnnotationPresent(ElementCollection.class)) {
-			return PersistentAttributeType.ELEMENT_COLLECTION;
-		} else if (field.isAnnotationPresent(OneToOne.class)) {
-			return PersistentAttributeType.ONE_TO_ONE;
-		} else if (field.isAnnotationPresent(OneToMany.class)) {
-			return PersistentAttributeType.ONE_TO_MANY;
-		} else if (field.isAnnotationPresent(ManyToOne.class)) {
-			return PersistentAttributeType.MANY_TO_ONE;
-		} else if (field.isAnnotationPresent(ManyToMany.class)) {
-			return PersistentAttributeType.MANY_TO_MANY;
-		}
-		return PersistentAttributeType.BASIC;
-	}
-
-	private Type<?> getElementType(Field field, Map<Class<?>, Type<?>> types, Map<Class<?>, EntityType<?>> entities,
-			Map<Class<?>, ManagedType<?>> managedTypes, Map<Class<?>, EmbeddableType<?>> embeddables,
-			Set<MappedSuperclassType<?>> mappedSuperclasses) {
-		ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-		java.lang.reflect.Type elementType = parameterizedType.getActualTypeArguments()[0];
-		Class<?> genericType = JavaReflect.classForName(((Class<?>) elementType).getName());
-		return getType(genericType, types, entities, managedTypes, embeddables, mappedSuperclasses);
-	}
-
-	private Type<?> getKeyType(Field field, Map<Class<?>, Type<?>> types, Map<Class<?>, EntityType<?>> entities,
-			Map<Class<?>, ManagedType<?>> managedTypes, Map<Class<?>, EmbeddableType<?>> embeddables,
-			Set<MappedSuperclassType<?>> mappedSuperclasses) {
-		ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-		java.lang.reflect.Type keyType = parameterizedType.getActualTypeArguments()[0];
-		Class<?> genericType = JavaReflect.classForName(((Class<?>) keyType).getName());
-		return getType(genericType, types, entities, managedTypes, embeddables, mappedSuperclasses);
-	}
-
-	private Type<?> getValueType(Field field, Map<Class<?>, Type<?>> types, Map<Class<?>, EntityType<?>> entities,
-			Map<Class<?>, ManagedType<?>> managedTypes, Map<Class<?>, EmbeddableType<?>> embeddables,
-			Set<MappedSuperclassType<?>> mappedSuperclasses) {
-		ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-		java.lang.reflect.Type elementType = parameterizedType.getActualTypeArguments()[1];
-		Class<?> genericType = JavaReflect.classForName(((Class<?>) elementType).getName());
-		if (genericType.isAnnotationPresent(Entity.class)) {
-			// System.out.println(getEntityName(genericType));
-			// System.out.println(getEntityName(field.getDeclaringClass()));
-			Class<?> clazz = field.getDeclaringClass();
-			Field[] fields = clazz.getDeclaredFields();
-			for (Field field2 : fields) {
-				if (field.getDeclaringClass() == field2.getType()) {
-					System.out.println(field2);
-				}
-			}
-		}
-
-		return getType(genericType, types, entities, managedTypes, embeddables, mappedSuperclasses);
-	}
-
-	private Type<?> getIdType(Class<?> type, Map<Class<?>, Type<?>> types, Map<Class<?>, EntityType<?>> entities,
-			Map<Class<?>, ManagedType<?>> managedTypes, Map<Class<?>, EmbeddableType<?>> embeddables,
-			Set<MappedSuperclassType<?>> mappedSuperclasses) {
-		Field[] fields = type.getDeclaredFields();
-		for (int i = 0; i < fields.length; i++) {
-			if (fields[i].isAnnotationPresent(Id.class)) {
-				return getType(fields[i].getType(), types, entities, managedTypes, embeddables, mappedSuperclasses);
-			}
-		}
-		return null;
-		// throw new
-		// PersistenceException("No field was annotated with @Id annotation");
-	}
 }

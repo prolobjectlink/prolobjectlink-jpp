@@ -21,15 +21,13 @@ package org.logicware.database.prolog;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Calendar.Builder;
 import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * Persistent Calendar class implementation based on the {@link Builder} fields
- * for persistence. {@link Locale} and {@link TimeZone} are not persistent. By
- * this reason the {@link Calendar} obtained from this class use the default
- * locale and time zone.
+ * Persistent Calendar class implementation for persistence. {@link Locale} and
+ * {@link TimeZone} are not persistent. By this reason the {@link Calendar}
+ * obtained from this class use the default locale and time zone.
  * 
  * @author Jose Zalacain
  * @since 1.0
@@ -37,11 +35,9 @@ import java.util.TimeZone;
 public class PrologCalendar extends AbstractTemporal implements Serializable {
 
 	private final boolean lenient;
-	private final String calendarType;
 	private final int firstDayOfWeek;
 	private final int minimalDaysInFirstWeek;
 
-	private static final Builder builder = new Calendar.Builder();
 	private static final long serialVersionUID = -1810532253972577393L;
 
 	PrologCalendar() {
@@ -49,25 +45,18 @@ public class PrologCalendar extends AbstractTemporal implements Serializable {
 		Calendar c = Calendar.getInstance();
 		minimalDaysInFirstWeek = c.getMinimalDaysInFirstWeek();
 		firstDayOfWeek = c.getFirstDayOfWeek();
-		calendarType = c.getCalendarType();
 		lenient = c.isLenient();
 	}
 
-	PrologCalendar(boolean lenient, long timeInMillis, String calendarType, int firstDayOfWeek,
-			int minimalDaysInFirstWeek) {
+	PrologCalendar(boolean lenient, long timeInMillis, int firstDayOfWeek, int minimalDaysInFirstWeek) {
 		super(timeInMillis);
 		this.lenient = lenient;
-		this.calendarType = calendarType;
 		this.firstDayOfWeek = firstDayOfWeek;
 		this.minimalDaysInFirstWeek = minimalDaysInFirstWeek;
 	}
 
 	final long getTimeInMillis() {
 		return getTime();
-	}
-
-	final String getCalendarType() {
-		return calendarType;
 	}
 
 	final boolean isLenient() {
@@ -91,7 +80,6 @@ public class PrologCalendar extends AbstractTemporal implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((calendarType == null) ? 0 : calendarType.hashCode());
 		result = prime * result + firstDayOfWeek;
 		result = prime * result + (lenient ? 1231 : 1237);
 		result = prime * result + minimalDaysInFirstWeek;
@@ -107,11 +95,6 @@ public class PrologCalendar extends AbstractTemporal implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		PrologCalendar other = (PrologCalendar) obj;
-		if (calendarType == null) {
-			if (other.calendarType != null)
-				return false;
-		} else if (!calendarType.equals(other.calendarType))
-			return false;
 		if (firstDayOfWeek != other.firstDayOfWeek)
 			return false;
 		if (lenient != other.lenient)
@@ -120,11 +103,12 @@ public class PrologCalendar extends AbstractTemporal implements Serializable {
 	}
 
 	public Calendar getJavaUtilCalendar() {
-		builder.setWeekDefinition(firstDayOfWeek, minimalDaysInFirstWeek);
-		builder.setCalendarType(calendarType);
-		builder.setInstant(getTime());
-		builder.setLenient(lenient);
-		return builder.build();
+		Calendar c = Calendar.getInstance();
+		c.setMinimalDaysInFirstWeek(getMinimalDaysInFirstWeek());
+		c.setFirstDayOfWeek(getFirstDayOfWeek());
+		c.setTimeInMillis(getTime());
+		c.setLenient(isLenient());
+		return c;
 	}
 
 }

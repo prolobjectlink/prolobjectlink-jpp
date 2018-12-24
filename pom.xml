@@ -230,6 +230,25 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- <plugin> -->
+			<!-- <groupId>de.jflex</groupId> -->
+			<!-- <artifactId>jflex-maven-plugin</artifactId> -->
+			<!-- <version>1.6.0</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <goals> -->
+			<!-- <goal>generate</goal> -->
+			<!-- </goals> -->
+			<!-- <configuration> -->
+			<!-- <verbose>true</verbose> -->
+			<!-- <outputDirectory>${basedir}/src/main/java/</outputDirectory> -->
+			<!-- <lexDefinitions> -->
+			<!-- <lexDefinition>src/main/jflex</lexDefinition> -->
+			<!-- </lexDefinitions> -->
+			<!-- </configuration> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- </plugin> -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>

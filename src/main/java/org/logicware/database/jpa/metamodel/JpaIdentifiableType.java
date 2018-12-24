@@ -19,126 +19,112 @@
  */
 package org.logicware.database.jpa.metamodel;
 
-import java.util.LinkedHashSet;
+import java.lang.reflect.Field;
 import java.util.Set;
 
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.PersistenceException;
 import javax.persistence.metamodel.IdentifiableType;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.Type;
 
+import org.logicware.database.DatabaseClass;
+import org.logicware.database.Schema;
+
 public abstract class JpaIdentifiableType<X> extends JpaManagedType<X> implements IdentifiableType<X> {
 
-	private final Type<?> idType;
-	private IdentifiableType<? super X> superType;
-	private SingularAttribute<? super X, ?> versionAttribute;
-	private Set<SingularAttribute<? super X, ?>> idAttributes;
-
-	public JpaIdentifiableType(Class<X> javaType, Type<?> idType) {
-		super(javaType);
-		this.idType = idType;
-		idAttributes = new LinkedHashSet<SingularAttribute<? super X, ?>>();
+	public JpaIdentifiableType(Schema schema, DatabaseClass databaseClass) {
+		super(schema, databaseClass);
 	}
 
-	public <Y> SingularAttribute<? super X, Y> getId(Class<Y> type) {
+	public final <Y> SingularAttribute<? super X, Y> getId(Class<Y> type) {
 		return getDeclaredId(type);
 	}
 
-	public <Y> SingularAttribute<X, Y> getDeclaredId(Class<Y> type) {
-		for (SingularAttribute<? super X, ?> idAttribute : idAttributes) {
-			if (idAttribute.getType().getJavaType() == type) {
-				return (SingularAttribute<X, Y>) idAttribute;
+	public final <Y> SingularAttribute<X, Y> getDeclaredId(Class<Y> type) {
+		Class<?> owner = databaseClass.getJavaClass();
+		Field[] fields = owner.getDeclaredFields();
+		for (Field field : fields) {
+			if (field.getType() == type) {
+				String name = field.getName();
+				if (field.isAnnotationPresent(Id.class)) {
+					if (type.isAnnotationPresent(IdClass.class)) {
+						DatabaseClass cls = schema.getClass(type);
+						if (type.isAnnotationPresent(MappedSuperclass.class)) {
+							Type<Y> modelType = new JpaMappedSuperclassType<Y>(schema, cls);
+							return new JpaSingularAttribute<X, Y>(this, name, modelType);
+						} else {
+							Type<Y> modelType = new JpaEntityType<Y>(schema, cls);
+							return new JpaSingularAttribute<X, Y>(this, name, modelType);
+						}
+					} else {
+						Type<Y> modelType = new JpaBasicType<Y>(schema, type);
+						return new JpaSingularAttribute<X, Y>(this, name, modelType);
+					}
+				} else if (field.isAnnotationPresent(EmbeddedId.class) && type.isAnnotationPresent(Embeddable.class)) {
+					DatabaseClass cls = schema.getClass(type);
+					Type<Y> modelType = new JpaEmbeddableType<Y>(schema, cls);
+					return new JpaSingularAttribute<X, Y>(this, name, modelType);
+				}
+			} else {
+				throw new PersistenceException("No type matching for given argument and " + field.getType());
 			}
 		}
-		throw new IllegalArgumentException("No id attribute of type " + type + " on " + getJavaType());
+		throw new PersistenceException("No @Id annotation was found in " + databaseClass);
 	}
 
-	public <Y> SingularAttribute<? super X, Y> getVersion(Class<Y> type) {
+	public final <Y> SingularAttribute<? super X, Y> getVersion(Class<Y> type) {
 		return getDeclaredVersion(type);
 	}
 
-	public <Y> SingularAttribute<X, Y> getDeclaredVersion(Class<Y> type) {
-		if (hasVersionAttribute()) {
-			Class<?> javaType = versionAttribute.getType().getJavaType();
-			if (javaType == type) {
-				return (SingularAttribute<X, Y>) versionAttribute;
-			}
+	public final <Y> SingularAttribute<X, Y> getDeclaredVersion(Class<Y> type) {
+		Type<Y> modelType = null;
+		String name = databaseClass.getVersionField().getName();
+		Class<?> fType = databaseClass.getVersionField().getType();
+		if (!schema.containsClass(fType.getName())) {
+			modelType = new JpaBasicType<Y>(schema, (Class<Y>) fType);
+		} else {
+			DatabaseClass cls = schema.getClass(fType);
+			modelType = new JpaEntityType<Y>(schema, cls);
 		}
-		throw new IllegalArgumentException("No version attribute of type " + type + " on " + getJavaType());
+		assert modelType != null;
+		return new JpaSingularAttribute<X, Y>(this, name, modelType);
 	}
 
-	public IdentifiableType<? super X> getSupertype() {
-		return superType;
+	public final IdentifiableType<? super X> getSupertype() {
+		DatabaseClass s = databaseClass.getSuperClass();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public boolean hasSingleIdAttribute() {
-		return !idAttributes.isEmpty();
+	public final boolean hasSingleIdAttribute() {
+		Class<?> fType = databaseClass.getIdField().getType();
+		return (!schema.containsClass(fType.getName()));
 	}
 
-	public boolean hasVersionAttribute() {
-		return versionAttribute != null;
+	public final boolean hasVersionAttribute() {
+		return databaseClass.hasVersionField();
 	}
 
-	public Set<SingularAttribute<? super X, ?>> getIdClassAttributes() {
-		return idAttributes;
+	public final Set<SingularAttribute<? super X, ?>> getIdClassAttributes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Type<?> getIdType() {
-		return idType;
-	}
-
-	public void setSuperType(IdentifiableType<? super X> superType) {
-		this.superType = superType;
-	}
-
-	public void setVersionAttribute(SingularAttribute<? super X, ?> versionAttribute) {
-		this.versionAttribute = versionAttribute;
-	}
-
-	public void addIdAttribute(SingularAttribute<? super X, ?> idAttribute) {
-		idAttributes.add(idAttribute);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((idAttributes == null) ? 0 : idAttributes.hashCode());
-		result = prime * result + ((idType == null) ? 0 : idType.hashCode());
-		result = prime * result + ((superType == null) ? 0 : superType.hashCode());
-		result = prime * result + ((versionAttribute == null) ? 0 : versionAttribute.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		JpaIdentifiableType<?> other = (JpaIdentifiableType<?>) obj;
-		if (idAttributes == null) {
-			if (other.idAttributes != null)
-				return false;
-		} else if (!idAttributes.equals(other.idAttributes))
-			return false;
-		if (idType == null) {
-			if (other.idType != null)
-				return false;
-		} else if (!idType.equals(other.idType))
-			return false;
-		if (superType == null) {
-			if (other.superType != null)
-				return false;
-		} else if (!superType.equals(other.superType))
-			return false;
-		if (versionAttribute == null) {
-			if (other.versionAttribute != null)
-				return false;
-		} else if (!versionAttribute.equals(other.versionAttribute))
-			return false;
-		return true;
+	public final Type<?> getIdType() {
+		Type<?> modelType = null;
+		Class<?> fType = databaseClass.getIdField().getType();
+		if (!schema.containsClass(fType.getName())) {
+			modelType = new JpaBasicType(schema, fType);
+		} else {
+			DatabaseClass cls = schema.getClass(fType);
+			modelType = new JpaEntityType(schema, cls);
+		}
+		return modelType;
 	}
 
 }

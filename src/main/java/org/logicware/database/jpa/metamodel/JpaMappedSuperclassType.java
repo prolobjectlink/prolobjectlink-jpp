@@ -20,16 +20,23 @@
 package org.logicware.database.jpa.metamodel;
 
 import javax.persistence.metamodel.MappedSuperclassType;
-import javax.persistence.metamodel.Type;
+
+import org.logicware.database.DatabaseClass;
+import org.logicware.database.Schema;
 
 public final class JpaMappedSuperclassType<X> extends JpaIdentifiableType<X> implements MappedSuperclassType<X> {
 
-	public JpaMappedSuperclassType(Class<X> javaType, Type<?> idType) {
-		super(javaType, idType);
+	public JpaMappedSuperclassType(Schema schema, DatabaseClass databaseClass) {
+		super(schema, databaseClass);
 	}
 
 	public PersistenceType getPersistenceType() {
 		return PersistenceType.MAPPED_SUPERCLASS;
+	}
+
+	@Override
+	public String toString() {
+		return "JpaMappedSuperclassType [javaType=" + javaType + "]";
 	}
 
 }

@@ -42,8 +42,9 @@ public final class DatabaseField extends AbstractElement<DatabaseField>
 	private String typeName;
 	private boolean notNull;
 	private String fullName;
+	private boolean version;
 	private boolean primaryKey;
-	private boolean isTrnasient;
+	private boolean isTransient;
 	private String linkedTypeName;
 	private Serializable minValue;
 	private Serializable maxValue;
@@ -192,8 +193,7 @@ public final class DatabaseField extends AbstractElement<DatabaseField>
 	/**
 	 * Create a field in byte code instruction
 	 * 
-	 * @param cv
-	 *            class writer to field declaration
+	 * @param cv class writer to field declaration
 	 * @since 1.0
 	 */
 	public void createField(ClassVisitor cv) {
@@ -203,10 +203,8 @@ public final class DatabaseField extends AbstractElement<DatabaseField>
 	/**
 	 * Create a getter method associated to this field in byte code instruction
 	 * 
-	 * @param cv
-	 *            class writer to method declaration
-	 * @param className
-	 *            name of the owner class
+	 * @param cv        class writer to method declaration
+	 * @param className name of the owner class
 	 * @since 1.0
 	 */
 	public void createSetter(ClassVisitor cv, String className, String type, Class<?> c) {
@@ -223,10 +221,8 @@ public final class DatabaseField extends AbstractElement<DatabaseField>
 	/**
 	 * Create a setter method associated to this field in byte code instruction
 	 * 
-	 * @param cv
-	 *            class writer to method declaration
-	 * @param className
-	 *            name of the owner class
+	 * @param cv        class writer to method declaration
+	 * @param className name of the owner class
 	 * @since 1.0
 	 */
 	public void createGetter(ClassVisitor cv, String className, String returnType, Class<?> c) {
@@ -267,8 +263,8 @@ public final class DatabaseField extends AbstractElement<DatabaseField>
 	}
 
 	/**
-	 * Return the {@link DatabaseClass} relationship that connect the owner
-	 * class with the field type.
+	 * Return the {@link DatabaseClass} relationship that connect the owner class
+	 * with the field type.
 	 * 
 	 * @return relationship that connect the owner class with the field type.
 	 * @since 1.0
@@ -278,12 +274,11 @@ public final class DatabaseField extends AbstractElement<DatabaseField>
 	}
 
 	/**
-	 * Put the {@link DatabaseClass} relationship that connect the owner class
-	 * with the field type.
+	 * Put the {@link DatabaseClass} relationship that connect the owner class with
+	 * the field type.
 	 * 
-	 * @param clazz
-	 *            {@link DatabaseClass} relationship that connect the owner
-	 *            class with the field type.
+	 * @param clazz {@link DatabaseClass} relationship that connect the owner class
+	 *              with the field type.
 	 * @since 1.0
 	 */
 	public DatabaseField setLinkedClass(DatabaseClass clazz) {
@@ -314,16 +309,26 @@ public final class DatabaseField extends AbstractElement<DatabaseField>
 		return primaryKey;
 	}
 
-	public void setPrimaryKey(boolean primaryKey) {
+	public DatabaseField setPrimaryKey(boolean primaryKey) {
 		this.primaryKey = primaryKey;
+		return this;
 	}
 
-	public boolean isTrnasient() {
-		return isTrnasient;
+	public boolean isVersion() {
+		return version;
 	}
 
-	public DatabaseField setTrnasient(boolean isTrnasient) {
-		this.isTrnasient = isTrnasient;
+	public DatabaseField setVersion(boolean version) {
+		this.version = version;
+		return this;
+	}
+
+	public boolean isTransient() {
+		return isTransient;
+	}
+
+	public DatabaseField setTransient(boolean isTrnasient) {
+		this.isTransient = isTrnasient;
 		return this;
 	}
 

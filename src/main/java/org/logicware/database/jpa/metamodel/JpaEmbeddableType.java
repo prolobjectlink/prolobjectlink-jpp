@@ -21,14 +21,22 @@ package org.logicware.database.jpa.metamodel;
 
 import javax.persistence.metamodel.EmbeddableType;
 
+import org.logicware.database.DatabaseClass;
+import org.logicware.database.Schema;
+
 public final class JpaEmbeddableType<X> extends JpaManagedType<X> implements EmbeddableType<X> {
 
-	public JpaEmbeddableType(Class<X> javaType) {
-		super(javaType);
+	public JpaEmbeddableType(Schema schema, DatabaseClass databaseClass) {
+		super(schema, databaseClass);
 	}
 
 	public PersistenceType getPersistenceType() {
 		return PersistenceType.EMBEDDABLE;
+	}
+
+	@Override
+	public String toString() {
+		return "JpaEmbeddableType [javaType=" + javaType + "]";
 	}
 
 }

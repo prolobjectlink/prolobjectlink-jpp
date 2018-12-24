@@ -29,8 +29,8 @@ public final class JpaSingularAttribute<X, Y> extends JpaAttribute<X, Y> impleme
 	private boolean id;
 	private boolean version;
 
-	public JpaSingularAttribute(String name, Type<Y> javaType, ManagedType<X> managedType) {
-		super(name, javaType, managedType);
+	protected JpaSingularAttribute(ManagedType<X> ownerType, String name, Type<Y> type) {
+		super(ownerType, name, type);
 	}
 
 	public BindableType getBindableType() {

@@ -126,10 +126,10 @@ public final class Settings extends AbstractMap<Object, Object>
 			Class<?> clazzProvider = JavaReflect.classForName(provider);
 
 			this.timeGranularity = Integer
-					.valueOf((String) properties.getOrDefault(TIME_GRANULARITY, DEFAULT_TIME_GRANULARITY));
-			this.lockSleep = Integer.valueOf((String) properties.getOrDefault(LOCK_SLEEP, DEFAULT_LOCK_SLEEP));
-			this.sleepGap = Integer.valueOf((String) properties.getOrDefault(SLEEP_GAP, DEFAULT_SLEEP_GAP));
-			this.port = Integer.valueOf((String) properties.getOrDefault(PORT, DEFAULT_PORT));
+					.valueOf((String) properties.getProperty(TIME_GRANULARITY, "" + DEFAULT_TIME_GRANULARITY + ""));
+			this.lockSleep = Integer.valueOf((String) properties.getProperty(LOCK_SLEEP, "" + DEFAULT_LOCK_SLEEP + ""));
+			this.sleepGap = Integer.valueOf((String) properties.getProperty(SLEEP_GAP, "" + DEFAULT_SLEEP_GAP + ""));
+			this.port = Integer.valueOf((String) properties.getProperty(PORT, "" + DEFAULT_PORT + ""));
 			this.password = properties.getProperty(SECRET, DEFAULT_SECRET);
 			this.username = properties.getProperty(USER, DEFAULT_USER);
 

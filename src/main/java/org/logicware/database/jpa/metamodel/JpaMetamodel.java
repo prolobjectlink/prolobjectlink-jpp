@@ -19,84 +19,84 @@
  */
 package org.logicware.database.jpa.metamodel;
 
-import java.util.LinkedHashSet;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.PersistenceException;
 import javax.persistence.metamodel.EmbeddableType;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.ManagedType;
-import javax.persistence.metamodel.MappedSuperclassType;
 import javax.persistence.metamodel.Metamodel;
-import javax.persistence.metamodel.Type;
+
+import org.logicware.database.DatabaseClass;
+import org.logicware.database.Schema;
 
 public final class JpaMetamodel implements Metamodel {
 
-	private final Map<Class<?>, Type<?>> types;
-	private final Map<Class<?>, EntityType<?>> entities;
-	private final Map<Class<?>, ManagedType<?>> managedTypes;
-	private final Map<Class<?>, EmbeddableType<?>> embeddables;
-	private final Set<MappedSuperclassType<?>> mappedSuperclasses;
+	private final Schema schema;
 
-	public JpaMetamodel(Map<Class<?>, EntityType<?>> entities, Map<Class<?>, EmbeddableType<?>> embeddables,
-			Map<Class<?>, ManagedType<?>> managedTypes, Map<Class<?>, Type<?>> types,
-			Set<MappedSuperclassType<?>> mappedSuperclasses) {
-		this.mappedSuperclasses = mappedSuperclasses;
-		this.managedTypes = managedTypes;
-		this.embeddables = embeddables;
-		this.entities = entities;
-		this.types = types;
+	public JpaMetamodel(Schema schema) {
+		this.schema = schema;
 	}
 
 	public <X> EntityType<X> entity(Class<X> cls) {
-		EntityType<?> entityType = entities.get(cls);
-		if (entityType != null && entityType.getJavaType() == cls) {
-			return (EntityType<X>) entityType;
-		}
-		throw new IllegalArgumentException("No entity type associated to " + cls);
+		DatabaseClass c = schema.getClass(cls);
+		assertEntityAnnotatedClass(cls);
+		return new JpaEntityType<X>(schema, c);
 	}
 
 	public <X> ManagedType<X> managedType(Class<X> cls) {
-		ManagedType<?> managedType = entities.get(cls);
-		if (managedType != null && managedType.getJavaType() == cls) {
-			return (ManagedType<X>) managedType;
-		}
-		throw new IllegalArgumentException("No manage type associated to " + cls);
+		DatabaseClass c = schema.getClass(cls);
+		return new JpaMappedSuperclassType<X>(schema, c);
 	}
 
 	public <X> EmbeddableType<X> embeddable(Class<X> cls) {
-		EmbeddableType<?> embeddableType = embeddables.get(cls);
-		if (embeddableType != null && embeddableType.getJavaType() == cls) {
-			return (EmbeddableType<X>) embeddableType;
-		}
-		throw new IllegalArgumentException("No embeddable type associated to " + cls);
+		DatabaseClass c = schema.getClass(cls);
+		assertEmbeddableAnnotatedClass(cls);
+		return new JpaEmbeddableType<X>(schema, c);
 	}
 
 	public Set<ManagedType<?>> getManagedTypes() {
-		Set<Class<?>> keySet = managedTypes.keySet();
-		Set<ManagedType<?>> set = new LinkedHashSet<ManagedType<?>>(keySet.size());
-		for (Class<?> clazz : keySet) {
-			set.add(managedTypes.get(clazz));
-		}
-		return set;
+		Set<ManagedType<?>> types = new HashSet<ManagedType<?>>();
+		types.addAll(getEmbeddables());
+		types.addAll(getEntities());
+		return types;
 	}
 
 	public Set<EntityType<?>> getEntities() {
-		Set<Class<?>> keySet = entities.keySet();
-		Set<EntityType<?>> set = new LinkedHashSet<EntityType<?>>(keySet.size());
-		for (Class<?> clazz : keySet) {
-			set.add(entities.get(clazz));
+		Set<EntityType<?>> entities = new HashSet<EntityType<?>>();
+		for (DatabaseClass cls : schema.getClasses()) {
+			if (cls.getJavaClass().isAnnotationPresent(Entity.class)) {
+				EntityType<?> e = new JpaEntityType(schema, cls);
+				entities.add(e);
+			}
 		}
-		return set;
+		return entities;
 	}
 
 	public Set<EmbeddableType<?>> getEmbeddables() {
-		Set<Class<?>> keySet = embeddables.keySet();
-		Set<EmbeddableType<?>> set = new LinkedHashSet<EmbeddableType<?>>(keySet.size());
-		for (Class<?> clazz : keySet) {
-			set.add(embeddables.get(clazz));
+		Set<EmbeddableType<?>> embeddables = new HashSet<EmbeddableType<?>>();
+		for (DatabaseClass cls : schema.getClasses()) {
+			if (cls.getJavaClass().isAnnotationPresent(Embeddable.class)) {
+				EmbeddableType<?> e = new JpaEmbeddableType(schema, cls);
+				embeddables.add(e);
+			}
 		}
-		return set;
+		return embeddables;
+	}
+
+	private void assertEmbeddableAnnotatedClass(Class<?> cls) {
+		if (!cls.isAnnotationPresent(Embeddable.class)) {
+			throw new PersistenceException("No @Entity annotated class " + cls);
+		}
+	}
+
+	private void assertEntityAnnotatedClass(Class<?> cls) {
+		if (!cls.isAnnotationPresent(Entity.class)) {
+			throw new PersistenceException("No @Entity annotated class " + cls);
+		}
 	}
 
 }

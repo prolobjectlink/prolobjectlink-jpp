@@ -19,7 +19,10 @@
  */
 package org.logicware.database.querylang.jpql;
 
-public class JpqlSymbols {
+import org.logicware.AbstractIterator;
+import org.logicware.database.querylang.SymbolEntry;
+
+public abstract class JpqlSymbols extends AbstractIterator<SymbolEntry> {
 	public static final int AS = 39;
 	public static final int LEFT = 88;
 	public static final int COALESCE = 8;

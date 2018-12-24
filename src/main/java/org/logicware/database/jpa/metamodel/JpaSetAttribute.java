@@ -27,9 +27,9 @@ import javax.persistence.metamodel.Type;
 
 public final class JpaSetAttribute<X, E> extends JpaPluralAttribute<X, Set<E>, E> implements SetAttribute<X, E> {
 
-	public JpaSetAttribute(String name, Type<Set<E>> type, ManagedType<X> managedType, Type<E> elementType,
+	public JpaSetAttribute(ManagedType<X> ownerType, String name, Type<Set<E>> type, Type<E> elementType,
 			PersistentAttributeType attributeType) {
-		super(name, type, managedType, elementType, attributeType);
+		super(ownerType, name, type, elementType, attributeType);
 	}
 
 	public CollectionType getCollectionType() {

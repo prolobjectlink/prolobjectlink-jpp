@@ -31,9 +31,9 @@ public final class JpaMapAttribute<X, K, V> extends JpaPluralAttribute<X, Map<K,
 
 	private final Type<K> keyType;
 
-	public JpaMapAttribute(String name, Type<Map<K, V>> type, ManagedType<X> managedType, Type<V> elementType,
+	public JpaMapAttribute(ManagedType<X> ownerType, String name, Type<Map<K, V>> type, Type<V> elementType,
 			PersistentAttributeType attributeType, Type<K> keyType) {
-		super(name, type, managedType, elementType, attributeType);
+		super(ownerType, name, type, elementType, attributeType);
 		this.keyType = keyType;
 	}
 
@@ -80,8 +80,9 @@ public final class JpaMapAttribute<X, K, V> extends JpaPluralAttribute<X, Map<K,
 		if (keyType == null) {
 			if (other.keyType != null)
 				return false;
-		} else if (!keyType.equals(other.keyType))
+		} else if (!keyType.equals(other.keyType)) {
 			return false;
+		}
 		return true;
 	}
 

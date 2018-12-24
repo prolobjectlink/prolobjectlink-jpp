@@ -20,16 +20,14 @@
 package org.logicware.database.jpa.metamodel;
 
 import javax.persistence.metamodel.Bindable;
-import javax.persistence.metamodel.Type;
+
+import org.logicware.database.DatabaseClass;
+import org.logicware.database.Schema;
 
 public abstract class JpaBindableType<X> extends JpaIdentifiableType<X> implements Bindable<X> {
 
-	JpaBindableType(Class<X> javaType, Type<?> idType) {
-		super(javaType, idType);
-	}
-
-	public Class<X> getBindableJavaType() {
-		return getJavaType();
+	public JpaBindableType(Schema schema, DatabaseClass databaseClass) {
+		super(schema, databaseClass);
 	}
 
 }
