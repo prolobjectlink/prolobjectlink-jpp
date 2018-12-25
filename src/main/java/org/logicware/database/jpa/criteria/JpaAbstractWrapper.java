@@ -31,7 +31,11 @@ public abstract class JpaAbstractWrapper extends AbstractWrapper implements JpaT
 
 	private static final String MESSAGE2 = "Unsupported featured";
 
-	public String compile() {
+	public String getJpqlString() {
+		return toString();
+	}
+
+	public String getQueryString() {
 		throw new UnsupportedOperationException(MESSAGE2);
 	}
 

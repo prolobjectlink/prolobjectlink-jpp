@@ -28,10 +28,11 @@ import javax.persistence.metamodel.Metamodel;
 public abstract class JpaAbstractCriteria<T> extends JpaAbstractWrapper implements CommonAbstractCriteria {
 
 	protected Expression<Boolean> restriction;
+	protected final Class<T> targetEntity;
 	protected final Metamodel metamodel;
 
 	public JpaAbstractCriteria(Expression<Boolean> restriction, Metamodel metamodel, Class<T> targetEntity) {
-		subquery(targetEntity);
+		this.targetEntity = targetEntity;
 		this.restriction = restriction;
 		this.metamodel = metamodel;
 	}

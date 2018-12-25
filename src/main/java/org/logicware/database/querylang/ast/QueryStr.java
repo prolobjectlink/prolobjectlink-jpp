@@ -29,7 +29,7 @@ public class QueryStr extends AbstractStr implements Str {
 	}
 
 	@Override
-	public String compile() {
+	public String getQueryString() {
 		return "'" + str + "'";
 	}
 

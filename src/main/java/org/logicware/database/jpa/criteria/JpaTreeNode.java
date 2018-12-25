@@ -31,12 +31,19 @@ public interface JpaTreeNode {
 	public String toString();
 
 	/**
+	 * JPQL Query Language
+	 * 
+	 * @return JPQL Query Language
+	 * @since 1.0
+	 */
+	public String getJpqlString();
+
+	/**
 	 * Compile the Query Language to Native Query Language
 	 * 
-	 * @param symbols Symbol Table for compilation identifiers information
 	 * @return Native Query Language
 	 * @since 1.0
 	 */
-	public String compile();
+	public String getQueryString();
 
 }

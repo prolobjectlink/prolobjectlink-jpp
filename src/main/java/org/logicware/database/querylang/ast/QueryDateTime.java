@@ -36,7 +36,7 @@ public class QueryDateTime extends AbstractDateTime implements DateTime {
 	}
 
 	@Override
-	public String compile() {
+	public String getQueryString() {
 		return "'" + date + "'";
 	}
 

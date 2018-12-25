@@ -318,4 +318,14 @@ public class JpaQuery implements Query {
 		throw new PersistenceException("Impossible unwrap to " + cls.getName());
 	}
 
+	public void getJpqlString() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void getQueryString() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

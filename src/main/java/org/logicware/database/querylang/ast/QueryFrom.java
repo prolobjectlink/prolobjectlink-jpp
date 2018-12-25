@@ -36,7 +36,7 @@ public class QueryFrom extends AbstractFrom implements FromNode {
 	}
 
 	@Override
-	public String compile() {
+	public String getQueryString() {
 		return "FROM";
 	}
 

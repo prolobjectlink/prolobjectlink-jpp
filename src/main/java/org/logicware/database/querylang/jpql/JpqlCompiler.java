@@ -45,7 +45,7 @@ public class JpqlCompiler {
 	 * @since 1.0
 	 */
 	public static String compile(Set<String> builtins, String jpqlStatementQuery) {
-		return treeNode(builtins, jpqlStatementQuery).compile();
+		return treeNode(builtins, jpqlStatementQuery).getQueryString();
 	}
 
 	/**

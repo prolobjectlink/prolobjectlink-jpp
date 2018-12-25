@@ -36,7 +36,7 @@ public class QueryNumber extends AbstractNumber implements Number {
 	}
 
 	@Override
-	public String compile() {
+	public String getQueryString() {
 		return "" + n + "";
 	}
 

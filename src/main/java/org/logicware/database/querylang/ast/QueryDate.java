@@ -36,7 +36,7 @@ public class QueryDate extends AbstractDate implements JpaTreeNode {
 	}
 
 	@Override
-	public String compile() {
+	public String getQueryString() {
 		return "'" + date + "'";
 	}
 
