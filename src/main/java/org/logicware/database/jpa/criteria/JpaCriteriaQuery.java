@@ -34,6 +34,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Predicate.BooleanOperator;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import javax.persistence.metamodel.Bindable;
@@ -46,7 +47,7 @@ import org.logicware.database.jpa.criteria.predicate.JpaConjuntion;
 
 public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements CriteriaQuery<T> {
 
-	protected Selection<?> selection;
+	protected Selection<T> selection;
 	protected List<Order> orderBy = new ArrayList<Order>();
 	protected List<From<?, ?>> joins = new ArrayList<From<?, ?>>();
 	protected final List<Predicate> predicates = new LinkedList<Predicate>();
@@ -84,7 +85,7 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	public CriteriaQuery<T> where(Expression<Boolean> restriction) {
 		String alias = restriction.getAlias();
 		Class<? extends Boolean> javaType = restriction.getJavaType();
-		this.restriction = new JpaWhere(alias, javaType, restriction, metamodel);
+		this.restriction = new JpaWhere(alias, javaType, restriction, metamodel, BooleanOperator.AND, newList());
 		return this;
 	}
 
@@ -167,6 +168,10 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 		return from(entity.getJavaType());
 	}
 
+	public Selection<T> getSelection() {
+		return selection;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
@@ -174,10 +179,15 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 		if (selection != null) {
 			b.append(selection);
 		}
-		if (whereClause != null) {
-			b.append(whereClause);
+		if (!groupBy.isEmpty()) {
+			for (Expression<?> o : groupBy) {
+				b.append("GROUP BY ");
+				b.append(o);
+			}
 		}
 		if (havingClause != null) {
+			b.append(' ');
+			b.append("HAVING ");
 			b.append(havingClause);
 		}
 		if (restriction != null) {
@@ -185,12 +195,6 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 		}
 		if (!orderBy.isEmpty()) {
 			for (Order o : orderBy) {
-				b.append(o);
-			}
-		}
-		if (!groupBy.isEmpty()) {
-			for (Expression<?> o : groupBy) {
-				b.append("GROUP BY ");
 				b.append(o);
 			}
 		}

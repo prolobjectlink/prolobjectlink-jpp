@@ -19,13 +19,17 @@
  */
 package org.logicware.database.jpa.criteria;
 
+import java.util.List;
+
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.metamodel.Metamodel;
 
-public class JpaWhere extends JpaExpression<Boolean> implements Expression<Boolean> {
+public class JpaWhere extends JpaPredicate implements Predicate {
 
-	public JpaWhere(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel) {
-		super(alias, javaType, expression, metamodel);
+	public JpaWhere(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
+			BooleanOperator operator, List<Expression<?>> expressions) {
+		super(alias, javaType, expression, metamodel, operator, expressions);
 	}
 
 	@Override

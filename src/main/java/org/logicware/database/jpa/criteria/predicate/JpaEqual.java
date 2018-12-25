@@ -24,13 +24,11 @@ import java.util.List;
 import javax.persistence.criteria.Expression;
 import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.database.jpa.criteria.JpaPredicate;
+public class JpaEqual extends JpaComparablePredicate {
 
-public class JpaEqual extends JpaPredicate {
-
-	public JpaEqual(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
-			List<Expression<?>> expressions) {
-		super(alias, javaType, expression, metamodel, BooleanOperator.OR, expressions);
+	public JpaEqual(String alias, Class<? extends Boolean> javaType, Expression<? extends Comparable<?>> expression,
+			Metamodel metamodel, List<Expression<?>> expressions) {
+		super(alias, javaType, expression, metamodel, expressions);
 	}
 
 	@Override

@@ -76,11 +76,10 @@ public class JpaPredicate extends JpaExpression<Boolean> implements Predicate {
 		if (expressions == null) {
 			if (other.expressions != null)
 				return false;
-		} else if (!expressions.equals(other.expressions))
+		} else if (!expressions.equals(other.expressions)) {
 			return false;
-		if (operator != other.operator)
-			return false;
-		return true;
+		}
+		return operator == other.operator;
 	}
 
 }

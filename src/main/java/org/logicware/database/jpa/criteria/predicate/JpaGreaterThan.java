@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.database.jpa.criteria;
+package org.logicware.database.jpa.criteria.predicate;
 
 import java.util.List;
 
@@ -25,18 +25,16 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.database.jpa.criteria.predicate.JpaComparablePredicate;
+public class JpaGreaterThan extends JpaComparablePredicate implements Predicate {
 
-public class JpaGreaterEqual extends JpaComparablePredicate implements Predicate {
-
-	public JpaGreaterEqual(String alias, Class<? extends Boolean> javaType,
+	public JpaGreaterThan(String alias, Class<? extends Boolean> javaType,
 			Expression<? extends Comparable<?>> expression, Metamodel metamodel, List<Expression<?>> expressions) {
 		super(alias, javaType, expression, metamodel, expressions);
 	}
-
+	
 	@Override
 	public String toString() {
-		return "" + expressions.get(0) + ">=" + expressions.get(1) + "";
+		return "" + expressions.get(0) + " > " + expressions.get(1) + "";
 	}
 
 }
