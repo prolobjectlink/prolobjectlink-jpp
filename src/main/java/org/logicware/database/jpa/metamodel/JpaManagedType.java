@@ -238,4 +238,9 @@ public abstract class JpaManagedType<X> extends JpaType<X> implements ManagedTyp
 		return getDeclaredMap(name, null, null);
 	}
 
+	@Override
+	public final String toString() {
+		return databaseClass.getShortName();
+	}
+
 }

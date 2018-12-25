@@ -34,9 +34,4 @@ public final class JpaEmbeddableType<X> extends JpaManagedType<X> implements Emb
 		return PersistenceType.EMBEDDABLE;
 	}
 
-	@Override
-	public String toString() {
-		return "JpaEmbeddableType [javaType=" + javaType + "]";
-	}
-
 }

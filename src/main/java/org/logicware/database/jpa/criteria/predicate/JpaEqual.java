@@ -28,9 +28,14 @@ import org.logicware.database.jpa.criteria.JpaPredicate;
 
 public class JpaEqual extends JpaPredicate {
 
-	public JpaEqual(String alias, Class<? extends Boolean> javaType, Expression<?> expression,
-			Metamodel metamodel, List<Expression<?>> expressions) {
+	public JpaEqual(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
+			List<Expression<?>> expressions) {
 		super(alias, javaType, expression, metamodel, BooleanOperator.OR, expressions);
+	}
+
+	@Override
+	public String toString() {
+		return "" + expressions.get(0) + "=" + expressions.get(1) + "";
 	}
 
 }

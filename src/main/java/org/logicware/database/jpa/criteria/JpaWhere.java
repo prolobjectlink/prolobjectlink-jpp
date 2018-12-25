@@ -17,15 +17,20 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.predicate;
+package org.logicware.database.jpa.criteria;
 
-import org.logicware.database.Predicate;
-import org.logicware.domain.geometry.Point;
+import javax.persistence.criteria.Expression;
+import javax.persistence.metamodel.Metamodel;
 
-public class PointBasedPredicate implements Predicate<Point> {
+public class JpaWhere extends JpaExpression<Boolean> implements Expression<Boolean> {
 
-	public boolean evaluate(Point p) {
-		return p.getX() < p.getY();
+	public JpaWhere(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel) {
+		super(alias, javaType, expression, metamodel);
+	}
+
+	@Override
+	public String toString() {
+		return "WHERE " + expression + "";
 	}
 
 }

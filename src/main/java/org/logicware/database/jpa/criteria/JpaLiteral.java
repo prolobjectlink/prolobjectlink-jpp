@@ -28,4 +28,9 @@ public class JpaLiteral<X> extends JpaExpression<X> implements Expression<X> {
 		super(alias, javaType, expression, metamodel);
 	}
 
+	@Override
+	public String toString() {
+		return "" + expression + "";
+	}
+
 }

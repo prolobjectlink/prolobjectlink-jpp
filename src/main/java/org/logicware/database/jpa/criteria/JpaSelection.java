@@ -50,6 +50,20 @@ public class JpaSelection<X> extends JpaTupleElement<X> implements Selection<X> 
 	}
 
 	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append("SELECT " + alias + " ");
+		// TODO populate selection items
+		if (expression != null) {
+			b.append(expression);
+		}
+		if (value != null) {
+			b.append(value);
+		}
+		return "" + b + "";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
@@ -69,8 +83,9 @@ public class JpaSelection<X> extends JpaTupleElement<X> implements Selection<X> 
 		if (expression == null) {
 			if (other.expression != null)
 				return false;
-		} else if (!expression.equals(other.expression))
+		} else if (!expression.equals(other.expression)) {
 			return false;
+		}
 		return true;
 	}
 

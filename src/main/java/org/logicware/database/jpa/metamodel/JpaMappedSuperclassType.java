@@ -34,9 +34,4 @@ public final class JpaMappedSuperclassType<X> extends JpaIdentifiableType<X> imp
 		return PersistenceType.MAPPED_SUPERCLASS;
 	}
 
-	@Override
-	public String toString() {
-		return "JpaMappedSuperclassType [javaType=" + javaType + "]";
-	}
-
 }

@@ -30,9 +30,11 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.MapJoin;
 import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 import javax.persistence.criteria.SetJoin;
 import javax.persistence.metamodel.Bindable;
 import javax.persistence.metamodel.CollectionAttribute;
+import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.MapAttribute;
@@ -41,7 +43,7 @@ import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 
-public class JpaFrom<Z, X> extends JpaPath<X> implements From<Z, X> {
+public class JpaFrom<Z, X> extends JpaPath<X> implements /* From<Z, X>, */ Root<X> {
 
 	protected ManagedType<X> managedType;
 	protected Set<Join<X, ?>> joins;
@@ -105,11 +107,6 @@ public class JpaFrom<Z, X> extends JpaPath<X> implements From<Z, X> {
 	public boolean isCorrelated() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	public From<Z, X> getCorrelationParent() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public <Y> Join<X, Y> join(SingularAttribute<? super X, Y> attribute) {
@@ -210,6 +207,51 @@ public class JpaFrom<Z, X> extends JpaPath<X> implements From<Z, X> {
 	public <X, K, V> MapJoin<X, K, V> joinMap(String attributeName, JoinType jt) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public From<X, X> getCorrelationParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public EntityType<X> getModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append("FROM ");
+		if (fetches != null && !fetches.isEmpty()) {
+			b.append(fetches);
+			b.append(' ');
+		}
+		if (joins != null && !joins.isEmpty()) {
+			b.append(joins);
+			b.append(' ');
+		}
+		if (correlatedParent != null) {
+			b.append(correlatedParent);
+			b.append(' ');
+		}
+		if (managedType != null) {
+			b.append(managedType);
+			b.append(' ');
+		}
+		if (expression != null) {
+			b.append(expression);
+			b.append(' ');
+		}
+		if (alias != null) {
+			b.append(alias);
+			b.append(' ');
+		}
+		if (value != null) {
+			b.append(value);
+			b.append(' ');
+		}
+		return "" + b + "";
 	}
 
 	@Override

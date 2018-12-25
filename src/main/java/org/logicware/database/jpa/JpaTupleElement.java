@@ -53,7 +53,7 @@ public class JpaTupleElement<X> extends JpaAbstractWrapper implements TupleEleme
 
 	@Override
 	public String toString() {
-		return "LogicTupleElement [value=" + value + ", alias=" + alias + ", javaType=" + javaType + "]";
+		return value != null ? alias + "=" + value : alias;
 	}
 
 	@Override

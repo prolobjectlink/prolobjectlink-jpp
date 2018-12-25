@@ -34,4 +34,9 @@ public class JpaLessEqual extends JpaComparablePredicate implements Predicate {
 		super(alias, javaType, expression, metamodel, expressions);
 	}
 
+	@Override
+	public String toString() {
+		return "" + expressions.get(0) + "<=" + expressions.get(1) + "";
+	}
+
 }

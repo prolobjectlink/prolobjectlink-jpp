@@ -2,7 +2,7 @@
  * #%L
  * prolobjectlink-jpp
  * %%
- * Copyright (C) 2012 - 2017 Logicware Project
+ * Copyright (C) 2012 - 2018 Logicware Project
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,23 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.database.jpa.criteria.predicate;
-
-import java.util.List;
+package org.logicware.database.jpa.criteria;
 
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Path;
+import javax.persistence.metamodel.Bindable;
 import javax.persistence.metamodel.Metamodel;
 
-import org.logicware.database.jpa.criteria.JpaPredicate;
+public class JpaIdentification<X> extends JpaPath<X> implements JpaTreeNode {
 
-public class JpaNotEqual extends JpaPredicate {
-
-	public JpaNotEqual(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
-			List<Expression<?>> expressions) {
-		super(alias, javaType, expression, metamodel, BooleanOperator.OR, expressions);
+	public JpaIdentification(String alias, Class<? extends X> javaType, Expression<X> expression, Metamodel metamodel,
+			Path<?> pathParent, Bindable<X> model) {
+		super(alias, javaType, expression, metamodel, pathParent, model);
 	}
 
 	@Override
 	public String toString() {
-		return "" + expressions.get(0) + "<>" + expressions.get(1) + "";
+		return alias;
 	}
 
 }

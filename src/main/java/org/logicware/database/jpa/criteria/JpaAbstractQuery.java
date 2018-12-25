@@ -38,6 +38,11 @@ public abstract class JpaAbstractQuery<T> extends JpaAbstractCriteria<T> impleme
 	protected boolean distinct;
 	protected Class<T> resultType;
 	protected final Set<Root<?>> roots;
+
+	/**
+	 * @deprecated use restriction
+	 */
+	@Deprecated
 	protected Expression<Boolean> whereClause;
 	protected Expression<Boolean> havingClause;
 	protected List<Expression<?>> groupBy = newList();

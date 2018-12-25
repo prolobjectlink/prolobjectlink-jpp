@@ -32,6 +32,9 @@ public class JpaObject<X> extends JpaExpression<X> implements Expression<X> {
 
 	@Override
 	public String toString() {
+		if (object instanceof String) {
+			return "'" + object + "'";
+		}
 		return "" + object + "";
 	}
 
@@ -51,7 +54,7 @@ public class JpaObject<X> extends JpaExpression<X> implements Expression<X> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JpaObject other = (JpaObject) obj;
+		JpaObject<?> other = (JpaObject<?>) obj;
 		if (object == null) {
 			if (other.object != null)
 				return false;

@@ -27,22 +27,28 @@ import java.util.Set;
 
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.From;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
+import javax.persistence.metamodel.Bindable;
 import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
 
+import org.logicware.database.jpa.criteria.predicate.JpaAndPredicate;
 import org.logicware.database.jpa.criteria.predicate.JpaConjuntion;
 
 public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements CriteriaQuery<T> {
 
-	protected List<Order> orderBy;
 	protected Selection<?> selection;
-	protected List<From<?, ?>> joins;
+	protected List<Order> orderBy = new ArrayList<Order>();
+	protected List<From<?, ?>> joins = new ArrayList<From<?, ?>>();
 	protected final List<Predicate> predicates = new LinkedList<Predicate>();
 
 	public JpaCriteriaQuery(Expression<Boolean> restriction, Metamodel metamodel, boolean distinct, Class<T> resultType,
@@ -55,7 +61,13 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	}
 
 	public CriteriaQuery<T> select(Selection<? extends T> selection) {
-		this.selection = selection;
+		String alias = selection.getAlias();
+		Class<?> type = selection.getJavaType();
+		Expression<T> exp = null;
+		if (selection instanceof From) {
+			exp = (From) selection;
+		}
+		this.selection = new JpaSelection(alias, type, exp);
 		return this;
 	}
 
@@ -70,12 +82,17 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	}
 
 	public CriteriaQuery<T> where(Expression<Boolean> restriction) {
-		this.restriction = restriction;
+		String alias = restriction.getAlias();
+		Class<? extends Boolean> javaType = restriction.getJavaType();
+		this.restriction = new JpaWhere(alias, javaType, restriction, metamodel);
 		return this;
 	}
 
 	public CriteriaQuery<T> where(Predicate... restrictions) {
 		for (Predicate predicate : restrictions) {
+			String alias = restriction.getAlias();
+			Class<? extends Boolean> javaType = restriction.getJavaType();
+			restriction = new JpaAndPredicate(alias, javaType, predicate, metamodel, null);
 			predicates.add(predicate);
 		}
 		return this;
@@ -132,13 +149,108 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	}
 
 	public <X> Root<X> from(Class<X> entityClass) {
-		// TODO Auto-generated method stub
-		return null;
+		Bindable<X> model = null;
+		Set<Join<X, ?>> joinSet = new HashSet<Join<X, ?>>();
+		Set<Fetch<X, ?>> fetches = new HashSet<Fetch<X, ?>>();
+		char character = entityClass.getSimpleName().charAt(0);
+		String alias = "" + Character.toLowerCase(character) + "";
+		ManagedType<X> managedType = metamodel.managedType(entityClass);
+		if (managedType instanceof EntityType) {
+			model = (EntityType<X>) managedType;
+		}
+		Path<X> pathParent = new JpaIdentification<X>(alias, entityClass, null, metamodel, null, model);
+		return new JpaFrom(alias, entityClass, null, metamodel, pathParent, model, managedType, joinSet, fetches, false,
+				false, null);
 	}
 
 	public <X> Root<X> from(EntityType<X> entity) {
-		// TODO Auto-generated method stub
-		return null;
+		return from(entity.getJavaType());
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		// Distinct ???
+		if (selection != null) {
+			b.append(selection);
+		}
+		if (whereClause != null) {
+			b.append(whereClause);
+		}
+		if (havingClause != null) {
+			b.append(havingClause);
+		}
+		if (restriction != null) {
+			b.append(restriction);
+		}
+		if (!orderBy.isEmpty()) {
+			for (Order o : orderBy) {
+				b.append(o);
+			}
+		}
+		if (!groupBy.isEmpty()) {
+			for (Expression<?> o : groupBy) {
+				b.append("GROUP BY ");
+				b.append(o);
+			}
+		}
+		if (!predicates.isEmpty()) {
+			b.append(predicates);
+		}
+		if (roots != null && !roots.isEmpty()) {
+			b.append(roots);
+		}
+		if (joins != null && !joins.isEmpty()) {
+			b.append(joins);
+		}
+		return "" + b + "";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((joins == null) ? 0 : joins.hashCode());
+		result = prime * result + ((orderBy == null) ? 0 : orderBy.hashCode());
+		result = prime * result + ((predicates == null) ? 0 : predicates.hashCode());
+		result = prime * result + ((selection == null) ? 0 : selection.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JpaCriteriaQuery<?> other = (JpaCriteriaQuery<?>) obj;
+		if (joins == null) {
+			if (other.joins != null)
+				return false;
+		} else if (!joins.equals(other.joins)) {
+			return false;
+		}
+		if (orderBy == null) {
+			if (other.orderBy != null)
+				return false;
+		} else if (!orderBy.equals(other.orderBy)) {
+			return false;
+		}
+		if (predicates == null) {
+			if (other.predicates != null)
+				return false;
+		} else if (!predicates.equals(other.predicates)) {
+			return false;
+		}
+		if (selection == null) {
+			if (other.selection != null)
+				return false;
+		} else if (!selection.equals(other.selection)) {
+			return false;
+		}
+		return true;
 	}
 
 }

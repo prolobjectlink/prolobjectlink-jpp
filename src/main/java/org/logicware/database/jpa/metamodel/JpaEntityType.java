@@ -25,15 +25,10 @@ import javax.persistence.metamodel.EntityType;
 import org.logicware.database.DatabaseClass;
 import org.logicware.database.Schema;
 
-public final class JpaEntityType<X> extends JpaBindableType<X> implements EntityType<X> {
+public final class JpaEntityType<X> extends JpaIdentifiableType<X> implements EntityType<X> {
 
 	public JpaEntityType(Schema schema, DatabaseClass databaseClass) {
 		super(schema, databaseClass);
-	}
-
-	@Override
-	public String toString() {
-		return "JpaEntityType [javaType=" + javaType + "]";
 	}
 
 	public PersistenceType getPersistenceType() {

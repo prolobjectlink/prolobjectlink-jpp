@@ -24,10 +24,12 @@ import java.util.Set;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.PersistenceException;
 import javax.persistence.metamodel.EmbeddableType;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.ManagedType;
+import javax.persistence.metamodel.MappedSuperclassType;
 import javax.persistence.metamodel.Metamodel;
 
 import org.logicware.database.DatabaseClass;
@@ -48,7 +50,20 @@ public final class JpaMetamodel implements Metamodel {
 	}
 
 	public <X> ManagedType<X> managedType(Class<X> cls) {
+		ManagedType<X> managedType = null;
+		if (cls.isAnnotationPresent(MappedSuperclass.class)) {
+			managedType = mappedSuperclass(cls);
+		} else if (cls.isAnnotationPresent(Embeddable.class)) {
+			managedType = embeddable(cls);
+		} else if (cls.isAnnotationPresent(Entity.class)) {
+			managedType = entity(cls);
+		}
+		return managedType;
+	}
+
+	public <X> MappedSuperclassType<X> mappedSuperclass(Class<X> cls) {
 		DatabaseClass c = schema.getClass(cls);
+		assertMappedSuperclassAnnotatedClass(cls);
 		return new JpaMappedSuperclassType<X>(schema, c);
 	}
 
@@ -89,13 +104,19 @@ public final class JpaMetamodel implements Metamodel {
 
 	private void assertEmbeddableAnnotatedClass(Class<?> cls) {
 		if (!cls.isAnnotationPresent(Embeddable.class)) {
-			throw new PersistenceException("No @Entity annotated class " + cls);
+			throw new PersistenceException("No @Embeddable annotated class " + cls);
 		}
 	}
 
 	private void assertEntityAnnotatedClass(Class<?> cls) {
 		if (!cls.isAnnotationPresent(Entity.class)) {
 			throw new PersistenceException("No @Entity annotated class " + cls);
+		}
+	}
+
+	private void assertMappedSuperclassAnnotatedClass(Class<?> cls) {
+		if (!cls.isAnnotationPresent(MappedSuperclass.class)) {
+			throw new PersistenceException("No @MappedSuperclass annotated class " + cls);
 		}
 	}
 

@@ -71,8 +71,26 @@ public class JpaPath<X> extends JpaExpression<X> implements Path<X> {
 	}
 
 	public <Y> Path<Y> get(String attributeName) {
-		// TODO Auto-generated method stub
-		return null;
+		return new JpaPath(attributeName, javaType, expression, metamodel, pathParent, model);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		if (pathParent != null) {
+			b.append(pathParent);
+		}
+		if (expression != null) {
+			b.append(expression);
+		}
+		if (alias != null) {
+			b.append('.');
+			b.append(alias);
+		}
+		if (value != null) {
+			b.append(value);
+		}
+		return "" + b + "";
 	}
 
 	@Override

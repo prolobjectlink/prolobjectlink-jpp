@@ -33,5 +33,10 @@ public class JpaGreaterThan extends JpaComparablePredicate implements Predicate 
 			Expression<? extends Comparable<?>> expression, Metamodel metamodel, List<Expression<?>> expressions) {
 		super(alias, javaType, expression, metamodel, expressions);
 	}
+	
+	@Override
+	public String toString() {
+		return "" + expressions.get(0) + ">" + expressions.get(1) + "";
+	}
 
 }
