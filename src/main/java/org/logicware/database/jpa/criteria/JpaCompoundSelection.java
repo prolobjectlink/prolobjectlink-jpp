@@ -20,26 +20,29 @@
 package org.logicware.database.jpa.criteria;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Selection;
 
+import org.logicware.ArrayIterator;
+
 public class JpaCompoundSelection<X> extends JpaSelection<X> implements CompoundSelection<X> {
 
-	protected Selection<?>[] subSelections;
+	protected Selection<?>[] selections;
 
 	public JpaCompoundSelection(String alias, Class<? extends X> javaType, Expression<X> expression,
 			Selection<?>[] subSelections) {
 		super(alias, javaType, expression);
-		this.subSelections = subSelections;
+		this.selections = subSelections;
 	}
 
 	public JpaCompoundSelection(String alias, Class<? extends X> javaType, Expression<X> expression,
 			List<Selection<?>> selectionList) {
 		super(alias, javaType, expression);
-		this.subSelections = selectionList.toArray(new JpaSelection[0]);
+		this.selections = selectionList.toArray(new JpaSelection[0]);
 	}
 
 	@Override
@@ -49,14 +52,41 @@ public class JpaCompoundSelection<X> extends JpaSelection<X> implements Compound
 
 	@Override
 	public List<Selection<?>> getCompoundSelectionItems() {
-		return Arrays.asList(subSelections);
+		return Arrays.asList(selections);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		if (distinct) {
+			b.append("SELECT DISTINCT ");
+		} else {
+			b.append("SELECT ");
+		}
+		if (selections != null && selections.length > 0) {
+			Iterator<Selection<?>> i = new ArrayIterator<Selection<?>>(selections);
+			while (i.hasNext()) {
+				b.append(i.next().getAlias());
+				if (i.hasNext()) {
+					b.append(',');
+				}
+				b.append(' ');
+			}
+		}
+		if (expression != null) {
+			b.append(expression);
+		}
+		if (value != null) {
+			b.append(value);
+		}
+		return "" + b + "";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Arrays.hashCode(subSelections);
+		result = prime * result + Arrays.hashCode(selections);
 		return result;
 	}
 
@@ -69,7 +99,7 @@ public class JpaCompoundSelection<X> extends JpaSelection<X> implements Compound
 		if (getClass() != obj.getClass())
 			return false;
 		JpaCompoundSelection<?> other = (JpaCompoundSelection<?>) obj;
-		return Arrays.equals(subSelections, other.subSelections);
+		return Arrays.equals(selections, other.selections);
 	}
 
 }

@@ -222,7 +222,6 @@ public class JpaFrom<Z, X> extends JpaPath<X> implements /* From<Z, X>, */ Root<
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
-		b.append("FROM ");
 		if (fetches != null && !fetches.isEmpty()) {
 			b.append(fetches);
 			b.append(' ');
@@ -245,7 +244,6 @@ public class JpaFrom<Z, X> extends JpaPath<X> implements /* From<Z, X>, */ Root<
 		}
 		if (alias != null) {
 			b.append(alias);
-			b.append(' ');
 		}
 		if (value != null) {
 			b.append(value);

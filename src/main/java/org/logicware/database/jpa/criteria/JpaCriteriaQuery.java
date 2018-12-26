@@ -21,6 +21,8 @@ package org.logicware.database.jpa.criteria;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +53,7 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	protected List<Order> orderBy = new ArrayList<Order>();
 	protected List<From<?, ?>> joins = new ArrayList<From<?, ?>>();
 	protected final List<Predicate> predicates = new LinkedList<Predicate>();
+	protected final Set<ParameterExpression<?>> parameters = new LinkedHashSet<ParameterExpression<?>>();
 
 	public JpaCriteriaQuery(Expression<Boolean> restriction, Metamodel metamodel, boolean distinct, Class<T> resultType,
 			Set<Root<?>> roots, List<Expression<?>> groupBy) {
@@ -64,11 +67,8 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	public CriteriaQuery<T> select(Selection<? extends T> selection) {
 		String alias = selection.getAlias();
 		Class<?> type = selection.getJavaType();
-		Expression<T> exp = null;
-		if (selection instanceof From) {
-			exp = (From) selection;
-		}
-		this.selection = new JpaSelection(alias, type, exp);
+		roots.add((Root) selection);
+		this.selection = new JpaSelection(distinct, alias, type, roots);
 		return this;
 	}
 
@@ -136,8 +136,11 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	}
 
 	public CriteriaQuery<T> distinct(boolean distinct) {
+		if (selection instanceof JpaSelection) {
+			((JpaSelection<?>) selection).distinct = distinct;
+		}
 		this.distinct = distinct;
-		return null;
+		return this;
 	}
 
 	public List<Order> getOrderList() {
@@ -145,8 +148,7 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	}
 
 	public Set<ParameterExpression<?>> getParameters() {
-		// TODO Auto-generated method stub
-		return null;
+		return parameters;
 	}
 
 	public <X> Root<X> from(Class<X> entityClass) {
@@ -160,8 +162,10 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 			model = (EntityType<X>) managedType;
 		}
 		Path<X> pathParent = new JpaIdentification<X>(alias, entityClass, null, metamodel, null, model);
-		return new JpaFrom(alias, entityClass, null, metamodel, pathParent, model, managedType, joinSet, fetches, false,
-				false, null);
+		Root<X> from = new JpaFrom(alias, entityClass, null, metamodel, pathParent, model, managedType, joinSet,
+				fetches, false, false, null);
+		roots.add(from);
+		return from;
 	}
 
 	public <X> Root<X> from(EntityType<X> entity) {
@@ -175,9 +179,19 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
-		// Distinct ???
 		if (selection != null) {
 			b.append(selection);
+		}
+		if (!roots.isEmpty()) {
+			b.append("FROM ");
+			Iterator<?> i = roots.iterator();
+			while (i.hasNext()) {
+				b.append(i.next());
+				if (i.hasNext()) {
+					b.append(',');
+				}
+				b.append(' ');
+			}
 		}
 		if (!groupBy.isEmpty()) {
 			for (Expression<?> o : groupBy) {
@@ -201,9 +215,6 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 		if (!predicates.isEmpty()) {
 			b.append(predicates);
 		}
-		if (roots != null && !roots.isEmpty()) {
-			b.append(roots);
-		}
 		if (joins != null && !joins.isEmpty()) {
 			b.append(joins);
 		}
@@ -214,10 +225,11 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((joins == null) ? 0 : joins.hashCode());
-		result = prime * result + ((orderBy == null) ? 0 : orderBy.hashCode());
-		result = prime * result + ((predicates == null) ? 0 : predicates.hashCode());
-		result = prime * result + ((selection == null) ? 0 : selection.hashCode());
+		result = prime * result + (joins.hashCode());
+		result = prime * result + (orderBy.hashCode());
+		result = prime * result + (predicates.hashCode());
+		result = prime * result + (selection.hashCode());
+		result = prime * result + (parameters.hashCode());
 		return result;
 	}
 
@@ -236,16 +248,13 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 		} else if (!joins.equals(other.joins)) {
 			return false;
 		}
-		if (orderBy == null) {
-			if (other.orderBy != null)
-				return false;
-		} else if (!orderBy.equals(other.orderBy)) {
+		if (!orderBy.equals(other.orderBy)) {
 			return false;
 		}
-		if (predicates == null) {
-			if (other.predicates != null)
-				return false;
-		} else if (!predicates.equals(other.predicates)) {
+		if (!predicates.equals(other.predicates)) {
+			return false;
+		}
+		if (!parameters.equals(other.parameters)) {
 			return false;
 		}
 		if (selection == null) {

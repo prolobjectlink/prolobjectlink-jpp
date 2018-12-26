@@ -20,6 +20,8 @@
 package org.logicware.database.jpa.criteria;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +35,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.MapJoin;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Predicate.BooleanOperator;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import javax.persistence.criteria.SetJoin;
@@ -40,6 +43,7 @@ import javax.persistence.criteria.Subquery;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
+import org.logicware.database.jpa.criteria.predicate.JpaAndPredicate;
 import org.logicware.database.jpa.criteria.predicate.JpaConjuntion;
 import org.logicware.database.jpa.criteria.predicate.JpaNotNullPredicate;
 import org.logicware.database.jpa.criteria.predicate.JpaNullPredicate;
@@ -49,9 +53,10 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 	protected String alias;
 	protected Expression<T> selection;
 	protected AbstractQuery<T> parent;
-	protected Set<From<?, ?>> processedJoins;
-	protected Set<Expression<?>> correlations;
-	protected Set<Join<?, ?>> correlatedJoins;
+	protected Set<From<?, ?>> processedJoins = new LinkedHashSet<From<?, ?>>();
+	protected Set<Expression<?>> correlations = new LinkedHashSet<Expression<?>>();
+	protected Set<Join<?, ?>> correlatedJoins = new LinkedHashSet<Join<?, ?>>();
+	protected final List<Predicate> predicates = new LinkedList<Predicate>();
 
 	public JpaSubQuery(Expression<Boolean> restriction, Class<T> type, Metamodel metamodel) {
 		super(restriction, metamodel, type);
@@ -167,13 +172,18 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 	}
 
 	public Subquery<T> where(Expression<Boolean> restriction) {
-		whereClause = restriction;
+		String alias = restriction.getAlias();
+		Class<? extends Boolean> javaType = restriction.getJavaType();
+		this.restriction = new JpaWhere(alias, javaType, restriction, metamodel, BooleanOperator.AND, newList());
 		return this;
 	}
 
 	public Subquery<T> where(Predicate... restrictions) {
 		for (Predicate predicate : restrictions) {
-			whereClause = new JpaConjuntion(null, Boolean.class, null, metamodel, newList(restriction, predicate));
+			String als = restriction.getAlias();
+			Class<? extends Boolean> javaType = restriction.getJavaType();
+			restriction = new JpaAndPredicate(als, javaType, predicate, metamodel, null);
+			predicates.add(predicate);
 		}
 		return this;
 	}

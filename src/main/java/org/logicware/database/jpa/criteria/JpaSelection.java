@@ -20,20 +20,54 @@
 package org.logicware.database.jpa.criteria;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 
 import org.logicware.database.jpa.JpaTupleElement;
 
 public class JpaSelection<X> extends JpaTupleElement<X> implements Selection<X> {
 
+	protected boolean distinct;
 	protected Expression<?> expression;
+	protected /* final */ Set<Root<?>> roots;
 
+	/**
+	 * @deprecated Use {@link #JpaSelection(String, Class, boolean, Set)} instead to
+	 *             set DISTINCT boolean flag.
+	 * @param alias
+	 * @param javaType
+	 * @param expression
+	 */
+	@Deprecated
 	public JpaSelection(String alias, Class<? extends X> javaType, Expression<?> expression) {
 		super(alias, javaType);
 		this.expression = expression;
+	}
+
+	/**
+	 * @deprecated Use {@link #JpaSelection(String, Class, boolean, Set)} instead to
+	 *             set DISTINCT boolean flag.
+	 * @param distinct
+	 * @param alias
+	 * @param javaType
+	 * @param expression
+	 */
+	@Deprecated
+	public JpaSelection(boolean distinct, String alias, Class<? extends X> javaType, Expression<?> expression) {
+		super(alias, javaType);
+		this.expression = expression;
+		this.distinct = distinct;
+	}
+
+	public JpaSelection(boolean distinct, String alias, Class<? extends X> javaType, Set<Root<?>> roots) {
+		super(alias, javaType);
+		this.distinct = distinct;
+		this.roots = roots;
 	}
 
 	public boolean isCompoundSelection() {
@@ -52,13 +86,10 @@ public class JpaSelection<X> extends JpaTupleElement<X> implements Selection<X> 
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
-		b.append("SELECT " + alias + " ");
-		// TODO populate selection items
-		if (expression != null) {
-			b.append(expression);
-		}
-		if (value != null) {
-			b.append(value);
+		if (distinct) {
+			b.append("SELECT DISTINCT " + alias + " ");
+		} else {
+			b.append("SELECT " + alias + " ");
 		}
 		return "" + b + "";
 	}
