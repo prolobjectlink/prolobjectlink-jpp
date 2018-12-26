@@ -29,4 +29,11 @@ public class JpaNullIf<X> extends JpaFunctionExpression<X> implements Expression
 		super(alias, javaType, left, "CONCAT", right, metamodel);
 	}
 
+	@Override
+	public String toString() {
+		return "JpaNullIf [operator=" + operator + ", right=" + right + ", metamodel=" + metamodel + ", distinct="
+				+ distinct + ", expression=" + expression + ", roots=" + roots + ", alias=" + alias + ", value=" + value
+				+ ", javaType=" + javaType + "]";
+	}
+
 }

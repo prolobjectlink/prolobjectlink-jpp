@@ -29,4 +29,10 @@ public class JpaNullLiteral extends JpaExpression<Object> implements Expression<
 		super(alias, javaType, expression, metamodel);
 	}
 
+	@Override
+	public String toString() {
+		return "JpaNullLiteral [metamodel=" + metamodel + ", distinct=" + distinct + ", expression=" + expression
+				+ ", roots=" + roots + ", alias=" + alias + ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
 }

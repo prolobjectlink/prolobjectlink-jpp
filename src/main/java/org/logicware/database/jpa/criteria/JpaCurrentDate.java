@@ -27,5 +27,10 @@ public final class JpaCurrentDate<X> extends JpaExpression<X> {
 	public JpaCurrentDate(String alias, Class<? extends X> javaType, Expression<?> expression, Metamodel metamodel) {
 		super(alias, javaType, expression, metamodel);
 	}
+	
+	@Override
+	public String toString() {
+		return "CURRENT_DATE";
+	}
 
 }

@@ -20,9 +20,12 @@
 package org.logicware.database.jpa.criteria;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 import javax.persistence.criteria.Expression;
 import javax.persistence.metamodel.Metamodel;
+
+import org.logicware.ArrayIterator;
 
 public class JpaFunction<X> extends JpaExpression<X> implements Expression<X> {
 
@@ -36,6 +39,24 @@ public class JpaFunction<X> extends JpaExpression<X> implements Expression<X> {
 			Metamodel metamodel) {
 		super(alias, javaType, expression, metamodel);
 		this.arguments = arguments;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder(alias);
+		Iterator<?> i = new ArrayIterator<Object>(arguments);
+		if (i.hasNext()) {
+			b.append('(');
+			while (i.hasNext()) {
+				b.append(i.next());
+				if (i.hasNext()) {
+					b.append(',');
+					b.append(' ');
+				}
+			}
+			b.append(')');
+		}
+		return "" + b + "";
 	}
 
 	@Override

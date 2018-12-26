@@ -38,6 +38,13 @@ public class JpaLocate<X> extends JpaFunctionExpression<X> implements Expression
 	}
 
 	@Override
+	public String toString() {
+		return "JpaLocate [length=" + length + ", operator=" + operator + ", right=" + right + ", metamodel="
+				+ metamodel + ", distinct=" + distinct + ", expression=" + expression + ", roots=" + roots + ", alias="
+				+ alias + ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();

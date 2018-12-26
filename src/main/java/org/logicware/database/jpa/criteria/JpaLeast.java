@@ -28,4 +28,10 @@ public final class JpaLeast<X> extends JpaExpression<X> {
 		super(alias, javaType, expression, metamodel);
 	}
 
+	@Override
+	public String toString() {
+		return "JpaLeast [metamodel=" + metamodel + ", distinct=" + distinct + ", expression=" + expression + ", roots="
+				+ roots + ", alias=" + alias + ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
 }

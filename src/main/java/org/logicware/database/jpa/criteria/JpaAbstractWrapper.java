@@ -63,4 +63,10 @@ public abstract class JpaAbstractWrapper extends AbstractWrapper implements JpaT
 		return list;
 	}
 
+//	@Override
+//	public abstract int hashCode();
+//
+//	@Override
+//	public abstract boolean equals(Object obj);
+
 }

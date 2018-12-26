@@ -27,5 +27,10 @@ public final class JpaMax<X> extends JpaExpression<X> {
 	public JpaMax(String alias, Class<? extends X> javaType, Expression<?> expression, Metamodel metamodel) {
 		super(alias, javaType, expression, metamodel);
 	}
+	
+	@Override
+	public String toString() {
+		return "MAX (" + expression + ")";
+	}
 
 }

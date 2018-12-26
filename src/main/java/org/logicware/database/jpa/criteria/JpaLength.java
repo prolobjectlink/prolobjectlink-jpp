@@ -28,4 +28,9 @@ public final class JpaLength<X> extends JpaExpression<X> {
 		super(alias, javaType, expression, metamodel);
 	}
 
+	@Override
+	public String toString() {
+		return "LENGTH ( " + expression + " )";
+	}
+
 }

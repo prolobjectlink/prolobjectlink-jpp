@@ -20,7 +20,6 @@
 package org.logicware.database.jpa.criteria;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +29,13 @@ import javax.persistence.criteria.Selection;
 
 import org.logicware.database.jpa.JpaTupleElement;
 
+/**
+ * 
+ * @author Jose Zalacain
+ *
+ * @param <X>
+ * @since 1.0
+ */
 public class JpaSelection<X> extends JpaTupleElement<X> implements Selection<X> {
 
 	protected boolean distinct;

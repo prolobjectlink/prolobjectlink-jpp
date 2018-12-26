@@ -28,9 +28,16 @@ import org.logicware.database.jpa.criteria.JpaPredicate;
 
 public class JpaIsEmpty extends JpaPredicate {
 
-	public JpaIsEmpty(String alias, Class<? extends Boolean> javaType, Expression<?> expression,
-			Metamodel metamodel, BooleanOperator operator, List<Expression<?>> expressions) {
+	public JpaIsEmpty(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
+			BooleanOperator operator, List<Expression<?>> expressions) {
 		super(alias, javaType, expression, metamodel, operator, expressions);
+	}
+
+	@Override
+	public String toString() {
+		return "JpaIsEmpty [expressions=" + expressions + ", operator=" + operator + ", metamodel=" + metamodel
+				+ ", distinct=" + distinct + ", expression=" + expression + ", roots=" + roots + ", alias=" + alias
+				+ ", value=" + value + ", javaType=" + javaType + "]";
 	}
 
 }

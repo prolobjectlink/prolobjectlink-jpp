@@ -28,4 +28,9 @@ public final class JpaCurrentTime<X> extends JpaExpression<X> {
 		super(alias, javaType, expression, metamodel);
 	}
 
+	@Override
+	public String toString() {
+		return "CURRENT_TIME";
+	}
+
 }

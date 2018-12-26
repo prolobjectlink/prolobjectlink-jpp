@@ -28,9 +28,16 @@ import org.logicware.database.jpa.criteria.JpaPredicate;
 
 public class JpaLike extends JpaPredicate {
 
-	public JpaLike(String alias, Class<? extends Boolean> javaType, Expression<?> expression,
-			Metamodel metamodel, List<Expression<?>> expressions) {
+	public JpaLike(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
+			List<Expression<?>> expressions) {
 		super(alias, javaType, expression, metamodel, BooleanOperator.OR, expressions);
+	}
+
+	@Override
+	public String toString() {
+		return "JpaLike [expressions=" + expressions + ", operator=" + operator + ", metamodel=" + metamodel
+				+ ", distinct=" + distinct + ", expression=" + expression + ", roots=" + roots + ", alias=" + alias
+				+ ", value=" + value + ", javaType=" + javaType + "]";
 	}
 
 }

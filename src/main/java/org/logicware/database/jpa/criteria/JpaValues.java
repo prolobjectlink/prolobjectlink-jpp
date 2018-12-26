@@ -36,6 +36,13 @@ public class JpaValues<V> extends JpaExpression<Collection<V>> implements Expres
 	}
 
 	@Override
+	public String toString() {
+		return "JpaValues [map=" + map + ", metamodel=" + metamodel + ", distinct=" + distinct + ", expression="
+				+ expression + ", roots=" + roots + ", alias=" + alias + ", value=" + value + ", javaType=" + javaType
+				+ "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();

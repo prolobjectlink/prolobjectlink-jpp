@@ -28,4 +28,9 @@ public final class JpaMin<X> extends JpaExpression<X> {
 		super(alias, javaType, expression, metamodel);
 	}
 
+	@Override
+	public String toString() {
+		return "MIN (" + expression + ")";
+	}
+
 }

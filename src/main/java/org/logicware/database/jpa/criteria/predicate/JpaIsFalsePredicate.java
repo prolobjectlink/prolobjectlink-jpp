@@ -33,4 +33,11 @@ public class JpaIsFalsePredicate extends JpaPredicate {
 		super(alias, javaType, expression, metamodel, operator, expressions);
 	}
 
+	@Override
+	public String toString() {
+		return "JpaIsFalsePredicate [expressions=" + expressions + ", operator=" + operator + ", metamodel=" + metamodel
+				+ ", distinct=" + distinct + ", expression=" + expression + ", roots=" + roots + ", alias=" + alias
+				+ ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
 }

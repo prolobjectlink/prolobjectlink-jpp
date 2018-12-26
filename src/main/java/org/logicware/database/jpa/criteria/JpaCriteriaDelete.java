@@ -26,6 +26,7 @@ import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
@@ -62,6 +63,11 @@ public final class JpaCriteriaDelete<T> extends JpaAbstractCriteria<T> implement
 			predicates.add(predicate);
 		}
 		return this;
+	}
+
+	public <U> Subquery<U> subquery(Class<U> type) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

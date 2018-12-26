@@ -22,7 +22,6 @@ package org.logicware.database.jpa.criteria.predicate;
 import java.util.List;
 
 import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Subquery;
 import javax.persistence.metamodel.Metamodel;
 
 import org.logicware.database.jpa.criteria.JpaPredicate;
@@ -32,6 +31,11 @@ public class JpaExist extends JpaPredicate {
 	public JpaExist(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
 			BooleanOperator operator, List<Expression<?>> expressions) {
 		super(alias, javaType, expression, metamodel, operator, expressions);
+	}
+
+	@Override
+	public String toString() {
+		return "EXISTS ( " + expression + " )";
 	}
 
 }

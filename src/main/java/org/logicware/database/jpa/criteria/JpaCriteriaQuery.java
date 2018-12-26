@@ -39,6 +39,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Predicate.BooleanOperator;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
+import javax.persistence.criteria.Subquery;
 import javax.persistence.metamodel.Bindable;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.ManagedType;
@@ -170,6 +171,12 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 
 	public <X> Root<X> from(EntityType<X> entity) {
 		return from(entity.getJavaType());
+	}
+
+	public <U> Subquery<U> subquery(Class<U> type) {
+		char character = type.getSimpleName().charAt(0);
+		String alias = "" + Character.toLowerCase(character) + "";
+		return new JpaSubQuery<U>(distinct, alias, selection, restriction, metamodel, type, null);
 	}
 
 	public Selection<T> getSelection() {

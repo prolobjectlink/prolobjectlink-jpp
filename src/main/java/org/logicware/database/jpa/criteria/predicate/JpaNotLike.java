@@ -28,9 +28,16 @@ import org.logicware.database.jpa.criteria.JpaPredicate;
 
 public class JpaNotLike extends JpaPredicate {
 
-	public JpaNotLike(String alias, Class<? extends Boolean> javaType, Expression<?> expression,
-			Metamodel metamodel, List<Expression<?>> expressions) {
+	public JpaNotLike(String alias, Class<? extends Boolean> javaType, Expression<?> expression, Metamodel metamodel,
+			List<Expression<?>> expressions) {
 		super(alias, javaType, expression, metamodel, BooleanOperator.OR, expressions);
+	}
+
+	@Override
+	public String toString() {
+		return "JpaNotLike [expressions=" + expressions + ", operator=" + operator + ", metamodel=" + metamodel
+				+ ", distinct=" + distinct + ", expression=" + expression + ", roots=" + roots + ", alias=" + alias
+				+ ", value=" + value + ", javaType=" + javaType + "]";
 	}
 
 }

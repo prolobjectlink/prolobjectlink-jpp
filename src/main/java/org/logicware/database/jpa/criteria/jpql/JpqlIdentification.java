@@ -27,8 +27,14 @@ import org.logicware.database.jpa.criteria.JpaTreeNode;
 
 public class JpqlIdentification<X> extends JpaExpression<X> implements JpaTreeNode {
 
-	public JpqlIdentification(String alias, Class<? extends X> javaType, Expression<?> expression, Metamodel metamodel) {
+	public JpqlIdentification(String alias, Class<? extends X> javaType, Expression<?> expression,
+			Metamodel metamodel) {
 		super(alias, javaType, expression, metamodel);
+	}
+
+	@Override
+	public String toString() {
+		return alias;
 	}
 
 }

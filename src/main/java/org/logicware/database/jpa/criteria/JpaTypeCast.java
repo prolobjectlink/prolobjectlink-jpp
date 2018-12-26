@@ -28,4 +28,10 @@ public final class JpaTypeCast<X> extends JpaExpression<X> {
 		super(alias, javaType, expression, metamodel);
 	}
 
+	@Override
+	public String toString() {
+		return "JpaTypeCast [metamodel=" + metamodel + ", distinct=" + distinct + ", expression=" + expression
+				+ ", roots=" + roots + ", alias=" + alias + ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
 }

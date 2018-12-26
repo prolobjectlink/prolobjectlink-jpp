@@ -22,7 +22,6 @@ package org.logicware.database.jpa.criteria;
 import javax.persistence.criteria.CommonAbstractCriteria;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Subquery;
 import javax.persistence.metamodel.Metamodel;
 
 public abstract class JpaAbstractCriteria<T> extends JpaAbstractWrapper implements CommonAbstractCriteria {
@@ -37,12 +36,48 @@ public abstract class JpaAbstractCriteria<T> extends JpaAbstractWrapper implemen
 		this.metamodel = metamodel;
 	}
 
-	public <U> Subquery<U> subquery(Class<U> type) {
-		return new JpaSubQuery<U>(restriction, type, metamodel);
-	}
-
 	public Predicate getRestriction() {
 		return (Predicate) restriction;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((metamodel == null) ? 0 : metamodel.hashCode());
+		result = prime * result + ((restriction == null) ? 0 : restriction.hashCode());
+		result = prime * result + ((resultType == null) ? 0 : resultType.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JpaAbstractCriteria<?> other = (JpaAbstractCriteria<?>) obj;
+		if (metamodel == null) {
+			if (other.metamodel != null)
+				return false;
+		} else if (!metamodel.equals(other.metamodel)) {
+			return false;
+		}
+		if (restriction == null) {
+			if (other.restriction != null)
+				return false;
+		} else if (!restriction.equals(other.restriction)) {
+			return false;
+		}
+		if (resultType == null) {
+			if (other.resultType != null)
+				return false;
+		} else if (!resultType.equals(other.resultType)) {
+			return false;
+		}
+		return true;
 	}
 
 }

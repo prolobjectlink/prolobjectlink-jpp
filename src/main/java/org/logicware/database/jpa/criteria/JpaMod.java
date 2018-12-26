@@ -26,7 +26,7 @@ public class JpaMod<X> extends JpaArithmeticExpression<X> implements Expression<
 
 	public JpaMod(String alias, Class<? extends X> javaType, Expression<?> left, Expression<?> right,
 			Metamodel metamodel) {
-		super(alias, javaType, left, "/", right, metamodel);
+		super(alias, javaType, left, "%", right, metamodel);
 	}
 
 }

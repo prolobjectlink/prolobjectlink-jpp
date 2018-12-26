@@ -24,8 +24,14 @@ import javax.persistence.metamodel.Metamodel;
 
 public final class JpaCountDistinct<X> extends JpaExpression<X> {
 
+	// TODO DISTINCT is valid for MAX, MIN, SUM and COUNT
 	public JpaCountDistinct(String alias, Class<? extends X> javaType, Expression<?> expression, Metamodel metamodel) {
 		super(alias, javaType, expression, metamodel);
+	}
+
+	@Override
+	public String toString() {
+		return "COUNT ( DISTINCT " + alias + ")";
 	}
 
 }

@@ -49,4 +49,10 @@ public class JpaCase<R> extends JpaExpression<R> implements Case<R> {
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return "JpaCase [metamodel=" + metamodel + ", distinct=" + distinct + ", expression=" + expression + ", roots="
+				+ roots + ", alias=" + alias + ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
 }

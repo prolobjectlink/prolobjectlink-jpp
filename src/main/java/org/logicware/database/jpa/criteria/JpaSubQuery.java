@@ -19,7 +19,10 @@
  */
 package org.logicware.database.jpa.criteria;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,17 +33,21 @@ import javax.persistence.criteria.CollectionJoin;
 import javax.persistence.criteria.CommonAbstractCriteria;
 import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.MapJoin;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Predicate.BooleanOperator;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import javax.persistence.criteria.SetJoin;
 import javax.persistence.criteria.Subquery;
+import javax.persistence.metamodel.Bindable;
 import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
 
 import org.logicware.database.jpa.criteria.predicate.JpaAndPredicate;
@@ -51,15 +58,23 @@ import org.logicware.database.jpa.criteria.predicate.JpaNullPredicate;
 public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquery<T>, Selection<T>, Expression<T> {
 
 	protected String alias;
-	protected Expression<T> selection;
+	protected boolean distinct;
+	protected Selection<?> selection;
 	protected AbstractQuery<T> parent;
-	protected Set<From<?, ?>> processedJoins = new LinkedHashSet<From<?, ?>>();
+	protected Set<From<?, ?>> joins = new LinkedHashSet<From<?, ?>>();
 	protected Set<Expression<?>> correlations = new LinkedHashSet<Expression<?>>();
 	protected Set<Join<?, ?>> correlatedJoins = new LinkedHashSet<Join<?, ?>>();
 	protected final List<Predicate> predicates = new LinkedList<Predicate>();
 
-	public JpaSubQuery(Expression<Boolean> restriction, Class<T> type, Metamodel metamodel) {
-		super(restriction, metamodel, type);
+	public JpaSubQuery(boolean distinct, String alias, Selection<?> selection, Expression<Boolean> restriction,
+			Metamodel metamodel, Class<T> resultType, AbstractQuery<T> parent) {
+		super(restriction, metamodel, distinct, resultType, new HashSet<Root<?>>(), new ArrayList<Expression<?>>());
+		this.selection = new JpaSelection(distinct, alias, resultType, roots);
+		roots.add((Root) selection);
+		this.selection = selection;
+		this.distinct = distinct;
+		this.parent = parent;
+		this.alias = alias;
 	}
 
 	public Selection<T> alias(String name) {
@@ -162,13 +177,24 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 	}
 
 	public <X> Root<X> from(Class<X> entityClass) {
-		// TODO Auto-generated method stub
-		return null;
+		Bindable<X> model = null;
+		Set<Join<X, ?>> joinSet = new HashSet<Join<X, ?>>();
+		Set<Fetch<X, ?>> fetches = new HashSet<Fetch<X, ?>>();
+		char character = entityClass.getSimpleName().charAt(0);
+		String als = "" + Character.toLowerCase(character) + "";
+		ManagedType<X> managedType = metamodel.managedType(entityClass);
+		if (managedType instanceof EntityType) {
+			model = (EntityType<X>) managedType;
+		}
+		Path<X> pathParent = new JpaIdentification<X>(als, entityClass, null, metamodel, null, model);
+		Root<X> from = new JpaFrom(als, entityClass, null, metamodel, pathParent, model, managedType, joinSet, fetches,
+				false, false, null);
+		roots.add(from);
+		return from;
 	}
 
 	public <X> Root<X> from(EntityType<X> entity) {
-		// TODO Auto-generated method stub
-		return null;
+		return from(entity.getJavaType());
 	}
 
 	public Subquery<T> where(Expression<Boolean> restriction) {
@@ -217,8 +243,120 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 		return this;
 	}
 
+	public <U> Subquery<U> subquery(Class<U> type) {
+		char character = type.getSimpleName().charAt(0);
+		String als = "" + Character.toLowerCase(character) + "";
+		return new JpaSubQuery<U>(distinct, als, selection, restriction, metamodel, type, null);
+	}
+
 	public Subquery<T> getSelection() {
-		return new JpaSubQuery<T>(restriction, resultType, metamodel);
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		if (distinct) {
+			b.append("SELECT DISTINCT " + alias + " ");
+		} else {
+			b.append("SELECT " + alias + " ");
+		}
+//		if (selection != null) {
+//			b.append(selection);
+//		}
+		if (!roots.isEmpty()) {
+			b.append("FROM ");
+			Iterator<?> i = roots.iterator();
+			while (i.hasNext()) {
+				b.append(i.next());
+				if (i.hasNext()) {
+					b.append(',');
+				}
+				b.append(' ');
+			}
+		}
+		if (!groupBy.isEmpty()) {
+			for (Expression<?> o : groupBy) {
+				b.append("GROUP BY ");
+				b.append(o);
+			}
+		}
+		if (havingClause != null) {
+			b.append(' ');
+			b.append("HAVING ");
+			b.append(havingClause);
+		}
+		if (restriction != null) {
+			b.append(restriction);
+		}
+		if (!predicates.isEmpty()) {
+			b.append(predicates);
+		}
+		if (joins != null && !joins.isEmpty()) {
+			b.append(joins);
+		}
+		return "" + b + "";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((alias == null) ? 0 : alias.hashCode());
+		result = prime * result + ((correlatedJoins == null) ? 0 : correlatedJoins.hashCode());
+		result = prime * result + ((correlations == null) ? 0 : correlations.hashCode());
+		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+		result = prime * result + ((predicates == null) ? 0 : predicates.hashCode());
+		result = prime * result + ((joins == null) ? 0 : joins.hashCode());
+		result = prime * result + ((selection == null) ? 0 : selection.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JpaSubQuery other = (JpaSubQuery) obj;
+		if (alias == null) {
+			if (other.alias != null)
+				return false;
+		} else if (!alias.equals(other.alias))
+			return false;
+		if (correlatedJoins == null) {
+			if (other.correlatedJoins != null)
+				return false;
+		} else if (!correlatedJoins.equals(other.correlatedJoins))
+			return false;
+		if (correlations == null) {
+			if (other.correlations != null)
+				return false;
+		} else if (!correlations.equals(other.correlations))
+			return false;
+		if (parent == null) {
+			if (other.parent != null)
+				return false;
+		} else if (!parent.equals(other.parent))
+			return false;
+		if (predicates == null) {
+			if (other.predicates != null)
+				return false;
+		} else if (!predicates.equals(other.predicates))
+			return false;
+		if (joins == null) {
+			if (other.joins != null)
+				return false;
+		} else if (!joins.equals(other.joins))
+			return false;
+		if (selection == null) {
+			if (other.selection != null)
+				return false;
+		} else if (!selection.equals(other.selection))
+			return false;
+		return true;
 	}
 
 }

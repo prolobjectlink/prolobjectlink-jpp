@@ -66,10 +66,7 @@ public abstract class JpaExpression<X> extends JpaSelection<X> implements Expres
 	}
 
 	@Override
-	public String toString() {
-		return "JpaExpression [expression=" + expression + ", alias=" + alias + ", value=" + value + ", javaType="
-				+ javaType + "]";
-	}
+	public abstract String toString();
 
 	@Override
 	public int hashCode() {

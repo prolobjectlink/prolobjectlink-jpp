@@ -25,9 +25,12 @@ import javax.persistence.metamodel.Metamodel;
 
 public class JpaParameterExpression<X> extends JpaExpression<X> implements ParameterExpression<X> {
 
+	protected final Integer position;
+
 	public JpaParameterExpression(String alias, Class<? extends X> javaType, Expression<?> expression,
-			Metamodel metamodel) {
+			Metamodel metamodel, Integer position) {
 		super(alias, javaType, expression, metamodel);
+		this.position = position;
 	}
 
 	public String getName() {
@@ -35,12 +38,18 @@ public class JpaParameterExpression<X> extends JpaExpression<X> implements Param
 	}
 
 	public Integer getPosition() {
-		// TODO Auto-generated method stub
-		return null;
+		return position;
 	}
 
 	public Class<X> getParameterType() {
 		return (Class<X>) javaType;
+	}
+
+	@Override
+	public String toString() {
+		return "JpaParameterExpression [position=" + position + ", metamodel=" + metamodel + ", distinct=" + distinct
+				+ ", expression=" + expression + ", roots=" + roots + ", alias=" + alias + ", value=" + value
+				+ ", javaType=" + javaType + "]";
 	}
 
 }

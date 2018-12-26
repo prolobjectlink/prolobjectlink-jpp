@@ -53,6 +53,13 @@ public class JpaInPredicate<X> extends JpaPredicate implements In<X> {
 	}
 
 	@Override
+	public String toString() {
+		return "JpaInPredicate [leftExpression=" + leftExpression + ", expressions=" + expressions + ", operator="
+				+ operator + ", metamodel=" + metamodel + ", distinct=" + distinct + ", expression=" + expression
+				+ ", roots=" + roots + ", alias=" + alias + ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
@@ -72,8 +79,9 @@ public class JpaInPredicate<X> extends JpaPredicate implements In<X> {
 		if (leftExpression == null) {
 			if (other.leftExpression != null)
 				return false;
-		} else if (!leftExpression.equals(other.leftExpression))
+		} else if (!leftExpression.equals(other.leftExpression)) {
 			return false;
+		}
 		return true;
 	}
 

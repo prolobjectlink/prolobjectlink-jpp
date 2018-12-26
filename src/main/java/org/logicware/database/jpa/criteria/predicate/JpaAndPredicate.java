@@ -33,4 +33,11 @@ public class JpaAndPredicate extends JpaPredicate {
 		super(alias, javaType, expression, metamodel, BooleanOperator.AND, expressions);
 	}
 
+	@Override
+	public String toString() {
+		return "JpaAndPredicate [expressions=" + expressions + ", operator=" + operator + ", metamodel=" + metamodel
+				+ ", distinct=" + distinct + ", expression=" + expression + ", roots=" + roots + ", alias=" + alias
+				+ ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
 }

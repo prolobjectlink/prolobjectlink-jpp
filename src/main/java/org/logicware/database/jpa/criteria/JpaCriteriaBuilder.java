@@ -446,11 +446,11 @@ public class JpaCriteriaBuilder extends JpaAbstractWrapper implements CriteriaBu
 	}
 
 	public <T> ParameterExpression<T> parameter(Class<T> paramClass) {
-		return new JpaParameterExpression(null, paramClass, null, metamodel);
+		return new JpaParameterExpression(null, paramClass, null, metamodel, 0);
 	}
 
 	public <T> ParameterExpression<T> parameter(Class<T> paramClass, String name) {
-		return new JpaParameterExpression(name, paramClass, null, metamodel);
+		return new JpaParameterExpression(name, paramClass, null, metamodel, 0);
 	}
 
 	public <C extends Collection<?>> Predicate isEmpty(Expression<C> collection) {
@@ -720,6 +720,32 @@ public class JpaCriteriaBuilder extends JpaAbstractWrapper implements CriteriaBu
 //		return new JpaRoot<T>(null, type, root, metamodel, root, model,
 //				metamodel.managedType(type), joins, fetches, false, false, root);
 		return null;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((metamodel == null) ? 0 : metamodel.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JpaCriteriaBuilder other = (JpaCriteriaBuilder) obj;
+		if (metamodel == null) {
+			if (other.metamodel != null)
+				return false;
+		} else if (!metamodel.equals(other.metamodel)) {
+			return false;
+		}
+		return true;
 	}
 
 }

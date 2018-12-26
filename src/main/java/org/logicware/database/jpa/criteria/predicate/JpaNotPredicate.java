@@ -33,4 +33,11 @@ public final class JpaNotPredicate extends JpaPredicate {
 		super(alias, javaType, expression, metamodel, null, expressions);
 	}
 
+	@Override
+	public String toString() {
+		return "JpaNotPredicate [expressions=" + expressions + ", operator=" + operator + ", metamodel=" + metamodel
+				+ ", distinct=" + distinct + ", expression=" + expression + ", roots=" + roots + ", alias=" + alias
+				+ ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
 }

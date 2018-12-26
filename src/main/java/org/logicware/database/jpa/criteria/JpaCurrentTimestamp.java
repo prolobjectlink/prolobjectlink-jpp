@@ -24,8 +24,14 @@ import javax.persistence.metamodel.Metamodel;
 
 public final class JpaCurrentTimestamp<X> extends JpaExpression<X> {
 
-	public JpaCurrentTimestamp(String alias, Class<? extends X> javaType, Expression<?> expression, Metamodel metamodel) {
+	public JpaCurrentTimestamp(String alias, Class<? extends X> javaType, Expression<?> expression,
+			Metamodel metamodel) {
 		super(alias, javaType, expression, metamodel);
+	}
+
+	@Override
+	public String toString() {
+		return "CURRENT_TIMESTAMP";
 	}
 
 }

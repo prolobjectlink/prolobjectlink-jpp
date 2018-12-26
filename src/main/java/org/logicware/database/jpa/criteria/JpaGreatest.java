@@ -28,4 +28,10 @@ public final class JpaGreatest<X> extends JpaExpression<X> {
 		super(alias, javaType, expression, metamodel);
 	}
 
+	@Override
+	public String toString() {
+		return "JpaGreatest [metamodel=" + metamodel + ", distinct=" + distinct + ", expression=" + expression
+				+ ", roots=" + roots + ", alias=" + alias + ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
 }

@@ -27,12 +27,19 @@ import javax.persistence.metamodel.Metamodel;
 
 public class JpaKeys<K> extends JpaExpression<Set<K>> implements Expression<Set<K>> {
 
-	private final Map<K, ?> map;
+	protected final Map<K, ?> map;
 
 	public JpaKeys(String alias, Class<? extends Set<K>> javaType, Expression<?> expression, Metamodel metamodel,
 			Map<K, ?> map) {
 		super(alias, javaType, expression, metamodel);
 		this.map = map;
+	}
+
+	@Override
+	public String toString() {
+		return "JpaKeys [map=" + map + ", metamodel=" + metamodel + ", distinct=" + distinct + ", expression="
+				+ expression + ", roots=" + roots + ", alias=" + alias + ", value=" + value + ", javaType=" + javaType
+				+ "]";
 	}
 
 	@Override

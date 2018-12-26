@@ -37,6 +37,7 @@ public abstract class JpaAbstractQuery<T> extends JpaAbstractCriteria<T> impleme
 	protected Expression<Boolean> havingClause;
 	protected List<Expression<?>> groupBy = newList();
 
+	@Deprecated
 	public JpaAbstractQuery(Expression<Boolean> restriction, Metamodel metamodel, Class<T> resultType) {
 		this(restriction, metamodel, false, resultType, new HashSet<Root<?>>(), new ArrayList<Expression<?>>());
 	}
@@ -67,6 +68,49 @@ public abstract class JpaAbstractQuery<T> extends JpaAbstractCriteria<T> impleme
 
 	public final Class<T> getResultType() {
 		return resultType;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (distinct ? 1231 : 1237);
+		result = prime * result + ((groupBy == null) ? 0 : groupBy.hashCode());
+		result = prime * result + ((havingClause == null) ? 0 : havingClause.hashCode());
+		result = prime * result + ((roots == null) ? 0 : roots.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JpaAbstractQuery<?> other = (JpaAbstractQuery<?>) obj;
+		if (distinct != other.distinct)
+			return false;
+		if (groupBy == null) {
+			if (other.groupBy != null)
+				return false;
+		} else if (!groupBy.equals(other.groupBy)) {
+			return false;
+		}
+		if (havingClause == null) {
+			if (other.havingClause != null)
+				return false;
+		} else if (!havingClause.equals(other.havingClause)) {
+			return false;
+		}
+		if (roots == null) {
+			if (other.roots != null)
+				return false;
+		} else if (!roots.equals(other.roots)) {
+			return false;
+		}
+		return true;
 	}
 
 }

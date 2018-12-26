@@ -54,4 +54,10 @@ public class JpaSimpleCase<C, R> extends JpaExpression<R> implements SimpleCase<
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return "JpaSimpleCase [metamodel=" + metamodel + ", distinct=" + distinct + ", expression=" + expression
+				+ ", roots=" + roots + ", alias=" + alias + ", value=" + value + ", javaType=" + javaType + "]";
+	}
+
 }
