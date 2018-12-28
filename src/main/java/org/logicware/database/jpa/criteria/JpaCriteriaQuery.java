@@ -92,8 +92,12 @@ public final class JpaCriteriaQuery<T> extends JpaAbstractQuery<T> implements Cr
 
 	public CriteriaQuery<T> where(Predicate... restrictions) {
 		for (Predicate predicate : restrictions) {
-			String alias = restriction.getAlias();
-			Class<? extends Boolean> javaType = restriction.getJavaType();
+			String alias = null;
+			Class<? extends Boolean> javaType = null;
+			if (restriction != null) {
+				alias = restriction.getAlias();
+				javaType = restriction.getJavaType();
+			}
 			restriction = new JpaAndPredicate(alias, javaType, predicate, metamodel, null);
 			predicates.add(predicate);
 		}

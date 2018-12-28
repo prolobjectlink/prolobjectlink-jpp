@@ -22,6 +22,8 @@ package org.logicware.database.jpa.criteria.predicate;
 import java.util.List;
 
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.From;
+import javax.persistence.criteria.Path;
 import javax.persistence.metamodel.Metamodel;
 
 public class JpaEqual extends JpaComparablePredicate {
@@ -33,7 +35,21 @@ public class JpaEqual extends JpaComparablePredicate {
 
 	@Override
 	public String toString() {
-		return "" + expressions.get(0) + "=" + expressions.get(1) + "";
+		Object left = expressions.get(0);
+		Object right = expressions.get(1);
+		if (left instanceof From) {
+			left = ((From<?, ?>) left).getAlias();
+		}
+		if (right instanceof From) {
+			right = ((From<?, ?>) right).getAlias();
+		}
+		if (left instanceof Path) {
+			left = ((Path<?>) left).getParentPath();
+		}
+		if (right instanceof Path) {
+			right = ((Path<?>) right).getParentPath();
+		}
+		return "" + left + " = " + right + "";
 	}
 
 }

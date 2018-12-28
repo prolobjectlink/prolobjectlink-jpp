@@ -69,8 +69,6 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 	public JpaSubQuery(boolean distinct, String alias, Selection<?> selection, Expression<Boolean> restriction,
 			Metamodel metamodel, Class<T> resultType, AbstractQuery<T> parent) {
 		super(restriction, metamodel, distinct, resultType, new HashSet<Root<?>>(), new ArrayList<Expression<?>>());
-		this.selection = new JpaSelection(distinct, alias, resultType, roots);
-		roots.add((Root) selection);
 		this.selection = selection;
 		this.distinct = distinct;
 		this.parent = parent;
@@ -261,9 +259,6 @@ public final class JpaSubQuery<T> extends JpaAbstractQuery<T> implements Subquer
 		} else {
 			b.append("SELECT " + alias + " ");
 		}
-//		if (selection != null) {
-//			b.append(selection);
-//		}
 		if (!roots.isEmpty()) {
 			b.append("FROM ");
 			Iterator<?> i = roots.iterator();
