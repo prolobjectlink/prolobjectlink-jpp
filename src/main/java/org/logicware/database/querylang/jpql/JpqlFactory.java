@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 import org.logicware.RuntimeError;
 import org.logicware.database.jpa.criteria.JpaTreeNode;
 import org.logicware.database.querylang.Parser;
@@ -36,478 +38,482 @@ import org.logicware.database.querylang.ast.QueryTimestamp;
 
 public class JpqlFactory {
 
-	private JpqlFactory() {
+	private final CriteriaBuilder builder;
+
+	public JpqlFactory(CriteriaBuilder builder) {
+		this.builder = builder;
 	}
 
-	public static JpaTreeNode newNumber(String value) {
+	public JpaTreeNode newNumber(String value) {
 		return new QueryNumber(value);
 	}
 
-	public static JpaTreeNode newFromClause(List<JpaTreeNode> declarations) {
+	public JpaTreeNode newFromClause(List<JpaTreeNode> declarations) {
 		return new QueryFrom(declarations);
 	}
 
-	public static JpaTreeNode newIdentifier(String id) {
+	public JpaTreeNode newIdentifier(String id) {
 		return new QueryIdent(id);
 	}
 
-	public static RuntimeError syntaxError(Class<? extends Parser> class1, SymbolEntry current) {
+	public RuntimeError syntaxError(Class<? extends Parser> class1, SymbolEntry current) {
 		return new RuntimeError(class1, "Syntax Error at " + current.getLine() + ":" + current.getColumn());
 	}
 
-	public static JpaTreeNode newAbstractSchema(List<JpaTreeNode> l) {
+	public JpaTreeNode newAbstractSchema(List<JpaTreeNode> l) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newExpressions(List<JpaTreeNode> l) {
+	public JpaTreeNode newExpressions(List<JpaTreeNode> l) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newUpdate(JpaTreeNode update, JpaTreeNode where) {
+	public JpaTreeNode newUpdate(JpaTreeNode update, JpaTreeNode where) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newUpdate(JpaTreeNode update) {
+	public JpaTreeNode newUpdate(JpaTreeNode update) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newSet(List<JpaTreeNode> l) {
+	public JpaTreeNode newSet(List<JpaTreeNode> l) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newUpdateItem(JpaTreeNode path, JpaTreeNode value) {
+	public JpaTreeNode newUpdateItem(JpaTreeNode path, JpaTreeNode value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newSelect(JpaTreeNode select, JpaTreeNode from, JpaTreeNode where, JpaTreeNode group, JpaTreeNode having) {
+	public JpaTreeNode newSelect(JpaTreeNode select, JpaTreeNode from, JpaTreeNode where, JpaTreeNode group,
+			JpaTreeNode having) {
 		return newSelect(select, from, where, group, having, null);
 	}
 
-	public static JpaTreeNode newSelect(JpaTreeNode select, JpaTreeNode from, JpaTreeNode where, JpaTreeNode group, JpaTreeNode having,
-			JpaTreeNode order) {
+	public JpaTreeNode newSelect(JpaTreeNode select, JpaTreeNode from, JpaTreeNode where, JpaTreeNode group,
+			JpaTreeNode having, JpaTreeNode order) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newClassName(List<JpaTreeNode> l) {
+	public JpaTreeNode newClassName(List<JpaTreeNode> l) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newParameters(List<JpaTreeNode> l) {
+	public JpaTreeNode newParameters(List<JpaTreeNode> l) {
 		return new QueryParList(l);
 	}
 
-	public static JpaTreeNode newAVG(JpaTreeNode path) {
+	public JpaTreeNode newAVG(JpaTreeNode path) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newMAX(JpaTreeNode path) {
+	public JpaTreeNode newMAX(JpaTreeNode path) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newMIN(JpaTreeNode path) {
+	public JpaTreeNode newMIN(JpaTreeNode path) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newSUM(JpaTreeNode path) {
+	public JpaTreeNode newSUM(JpaTreeNode path) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newCOUNT(JpaTreeNode path) {
+	public JpaTreeNode newCOUNT(JpaTreeNode path) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newGroupBy(List<JpaTreeNode> l) {
+	public JpaTreeNode newGroupBy(List<JpaTreeNode> l) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newHaving(JpaTreeNode conditional) {
+	public JpaTreeNode newHaving(JpaTreeNode conditional) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newCondExp(JpaTreeNode term, JpaTreeNode exp) {
+	public JpaTreeNode newCondExp(JpaTreeNode term, JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newCondExp(JpaTreeNode term) {
+	public JpaTreeNode newCondExp(JpaTreeNode term) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newCondTerm(JpaTreeNode factor, JpaTreeNode term) {
+	public JpaTreeNode newCondTerm(JpaTreeNode factor, JpaTreeNode term) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newCondTerm(JpaTreeNode factor) {
+	public JpaTreeNode newCondTerm(JpaTreeNode factor) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newCondFactor(boolean not, JpaTreeNode primary) {
+	public JpaTreeNode newCondFactor(boolean not, JpaTreeNode primary) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newCondPrimary(JpaTreeNode expression) {
+	public JpaTreeNode newCondPrimary(JpaTreeNode expression) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newSubQueryFrom(List<JpaTreeNode> l) {
+	public JpaTreeNode newSubQueryFrom(List<JpaTreeNode> l) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newFromItem(JpaTreeNode var) {
+	public JpaTreeNode newFromItem(JpaTreeNode var) {
 		return newFromItem(null, var);
 	}
 
-	public static JpaTreeNode newFromItem(JpaTreeNode type, JpaTreeNode var) {
+	public JpaTreeNode newFromItem(JpaTreeNode type, JpaTreeNode var) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newCollMemberDekl(JpaTreeNode path) {
+	public JpaTreeNode newCollMemberDekl(JpaTreeNode path) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newQualifiedId(JpaTreeNode id) {
+	public JpaTreeNode newQualifiedId(JpaTreeNode id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newQualifiedPath(JpaTreeNode id) {
+	public JpaTreeNode newQualifiedPath(JpaTreeNode id) {
 		List<JpaTreeNode> l = new LinkedList<JpaTreeNode>();
 		l.add(id);
 		return newQualifiedPath(l);
 	}
 
-	public static JpaTreeNode newQualifiedPath(List<JpaTreeNode> l) {
+	public JpaTreeNode newQualifiedPath(List<JpaTreeNode> l) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newPath(JpaTreeNode id, JpaTreeNode rest) {
+	public JpaTreeNode newPath(JpaTreeNode id, JpaTreeNode rest) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newANY(JpaTreeNode s) {
+	public JpaTreeNode newANY(JpaTreeNode s) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newSOME(JpaTreeNode s) {
+	public JpaTreeNode newSOME(JpaTreeNode s) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newALL(JpaTreeNode s) {
+	public JpaTreeNode newALL(JpaTreeNode s) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newArithExp(JpaTreeNode term, JpaTreeNode exp) {
+	public JpaTreeNode newArithExp(JpaTreeNode term, JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newArithExp(JpaTreeNode term) {
+	public JpaTreeNode newArithExp(JpaTreeNode term) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newArithTerm(JpaTreeNode factor, JpaTreeNode term) {
+	public JpaTreeNode newArithTerm(JpaTreeNode factor, JpaTreeNode term) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newArithTerm(JpaTreeNode factor) {
+	public JpaTreeNode newArithTerm(JpaTreeNode factor) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newArithFactor(JpaTreeNode exp) {
+	public JpaTreeNode newArithFactor(JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newAllOrAny(JpaTreeNode exp) {
+	public JpaTreeNode newAllOrAny(JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newSelectExtension(JpaTreeNode scalar) {
+	public JpaTreeNode newSelectExtension(JpaTreeNode scalar) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newConstructorExpression(JpaTreeNode className, JpaTreeNode parameters) {
+	public JpaTreeNode newConstructorExpression(JpaTreeNode className, JpaTreeNode parameters) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newEntityTypeLiteral(JpaTreeNode variable) {
+	public JpaTreeNode newEntityTypeLiteral(JpaTreeNode variable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newExistsExpression(boolean not, JpaTreeNode subquery) {
+	public JpaTreeNode newExistsExpression(boolean not, JpaTreeNode subquery) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newDelete(JpaTreeNode from) {
+	public JpaTreeNode newDelete(JpaTreeNode from) {
 		return newDelete(from, null);
 	}
 
-	public static JpaTreeNode newDateTimeFunction(JpaTreeNode exp) {
+	public JpaTreeNode newDateTimeFunction(JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newDelete(JpaTreeNode from, JpaTreeNode where) {
+	public JpaTreeNode newDelete(JpaTreeNode from, JpaTreeNode where) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newCurrentTimestamp(long time) {
+	public JpaTreeNode newCurrentTimestamp(long time) {
 		return new QueryTimestamp(time);
 	}
 
-	public static JpaTreeNode newCurrentTime(long time) {
+	public JpaTreeNode newCurrentTime(long time) {
 		return newCurrentTimestamp(time);
 	}
 
-	public static JpaTreeNode newCurrentDate(long time) {
+	public JpaTreeNode newCurrentDate(long time) {
 		return new QueryDate(new Date(time));
 	}
 
-	public static JpaTreeNode newNumericFunction(JpaTreeNode exp) {
+	public JpaTreeNode newNumericFunction(JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newLENGTH(JpaTreeNode e) {
+	public JpaTreeNode newLENGTH(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newLOCATE(JpaTreeNode s1, JpaTreeNode s2) {
+	public JpaTreeNode newLOCATE(JpaTreeNode s1, JpaTreeNode s2) {
 		return newLOCATE(s1, s2, null);
 	}
 
-	public static JpaTreeNode newLOCATE(JpaTreeNode s1, JpaTreeNode s2, JpaTreeNode exp) {
+	public JpaTreeNode newLOCATE(JpaTreeNode s1, JpaTreeNode s2, JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newABS(JpaTreeNode e) {
+	public JpaTreeNode newABS(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newSQRT(JpaTreeNode e) {
+	public JpaTreeNode newSQRT(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newMOD(JpaTreeNode e) {
+	public JpaTreeNode newMOD(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newSIZE(JpaTreeNode e) {
+	public JpaTreeNode newSIZE(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newINDEX(JpaTreeNode e) {
+	public JpaTreeNode newINDEX(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newStringFunction(JpaTreeNode exp) {
+	public JpaTreeNode newStringFunction(JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newCONCAT(JpaTreeNode e) {
+	public JpaTreeNode newCONCAT(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newSUBSTRING(JpaTreeNode e) {
+	public JpaTreeNode newSUBSTRING(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newTRIM(JpaTreeNode e) {
+	public JpaTreeNode newTRIM(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newLOWER(JpaTreeNode e) {
+	public JpaTreeNode newLOWER(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newUPPER(JpaTreeNode e) {
+	public JpaTreeNode newUPPER(JpaTreeNode e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newTrimSpecification(JpaTreeNode exp) {
+	public JpaTreeNode newTrimSpecification(JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newLeadingSpec(JpaTreeNode exp) {
+	public JpaTreeNode newLeadingSpec(JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newTrailingSpec(JpaTreeNode exp) {
+	public JpaTreeNode newTrailingSpec(JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newBothSpec(JpaTreeNode exp) {
+	public JpaTreeNode newBothSpec(JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newNegative(boolean negative) {
+	public JpaTreeNode newNegative(boolean negative) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newLiteral(JpaTreeNode l) {
+	public JpaTreeNode newLiteral(JpaTreeNode l) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newNumeric(JpaTreeNode exp) {
+	public JpaTreeNode newNumeric(JpaTreeNode exp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newInteger(JpaTreeNode negative, Number number) {
+	public JpaTreeNode newInteger(JpaTreeNode negative, Number number) {
 		return null;
 	}
 
-	public static JpaTreeNode newDecimal(JpaTreeNode negative, Number number) {
+	public JpaTreeNode newDecimal(JpaTreeNode negative, Number number) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newString(String value) {
+	public JpaTreeNode newString(String value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newDate(Object date) {
+	public JpaTreeNode newDate(Object date) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newBoolean(boolean value) {
+	public JpaTreeNode newBoolean(boolean value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newPattern(JpaTreeNode value) {
+	public JpaTreeNode newPattern(JpaTreeNode value) {
 		return newPattern(value, null);
 	}
 
-	public static JpaTreeNode newPattern(JpaTreeNode value, JpaTreeNode esc) {
+	public JpaTreeNode newPattern(JpaTreeNode value, JpaTreeNode esc) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newEscapeCharacter(String string) {
+	public JpaTreeNode newEscapeCharacter(String string) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newTrimCharacter(String string) {
+	public JpaTreeNode newTrimCharacter(String string) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newOrderByExtension(JpaTreeNode agg) {
+	public JpaTreeNode newOrderByExtension(JpaTreeNode agg) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newOrderBy(List<JpaTreeNode> l) {
+	public JpaTreeNode newOrderBy(List<JpaTreeNode> l) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newEntityBeanExpression(JpaTreeNode value) {
+	public JpaTreeNode newEntityBeanExpression(JpaTreeNode value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newDatetimeExpression(JpaTreeNode s) {
+	public JpaTreeNode newDatetimeExpression(JpaTreeNode s) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newBooleanValue(JpaTreeNode v) {
+	public JpaTreeNode newBooleanValue(JpaTreeNode v) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newBooleanExpression(JpaTreeNode s) {
+	public JpaTreeNode newBooleanExpression(JpaTreeNode s) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newInnerJoin(JpaTreeNode path, JpaTreeNode var) {
+	public JpaTreeNode newInnerJoin(JpaTreeNode path, JpaTreeNode var) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newOuterJoin(JpaTreeNode path, JpaTreeNode var) {
+	public JpaTreeNode newOuterJoin(JpaTreeNode path, JpaTreeNode var) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newFetchJoin(JpaTreeNode fetch) {
+	public JpaTreeNode newFetchJoin(JpaTreeNode fetch) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newOuterFetchJoin(JpaTreeNode path) {
+	public JpaTreeNode newOuterFetchJoin(JpaTreeNode path) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newInnerFetchJoin(JpaTreeNode path) {
+	public JpaTreeNode newInnerFetchJoin(JpaTreeNode path) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static JpaTreeNode newUpdateClause(JpaTreeNode from, JpaTreeNode set) {
+	public JpaTreeNode newUpdateClause(JpaTreeNode from, JpaTreeNode set) {
 		// TODO Auto-generated method stub
 		return null;
 	}

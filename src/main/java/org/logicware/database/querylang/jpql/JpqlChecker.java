@@ -32,13 +32,15 @@ public abstract class JpqlChecker extends JpqlSymbols implements Parser {
 
 	protected SymbolEntry current;
 	protected final Scanner scanner;
+	protected final JpqlFactory jpqlfactory;
 
-	protected JpqlChecker(Scanner scanner) {
+	public JpqlChecker(Scanner scanner, JpqlFactory jpqlfactory) {
 		this.scanner = scanner;
+		this.jpqlfactory = jpqlfactory;
 	}
 
 	protected RuntimeError syntaxError() {
-		return JpqlFactory.syntaxError(getClass(), current);
+		return jpqlfactory.syntaxError(getClass(), current);
 	}
 
 	protected List<JpaTreeNode> newList() {

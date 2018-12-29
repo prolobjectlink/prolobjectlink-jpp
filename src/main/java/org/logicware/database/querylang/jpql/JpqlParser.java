@@ -34,8 +34,8 @@ import org.logicware.database.querylang.Scanner;
  */
 public class JpqlParser extends JpqlChecker implements Parser {
 
-	public JpqlParser(Scanner scanner) {
-		super(scanner);
+	public JpqlParser(Scanner scanner, JpqlFactory jpqlfactory) {
+		super(scanner, jpqlfactory);
 	}
 
 	public JpaTreeNode parseQuery() {
@@ -70,7 +70,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == ORDER) {
 			order = orderByClause();
 		}
-		return JpqlFactory.newSelect(
+		return jpqlfactory.newSelect(
 
 				select, from, where, group, having, order
 
@@ -81,7 +81,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		JpaTreeNode update = updateClause();
 		if (current.sym == WHERE) {
 			JpaTreeNode where = whereClause();
-			return JpqlFactory.newUpdate(update, where);
+			return jpqlfactory.newUpdate(update, where);
 		}
 		return update;
 	}
@@ -95,9 +95,9 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				if (current.sym == WHERE) {
 					current = scanner.next();
 					JpaTreeNode w = whereClause();
-					return JpqlFactory.newDelete(f, w);
+					return jpqlfactory.newDelete(f, w);
 				}
-				return JpqlFactory.newDelete(f);
+				return jpqlfactory.newDelete(f);
 			} else {
 				throw syntaxError();
 			}
@@ -125,10 +125,10 @@ public class JpqlParser extends JpqlChecker implements Parser {
 					vars.add(var);
 				}
 			}
-			return JpqlFactory.newFromClause(vars);
+			return jpqlfactory.newFromClause(vars);
 
 		} else {
-			throw JpqlFactory.syntaxError(getClass(), current);
+			throw jpqlfactory.syntaxError(getClass(), current);
 		}
 	}
 
@@ -142,10 +142,10 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == AS) {
 			current = scanner.next();
 			JpaTreeNode var = identificationVariable();
-			return JpqlFactory.newFromItem(type, var);
+			return jpqlfactory.newFromItem(type, var);
 		}
 		JpaTreeNode var = identificationVariable();
-		return JpqlFactory.newFromItem(var);
+		return jpqlfactory.newFromItem(var);
 	}
 
 	private JpaTreeNode subQueryFromClause() {
@@ -156,7 +156,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			l.add(subQueryFromItem());
 		}
-		return JpqlFactory.newSubQueryFrom(l);
+		return jpqlfactory.newSubQueryFrom(l);
 	}
 
 	private JpaTreeNode subselectIdentificationVariableDeclaration() {
@@ -180,7 +180,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				current = scanner.next();
 			}
 			JpaTreeNode var = identificationVariable();
-			return JpqlFactory.newInnerJoin(path, var);
+			return jpqlfactory.newInnerJoin(path, var);
 		} else {
 			throw syntaxError();
 		}
@@ -192,10 +192,10 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			if (current.sym == KEY || current.sym == VALUE) {
 				JpaTreeNode path = qualifiedPath();
-				return JpqlFactory.newCollMemberDekl(path);
+				return jpqlfactory.newCollMemberDekl(path);
 			} else {
 				JpaTreeNode path = path();
-				return JpqlFactory.newCollMemberDekl(path);
+				return jpqlfactory.newCollMemberDekl(path);
 			}
 		}
 		if (current.sym == RPAR) {
@@ -205,7 +205,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 		}
 		JpaTreeNode var = identificationVariable();
-		return JpqlFactory.newCollMemberDekl(var);
+		return jpqlfactory.newCollMemberDekl(var);
 	}
 
 	private JpaTreeNode outerJoin() {
@@ -221,7 +221,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 					current = scanner.next();
 				}
 				JpaTreeNode var = identificationVariable();
-				return JpqlFactory.newOuterJoin(path, var);
+				return jpqlfactory.newOuterJoin(path, var);
 			} else {
 				throw syntaxError();
 			}
@@ -237,7 +237,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		} else {
 			f = innerFetchJoin();
 		}
-		return JpqlFactory.newFetchJoin(f);
+		return jpqlfactory.newFetchJoin(f);
 	}
 
 	private JpaTreeNode outerFetchJoin() {
@@ -251,7 +251,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				if (current.sym == FETCH) {
 					current = scanner.next();
 					JpaTreeNode p = path();
-					return JpqlFactory.newOuterFetchJoin(p);
+					return jpqlfactory.newOuterFetchJoin(p);
 				} else {
 					throw syntaxError();
 				}
@@ -271,7 +271,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			if (current.sym == FETCH) {
 				JpaTreeNode path = path();
-				return JpqlFactory.newInnerFetchJoin(path);
+				return jpqlfactory.newInnerFetchJoin(path);
 			} else {
 				throw syntaxError();
 			}
@@ -283,7 +283,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 	private JpaTreeNode path() {
 		JpaTreeNode id = identificationVariable();
 		JpaTreeNode rest = pathComponent();
-		return JpqlFactory.newPath(id, rest);
+		return jpqlfactory.newPath(id, rest);
 	}
 
 	private JpaTreeNode updateClause() {
@@ -292,7 +292,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == SET) {
 			current = scanner.next();
 			JpaTreeNode set = setClause();
-			return JpqlFactory.newUpdateClause(from, set);
+			return jpqlfactory.newUpdateClause(from, set);
 		} else {
 			throw syntaxError();
 		}
@@ -305,7 +305,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			l.add(updateItem());
 		}
-		return JpqlFactory.newSet(l);
+		return jpqlfactory.newSet(l);
 	}
 
 	private JpaTreeNode updateItem() {
@@ -313,7 +313,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == EQ) {
 			current = scanner.next();
 			JpaTreeNode value = newValue();
-			return JpqlFactory.newUpdateItem(path, value);
+			return jpqlfactory.newUpdateItem(path, value);
 		} else {
 			throw syntaxError();
 		}
@@ -360,7 +360,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			l.add(selectExpression());
 		}
-		return JpqlFactory.newExpressions(l);
+		return jpqlfactory.newExpressions(l);
 	}
 
 	private JpaTreeNode selectExpression() {
@@ -370,7 +370,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 
 	private JpaTreeNode selectExtension() {
 		JpaTreeNode scalar = scalarFunction();
-		return JpqlFactory.newSelectExtension(scalar);
+		return jpqlfactory.newSelectExtension(scalar);
 	}
 
 	private JpaTreeNode subSelectExpressions() {
@@ -380,7 +380,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			l.add(subSelectExpression());
 		}
-		return JpqlFactory.newExpressions(l);
+		return jpqlfactory.newExpressions(l);
 	}
 
 	private JpaTreeNode subSelectExpression() {
@@ -393,7 +393,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			JpaTreeNode cn = className();
 			JpaTreeNode ps = constructorParameters();
-			return JpqlFactory.newConstructorExpression(cn, ps);
+			return jpqlfactory.newConstructorExpression(cn, ps);
 		} else {
 			throw syntaxError();
 		}
@@ -406,7 +406,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			l.add(identificationVariable());
 		}
-		return JpqlFactory.newClassName(l);
+		return jpqlfactory.newClassName(l);
 	}
 
 	private JpaTreeNode constructorParameters() {
@@ -424,9 +424,9 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			} else {
 				throw syntaxError();
 			}
-			return JpqlFactory.newParameters(l);
+			return jpqlfactory.newParameters(l);
 		}
-		return JpqlFactory.newParameters(newList());
+		return jpqlfactory.newParameters(newList());
 	}
 
 	private JpaTreeNode constructorParameter() {
@@ -476,31 +476,31 @@ public class JpqlParser extends JpqlChecker implements Parser {
 	private JpaTreeNode count() {
 		current = scanner.next();
 		JpaTreeNode path = aggregatePath();
-		return JpqlFactory.newCOUNT(path);
+		return jpqlfactory.newCOUNT(path);
 	}
 
 	private JpaTreeNode avg() {
 		current = scanner.next();
 		JpaTreeNode path = aggregatePath();
-		return JpqlFactory.newAVG(path);
+		return jpqlfactory.newAVG(path);
 	}
 
 	private JpaTreeNode max() {
 		current = scanner.next();
 		JpaTreeNode path = aggregatePath();
-		return JpqlFactory.newMAX(path);
+		return jpqlfactory.newMAX(path);
 	}
 
 	private JpaTreeNode min() {
 		current = scanner.next();
 		JpaTreeNode path = aggregatePath();
-		return JpqlFactory.newMIN(path);
+		return jpqlfactory.newMIN(path);
 	}
 
 	private JpaTreeNode sum() {
 		current = scanner.next();
 		JpaTreeNode path = aggregatePath();
-		return JpqlFactory.newSUM(path);
+		return jpqlfactory.newSUM(path);
 	}
 
 	private JpaTreeNode whereClause() {
@@ -518,7 +518,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				current = scanner.next();
 				l.add(groupByItem());
 			}
-			return JpqlFactory.newGroupBy(l);
+			return jpqlfactory.newGroupBy(l);
 		} else {
 			throw syntaxError();
 		}
@@ -537,7 +537,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 	private JpaTreeNode havingClause() {
 		current = scanner.next();
 		JpaTreeNode exp = conditionalExpression();
-		return JpqlFactory.newHaving(exp);
+		return jpqlfactory.newHaving(exp);
 	}
 
 	private JpaTreeNode subQuery() {
@@ -555,7 +555,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == HAVING) {
 			having = havingClause();
 		}
-		return JpqlFactory.newSelect(
+		return jpqlfactory.newSelect(
 
 				select, from, where, group, having
 
@@ -568,9 +568,9 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == OR) {
 			current = scanner.next();
 			JpaTreeNode exp = conditionalExpression();
-			return JpqlFactory.newCondExp(term, exp);
+			return jpqlfactory.newCondExp(term, exp);
 		}
-		return JpqlFactory.newCondExp(term);
+		return jpqlfactory.newCondExp(term);
 	}
 
 	private JpaTreeNode conditionalTerm() {
@@ -579,9 +579,9 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == AND) {
 			current = scanner.next();
 			JpaTreeNode term = conditionalTerm();
-			return JpqlFactory.newCondTerm(factor, term);
+			return jpqlfactory.newCondTerm(factor, term);
 		}
-		return JpqlFactory.newCondTerm(factor);
+		return jpqlfactory.newCondTerm(factor);
 	}
 
 	private JpaTreeNode conditionalFactor() {
@@ -589,10 +589,10 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == NOT) {
 			current = scanner.next();
 			JpaTreeNode p = conditionalPrimary();
-			return JpqlFactory.newCondFactor(true, p);
+			return jpqlfactory.newCondFactor(true, p);
 		}
 		JpaTreeNode p = conditionalPrimary();
-		return JpqlFactory.newCondFactor(false, p);
+		return jpqlfactory.newCondFactor(false, p);
 	}
 
 	private JpaTreeNode conditionalPrimary() {
@@ -602,11 +602,11 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			JpaTreeNode e = conditionalExpression();
 			if (current.sym == RPAR) {
 				current = scanner.next();
-				return JpqlFactory.newCondPrimary(e);
+				return jpqlfactory.newCondPrimary(e);
 			}
 		}
 		JpaTreeNode e = simpleCondExpression();
-		return JpqlFactory.newCondPrimary(e);
+		return jpqlfactory.newCondPrimary(e);
 	}
 
 	private JpaTreeNode simpleCondExpression() {
@@ -626,7 +626,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 
 	private JpaTreeNode entityTypeLiteral() {
 		JpaTreeNode v = identificationVariable();
-		return JpqlFactory.newEntityTypeLiteral(v);
+		return jpqlfactory.newEntityTypeLiteral(v);
 	}
 
 	private JpaTreeNode literalOrParam() {
@@ -662,7 +662,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				JpaTreeNode l = subQuery();
 				if (current.sym == RPAR) {
 					current = scanner.next();
-					return JpqlFactory.newExistsExpression(true, l);
+					return jpqlfactory.newExistsExpression(true, l);
 				} else {
 					throw syntaxError();
 				}
@@ -674,7 +674,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				JpaTreeNode l = subQuery();
 				if (current.sym == RPAR) {
 					current = scanner.next();
-					return JpqlFactory.newExistsExpression(false, l);
+					return jpqlfactory.newExistsExpression(false, l);
 				} else {
 					throw syntaxError();
 				}
@@ -697,7 +697,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			exp = allExpression();
 			break;
 		}
-		return JpqlFactory.newAllOrAny(exp);
+		return jpqlfactory.newAllOrAny(exp);
 	}
 
 	private JpaTreeNode anyExpression() {
@@ -707,7 +707,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			JpaTreeNode s = subQuery();
 			if (current.sym == RPAR) {
 				current = scanner.next();
-				return JpqlFactory.newANY(s);
+				return jpqlfactory.newANY(s);
 			} else {
 				throw syntaxError();
 			}
@@ -723,7 +723,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			JpaTreeNode s = subQuery();
 			if (current.sym == RPAR) {
 				current = scanner.next();
-				return JpqlFactory.newSOME(s);
+				return jpqlfactory.newSOME(s);
 			} else {
 				throw syntaxError();
 			}
@@ -739,7 +739,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			JpaTreeNode s = subQuery();
 			if (current.sym == RPAR) {
 				current = scanner.next();
-				return JpqlFactory.newALL(s);
+				return jpqlfactory.newALL(s);
 			} else {
 				throw syntaxError();
 			}
@@ -799,14 +799,14 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == PLUS) {
 			current = scanner.next();
 			JpaTreeNode exp = arithmeticExpression();
-			return JpqlFactory.newArithExp(term, exp);
+			return jpqlfactory.newArithExp(term, exp);
 		}
 		if (current.sym == MINUS) {
 			current = scanner.next();
 			JpaTreeNode exp = arithmeticExpression();
-			return JpqlFactory.newArithExp(term, exp);
+			return jpqlfactory.newArithExp(term, exp);
 		}
-		return JpqlFactory.newArithExp(term);
+		return jpqlfactory.newArithExp(term);
 	}
 
 	private JpaTreeNode arithmeticTerm() {
@@ -815,14 +815,14 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == TIMES) {
 			current = scanner.next();
 			JpaTreeNode term = arithmeticTerm();
-			return JpqlFactory.newArithTerm(factor, term);
+			return jpqlfactory.newArithTerm(factor, term);
 		}
 		if (current.sym == DIV) {
 			current = scanner.next();
 			JpaTreeNode term = arithmeticTerm();
-			return JpqlFactory.newArithTerm(factor, term);
+			return jpqlfactory.newArithTerm(factor, term);
 		}
-		return JpqlFactory.newArithTerm(factor);
+		return jpqlfactory.newArithTerm(factor);
 	}
 
 	private JpaTreeNode arithmeticFactor() {
@@ -830,17 +830,17 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == LPAR) {
 			current = scanner.next();
 			JpaTreeNode exp = conditionalPrimary();
-			return JpqlFactory.newArithFactor(exp);
+			return jpqlfactory.newArithFactor(exp);
 		}
 		JpaTreeNode p = arithmeticPrimary();
-		return JpqlFactory.newArithFactor(p);
+		return jpqlfactory.newArithFactor(p);
 	}
 
 	private JpaTreeNode qualifiedPath() {
 		current = scanner.next();
 		if (current.sym == KEY || current.sym == VALUE) {
 			JpaTreeNode id = identificationVariable();
-			return JpqlFactory.newQualifiedPath(id);
+			return jpqlfactory.newQualifiedPath(id);
 		} else if (current.sym == DOT) {
 			List<JpaTreeNode> l = newList();
 			l.add(pathComponent());
@@ -848,7 +848,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				current = scanner.next();
 				l.add(pathComponent());
 			}
-			return JpqlFactory.newQualifiedPath(l);
+			return jpqlfactory.newQualifiedPath(l);
 		} else {
 			throw syntaxError();
 		}
@@ -858,7 +858,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		current = scanner.next();
 		if (current.sym == KEY || current.sym == VALUE || current.sym == ENTRY) {
 			JpaTreeNode id = identificationVariable();
-			return JpqlFactory.newQualifiedId(id);
+			return jpqlfactory.newQualifiedId(id);
 		} else {
 			throw syntaxError();
 		}
@@ -868,7 +868,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		current = scanner.next();
 		if (current.sym == KEY || current.sym == VALUE) {
 			JpaTreeNode id = identificationVariable();
-			return JpqlFactory.newQualifiedId(id);
+			return jpqlfactory.newQualifiedId(id);
 		} else {
 			throw syntaxError();
 		}
@@ -937,7 +937,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		} else if (current.sym == PLUS) {
 			current = scanner.next();
 		}
-		return JpqlFactory.newNegative(negative);
+		return jpqlfactory.newNegative(negative);
 	}
 
 	private JpaTreeNode stringValue() {
@@ -968,7 +968,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		} else {
 			s = datetimePrimary();
 		}
-		return JpqlFactory.newDatetimeExpression(s);
+		return jpqlfactory.newDatetimeExpression(s);
 	}
 
 	private JpaTreeNode datetimePrimary() {
@@ -989,7 +989,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		} else {
 			v = path();
 		}
-		return JpqlFactory.newBooleanValue(v);
+		return jpqlfactory.newBooleanValue(v);
 	}
 
 	private JpaTreeNode booleanExpression() {
@@ -1005,7 +1005,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		} else {
 			s = booleanPrimary();
 		}
-		return JpqlFactory.newBooleanExpression(s);
+		return jpqlfactory.newBooleanExpression(s);
 	}
 
 	private JpaTreeNode booleanPrimary() {
@@ -1050,7 +1050,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			v = entityBeanValue();
 			break;
 		}
-		return JpqlFactory.newEntityBeanExpression(v);
+		return jpqlfactory.newEntityBeanExpression(v);
 	}
 
 	private JpaTreeNode functionsReturningStrings() {
@@ -1073,7 +1073,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			exp = upper();
 			break;
 		}
-		return JpqlFactory.newStringFunction(exp);
+		return jpqlfactory.newStringFunction(exp);
 	}
 
 	private JpaTreeNode concat() {
@@ -1099,7 +1099,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				JpaTreeNode e = stringExpression();
 				if (current.sym == RPAR) {
 					current = scanner.next();
-					return JpqlFactory.newLOWER(e);
+					return jpqlfactory.newLOWER(e);
 				} else {
 					throw syntaxError();
 				}
@@ -1119,7 +1119,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				JpaTreeNode e = stringExpression();
 				if (current.sym == RPAR) {
 					current = scanner.next();
-					return JpqlFactory.newUPPER(e);
+					return jpqlfactory.newUPPER(e);
 				} else {
 					throw syntaxError();
 				}
@@ -1136,16 +1136,16 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		JpaTreeNode exp = null;
 		switch (key) {
 		case LEADING:
-			exp = JpqlFactory.newLeadingSpec(exp);
+			exp = jpqlfactory.newLeadingSpec(exp);
 			break;
 		case TRAILING:
-			exp = JpqlFactory.newTrailingSpec(exp);
+			exp = jpqlfactory.newTrailingSpec(exp);
 			break;
 		default:
-			exp = JpqlFactory.newBothSpec(exp);
+			exp = jpqlfactory.newBothSpec(exp);
 			break;
 		}
-		return JpqlFactory.newTrimSpecification(exp);
+		return jpqlfactory.newTrimSpecification(exp);
 	}
 
 	private JpaTreeNode functionsReturningNumerics() {
@@ -1174,7 +1174,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			exp = index();
 			break;
 		}
-		return JpqlFactory.newNumericFunction(exp);
+		return jpqlfactory.newNumericFunction(exp);
 	}
 
 	private JpaTreeNode length() {
@@ -1185,7 +1185,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				JpaTreeNode e = stringExpression();
 				if (current.sym == RPAR) {
 					current = scanner.next();
-					return JpqlFactory.newLENGTH(e);
+					return jpqlfactory.newLENGTH(e);
 				} else {
 					throw syntaxError();
 				}
@@ -1214,14 +1214,14 @@ public class JpqlParser extends JpqlChecker implements Parser {
 						} else {
 							throw syntaxError();
 						}
-						return JpqlFactory.newLOCATE(s1, s2, exp);
+						return jpqlfactory.newLOCATE(s1, s2, exp);
 					}
 					if (current.sym == RPAR) {
 						current = scanner.next();
 					} else {
 						throw syntaxError();
 					}
-					return JpqlFactory.newLOCATE(s1, s2);
+					return jpqlfactory.newLOCATE(s1, s2);
 				} else {
 					throw syntaxError();
 				}
@@ -1240,7 +1240,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				JpaTreeNode e = arithmeticExpression();
 				if (current.sym == RPAR) {
 					current = scanner.next();
-					return JpqlFactory.newABS(e);
+					return jpqlfactory.newABS(e);
 				} else {
 					throw syntaxError();
 				}
@@ -1260,7 +1260,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				JpaTreeNode e = arithmeticExpression();
 				if (current.sym == RPAR) {
 					current = scanner.next();
-					return JpqlFactory.newSQRT(e);
+					return jpqlfactory.newSQRT(e);
 				} else {
 					throw syntaxError();
 				}
@@ -1290,7 +1290,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 				JpaTreeNode e = identificationVariable();
 				if (current.sym == RPAR) {
 					current = scanner.next();
-					return JpqlFactory.newINDEX(e);
+					return jpqlfactory.newINDEX(e);
 				} else {
 					throw syntaxError();
 				}
@@ -1309,18 +1309,18 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		switch (key) {
 		case CURRENT_TIMESTAMP:
 			current = scanner.next();
-			exp = JpqlFactory.newCurrentTimestamp(time);
+			exp = jpqlfactory.newCurrentTimestamp(time);
 			break;
 		case CURRENT_TIME:
 			current = scanner.next();
-			exp = JpqlFactory.newCurrentTime(time);
+			exp = jpqlfactory.newCurrentTime(time);
 			break;
 		default:
 			current = scanner.next();
-			exp = JpqlFactory.newCurrentDate(time);
+			exp = jpqlfactory.newCurrentDate(time);
 			break;
 		}
-		return JpqlFactory.newDateTimeFunction(exp);
+		return jpqlfactory.newDateTimeFunction(exp);
 	}
 
 	private JpaTreeNode orderByClause() {
@@ -1334,7 +1334,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 					current = scanner.next();
 					l.add(orderByItem());
 				}
-				return JpqlFactory.newOrderBy(l);
+				return jpqlfactory.newOrderBy(l);
 			} else {
 				throw syntaxError();
 			}
@@ -1350,7 +1350,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 
 	private JpaTreeNode orderbyExtension() {
 		JpaTreeNode agg = aggregateSelectExpression();
-		return JpqlFactory.newOrderByExtension(agg);
+		return jpqlfactory.newOrderByExtension(agg);
 	}
 
 	private JpaTreeNode abstractSchemaName() {
@@ -1360,14 +1360,14 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			l.add(pathComponent());
 		}
-		return JpqlFactory.newAbstractSchema(l);
+		return jpqlfactory.newAbstractSchema(l);
 	}
 
 	private JpaTreeNode tok() {
 		if (current.sym == IDENTIFIER) {
 			String id = "" + current.value + "";
 			current = scanner.next();
-			return JpqlFactory.newIdentifier(id);
+			return jpqlfactory.newIdentifier(id);
 		} else {
 			throw syntaxError();
 		}
@@ -1377,7 +1377,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == IDENTIFIER) {
 			String id = "" + current.value + "";
 			current = scanner.next();
-			return JpqlFactory.newIdentifier(id);
+			return jpqlfactory.newIdentifier(id);
 		} else {
 			throw syntaxError();
 		}
@@ -1438,7 +1438,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			l = timeLiteral();
 			break;
 		}
-		return JpqlFactory.newLiteral(l);
+		return jpqlfactory.newLiteral(l);
 	}
 
 	private JpaTreeNode numericLiteral() {
@@ -1450,7 +1450,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			exp = decimalLiteral();
 		}
-		return JpqlFactory.newNumeric(exp);
+		return jpqlfactory.newNumeric(exp);
 	}
 
 	private JpaTreeNode integerLiteral() {
@@ -1458,7 +1458,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == INTEGER_LITERAL) {
 			Integer n = (Integer) current.value;
 			current = scanner.next();
-			return JpqlFactory.newInteger(negative, n);
+			return jpqlfactory.newInteger(negative, n);
 		} else {
 			throw syntaxError();
 		}
@@ -1469,7 +1469,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == FLOATING_POINT_LITERAL) {
 			Double n = (Double) current.value;
 			current = scanner.next();
-			return JpqlFactory.newDecimal(negative, n);
+			return jpqlfactory.newDecimal(negative, n);
 		} else {
 			throw syntaxError();
 		}
@@ -1478,10 +1478,10 @@ public class JpqlParser extends JpqlChecker implements Parser {
 	private JpaTreeNode booleanLiteral() {
 		if (current.sym == FALSE) {
 			current = scanner.next();
-			return JpqlFactory.newBoolean(false);
+			return jpqlfactory.newBoolean(false);
 		} else if (current.sym == TRUE) {
 			current = scanner.next();
-			return JpqlFactory.newBoolean(true);
+			return jpqlfactory.newBoolean(true);
 		} else {
 			throw syntaxError();
 		}
@@ -1491,7 +1491,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == STRING_LITERAL) {
 			String s = "" + current.value + "";
 			current = scanner.next();
-			return JpqlFactory.newString(s);
+			return jpqlfactory.newString(s);
 		} else {
 			throw syntaxError();
 		}
@@ -1506,7 +1506,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == DATE) {
 			Object d = current.value;
 			current = scanner.next();
-			return JpqlFactory.newDate(d);
+			return jpqlfactory.newDate(d);
 		} else {
 			throw syntaxError();
 		}
@@ -1521,7 +1521,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == TIMESTAMP) {
 			Object d = current.value;
 			current = scanner.next();
-			return JpqlFactory.newDate(d);
+			return jpqlfactory.newDate(d);
 		} else {
 			throw syntaxError();
 		}
@@ -1555,7 +1555,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			current = scanner.next();
 			if (current.sym == INTEGER_LITERAL) {
 				String n = "" + current.value + "";
-				return JpqlFactory.newNumber(n);
+				return jpqlfactory.newNumber(n);
 			} else {
 				throw syntaxError();
 			}
@@ -1588,16 +1588,16 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == ESCAPE) {
 			current = scanner.next();
 			JpaTreeNode esc = escapeCharacter();
-			return JpqlFactory.newPattern(value, esc);
+			return jpqlfactory.newPattern(value, esc);
 		}
-		return JpqlFactory.newPattern(value);
+		return jpqlfactory.newPattern(value);
 	}
 
 	private JpaTreeNode escapeCharacter() {
 		if (current.sym == STRING_LITERAL) {
 			String s = "" + current.value + "";
 			current = scanner.next();
-			return JpqlFactory.newEscapeCharacter(s);
+			return jpqlfactory.newEscapeCharacter(s);
 		} else {
 			throw syntaxError();
 		}
@@ -1607,7 +1607,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 		if (current.sym == STRING_LITERAL) {
 			String s = "" + current.value + "";
 			current = scanner.next();
-			return JpqlFactory.newTrimCharacter(s);
+			return jpqlfactory.newTrimCharacter(s);
 		} else {
 			throw syntaxError();
 		}

@@ -24,18 +24,26 @@ import static org.logicware.logging.LoggerConstants.SYNTAX_ERROR;
 import java.io.StringReader;
 import java.util.Set;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 import org.logicware.RuntimeError;
 import org.logicware.database.jpa.criteria.JpaTreeNode;
 import org.logicware.database.querylang.SymbolTable;
 import org.logicware.logging.LoggerUtils;
 
 /**
- * Compiler to compile from the Query Language to Prolog Query Language
+ * Compiler to compile from the Query Language to Prolog Native Query Language
  * 
  * @author Jose Zalacain
  * @since 1.0
  */
 public class JpqlCompiler {
+
+	private final CriteriaBuilder builder;
+
+	public JpqlCompiler(CriteriaBuilder builder) {
+		this.builder = builder;
+	}
 
 	/**
 	 * Compile the Query Language to Prolog Query Language
@@ -44,7 +52,7 @@ public class JpqlCompiler {
 	 * @return Native Query Language string
 	 * @since 1.0
 	 */
-	public static String compile(Set<String> builtins, String jpqlStatementQuery) {
+	public String compile(Set<String> builtins, String jpqlStatementQuery) {
 		return treeNode(builtins, jpqlStatementQuery).getQueryString();
 	}
 
@@ -55,11 +63,12 @@ public class JpqlCompiler {
 	 * @return Tree node query representation
 	 * @since 1.0
 	 */
-	public static JpaTreeNode treeNode(Set<String> builtins, String jpqlStatementQuery) {
+	public JpaTreeNode treeNode(Set<String> builtins, String jpqlStatementQuery) {
+		JpqlFactory jpqlFactory = new JpqlFactory(builder);
 		SymbolTable symbolTable = new SymbolTable(builtins);
 		StringReader jpqlReader = new StringReader(jpqlStatementQuery);
 		JpqlScanner scanner = new JpqlScanner(jpqlReader, symbolTable);
-		JpqlParser parser = new JpqlParser(scanner);
+		JpqlParser parser = new JpqlParser(scanner, jpqlFactory);
 		try {
 			return parser.parseQuery();
 		} catch (RuntimeError e) {
@@ -68,9 +77,6 @@ public class JpqlCompiler {
 			LoggerUtils.error(JpqlCompiler.class, SYNTAX_ERROR, e);
 		}
 		throw new RuntimeError("Syntax error");
-	}
-
-	private JpqlCompiler() {
 	}
 
 }
