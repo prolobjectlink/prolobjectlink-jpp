@@ -19,8 +19,8 @@
  */
 package org.logicware.web.platform.win32.tomcat;
 
-import org.logicware.web.container.AbstractTomcatServer;
 import org.logicware.web.container.TomcatWebServer;
+import org.logicware.web.platform.AbstractTomcatServer;
 
 public class Win32TomcatWebServer extends AbstractTomcatServer implements TomcatWebServer {
 

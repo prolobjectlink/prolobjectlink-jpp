@@ -17,8 +17,40 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.container;
+package org.logicware.web.platform;
 
-public class WebServerLauncher {
+import org.logicware.web.container.TomcatWebServer;
+
+public class AbstractTomcatServer extends AbstractWebServer implements TomcatWebServer {
+
+	public String getLicense() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getVersion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void start() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void restart() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void stop() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

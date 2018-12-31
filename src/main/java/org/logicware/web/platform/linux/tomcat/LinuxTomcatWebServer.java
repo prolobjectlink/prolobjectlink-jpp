@@ -19,8 +19,8 @@
  */
 package org.logicware.web.platform.linux.tomcat;
 
-import org.logicware.web.container.AbstractTomcatServer;
 import org.logicware.web.container.TomcatWebServer;
+import org.logicware.web.platform.AbstractTomcatServer;
 
 public class LinuxTomcatWebServer extends AbstractTomcatServer implements TomcatWebServer {
 

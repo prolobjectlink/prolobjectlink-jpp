@@ -17,24 +17,40 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.container;
+package org.logicware.web.platform;
 
-import org.logicware.RuntimeError;
-import org.logicware.web.platform.linux.jetty.LinuxJettyWebServer;
-import org.logicware.web.platform.linux.tomcat.LinuxTomcatWebServer;
+import org.logicware.web.container.JettyWebServer;
 
-public class WebServerFactory {
+public class AbstractJettyServer extends AbstractWebServer implements JettyWebServer {
 
-	public static WebServer newWebServer(Class<?> cls) {
-		if (cls == LinuxJettyWebServer.class) {
-			return new LinuxJettyWebServer();
-		} else if (cls == LinuxTomcatWebServer.class) {
-			return new LinuxTomcatWebServer();
-		}
-		throw new RuntimeError("Unknow Web Server Instance " + cls);
+	public String getLicense() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	private WebServerFactory() {
+	public String getVersion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void start() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void restart() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void stop() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
