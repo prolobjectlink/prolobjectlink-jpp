@@ -96,7 +96,12 @@
 		<dependency>
 			<groupId>org.logicware</groupId>
 			<artifactId>prolobjectlink-jpi</artifactId>
-			<version>1.0.0</version>
+			<version>[1.0.0, )</version>
+		</dependency>
+		<dependency>
+			<groupId>org.logicware</groupId>
+			<artifactId>prolobjectlink-jds</artifactId>
+			<version>[1.0.0, )</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
