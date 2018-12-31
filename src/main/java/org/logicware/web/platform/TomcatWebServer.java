@@ -17,12 +17,8 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.container;
+package org.logicware.web.platform;
 
-import org.logicware.Platform;
-
-public interface WebPlatform extends Platform {
-
-	public void openBrowser(String url);
+public interface TomcatWebServer extends WebServer {
 
 }

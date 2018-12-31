@@ -19,8 +19,8 @@
  */
 package org.logicware.web.platform.linux.jetty;
 
-import org.logicware.web.container.JettyWebServer;
 import org.logicware.web.platform.AbstractJettyServer;
+import org.logicware.web.platform.JettyWebServer;
 
 public class LinuxJettyWebServer extends AbstractJettyServer implements JettyWebServer {
 

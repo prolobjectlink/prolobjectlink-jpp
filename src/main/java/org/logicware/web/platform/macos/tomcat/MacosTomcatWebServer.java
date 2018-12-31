@@ -19,8 +19,8 @@
  */
 package org.logicware.web.platform.macos.tomcat;
 
-import org.logicware.web.container.TomcatWebServer;
 import org.logicware.web.platform.AbstractTomcatServer;
+import org.logicware.web.platform.TomcatWebServer;
 
 public class MacosTomcatWebServer extends AbstractTomcatServer implements TomcatWebServer {
 

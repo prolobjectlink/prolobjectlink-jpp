@@ -17,8 +17,8 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.container;
+package org.logicware.web.platform;
 
-public interface TomcatWebServer extends WebServer {
+public interface JettyWebServer extends WebServer {
 
 }

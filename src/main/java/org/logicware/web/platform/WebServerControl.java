@@ -17,8 +17,22 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.container;
+package org.logicware.web.platform;
 
-public interface JettyWebServer extends WebServer {
+import org.logicware.database.DatabaseServer;
+
+public interface WebServerControl extends WebPlatform {
+
+	public WebServer getWebServer();
+
+	public void run(String[] args);
+
+	public void stop();
+
+	public void restart();
+
+	public void start();
+
+	DatabaseServer getDatabaseServer();
 
 }

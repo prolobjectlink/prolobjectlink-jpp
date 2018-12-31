@@ -19,8 +19,6 @@
  */
 package org.logicware.web.platform;
 
-import org.logicware.web.container.TomcatWebServer;
-
 public class AbstractTomcatServer extends AbstractWebServer implements TomcatWebServer {
 
 	public String getLicense() {

@@ -19,8 +19,8 @@
  */
 package org.logicware.web.platform.macos.jetty;
 
-import org.logicware.web.container.JettyWebServer;
 import org.logicware.web.platform.AbstractJettyServer;
+import org.logicware.web.platform.JettyWebServer;
 
 public class MacosJettyWebServer extends AbstractJettyServer implements JettyWebServer {
 

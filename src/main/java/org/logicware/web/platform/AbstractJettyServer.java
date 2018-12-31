@@ -19,8 +19,6 @@
  */
 package org.logicware.web.platform;
 
-import org.logicware.web.container.JettyWebServer;
-
 public class AbstractJettyServer extends AbstractWebServer implements JettyWebServer {
 
 	public String getLicense() {

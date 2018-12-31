@@ -19,8 +19,6 @@
  */
 package org.logicware.web.platform;
 
-import org.logicware.web.container.WebServer;
-
 public abstract class AbstractWebServer implements WebServer {
 
 }

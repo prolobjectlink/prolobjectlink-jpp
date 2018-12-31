@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.container;
+package org.logicware.web.platform;
 
 public interface WebServer {
 

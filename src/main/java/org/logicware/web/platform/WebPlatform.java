@@ -17,22 +17,12 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.container;
+package org.logicware.web.platform;
 
-import org.logicware.database.DatabaseServer;
+import org.logicware.Platform;
 
-public interface WebServerControl extends WebPlatform {
+public interface WebPlatform extends Platform {
 
-	public WebServer getWebServer();
-
-	public void run(String[] args);
-
-	public void stop();
-
-	public void restart();
-
-	public void start();
-
-	DatabaseServer getDatabaseServer();
+	public void openBrowser(String url);
 
 }

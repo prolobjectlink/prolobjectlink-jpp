@@ -20,8 +20,8 @@
 package org.logicware.web.platform.linux;
 
 import org.logicware.database.DatabaseServer;
-import org.logicware.web.container.WebServer;
-import org.logicware.web.container.WebServerControl;
+import org.logicware.web.platform.WebServer;
+import org.logicware.web.platform.WebServerControl;
 import org.logicware.web.platform.linux.jetty.LinuxJettyWebServer;
 
 public class LinuxServerControl extends LinuxPlatform implements WebServerControl {
