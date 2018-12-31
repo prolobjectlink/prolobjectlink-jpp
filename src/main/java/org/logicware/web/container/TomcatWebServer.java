@@ -17,20 +17,8 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web;
+package org.logicware.web.container;
 
-public interface WebServer {
-
-	public String getLicense();
-
-	public String getVersion();
-
-	public String getName();
-
-	public void start();
-
-	public void restart();
-
-	public void stop();
+public interface TomcatWebServer extends WebServer {
 
 }

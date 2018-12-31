@@ -17,8 +17,24 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web;
+package org.logicware.web.container;
 
-public interface TomcatWebServer extends WebServer {
+import org.logicware.RuntimeError;
+import org.logicware.web.platform.linux.jetty.LinuxJettyWebServer;
+import org.logicware.web.platform.linux.tomcat.LinuxTomcatWebServer;
+
+public class WebServerFactory {
+
+	public static WebServer newWebServer(Class<?> cls) {
+		if (cls == LinuxJettyWebServer.class) {
+			return new LinuxJettyWebServer();
+		} else if (cls == LinuxTomcatWebServer.class) {
+			return new LinuxTomcatWebServer();
+		}
+		throw new RuntimeError("Unknow Web Server Instance " + cls);
+	}
+
+	private WebServerFactory() {
+	}
 
 }

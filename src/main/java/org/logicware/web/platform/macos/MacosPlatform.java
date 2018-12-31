@@ -22,8 +22,8 @@ package org.logicware.web.platform.macos;
 import java.io.IOException;
 
 import org.logicware.database.DatabaseServer;
-import org.logicware.web.WebPlatform;
-import org.logicware.web.WebServer;
+import org.logicware.web.container.WebPlatform;
+import org.logicware.web.container.WebServer;
 import org.logicware.web.platform.AbstractWebControl;
 
 public class MacosPlatform extends AbstractWebControl implements WebPlatform {

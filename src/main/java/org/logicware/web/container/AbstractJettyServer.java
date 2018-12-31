@@ -19,7 +19,6 @@
  */
 package org.logicware.web.container;
 
-import org.logicware.web.JettyWebServer;
 import org.logicware.web.platform.AbstractWebServer;
 
 public class AbstractJettyServer extends AbstractWebServer implements JettyWebServer {

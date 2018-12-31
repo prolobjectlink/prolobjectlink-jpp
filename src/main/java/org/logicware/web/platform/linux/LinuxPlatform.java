@@ -26,8 +26,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.logicware.database.DatabaseServer;
-import org.logicware.web.WebPlatform;
-import org.logicware.web.WebServer;
+import org.logicware.web.container.WebPlatform;
+import org.logicware.web.container.WebServer;
 import org.logicware.web.platform.AbstractWebControl;
 
 public class LinuxPlatform extends AbstractWebControl implements WebPlatform {

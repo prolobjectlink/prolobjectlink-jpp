@@ -20,8 +20,8 @@
 package org.logicware.web.platform.macos;
 
 import org.logicware.database.DatabaseServer;
-import org.logicware.web.WebServer;
-import org.logicware.web.WebServerControl;
+import org.logicware.web.container.WebServer;
+import org.logicware.web.container.WebServerControl;
 import org.logicware.web.platform.macos.jetty.MacosJettyWebServer;
 
 public class MacosServerControl extends MacosPlatform implements WebServerControl {

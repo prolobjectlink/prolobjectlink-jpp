@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web;
+package org.logicware.web.container;
 
 public class WebServerLauncher {
 

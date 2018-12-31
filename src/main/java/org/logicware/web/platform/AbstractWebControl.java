@@ -38,8 +38,8 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import org.logicware.database.DatabaseServer;
-import org.logicware.web.WebServer;
-import org.logicware.web.WebServerControl;
+import org.logicware.web.container.WebServer;
+import org.logicware.web.container.WebServerControl;
 
 public abstract class AbstractWebControl extends AbstractWebPlatform implements WebServerControl {
 

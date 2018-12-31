@@ -19,8 +19,8 @@
  */
 package org.logicware.web.platform.win32.jetty;
 
-import org.logicware.web.JettyWebServer;
 import org.logicware.web.container.AbstractJettyServer;
+import org.logicware.web.container.JettyWebServer;
 
 public class Win32JettyWebServer extends AbstractJettyServer implements JettyWebServer {
 
