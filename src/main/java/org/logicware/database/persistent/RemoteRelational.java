@@ -25,7 +25,7 @@ import org.logicware.database.DatabaseType;
 import org.logicware.database.DatabaseUser;
 import org.logicware.database.RemoteDatabase;
 import org.logicware.database.Schema;
-import org.logicware.database.Settings;
+import org.logicware.database.etc.Settings;
 
 public final class RemoteRelational extends RemoteDatabaseClient implements RemoteDatabase {
 

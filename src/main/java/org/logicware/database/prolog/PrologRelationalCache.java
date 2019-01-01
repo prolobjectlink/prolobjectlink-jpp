@@ -24,8 +24,8 @@ import org.logicware.database.ObjectConverter;
 import org.logicware.database.RelationalCache;
 import org.logicware.database.RelationalGraph;
 import org.logicware.database.Schema;
-import org.logicware.database.Settings;
 import org.logicware.database.cache.AbstractRelationalCache;
+import org.logicware.database.etc.Settings;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
 

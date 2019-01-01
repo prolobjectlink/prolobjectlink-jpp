@@ -19,6 +19,7 @@
  */
 package org.logicware.database;
 
+import org.logicware.database.etc.Settings;
 import org.logicware.prolog.PrologConverter;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;

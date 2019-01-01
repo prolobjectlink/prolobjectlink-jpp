@@ -22,8 +22,8 @@ package org.logicware.database.prolog;
 import org.logicware.database.ContainerFactory;
 import org.logicware.database.HierarchicalCache;
 import org.logicware.database.ObjectConverter;
-import org.logicware.database.Settings;
 import org.logicware.database.cache.AbstractHierarchicalCache;
+import org.logicware.database.etc.Settings;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
 

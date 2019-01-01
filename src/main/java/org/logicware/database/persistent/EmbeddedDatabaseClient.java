@@ -31,10 +31,10 @@ import org.logicware.database.Predicate;
 import org.logicware.database.ProcedureQuery;
 import org.logicware.database.Query;
 import org.logicware.database.Schema;
-import org.logicware.database.Settings;
 import org.logicware.database.Transaction;
 import org.logicware.database.TypedQuery;
 import org.logicware.database.engine.AbstractDatabaseEngine;
+import org.logicware.database.etc.Settings;
 
 public abstract class EmbeddedDatabaseClient extends AbstractDatabaseEngine
 		implements PersistentContainer, EmbeddedDatabase {

@@ -27,8 +27,8 @@ import java.util.Map;
 
 import org.logicware.database.ObjectConverter;
 import org.logicware.database.Predicate;
-import org.logicware.database.Settings;
 import org.logicware.database.VolatileContainer;
+import org.logicware.database.etc.Settings;
 import org.logicware.database.util.JavaReflect;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologQuery;

@@ -22,9 +22,9 @@ package org.logicware.database.prolog;
 import org.logicware.database.DatabaseSchema;
 import org.logicware.database.DatabaseUser;
 import org.logicware.database.HierarchicalDatabase;
-import org.logicware.database.Settings;
 import org.logicware.database.StorageMode;
 import org.logicware.database.engine.AbstractHierarchicalDatabase;
+import org.logicware.database.etc.Settings;
 
 /**
  * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,

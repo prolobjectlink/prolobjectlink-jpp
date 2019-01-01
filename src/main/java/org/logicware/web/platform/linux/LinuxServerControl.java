@@ -20,9 +20,11 @@
 package org.logicware.web.platform.linux;
 
 import org.logicware.database.DatabaseServer;
+import org.logicware.database.platform.linux.LinuxDatabaseServer;
 import org.logicware.web.platform.WebServer;
 import org.logicware.web.platform.WebServerControl;
 import org.logicware.web.platform.linux.jetty.LinuxJettyWebServer;
+import org.logicware.web.platform.linux.tomcat.LinuxTomcatWebServer;
 
 public class LinuxServerControl extends LinuxPlatform implements WebServerControl {
 
@@ -35,8 +37,9 @@ public class LinuxServerControl extends LinuxPlatform implements WebServerContro
 		// TODO Database Server
 		// TODO Port from args
 		LinuxDatabaseServer database = new LinuxDatabaseServer();
-		LinuxJettyWebServer server = new LinuxJettyWebServer(8888);
-		new LinuxServerControl(server, database).run(args);
+		LinuxJettyWebServer jetty = new LinuxJettyWebServer(8888);
+		LinuxTomcatWebServer tomcat = new LinuxTomcatWebServer(8080);
+		new LinuxServerControl(jetty, database).run(args);
 	}
 
 }

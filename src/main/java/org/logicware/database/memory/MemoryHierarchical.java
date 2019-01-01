@@ -33,7 +33,7 @@ import org.logicware.database.HierarchicalCache;
 import org.logicware.database.MemoryDatabase;
 import org.logicware.database.Protocol;
 import org.logicware.database.Schema;
-import org.logicware.database.Settings;
+import org.logicware.database.etc.Settings;
 import org.logicware.database.jpa.JpaProperties;
 import org.logicware.database.jpa.spi.JPAPersistenceXmlParser;
 import org.logicware.database.util.JavaReflect;

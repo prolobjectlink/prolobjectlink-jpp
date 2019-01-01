@@ -25,13 +25,13 @@ import org.logicware.database.HierarchicalDatabase;
 import org.logicware.database.RelationalCache;
 import org.logicware.database.RelationalDatabase;
 import org.logicware.database.Schema;
-import org.logicware.database.Settings;
 import org.logicware.database.Storage;
 import org.logicware.database.StorageGraph;
 import org.logicware.database.StorageManager;
 import org.logicware.database.StorageMode;
 import org.logicware.database.StoragePool;
 import org.logicware.database.container.AbstractContainerFactory;
+import org.logicware.database.etc.Settings;
 import org.logicware.prolog.PrologProvider;
 
 public abstract class PrologContainerFactory extends AbstractContainerFactory implements ContainerFactory {

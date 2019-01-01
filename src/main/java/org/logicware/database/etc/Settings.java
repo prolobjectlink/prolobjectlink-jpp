@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.database;
+package org.logicware.database.etc;
 
 import static org.logicware.database.jpa.spi.JPAPersistenceXmlParser.XML;
 
@@ -32,6 +32,20 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.logicware.database.ContainerFactory;
+import org.logicware.database.DatabaseUser;
+import org.logicware.database.HierarchicalCache;
+import org.logicware.database.HierarchicalDatabase;
+import org.logicware.database.ObjectConverter;
+import org.logicware.database.RelationalCache;
+import org.logicware.database.RelationalDatabase;
+import org.logicware.database.SaveLoad;
+import org.logicware.database.Schema;
+import org.logicware.database.Storage;
+import org.logicware.database.StorageGraph;
+import org.logicware.database.StorageManager;
+import org.logicware.database.StorageMode;
+import org.logicware.database.StoragePool;
 import org.logicware.database.util.JavaReflect;
 import org.logicware.logging.LoggerConstants;
 import org.logicware.logging.LoggerUtils;

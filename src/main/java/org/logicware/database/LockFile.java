@@ -28,6 +28,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Properties;
 
+import org.logicware.database.etc.Settings;
+
 /**
  * The file lock is used to lock a database so that only one process can write
  * to it. It uses a cooperative locking protocol. Usually a .lock file is used.

@@ -17,14 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.platform.linux;
+package org.logicware.database.platform.win32;
 
 import java.io.IOException;
 
 import org.logicware.database.DatabaseServer;
 import org.logicware.database.DatabaseServerType;
 
-public class LinuxDatabaseServer implements DatabaseServer {
+public class Win32DatabaseServer implements DatabaseServer {
 
 	public void startup() throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method stub

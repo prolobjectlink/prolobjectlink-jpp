@@ -20,9 +20,11 @@
 package org.logicware.web.platform.win32;
 
 import org.logicware.database.DatabaseServer;
+import org.logicware.database.platform.win32.Win32DatabaseServer;
 import org.logicware.web.platform.WebServer;
 import org.logicware.web.platform.WebServerControl;
 import org.logicware.web.platform.win32.jetty.Win32JettyWebServer;
+import org.logicware.web.platform.win32.tomcat.Win32TomcatWebServer;
 
 public class Win32ServerControl extends Win32Platform implements WebServerControl {
 
@@ -35,8 +37,9 @@ public class Win32ServerControl extends Win32Platform implements WebServerContro
 		// TODO Database Server
 		// TODO Port from args
 		Win32DatabaseServer database = new Win32DatabaseServer();
-		Win32JettyWebServer server = new Win32JettyWebServer(8888);
-		new Win32Platform(server, database).run(args);
+		Win32JettyWebServer jetty = new Win32JettyWebServer(8888);
+		Win32TomcatWebServer tomcat = new Win32TomcatWebServer(8080);
+		new Win32Platform(tomcat, database).run(args);
 	}
 
 }

@@ -20,9 +20,11 @@
 package org.logicware.web.platform.macos;
 
 import org.logicware.database.DatabaseServer;
+import org.logicware.database.platform.macos.MacosDatabaseServer;
 import org.logicware.web.platform.WebServer;
 import org.logicware.web.platform.WebServerControl;
 import org.logicware.web.platform.macos.jetty.MacosJettyWebServer;
+import org.logicware.web.platform.macos.tomcat.MacosTomcatWebServer;
 
 public class MacosServerControl extends MacosPlatform implements WebServerControl {
 
@@ -35,8 +37,9 @@ public class MacosServerControl extends MacosPlatform implements WebServerContro
 		// TODO Database Server
 		// TODO Port from args
 		MacosDatabaseServer database = new MacosDatabaseServer();
-		MacosJettyWebServer server = new MacosJettyWebServer(8888);
-		new MacosServerControl(server, database).run(args);
+		MacosJettyWebServer jetty = new MacosJettyWebServer(8888);
+		MacosTomcatWebServer tomcat = new MacosTomcatWebServer(8080);
+		new MacosServerControl(jetty, database).run(args);
 	}
 
 }

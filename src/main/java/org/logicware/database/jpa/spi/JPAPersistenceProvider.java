@@ -60,7 +60,7 @@ import javax.persistence.spi.ProviderUtil;
 import org.logicware.database.DatabaseEngine;
 import org.logicware.database.DatabaseUser;
 import org.logicware.database.ObjectConverter;
-import org.logicware.database.Settings;
+import org.logicware.database.etc.Settings;
 import org.logicware.database.jpa.JpaAttributeNode;
 import org.logicware.database.jpa.JpaColumnResult;
 import org.logicware.database.jpa.JpaConstructorResult;

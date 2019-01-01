@@ -24,9 +24,9 @@ import java.io.File;
 import org.logicware.database.DatabaseSchema;
 import org.logicware.database.DatabaseUser;
 import org.logicware.database.RelationalDatabase;
-import org.logicware.database.Settings;
 import org.logicware.database.StorageMode;
 import org.logicware.database.engine.AbstractRelationalDatabase;
+import org.logicware.database.etc.Settings;
 
 /**
  * @deprecated Use {@link MemoryRelational,EmbeddedRelational,

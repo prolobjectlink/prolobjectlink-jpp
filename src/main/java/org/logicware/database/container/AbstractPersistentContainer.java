@@ -22,7 +22,7 @@ package org.logicware.database.container;
 import org.logicware.database.ContainerFactory;
 import org.logicware.database.ObjectConverter;
 import org.logicware.database.PersistentContainer;
-import org.logicware.database.Settings;
+import org.logicware.database.etc.Settings;
 import org.logicware.database.tools.Backup;
 import org.logicware.database.tools.Restore;
 import org.logicware.prolog.PrologProvider;
