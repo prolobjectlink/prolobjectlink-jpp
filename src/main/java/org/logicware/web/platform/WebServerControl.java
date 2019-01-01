@@ -19,7 +19,7 @@
  */
 package org.logicware.web.platform;
 
-import org.logicware.database.DatabaseServer;
+import org.logicware.db.DatabaseServer;
 
 public interface WebServerControl extends WebPlatform {
 

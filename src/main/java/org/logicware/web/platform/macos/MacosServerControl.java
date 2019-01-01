@@ -19,8 +19,8 @@
  */
 package org.logicware.web.platform.macos;
 
-import org.logicware.database.DatabaseServer;
-import org.logicware.database.platform.macos.MacosDatabaseServer;
+import org.logicware.db.DatabaseServer;
+import org.logicware.db.platform.macos.MacosDatabaseServer;
 import org.logicware.web.platform.WebServer;
 import org.logicware.web.platform.WebServerControl;
 import org.logicware.web.platform.macos.jetty.MacosJettyWebServer;

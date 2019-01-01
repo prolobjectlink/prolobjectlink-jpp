@@ -21,7 +21,7 @@ package org.logicware.web.platform.win32;
 
 import java.io.IOException;
 
-import org.logicware.database.DatabaseServer;
+import org.logicware.db.DatabaseServer;
 import org.logicware.web.platform.AbstractWebControl;
 import org.logicware.web.platform.WebPlatform;
 import org.logicware.web.platform.WebServer;

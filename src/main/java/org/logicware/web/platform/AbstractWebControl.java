@@ -33,7 +33,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import org.logicware.database.DatabaseServer;
+import org.logicware.db.DatabaseServer;
 import org.logicware.logging.LoggerUtils;
 
 public abstract class AbstractWebControl extends AbstractWebPlatform implements WebServerControl {

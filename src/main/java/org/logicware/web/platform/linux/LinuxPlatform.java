@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.logicware.database.DatabaseServer;
+import org.logicware.db.DatabaseServer;
 import org.logicware.web.platform.AbstractWebControl;
 import org.logicware.web.platform.WebPlatform;
 import org.logicware.web.platform.WebServer;
