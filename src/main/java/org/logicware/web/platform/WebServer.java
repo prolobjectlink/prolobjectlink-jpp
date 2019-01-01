@@ -21,6 +21,9 @@ package org.logicware.web.platform;
 
 public interface WebServer {
 
+	public final String TOMCAT = "Apache Tomcat";
+	public final String JETTY = "Jetty";
+
 	public String getLicense();
 
 	public String getVersion();
@@ -32,5 +35,7 @@ public interface WebServer {
 	public void restart();
 
 	public void stop();
+
+	int getPort();
 
 }

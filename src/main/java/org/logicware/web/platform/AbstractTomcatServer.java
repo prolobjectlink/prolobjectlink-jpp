@@ -19,36 +19,29 @@
  */
 package org.logicware.web.platform;
 
+import org.apache.catalina.startup.Tomcat;
+import org.logicware.Licenses;
+
 public class AbstractTomcatServer extends AbstractWebServer implements TomcatWebServer {
 
-	public String getLicense() {
-		// TODO Auto-generated method stub
-		return null;
+	private final Tomcat tomcatServer = new Tomcat();
+
+	public AbstractTomcatServer(int serverPort) {
+		super(serverPort);
+		tomcatServer.setPort(serverPort);
 	}
 
-	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
+	public final String getLicense() {
+		return Licenses.APACHE_V2;
 	}
 
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+	public final String getVersion() {
+		// TODO
+		return "Tomcat";
 	}
 
-	public void start() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void restart() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void stop() {
-		// TODO Auto-generated method stub
-
+	public final String getName() {
+		return TOMCAT;
 	}
 
 }

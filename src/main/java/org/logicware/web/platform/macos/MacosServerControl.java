@@ -33,8 +33,9 @@ public class MacosServerControl extends MacosPlatform implements WebServerContro
 	public static void main(String[] args) throws Exception {
 		// TODO catch server type default is Jetty
 		// TODO Database Server
+		// TODO Port from args
 		MacosDatabaseServer database = new MacosDatabaseServer();
-		MacosJettyWebServer server = new MacosJettyWebServer();
+		MacosJettyWebServer server = new MacosJettyWebServer(8888);
 		new MacosServerControl(server, database).run(args);
 	}
 

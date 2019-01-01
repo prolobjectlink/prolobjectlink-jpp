@@ -33,8 +33,9 @@ public class LinuxServerControl extends LinuxPlatform implements WebServerContro
 	public static void main(String[] args) throws Exception {
 		// TODO catch server type default is Jetty
 		// TODO Database Server
+		// TODO Port from args
 		LinuxDatabaseServer database = new LinuxDatabaseServer();
-		LinuxJettyWebServer server = new LinuxJettyWebServer();
+		LinuxJettyWebServer server = new LinuxJettyWebServer(8888);
 		new LinuxServerControl(server, database).run(args);
 	}
 

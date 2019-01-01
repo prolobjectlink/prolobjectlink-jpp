@@ -33,8 +33,9 @@ public class Win32ServerControl extends Win32Platform implements WebServerContro
 	public static void main(String[] args) throws Exception {
 		// TODO catch server type default is Jetty
 		// TODO Database Server
+		// TODO Port from args
 		Win32DatabaseServer database = new Win32DatabaseServer();
-		Win32JettyWebServer server = new Win32JettyWebServer();
+		Win32JettyWebServer server = new Win32JettyWebServer(8888);
 		new Win32Platform(server, database).run(args);
 	}
 

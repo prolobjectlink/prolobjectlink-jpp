@@ -85,7 +85,7 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 
 			PopupMenu menu = new PopupMenu();
 
-			MenuItem openItem = new MenuItem("Open Explorer");
+			MenuItem openItem = new MenuItem("Explorer");
 			openItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					openBrowser(url);
@@ -93,29 +93,45 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 			});
 			menu.add(openItem);
 
-			MenuItem startItem = new MenuItem("Start Server");
+			MenuItem startItem = new MenuItem("Start");
 			startItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					openBrowser(url);
+					webServer.start();
 				}
 			});
 			menu.add(startItem);
 
-			MenuItem stopItem = new MenuItem("Stop Server");
+			MenuItem stopItem = new MenuItem("Stop");
 			startItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					openBrowser(url);
+					webServer.stop();
 				}
 			});
 			menu.add(stopItem);
 
-			MenuItem configItem = new MenuItem("Configuration");
+			MenuItem configItem = new MenuItem("Config.");
 			startItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null, "Configuration");
 				}
 			});
 			menu.add(configItem);
+
+			MenuItem helpItem = new MenuItem("Help");
+			helpItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.exit(0);
+				}
+			});
+			menu.add(helpItem);
+
+			MenuItem aboutItem = new MenuItem("About");
+			aboutItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.exit(0);
+				}
+			});
+			menu.add(aboutItem);
 
 			MenuItem closeItem = new MenuItem("Close");
 			closeItem.addActionListener(new ActionListener() {

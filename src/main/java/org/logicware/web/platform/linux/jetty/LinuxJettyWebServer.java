@@ -24,34 +24,8 @@ import org.logicware.web.platform.JettyWebServer;
 
 public class LinuxJettyWebServer extends AbstractJettyServer implements JettyWebServer {
 
-	public String getLicense() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void start() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void restart() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void stop() {
-		// TODO Auto-generated method stub
-
+	public LinuxJettyWebServer(int serverPort) {
+		super(serverPort);
 	}
 
 }

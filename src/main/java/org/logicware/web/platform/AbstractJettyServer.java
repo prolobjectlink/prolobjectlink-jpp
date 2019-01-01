@@ -19,36 +19,33 @@
  */
 package org.logicware.web.platform;
 
+import org.logicware.Licenses;
+import org.mortbay.jetty.Server;
+
 public class AbstractJettyServer extends AbstractWebServer implements JettyWebServer {
 
-	public String getLicense() {
-		// TODO Auto-generated method stub
-		return null;
+	private final Server jettyServer;
+
+	public AbstractJettyServer(int serverPort) {
+		super(serverPort);
+		jettyServer = new Server(serverPort);
 	}
 
-	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
+	public final String getLicense() {
+		Package p = Server.class.getPackage();
+		String quialify = p.getName();
+		if (quialify.contains("org.mortbay.jetty")) {
+			return Licenses.APACHE_V2;
+		}
+		return Licenses.EPL_V1;
 	}
 
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+	public final String getVersion() {
+		return Server.getVersion();
 	}
 
-	public void start() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void restart() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void stop() {
-		// TODO Auto-generated method stub
-
+	public final String getName() {
+		return JETTY;
 	}
 
 }
