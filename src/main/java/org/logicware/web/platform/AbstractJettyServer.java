@@ -19,16 +19,20 @@
  */
 package org.logicware.web.platform;
 
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.logicware.Licenses;
-import org.mortbay.jetty.Server;
 
 public class AbstractJettyServer extends AbstractWebServer implements JettyWebServer {
 
-	private final Server jettyServer;
+	private final Server jettyServer = new Server();
+	private final ServerConnector connector = new ServerConnector(jettyServer);
 
 	public AbstractJettyServer(int serverPort) {
 		super(serverPort);
-		jettyServer = new Server(serverPort);
+		connector.setPort(serverPort);
+		jettyServer.setConnectors(new Connector[] { connector });
 	}
 
 	public final String getLicense() {

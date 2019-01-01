@@ -23,10 +23,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 public abstract class AbstractWebServer implements WebServer {
 
@@ -104,8 +104,7 @@ public abstract class AbstractWebServer implements WebServer {
 
 		final Server server = new Server();
 
-		final Connector connector = new SelectChannelConnector();
-
+		final ServerConnector connector = new ServerConnector(server);
 		connector.setPort(port);
 		server.setConnectors(new Connector[] { connector });
 
