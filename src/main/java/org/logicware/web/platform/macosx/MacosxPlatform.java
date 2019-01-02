@@ -17,15 +17,29 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.platform.macos.jetty;
+package org.logicware.web.platform.macosx;
 
-import org.logicware.web.platform.AbstractJettyServer;
-import org.logicware.web.platform.JettyWebServer;
+import java.io.IOException;
 
-public class MacosJettyWebServer extends AbstractJettyServer implements JettyWebServer {
+import org.logicware.db.DatabaseServer;
+import org.logicware.web.platform.AbstractWebControl;
+import org.logicware.web.platform.WebPlatform;
+import org.logicware.web.platform.WebServer;
 
-	public MacosJettyWebServer(int serverPort) {
-		super(serverPort);
+public class MacosxPlatform extends AbstractWebControl implements WebPlatform {
+
+	public MacosxPlatform(WebServer webServer, DatabaseServer databaseServer) {
+		super(webServer, databaseServer);
+	}
+
+	public final void openBrowser(String url) {
+		if (!started) {
+			try {
+				runtime.exec("open " + url);
+				started = true;
+			} catch (final IOException e) {
+			}
+		}
 	}
 
 }

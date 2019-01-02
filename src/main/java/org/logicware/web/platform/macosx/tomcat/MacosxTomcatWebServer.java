@@ -17,14 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.platform.macos.tomcat;
+package org.logicware.web.platform.macosx.tomcat;
 
 import org.logicware.web.platform.AbstractTomcatServer;
 import org.logicware.web.platform.TomcatWebServer;
 
-public class MacosTomcatWebServer extends AbstractTomcatServer implements TomcatWebServer {
+public class MacosxTomcatWebServer extends AbstractTomcatServer implements TomcatWebServer {
 
-	public MacosTomcatWebServer(int serverPort) {
+	public MacosxTomcatWebServer(int serverPort) {
 		super(serverPort);
 	}
 

@@ -17,18 +17,18 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.web.platform.macos;
+package org.logicware.web.platform.macosx;
 
 import org.logicware.db.DatabaseServer;
-import org.logicware.db.platform.macos.MacosDatabaseServer;
+import org.logicware.db.platform.macosx.MacosxDatabaseServer;
 import org.logicware.web.platform.WebServer;
 import org.logicware.web.platform.WebServerControl;
-import org.logicware.web.platform.macos.jetty.MacosJettyWebServer;
-import org.logicware.web.platform.macos.tomcat.MacosTomcatWebServer;
+import org.logicware.web.platform.macosx.jetty.MacosxJettyWebServer;
+import org.logicware.web.platform.macosx.tomcat.MacosxTomcatWebServer;
 
-public class MacosServerControl extends MacosPlatform implements WebServerControl {
+public class MacosxServerControl extends MacosxPlatform implements WebServerControl {
 
-	public MacosServerControl(WebServer webServer, DatabaseServer databaseServer) {
+	public MacosxServerControl(WebServer webServer, DatabaseServer databaseServer) {
 		super(webServer, databaseServer);
 	}
 
@@ -36,10 +36,10 @@ public class MacosServerControl extends MacosPlatform implements WebServerContro
 		// TODO catch server type default is Jetty
 		// TODO Database Server
 		// TODO Port from args
-		MacosDatabaseServer database = new MacosDatabaseServer();
-		MacosJettyWebServer jetty = new MacosJettyWebServer(8888);
-		MacosTomcatWebServer tomcat = new MacosTomcatWebServer(8080);
-		new MacosServerControl(jetty, database).run(args);
+		MacosxDatabaseServer database = new MacosxDatabaseServer();
+		MacosxJettyWebServer jetty = new MacosxJettyWebServer(8888);
+		MacosxTomcatWebServer tomcat = new MacosxTomcatWebServer(8080);
+		new MacosxServerControl(jetty, database).run(args);
 	}
 
 }

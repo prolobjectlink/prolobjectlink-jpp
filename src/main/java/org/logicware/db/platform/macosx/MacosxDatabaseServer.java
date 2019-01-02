@@ -17,14 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.db.platform.macos;
+package org.logicware.db.platform.macosx;
 
 import java.io.IOException;
 
 import org.logicware.db.DatabaseServer;
 import org.logicware.db.DatabaseServerType;
 
-public class MacosDatabaseServer implements DatabaseServer {
+public class MacosxDatabaseServer implements DatabaseServer {
 
 	public void startup() throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method stub
