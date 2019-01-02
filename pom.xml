@@ -309,6 +309,43 @@
 			<!-- </executions> -->
 			<!-- </plugin> -->
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>true</createDependencyReducedPom>
+							<createSourcesJar>${createSources}</createSourcesJar>
+							<keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
+							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>org.logicware.db.Version</Main-Class>
+										<Premain-Class>org.logicware.db.enhance.EnhancerAgent</Premain-Class>
+										<Agent-Class>org.logicware.db.enhance.InstrumentationFactory</Agent-Class>
+										<Can-Redefine-Classes>true</Can-Redefine-Classes>
+										<Can-Retransform-Classes>true</Can-Retransform-Classes>
+										<Implementation-Title>Prolobjectlink Persistence Server</Implementation-Title>
+										<Specification-Title>JSR-317 Java Persistence</Specification-Title>
+										<Specification-Vendor>Sun Microsystems, Inc.</Specification-Vendor>
+										<Specification-Version>2.1</Specification-Version>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.7.5.201505241946</version>
