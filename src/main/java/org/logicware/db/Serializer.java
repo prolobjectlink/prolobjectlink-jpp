@@ -25,15 +25,15 @@ import java.lang.reflect.Field;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+import org.logicware.db.util.JavaReflect;
 import org.logicware.logging.LoggerConstants;
 import org.logicware.logging.LoggerUtils;
-import org.logicware.asm.ClassReader;
-import org.logicware.asm.ClassVisitor;
-import org.logicware.asm.ClassWriter;
-import org.logicware.asm.Opcodes;
-import org.logicware.asm.Type;
-import org.logicware.asm.commons.SerialVersionUIDAdder;
-import org.logicware.db.util.JavaReflect;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.SerialVersionUIDAdder;
 
 /**
  * This class make {@link Serializable} an object if the object type is not
@@ -100,10 +100,10 @@ public class Serializer extends JavaReflect {
 	}
 
 	public static <O> Class<O> makeClass(O object) {
-	
+
 		// get the object default class
 		Class<?> clazz = object.getClass();
-	
+
 		// check serialized contention
 		Class<?>[] ifaces = clazz.getInterfaces();
 		for (int i = 0; i < ifaces.length; i++) {
@@ -111,18 +111,18 @@ public class Serializer extends JavaReflect {
 				return (Class<O>) clazz;
 			}
 		}
-	
+
 		// load modified class if is defined
 		Class<?> newClass = cachedClasses.get(clazz);
 		if (newClass == null) {
-	
+
 			//
 			LoggerUtils.debug(Serializer.class, "LOADING... " + clazz);
-	
+
 			// gets an input stream to read the byte code of the class
 			String resource = Type.getInternalName(clazz) + ".class";
 			InputStream is = loader.getResourceAsStream(resource);
-	
+
 			// adapts the class on the fly (runtime)
 			// add serializable interface implementation
 			// add generated serialVersionUID field
@@ -136,11 +136,11 @@ public class Serializer extends JavaReflect {
 			} catch (Exception e) {
 				LoggerUtils.error(Serializer.class, LoggerConstants.CLASS_NOT_FOUND, e);
 			}
-	
+
 			//
 			LoggerUtils.debug(Serializer.class, "LOADED " + clazz);
 		}
-	
+
 		return (Class<O>) newClass;
 	}
 

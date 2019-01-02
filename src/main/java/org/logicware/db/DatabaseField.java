@@ -21,10 +21,10 @@ package org.logicware.db;
 
 import java.io.Serializable;
 
-import org.logicware.asm.ClassVisitor;
-import org.logicware.asm.MethodVisitor;
-import org.logicware.asm.Opcodes;
-import org.logicware.asm.Type;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 /**
  * Represent a field for a database class in the database schema

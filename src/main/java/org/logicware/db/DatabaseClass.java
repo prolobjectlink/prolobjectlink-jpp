@@ -34,11 +34,11 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.MappedSuperclass;
 
-import org.logicware.asm.ClassWriter;
-import org.logicware.asm.MethodVisitor;
-import org.logicware.asm.Opcodes;
-import org.logicware.asm.Type;
 import org.logicware.db.util.JavaReflect;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		implements Comparable<DatabaseClass>, Serializable, SchemaElement<DatabaseClass> {
