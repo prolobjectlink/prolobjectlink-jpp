@@ -742,6 +742,7 @@
   </distributionManagement>
   <properties>
     <tomcat.version>8.5.23</tomcat.version>
+    <org.springframework.version>3.0.5.RELEASE</org.springframework.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <jetty.version>9.4.10.v20180503</jetty.version>
     <maven.compiler.source>1.8</maven.compiler.source>
