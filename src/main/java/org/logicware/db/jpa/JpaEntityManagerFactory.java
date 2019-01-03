@@ -23,8 +23,8 @@ import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
 
-import org.logicware.db.AbstractEntityManagerFactory;
 import org.logicware.db.DatabaseEngine;
+import org.logicware.db.common.AbstractEntityManagerFactory;
 
 /**
  * EntityManagerFactory implementation

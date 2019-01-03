@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.db;
+package org.logicware.db.common;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,6 +34,8 @@ import javax.persistence.SynchronizationType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.metamodel.Metamodel;
 
+import org.logicware.db.DatabaseEngine;
+import org.logicware.db.Schema;
 import org.logicware.db.jpa.JpaAttributeConverter;
 import org.logicware.db.jpa.JpaCache;
 import org.logicware.db.jpa.JpaEntityManager;

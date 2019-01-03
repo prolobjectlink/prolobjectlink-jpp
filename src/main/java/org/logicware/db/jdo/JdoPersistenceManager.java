@@ -19,9 +19,11 @@
  */
 package org.logicware.db.jdo;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.Extent;
@@ -36,75 +38,73 @@ import javax.jdo.Transaction;
 import javax.jdo.datastore.JDOConnection;
 import javax.jdo.datastore.Sequence;
 import javax.jdo.listener.InstanceLifecycleListener;
-import javax.persistence.PersistenceUnitUtil;
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.SynchronizationType;
 
 import org.logicware.db.DatabaseEngine;
-import org.logicware.db.jpa.JpaAbstractContainer;
+import org.logicware.db.common.AbstractEntityManager;
+import org.logicware.db.jpa.JpaResultSetMapping;
 
-public class JdoPersistenceManager extends JpaAbstractContainer implements PersistenceManager {
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.config.CacheConfiguration;
 
-	protected JdoPersistenceManager(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
-		super(database, persistenceUnitUtil);
+public class JdoPersistenceManager extends AbstractEntityManager implements PersistenceManager {
+
+	private final Transaction transaction;
+	private final Cache cache = new Cache(new CacheConfiguration());
+
+	public JdoPersistenceManager(DatabaseEngine database, EntityManagerFactory managerFactory,
+			SynchronizationType synchronizationType, Map properties, Map<String, Class<?>> entityMap,
+			Map<String, javax.persistence.Query> namedQueries, Map<String, EntityGraph<?>> namedEntityGraphs,
+			Map<String, JpaResultSetMapping> resultSetMappings) {
+		super(database, managerFactory, synchronizationType, properties, entityMap, namedQueries, namedEntityGraphs,
+				resultSetMappings);
+		this.transaction = new JdoTransaction(database.getTransaction());
+
 	}
 
 	@Override
 	public boolean isClosed() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void close() {
-		// TODO Auto-generated method stub
-
+		return closed;
 	}
 
 	@Override
 	public Transaction currentTransaction() {
-		// TODO Auto-generated method stub
-		return null;
+		return transaction;
 	}
 
 	@Override
 	public void evict(Object pc) {
-		// TODO Auto-generated method stub
-
+		cache.remove(pc);
 	}
 
 	@Override
 	public void evictAll(Object... pcs) {
-		// TODO Auto-generated method stub
-
+		cache.removeAll(Arrays.asList(pcs));
 	}
 
 	@Override
 	public void evictAll(Collection pcs) {
-		// TODO Auto-generated method stub
-
+		cache.removeAll(pcs);
 	}
 
 	@Override
 	public void evictAll(boolean subclasses, Class pcClass) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void evictAll() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void refresh(Object pc) {
-		// TODO Auto-generated method stub
-
+		cache.removeAll();
 	}
 
 	@Override
 	public void refreshAll(Object... pcs) {
-		// TODO Auto-generated method stub
+		evictAll(pcs);
+		for (Object object : pcs) {
 
+		}
 	}
 
 	@Override
@@ -531,12 +531,6 @@ public class JdoPersistenceManager extends JpaAbstractContainer implements Persi
 	public Object removeUserObject(Object key) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void flush() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

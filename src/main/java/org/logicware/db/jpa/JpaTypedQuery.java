@@ -33,7 +33,7 @@ import org.logicware.db.DatabaseEngine;
 
 public class JpaTypedQuery<X> extends JpaQuery implements TypedQuery<X> {
 
-	JpaTypedQuery(DatabaseEngine database, String qlString, Class<X> resultClass) {
+	public JpaTypedQuery(DatabaseEngine database, String qlString, Class<X> resultClass) {
 		super(database, qlString, resultClass);
 	}
 

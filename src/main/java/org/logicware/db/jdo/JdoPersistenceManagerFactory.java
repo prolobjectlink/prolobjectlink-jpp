@@ -30,8 +30,8 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.datastore.DataStoreCache;
 import javax.jdo.listener.InstanceLifecycleListener;
 
-import org.logicware.db.AbstractEntityManagerFactory;
 import org.logicware.db.DatabaseEngine;
+import org.logicware.db.common.AbstractEntityManagerFactory;
 
 public class JdoPersistenceManagerFactory extends AbstractEntityManagerFactory implements PersistenceManagerFactory {
 

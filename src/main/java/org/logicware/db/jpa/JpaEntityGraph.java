@@ -37,7 +37,7 @@ public final class JpaEntityGraph<T> extends JpaAttributeNode<T> implements Enti
 	private final Class<T> classType;
 	private final List<AttributeNode<?>> attributeNodes;
 
-	JpaEntityGraph(String graphName) {
+	public JpaEntityGraph(String graphName) {
 		this(graphName, null);
 	}
 

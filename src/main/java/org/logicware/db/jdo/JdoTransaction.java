@@ -20,10 +20,11 @@
 package org.logicware.db.jdo;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.Transaction;
 import javax.transaction.Synchronization;
 
-public class JdoTransaction implements Transaction {
+import org.logicware.db.Transaction;
+
+public class JdoTransaction implements javax.jdo.Transaction {
 
 	private final Transaction tx;
 
