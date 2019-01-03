@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.logicware.db.ContainerFactory;
-import org.logicware.db.DefaultTransaction;
 import org.logicware.db.ObjectConverter;
 import org.logicware.db.PersistentContainer;
 import org.logicware.db.Predicate;
@@ -44,6 +43,7 @@ import org.logicware.db.container.DummyProcedureQuery;
 import org.logicware.db.etc.Settings;
 import org.logicware.db.prolog.PrologContainerQuery;
 import org.logicware.db.prolog.PrologTypedQuery;
+import org.logicware.db.tx.PersistentContainerTransaction;
 import org.logicware.db.util.JavaLists;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
@@ -61,7 +61,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 		super(provider, properties, converter, location, containerFactory);
 		this.master = new IdentityHashMap<Class<?>, PersistentContainer>();
 		this.logger = new IdentityHashMap<Class<?>, PersistentContainer>();
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 		this.storageMode = storageMode;
 	}
 

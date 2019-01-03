@@ -25,7 +25,6 @@ import org.logicware.db.DatabaseEngine;
 import org.logicware.db.DatabaseMode;
 import org.logicware.db.DatabaseType;
 import org.logicware.db.DatabaseUser;
-import org.logicware.db.DefaultTransaction;
 import org.logicware.db.PersistentContainer;
 import org.logicware.db.Predicate;
 import org.logicware.db.ProcedureQuery;
@@ -35,6 +34,7 @@ import org.logicware.db.Schema;
 import org.logicware.db.StorageGraph;
 import org.logicware.db.Transaction;
 import org.logicware.db.TypedQuery;
+import org.logicware.db.tx.PersistentContainerTransaction;
 
 /**
  * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
@@ -59,7 +59,7 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 	public AbstractRelationalDatabase(String name, Schema schema, DatabaseUser user, StorageGraph storage) {
 		super(storage.getProperties(), LOCATION + File.separator + name + File.separator + "database", name, schema,
 				user);
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 		this.storage = storage;
 	}
 

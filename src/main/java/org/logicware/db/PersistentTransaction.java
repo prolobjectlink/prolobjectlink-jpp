@@ -2,7 +2,7 @@
  * #%L
  * prolobjectlink-jpp
  * %%
- * Copyright (C) 2012 - 2017 WorkLogic Project
+ * Copyright (C) 2012 - 2019 WorkLogic Project
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,8 @@
  */
 package org.logicware.db;
 
-public class DefaultTransaction extends AbstractTransaction implements Transaction {
+public interface PersistentTransaction extends Transaction {
 
-	public DefaultTransaction(PersistentContainer container) {
-		super(container, System.currentTimeMillis());
-	}
+	public PersistentContainer getContainer();
 
 }

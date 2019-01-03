@@ -44,7 +44,7 @@ import org.logicware.db.DatabaseEngine;
 
 public class JpaEntityManager extends JpaAbstractContainer implements EntityManager {
 
-	private boolean closed;
+	private volatile boolean closed;
 
 	// property key-value map
 	private final Map properties;
@@ -89,6 +89,7 @@ public class JpaEntityManager extends JpaAbstractContainer implements EntityMana
 		this.namedQueries = namedQueries;
 		this.properties = properties;
 		this.entityMap = entityMap;
+		database.begin();
 	}
 
 	public void persist(Object entity) {
@@ -335,10 +336,11 @@ public class JpaEntityManager extends JpaAbstractContainer implements EntityMana
 		if (properties != null) {
 			properties.clear();
 		}
+		closed = false;
 	}
 
 	public boolean isOpen() {
-		return closed;
+		return !closed;
 	}
 
 	public EntityTransaction getTransaction() {

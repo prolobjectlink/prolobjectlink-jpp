@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.logicware.RuntimeError;
 import org.logicware.db.ContainerFactory;
-import org.logicware.db.DefaultTransaction;
 import org.logicware.db.ObjectConverter;
 import org.logicware.db.PersistentContainer;
 import org.logicware.db.Predicate;
@@ -39,6 +38,7 @@ import org.logicware.db.StorageMode;
 import org.logicware.db.Transaction;
 import org.logicware.db.TypedQuery;
 import org.logicware.db.etc.Settings;
+import org.logicware.db.tx.PersistentContainerTransaction;
 import org.logicware.prolog.PrologEngine;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
@@ -59,7 +59,7 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 	public AbstractStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, ObjectConverter<PrologTerm> converter, StorageMode storageMode) {
 		this.storage = containerFactory.createStorageManager(location, storageMode);
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 		this.containerFactory = containerFactory;
 		this.engine = provider.newEngine();
 		this.properties = properties;
@@ -75,7 +75,7 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 		this.containerFactory = properties.getContainerFactory();
 		this.storage = containerFactory.createStorageManager(location, storageMode);
 		this.converter = properties.getObjectConverter();
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 		this.provider = properties.getProvider();
 		this.engine = provider.newEngine();
 		this.properties = properties;

@@ -23,25 +23,38 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Transaction;
 import javax.transaction.Synchronization;
 
-import org.logicware.db.AbstractTransaction;
-import org.logicware.db.PersistentContainer;
+public class JdoTransaction implements Transaction {
 
-public class JdoTransaction extends AbstractTransaction implements Transaction {
+	private final Transaction tx;
 
-	public JdoTransaction(PersistentContainer container, long timestamp) {
-		super(container, timestamp);
+	public JdoTransaction(Transaction tx) {
+		this.tx = tx;
 	}
 
-	@Override
-	public boolean getRollbackOnly() {
-		// TODO Auto-generated method stub
-		return false;
+	public void begin() {
+		tx.begin();
 	}
 
-	@Override
+	public void commit() {
+		tx.commit();
+	}
+
+	public void rollback() {
+		tx.rollback();
+	}
+
+	public boolean isActive() {
+		return tx.isActive();
+	}
+
 	public void setRollbackOnly() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public boolean getRollbackOnly() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

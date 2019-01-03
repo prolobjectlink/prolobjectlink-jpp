@@ -20,7 +20,6 @@
 package org.logicware.db.prolog;
 
 import org.logicware.db.ContainerFactory;
-import org.logicware.db.DefaultTransaction;
 import org.logicware.db.LockFile;
 import org.logicware.db.ObjectConverter;
 import org.logicware.db.Predicate;
@@ -31,6 +30,7 @@ import org.logicware.db.Transaction;
 import org.logicware.db.TypedQuery;
 import org.logicware.db.etc.Settings;
 import org.logicware.db.storage.AbstractStorage;
+import org.logicware.db.tx.PersistentContainerTransaction;
 import org.logicware.prolog.PrologProvider;
 import org.logicware.prolog.PrologTerm;
 
@@ -41,25 +41,25 @@ public final class PrologStorage extends AbstractStorage implements Storage {
 	public PrologStorage(PrologProvider provider, Settings properties, String location,
 			ContainerFactory containerFactory) {
 		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory);
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 	}
 
 	public PrologStorage(PrologProvider provider, Settings properties, String location,
 			ContainerFactory containerFactory, int maxCapacity) {
 		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory, maxCapacity);
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 	}
 
 	public PrologStorage(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
 			String location, ContainerFactory containerFactory, int maxCapacity) {
 		super(provider, properties, converter, location, containerFactory, maxCapacity);
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 	}
 
 	public PrologStorage(PrologProvider provider, Settings properties, ObjectConverter<PrologTerm> converter,
 			String location, ContainerFactory containerFactory, LockFile lock, int maxCapacity) {
 		super(provider, properties, converter, location, containerFactory, lock, maxCapacity);
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 	}
 
 	public Transaction getTransaction() {

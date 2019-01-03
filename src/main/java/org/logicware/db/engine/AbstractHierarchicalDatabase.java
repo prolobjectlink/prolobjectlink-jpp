@@ -25,7 +25,6 @@ import org.logicware.db.DatabaseEngine;
 import org.logicware.db.DatabaseMode;
 import org.logicware.db.DatabaseType;
 import org.logicware.db.DatabaseUser;
-import org.logicware.db.DefaultTransaction;
 import org.logicware.db.HierarchicalDatabase;
 import org.logicware.db.PersistentContainer;
 import org.logicware.db.Predicate;
@@ -35,6 +34,7 @@ import org.logicware.db.Schema;
 import org.logicware.db.StorageManager;
 import org.logicware.db.Transaction;
 import org.logicware.db.TypedQuery;
+import org.logicware.db.tx.PersistentContainerTransaction;
 
 /**
  * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
@@ -58,7 +58,7 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 	@Deprecated
 	public AbstractHierarchicalDatabase(String name, Schema schema, DatabaseUser user, StorageManager storage) {
 		super(storage.getProperties(), LOCATION + SEPARATOR + name + SEPARATOR + "database", name, schema, user);
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 		this.storage = storage;
 	}
 

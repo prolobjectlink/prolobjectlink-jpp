@@ -54,7 +54,6 @@ import java.net.URL;
 import org.logicware.db.DatabaseMode;
 import org.logicware.db.DatabaseRequest;
 import org.logicware.db.DatabaseUser;
-import org.logicware.db.DefaultTransaction;
 import org.logicware.db.PersistentContainer;
 import org.logicware.db.Predicate;
 import org.logicware.db.ProcedureQuery;
@@ -65,6 +64,7 @@ import org.logicware.db.Transaction;
 import org.logicware.db.TypedQuery;
 import org.logicware.db.engine.AbstractDatabaseEngine;
 import org.logicware.db.etc.Settings;
+import org.logicware.db.tx.PersistentContainerTransaction;
 import org.logicware.prolog.PrologClause;
 import org.logicware.prolog.PrologEngine;
 import org.logicware.prolog.PrologProvider;
@@ -78,7 +78,7 @@ public abstract class RemoteDatabaseClient extends AbstractDatabaseEngine implem
 	RemoteDatabaseClient(Settings settings, URL url, String name, Schema schema, DatabaseUser owner) {
 		super(settings, url, name, schema, owner);
 		this.activeRequest = new DatabaseRequest(url.getHost(), url.getPort(), name, getType());
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 	}
 
 	public final PersistentContainer getContainer() {

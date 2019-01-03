@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.logicware.db.ContainerFactory;
-import org.logicware.db.DefaultTransaction;
 import org.logicware.db.ObjectConverter;
 import org.logicware.db.PersistentContainer;
 import org.logicware.db.Predicate;
@@ -39,6 +38,7 @@ import org.logicware.db.Transaction;
 import org.logicware.db.container.AbstractPersistentContainer;
 import org.logicware.db.container.AbstractProcedureQuery;
 import org.logicware.db.etc.Settings;
+import org.logicware.db.tx.PersistentContainerTransaction;
 import org.logicware.logging.LoggerConstants;
 import org.logicware.logging.LoggerUtils;
 import org.logicware.prolog.PrologProvider;
@@ -74,7 +74,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 			String location, String name, ContainerFactory containerFactory, int storageCapacity) {
 		super(provider, properties, converter, location + SEPARATOR + name, containerFactory);
 		this.rootDirectory = new File(location + SEPARATOR + name);
-		this.transaction = new DefaultTransaction(this);
+		this.transaction = new PersistentContainerTransaction(this);
 		this.storageCapacity = storageCapacity;
 		this.rootDirectory.mkdir();
 		this.open = false;

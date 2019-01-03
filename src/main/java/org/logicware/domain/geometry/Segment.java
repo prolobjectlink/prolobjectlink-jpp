@@ -19,10 +19,20 @@
  */
 package org.logicware.domain.geometry;
 
-import java.io.Serializable;
+import javax.persistence.ColumnResult;
+import javax.persistence.Entity;
+import javax.persistence.EntityResult;
+import javax.persistence.FieldResult;
+import javax.persistence.Id;
+import javax.persistence.SqlResultSetMapping;
 
-public class Segment implements Serializable {
+@Entity(name = "segment")
+@SqlResultSetMapping(name = "SegmentResults", entities = { @EntityResult(entityClass = Segment.class, fields = {
+		@FieldResult(name = "ids", column = "Ids"), @FieldResult(name = "point0", column = "Point0"),
+		@FieldResult(name = "point1", column = "Point1") }) }, columns = { @ColumnResult(name = "ids") })
+public class Segment {
 
+	@Id
 	private String ids;
 	private Point point0;
 	private Point point1;
@@ -95,18 +105,21 @@ public class Segment implements Serializable {
 		if (ids == null) {
 			if (other.ids != null)
 				return false;
-		} else if (!ids.equals(other.ids))
+		} else if (!ids.equals(other.ids)) {
 			return false;
+		}
 		if (point0 == null) {
 			if (other.point0 != null)
 				return false;
-		} else if (!point0.equals(other.point0))
+		} else if (!point0.equals(other.point0)) {
 			return false;
+		}
 		if (point1 == null) {
 			if (other.point1 != null)
 				return false;
-		} else if (!point1.equals(other.point1))
+		} else if (!point1.equals(other.point1)) {
 			return false;
+		}
 		return true;
 	}
 

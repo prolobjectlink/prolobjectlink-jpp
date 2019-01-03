@@ -19,10 +19,21 @@
  */
 package org.logicware.domain.geometry;
 
-import java.io.Serializable;
+import javax.persistence.ColumnResult;
+import javax.persistence.Entity;
+import javax.persistence.EntityResult;
+import javax.persistence.FieldResult;
+import javax.persistence.Id;
+import javax.persistence.SqlResultSetMapping;
 
-public class Polygon implements Serializable {
+@Entity(name = "polygon")
+@SqlResultSetMapping(name = "PolygonResults", entities = { @EntityResult(entityClass = Polygon.class, fields = {
+		@FieldResult(name = "id", column = "Id"), @FieldResult(name = "segment0", column = "Segment0"),
+		@FieldResult(name = "segment1", column = "Segment1"),
+		@FieldResult(name = "segment2", column = "Segment2") }) }, columns = { @ColumnResult(name = "id") })
+public class Polygon {
 
+	@Id
 	protected String id;
 	protected Segment segment0;
 	protected Segment segment1;

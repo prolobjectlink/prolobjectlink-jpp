@@ -2,7 +2,7 @@
  * #%L
  * prolobjectlink-jpp
  * %%
- * Copyright (C) 2012 - 2017 WorkLogic Project
+ * Copyright (C) 2012 - 2019 WorkLogic Project
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,30 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.db;
+package org.logicware.db.tx;
 
-import java.io.Closeable;
+import org.logicware.db.AbstractTransaction;
+import org.logicware.db.Transaction;
 
-public interface Transaction extends Transactional, Comparable<Transaction>, Closeable {
+public final class VolatileTransaction extends AbstractTransaction implements Transaction {
 
-	public boolean isActive();
+	public VolatileTransaction() {
+		super(System.currentTimeMillis());
+	}
 
-	public long getTimestamp();
+	@Override
+	public void begin() {
+		active = true;
+	}
 
-	public int hashCode();
+	@Override
+	public void commit() {
+		// do nothing
+	}
 
-	public boolean equals(Object obj);
-
-	public boolean after(Transaction t);
-
-	public boolean before(Transaction t);
+	@Override
+	public void rollback() {
+		// do nothing
+	}
 
 }

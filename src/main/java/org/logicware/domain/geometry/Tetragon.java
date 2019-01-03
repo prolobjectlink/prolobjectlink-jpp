@@ -19,6 +19,17 @@
  */
 package org.logicware.domain.geometry;
 
+import javax.persistence.ColumnResult;
+import javax.persistence.Entity;
+import javax.persistence.EntityResult;
+import javax.persistence.FieldResult;
+import javax.persistence.SqlResultSetMapping;
+
+@Entity(name = "tetragon")
+@SqlResultSetMapping(name = "TetragonResults", entities = { @EntityResult(entityClass = Tetragon.class, fields = {
+		@FieldResult(name = "id", column = "Id"), @FieldResult(name = "segment0", column = "Segment0"),
+		@FieldResult(name = "segment1", column = "Segment1"), @FieldResult(name = "segment2", column = "Segment2"),
+		@FieldResult(name = "segment3", column = "Segment3") }) }, columns = { @ColumnResult(name = "id") })
 public class Tetragon extends Polygon {
 
 	private Segment segment3;

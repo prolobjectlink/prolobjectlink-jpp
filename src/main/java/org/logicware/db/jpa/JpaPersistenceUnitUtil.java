@@ -76,7 +76,7 @@ public final class JpaPersistenceUnitUtil implements PersistenceUnitUtil {
 			}
 		}
 
-		throw new PersistenceException("No field was annotated with @Id annotation");
+		throw new PersistenceException(" The class " + clazz + " no field was annotated with @Id annotation");
 	}
 
 }

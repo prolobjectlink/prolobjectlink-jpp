@@ -27,27 +27,21 @@ public abstract class AbstractTransaction extends AbstractWrapper implements Tra
 
 	protected boolean active;
 	private final long timestamp;
-	private final PersistentContainer container;
 
-	private void checkNonActiveTransaction() {
+	public AbstractTransaction(long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	protected void checkNonActiveTransaction() {
 		if (!isActive()) {
 			throw new IllegalStateException("Entity Transaction is not active");
 		}
 	}
 
-	private void checkActiveTransaction() {
+	protected void checkActiveTransaction() {
 		if (isActive()) {
 			throw new IllegalStateException("Entity Transaction is active");
 		}
-	}
-
-	public AbstractTransaction(PersistentContainer container, long timestamp) {
-		this.container = container;
-		this.timestamp = timestamp;
-	}
-
-	public final PersistentContainer getContainer() {
-		return container;
 	}
 
 	public final boolean before(Transaction t) {
@@ -66,24 +60,6 @@ public abstract class AbstractTransaction extends AbstractWrapper implements Tra
 
 	public final long getTimestamp() {
 		return timestamp;
-	}
-
-	public final void begin() {
-		checkActiveTransaction();
-		getContainer().open();
-		active = true;
-	}
-
-	public final void commit() {
-		checkNonActiveTransaction();
-		getContainer().flush();
-	}
-
-	public final void rollback() {
-		checkNonActiveTransaction();
-		// roll back open the file
-		// losing all memory data changes
-		getContainer().open();
 	}
 
 	public final boolean isActive() {

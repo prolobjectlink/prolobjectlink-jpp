@@ -36,11 +36,13 @@ import org.logicware.db.engine.AbstractDatabaseEngine;
 import org.logicware.db.etc.Settings;
 import org.logicware.db.prolog.PrologContainerQuery;
 import org.logicware.db.prolog.PrologTypedQuery;
+import org.logicware.db.tx.VolatileTransaction;
 
 public abstract class AbstractMemoryDatabase extends AbstractDatabaseEngine implements MemoryDatabase {
 
 	private boolean closed;
 	private final VolatileContainer storage;
+	private final Transaction transaction = new VolatileTransaction();
 
 	AbstractMemoryDatabase(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
 			VolatileContainer container) {
@@ -139,8 +141,7 @@ public abstract class AbstractMemoryDatabase extends AbstractDatabaseEngine impl
 	}
 
 	public final Transaction getTransaction() {
-		// TODO Auto-generated method stub
-		return null;
+		return transaction;
 	}
 
 	public final boolean isOpen() {

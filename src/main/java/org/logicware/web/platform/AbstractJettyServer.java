@@ -23,16 +23,17 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.logicware.Licenses;
+import org.mortbay.jetty.Connector;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.nio.SelectChannelConnector;
+import org.mortbay.jetty.webapp.WebAppContext;
 
 public class AbstractJettyServer extends AbstractWebServer implements JettyWebServer {
 
 	private final Server jettyServer = new Server();
-	private final ServerConnector connector = new ServerConnector(jettyServer);
+	private final Connector connector = new SelectChannelConnector();
+	// private final ServerConnector connector = new ServerConnector(jettyServer);
 
 	public AbstractJettyServer(int serverPort) {
 		super(serverPort);
@@ -82,8 +83,6 @@ public class AbstractJettyServer extends AbstractWebServer implements JettyWebSe
 		}
 	}
 
-	
-
 	public final void stop() {
 		// TODO Auto-generated method stub
 		System.out.println("Server is stopping");
@@ -113,12 +112,13 @@ public class AbstractJettyServer extends AbstractWebServer implements JettyWebSe
 
 		// Add help for System.out
 		System.out.println("-------------------------------------------------\n" + "Starting Vaadin in " + mode + ".\n"
-				+ "Running in http://localhost:" + getPort()
-				+ "\n-------------------------------------------------\n");
+				+ "Running in http://localhost:" + getPort() + "\n-------------------------------------------------\n");
 
 		final Server server = new Server();
 
-		final ServerConnector connector = new ServerConnector(server);
+//		final ServerConnector connector = new ServerConnector(server);
+		final Connector connector = new SelectChannelConnector();
+
 		connector.setPort(port);
 		server.setConnectors(new Connector[] { connector });
 

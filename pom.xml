@@ -82,8 +82,9 @@
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<jetty.version>9.4.10.v20180503</jetty.version>
+		<jetty.version>6.1.11</jetty.version>
 		<tomcat.version>8.5.23</tomcat.version>
+		<asm.version>5.0.3</asm.version>
 	</properties>
 
 	<dependencies>
@@ -92,28 +93,50 @@
 			<artifactId>prolobjectlink-jpi</artifactId>
 			<version>[1.0.0, )</version>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>org.mortbay.jetty</groupId> -->
-		<!-- <artifactId>jetty</artifactId> -->
-		<!-- <version>${jetty.version}</version> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.mortbay.jetty</groupId> -->
-		<!-- <artifactId>jetty-util</artifactId> -->
-		<!-- <version>${jetty.version}</version> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.mortbay.jetty</groupId> -->
-		<!-- <artifactId>servlet-api-2.5</artifactId> -->
-		<!-- <version>${jetty.version}</version> -->
-		<!-- </dependency> -->
-
-
 		<dependency>
-			<groupId>org.eclipse.jetty.aggregate</groupId>
-			<artifactId>jetty-all</artifactId>
+			<groupId>javax.transaction</groupId>
+			<artifactId>javax.transaction-api</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>${asm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm-commons</artifactId>
+			<version>${asm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm-tree</artifactId>
+			<version>${asm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm-util</artifactId>
+			<version>${asm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>2.6.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty</artifactId>
 			<version>${jetty.version}</version>
-			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>servlet-api-2.5</artifactId>
+			<version>${jetty.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
@@ -140,17 +163,12 @@
 			<artifactId>tomcat-jsp-api</artifactId>
 			<version>${tomcat.version}</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>com.wladek.project</groupId>
 			<artifactId>movies</artifactId>
 			<version>[1.0.0, )</version>
 			<type>war</type>
 		</dependency>
-
-
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -305,43 +323,6 @@
 			<!-- </execution> -->
 			<!-- </executions> -->
 			<!-- </plugin> -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<createDependencyReducedPom>true</createDependencyReducedPom>
-							<createSourcesJar>${createSources}</createSourcesJar>
-							<keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
-							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<manifestEntries>
-										<Main-Class>org.logicware.db.Version</Main-Class>
-										<Premain-Class>org.logicware.db.enhance.EnhancerAgent</Premain-Class>
-										<Agent-Class>org.logicware.db.enhance.InstrumentationFactory</Agent-Class>
-										<Can-Redefine-Classes>true</Can-Redefine-Classes>
-										<Can-Retransform-Classes>true</Can-Retransform-Classes>
-										<Implementation-Title>Prolobjectlink Persistence Server</Implementation-Title>
-										<Specification-Title>JSR-317 Java Persistence</Specification-Title>
-										<Specification-Vendor>Sun Microsystems, Inc.</Specification-Vendor>
-										<Specification-Version>2.1</Specification-Version>
-									</manifestEntries>
-								</transformer>
-							</transformers>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>

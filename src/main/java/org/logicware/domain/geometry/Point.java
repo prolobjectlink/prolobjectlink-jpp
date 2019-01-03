@@ -19,10 +19,21 @@
  */
 package org.logicware.domain.geometry;
 
-import java.io.Serializable;
+import javax.persistence.ColumnResult;
+import javax.persistence.Entity;
+import javax.persistence.EntityResult;
+import javax.persistence.FieldResult;
+import javax.persistence.Id;
+import javax.persistence.SqlResultSetMapping;
 
-public class Point implements Serializable{
+@Entity(name = "point")
+@SqlResultSetMapping(name = "PointResults", entities = {
+		@EntityResult(entityClass = Point.class, fields = { @FieldResult(name = "idp", column = "Idp"),
+				@FieldResult(name = "x", column = "X"), @FieldResult(name = "y", column = "Y") }) }, columns = {
+						@ColumnResult(name = "idp") })
+public class Point {
 
+	@Id
 	private String idp;
 	private double x;
 	private double y;
