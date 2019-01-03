@@ -30,9 +30,9 @@ import javax.persistence.PersistenceUnitUtil;
 
 import org.logicware.db.util.JavaReflect;
 
-final class JpaPersistenceUnitUtil implements PersistenceUnitUtil {
+public final class JpaPersistenceUnitUtil implements PersistenceUnitUtil {
 
-	JpaPersistenceUnitUtil() {
+	public JpaPersistenceUnitUtil() {
 	}
 
 	public boolean isLoaded(Object entity, String attributeName) {

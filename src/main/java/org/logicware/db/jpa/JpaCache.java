@@ -31,7 +31,7 @@ public final class JpaCache extends JpaAbstractContainer implements Cache {
 
 	// TODO implement a cache map and release database use
 
-	JpaCache(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
+	public JpaCache(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
 		super(database, persistenceUnitUtil);
 	}
 

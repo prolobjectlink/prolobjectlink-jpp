@@ -106,6 +106,9 @@
           <acceptPomPackaging>true</acceptPomPackaging>
           <licenseName>apache_v2</licenseName>
           <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+          <excludes>
+            <exclude>src/main/javax</exclude>
+          </excludes>
           <roots>
             <root>src/main</root>
             <root>src/test</root>
@@ -705,21 +708,6 @@
             <tag>TODO</tag>
             <tag>FIXME</tag>
           </tags>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>clirr-maven-plugin</artifactId>
-        <version>2.2.2</version>
-        <configuration>
-          <comparisonArtifacts>
-            <comparisonArtifact>
-              <groupId>commons-lang</groupId>
-              <artifactId>commons-lang</artifactId>
-              <version>2.6</version>
-            </comparisonArtifact>
-          </comparisonArtifacts>
-          <minSeverity>info</minSeverity>
         </configuration>
       </plugin>
     </plugins>

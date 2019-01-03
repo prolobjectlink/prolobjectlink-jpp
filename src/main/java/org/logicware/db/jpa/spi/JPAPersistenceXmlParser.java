@@ -35,13 +35,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamSource;
 
+import org.logicware.db.XmlParser;
+import org.logicware.db.xml.AbstractXmlParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public final class JPAPersistenceXmlParser {
+public final class JPAPersistenceXmlParser extends AbstractXmlParser implements XmlParser {
 
 	//
 	public static final String XML_ROOT = "META-INF/";
@@ -116,7 +118,8 @@ public final class JPAPersistenceXmlParser {
 				String persistenceUnitTransactionType = map.getNamedItem(PERSISTENCE_UNIT_TRANSACTION_TYPE)
 						.getNodeValue();
 				PersistenceUnitTransactionType transactionType = persistenceUnitTransactionType.equals("RESOURCE_LOCAL")
-						? PersistenceUnitTransactionType.RESOURCE_LOCAL : PersistenceUnitTransactionType.JTA;
+						? PersistenceUnitTransactionType.RESOURCE_LOCAL
+						: PersistenceUnitTransactionType.JTA;
 
 				JPAPersistenceUnitInfo persistenceUnitInfo = new JPAPersistenceUnitInfo(persistenceXml, schemaVersion,
 						persistenceVersion, persistenceUnitName, transactionType);
