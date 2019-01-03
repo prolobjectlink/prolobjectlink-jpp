@@ -55,7 +55,7 @@ public final class JpaEntityManagerFactory implements EntityManagerFactory {
 	private final DatabaseEngine database;
 
 	// property key-value map
-	private Map<String, Object> properties;
+	private Map<Object, Object> properties;
 
 	//
 	private final PersistenceUnitUtil persistenceUnitUtil;
@@ -122,7 +122,7 @@ public final class JpaEntityManagerFactory implements EntityManagerFactory {
 		}
 	}
 
-	public Map<String, Object> getProperties() {
+	public Map<Object, Object> getProperties() {
 		return properties;
 	}
 
