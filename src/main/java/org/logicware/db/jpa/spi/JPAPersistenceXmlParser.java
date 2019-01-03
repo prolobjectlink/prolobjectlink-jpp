@@ -45,39 +45,6 @@ import org.w3c.dom.NodeList;
 
 public final class JPAPersistenceXmlParser extends AbstractXmlParser implements XmlParser {
 
-	//
-	public static final String XML_ROOT = "META-INF/";
-	public static final String XML_BASE_NAME = "persistence.xml";
-	public static final String XSD_DIR = "javax/persistence/";
-	public static final String XML = XML_ROOT + XML_BASE_NAME;
-	public static final String NS_URI = "http://java.sun.com/xml/ns/persistence";
-
-	//
-	private static final String PERSISTENCE_VERSION = "version";
-	private static final String PERSISTENCE_XMLNS = "xmlns";
-	private static final String PERSISTENCE_XMLNS_XSI = "xmlns:xsi";
-	private static final String PERSISTENCE_XSI_SCHEMALOCATION = "xsi:schemaLocation";
-
-	//
-	private static final String PERSISTENCE_UNIT = "persistence-unit";
-	private static final String PERSISTENCE_UNIT_NAME = "name";
-	private static final String PERSISTENCE_UNIT_TRANSACTION_TYPE = "transaction-type";
-
-	//
-	private static final String PERSISTENCE_DESCRIPTION = "description";
-	private static final String PERSISTENCE_PROVIDER = "provider";
-	private static final String PERSISTENCE_JTA_DATA_SOURCE = "jta-data-source";
-	private static final String PERSISTENCE_NON_JTA_DATA_SOURCE = "non-jta-data-source";
-	private static final String PERSISTENCE_MAPPING_FILE = "mapping-file";
-	private static final String PERSISTENCE_JAR_FILE = "jar-file";
-	private static final String PERSISTENCE_CLASS = "class";
-	private static final String PERSISTENCE_EXCLUDE_UNLISTED_CLASSES = "exclude-unlisted-classes";
-	private static final String PERSISTENCE_SHARED_CACHE_MODE = "shared-cache-mode";
-	private static final String PERSISTENCE_VALIDATION_MODE = "validation-mode";
-	private static final String PERSISTENCE_PROPERTIES = "properties";
-	private static final String PERSISTENCE_PROPERTY_NAME = "name";
-	private static final String PERSISTENCE_PROPERTY_VALUE = "value";
-
 	public Map<String, PersistenceUnitInfo> parsePersistenceXml(URL persistenceXml) {
 
 		JPAPersistenceSchemaVersion schemaVersion;
