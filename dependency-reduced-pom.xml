@@ -709,11 +709,6 @@
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>javancss-maven-plugin</artifactId>
-        <version>2.0</version>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
         <artifactId>clirr-maven-plugin</artifactId>
         <version>2.2.2</version>
         <configuration>
@@ -749,10 +744,10 @@
     <tomcat.version>8.5.23</tomcat.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <jetty.version>9.4.10.v20180503</jetty.version>
-    <maven.compiler.source>1.5</maven.compiler.source>
+    <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.target>1.5</maven.compiler.target>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 </project>
 

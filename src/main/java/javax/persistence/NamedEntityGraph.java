@@ -18,7 +18,7 @@
  * #L%
  */
 /*******************************************************************************
- * Copyright (c) 2011 - 2013 Oracle Corporation. All rights reserved.
+ * Copyright (c) 2011 - 2015 Oracle Corporation. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
@@ -28,12 +28,14 @@
  * http://www.eclipse.org/org/documents/edl-v10.php.
  *
  * Contributors:
+ *     Petros Splinakis - Java Persistence 2.2
  *     Linda DeMichiel - Java Persistence 2.1
  *
  ******************************************************************************/
 
 package javax.persistence;
 
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.ElementType.TYPE;
@@ -44,6 +46,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @since Java Persistence 2.1
  */
+@Repeatable(NamedEntityGraphs.class)
 @Target({TYPE})
 @Retention(RUNTIME)
 public @interface NamedEntityGraph {

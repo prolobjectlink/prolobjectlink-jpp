@@ -18,7 +18,7 @@
  * #L%
  */
 /*******************************************************************************
- * Copyright (c) 2008 - 2013 Oracle Corporation. All rights reserved.
+ * Copyright (c) 2008 - 2014 Oracle Corporation. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
@@ -51,7 +51,7 @@ public interface PersistenceUnitInfo {
 	
     /**
      * Returns the name of the persistence unit. Corresponds to the
-     * <code>name</code> attribute in the <code>persistence.xml<code> file.
+     * <code>name</code> attribute in the <code>persistence.xml</code> file.
      * @return  the name of the persistence unit 
      */
     public String getPersistenceUnitName();

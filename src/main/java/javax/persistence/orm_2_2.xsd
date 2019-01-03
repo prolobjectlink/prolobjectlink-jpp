@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Java Persistence API object/relational mapping file schema -->
-<xsd:schema targetNamespace="http://java.sun.com/xml/ns/persistence/orm" 
-  xmlns:orm="http://java.sun.com/xml/ns/persistence/orm" 
+<xsd:schema targetNamespace="http://xmlns.jcp.org/xml/ns/persistence/orm" 
+  xmlns:orm="http://xmlns.jcp.org/xml/ns/persistence/orm" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
   elementFormDefault="qualified" 
   attributeFormDefault="unqualified" 
-  version="2.0">
+  version="2.2">
 
   <xsd:annotation>
     <xsd:documentation>
-      @(#)orm_2_0.xsd 2.0  October 1 2009
+      @(#)orm_2_2.xsd 2.2  July 7 2017
     </xsd:documentation>
   </xsd:annotation>
 
   <xsd:annotation>
     <xsd:documentation>
 
-  Copyright (c) 2008, 2009 Sun Microsystems. All rights reserved. 
+  Copyright (c) 2008 - 2017 Oracle Corporation.  All rights reserved. 
   
   This program and the accompanying materials are made available under the 
   terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0 
@@ -26,8 +26,8 @@
   http://www.eclipse.org/org/documents/edl-v10.php.
   
   Contributors:
-      Linda DeMichiel - Java Persistence 2.0, Version 2.0 (October 1, 2009)
-      Specification available from http://jcp.org/en/jsr/detail?id=317
+      Linda DeMichiel - Java Persistence 2.2, Version 2.2 (July 7, 2017)
+      Specification available from http://jcp.org/en/jsr/detail?id=338
   
     </xsd:documentation>
   </xsd:annotation>
@@ -44,16 +44,16 @@
        Object/relational mapping files must indicate the object/relational
        mapping file schema by using the persistence namespace:
 
-       http://java.sun.com/xml/ns/persistence
+       http://xmlns.jcp.org/xml/ns/persistence/orm
 
        and indicate the version of the schema by
        using the version element as shown below:
 
-      <entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+      <entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
-          http://java.sun.com/xml/ns/persistence/orm/orm_2_0.xsd"
-        version="2.0">
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+          http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
+        version="2.2">
           ...
       </entity-mappings>
 
@@ -87,14 +87,17 @@
         the entity, mapped-superclass and embeddable elements defined in
         the same file in which they occur.
 
-        3. The sequence-generator, table-generator, named-query,
-        named-native-query and sql-result-set-mapping elements are global
-        to the persistence unit. It is undefined to have more than one
-        sequence-generator or table-generator of the same name in the same
-        or different mapping files in a persistence unit. It is also 
-        undefined to have more than one named-query, named-native-query, or
-        result-set-mapping of the same name in the same or different mapping 
-        files in a persistence unit.
+        3. The sequence-generator, table-generator, converter, named-query,
+        named-native-query, named-stored-procedure-query, and 
+        sql-result-set-mapping elements are global to the persistence
+        unit. It is undefined to have more than one sequence-generator
+        or table-generator of the same name in the same or different
+        mapping files in a persistence unit. It is undefined to have
+        more than one named-query, named-native-query, sql-result-set-mapping,
+        or named-stored-procedure-query of the same name in the same 
+        or different mapping files in a persistence unit.  It is also
+        undefined to have more than one converter for the same target
+        type in the same or different mapping files in a persistence unit.
 
         4. The entity, mapped-superclass and embeddable elements each define
         the mapping information for a managed persistent class. The mapping
@@ -125,6 +128,9 @@
                      minOccurs="0" maxOccurs="unbounded"/>
         <xsd:element name="named-native-query" type="orm:named-native-query"
                      minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="named-stored-procedure-query" 
+                     type="orm:named-stored-procedure-query"
+                     minOccurs="0" maxOccurs="unbounded"/>
         <xsd:element name="sql-result-set-mapping" 
                      type="orm:sql-result-set-mapping" 
                      minOccurs="0" maxOccurs="unbounded"/>
@@ -134,9 +140,11 @@
                      minOccurs="0" maxOccurs="unbounded"/>
         <xsd:element name="embeddable" type="orm:embeddable" 
                      minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="converter" type="orm:converter" 
+                     minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="version" type="orm:versionType" 
-                     fixed="2.0" use="required"/>
+                     fixed="2.2" use="required"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -189,7 +197,6 @@
             in all entity relationships of the persistence unit
         entity-listeners - List of default entity listeners to be invoked 
             on each entity in the persistence unit. 
-
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
@@ -236,9 +243,14 @@
                    minOccurs="0"/>
       <xsd:element name="secondary-table" type="orm:secondary-table" 
                    minOccurs="0" maxOccurs="unbounded"/>
-      <xsd:element name="primary-key-join-column" 
-                   type="orm:primary-key-join-column" 
-                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:sequence>
+        <xsd:element name="primary-key-join-column" 
+                     type="orm:primary-key-join-column" 
+                     minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="primary-key-foreign-key" 
+                     type="orm:foreign-key" 
+                     minOccurs="0"/>
+      </xsd:sequence>
       <xsd:element name="id-class" type="orm:id-class" minOccurs="0"/>
       <xsd:element name="inheritance" type="orm:inheritance" minOccurs="0"/>
       <xsd:element name="discriminator-value" type="orm:discriminator-value" 
@@ -253,6 +265,9 @@
       <xsd:element name="named-query" type="orm:named-query" 
                    minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="named-native-query" type="orm:named-native-query" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="named-stored-procedure-query"
+                   type="orm:named-stored-procedure-query" 
                    minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="sql-result-set-mapping" 
                    type="orm:sql-result-set-mapping" 
@@ -275,6 +290,10 @@
                    minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="association-override" 
                    type="orm:association-override"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="convert" type="orm:convert"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="named-entity-graph" type="orm:named-entity-graph"
                    minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="attributes" type="orm:attributes" minOccurs="0"/>
     </xsd:sequence>
@@ -320,8 +339,12 @@
     <xsd:sequence>
       <xsd:element name="description" type="xsd:string" minOccurs="0"/>
       <xsd:choice>
-        <xsd:element name="join-column" type="orm:join-column"
-                     minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:sequence>
+          <xsd:element name="join-column" type="orm:join-column"
+                       minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="foreign-key" type="orm:foreign-key" 
+                       minOccurs="0"/>
+        </xsd:sequence>
         <xsd:element name="join-table" type="orm:join-table"
                      minOccurs="0"/>
       </xsd:choice>
@@ -413,6 +436,7 @@
         <xsd:element name="lob" type="orm:lob" minOccurs="0"/>
         <xsd:element name="temporal" type="orm:temporal" minOccurs="0"/>
         <xsd:element name="enumerated" type="orm:enumerated" minOccurs="0"/>
+        <xsd:element name="convert" type="orm:convert" minOccurs="0"/>
       </xsd:choice>
     </xsd:sequence>
     <xsd:attribute name="name" type="xsd:string" use="required"/>
@@ -460,14 +484,21 @@
           String schema() default "";
           JoinColumn[] joinColumns() default {};
           UniqueConstraint[] uniqueConstraints() default {};
+          Index[] indexes() default {};
         }
 
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:element name="join-column" type="orm:join-column" 
-                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:sequence>
+        <xsd:element name="join-column" type="orm:join-column" 
+                     minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="foreign-key" type="orm:foreign-key" 
+                     minOccurs="0"/>
+      </xsd:sequence>
       <xsd:element name="unique-constraint" type="orm:unique-constraint" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="index" type="orm:index" 
                    minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="name" type="xsd:string"/>
@@ -519,11 +550,95 @@
         @Target({}) @Retention(RUNTIME)
         public @interface ColumnResult {
           String name();
+          Class type() default void.class;
         }
 
       </xsd:documentation>
     </xsd:annotation>
     <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="class" type="xsd:string"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:simpleType name="constraint-mode">
+    <xsd:annotation>
+      <xsd:documentation>
+
+       public enum ConstraintMode {CONSTRAINT, NO_CONSTRAINT, PROVIDER_DEFAULT};
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="CONSTRAINT"/>
+      <xsd:enumeration value="NO_CONSTRAINT"/>
+      <xsd:enumeration value="PROVIDER_DEFAULT"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+<!-- **************************************************** -->
+
+
+  <xsd:complexType name="constructor-result">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        @Target({}) @Retention(RUNTIME)
+        public @interface ConstructorResult {
+          Class targetClass();
+          ColumnResult[] columns();
+        }
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="column" type="orm:column-result" 
+                   maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="target-class" type="xsd:string" use="required"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="convert">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        @Target({TYPE, METHOD, FIELD}) @Retention(RUNTIME)
+        public @interface Convert {
+          Class converter() default void.class;
+          String attributeName() default "";
+          boolean disableConversion() default false;
+        }
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="converter" type="xsd:string"/>
+    <xsd:attribute name="attribute-name" type="xsd:string"/>
+    <xsd:attribute name="disable-conversion" type="xsd:boolean"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="converter">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        @Target({TYPE, METHOD, FIELD}) @Retention(RUNTIME)
+        public @interface Converter {
+          boolean autoApply() default false;
+        }
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="class" type="xsd:string" use="required"/>
+    <xsd:attribute name="auto-apply" type="xsd:boolean"/>
   </xsd:complexType>
 
 <!-- **************************************************** -->
@@ -583,7 +698,7 @@
 
 <!-- **************************************************** -->
 
-<xsd:complexType name="element-collection">
+ <xsd:complexType name="element-collection">
     <xsd:annotation>
       <xsd:documentation>
 
@@ -615,17 +730,26 @@
             <xsd:element name="map-key-enumerated"
                          type="orm:enumerated"
                          minOccurs="0"/>
-            <xsd:element name="map-key-attribute-override"
-                         type="orm:attribute-override"
-                         minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:sequence>
+               <xsd:element name="map-key-attribute-override"
+                            type="orm:attribute-override"
+                            minOccurs="0" maxOccurs="unbounded"/>
+               <xsd:element name="map-key-convert" type="orm:convert"
+                            minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
           </xsd:choice>
           <xsd:choice>
             <xsd:element name="map-key-column"
                          type="orm:map-key-column"
                          minOccurs="0"/>
-            <xsd:element name="map-key-join-column"
-                         type="orm:map-key-join-column"
-                         minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:sequence>
+              <xsd:element name="map-key-join-column"
+                           type="orm:map-key-join-column"
+                           minOccurs="0" maxOccurs="unbounded"/>
+              <xsd:element name="map-key-foreign-key" 
+                           type="orm:foreign-key" 
+                           minOccurs="0"/>
+            </xsd:sequence>
           </xsd:choice>
         </xsd:sequence>
       </xsd:choice>
@@ -650,6 +774,8 @@
                        minOccurs="0" maxOccurs="unbounded"/>
           <xsd:element name="association-override"
                        type="orm:association-override"
+                       minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="convert" type="orm:convert"
                        minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
       </xsd:choice>
@@ -729,6 +855,8 @@
                    minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="association-override" 
                    type="orm:association-override"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="convert" type="orm:convert"
                    minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="name" type="xsd:string" use="required"/>
@@ -892,6 +1020,33 @@
 
 <!-- **************************************************** -->
 
+  <xsd:complexType name="foreign-key">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        @Target({}) @Retention(RUNTIME)
+        public @interface ForeignKey {
+          String name() default "";
+	  ConstraintMode value() default CONSTRAINT;
+          String foreign-key-definition() default "";
+
+        Note that the elements that embed the use of the annotation
+        default this use as @ForeignKey(PROVIDER_DEFAULT).
+
+        }
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string"/>
+    <xsd:attribute name="constraint-mode" type="orm:constraint-mode"/>
+    <xsd:attribute name="foreign-key-definition" type="xsd:string"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
   <xsd:complexType name="generated-value">
     <xsd:annotation>
       <xsd:documentation>
@@ -971,6 +1126,29 @@
 
 <!-- **************************************************** -->
 
+  <xsd:complexType name="index">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        @Target({}) @Retention(RUNTIME)
+        public @interface Index {
+          String name() default "";
+          String columnList();
+          boolean unique() default false;
+        }
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string"/>
+    <xsd:attribute name="column-list" type="xsd:string" use="required"/>
+    <xsd:attribute name="unique" type="xsd:boolean"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
   <xsd:complexType name="inheritance">
     <xsd:annotation>
       <xsd:documentation>
@@ -1019,6 +1197,7 @@
           boolean updatable() default true;
           String columnDefinition() default "";
           String table() default "";
+          ForeignKey foreignKey() default @ForeignKey();
         }
 
       </xsd:documentation>
@@ -1047,16 +1226,27 @@
           JoinColumn[] joinColumns() default {};
           JoinColumn[] inverseJoinColumns() default {};
           UniqueConstraint[] uniqueConstraints() default {};
+          Index[] indexes() default {};
         }
 
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:element name="join-column" type="orm:join-column" 
-                   minOccurs="0" maxOccurs="unbounded"/>
-      <xsd:element name="inverse-join-column" type="orm:join-column" 
-                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:sequence>
+        <xsd:element name="join-column" type="orm:join-column" 
+                     minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="foreign-key" type="orm:foreign-key" 
+                     minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:sequence>
+        <xsd:element name="inverse-join-column" type="orm:join-column" 
+                     minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="inverse-foreign-key" type="orm:foreign-key" 
+                     minOccurs="0"/>
+      </xsd:sequence>
       <xsd:element name="unique-constraint" type="orm:unique-constraint" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="index" type="orm:index" 
                    minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="name" type="xsd:string"/>
@@ -1136,16 +1326,25 @@
             <xsd:element name="map-key-enumerated"
                          type="orm:enumerated"
                          minOccurs="0"/>
-            <xsd:element name="map-key-attribute-override"
-                         type="orm:attribute-override"
-                         minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:sequence>
+               <xsd:element name="map-key-attribute-override"
+                            type="orm:attribute-override"
+                            minOccurs="0" maxOccurs="unbounded"/>
+               <xsd:element name="map-key-convert" type="orm:convert"
+                            minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
           </xsd:choice>
           <xsd:choice>
             <xsd:element name="map-key-column" type="orm:map-key-column"
                    minOccurs="0"/>
-            <xsd:element name="map-key-join-column"
-                   type="orm:map-key-join-column"
-                   minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:sequence>
+              <xsd:element name="map-key-join-column"
+                     type="orm:map-key-join-column"
+                     minOccurs="0" maxOccurs="unbounded"/>
+              <xsd:element name="map-key-foreign-key" 
+                           type="orm:foreign-key" 
+                           minOccurs="0"/>
+            </xsd:sequence>
           </xsd:choice>
         </xsd:sequence>
       </xsd:choice>
@@ -1179,8 +1378,12 @@
     </xsd:annotation>
     <xsd:sequence>
       <xsd:choice>       
-        <xsd:element name="join-column" type="orm:join-column" 
-                     minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:sequence>
+          <xsd:element name="join-column" type="orm:join-column" 
+                       minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="foreign-key" type="orm:foreign-key" 
+                       minOccurs="0"/>
+        </xsd:sequence>
         <xsd:element name="join-table" type="orm:join-table" 
                      minOccurs="0"/>
       </xsd:choice>       
@@ -1337,6 +1540,62 @@
 
 <!-- **************************************************** -->
 
+  <xsd:complexType name="named-attribute-node">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        @Target({}) @Retention(RUNTIME)
+        public @interface NamedAttributeNode {
+          String value();
+          String subgraph() default "";
+          String keySubgraph() default "";
+        }
+ 
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="subgraph" type="xsd:string"/>
+    <xsd:attribute name="key-subgraph" type="xsd:string"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="named-entity-graph">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        @Target({TYPE}) @Retention(RUNTIME)
+        public @interface NamedEntityGraph {
+          String name() default "";
+          NamedAttributeNode[] attributeNodes() default {};
+          boolean includeAllAttributes() default false;
+          NamedSubgraph[] subgraphs() default {};
+          NamedSubGraph[] subclassSubgraphs() default {};
+        }
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="named-attribute-node" 
+                   type="orm:named-attribute-node" 
+                   minOccurs="0"
+                   maxOccurs="unbounded"/>
+      <xsd:element name="subgraph" 
+                   type="orm:named-subgraph" 
+                   minOccurs="0"
+                   maxOccurs="unbounded"/>
+      <xsd:element name="subclass-subgraph" 
+                   type="orm:named-subgraph" 
+                   minOccurs="0"
+                   maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string"/>
+    <xsd:attribute name="include-all-attributes" type="xsd:boolean"/>
+  </xsd:complexType>
+
+
+<!-- **************************************************** -->
+
   <xsd:complexType name="named-native-query">
     <xsd:annotation>
       <xsd:documentation>
@@ -1391,6 +1650,65 @@
 
 <!-- **************************************************** -->
 
+  <xsd:complexType name="named-stored-procedure-query">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        @Target({TYPE}) @Retention(RUNTIME)
+        public @interface NamedStoredProcedureQuery {
+          String name();
+          String procedureName();
+          StoredProcedureParameter[] parameters() default {};
+          Class[] resultClasses() default {};
+          String[] resultSetMappings() default{};
+          QueryHint[] hints() default {};
+        }
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="parameter" 
+                   type="orm:stored-procedure-parameter" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="result-class" type="xsd:string"  
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="result-set-mapping" type="xsd:string"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="hint" type="orm:query-hint" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="procedure-name" type="xsd:string" use="required"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="named-subgraph">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        @Target({}) @Retention(RUNTIME)
+        public @interface NamedSubgraph {
+          String name();
+          Class type() default void.class;
+          NamedAttributeNode[] attributeNodes();
+        }
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="named-attribute-node" 
+                   type="orm:named-attribute-node" 
+                   minOccurs="0"
+                   maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="class" type="xsd:string"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
 <xsd:complexType name="one-to-many">
     <xsd:annotation>
       <xsd:documentation>
@@ -1425,24 +1743,37 @@
             <xsd:element name="map-key-enumerated"
                          type="orm:enumerated"
                          minOccurs="0"/>
-            <xsd:element name="map-key-attribute-override"
-                         type="orm:attribute-override"
-                         minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:sequence>
+               <xsd:element name="map-key-attribute-override"
+                            type="orm:attribute-override"
+                            minOccurs="0" maxOccurs="unbounded"/>
+               <xsd:element name="map-key-convert" type="orm:convert"
+                            minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
           </xsd:choice>
           <xsd:choice>
             <xsd:element name="map-key-column" type="orm:map-key-column"
                    minOccurs="0"/>
-            <xsd:element name="map-key-join-column"
-                   type="orm:map-key-join-column"
-                   minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:sequence>
+              <xsd:element name="map-key-join-column"
+                           type="orm:map-key-join-column"
+                           minOccurs="0" maxOccurs="unbounded"/>
+              <xsd:element name="map-key-foreign-key" 
+                           type="orm:foreign-key" 
+                           minOccurs="0"/>
+            </xsd:sequence>
           </xsd:choice>
         </xsd:sequence>
       </xsd:choice>
       <xsd:choice>
         <xsd:element name="join-table" type="orm:join-table"
                      minOccurs="0"/>
-        <xsd:element name="join-column" type="orm:join-column"
-                     minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:sequence>
+          <xsd:element name="join-column" type="orm:join-column"
+                       minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="foreign-key" type="orm:foreign-key" 
+                       minOccurs="0"/>
+        </xsd:sequence>
       </xsd:choice>
       <xsd:element name="cascade" type="orm:cascade-type"
                    minOccurs="0"/>
@@ -1475,11 +1806,20 @@
     </xsd:annotation>
     <xsd:sequence>
       <xsd:choice>
-        <xsd:element name="primary-key-join-column" 
-                     type="orm:primary-key-join-column" 
-                     minOccurs="0" maxOccurs="unbounded"/>
-        <xsd:element name="join-column" type="orm:join-column" 
-                     minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:sequence>
+          <xsd:element name="primary-key-join-column" 
+                       type="orm:primary-key-join-column" 
+                       minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="primary-key-foreign-key" 
+                       type="orm:foreign-key" 
+                       minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:sequence>
+          <xsd:element name="join-column" type="orm:join-column" 
+                       minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="foreign-key" type="orm:foreign-key" 
+                       minOccurs="0"/>
+        </xsd:sequence>
         <xsd:element name="join-table" type="orm:join-table" 
                      minOccurs="0"/>
       </xsd:choice>
@@ -1537,6 +1877,23 @@
     <xsd:attribute name="column-definition" type="xsd:string"/>
   </xsd:complexType>
 
+<!-- **************************************************** -->
+
+  <xsd:simpleType name="parameter-mode">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        public enum ParameterMode { IN, INOUT, OUT, REF_CURSOR};
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="IN"/>
+      <xsd:enumeration value="INOUT"/>
+      <xsd:enumeration value="OUT"/>
+      <xsd:enumeration value="REF_CURSOR"/>
+    </xsd:restriction>
+  </xsd:simpleType>
 
 <!-- **************************************************** -->
 
@@ -1711,15 +2068,23 @@
           String schema() default "";
           PrimaryKeyJoinColumn[] pkJoinColumns() default {};
           UniqueConstraint[] uniqueConstraints() default {};
+          Index[] indexes() default {};
          }
 
        </xsd:documentation>
      </xsd:annotation>
      <xsd:sequence>
-       <xsd:element name="primary-key-join-column" 
-                    type="orm:primary-key-join-column" 
-                    minOccurs="0" maxOccurs="unbounded"/>
+       <xsd:sequence>
+         <xsd:element name="primary-key-join-column" 
+                      type="orm:primary-key-join-column" 
+                      minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="primary-key-foreign-key" 
+                      type="orm:foreign-key" 
+                      minOccurs="0"/>
+       </xsd:sequence>
        <xsd:element name="unique-constraint" type="orm:unique-constraint" 
+                    minOccurs="0" maxOccurs="unbounded"/>
+       <xsd:element name="index" type="orm:index" 
                     minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="name" type="xsd:string" use="required"/>
@@ -1766,6 +2131,7 @@
         public @interface SqlResultSetMapping {
           String name();
           EntityResult[] entities() default {};
+          ConstructorResult[] classes() default{};
           ColumnResult[] columns() default {};
         }
 
@@ -1775,10 +2141,36 @@
       <xsd:element name="description" type="xsd:string" minOccurs="0"/>
       <xsd:element name="entity-result" type="orm:entity-result" 
                    minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="constructor-result" type="orm:constructor-result" 
+                   minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="column-result" type="orm:column-result" 
                    minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="name" type="xsd:string" use="required"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="stored-procedure-parameter">
+    <xsd:annotation>
+      <xsd:documentation>
+
+        @Target({TYPE}) @Retention(RUNTIME)
+        public @interface StoredProcedureParameter {
+          String name() default "";
+          ParameterMode mode() default ParameterMode.IN;
+          Class type();
+        }
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="description" type="xsd:string" 
+                   minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string"/>
+    <xsd:attribute name="class" type="xsd:string" use="required"/>
+    <xsd:attribute name="mode" type="orm:parameter-mode"/>
   </xsd:complexType>
 
 <!-- **************************************************** -->
@@ -1793,12 +2185,15 @@
           String catalog() default "";
           String schema() default "";
           UniqueConstraint[] uniqueConstraints() default {};
+          Index[] indexes() default {};
         }
 
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
       <xsd:element name="unique-constraint" type="orm:unique-constraint" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="index" type="orm:index" 
                    minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="name" type="xsd:string"/>
@@ -1824,6 +2219,7 @@
           int initialValue() default 0;
           int allocationSize() default 50;
           UniqueConstraint[] uniqueConstraints() default {};
+          Indexes[] indexes() default {};
         }
 
       </xsd:documentation>
@@ -1831,6 +2227,8 @@
     <xsd:sequence>
       <xsd:element name="description" type="xsd:string" minOccurs="0"/>
       <xsd:element name="unique-constraint" type="orm:unique-constraint" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="index" type="orm:index" 
                    minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="name" type="xsd:string" use="required"/>
