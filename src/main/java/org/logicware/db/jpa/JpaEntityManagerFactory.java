@@ -19,26 +19,12 @@
  */
 package org.logicware.db.jpa;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Cache;
-import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceException;
-import javax.persistence.PersistenceUnitUtil;
-import javax.persistence.Query;
-import javax.persistence.SynchronizationType;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.metamodel.Metamodel;
 
+import org.logicware.db.AbstractEntityManagerFactory;
 import org.logicware.db.DatabaseEngine;
-import org.logicware.db.Schema;
-import org.logicware.db.jpa.criteria.JpaCriteriaBuilder;
-import org.logicware.db.jpa.metamodel.JpaMetamodel;
-import org.logicware.prolog.PrologTerm;
 
 /**
  * EntityManagerFactory implementation
@@ -46,136 +32,10 @@ import org.logicware.prolog.PrologTerm;
  * @author Jose Zalacain
  * @since 1.0
  */
-public final class JpaEntityManagerFactory implements EntityManagerFactory {
-
-	// second level cache
-	private Cache cache;
-
-	//
-	private final DatabaseEngine database;
-
-	// property key-value map
-	private Map<Object, Object> properties;
-
-	//
-	private final PersistenceUnitUtil persistenceUnitUtil;
-
-	// user defined names for entities
-	private final Map<String, Class<?>> entityMap = new LinkedHashMap<String, Class<?>>();
-
-	// user defined named queries container
-	private final Map<String, Query> namedQueries = new LinkedHashMap<String, Query>();
-
-	// user defined named entity graphs container
-	private final Map<String, EntityGraph<?>> namedEntityGraphs = new LinkedHashMap<String, EntityGraph<?>>();
-
-	// result set mappings for native queries result
-	private final Map<String, JpaResultSetMapping> resultSetMappings = new LinkedHashMap<String, JpaResultSetMapping>();
-
-//	public JpaEntityManagerFactory(DatabaseEngine database) {
-//		this.persistenceUnitUtil = new JpaPersistenceUnitUtil();
-//		this.cache = new JpaCache(database, persistenceUnitUtil);
-//		this.database = database;
-//		this.database.begin();
-//	}
+public final class JpaEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory {
 
 	public JpaEntityManagerFactory(DatabaseEngine database, Map<Object, Object> properties) {
-		this.persistenceUnitUtil = new JpaPersistenceUnitUtil();
-		this.cache = new JpaCache(database, persistenceUnitUtil);
-		this.properties = properties;
-		this.database = database;
-		this.database.begin();
-	}
-
-	public EntityManager createEntityManager() {
-		return createEntityManager(properties);
-	}
-
-	public EntityManager createEntityManager(Map map) {
-		return createEntityManager(SynchronizationType.SYNCHRONIZED, properties);
-	}
-
-	public EntityManager createEntityManager(SynchronizationType synchronizationType) {
-		return createEntityManager(synchronizationType, properties);
-	}
-
-	public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
-		return new JpaEntityManager(database, this, synchronizationType, map, entityMap, namedQueries,
-				namedEntityGraphs, resultSetMappings);
-	}
-
-	public CriteriaBuilder getCriteriaBuilder() {
-		return new JpaCriteriaBuilder(getMetamodel());
-	}
-
-	public Metamodel getMetamodel() {
-		Schema s = database.getSchema();
-		return new JpaMetamodel(s);
-	}
-
-	public boolean isOpen() {
-		return database.isOpen();
-	}
-
-	public void close() {
-		namedQueries.clear();
-		if (database != null) {
-			database.clear();
-			database.close();
-		}
-		if (properties != null) {
-			properties.clear();
-		}
-		if (cache != null) {
-			cache.evictAll();
-		}
-	}
-
-	public Map<Object, Object> getProperties() {
-		return properties;
-	}
-
-	public Cache getCache() {
-		return cache;
-	}
-
-	public PersistenceUnitUtil getPersistenceUnitUtil() {
-		return persistenceUnitUtil;
-	}
-
-	public void addNamedQuery(String name, Query query) {
-		namedQueries.put(name, query);
-	}
-
-	public <T> void addNamedEntityGraph(String graphName, EntityGraph<T> entityGraph) {
-		namedEntityGraphs.put(graphName, entityGraph);
-	}
-
-	public <T> T unwrap(Class<T> cls) {
-		if (cls.equals(JpaEntityManagerFactory.class)) {
-			return (T) this;
-		}
-		throw new PersistenceException("Impossible  unwrap " + cls.getName());
-	}
-
-	public void addEntity(String name, Class<?> clazz) {
-		entityMap.put(name, clazz);
-	}
-
-	public void addResultSetMapping(JpaResultSetMapping mapping) {
-		resultSetMappings.put(mapping.getName(), mapping);
-	}
-
-	public AttributeConverter<Object, PrologTerm> getAttributeConverter() {
-		return new JpaAttributeConverter(database.getProvider());
-	}
-
-	public final Map<String, EntityGraph<?>> getNamedEntityGraphs() {
-		return namedEntityGraphs;
-	}
-
-	public final Map<String, Query> getNamedQueries() {
-		return namedQueries;
+		super(database, properties);
 	}
 
 }

@@ -76,7 +76,7 @@ public class JpaEntityManager extends JpaAbstractContainer implements EntityMana
 	//
 	private final EntityTransaction entityTransaction;
 
-	public JpaEntityManager(DatabaseEngine database, JpaEntityManagerFactory managerFactory,
+	public JpaEntityManager(DatabaseEngine database, EntityManagerFactory managerFactory,
 			SynchronizationType synchronizationType, Map properties, Map<String, Class<?>> entityMap,
 			Map<String, Query> namedQueries, Map<String, EntityGraph<?>> namedEntityGraphs,
 			Map<String, JpaResultSetMapping> resultSetMappings) {

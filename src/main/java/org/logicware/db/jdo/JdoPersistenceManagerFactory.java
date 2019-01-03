@@ -20,6 +20,7 @@
 package org.logicware.db.jdo;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -29,9 +30,16 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.datastore.DataStoreCache;
 import javax.jdo.listener.InstanceLifecycleListener;
 
-public class JdoPersistenceManagerFactory implements PersistenceManagerFactory {
+import org.logicware.db.AbstractEntityManagerFactory;
+import org.logicware.db.DatabaseEngine;
 
-	private static final long serialVersionUID = -724592289513343036L;
+public class JdoPersistenceManagerFactory extends AbstractEntityManagerFactory implements PersistenceManagerFactory {
+
+	private static final long serialVersionUID = -8268233969545842471L;
+
+	public JdoPersistenceManagerFactory(DatabaseEngine database, Map<Object, Object> properties) {
+		super(database, properties);
+	}
 
 	@Override
 	public void close() {
