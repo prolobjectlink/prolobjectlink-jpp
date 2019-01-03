@@ -72,10 +72,19 @@ public final class JpaEntityManagerFactory implements EntityManagerFactory {
 	// result set mappings for native queries result
 	private final Map<String, JpaResultSetMapping> resultSetMappings = new LinkedHashMap<String, JpaResultSetMapping>();
 
-	public JpaEntityManagerFactory(DatabaseEngine database) {
+//	public JpaEntityManagerFactory(DatabaseEngine database) {
+//		this.persistenceUnitUtil = new JpaPersistenceUnitUtil();
+//		this.cache = new JpaCache(database, persistenceUnitUtil);
+//		this.database = database;
+//		this.database.begin();
+//	}
+
+	public JpaEntityManagerFactory(DatabaseEngine database, Map<Object, Object> properties) {
 		this.persistenceUnitUtil = new JpaPersistenceUnitUtil();
 		this.cache = new JpaCache(database, persistenceUnitUtil);
+		this.properties = properties;
 		this.database = database;
+		this.database.begin();
 	}
 
 	public EntityManager createEntityManager() {
@@ -159,6 +168,14 @@ public final class JpaEntityManagerFactory implements EntityManagerFactory {
 
 	public AttributeConverter<Object, PrologTerm> getAttributeConverter() {
 		return new JpaAttributeConverter(database.getProvider());
+	}
+
+	public final Map<String, EntityGraph<?>> getNamedEntityGraphs() {
+		return namedEntityGraphs;
+	}
+
+	public final Map<String, Query> getNamedQueries() {
+		return namedQueries;
 	}
 
 }

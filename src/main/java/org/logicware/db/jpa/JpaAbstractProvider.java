@@ -19,7 +19,7 @@
  */
 package org.logicware.db.jpa;
 
-import static org.logicware.db.jpa.spi.JPAPersistenceXmlParser.XML;
+import static org.logicware.db.XmlParser.XML;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -95,7 +95,7 @@ public abstract class JpaAbstractProvider extends AbstractWrapper implements Per
 	public final EntityManagerFactory createContainerEntityManagerFactory(PersistenceUnitInfo info, Map map) {
 		DatabaseEngine database = createDatabaseEngine(info, map);
 		assert database != null;
-		return new JpaEntityManagerFactory(database);
+		return new JpaEntityManagerFactory(database, info.getProperties());
 	}
 
 	public final void generateSchema(PersistenceUnitInfo info, Map map) {

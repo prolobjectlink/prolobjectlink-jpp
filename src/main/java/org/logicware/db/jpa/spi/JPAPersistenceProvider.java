@@ -19,7 +19,7 @@
  */
 package org.logicware.db.jpa.spi;
 
-import static org.logicware.db.jpa.spi.JPAPersistenceXmlParser.XML;
+import static org.logicware.db.XmlParser.XML;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public abstract class JPAPersistenceProvider implements PersistenceProvider {
 		database = createDatabase(info.getPersistenceProviderClassName(), info.getPersistenceUnitName(),
 				new Settings(driver), url, user);
 
-		EntityManagerFactory managerFactory = new JpaEntityManagerFactory(database);
+		EntityManagerFactory managerFactory = new JpaEntityManagerFactory(database, properties);
 
 		List<String> managedClasNames = info.getManagedClassNames();
 		for (String className : managedClasNames) {

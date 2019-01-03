@@ -381,4 +381,25 @@ public class JpaEntityManager extends JpaAbstractContainer implements EntityMana
 		}
 		return graphs;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + (closed ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JpaEntityManager other = (JpaEntityManager) obj;
+		return closed == other.closed;
+	}
+
 }

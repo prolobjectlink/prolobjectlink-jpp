@@ -24,7 +24,8 @@ public interface XmlParser {
 	//
 	public static final String XML_ROOT = "META-INF/";
 	public static final String XML_BASE_NAME = "persistence.xml";
-	public static final String XSD_DIR = "javax/persistence/";
+	// public static final String XSD_DIR = "javax/persistence/";
+	public static final String XSD_DIR = XML_ROOT + "persistence/";
 	public static final String XML = XML_ROOT + XML_BASE_NAME;
 	public static final String NS_URI = "http://java.sun.com/xml/ns/persistence";
 

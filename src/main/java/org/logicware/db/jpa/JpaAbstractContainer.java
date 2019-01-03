@@ -42,4 +42,37 @@ public abstract class JpaAbstractContainer {
 		return database.createQuery(clazz).getSolutions();
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((database == null) ? 0 : database.hashCode());
+		result = prime * result + ((persistenceUnitUtil == null) ? 0 : persistenceUnitUtil.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JpaAbstractContainer other = (JpaAbstractContainer) obj;
+		if (database == null) {
+			if (other.database != null)
+				return false;
+		} else if (!database.equals(other.database)) {
+			return false;
+		}
+		if (persistenceUnitUtil == null) {
+			if (other.persistenceUnitUtil != null)
+				return false;
+		} else if (!persistenceUnitUtil.equals(other.persistenceUnitUtil)) {
+			return false;
+		}
+		return true;
+	}
+
 }

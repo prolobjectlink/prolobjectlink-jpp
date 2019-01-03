@@ -19,7 +19,7 @@
  */
 package org.logicware.db.engine;
 
-import static org.logicware.db.jpa.spi.JPAPersistenceXmlParser.XML;
+import static org.logicware.db.XmlParser.XML;
 
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
@@ -218,7 +218,7 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 		// TODO FILL ALL MAPS
 
 		// properties map
-		Map map = getProperties().asMap();
+		Map<Object, Object> map = getProperties().asMap();
 
 		// user defined named queries container
 		Map<String, Query> namedQueries = new HashMap<String, Query>();
@@ -227,7 +227,7 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 		Map<String, Class<?>> entityMap = new HashMap<String, Class<?>>();
 
 		//
-		JpaEntityManagerFactory factory = new JpaEntityManagerFactory(this);
+		JpaEntityManagerFactory factory = new JpaEntityManagerFactory(this, map);
 
 		//
 		Map<String, EntityGraph<?>> namedEntityGraphs = new HashMap<String, EntityGraph<?>>();
