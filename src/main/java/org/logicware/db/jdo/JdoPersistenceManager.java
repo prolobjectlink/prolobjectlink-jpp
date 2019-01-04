@@ -19,7 +19,6 @@
  */
 package org.logicware.db.jdo;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -45,14 +44,13 @@ import javax.persistence.SynchronizationType;
 import org.logicware.db.DatabaseEngine;
 import org.logicware.db.common.AbstractEntityManager;
 import org.logicware.db.jpa.JpaResultSetMapping;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.config.CacheConfiguration;
+import org.springframework.cache.Cache;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 
 public class JdoPersistenceManager extends AbstractEntityManager implements PersistenceManager {
 
 	private final Transaction transaction;
-	private final Cache cache = new Cache(new CacheConfiguration());
+	private final Cache cache = new EhCacheCacheManager().getCache("name");
 
 	public JdoPersistenceManager(DatabaseEngine database, EntityManagerFactory managerFactory,
 			SynchronizationType synchronizationType, Map properties, Map<String, Class<?>> entityMap,
@@ -76,17 +74,21 @@ public class JdoPersistenceManager extends AbstractEntityManager implements Pers
 
 	@Override
 	public void evict(Object pc) {
-		cache.remove(pc);
+		cache.equals(pc);
 	}
 
 	@Override
 	public void evictAll(Object... pcs) {
-		cache.removeAll(Arrays.asList(pcs));
+		for (Object object : pcs) {
+			evict(object);
+		}
 	}
 
 	@Override
 	public void evictAll(Collection pcs) {
-		cache.removeAll(pcs);
+		for (Object object : pcs) {
+			evict(object);
+		}
 	}
 
 	@Override
@@ -96,15 +98,13 @@ public class JdoPersistenceManager extends AbstractEntityManager implements Pers
 
 	@Override
 	public void evictAll() {
-		cache.removeAll();
+		cache.clear();
 	}
 
 	@Override
 	public void refreshAll(Object... pcs) {
-		evictAll(pcs);
-		for (Object object : pcs) {
-
-		}
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

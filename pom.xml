@@ -18,7 +18,7 @@
 
 	<licenses>
 		<license>
-			<name>Apache 2</name>
+			<name>Apache License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
@@ -118,11 +118,6 @@
 			<groupId>org.ow2.asm</groupId>
 			<artifactId>asm-util</artifactId>
 			<version>${asm.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache-core</artifactId>
-			<version>2.6.11</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mortbay.jetty</groupId>
@@ -227,46 +222,46 @@
 
 		<!-- Various Application Context utilities, including EhCache, JavaMail, 
 			Quartz, and Freemarker integration Define this if you need any of these integrations -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework</groupId> -->
-		<!-- <artifactId>spring-context-support</artifactId> -->
-		<!-- <version>${org.springframework.version}</version> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
 
 		<!-- Transaction Management Abstraction (depends on spring-core, spring-beans, 
 			spring-aop, spring-context) Define this if you use Spring Transactions or 
 			DAO Exception Hierarchy (org.springframework.transaction.*/org.springframework.dao.*) -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework</groupId> -->
-		<!-- <artifactId>spring-tx</artifactId> -->
-		<!-- <version>${org.springframework.version}</version> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
 
 		<!-- JDBC Data Access Library (depends on spring-core, spring-beans, spring-context, 
 			spring-tx) Define this if you use Spring's JdbcTemplate API (org.springframework.jdbc.*) -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework</groupId> -->
-		<!-- <artifactId>spring-jdbc</artifactId> -->
-		<!-- <version>${org.springframework.version}</version> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
 
 		<!-- Object-to-Relation-Mapping (ORM) integration with Hibernate, JPA, 
 			and iBatis. (depends on spring-core, spring-beans, spring-context, spring-tx) 
 			Define this if you need ORM (org.springframework.orm.*) -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework</groupId> -->
-		<!-- <artifactId>spring-orm</artifactId> -->
-		<!-- <version>${org.springframework.version}</version> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
 
 		<!-- Object-to-XML Mapping (OXM) abstraction and integration with JAXB, 
 			JiBX, Castor, XStream, and XML Beans. (depends on spring-core, spring-beans, 
 			spring-context) Define this if you need OXM (org.springframework.oxm.*) -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework</groupId> -->
-		<!-- <artifactId>spring-oxm</artifactId> -->
-		<!-- <version>${org.springframework.version}</version> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
 
 		<!-- Web application development utilities applicable to both Servlet and 
 			Portlet Environments (depends on spring-core, spring-beans, spring-context) 
@@ -290,21 +285,21 @@
 		<!-- Spring MVC for Portlet Environments (depends on spring-core, spring-beans, 
 			spring-context, spring-web) Define this if you use Spring MVC with a Portlet 
 			Container (org.springframework.web.portlet.*) -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework</groupId> -->
-		<!-- <artifactId>spring-webmvc-portlet</artifactId> -->
-		<!-- <version>${org.springframework.version}</version> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc-portlet</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
 
 		<!-- Support for testing Spring applications with tools such as JUnit and 
 			TestNG This artifact is generally always defined with a 'test' scope for 
 			the integration testing framework and unit testing stubs -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework</groupId> -->
-		<!-- <artifactId>spring-test</artifactId> -->
-		<!-- <version>${org.springframework.version}</version> -->
-		<!-- <scope>test</scope> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework.version}</version>
+			<scope>test</scope>
+		</dependency>
 
 
 
