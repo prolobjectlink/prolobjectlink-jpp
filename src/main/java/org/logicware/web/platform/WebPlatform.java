@@ -19,9 +19,9 @@
  */
 package org.logicware.web.platform;
 
-import org.logicware.Platform;
+import org.logicware.PlatformConsole;
 
-public interface WebPlatform extends Platform {
+public interface WebPlatform extends PlatformConsole {
 
 	public void openBrowser(String url);
 
