@@ -23,6 +23,10 @@ import org.logicware.db.DatabaseServer;
 
 public interface WebServerControl extends WebPlatform {
 
+	static final String embeddedWarfileName = "/embedded.war";
+
+	public DatabaseServer getDatabaseServer();
+
 	public WebServer getWebServer();
 
 	public void run(String[] args);
@@ -32,7 +36,5 @@ public interface WebServerControl extends WebPlatform {
 	public void restart();
 
 	public void start();
-
-	DatabaseServer getDatabaseServer();
 
 }

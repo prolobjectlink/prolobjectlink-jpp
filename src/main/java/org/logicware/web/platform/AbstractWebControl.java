@@ -28,7 +28,11 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
@@ -44,6 +48,35 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 	public AbstractWebControl(WebServer webServer, DatabaseServer databaseServer) {
 		this.webServer = webServer;
 		this.databaseServer = databaseServer;
+	}
+
+	protected boolean deployWarfile(Map<String, String> args) throws IOException {
+		final InputStream warfile = getClass().getResourceAsStream(embeddedWarfileName);
+		if (warfile != null) {
+			final File tempWarfile = File.createTempFile("embedded", ".war").getAbsoluteFile();
+			tempWarfile.getParentFile().mkdirs();
+			tempWarfile.deleteOnExit();
+
+			final String webroot = "ProlobjectlinkExplorerWar";
+			final File tempWebroot = new File(tempWarfile.getParentFile(), webroot);
+			tempWebroot.mkdirs();
+
+			final OutputStream out = new FileOutputStream(tempWarfile, true);
+			int read = 0;
+			final byte buffer[] = new byte[2048];
+			while ((read = warfile.read(buffer)) != -1) {
+				out.write(buffer, 0, read);
+			}
+			out.close();
+			warfile.close();
+
+			args.put("warfile", tempWarfile.getAbsolutePath());
+			args.put("webroot", tempWebroot.getAbsolutePath());
+			args.remove("webappsDir");
+			args.remove("hostsDir");
+			return true;
+		}
+		return false;
 	}
 
 	public final DatabaseServer getDatabaseServer() {
@@ -69,8 +102,7 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 	public final void run(String[] args) {
 
 		final String url = "http://mssql.delnet.cu:8080/";
-//		final Map<String, String> serverArgs = DevelopmentServerLauncher.parseArguments(args);
-		final Map<String, String> serverArgs = new HashMap<String, String>();
+		final Map<String, String> serverArgs = getArguments(args);
 
 		if (!serverArgs.containsKey("nogui") && url != null) {
 
