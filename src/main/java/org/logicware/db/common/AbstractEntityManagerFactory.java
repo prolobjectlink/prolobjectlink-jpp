@@ -25,12 +25,9 @@ import java.util.Map;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Cache;
 import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.Query;
-import javax.persistence.SynchronizationType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.metamodel.Metamodel;
 
@@ -38,7 +35,6 @@ import org.logicware.db.DatabaseEngine;
 import org.logicware.db.Schema;
 import org.logicware.db.jpa.JpaAttributeConverter;
 import org.logicware.db.jpa.JpaCache;
-import org.logicware.db.jpa.JpaEntityManager;
 import org.logicware.db.jpa.JpaEntityManagerFactory;
 import org.logicware.db.jpa.JpaPersistenceUnitUtil;
 import org.logicware.db.jpa.JpaResultSetMapping;
@@ -46,55 +42,34 @@ import org.logicware.db.jpa.criteria.JpaCriteriaBuilder;
 import org.logicware.db.jpa.metamodel.JpaMetamodel;
 import org.logicware.prolog.PrologTerm;
 
-public abstract class AbstractEntityManagerFactory implements EntityManagerFactory {
+public abstract class AbstractEntityManagerFactory {
 
 	// second level cache
-	private Cache cache;
+	protected Cache cache;
 
 	//
-	private final DatabaseEngine database;
-
-	// property key-value map
-	private Map<Object, Object> properties;
+	protected final DatabaseEngine database;
 
 	//
-	private final PersistenceUnitUtil persistenceUnitUtil;
+	protected final PersistenceUnitUtil persistenceUnitUtil;
 
 	// user defined names for entities
-	private final Map<String, Class<?>> entityMap = new LinkedHashMap<String, Class<?>>();
+	protected final Map<String, Class<?>> entityMap = new LinkedHashMap<String, Class<?>>();
 
 	// user defined named queries container
-	private final Map<String, Query> namedQueries = new LinkedHashMap<String, Query>();
+	protected final Map<String, Query> namedQueries = new LinkedHashMap<String, Query>();
 
 	// user defined named entity graphs container
-	private final Map<String, EntityGraph<?>> namedEntityGraphs = new LinkedHashMap<String, EntityGraph<?>>();
+	protected final Map<String, EntityGraph<?>> namedEntityGraphs = new LinkedHashMap<String, EntityGraph<?>>();
 
 	// result set mappings for native queries result
-	private final Map<String, JpaResultSetMapping> resultSetMappings = new LinkedHashMap<String, JpaResultSetMapping>();
+	protected final Map<String, JpaResultSetMapping> resultSetMappings = new LinkedHashMap<String, JpaResultSetMapping>();
 
-	public AbstractEntityManagerFactory(DatabaseEngine database, Map<Object, Object> properties) {
+	public AbstractEntityManagerFactory(DatabaseEngine database) {
 		this.persistenceUnitUtil = new JpaPersistenceUnitUtil();
 		this.cache = new JpaCache(database, persistenceUnitUtil);
-		this.properties = properties;
 		this.database = database;
-		this.database.begin();
-	}
-
-	public EntityManager createEntityManager() {
-		return createEntityManager(properties);
-	}
-
-	public EntityManager createEntityManager(Map map) {
-		return createEntityManager(SynchronizationType.SYNCHRONIZED, properties);
-	}
-
-	public EntityManager createEntityManager(SynchronizationType synchronizationType) {
-		return createEntityManager(synchronizationType, properties);
-	}
-
-	public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
-		return new JpaEntityManager(database, this, synchronizationType, map, entityMap, namedQueries,
-				namedEntityGraphs, resultSetMappings);
+//		this.database.begin();
 	}
 
 	public CriteriaBuilder getCriteriaBuilder() {
@@ -116,16 +91,9 @@ public abstract class AbstractEntityManagerFactory implements EntityManagerFacto
 			database.clear();
 			database.close();
 		}
-		if (properties != null) {
-			properties.clear();
-		}
 		if (cache != null) {
 			cache.evictAll();
 		}
-	}
-
-	public Map<Object, Object> getProperties() {
-		return properties;
 	}
 
 	public Cache getCache() {

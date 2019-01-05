@@ -260,4 +260,16 @@ public class JdoQuery implements Query {
 
 	}
 
+	@Override
+	public void cancel() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setTimeoutMillis(int arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

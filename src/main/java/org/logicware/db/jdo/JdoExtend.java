@@ -69,4 +69,9 @@ public class JdoExtend<E> implements Extent<E> {
 		return null;
 	}
 
+	public void close() throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
 }

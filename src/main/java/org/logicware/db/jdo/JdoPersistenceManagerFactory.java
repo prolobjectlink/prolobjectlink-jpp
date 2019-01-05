@@ -29,6 +29,8 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.datastore.DataStoreCache;
 import javax.jdo.listener.InstanceLifecycleListener;
+import javax.jdo.metadata.ComponentMetadata;
+import javax.jdo.metadata.JDOMetadata;
 
 import org.logicware.db.DatabaseEngine;
 import org.logicware.db.common.AbstractEntityManagerFactory;
@@ -38,7 +40,7 @@ public class JdoPersistenceManagerFactory extends AbstractEntityManagerFactory i
 	private static final long serialVersionUID = -8268233969545842471L;
 
 	public JdoPersistenceManagerFactory(DatabaseEngine database, Map<Object, Object> properties) {
-		super(database, properties);
+		super(database);
 	}
 
 	@Override
@@ -411,6 +413,36 @@ public class JdoPersistenceManagerFactory extends AbstractEntityManagerFactory i
 	public Set getFetchGroups() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ComponentMetadata getMetadata(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getQueryTimeoutMillis() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public JDOMetadata newMetadata() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void registerMetadata(JDOMetadata arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setQueryTimeoutMillis(int arg0) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
