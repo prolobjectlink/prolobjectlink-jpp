@@ -77,12 +77,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<!-- <maven.compiler.source>1.5</maven.compiler.source> -->
-		<!-- <maven.compiler.target>1.5</maven.compiler.target> -->
 		<org.springframework.version>4.3.4.RELEASE</org.springframework.version>
 		<!-- <org.springframework.version>5.1.1.RELEASE</org.springframework.version> -->
+		<!-- <maven.compiler.source>1.5</maven.compiler.source> -->
+		<!-- <maven.compiler.target>1.5</maven.compiler.target> -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<datanucleous.version>5.1.11</datanucleous.version>
 		<jetty.version>6.1.11</jetty.version>
 		<tomcat.version>8.5.23</tomcat.version>
 		<asm.version>5.0.3</asm.version>
@@ -96,8 +97,8 @@
 		</dependency>
 		<dependency>
 			<groupId>javax.transaction</groupId>
-			<artifactId>javax.transaction-api</artifactId>
-			<version>1.2</version>
+			<artifactId>transaction-api</artifactId>
+			<version>1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.jdo</groupId>
@@ -241,36 +242,39 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.wladek.project</groupId>
-			<artifactId>movies</artifactId>
-			<version>[1.0.0, )</version>
-			<type>war</type>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-accessplatform-jpa-rdbms</artifactId>
+			<version>4.2.3</version>
+			<type>pom</type>
 		</dependency>
-
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
+			<version>${datanucleous.version}</version>
+			<type>pom</type>
+		</dependency>
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-accessplatform-jdo-mongodb</artifactId>
-			<version>5.1.11</version>
+			<version>${datanucleous.version}</version>
 			<type>pom</type>
 		</dependency>
-
 		<dependency>
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>9.1-901-1.jdbc4</version>
 		</dependency>
 		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
 			<version>10.14.2.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.wladek.project</groupId>
+			<artifactId>movies</artifactId>
+			<version>[1.0.0, )</version>
+			<type>war</type>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
