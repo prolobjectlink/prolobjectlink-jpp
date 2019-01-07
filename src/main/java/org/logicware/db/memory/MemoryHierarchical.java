@@ -21,11 +21,14 @@ package org.logicware.db.memory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.persistence.spi.PersistenceUnitInfo;
 
+import org.logicware.db.DatabaseEngine;
 import org.logicware.db.DatabaseSchema;
 import org.logicware.db.DatabaseType;
 import org.logicware.db.DatabaseUser;
@@ -33,9 +36,11 @@ import org.logicware.db.HierarchicalCache;
 import org.logicware.db.MemoryDatabase;
 import org.logicware.db.Protocol;
 import org.logicware.db.Schema;
+import org.logicware.db.VolatileContainer;
 import org.logicware.db.etc.Settings;
 import org.logicware.db.jpa.JpaProperties;
 import org.logicware.db.jpa.spi.JPAPersistenceXmlParser;
+import org.logicware.db.util.Assertions;
 import org.logicware.db.util.JavaReflect;
 import org.logicware.logging.LoggerConstants;
 import org.logicware.logging.LoggerUtils;
@@ -43,9 +48,17 @@ import org.logicware.logging.LoggerUtils;
 public final class MemoryHierarchical extends AbstractMemoryDatabase implements MemoryDatabase {
 
 	private static MemoryDatabase memoryHierarchicalDatabase;
+	private final Map<String, PersistenceUnitInfo> units;
+
+	private MemoryHierarchical(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
+			VolatileContainer container, Map<String, PersistenceUnitInfo> units) {
+		super(settings, url, name, schema, owner, container);
+		this.units = units;
+	}
 
 	private MemoryHierarchical(String name, URL url, Schema schema, DatabaseUser owner, HierarchicalCache cache) {
 		super(cache.getProperties(), url, name, schema, owner, cache);
+		units = new HashMap<String, PersistenceUnitInfo>();
 	}
 
 	public static final MemoryDatabase newInstance(String name) {
@@ -104,6 +117,51 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 				}
 			} catch (MalformedURLException e) {
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.IO, e);
+			}
+
+			assert url != null;
+
+			String password = unit.getProperties().getProperty(JpaProperties.PASSWORD);
+			String user = unit.getProperties().getProperty(JpaProperties.USER);
+			DatabaseUser owner = new DatabaseUser(user, password);
+			HierarchicalCache cache = settings.createHierarchicalCache();
+			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
+			for (String managedClass : unit.getManagedClassNames()) {
+				schema.addClass(JavaReflect.classForName(managedClass), "");
+			}
+			memoryHierarchicalDatabase = new MemoryHierarchical(name, url, schema, owner, cache).create();
+
+		}
+		return memoryHierarchicalDatabase;
+	}
+
+	/**
+	 * Get or create an instance for the first persistence unit contained in the
+	 * given persistence unit map.
+	 * 
+	 * @param m persistence unit map.
+	 * @return an instance of the database for the first persistence unit contained
+	 *         in the given persistence unit map.
+	 * @since 1.0
+	 */
+	public static final DatabaseEngine newInstance(Map<String, PersistenceUnitInfo> m) {
+		if (memoryHierarchicalDatabase == null) {
+			m = Assertions.notNull(m);
+			m = Assertions.nonEmpty(m);
+			Collection<PersistenceUnitInfo> c = m.values();
+			Iterator<PersistenceUnitInfo> i = c.iterator();
+			PersistenceUnitInfo unit = i.next();
+			String name = unit.getPersistenceUnitName();
+			Settings settings = new Settings(unit.getProperties().getProperty(JpaProperties.DRIVER));
+			URL url = null;
+			try {
+				System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
+				url = new URL(unit.getProperties().getProperty(JpaProperties.URL).replace(URL_PREFIX, ""));
+				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
+					throw new MalformedURLException("The URL path don't have database named " + name);
+				}
+			} catch (MalformedURLException e) {
+				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
 			}
 
 			assert url != null;

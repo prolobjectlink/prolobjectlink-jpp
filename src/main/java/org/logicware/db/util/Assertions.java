@@ -21,6 +21,8 @@
 package org.logicware.db.util;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.Map;
 
 public final class Assertions {
 
@@ -89,6 +91,34 @@ public final class Assertions {
 			throw new IllegalArgumentException(message);
 		}
 		return target;
+	}
+
+	public static <K, V> Map<K, V> nonEmpty(Map<K, V> m) {
+		if (m.isEmpty()) {
+			throw new IllegalArgumentException();
+		}
+		return m;
+	}
+
+	public static <K, V> Map<K, V> nonEmpty(Map<K, V> m, String message) {
+		if (m.isEmpty()) {
+			throw new IllegalArgumentException(message);
+		}
+		return m;
+	}
+
+	public static <E> Collection<E> nonEmpty(Collection<E> c) {
+		if (c.isEmpty()) {
+			throw new IllegalArgumentException();
+		}
+		return c;
+	}
+
+	public static <E> Collection<E> nonEmpty(Collection<E> c, String message) {
+		if (c.isEmpty()) {
+			throw new IllegalArgumentException(message);
+		}
+		return c;
 	}
 
 	/**

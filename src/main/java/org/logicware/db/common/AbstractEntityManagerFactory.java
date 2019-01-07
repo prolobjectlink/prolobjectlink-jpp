@@ -47,7 +47,7 @@ public abstract class AbstractEntityManagerFactory {
 	// second level cache
 	protected Cache cache;
 
-	//
+	// container database engine
 	protected final DatabaseEngine database;
 
 	//
@@ -67,7 +67,7 @@ public abstract class AbstractEntityManagerFactory {
 
 	public AbstractEntityManagerFactory(DatabaseEngine database) {
 		this.persistenceUnitUtil = new JpaPersistenceUnitUtil();
-		this.cache = new JpaCache(database, persistenceUnitUtil);
+		this.cache = new JpaCache(persistenceUnitUtil);
 		this.database = database;
 //		this.database.begin();
 	}

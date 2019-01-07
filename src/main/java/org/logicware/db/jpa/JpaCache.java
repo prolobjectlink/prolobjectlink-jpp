@@ -19,62 +19,41 @@
  */
 package org.logicware.db.jpa;
 
-import java.util.List;
-
 import javax.persistence.Cache;
-import javax.persistence.PersistenceException;
 import javax.persistence.PersistenceUnitUtil;
 
-import org.logicware.db.DatabaseEngine;
-
-public final class JpaCache extends JpaAbstractContainer implements Cache {
+public final class JpaCache implements Cache {
 
 	// TODO implement a cache map and release database use
 
-	public JpaCache(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
-		super(database, persistenceUnitUtil);
+	public JpaCache(PersistenceUnitUtil persistenceUnitUtil) {
+		// TODO Auto-generated method stub
 	}
 
 	void add(Object object) {
-		if (object != null) {
-			database.insert(object);
-		}
+		// TODO Auto-generated method stub
 	}
 
 	public boolean contains(Class cls, Object primaryKey) {
-		List<Object> list = findAll(cls);
-		for (Object t : list) {
-			Object id = persistenceUnitUtil.getIdentifier(t);
-			if (primaryKey.equals(id)) {
-				return true;
-			}
-		}
-		return false;
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	public void evict(Class cls, Object primaryKey) {
-		List<Object> list = findAll(cls);
-		for (Object t : list) {
-			Object id = persistenceUnitUtil.getIdentifier(t);
-			if (primaryKey.equals(id)) {
-				database.delete(t);
-			}
-		}
+		// TODO Auto-generated method stub
 	}
 
 	public void evict(Class cls) {
-		database.delete(cls);
+		// TODO Auto-generated method stub
 	}
 
 	public void evictAll() {
-		database.clear();
+		// TODO Auto-generated method stub
 	}
 
 	public <T> T unwrap(Class<T> cls) {
-		if (cls.equals(JpaCache.class)) {
-			return (T) this;
-		}
-		throw new PersistenceException("Impossible unwrap to " + cls.getName());
+
+		return null;
 	}
 
 }

@@ -23,6 +23,7 @@ import static org.logicware.db.XmlParser.XML;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
@@ -58,6 +59,8 @@ public abstract class JpaAbstractProvider extends AbstractWrapper implements Per
 	protected static final String URL = "javax.persistence.jdbc.url";
 	protected static final String URL_PREFIX = "jdbc:prolobjectlink:";
 
+	protected Map<String, EntityManagerFactory> entityManagerFactories = new LinkedHashMap<String, EntityManagerFactory>();
+
 	protected final void assertPersistenceUnitExistenceInMapLoadedFromXml(String emName,
 			Map<String, PersistenceUnitInfo> m) {
 		if (m.get(emName) == null) {
@@ -85,11 +88,22 @@ public abstract class JpaAbstractProvider extends AbstractWrapper implements Per
 		return null;
 	}
 
+	private DatabaseEngine generateSchema0(PersistenceUnitInfo info, Map map) {
+		DatabaseEngine database = createDatabaseEngine(info, map);
+		assert database != null;
+		database.getSchema().flush();
+		return database;
+	}
+
 	public final EntityManagerFactory createEntityManagerFactory(String emName, Map map) {
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(loader.getResource(XML));
-		assertPersistenceUnitExistenceInMapLoadedFromXml(emName, m);
-		return createContainerEntityManagerFactory(m.get(emName), map);
+		EntityManagerFactory emf = entityManagerFactories.get(emName);
+		if (emf == null) {
+			ClassLoader loader = Thread.currentThread().getContextClassLoader();
+			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(loader.getResource(XML));
+			assertPersistenceUnitExistenceInMapLoadedFromXml(emName, m);
+			emf = createContainerEntityManagerFactory(m.get(emName), map);
+		}
+		return emf;
 	}
 
 	public final EntityManagerFactory createContainerEntityManagerFactory(PersistenceUnitInfo info, Map map) {
@@ -99,9 +113,7 @@ public abstract class JpaAbstractProvider extends AbstractWrapper implements Per
 	}
 
 	public final void generateSchema(PersistenceUnitInfo info, Map map) {
-		DatabaseEngine database = createDatabaseEngine(info, map);
-		assert database != null;
-		database.getSchema().flush();
+		generateSchema0(info, map);
 	}
 
 	public final boolean generateSchema(String persistenceUnitName, Map map) {
@@ -109,9 +121,7 @@ public abstract class JpaAbstractProvider extends AbstractWrapper implements Per
 		Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(loader.getResource(XML));
 		assertPersistenceUnitExistenceInMapLoadedFromXml(persistenceUnitName, m);
 		PersistenceUnitInfo unit = m.get(persistenceUnitName);
-		DatabaseEngine database = createDatabaseEngine(unit, map);
-		assert database != null;
-		database.getSchema().flush();
+		DatabaseEngine database = generateSchema0(unit, map);
 		return database.exist();
 	}
 

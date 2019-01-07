@@ -21,7 +21,7 @@ package org.logicware.db.jdo.store;
 
 import javax.jdo.datastore.Sequence;
 
-public class JDOSequence implements Sequence {
+public class JdoSequence implements Sequence {
 
 	@Override
 	public String getName() {

@@ -27,11 +27,11 @@ import javax.persistence.PersistenceUnitUtil;
 import org.logicware.db.DatabaseEngine;
 import org.logicware.db.jpa.JpaAbstractContainer;
 
-public class JDODataStoreCache extends JpaAbstractContainer implements DataStoreCache {
+public class JdoDataStoreCache extends JpaAbstractContainer implements DataStoreCache {
 
 	// TODO implement a cache map and release database use
 
-	JDODataStoreCache(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
+	JdoDataStoreCache(DatabaseEngine database, PersistenceUnitUtil persistenceUnitUtil) {
 		super(database, persistenceUnitUtil);
 	}
 

@@ -22,7 +22,6 @@ package org.logicware.db.jpa;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -30,7 +29,6 @@ import javax.persistence.SynchronizationType;
 
 import org.logicware.db.DatabaseEngine;
 import org.logicware.db.common.AbstractEntityManagerFactory;
-import org.logicware.db.engine.AbstractDatabaseEngine;
 
 /**
  * EntityManagerFactory implementation
@@ -43,19 +41,7 @@ public final class JpaEntityManagerFactory extends AbstractEntityManagerFactory 
 	// property key-value map
 	protected Map<String, Object> properties = new HashMap<String, Object>();
 
-	public JpaEntityManagerFactory(DatabaseEngine database, Map<String, Object> properties) {
-		super(database);
-		this.properties = properties;
-	}
-
-	public JpaEntityManagerFactory(DatabaseEngine database, Properties properties) {
-		super(database);
-		for (Entry<Object, Object> e : properties.entrySet()) {
-			this.properties.put("" + e.getKey() + "", e.getValue());
-		}
-	}
-
-	public JpaEntityManagerFactory(AbstractDatabaseEngine database, Map<Object, Object> map) {
+	public JpaEntityManagerFactory(DatabaseEngine database, Map<Object, Object> map) {
 		super(database);
 		for (Entry<Object, Object> e : map.entrySet()) {
 			this.properties.put("" + e.getKey() + "", e.getValue());
@@ -80,6 +66,9 @@ public final class JpaEntityManagerFactory extends AbstractEntityManagerFactory 
 	}
 
 	public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
+
+		// TODO create database here
+
 		return new JpaEntityManager(database, this, synchronizationType, map, entityMap, namedQueries,
 				namedEntityGraphs, resultSetMappings);
 	}
