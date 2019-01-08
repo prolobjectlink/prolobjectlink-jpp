@@ -44,13 +44,10 @@ import javax.persistence.SynchronizationType;
 import org.logicware.db.DatabaseEngine;
 import org.logicware.db.common.AbstractEntityManager;
 import org.logicware.db.jpa.JpaResultSetMapping;
-import org.springframework.cache.Cache;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
 
 public class JdoPersistenceManager extends AbstractEntityManager implements PersistenceManager {
 
 	private final Transaction transaction;
-	private final Cache cache = new EhCacheCacheManager().getCache("name");
 
 	public JdoPersistenceManager(DatabaseEngine database, EntityManagerFactory managerFactory,
 			SynchronizationType synchronizationType, Map properties, Map<String, Class<?>> entityMap,
@@ -74,7 +71,8 @@ public class JdoPersistenceManager extends AbstractEntityManager implements Pers
 
 	@Override
 	public void evict(Object pc) {
-		cache.equals(pc);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -98,13 +96,14 @@ public class JdoPersistenceManager extends AbstractEntityManager implements Pers
 
 	@Override
 	public void evictAll() {
-		cache.clear();
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void refreshAll(Object... pcs) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
