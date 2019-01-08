@@ -40,7 +40,7 @@ import java.util.List;
  * 
  * <pre>
  * TypedQuery&lt;Point&gt; query = objectContainer.createQuery(Point.class);
- * TypedQuery&lt;Point&gt; query = objectContainer.createQuery(new Point(3.5, 10.14));
+ * TypedQuery&lt;Point&gt; query = objectContainer.createQuery(new Point(3,14));
  * </pre>
  * 
  * <p>

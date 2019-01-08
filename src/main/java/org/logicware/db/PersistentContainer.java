@@ -83,9 +83,9 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * predicate class that was specified in the configuration.
 	 * 
 	 * <pre>
-	 * query = pm.createQuery(&quot;point(Idp, X, Y), X =:= 3.5, Y =:= 10.14&quot;);
+	 * query = pm.createQuery(&quot;point(Idp, X, Y), X =:= 3, Y =:= 14&quot;);
 	 * query = pm.createQuery(
-	 * 		&quot;segment(Ids, Point0, Point1), Point0 == point(a, 3.5, 10.14), Point1 == point(b, 3.5, 10.14)&quot;);
+	 * 		&quot;segment(Ids, Point0, Point1), Point0 == point(a, 3,14), Point1 == point(b, 3,14)&quot;);
 	 * </pre>
 	 * 
 	 * </p>
@@ -139,7 +139,7 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * Prolog Generated Query:
 	 * 
 	 * <pre>
-	 * ?-point(a, 3.5, 10.14).
+	 * ?-point(a, 3,14).
 	 * </pre>
 	 * 
 	 * <li>If the Object term are fully empty (all field are null values) the query
@@ -173,7 +173,7 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * Prolog Generated Query:
 	 * 
 	 * <pre>
-	 * ?-point(Ipd, 3.5, 10.14).
+	 * ?-point(Ipd, 3,14).
 	 * </pre>
 	 * 
 	 * </p>

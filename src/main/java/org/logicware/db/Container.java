@@ -59,14 +59,14 @@ public interface Container extends Wrapper {
 	 * 
 	 * <pre>
 	 * objectContainer.contains(&quot;'org.prolobjectlink.domain.geometry.Point'(Idp, X, Y)&quot;);
-	 * objectContainer.contains(&quot;'org.prolobjectlink.domain.geometry.Point'( a, 3.5, 10.14 )&quot;);
+	 * objectContainer.contains(&quot;'org.prolobjectlink.domain.geometry.Point'( a, 3,14 )&quot;);
 	 * </pre>
 	 * 
 	 * Formulated Prolog Query
 	 * 
 	 * <pre>
 	 * ?- clause('org.prolobjectlink.domain.geometry.Point'( Idp, X, Y ),true).
-	 * ?- clause('org.prolobjectlink.domain.geometry.Point'( a, 3.5, 10.14 ),true).
+	 * ?- clause('org.prolobjectlink.domain.geometry.Point'( a, 3,14 ),true).
 	 * </pre>
 	 * 
 	 * @param string string based prolog term.
@@ -93,14 +93,14 @@ public interface Container extends Wrapper {
 	 * exist that resolve the converted object.
 	 * 
 	 * <pre>
-	 * objectContainer.contains(new Point(&quot;a&quot;, 3.5, 10.14));
+	 * objectContainer.contains(new Point(&quot;a&quot;, 3,14));
 	 * </pre>
 	 * 
 	 * 
 	 * Formulated Prolog Query
 	 * 
 	 * <pre>
-	 * ?- clause('org.prolobjectlink.domain.geometry.Point'( a, 3.5, 10.14 ),true).
+	 * ?- clause('org.prolobjectlink.domain.geometry.Point'( a, 3,14 ),true).
 	 * </pre>
 	 * 
 	 * @param <O> object to be converted to equivalent prolog term and querying to
