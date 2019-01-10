@@ -17,13 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.classes;
+package org.worklogic.domain.model.view;
 
-public class NonFieldClass {
+import org.worklogic.domain.model.Employee;
 
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof NonFieldClass;
+public class AnEmployeeView extends Employee {
+
+	public AnEmployeeView(long salary) {
+		super(salary);
 	}
 
 }

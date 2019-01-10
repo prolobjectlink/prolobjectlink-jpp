@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.model;
+package org.worklogic.domain.model;
 
 import java.util.Map;
 

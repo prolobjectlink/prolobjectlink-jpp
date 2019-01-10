@@ -17,10 +17,13 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.classes;
+package org.worklogic.domain.classes;
 
-public enum MonsEnum {
+public class NonFieldClass {
 
-	JAN, FEB, MAR, APR, MAY, UN, JUL, AGU, SEP, OCT, NOV, DIC
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof NonFieldClass;
+	}
 
 }

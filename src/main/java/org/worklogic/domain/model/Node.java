@@ -18,7 +18,7 @@
  * #L%
  */
 
-package org.logicware.domain.model;
+package org.worklogic.domain.model;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;

@@ -17,14 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.model.view;
+package org.worklogic.domain.geometry.view;
 
-import org.logicware.domain.model.Employee;
+import org.worklogic.domain.geometry.Point;
 
-public class AnEmployeeView extends Employee {
-
-	public AnEmployeeView(long salary) {
-		super(salary);
-	}
+public class SamePoint extends Point {
 
 }

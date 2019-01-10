@@ -17,10 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.predicate;
+package org.worklogic.domain.predicate;
 
-import org.logicware.domain.geometry.Point;
 import org.worklogic.db.Predicate;
+import org.worklogic.domain.geometry.Point;
 
 public class PointBasedPredicate implements Predicate<Point> {
 

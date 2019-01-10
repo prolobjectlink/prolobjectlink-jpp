@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.classes;
+package org.worklogic.domain.classes;
 
 public class StaticFieldClass {
 

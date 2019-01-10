@@ -17,10 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.geometry.view;
+package org.worklogic.domain.classes;
 
-import org.logicware.domain.geometry.Point;
+public enum MonsEnum {
 
-public class SamePoint extends Point {
+	JAN, FEB, MAR, APR, MAY, UN, JUL, AGU, SEP, OCT, NOV, DIC
 
 }

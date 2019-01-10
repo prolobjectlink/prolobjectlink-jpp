@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.geometry;
+package org.worklogic.domain.geometry;
 
 import javax.persistence.ColumnResult;
 import javax.persistence.Entity;

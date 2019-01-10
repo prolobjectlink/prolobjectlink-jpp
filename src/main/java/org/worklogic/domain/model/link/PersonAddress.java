@@ -17,16 +17,16 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.model.link;
+package org.worklogic.domain.model.link;
 
-public final class AddressPerson {
+public final class PersonAddress {
 
-	private final int personId;
 	private final int addressId;
+	private final int personId;
 
-	public AddressPerson(int personId, int addressId) {
-		this.personId = personId;
+	public PersonAddress(int addressId, int personId) {
 		this.addressId = addressId;
+		this.personId = personId;
 	}
 
 	public int getPersonId() {
@@ -59,10 +59,12 @@ public final class AddressPerson {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AddressPerson other = (AddressPerson) obj;
+		PersonAddress other = (PersonAddress) obj;
 		if (addressId != other.addressId)
 			return false;
-		return personId == other.personId;
+		if (personId != other.personId)
+			return false;
+		return true;
 	}
 
 }

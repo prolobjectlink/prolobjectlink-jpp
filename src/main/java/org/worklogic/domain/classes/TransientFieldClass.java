@@ -17,37 +17,19 @@
  * limitations under the License.
  * #L%
  */
-package org.logicware.domain.model.link;
+package org.worklogic.domain.classes;
 
-public final class PersonAddress {
+import java.io.Serializable;
 
-	private final int addressId;
-	private final int personId;
+public class TransientFieldClass implements Serializable {
 
-	public PersonAddress(int addressId, int personId) {
-		this.addressId = addressId;
-		this.personId = personId;
-	}
-
-	public int getPersonId() {
-		return personId;
-	}
-
-	public int getAddressId() {
-		return addressId;
-	}
-
-	@Override
-	public String toString() {
-		return "PersonAddress [personId=" + personId + ", addressId=" + addressId + "]";
-	}
+	private transient int field;
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + addressId;
-		result = prime * result + personId;
+		result = prime * result + field;
 		return result;
 	}
 
@@ -59,10 +41,8 @@ public final class PersonAddress {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PersonAddress other = (PersonAddress) obj;
-		if (addressId != other.addressId)
-			return false;
-		if (personId != other.personId)
+		TransientFieldClass other = (TransientFieldClass) obj;
+		if (field != other.field)
 			return false;
 		return true;
 	}
