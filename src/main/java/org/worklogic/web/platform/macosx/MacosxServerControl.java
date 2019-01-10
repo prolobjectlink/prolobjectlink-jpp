@@ -22,11 +22,11 @@ package org.worklogic.web.platform.macosx;
 import java.io.IOException;
 import java.util.Map;
 
-import org.logicware.db.DatabaseServer;
-import org.logicware.web.platform.AbstractWebControl;
-import org.logicware.web.platform.WebServer;
-import org.logicware.web.platform.WebServerControl;
+import org.worklogic.db.DatabaseServer;
 import org.worklogic.db.platform.macosx.MacosxDatabaseServer;
+import org.worklogic.web.platform.AbstractWebControl;
+import org.worklogic.web.platform.WebServer;
+import org.worklogic.web.platform.WebServerControl;
 import org.worklogic.web.platform.macosx.jetty.MacosxJettyWebServer;
 import org.worklogic.web.platform.macosx.tomcat.MacosxTomcatWebServer;
 

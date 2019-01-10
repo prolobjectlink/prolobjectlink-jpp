@@ -19,8 +19,8 @@
  */
 package org.worklogic.web.platform.win32.tomcat;
 
-import org.logicware.web.platform.AbstractTomcatServer;
-import org.logicware.web.platform.TomcatWebServer;
+import org.worklogic.web.platform.AbstractTomcatServer;
+import org.worklogic.web.platform.TomcatWebServer;
 
 public class Win32TomcatWebServer extends AbstractTomcatServer implements TomcatWebServer {
 

@@ -19,8 +19,8 @@
  */
 package org.logicware.domain.predicate;
 
-import org.logicware.db.Predicate;
 import org.logicware.domain.geometry.Point;
+import org.worklogic.db.Predicate;
 
 public class PointBasedPredicate implements Predicate<Point> {
 

@@ -22,11 +22,11 @@ package org.worklogic.web.platform.win32;
 import java.io.IOException;
 import java.util.Map;
 
-import org.logicware.db.DatabaseServer;
-import org.logicware.web.platform.AbstractWebControl;
-import org.logicware.web.platform.WebServer;
-import org.logicware.web.platform.WebServerControl;
+import org.worklogic.db.DatabaseServer;
 import org.worklogic.db.platform.win32.Win32DatabaseServer;
+import org.worklogic.web.platform.AbstractWebControl;
+import org.worklogic.web.platform.WebServer;
+import org.worklogic.web.platform.WebServerControl;
 import org.worklogic.web.platform.win32.jetty.Win32JettyWebServer;
 import org.worklogic.web.platform.win32.tomcat.Win32TomcatWebServer;
 

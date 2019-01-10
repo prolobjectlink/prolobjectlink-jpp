@@ -19,8 +19,8 @@
  */
 package org.worklogic.web.platform.linux.jetty;
 
-import org.logicware.web.platform.AbstractJettyServer;
-import org.logicware.web.platform.JettyWebServer;
+import org.worklogic.web.platform.AbstractJettyServer;
+import org.worklogic.web.platform.JettyWebServer;
 
 public class LinuxJettyWebServer extends AbstractJettyServer implements JettyWebServer {
 

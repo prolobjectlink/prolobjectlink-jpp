@@ -21,8 +21,8 @@ package org.worklogic.db.platform.win32;
 
 import java.io.IOException;
 
-import org.logicware.db.DatabaseServer;
-import org.logicware.db.DatabaseServerType;
+import org.worklogic.db.DatabaseServer;
+import org.worklogic.db.DatabaseServerType;
 
 public class Win32DatabaseServer implements DatabaseServer {
 

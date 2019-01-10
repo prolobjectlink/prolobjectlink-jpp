@@ -19,8 +19,8 @@
  */
 package org.worklogic.web.platform.macosx.tomcat;
 
-import org.logicware.web.platform.AbstractTomcatServer;
-import org.logicware.web.platform.TomcatWebServer;
+import org.worklogic.web.platform.AbstractTomcatServer;
+import org.worklogic.web.platform.TomcatWebServer;
 
 public class MacosxTomcatWebServer extends AbstractTomcatServer implements TomcatWebServer {
 
