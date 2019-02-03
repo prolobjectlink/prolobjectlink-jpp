@@ -168,12 +168,6 @@
 			<version>${tomcat.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.wladek.project</groupId>
-			<artifactId>movies</artifactId>
-			<version>[1.0.0, )</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>[4.10, )</version>
