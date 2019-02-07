@@ -31,11 +31,10 @@ import java.util.Queue;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.prolobjectlink.AbstractPlatform;
 import org.prolobjectlink.ArrayQueue;
 import org.prolobjectlink.logging.LoggerUtils;
 
-public class Backup extends AbstractPlatform {
+public class Backup extends Tool {
 
 	/**
 	 * Create backs up database file.

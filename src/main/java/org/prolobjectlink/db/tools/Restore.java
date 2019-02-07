@@ -29,10 +29,9 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.prolobjectlink.AbstractPlatform;
 import org.prolobjectlink.logging.LoggerUtils;
 
-public class Restore extends AbstractPlatform {
+public class Restore extends Tool {
 
 	/**
 	 * Restore database files.

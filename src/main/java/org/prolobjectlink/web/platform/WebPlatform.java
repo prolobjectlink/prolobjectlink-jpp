@@ -30,4 +30,6 @@ public interface WebPlatform extends PlatformConsole {
 
 	public void openBrowser(String url);
 
+	public Process run(String cmd);
+
 }
