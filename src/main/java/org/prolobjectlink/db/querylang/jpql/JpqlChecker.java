@@ -41,7 +41,7 @@ public abstract class JpqlChecker extends JpqlSymbols implements Parser {
 	}
 
 	protected RuntimeError syntaxError() {
-		return jpqlfactory.syntaxError(getClass(), current);
+		return jpqlfactory.syntaxError(current);
 	}
 
 	protected List<JpaTreeNode> newList() {

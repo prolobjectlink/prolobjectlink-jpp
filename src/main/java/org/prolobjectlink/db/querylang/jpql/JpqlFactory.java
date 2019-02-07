@@ -27,7 +27,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 
 import org.prolobjectlink.RuntimeError;
 import org.prolobjectlink.db.jpa.criteria.JpaTreeNode;
-import org.prolobjectlink.db.querylang.Parser;
 import org.prolobjectlink.db.querylang.SymbolEntry;
 import org.prolobjectlink.db.querylang.ast.QueryDate;
 import org.prolobjectlink.db.querylang.ast.QueryFrom;
@@ -56,8 +55,8 @@ public class JpqlFactory {
 		return new QueryIdent(id);
 	}
 
-	public RuntimeError syntaxError(Class<? extends Parser> class1, SymbolEntry current) {
-		return new RuntimeError(class1, "Syntax Error at " + current.getLine() + ":" + current.getColumn());
+	public RuntimeError syntaxError(SymbolEntry current) {
+		return new RuntimeError("Syntax Error at " + current.getLine() + ":" + current.getColumn());
 	}
 
 	public JpaTreeNode newAbstractSchema(List<JpaTreeNode> l) {

@@ -128,7 +128,7 @@ public class JpqlParser extends JpqlChecker implements Parser {
 			return jpqlfactory.newFromClause(vars);
 
 		} else {
-			throw jpqlfactory.syntaxError(getClass(), current);
+			throw jpqlfactory.syntaxError(current);
 		}
 	}
 
