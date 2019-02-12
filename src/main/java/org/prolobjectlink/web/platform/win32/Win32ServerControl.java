@@ -20,7 +20,6 @@
 package org.prolobjectlink.web.platform.win32;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.prolobjectlink.db.DatabaseServer;
 import org.prolobjectlink.db.platform.win32.Win32DatabaseServer;
@@ -44,16 +43,6 @@ public final class Win32ServerControl extends AbstractWebControl implements WebS
 			} catch (final IOException e) {
 			}
 		}
-	}
-
-	public Map<String, String> getArguments(String[] args) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void printUsage() {
-		// TODO Auto-generated method stub
-
 	}
 
 	public static void main(String[] args) throws Exception {

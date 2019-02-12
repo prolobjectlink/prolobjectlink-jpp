@@ -24,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Map;
 
 import org.prolobjectlink.db.DatabaseServer;
 import org.prolobjectlink.db.platform.linux.LinuxDatabaseServer;
@@ -101,16 +100,6 @@ public final class LinuxServerControl extends AbstractWebControl implements WebS
 			} catch (final IOException e) {
 			}
 		}
-	}
-
-	public Map<String, String> getArguments(String[] args) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void printUsage() {
-		// TODO Auto-generated method stub
-
 	}
 
 	public static void main(String[] args) throws Exception {

@@ -33,12 +33,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
 
 import org.prolobjectlink.db.DatabaseServer;
 import org.prolobjectlink.logging.LoggerUtils;
+import org.prolobjectlink.prolog.ArrayIterator;
 
 /**
  * 
@@ -49,6 +53,10 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 
 	private final WebServer webServer;
 	private final DatabaseServer databaseServer;
+
+	// standard output stream
+	// private final PrintWriter stdout = System.console().writer()
+	private static final PrintStream stdout = System.out;
 
 	public AbstractWebControl(WebServer webServer, DatabaseServer databaseServer) {
 		this.webServer = webServer;
@@ -68,7 +76,7 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 
 			final OutputStream out = new FileOutputStream(tempWarfile, true);
 			int read = 0;
-			final byte buffer[] = new byte[2048];
+			final byte[] buffer = new byte[2048];
 			while ((read = warfile.read(buffer)) != -1) {
 				out.write(buffer, 0, read);
 			}
@@ -92,6 +100,36 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 		return webServer;
 	}
 
+	public final Map<String, String> getArguments(String[] args) {
+		final Map<String, String> map = new HashMap<String, String>();
+		if (args.length > 0) {
+			Iterator<String> i = new ArrayIterator<String>(args);
+			String name = i.next();
+			if (i.hasNext()) {
+				String value = i.next();
+				map.put(name, value);
+			} else {
+				map.put(name, "");
+			}
+		}
+		return map;
+	}
+
+	public final void printUsage() {
+		stdout.println("Usage: prolog option [file] to consult a file");
+		stdout.println("options:");
+		stdout.println("	-r	consult/run a prolog file");
+		stdout.println("	-v	print the prolog engine version");
+		stdout.println("	-n	print the prolog engine name");
+		stdout.println("	-l	print the prolog engine license");
+		stdout.println("	-i	print the prolog engine information");
+		stdout.println("	-a	print the prolog engine about");
+		stdout.println("	-e	print the prolog engine enviroment paths");
+		stdout.println("	-x	start the prolog engine execution");
+		stdout.println("	-w	print the current work directory ");
+		stdout.println("	-f	consult a prolog file and save formatted code");
+	}
+
 	public final void start() {
 		webServer.start();
 	}
@@ -108,6 +146,14 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 
 		final String url = "http://mssql.delnet.cu:8080/";
 		final Map<String, String> serverArgs = getArguments(args);
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				databaseServer.shutdown();
+				webServer.stop();
+			}
+		});
 
 		if (!serverArgs.containsKey("nogui") && url != null) {
 
