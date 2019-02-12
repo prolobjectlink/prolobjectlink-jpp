@@ -22,7 +22,6 @@ package org.prolobjectlink.db.querylang.jpql;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.prolobjectlink.RuntimeError;
 import org.prolobjectlink.db.jpa.criteria.JpaTreeNode;
 import org.prolobjectlink.db.querylang.Parser;
 import org.prolobjectlink.db.querylang.Scanner;
@@ -40,7 +39,7 @@ public abstract class JpqlChecker extends JpqlSymbols implements Parser {
 		this.jpqlfactory = jpqlfactory;
 	}
 
-	protected RuntimeError syntaxError() {
+	protected RuntimeException syntaxError() {
 		return jpqlfactory.syntaxError(current);
 	}
 

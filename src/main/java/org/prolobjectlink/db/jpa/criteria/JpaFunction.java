@@ -25,7 +25,7 @@ import java.util.Iterator;
 import javax.persistence.criteria.Expression;
 import javax.persistence.metamodel.Metamodel;
 
-import org.prolobjectlink.ArrayIterator;
+import org.prolobjectlink.prolog.ArrayIterator;
 
 public class JpaFunction<X> extends JpaExpression<X> implements Expression<X> {
 

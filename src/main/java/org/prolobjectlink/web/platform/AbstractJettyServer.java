@@ -27,7 +27,7 @@ import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
-import org.prolobjectlink.Licenses;
+import org.prolobjectlink.prolog.Licenses;
 
 /**
  * 

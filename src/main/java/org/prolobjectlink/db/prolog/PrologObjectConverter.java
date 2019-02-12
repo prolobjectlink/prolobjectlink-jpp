@@ -49,8 +49,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import org.prolobjectlink.ArrayStack;
-import org.prolobjectlink.Stack;
 import org.prolobjectlink.db.AbstractConverter;
 import org.prolobjectlink.db.ObjectConverter;
 import org.prolobjectlink.db.util.Assertions;
@@ -60,6 +58,7 @@ import org.prolobjectlink.db.util.JavaReflect;
 import org.prolobjectlink.db.util.JavaSets;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
+import org.prolobjectlink.prolog.ArrayStack;
 import org.prolobjectlink.prolog.PrologDouble;
 import org.prolobjectlink.prolog.PrologFloat;
 import org.prolobjectlink.prolog.PrologInteger;
@@ -68,6 +67,7 @@ import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologStructure;
 import org.prolobjectlink.prolog.PrologTerm;
 import org.prolobjectlink.prolog.PrologVariable;
+import org.prolobjectlink.prolog.Stack;
 import org.prolobjectlink.prolog.UnknownTermError;
 
 public final class PrologObjectConverter extends AbstractConverter<PrologTerm> implements ObjectConverter<PrologTerm> {

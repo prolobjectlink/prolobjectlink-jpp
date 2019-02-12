@@ -26,7 +26,6 @@ import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 
-import org.prolobjectlink.RuntimeError;
 import org.prolobjectlink.db.jpa.criteria.JpaTreeNode;
 import org.prolobjectlink.db.querylang.SymbolTable;
 import org.prolobjectlink.logging.LoggerUtils;
@@ -71,12 +70,12 @@ public class JpqlCompiler {
 		JpqlParser parser = new JpqlParser(scanner, jpqlFactory);
 		try {
 			return parser.parseQuery();
-		} catch (RuntimeError e) {
+		} catch (RuntimeException e) {
 			LoggerUtils.error(JpqlCompiler.class, SYNTAX_ERROR, e);
 		} catch (Exception e) {
 			LoggerUtils.error(JpqlCompiler.class, SYNTAX_ERROR, e);
 		}
-		throw new RuntimeError("Syntax error");
+		throw new RuntimeException("Syntax error");
 	}
 
 }

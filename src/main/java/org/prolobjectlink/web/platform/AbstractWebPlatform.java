@@ -23,7 +23,6 @@ import java.io.IOException;
 
 import org.prolobjectlink.AbstractPlatform;
 import org.prolobjectlink.Platform;
-import org.prolobjectlink.RuntimeError;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
 
@@ -47,7 +46,7 @@ public abstract class AbstractWebPlatform extends AbstractPlatform implements Pl
 		} catch (IOException e) {
 			LoggerUtils.error(getClass(), LoggerConstants.IO, e);
 		}
-		throw new RuntimeError("Can't run process " + cmd);
+		throw new RuntimeException("Can't run process " + cmd);
 	}
 
 }

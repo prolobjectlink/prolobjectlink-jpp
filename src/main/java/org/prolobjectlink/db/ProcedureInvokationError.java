@@ -19,9 +19,7 @@
  */
 package org.prolobjectlink.db;
 
-import org.prolobjectlink.RuntimeError;
-
-public final class ProcedureInvokationError extends RuntimeError {
+public final class ProcedureInvokationError extends RuntimeException {
 
 	private static final long serialVersionUID = -1926528417397697548L;
 

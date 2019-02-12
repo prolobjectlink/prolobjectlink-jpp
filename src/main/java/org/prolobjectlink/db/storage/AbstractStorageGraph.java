@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.prolobjectlink.RuntimeError;
 import org.prolobjectlink.db.ContainerFactory;
 import org.prolobjectlink.db.ObjectConverter;
 import org.prolobjectlink.db.PersistentContainer;
@@ -94,7 +93,7 @@ public abstract class AbstractStorageGraph extends RelationalGraph<Object, Objec
 				return cls.cast(o);
 			}
 		} catch (Exception e) {
-			throw new RuntimeError(
+			throw new RuntimeException(
 
 					"Impossible unwrap " + getClass()
 

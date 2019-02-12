@@ -22,7 +22,6 @@ package org.prolobjectlink.db.cache;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.prolobjectlink.RuntimeError;
 import org.prolobjectlink.db.ContainerFactory;
 import org.prolobjectlink.db.ObjectConverter;
 import org.prolobjectlink.db.Predicate;
@@ -237,7 +236,7 @@ public class AbstractRelationalCache extends RelationalGraph<Object, Object> imp
 				return cls.cast(o);
 			}
 		} catch (Exception e) {
-			throw new RuntimeError(
+			throw new RuntimeException(
 
 					"Impossible unwrap " + getClass()
 

@@ -27,7 +27,7 @@ import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Selection;
 
-import org.prolobjectlink.ArrayIterator;
+import org.prolobjectlink.prolog.ArrayIterator;
 
 public class JpaCompoundSelection<X> extends JpaSelection<X> implements CompoundSelection<X> {
 

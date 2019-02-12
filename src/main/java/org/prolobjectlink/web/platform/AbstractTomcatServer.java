@@ -35,7 +35,7 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.DirResourceSet;
 import org.apache.catalina.webresources.EmptyResourceSet;
 import org.apache.catalina.webresources.StandardRoot;
-import org.prolobjectlink.Licenses;
+import org.prolobjectlink.prolog.Licenses;
 
 /**
  * 

@@ -22,7 +22,7 @@ package org.prolobjectlink.db.prolog;
 import java.util.Collection;
 import java.util.EmptyStackException;
 
-import org.prolobjectlink.Stack;
+import org.prolobjectlink.prolog.Stack;
 
 public class PrologStack<E> extends PrologArrayList<E> implements Stack<E> {
 

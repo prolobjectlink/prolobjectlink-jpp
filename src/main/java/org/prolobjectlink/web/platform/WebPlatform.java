@@ -19,7 +19,7 @@
  */
 package org.prolobjectlink.web.platform;
 
-import org.prolobjectlink.PlatformConsole;
+import org.prolobjectlink.prolog.PlatformConsole;
 
 /**
  * 
