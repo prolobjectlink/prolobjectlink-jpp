@@ -22,8 +22,8 @@ package org.prolobjectlink.db.querylang;
 
 import java.util.Iterator;
 
-import org.prolobjectlink.AbstractIterator;
 import org.prolobjectlink.db.jpa.criteria.JpaAbstractWrapper;
+import org.prolobjectlink.prolog.AbstractIterator;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class AbstractDeklList extends JpaAbstractWrapper implements DeklList {
