@@ -31,8 +31,8 @@ import java.util.Queue;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.prolobjectlink.ArrayQueue;
 import org.prolobjectlink.logging.LoggerUtils;
-import org.prolobjectlink.prolog.ArrayQueue;
 
 public class Backup extends Tool {
 
