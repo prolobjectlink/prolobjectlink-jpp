@@ -214,7 +214,12 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery implement
 		}
 
 		returnedTerms = Arrays.copyOf(currentTerms, currentTerms.length);
-		currentTerms = query.nextSolution();
+
+		if (query.hasNext()) {
+			currentTerms = query.nextSolution();
+		} else {
+			currentTerms = null;
+		}
 
 		Object[] values = new Object[returnedTerms.length];
 		for (int i = 0; i < returnedTerms.length; i++) {
