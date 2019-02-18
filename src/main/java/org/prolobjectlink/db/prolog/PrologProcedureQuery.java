@@ -33,6 +33,13 @@ import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologQuery;
 import org.prolobjectlink.prolog.PrologTerm;
 
+/**
+ * Prolog Procedure Query implementation. Is an query extension for procedures
+ * cases. It allow specify arguments and procedure name.
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
 public final class PrologProcedureQuery extends AbstractProcedureQuery implements ProcedureQuery {
 
 	private boolean executed;
@@ -215,9 +222,11 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery implement
 
 		returnedTerms = Arrays.copyOf(currentTerms, currentTerms.length);
 
-		if (query.hasNext()) {
+		// Never use query.hasNext() or query.hasMoreSolutions()
+		try {
 			currentTerms = query.nextSolution();
-		} else {
+		} catch (Exception e) {
+			// NoSuchElement exception or others
 			currentTerms = null;
 		}
 
