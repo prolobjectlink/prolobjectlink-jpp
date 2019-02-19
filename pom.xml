@@ -43,7 +43,7 @@
 		<developerConnection>scm:git:https://github.com/prolobjectlink/${project.name}.git</developerConnection>
 		<connection>scm:git:https://github.com/prolobjectlink/${project.name}.git</connection>
 		<url>https://github.com/prolobjectlink/${project.name}</url>
-		
+
 	</scm>
 
 	<ciManagement>
@@ -168,9 +168,9 @@
 			<version>${tomcat.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.glassfish.extras</groupId>
+			<groupId>org.glassfish.main.extras</groupId>
 			<artifactId>glassfish-embedded-all</artifactId>
-			<version>3.1.1-b06</version>
+			<version>4.1.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -179,6 +179,7 @@
 			<version>[4.10, )</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>

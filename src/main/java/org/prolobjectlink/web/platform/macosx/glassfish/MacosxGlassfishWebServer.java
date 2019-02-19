@@ -17,31 +17,15 @@
  * limitations under the License.
  * #L%
  */
-package org.prolobjectlink.web.platform;
+package org.prolobjectlink.web.platform.macosx.glassfish;
 
-/**
- * 
- * @author Jose Zalacain
- * @since 1.0
- */
-public interface WebServer {
+import org.prolobjectlink.web.platform.AbstractJettyServer;
+import org.prolobjectlink.web.platform.GlassfishWebServer;
 
-	public final String TOMCAT = "Apache Tomcat";
-	public final String GLASSFISH = "Glassfish";
-	public final String JETTY = "Jetty";
+public class MacosxGlassfishWebServer extends AbstractJettyServer implements GlassfishWebServer {
 
-	public String getLicense();
-
-	public String getVersion();
-
-	public String getName();
-
-	public int getPort();
-
-	public void start();
-
-	public void restart();
-
-	public void stop();
+	public MacosxGlassfishWebServer(int serverPort) {
+		super(serverPort);
+	}
 
 }

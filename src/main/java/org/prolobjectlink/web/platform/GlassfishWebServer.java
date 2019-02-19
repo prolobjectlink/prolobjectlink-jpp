@@ -24,24 +24,6 @@ package org.prolobjectlink.web.platform;
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface WebServer {
-
-	public final String TOMCAT = "Apache Tomcat";
-	public final String GLASSFISH = "Glassfish";
-	public final String JETTY = "Jetty";
-
-	public String getLicense();
-
-	public String getVersion();
-
-	public String getName();
-
-	public int getPort();
-
-	public void start();
-
-	public void restart();
-
-	public void stop();
+public interface GlassfishWebServer extends WebServer {
 
 }

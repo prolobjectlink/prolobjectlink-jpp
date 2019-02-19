@@ -24,24 +24,32 @@ package org.prolobjectlink.web.platform;
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface WebServer {
+public abstract class AbstractGlassfishServer extends AbstractWebServer implements JettyWebServer {
 
-	public final String TOMCAT = "Apache Tomcat";
-	public final String GLASSFISH = "Glassfish";
-	public final String JETTY = "Jetty";
+	public AbstractGlassfishServer(int serverPort) {
+		super(serverPort);
+	}
 
-	public String getLicense();
+	public final String getLicense() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-	public String getVersion();
+	public final String getVersion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-	public String getName();
+	public final String getName() {
+		return GLASSFISH;
+	}
 
-	public int getPort();
+	public final void start() {
+		// TODO Auto-generated method stub
+	}
 
-	public void start();
-
-	public void restart();
-
-	public void stop();
+	public final void stop() {
+		// TODO Auto-generated method stub
+	}
 
 }

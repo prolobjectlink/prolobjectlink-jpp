@@ -64,7 +64,7 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		versionMap.put("1.5", Opcodes.V1_5);
 		versionMap.put("1.6", Opcodes.V1_6);
 		versionMap.put("1.7", Opcodes.V1_7);
-		versionMap.put("1.8", Opcodes.V1_8);
+//		versionMap.put("1.8", Opcodes.V1_8);
 
 	}
 
@@ -191,7 +191,8 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	}
 
 	public byte[] compile() {
-		ClassWriter cw = new ClassWriter(Opcodes.ASM5);
+//	 ASM 5	ClassWriter cw = new ClassWriter(Opcodes.ASM4);
+		ClassWriter cw = new ClassWriter(4);
 		String internalName = name.replace('.', '/');
 		String superclass = superClass != null ? //
 				superClass.getName().replace('.', '/') : //
@@ -202,24 +203,35 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 			interfaces[i] = superClasses.get(i).name.replace('.', '/');
 		}
 
-		String javaVersion = System.getProperty("java.version");
-		javaVersion = javaVersion.substring(0, javaVersion.lastIndexOf('.'));
-		cw.visit(versionMap.get(javaVersion), Opcodes.ACC_PUBLIC, internalName, null, superclass, interfaces);
+//	 ASM 5	String javaVersion = System.getProperty("java.version");
+//	 ASM 5	javaVersion = javaVersion.substring(0, javaVersion.lastIndexOf('.'));
+//	 ASM 5	cw.visit(versionMap.get(javaVersion), Opcodes.ACC_PUBLIC, internalName, null, superclass, interfaces);
+		cw.visit(Opcodes.V1_7, Opcodes.ACC_PUBLIC, internalName, null, superclass, interfaces);
 
 		// Fields Declaration
 		for (DatabaseField field : fields.values()) {
 			field.createField(cw);
 		}
 
-		MethodVisitor con = cw.visitMethod(Opcodes.ACC_PUBLIC, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), null,
-				null);
+		MethodVisitor con = cw.visitMethod(Opcodes.ACC_PUBLIC, "<init>",
+				Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]), null, null);
 
 		con.visitCode();
 		con.visitVarInsn(Opcodes.ALOAD, 0);
 		con.visitMethodInsn(Opcodes.INVOKESPECIAL, Type.getInternalName(Object.class), "<init>",
-				Type.getMethodDescriptor(Type.VOID_TYPE), false);
+				Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]));
 		con.visitInsn(Opcodes.RETURN);
 		con.visitMaxs(1, 1);
+
+//	from ASM 5	MethodVisitor con = cw.visitMethod(Opcodes.ACC_PUBLIC, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), null,
+//				null);
+//
+//	from ASM 5	con.visitCode();
+//	from ASM 5	con.visitVarInsn(Opcodes.ALOAD, 0);
+//	from ASM 5	con.visitMethodInsn(Opcodes.INVOKESPECIAL, Type.getInternalName(Object.class), "<init>",
+//	from ASM 5			Type.getMethodDescriptor(Type.VOID_TYPE), false);
+//	from ASM 5	con.visitInsn(Opcodes.RETURN);
+//	from ASM 5	con.visitMaxs(1, 1);
 
 		// Fields Getters and Setters
 		for (DatabaseField field : fields.values()) {
