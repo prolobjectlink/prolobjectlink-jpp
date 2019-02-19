@@ -168,6 +168,12 @@
 			<version>${tomcat.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.glassfish.extras</groupId>
+			<artifactId>glassfish-embedded-all</artifactId>
+			<version>3.1.1-b06</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>[4.10, )</version>
