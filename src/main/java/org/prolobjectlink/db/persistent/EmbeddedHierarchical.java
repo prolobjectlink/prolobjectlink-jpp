@@ -27,6 +27,7 @@ import java.util.Map;
 import javax.persistence.spi.PersistenceUnitInfo;
 
 import org.prolobjectlink.db.DatabaseMode;
+import org.prolobjectlink.db.DatabaseProperties;
 import org.prolobjectlink.db.DatabaseSchema;
 import org.prolobjectlink.db.DatabaseType;
 import org.prolobjectlink.db.DatabaseUser;
@@ -36,9 +37,8 @@ import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.StorageManager;
 import org.prolobjectlink.db.StorageMode;
 import org.prolobjectlink.db.etc.Settings;
-import org.prolobjectlink.db.jpa.JpaProperties;
-import org.prolobjectlink.db.jpa.spi.JPAPersistenceXmlParser;
 import org.prolobjectlink.db.memory.MemoryHierarchical;
+import org.prolobjectlink.db.spi.PersistenceXmlParser;
 import org.prolobjectlink.db.util.JavaReflect;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
@@ -58,15 +58,15 @@ public final class EmbeddedHierarchical extends EmbeddedDatabaseClient implement
 	public static final EmbeddedDatabase newInstance(String name, Map<?, ?> map) {
 		if (embeddedHierarchicalDatabase == null) {
 			StorageMode mode = StorageMode.STORAGE_POOL;
-			JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
+			PersistenceXmlParser p = new PersistenceXmlParser();
 			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(persistenceXml);
 			for (PersistenceUnitInfo unit : m.values()) {
 				String unitName = unit.getPersistenceUnitName();
 				if (unitName.equals(name)) {
-					Settings settings = new Settings(unit.getProperties().getProperty(JpaProperties.DRIVER));
+					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
 					URL url = null;
 					try {
-						url = new URL(unit.getProperties().getProperty(JpaProperties.URL).replace(URL_PREFIX, ""));
+						url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
 						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
 							throw new MalformedURLException("The URL path don't have database name at the end");
 						}
@@ -76,8 +76,8 @@ public final class EmbeddedHierarchical extends EmbeddedDatabaseClient implement
 
 					assert url != null;
 
-					String password = unit.getProperties().getProperty(JpaProperties.PASSWORD);
-					String user = unit.getProperties().getProperty(JpaProperties.USER);
+					String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
+					String user = unit.getProperties().getProperty(DatabaseProperties.USER);
 					DatabaseUser owner = new DatabaseUser(user, password);
 					StorageManager storage = settings.createStorageManager(url.getFile() + "/database", mode);
 					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
@@ -98,10 +98,10 @@ public final class EmbeddedHierarchical extends EmbeddedDatabaseClient implement
 		StorageMode mode = StorageMode.STORAGE_POOL;
 		if (embeddedHierarchicalDatabase == null) {
 			String name = unit.getPersistenceUnitName();
-			Settings settings = new Settings(unit.getProperties().getProperty(JpaProperties.DRIVER));
+			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
 			URL url = null;
 			try {
-				url = new URL(unit.getProperties().getProperty(JpaProperties.URL).replace(URL_PREFIX, ""));
+				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
 				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
 					throw new MalformedURLException("The URL path don't have database name at the end");
 				}
@@ -111,8 +111,8 @@ public final class EmbeddedHierarchical extends EmbeddedDatabaseClient implement
 
 			assert url != null;
 
-			String password = unit.getProperties().getProperty(JpaProperties.PASSWORD);
-			String user = unit.getProperties().getProperty(JpaProperties.USER);
+			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
+			String user = unit.getProperties().getProperty(DatabaseProperties.USER);
 			DatabaseUser owner = new DatabaseUser(user, password);
 			StorageManager storage = settings.createStorageManager(url.getFile() + "/database", mode);
 			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);

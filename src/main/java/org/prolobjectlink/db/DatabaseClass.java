@@ -30,10 +30,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.MappedSuperclass;
-
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -557,18 +553,6 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 
 	public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
 		return getJavaClass().isAnnotationPresent(annotationClass);
-	}
-
-	public boolean isMappedSuperclass() {
-		return isAnnotationPresent(MappedSuperclass.class);
-	}
-
-	public boolean isEmbeddable() {
-		return isAnnotationPresent(Embeddable.class);
-	}
-
-	public boolean isEntity() {
-		return isAnnotationPresent(Entity.class);
 	}
 
 	public DatabaseField getIdField() {

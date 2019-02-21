@@ -30,10 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.SynchronizationType;
 import javax.persistence.spi.PersistenceUnitInfo;
 
 import org.prolobjectlink.db.ContainerFactory;
@@ -44,9 +40,6 @@ import org.prolobjectlink.db.Predicate;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.container.AbstractContainer;
 import org.prolobjectlink.db.etc.Settings;
-import org.prolobjectlink.db.jpa.JpaEntityManager;
-import org.prolobjectlink.db.jpa.JpaEntityManagerFactory;
-import org.prolobjectlink.db.jpa.JpaResultSetMapping;
 import org.prolobjectlink.db.tools.Backup;
 import org.prolobjectlink.db.tools.Restore;
 import org.prolobjectlink.db.util.JavaReflect;
@@ -212,32 +205,6 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 
 	public final Map<String, PersistenceUnitInfo> getPersistenceUnits() {
 		return units;
-	}
-
-	public final EntityManager getEntityManager() {
-
-		// TODO FILL ALL MAPS
-
-		// properties map
-		Map<Object, Object> map = getProperties().asMap();
-
-		// user defined named queries container
-		Map<String, Query> namedQueries = new HashMap<String, Query>();
-
-		// user defined names for entities
-		Map<String, Class<?>> entityMap = new HashMap<String, Class<?>>();
-
-		//
-		JpaEntityManagerFactory factory = new JpaEntityManagerFactory(this, map);
-
-		//
-		Map<String, EntityGraph<?>> namedEntityGraphs = new HashMap<String, EntityGraph<?>>();
-
-		// result set mappings for native queries result
-		Map<String, JpaResultSetMapping> resultSetMappings = new HashMap<String, JpaResultSetMapping>();
-
-		return new JpaEntityManager(this, factory, SynchronizationType.SYNCHRONIZED, map, entityMap, namedQueries,
-				namedEntityGraphs, resultSetMappings);
 	}
 
 	public final String getRootLocation() {

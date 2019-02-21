@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.persistence.spi.PersistenceUnitInfo;
 
+import org.prolobjectlink.db.DatabaseProperties;
 import org.prolobjectlink.db.DatabaseSchema;
 import org.prolobjectlink.db.DatabaseType;
 import org.prolobjectlink.db.DatabaseUser;
@@ -33,9 +34,8 @@ import org.prolobjectlink.db.Protocol;
 import org.prolobjectlink.db.RemoteDatabase;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.etc.Settings;
-import org.prolobjectlink.db.jpa.JpaProperties;
-import org.prolobjectlink.db.jpa.spi.JPAPersistenceXmlParser;
 import org.prolobjectlink.db.memory.MemoryHierarchical;
+import org.prolobjectlink.db.spi.PersistenceXmlParser;
 import org.prolobjectlink.db.util.JavaReflect;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
@@ -54,16 +54,16 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 
 	public static final RemoteDatabase newInstance(String name, Map<?, ?> map) {
 		if (remoteHierarchicalDatabase == null) {
-			JPAPersistenceXmlParser p = new JPAPersistenceXmlParser();
+			PersistenceXmlParser p = new PersistenceXmlParser();
 			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(persistenceXml);
 			for (PersistenceUnitInfo unit : m.values()) {
 				String unitName = unit.getPersistenceUnitName();
 				if (unitName.equals(name)) {
-					Settings settings = new Settings(unit.getProperties().getProperty(JpaProperties.DRIVER));
+					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
 					URL url = null;
 					try {
 						System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
-						url = new URL(unit.getProperties().getProperty(JpaProperties.URL).replace(URL_PREFIX, ""));
+						url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
 						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
 							throw new MalformedURLException("The URL path don't have database name at the end");
 						}
@@ -73,8 +73,8 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 
 					assert url != null;
 
-					String password = unit.getProperties().getProperty(JpaProperties.PASSWORD);
-					String user = unit.getProperties().getProperty(JpaProperties.USER);
+					String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
+					String user = unit.getProperties().getProperty(DatabaseProperties.USER);
 					DatabaseUser owner = new DatabaseUser(user, password);
 					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
 					for (String managedClass : unit.getManagedClassNames()) {
@@ -94,11 +94,11 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 	public static final RemoteDatabase newInstance(PersistenceUnitInfo unit, Map<?, ?> map) {
 		if (remoteHierarchicalDatabase == null) {
 			String name = unit.getPersistenceUnitName();
-			Settings settings = new Settings(unit.getProperties().getProperty(JpaProperties.DRIVER));
+			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
 			URL url = null;
 			try {
 				System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
-				url = new URL(unit.getProperties().getProperty(JpaProperties.URL).replace(URL_PREFIX, ""));
+				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
 				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
 					throw new MalformedURLException("The URL path don't have database name at the end");
 				}
@@ -108,8 +108,8 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 
 			assert url != null;
 
-			String password = unit.getProperties().getProperty(JpaProperties.PASSWORD);
-			String user = unit.getProperties().getProperty(JpaProperties.USER);
+			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
+			String user = unit.getProperties().getProperty(DatabaseProperties.USER);
 			DatabaseUser owner = new DatabaseUser(user, password);
 			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
 			for (String managedClass : unit.getManagedClassNames()) {

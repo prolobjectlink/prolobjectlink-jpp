@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.PersistenceException;
-
 import org.prolobjectlink.AbstractWrapper;
 import org.prolobjectlink.db.Container;
 import org.prolobjectlink.db.ObjectConverter;
@@ -225,13 +223,13 @@ public abstract class AbstractContainer extends AbstractWrapper implements Conta
 
 	protected final void checkStorableObject(Object object) {
 		if (classes.contains(object.getClass()) || object.getClass().isArray()) {
-			throw new PersistenceException("The object do not belong to persistent class: " + object);
+			throw new RuntimeException("The object do not belong to persistent class: " + object);
 		}
 	}
 
 	protected final void checkReplacementObject(Object match, Object update) {
 		if (match.getClass() != update.getClass()) {
-			throw new PersistenceException(
+			throw new RuntimeException(
 					"The update object [ " + match + "]class is different to match object [" + update + "]");
 		}
 	}
