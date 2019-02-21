@@ -31,9 +31,7 @@ package org.prolobjectlink.db.prolog;
 import java.util.Collection;
 import java.util.EmptyStackException;
 
-import org.prolobjectlink.prolog.Stack;
-
-public class PrologStack<E> extends PrologArrayList<E> implements Stack<E> {
+public class PrologStack<E> extends PrologArrayList<E> {
 
 	private static final long serialVersionUID = 5252181262129160650L;
 

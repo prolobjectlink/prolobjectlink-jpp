@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.prolobjectlink.prolog.ArrayStack;
-import org.prolobjectlink.prolog.Stack;
 
 class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
@@ -354,7 +353,7 @@ class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 		private boolean canRemove;
 
 		private final PrologTreeSet<E> root;
-		private final Stack<PrologTreeSet<E>> stack;
+		private final ArrayStack<PrologTreeSet<E>> stack;
 
 		public TreeSetIterator() {
 			stack = new ArrayStack<PrologTreeSet<E>>();

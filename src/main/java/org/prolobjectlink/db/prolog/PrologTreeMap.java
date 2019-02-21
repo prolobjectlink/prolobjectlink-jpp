@@ -37,7 +37,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.prolobjectlink.prolog.ArrayStack;
-import org.prolobjectlink.prolog.Stack;
 
 class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V> implements Map.Entry<K, V> {
 
@@ -418,7 +417,7 @@ class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V
 		private boolean canRemove;
 
 		private final PrologTreeMap<K, V> root;
-		private final Stack<PrologTreeMap<K, V>> stack;
+		private final ArrayStack<PrologTreeMap<K, V>> stack;
 
 		public AbstractIterator() {
 			stack = new ArrayStack<PrologTreeMap<K, V>>();

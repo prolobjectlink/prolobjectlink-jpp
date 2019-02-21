@@ -76,7 +76,6 @@ import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologStructure;
 import org.prolobjectlink.prolog.PrologTerm;
 import org.prolobjectlink.prolog.PrologVariable;
-import org.prolobjectlink.prolog.Stack;
 import org.prolobjectlink.prolog.UnknownTermError;
 
 public final class PrologObjectConverter extends AbstractConverter<PrologTerm> implements ObjectConverter<PrologTerm> {
@@ -163,7 +162,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			// creating new instance
 			object = JavaReflect.newInstance(classPtr);
 
-			Stack<Field> stack = new ArrayStack<Field>();
+			ArrayStack<Field> stack = new ArrayStack<Field>();
 
 			while (classPtr != null && classPtr != Object.class) {
 
@@ -414,7 +413,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			classPtr = Assertions.nonStaticFinal(classPtr, "Non persistent " + classPtr);
 
 			// stack for resolve prolog structure arguments order
-			Stack<PrologTerm> stack = new ArrayStack<PrologTerm>();
+			ArrayStack<PrologTerm> stack = new ArrayStack<PrologTerm>();
 
 			// class name to convert in predicate functor
 			String className = classPtr.getName();
@@ -488,7 +487,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		classPtr = Assertions.nonStaticFinal(classPtr, "Non persistent " + classPtr);
 
 		// stack for resolve prolog structure arguments order
-		Stack<PrologTerm> stack = new ArrayStack<PrologTerm>();
+		ArrayStack<PrologTerm> stack = new ArrayStack<PrologTerm>();
 
 		// class name to convert in predicate functor
 		String functor = "'" + classPtr.getName() + "'";
