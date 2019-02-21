@@ -26,19 +26,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.prolobjectlink.web.platform;
+package org.prolobjectlink;
 
-import org.prolobjectlink.PlatformConsole;
+import java.util.Map;
+
+import org.prolobjectlink.Platform;
 
 /**
+ * Represent the platform of the running system.
  * 
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface WebPlatform extends PlatformConsole {
+public interface PlatformConsole extends Platform {
 
-	public void openBrowser(String url);
+	/**
+	 * Create a arguments map from a given string arguments array. Used for convert
+	 * command line interface program arguments array to argument map.
+	 * 
+	 * @param args string arguments array
+	 * @return arguments map
+	 * @since 1.0
+	 */
+	public Map<String, String> getArguments(String[] args);
 
-	public Process run(String cmd);
+	/**
+	 * <p>
+	 * Command line interface program run method for this platform. Take the program
+	 * arguments from main entry point and execute the job. Used like:
+	 * </p>
+	 * 
+	 * <tt>
+	 * public class Main{
+	 * public static void main(String[] args) {
+	 *	new Main().run(args);
+	 *}
+	 *
+	 *}
+	 * </tt>
+	 * 
+	 * @param args command line interface program arguments array
+	 * @since 1.0
+	 */
+	public void run(String[] args);
+
+	/**
+	 * Used to print console usage.
+	 * 
+	 * @since 1.0
+	 */
+	public void printUsage();
 
 }
