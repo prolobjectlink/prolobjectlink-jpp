@@ -17,11 +17,11 @@
 	</organization>
 
 	<licenses>
-	    <license>
-	      <name>Simplified BSD License</name>
-	      <url>https://github.com/prolobjectlink/${project.name}/blob/master/LICENSE</url>
-	    </license>
-    </licenses>
+		<license>
+			<name>CDDL 1.0</name>
+			<url>https://glassfish.dev.java.net/public/CDDLv1.0.html</url>
+		</license>
+	</licenses>
 
 	<developers>
 		<developer>
@@ -93,6 +93,11 @@
 			<version>[1.0.0, )</version>
 		</dependency>
 		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>javax.persistence-api</artifactId>
 			<version>2.2</version>
@@ -123,7 +128,6 @@
 			<version>[4.10, )</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -188,7 +192,7 @@
 					<canUpdateDescription>true</canUpdateDescription>
 					<failOnMissingHeader>true</failOnMissingHeader>
 					<acceptPomPackaging>true</acceptPomPackaging>
-					<licenseName>bsd_2</licenseName>
+					<licenseName>cddl_v1</licenseName>
 					<!-- <dryRun>true</dryRun> -->
 					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
 					<excludes>

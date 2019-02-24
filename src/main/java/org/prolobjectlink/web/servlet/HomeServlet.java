@@ -1,8 +1,8 @@
-/*
+/*-
  * #%L
  * prolobjectlink-jpp
  * %%
- * Copyright (C) 2019 Prolobjectlink Project
+ * Copyright (C) 2012 - 2019 Prolobjectlink Project
  * %%
  * COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
  * 
@@ -21,16 +21,26 @@
  * <http://www.gnu.org/licenses/gpl-1.0.html>.
  * #L%
  */
-package org.prolobjectlink.db.predicate;
+package org.prolobjectlink.web.servlet;
 
-import org.prolobjectlink.db.Predicate;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-public final class FalsePredicate<O> implements Predicate<O> {
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-	private static final long serialVersionUID = 761080493298953840L;
+public class HomeServlet extends HttpServlet implements Servlet {
 
-	public boolean evaluate(final O o) {
-		return false;
+	private static final long serialVersionUID = 7313381101418470194L;
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setStatus(HttpServletResponse.SC_OK);
+		PrintWriter out = resp.getWriter();
+		out.print("<h1>Hello World</h1>");
 	}
 
 }
