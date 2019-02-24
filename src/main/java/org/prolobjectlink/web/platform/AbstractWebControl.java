@@ -32,12 +32,7 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -62,40 +57,11 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 
 	// standard output stream
 	// private final PrintWriter stdout = System.console().writer()
-	private static final PrintStream stdout = System.out;
+	private static final PrintWriter stdout = new PrintWriter(System.out, true);
 
 	public AbstractWebControl(WebServer webServer, DatabaseServer databaseServer) {
-		this.webServer = webServer;
 		this.databaseServer = databaseServer;
-	}
-
-	protected boolean deployWarfile(Map<String, String> args) throws IOException {
-		final InputStream warfile = getClass().getResourceAsStream(embeddedWarfileName);
-		if (warfile != null) {
-			final File tempWarfile = File.createTempFile("embedded", ".war").getAbsoluteFile();
-			tempWarfile.getParentFile().mkdirs();
-			tempWarfile.deleteOnExit();
-
-			final String webroot = "ProlobjectlinkExplorerWar";
-			final File tempWebroot = new File(tempWarfile.getParentFile(), webroot);
-			tempWebroot.mkdirs();
-
-			final OutputStream out = new FileOutputStream(tempWarfile, true);
-			int read = 0;
-			final byte[] buffer = new byte[2048];
-			while ((read = warfile.read(buffer)) != -1) {
-				out.write(buffer, 0, read);
-			}
-			out.close();
-			warfile.close();
-
-			args.put("warfile", tempWarfile.getAbsolutePath());
-			args.put("webroot", tempWebroot.getAbsolutePath());
-			args.remove("webappsDir");
-			args.remove("hostsDir");
-			return true;
-		}
-		return false;
+		this.webServer = webServer;
 	}
 
 	public final DatabaseServer getDatabaseServer() {
@@ -150,7 +116,7 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 
 	public final void run(String[] args) {
 
-		final String url = "http://mssql.delnet.cu:8080/";
+		final String url = "http://localhost:" + webServer.getPort() + "/home";
 		final Map<String, String> serverArgs = getArguments(args);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -161,84 +127,81 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 			}
 		});
 
-		if (!serverArgs.containsKey("nogui")) {
-
-			if (!SystemTray.isSupported()) {
-				LoggerUtils.info(getClass(), "SystemTray is not supported");
-				return;
-			}
-
-			SystemTray tray = SystemTray.getSystemTray();
-			Toolkit toolkit = Toolkit.getDefaultToolkit();
-			Image image = toolkit.getImage("trayIcon.png");
-
-			PopupMenu menu = new PopupMenu();
-
-			MenuItem openItem = new MenuItem("Explorer");
-			openItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					openBrowser(url);
-				}
-			});
-			menu.add(openItem);
-
-			MenuItem startItem = new MenuItem("Start");
-			startItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					webServer.start();
-				}
-			});
-			menu.add(startItem);
-
-			MenuItem stopItem = new MenuItem("Stop");
-			startItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					webServer.stop();
-				}
-			});
-			menu.add(stopItem);
-
-			MenuItem configItem = new MenuItem("Config.");
-			startItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null, "Configuration");
-				}
-			});
-			menu.add(configItem);
-
-			MenuItem helpItem = new MenuItem("Help");
-			helpItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
-				}
-			});
-			menu.add(helpItem);
-
-			MenuItem aboutItem = new MenuItem("About");
-			aboutItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
-				}
-			});
-			menu.add(aboutItem);
-
-			MenuItem closeItem = new MenuItem("Close");
-			closeItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
-				}
-			});
-			menu.add(closeItem);
-
-			TrayIcon icon = new TrayIcon(image, "Prolobjectlink Server", menu);
-			icon.setImageAutoSize(true);
-			try {
-				tray.add(icon);
-			} catch (AWTException e) {
-				Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
-			}
-
+		if (!SystemTray.isSupported()) {
+			LoggerUtils.info(getClass(), "SystemTray is not supported");
+			return;
 		}
+
+		SystemTray tray = SystemTray.getSystemTray();
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image image = toolkit.getImage("trayIcon.png");
+
+		PopupMenu menu = new PopupMenu();
+
+		MenuItem openItem = new MenuItem("Explorer");
+		openItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openBrowser(url);
+			}
+		});
+		menu.add(openItem);
+
+		MenuItem startItem = new MenuItem("Start");
+		startItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				webServer.start();
+			}
+		});
+		menu.add(startItem);
+
+		MenuItem stopItem = new MenuItem("Stop");
+		startItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				webServer.stop();
+			}
+		});
+		menu.add(stopItem);
+
+		MenuItem configItem = new MenuItem("Config.");
+		startItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Configuration");
+			}
+		});
+		menu.add(configItem);
+
+		MenuItem helpItem = new MenuItem("Help");
+		helpItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		menu.add(helpItem);
+
+		MenuItem aboutItem = new MenuItem("About");
+		aboutItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		menu.add(aboutItem);
+
+		MenuItem closeItem = new MenuItem("Close");
+		closeItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		menu.add(closeItem);
+
+		TrayIcon icon = new TrayIcon(image, "Prolobjectlink Server", menu);
+		icon.setImageAutoSize(true);
+		try {
+			tray.add(icon);
+		} catch (AWTException e) {
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
+		}
+
 	}
 
 }
