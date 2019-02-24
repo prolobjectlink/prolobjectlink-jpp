@@ -31,15 +31,15 @@ package org.prolobjectlink.web.platform;
 public class WebPlatformUtil {
 
 	public static boolean runOnOsX() {
-		return getOsName().indexOf("mac os x", 0) != -1;
+		return getOsName().equals("Mac OS X") || getOsName().equals("Darwin");
 	}
 
 	public static boolean runOnWindows() {
-		return getOsName().indexOf("windows", 0) != -1;
+		return getOsName().startsWith("Windows");
 	}
 
 	public static boolean runOnLinux() {
-		return getOsName().indexOf("linux", 0) != -1;
+		return getOsName().equals("Linux");
 	}
 
 	public static String getOsName() {

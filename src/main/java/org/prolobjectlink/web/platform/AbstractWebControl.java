@@ -46,6 +46,8 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
@@ -164,7 +166,7 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 			}
 		});
 
-		if (!serverArgs.containsKey("nogui") && url != null) {
+		if (!serverArgs.containsKey("nogui")) {
 
 			if (!SystemTray.isSupported()) {
 				LoggerUtils.info(getClass(), "SystemTray is not supported");
@@ -237,9 +239,8 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 			icon.setImageAutoSize(true);
 			try {
 				tray.add(icon);
-			} catch (AWTException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} catch (AWTException e) {
+				Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
 			}
 
 		}
