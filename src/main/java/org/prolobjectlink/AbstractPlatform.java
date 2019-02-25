@@ -51,15 +51,15 @@ public abstract class AbstractPlatform implements Platform {
 	}
 
 	public final boolean runOnOsX() {
-		return getOsName().indexOf("mac os x", 0) != -1;
+		return getOsName().equals("Mac OS X") || getOsName().equals("Darwin");
 	}
 
 	public final boolean runOnWindows() {
-		return getOsName().indexOf("windows", 0) != -1;
+		return getOsName().startsWith("Windows");
 	}
 
 	public final boolean runOnLinux() {
-		return getOsName().indexOf("linux", 0) != -1;
+		return getOsName().equals("Linux");
 	}
 
 	public final String getOsName() {
