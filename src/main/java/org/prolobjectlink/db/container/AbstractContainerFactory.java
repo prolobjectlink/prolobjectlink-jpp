@@ -76,9 +76,9 @@ public abstract class AbstractContainerFactory implements ContainerFactory {
 		return provider;
 	}
 
-	public final <K> PrologConverter<K> getConverter() {
-		return provider.getConverter();
-	}
+//	public final <K> PrologConverter<K> getConverter() {
+//		return provider.getConverter();
+//	}
 
 	@Override
 	public final int hashCode() {

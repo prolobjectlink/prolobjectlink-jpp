@@ -310,9 +310,9 @@ public final class Settings extends AbstractMap<Object, Object>
 		return properties.put(key, value);
 	}
 
-	public <K> PrologConverter<K> getConverter() {
-		return containerFactory.getConverter();
-	}
+//	public <K> PrologConverter<K> getConverter() {
+//		return containerFactory.getConverter();
+//	}
 
 	@Override
 	public Set<Entry<Object, Object>> entrySet() {

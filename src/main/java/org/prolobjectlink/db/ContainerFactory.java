@@ -93,7 +93,7 @@ public interface ContainerFactory {
 
 	public Storage createStorage(String path);
 
-	public <K> PrologConverter<K> getConverter();
+//	public <K> PrologConverter<K> getConverter();
 
 	ObjectConverter<PrologTerm> getObjectConverter();
 
