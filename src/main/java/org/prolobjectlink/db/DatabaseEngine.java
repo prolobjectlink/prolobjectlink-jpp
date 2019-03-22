@@ -28,8 +28,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.spi.PersistenceUnitInfo;
-
 /**
  * 
  * @author Jose Zalacain
@@ -97,6 +95,6 @@ public interface DatabaseEngine extends PersistentContainer {
 
 	public URL getURL();
 
-	public Map<String, PersistenceUnitInfo> getPersistenceUnits();
+	public Map<String, DatabaseUnitInfo> getPersistenceUnits();
 
 }

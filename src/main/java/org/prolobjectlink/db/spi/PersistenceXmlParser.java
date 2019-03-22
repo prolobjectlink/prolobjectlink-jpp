@@ -32,12 +32,12 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamSource;
 
+import org.prolobjectlink.db.DatabaseUnitInfo;
 import org.prolobjectlink.db.XmlParser;
 import org.prolobjectlink.db.xml.AbstractXmlParser;
 import org.w3c.dom.Document;
@@ -48,11 +48,11 @@ import org.w3c.dom.NodeList;
 
 public final class PersistenceXmlParser extends AbstractXmlParser implements XmlParser {
 
-	public Map<String, PersistenceUnitInfo> parsePersistenceXml(URL persistenceXml) {
+	public Map<String, DatabaseUnitInfo> parsePersistenceXml(URL persistenceXml) {
 
 		PersistenceSchemaVersion schemaVersion;
 		PersistenceVersion persistenceVersion;
-		Map<String, PersistenceUnitInfo> persistenceUnits = new HashMap<String, PersistenceUnitInfo>();
+		Map<String, DatabaseUnitInfo> persistenceUnits = new HashMap<String, DatabaseUnitInfo>();
 
 		try {
 
@@ -91,7 +91,7 @@ public final class PersistenceXmlParser extends AbstractXmlParser implements Xml
 						? PersistenceUnitTransactionType.RESOURCE_LOCAL
 						: PersistenceUnitTransactionType.JTA;
 
-				JPAPersistenceUnitInfo persistenceUnitInfo = new JPAPersistenceUnitInfo(persistenceXml, schemaVersion,
+				PersistenceUnitInformation persistenceUnitInfo = new PersistenceUnitInformation(persistenceXml, schemaVersion,
 						persistenceVersion, persistenceUnitName, transactionType);
 
 				//

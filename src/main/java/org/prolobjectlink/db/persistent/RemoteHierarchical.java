@@ -28,12 +28,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.spi.PersistenceUnitInfo;
-
 import org.prolobjectlink.db.DatabaseProperties;
 import org.prolobjectlink.db.DatabaseSchema;
 import org.prolobjectlink.db.DatabaseType;
 import org.prolobjectlink.db.DatabaseUser;
+import org.prolobjectlink.db.DatabaseUnitInfo;
 import org.prolobjectlink.db.Protocol;
 import org.prolobjectlink.db.RemoteDatabase;
 import org.prolobjectlink.db.Schema;
@@ -59,8 +58,8 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 	public static final RemoteDatabase newInstance(String name, Map<?, ?> map) {
 		if (remoteHierarchicalDatabase == null) {
 			PersistenceXmlParser p = new PersistenceXmlParser();
-			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(persistenceXml);
-			for (PersistenceUnitInfo unit : m.values()) {
+			Map<String, DatabaseUnitInfo> m = p.parsePersistenceXml(persistenceXml);
+			for (DatabaseUnitInfo unit : m.values()) {
 				String unitName = unit.getPersistenceUnitName();
 				if (unitName.equals(name)) {
 					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -95,7 +94,7 @@ public final class RemoteHierarchical extends RemoteDatabaseClient implements Re
 		return remoteHierarchicalDatabase;
 	}
 
-	public static final RemoteDatabase newInstance(PersistenceUnitInfo unit, Map<?, ?> map) {
+	public static final RemoteDatabase newInstance(DatabaseUnitInfo unit, Map<?, ?> map) {
 		if (remoteHierarchicalDatabase == null) {
 			String name = unit.getPersistenceUnitName();
 			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));

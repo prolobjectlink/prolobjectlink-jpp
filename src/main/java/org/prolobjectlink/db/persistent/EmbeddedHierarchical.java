@@ -28,14 +28,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.spi.PersistenceUnitInfo;
-
 import org.prolobjectlink.db.DatabaseMode;
 import org.prolobjectlink.db.DatabaseProperties;
 import org.prolobjectlink.db.DatabaseSchema;
 import org.prolobjectlink.db.DatabaseType;
 import org.prolobjectlink.db.DatabaseUser;
 import org.prolobjectlink.db.EmbeddedDatabase;
+import org.prolobjectlink.db.DatabaseUnitInfo;
 import org.prolobjectlink.db.PersistentContainer;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.StorageManager;
@@ -63,8 +62,8 @@ public final class EmbeddedHierarchical extends EmbeddedDatabaseClient implement
 		if (embeddedHierarchicalDatabase == null) {
 			StorageMode mode = StorageMode.STORAGE_POOL;
 			PersistenceXmlParser p = new PersistenceXmlParser();
-			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(persistenceXml);
-			for (PersistenceUnitInfo unit : m.values()) {
+			Map<String, DatabaseUnitInfo> m = p.parsePersistenceXml(persistenceXml);
+			for (DatabaseUnitInfo unit : m.values()) {
 				String unitName = unit.getPersistenceUnitName();
 				if (unitName.equals(name)) {
 					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -98,7 +97,7 @@ public final class EmbeddedHierarchical extends EmbeddedDatabaseClient implement
 		return embeddedHierarchicalDatabase;
 	}
 
-	public static final EmbeddedDatabase newInstance(PersistenceUnitInfo unit, Map<?, ?> map) {
+	public static final EmbeddedDatabase newInstance(DatabaseUnitInfo unit, Map<?, ?> map) {
 		StorageMode mode = StorageMode.STORAGE_POOL;
 		if (embeddedHierarchicalDatabase == null) {
 			String name = unit.getPersistenceUnitName();

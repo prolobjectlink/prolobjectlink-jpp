@@ -30,15 +30,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.persistence.spi.PersistenceUnitInfo;
-
 import org.prolobjectlink.db.DatabaseEngine;
+import org.prolobjectlink.db.DatabaseProperties;
 import org.prolobjectlink.db.DatabaseSchema;
 import org.prolobjectlink.db.DatabaseType;
 import org.prolobjectlink.db.DatabaseUser;
 import org.prolobjectlink.db.HierarchicalCache;
-import org.prolobjectlink.db.DatabaseProperties;
 import org.prolobjectlink.db.MemoryDatabase;
+import org.prolobjectlink.db.DatabaseUnitInfo;
 import org.prolobjectlink.db.Protocol;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.VolatileContainer;
@@ -52,17 +51,17 @@ import org.prolobjectlink.logging.LoggerUtils;
 public final class MemoryHierarchical extends AbstractMemoryDatabase implements MemoryDatabase {
 
 	private static MemoryDatabase memoryHierarchicalDatabase;
-	private final Map<String, PersistenceUnitInfo> units;
+	private final Map<String, DatabaseUnitInfo> units;
 
 	private MemoryHierarchical(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
-			VolatileContainer container, Map<String, PersistenceUnitInfo> units) {
+			VolatileContainer container, Map<String, DatabaseUnitInfo> units) {
 		super(settings, url, name, schema, owner, container);
 		this.units = units;
 	}
 
 	private MemoryHierarchical(String name, URL url, Schema schema, DatabaseUser owner, HierarchicalCache cache) {
 		super(cache.getProperties(), url, name, schema, owner, cache);
-		units = new HashMap<String, PersistenceUnitInfo>();
+		units = new HashMap<String, DatabaseUnitInfo>();
 	}
 
 	public static final MemoryDatabase newInstance(String name) {
@@ -72,8 +71,8 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 	public static final MemoryDatabase newInstance(String name, Map<?, ?> map) {
 		if (memoryHierarchicalDatabase == null) {
 			PersistenceXmlParser p = new PersistenceXmlParser();
-			Map<String, PersistenceUnitInfo> m = p.parsePersistenceXml(persistenceXml);
-			for (PersistenceUnitInfo unit : m.values()) {
+			Map<String, DatabaseUnitInfo> m = p.parsePersistenceXml(persistenceXml);
+			for (DatabaseUnitInfo unit : m.values()) {
 				String unitName = unit.getPersistenceUnitName();
 				if (unitName.equals(name)) {
 					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -108,7 +107,7 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 		return memoryHierarchicalDatabase;
 	}
 
-	public static final MemoryDatabase newInstance(PersistenceUnitInfo unit, Map<?, ?> map) {
+	public static final MemoryDatabase newInstance(DatabaseUnitInfo unit, Map<?, ?> map) {
 		if (memoryHierarchicalDatabase == null) {
 			String name = unit.getPersistenceUnitName();
 			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -148,13 +147,13 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 	 *         in the given persistence unit map.
 	 * @since 1.0
 	 */
-	public static final DatabaseEngine newInstance(Map<String, PersistenceUnitInfo> m) {
+	public static final DatabaseEngine newInstance(Map<String, DatabaseUnitInfo> m) {
 		if (memoryHierarchicalDatabase == null) {
 			m = Assertions.notNull(m);
 			m = Assertions.nonEmpty(m);
-			Collection<PersistenceUnitInfo> c = m.values();
-			Iterator<PersistenceUnitInfo> i = c.iterator();
-			PersistenceUnitInfo unit = i.next();
+			Collection<DatabaseUnitInfo> c = m.values();
+			Iterator<DatabaseUnitInfo> i = c.iterator();
+			DatabaseUnitInfo unit = i.next();
 			String name = unit.getPersistenceUnitName();
 			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
 			URL url = null;

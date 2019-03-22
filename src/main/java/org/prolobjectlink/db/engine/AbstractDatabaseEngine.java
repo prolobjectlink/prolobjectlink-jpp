@@ -34,12 +34,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.spi.PersistenceUnitInfo;
-
 import org.prolobjectlink.db.ContainerFactory;
 import org.prolobjectlink.db.DatabaseEngine;
 import org.prolobjectlink.db.DatabaseRole;
 import org.prolobjectlink.db.DatabaseUser;
+import org.prolobjectlink.db.DatabaseUnitInfo;
 import org.prolobjectlink.db.Predicate;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.container.AbstractContainer;
@@ -62,7 +61,7 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 	private final Map<String, DatabaseUser> users;
 	private final Map<String, DatabaseRole> roles;
 	private final ContainerFactory containerFactory;
-	private final Map<String, PersistenceUnitInfo> units;
+	private final Map<String, DatabaseUnitInfo> units;
 
 	private static final Backup backuper = new Backup();
 	private static final Restore restorer = new Restore();
@@ -72,7 +71,7 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 
 	public AbstractDatabaseEngine(Settings settings, String location, String name, Schema schema, DatabaseUser owner) {
 		super(settings.getProvider(), settings, settings.getObjectConverter());
-		this.units = new HashMap<String, PersistenceUnitInfo>();
+		this.units = new HashMap<String, DatabaseUnitInfo>();
 		this.containerFactory = settings.getContainerFactory();
 		this.roles = new HashMap<String, DatabaseRole>();
 		this.users = new HashMap<String, DatabaseUser>();
@@ -90,7 +89,7 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 
 	public AbstractDatabaseEngine(Settings settings, URL url, String name, Schema schema, DatabaseUser owner) {
 		super(settings.getProvider(), settings, settings.getObjectConverter());
-		this.units = new HashMap<String, PersistenceUnitInfo>();
+		this.units = new HashMap<String, DatabaseUnitInfo>();
 		this.containerFactory = settings.getContainerFactory();
 		this.roles = new HashMap<String, DatabaseRole>();
 		this.users = new HashMap<String, DatabaseUser>();
@@ -207,7 +206,7 @@ public abstract class AbstractDatabaseEngine extends AbstractContainer implement
 		return name;
 	}
 
-	public final Map<String, PersistenceUnitInfo> getPersistenceUnits() {
+	public final Map<String, DatabaseUnitInfo> getPersistenceUnits() {
 		return units;
 	}
 
