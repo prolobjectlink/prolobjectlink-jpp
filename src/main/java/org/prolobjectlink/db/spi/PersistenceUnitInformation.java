@@ -24,79 +24,35 @@
 package org.prolobjectlink.db.spi;
 
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.SharedCacheMode;
-import javax.persistence.ValidationMode;
-import javax.persistence.spi.ClassTransformer;
-import javax.persistence.spi.PersistenceUnitTransactionType;
 
 import org.prolobjectlink.db.DatabaseUnitInfo;
 
 public final class PersistenceUnitInformation extends AbstractUnitInfo implements DatabaseUnitInfo {
 
-	private static final String ALL = "ALL";
-	private static final String NONE = "NONE";
-	private static final String AUTO = "AUTO";
-	private static final String CALLBACK = "CALLBACK";
-	private static final String UNSPECIFIED = "UNSPECIFIED";
-	private static final String ENABLE_SELECTIVE = "ENABLE_SELECTIVE";
-	private static final String DISABLE_SELECTIVE = "DISABLE_SELECTIVE";
+	protected static final String ALL = "ALL";
+	protected static final String NONE = "NONE";
+	protected static final String AUTO = "AUTO";
+	protected static final String CALLBACK = "CALLBACK";
+	protected static final String UNSPECIFIED = "UNSPECIFIED";
+	protected static final String ENABLE_SELECTIVE = "ENABLE_SELECTIVE";
+	protected static final String DISABLE_SELECTIVE = "DISABLE_SELECTIVE";
 
-	private final PersistenceUnitTransactionType transactionType;
-	private ValidationMode validationMode = ValidationMode.AUTO;
-	private SharedCacheMode sharedCacheMode = SharedCacheMode.UNSPECIFIED;
-	private final Set<ClassTransformer> classTransformers = new HashSet<ClassTransformer>();
+	protected final String transactionType;
+	protected String sharedCacheMode;
+	protected String validationMode;
 
 	public PersistenceUnitInformation(URL unitRootUrl, PersistenceSchemaVersion xmlVersion,
-			PersistenceVersion persistenceVersion, String unitName, PersistenceUnitTransactionType transactionType) {
+			PersistenceVersion persistenceVersion, String unitName, String transactionType) {
 		super(unitRootUrl, xmlVersion, persistenceVersion, unitName);
 		this.transactionType = transactionType;
 	}
 
-	public PersistenceUnitTransactionType getTransactionType() {
-		return transactionType;
-	}
-
-	public SharedCacheMode getSharedCacheMode() {
-		return sharedCacheMode;
-	}
-
-	public ValidationMode getValidationMode() {
-		return validationMode;
-	}
-
-	public void addTransformer(ClassTransformer transformer) {
-		classTransformers.add(transformer);
-	}
-
 	public void setValidationMode(String mode) {
-		if (mode.equals(NONE)) {
-			validationMode = ValidationMode.NONE;
-		} else if (mode.equals(AUTO)) {
-			validationMode = ValidationMode.AUTO;
-		} else if (mode.equals(CALLBACK)) {
-			validationMode = ValidationMode.CALLBACK;
-		}
+		this.validationMode = mode;
 	}
 
 	public void setSharedCacheMode(String mode) {
-		if (mode.equals(ALL)) {
-			sharedCacheMode = SharedCacheMode.ALL;
-		} else if (mode.equals(NONE)) {
-			sharedCacheMode = SharedCacheMode.NONE;
-		} else if (mode.equals(UNSPECIFIED)) {
-			sharedCacheMode = SharedCacheMode.UNSPECIFIED;
-		} else if (mode.equals(ENABLE_SELECTIVE)) {
-			sharedCacheMode = SharedCacheMode.ENABLE_SELECTIVE;
-		} else if (mode.equals(DISABLE_SELECTIVE)) {
-			sharedCacheMode = SharedCacheMode.DISABLE_SELECTIVE;
-		}
-	}
-
-	public final Set<ClassTransformer> getClassTransformers() {
-		return classTransformers;
+		this.sharedCacheMode = mode;
 	}
 
 	@Override

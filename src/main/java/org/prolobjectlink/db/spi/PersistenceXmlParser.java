@@ -32,7 +32,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamSource;
@@ -87,12 +86,13 @@ public final class PersistenceXmlParser extends AbstractXmlParser implements Xml
 				String persistenceUnitName = map.getNamedItem(PERSISTENCE_UNIT_NAME).getNodeValue();
 				String persistenceUnitTransactionType = map.getNamedItem(PERSISTENCE_UNIT_TRANSACTION_TYPE)
 						.getNodeValue();
-				PersistenceUnitTransactionType transactionType = persistenceUnitTransactionType.equals("RESOURCE_LOCAL")
-						? PersistenceUnitTransactionType.RESOURCE_LOCAL
-						: PersistenceUnitTransactionType.JTA;
 
-				PersistenceUnitInformation persistenceUnitInfo = new PersistenceUnitInformation(persistenceXml, schemaVersion,
-						persistenceVersion, persistenceUnitName, transactionType);
+//				PersistenceUnitTransactionType transactionType = persistenceUnitTransactionType.equals("RESOURCE_LOCAL")
+//						? PersistenceUnitTransactionType.RESOURCE_LOCAL
+//						: PersistenceUnitTransactionType.JTA;
+
+				PersistenceUnitInformation persistenceUnitInfo = new PersistenceUnitInformation(persistenceXml,
+						schemaVersion, persistenceVersion, persistenceUnitName, persistenceUnitTransactionType);
 
 				//
 				NodeList persistenceUnitElementNodeList = persistenceUnitNode.getChildNodes();
