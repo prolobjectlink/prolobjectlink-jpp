@@ -37,17 +37,14 @@ public final class VolatileTransaction extends AbstractTransaction implements Tr
 		super(System.currentTimeMillis());
 	}
 
-	@Override
 	public void begin() {
 		active = true;
 	}
 
-	@Override
 	public void commit() {
 		// do nothing
 	}
 
-	@Override
 	public void rollback() {
 		// do nothing
 	}

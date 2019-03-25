@@ -47,7 +47,6 @@ import org.prolobjectlink.db.Generator;
 
 public class RuntimeModelGenerator extends AbstractGenerator implements Generator {
 
-	@Override
 	public void generate() {
 		// TODO Auto-generated method stub
 
