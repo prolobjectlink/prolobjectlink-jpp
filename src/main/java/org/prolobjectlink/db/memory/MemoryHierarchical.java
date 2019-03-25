@@ -39,10 +39,10 @@ import org.prolobjectlink.db.DatabaseEngine;
 import org.prolobjectlink.db.DatabaseProperties;
 import org.prolobjectlink.db.DatabaseSchema;
 import org.prolobjectlink.db.DatabaseType;
+import org.prolobjectlink.db.DatabaseUnitInfo;
 import org.prolobjectlink.db.DatabaseUser;
 import org.prolobjectlink.db.HierarchicalCache;
 import org.prolobjectlink.db.MemoryDatabase;
-import org.prolobjectlink.db.DatabaseUnitInfo;
 import org.prolobjectlink.db.Protocol;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.VolatileContainer;
@@ -64,8 +64,9 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 		this.units = units;
 	}
 
-	private MemoryHierarchical(String name, URL url, Schema schema, DatabaseUser owner, HierarchicalCache cache) {
-		super(cache.getProperties(), url, name, schema, owner, cache);
+	private MemoryHierarchical(Settings settings, String name, URL url, Schema schema, DatabaseUser owner,
+			HierarchicalCache cache) {
+		super(settings, url, name, schema, owner, cache);
 		units = new HashMap<String, DatabaseUnitInfo>();
 	}
 
@@ -102,7 +103,8 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 					for (String managedClass : unit.getManagedClassNames()) {
 						schema.addClass(JavaReflect.classForName(managedClass), "");
 					}
-					memoryHierarchicalDatabase = new MemoryHierarchical(name, url, schema, owner, cache).create();
+					memoryHierarchicalDatabase = new MemoryHierarchical(settings, name, url, schema, owner, cache)
+							.create();
 				} else {
 					LoggerUtils.error(MemoryHierarchical.class,
 							"The given name don't match with persistence unit name");
@@ -137,7 +139,7 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 			for (String managedClass : unit.getManagedClassNames()) {
 				schema.addClass(JavaReflect.classForName(managedClass), "");
 			}
-			memoryHierarchicalDatabase = new MemoryHierarchical(name, url, schema, owner, cache).create();
+			memoryHierarchicalDatabase = new MemoryHierarchical(settings, name, url, schema, owner, cache).create();
 
 		}
 		return memoryHierarchicalDatabase;
@@ -182,7 +184,7 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 			for (String managedClass : unit.getManagedClassNames()) {
 				schema.addClass(JavaReflect.classForName(managedClass), "");
 			}
-			memoryHierarchicalDatabase = new MemoryHierarchical(name, url, schema, owner, cache).create();
+			memoryHierarchicalDatabase = new MemoryHierarchical(settings, name, url, schema, owner, cache).create();
 
 		}
 		return memoryHierarchicalDatabase;

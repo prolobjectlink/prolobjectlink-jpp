@@ -52,11 +52,12 @@ public abstract class AbstractMemoryDatabase extends AbstractDatabaseEngine impl
 
 	private boolean closed;
 	private final VolatileContainer storage;
-	private final Transaction transaction = new VolatileTransaction();
+	private final VolatileTransaction transaction;
 
 	AbstractMemoryDatabase(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
 			VolatileContainer container) {
 		super(settings, url, name, schema, owner);
+		this.transaction = new VolatileTransaction();
 		this.storage = container;
 		this.closed = false;
 	}
@@ -199,6 +200,9 @@ public abstract class AbstractMemoryDatabase extends AbstractDatabaseEngine impl
 	}
 
 	public final MemoryDatabase drop() {
+		getSchema().clear();
+		clear();
+		flush();
 		return this;
 	}
 
