@@ -18,8 +18,8 @@
 
 	<licenses>
 		<license>
-			<name>CDDL 1.0</name>
-			<url>https://glassfish.dev.java.net/public/CDDLv1.0.html</url>
+			<name>Simplified BSD License</name>
+			<url>https://github.com/SWI-Prolog/swipl-devel/blob/master/LICENSE</url>
 		</license>
 	</licenses>
 
@@ -77,12 +77,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<!-- <maven.compiler.source>1.5</maven.compiler.source> -->
-		<!-- <maven.compiler.target>1.5</maven.compiler.target> -->
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<jetty.version>6.1.11</jetty.version>
-		<tomcat.version>8.5.23</tomcat.version>
+		<maven.compiler.source>1.5</maven.compiler.source>
+		<maven.compiler.target>1.5</maven.compiler.target>
 		<asm.version>5.0.3</asm.version>
 	</properties>
 
@@ -91,11 +87,6 @@
 			<groupId>org.prolobjectlink</groupId>
 			<artifactId>prolobjectlink-jpi</artifactId>
 			<version>[1.0.0, )</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ow2.asm</groupId>
@@ -150,22 +141,22 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 			</plugin>
-			<!-- <plugin> -->
-			<!-- <groupId>org.apache.maven.plugins</groupId> -->
-			<!-- <artifactId>maven-javadoc-plugin</artifactId> -->
-			<!-- <version>3.0.0</version> -->
-			<!-- <configuration> -->
-			<!-- <nohelp>true</nohelp> -->
-			<!-- </configuration> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <id>attach-javadocs</id> -->
-			<!-- <goals> -->
-			<!-- <goal>jar</goal> -->
-			<!-- </goals> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 				<artifactId>maven-javadoc-plugin</artifactId> -->
+<!-- 				<version>3.0.0</version> -->
+<!-- 				<configuration> -->
+<!-- 					<nohelp>true</nohelp> -->
+<!-- 				</configuration> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>attach-javadocs</id> -->
+<!-- 						<goals> -->
+<!-- 							<goal>jar</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -187,7 +178,7 @@
 					<canUpdateDescription>true</canUpdateDescription>
 					<failOnMissingHeader>true</failOnMissingHeader>
 					<acceptPomPackaging>true</acceptPomPackaging>
-					<licenseName>cddl_v1</licenseName>
+					<licenseName>bsd_2</licenseName>
 					<!-- <dryRun>true</dryRun> -->
 					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
 					<excludes>
