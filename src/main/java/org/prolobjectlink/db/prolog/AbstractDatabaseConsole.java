@@ -202,8 +202,10 @@ public abstract class AbstractDatabaseConsole implements DatabaseConsole {
 					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
 					System.exit(1);
 				}
+				String uri = "http://localhost:" + port + "/welcome";
 				WebServerControl control = getWebServerControl(port);
 				control.run(new String[] { arg });
+				control.openBrowser(uri);
 			} else {
 				printUsage();
 				System.exit(1);
