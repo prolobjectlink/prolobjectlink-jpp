@@ -53,6 +53,7 @@ import org.prolobjectlink.prolog.PrologProject;
 import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologQuery;
 import org.prolobjectlink.prolog.PrologTerm;
+import org.prolobjectlink.web.platform.WebServerControl;
 
 public abstract class AbstractDatabaseConsole implements DatabaseConsole {
 
@@ -91,6 +92,10 @@ public abstract class AbstractDatabaseConsole implements DatabaseConsole {
 		return map;
 	}
 
+	public final int getDefaultHttpPort() {
+		return 8080;
+	}
+
 	public final void printUsage() {
 		stdout.println("Usage: pllink option [file] to consult a file");
 		stdout.println("options:");
@@ -108,6 +113,7 @@ public abstract class AbstractDatabaseConsole implements DatabaseConsole {
 		stdout.println("	-p	print in a file a snapshot of currents predicates");
 		stdout.println("	-g	generate all java class path wrapper procedures");
 		stdout.println("	-s	generate .project file for Prolog Development Tool");
+		stdout.println("	-z	start the embedded web server");
 	}
 
 	public final void run(String[] args) {
@@ -187,6 +193,17 @@ public abstract class AbstractDatabaseConsole implements DatabaseConsole {
 			} else if (m.containsKey("-s")) {
 				PrologProject.dotProject();
 				System.exit(0);
+			} else if (m.containsKey("-z")) {
+				String arg = m.get("-z");
+				int port = getDefaultHttpPort();
+				try {
+					port = Integer.parseInt(arg);
+				} catch (NumberFormatException e) {
+					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
+					System.exit(1);
+				}
+				WebServerControl control = getWebServerControl(port);
+				control.run(new String[] { arg });
 			} else {
 				printUsage();
 				System.exit(1);
