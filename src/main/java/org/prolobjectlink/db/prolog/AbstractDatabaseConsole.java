@@ -51,10 +51,8 @@ import java.util.logging.Logger;
 
 import org.prolobjectlink.db.DatabaseConsole;
 import org.prolobjectlink.prolog.ArrayIterator;
-import org.prolobjectlink.prolog.PrologEngine;
 import org.prolobjectlink.prolog.PrologIndicator;
 import org.prolobjectlink.prolog.PrologProject;
-import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologQuery;
 import org.prolobjectlink.prolog.PrologTerm;
 import org.prolobjectlink.web.platform.WebServerControl;
@@ -75,9 +73,9 @@ public abstract class AbstractDatabaseConsole implements DatabaseConsole {
 	private static final PrintWriter stdout = new PrintWriter(System.out, true);
 
 	//
-	private final PrologEngine engine;
+	private final PrologDatabaseEngine engine;
 
-	public AbstractDatabaseConsole(PrologProvider provider) {
+	public AbstractDatabaseConsole(PrologDatabaseProvider provider) {
 		this.engine = provider.newEngine();
 	}
 
