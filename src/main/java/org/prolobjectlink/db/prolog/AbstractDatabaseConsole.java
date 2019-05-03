@@ -52,7 +52,6 @@ import java.util.logging.Logger;
 import org.prolobjectlink.db.DatabaseConsole;
 import org.prolobjectlink.prolog.ArrayIterator;
 import org.prolobjectlink.prolog.PrologIndicator;
-import org.prolobjectlink.prolog.PrologProject;
 import org.prolobjectlink.prolog.PrologQuery;
 import org.prolobjectlink.prolog.PrologTerm;
 import org.prolobjectlink.web.platform.WebServerControl;
