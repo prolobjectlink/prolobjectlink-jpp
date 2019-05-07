@@ -30,10 +30,9 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.prolobjectlink.db.xml.mapping;
+package org.prolobjectlink.db.xml;
 
 import org.prolobjectlink.db.XmlParser;
-import org.prolobjectlink.db.xml.AbstractXmlParser;
 
 public class OrmXmlParser extends AbstractXmlParser implements XmlParser {
 

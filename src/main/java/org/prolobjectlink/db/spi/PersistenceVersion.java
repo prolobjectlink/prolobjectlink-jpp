@@ -64,7 +64,7 @@ public final class PersistenceVersion {
 		return xsiSchemaLocation;
 	}
 
-	String getFileName() {
+	public String getFileName() {
 		StringTokenizer stringTokenizer = new StringTokenizer(version, ".");
 		if (stringTokenizer.countTokens() != 2) {
 			throw new RuntimeException("Schema version is not correct");

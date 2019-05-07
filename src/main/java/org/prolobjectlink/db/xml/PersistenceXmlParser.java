@@ -30,7 +30,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.prolobjectlink.db.spi;
+package org.prolobjectlink.db.xml;
 
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 import static javax.xml.validation.SchemaFactory.newInstance;
@@ -47,7 +47,9 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.prolobjectlink.db.DatabaseUnitInfo;
 import org.prolobjectlink.db.XmlParser;
-import org.prolobjectlink.db.xml.AbstractXmlParser;
+import org.prolobjectlink.db.spi.PersistenceSchemaVersion;
+import org.prolobjectlink.db.spi.PersistenceUnitInformation;
+import org.prolobjectlink.db.spi.PersistenceVersion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;

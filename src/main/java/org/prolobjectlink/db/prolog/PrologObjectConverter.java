@@ -141,7 +141,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		case ATOM_TYPE:
 			return removeApices(prologTerm.getFunctor());
 		case INTEGER_TYPE:
-			return ((PrologInteger) prologTerm).getIntValue();
+			return ((PrologInteger) prologTerm).getIntegerValue();
 		case FLOAT_TYPE:
 			return ((PrologFloat) prologTerm).getFloatValue();
 		case LONG_TYPE:

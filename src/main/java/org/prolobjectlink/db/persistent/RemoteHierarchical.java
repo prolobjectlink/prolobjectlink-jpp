@@ -47,8 +47,8 @@ import org.prolobjectlink.db.RemoteDatabase;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.memory.MemoryHierarchical;
-import org.prolobjectlink.db.spi.PersistenceXmlParser;
 import org.prolobjectlink.db.util.JavaReflect;
+import org.prolobjectlink.db.xml.PersistenceXmlParser;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
 
