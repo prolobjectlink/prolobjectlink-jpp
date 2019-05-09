@@ -169,8 +169,9 @@ public abstract class AbstractConverter<T> implements ObjectConverter<T> {
 		if (provider == null) {
 			if (other.provider != null)
 				return false;
-		} else if (!provider.equals(other.provider))
+		} else if (!provider.equals(other.provider)) {
 			return false;
+		}
 		return true;
 	}
 
