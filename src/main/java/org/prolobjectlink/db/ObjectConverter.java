@@ -43,9 +43,9 @@ import org.prolobjectlink.prolog.PrologProvider;
  */
 public interface ObjectConverter<T> extends ObjectSerializer<T> {
 
-	public String removeApices(String functor);
+	public String removeQuotes(String functor);
 
-	public boolean containApices(String functor);
+	public boolean containQuotes(String functor);
 
 	//
 

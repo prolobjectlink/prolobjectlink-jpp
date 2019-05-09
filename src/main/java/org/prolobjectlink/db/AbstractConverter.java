@@ -54,15 +54,15 @@ public abstract class AbstractConverter<T> implements ObjectConverter<T> {
 	}
 
 	//
-	public final boolean containApices(String functor) {
+	public final boolean containQuotes(String functor) {
 		if (functor != null && !functor.isEmpty()) {
 			return functor.startsWith("\'") && functor.endsWith("\'");
 		}
 		return false;
 	}
 
-	public final String removeApices(String functor) {
-		if (containApices(functor)) {
+	public final String removeQuotes(String functor) {
+		if (containQuotes(functor)) {
 			return functor.substring(1, functor.length() - 1);
 		}
 		return functor;

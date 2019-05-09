@@ -111,7 +111,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		case LIST_TYPE:
 			return Object[].class;
 		case STRUCTURE_TYPE:
-			String className = removeApices(prologTerm.getFunctor());
+			String className = removeQuotes(prologTerm.getFunctor());
 			try {
 				return Class.forName(className);
 			} catch (ClassNotFoundException e) {
@@ -139,7 +139,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		case EMPTY_TYPE:
 			return new Object[0];
 		case ATOM_TYPE:
-			return removeApices(prologTerm.getFunctor());
+			return removeQuotes(prologTerm.getFunctor());
 		case INTEGER_TYPE:
 			return ((PrologInteger) prologTerm).getIntegerValue();
 		case FLOAT_TYPE:
