@@ -34,22 +34,7 @@ package org.prolobjectlink.db.modelgen;
 
 import org.prolobjectlink.db.Generator;
 
-//import java.util.ArrayList;
-//import java.util.Collections;
-//import java.util.Date;
-//import java.util.HashMap;
-//import java.util.Map;
-//import java.util.Set;
-//
-//import javax.lang.model.element.*;
-//import javax.lang.model.type.PrimitiveType;
-//import javax.persistence.Embeddable;
-//import javax.persistence.Entity;
-//import javax.persistence.MappedSuperclass;
-//import javax.tools.JavaFileObject;
-//import javax.tools.Diagnostic.Kind;
-
-public class RuntimeModelGenerator extends AbstractGenerator implements Generator {
+public class ModelGenerator extends AbstractGenerator implements Generator {
 
 	public void generate() {
 		// TODO Auto-generated method stub
