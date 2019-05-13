@@ -51,6 +51,8 @@ public interface ObjectConverter<T> extends ObjectSerializer<T> {
 
 	public Class<?> toClass(T prologTerm);
 
+	public Class<?> toClass(String prologType);
+
 	public Class<?>[] toClassArray(T[] terms);
 
 	public Object toObject(T prologTerm);

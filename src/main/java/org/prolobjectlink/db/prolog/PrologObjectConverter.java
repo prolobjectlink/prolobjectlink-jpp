@@ -88,6 +88,23 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		super(provider);
 	}
 
+	public Class<?> toClass(String prologType) {
+		if (prologType.equals("atom")) {
+			return String.class;
+		} else if (prologType.equals("integer")) {
+			return Integer.class;
+		} else if (prologType.equals("float")) {
+			return Float.class;
+		} else if (prologType.equals("long")) {
+			return Long.class;
+		} else if (prologType.equals("double")) {
+			return Double.class;
+		} else if (prologType.equals("list")) {
+			return Object[].class;
+		}
+		throw new UnknownTermError(prologType);
+	}
+
 	public Class<?> toClass(PrologTerm prologTerm) {
 		switch (prologTerm.getType()) {
 		case NIL_TYPE:

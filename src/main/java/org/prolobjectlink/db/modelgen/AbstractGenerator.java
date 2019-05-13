@@ -32,9 +32,24 @@
  */
 package org.prolobjectlink.db.modelgen;
 
-import org.prolobjectlink.db.Generator;
+import org.prolobjectlink.db.DatabaseEngine;
+import org.prolobjectlink.db.SchemaGenerator;
+import org.prolobjectlink.db.Schema;
+import org.prolobjectlink.prolog.PrologEngine;
 
-/** @author Jose Zalacain @since 1.0 */
-public abstract class AbstractGenerator implements Generator {
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+abstract class AbstractGenerator implements SchemaGenerator {
+
+	protected final Schema schema;
+	protected final PrologEngine engine;
+
+	protected AbstractGenerator(DatabaseEngine database) {
+		engine = database.getEngine();
+		schema = database.getSchema();
+	}
 
 }

@@ -94,13 +94,15 @@ abstract class AbstractIdGenerator<O extends Serializable> implements IdGenerato
 		if (typeName == null) {
 			if (other.typeName != null)
 				return false;
-		} else if (!typeName.equals(other.typeName))
+		} else if (!typeName.equals(other.typeName)) {
 			return false;
+		}
 		if (value == null) {
 			if (other.value != null)
 				return false;
-		} else if (!value.equals(other.value))
+		} else if (!value.equals(other.value)) {
 			return false;
+		}
 		return true;
 	}
 

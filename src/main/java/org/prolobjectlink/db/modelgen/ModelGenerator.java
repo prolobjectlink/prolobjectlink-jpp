@@ -32,11 +32,94 @@
  */
 package org.prolobjectlink.db.modelgen;
 
-import org.prolobjectlink.db.Generator;
+import java.util.List;
 
-public class ModelGenerator extends AbstractGenerator implements Generator {
+import org.prolobjectlink.db.DatabaseClass;
+import org.prolobjectlink.db.DatabaseEngine;
+import org.prolobjectlink.db.ObjectConverter;
+import org.prolobjectlink.db.Schema;
+import org.prolobjectlink.db.SchemaGenerator;
+import org.prolobjectlink.prolog.PrologClause;
+import org.prolobjectlink.prolog.PrologList;
+import org.prolobjectlink.prolog.PrologTerm;
 
-	public void generate() {
+public class ModelGenerator extends AbstractGenerator implements SchemaGenerator {
+
+	private static final String MODEL_LOCATION = "app/model.pl";
+	private static final String CLASS_INDICATOR = "class/3";
+	private static final String FIELD_INDICATOR = "field/2";
+
+	private final ObjectConverter<PrologTerm> converter;
+
+	private void assertValidClassIndicator(PrologClause clause) {
+		if (!clause.getIndicator().equals(CLASS_INDICATOR)) {
+			throw new RuntimeException("No valid class descriptor predicate " + clause);
+		}
+	}
+
+	private void assertValidFieldIndicator(PrologTerm prologTerm) {
+		if (!prologTerm.getIndicator().equals(FIELD_INDICATOR)) {
+			throw new RuntimeException("No valid field descriptor predicate " + prologTerm);
+		}
+	}
+
+	public ModelGenerator(DatabaseEngine database) {
+		super(database);
+		converter = database.getConverter();
+	}
+
+	public Schema createSchema() {
+		engine.consult(MODEL_LOCATION);
+		for (PrologClause clause : engine) {
+
+			assertValidClassIndicator(clause);
+
+			PrologTerm head = clause.getHead();
+			PrologTerm className = head.getArgument(0);
+			PrologTerm classFields = head.getArgument(2);
+
+			// class qualified name
+			String name = (String) converter.toObject(className);
+
+			// class short name
+			int index = name.lastIndexOf('.') + 1;
+			String shortName = name.substring(index);
+
+			DatabaseClass dbclass = schema.addClass(shortName, "");
+			PrologList list = (PrologList) classFields;
+			
+			int position = 0;
+			
+			for (PrologTerm prologTerm : list) {
+
+				assertValidFieldIndicator(prologTerm);
+
+				PrologTerm fieldName = prologTerm.getArgument(0);
+				PrologTerm fieldType = prologTerm.getArgument(1);
+
+				String fname = (String) converter.toObject(fieldName);
+				String ftype = (String) converter.toObject(fieldType);
+				Class<?> c = converter.toClass(ftype);
+
+				dbclass.addField(fname, "", position++, c);
+
+			}
+
+			System.out.println(dbclass);
+
+		}
+		return schema;
+	}
+
+	public List<Class<?>> compileSchema() {
+		return schema.compile();
+	}
+
+	public String generateSchema() {
+		return schema.generate();
+	}
+
+	public void writePersistence() {
 		// TODO Auto-generated method stub
 
 	}

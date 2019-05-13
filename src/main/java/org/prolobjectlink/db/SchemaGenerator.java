@@ -32,13 +32,21 @@
  */
 package org.prolobjectlink.db;
 
+import java.util.List;
+
 /**
  * 
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface Generator {
+public interface SchemaGenerator {
 
-	public void generate();
+	public Schema createSchema();
+
+	public String generateSchema();
+
+	public List<Class<?>> compileSchema();
+
+	public void writePersistence();
 
 }

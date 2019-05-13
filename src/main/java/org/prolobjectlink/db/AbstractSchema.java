@@ -465,15 +465,22 @@ public abstract class AbstractSchema implements Schema {
 	}
 
 	@Override
-	public final int hashCode() {
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((classes == null) ? 0 : classes.hashCode());
+		result = prime * result + ((functions == null) ? 0 : functions.hashCode());
+		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		result = prime * result + ((triggers == null) ? 0 : triggers.hashCode());
+		result = prime * result + ((users == null) ? 0 : users.hashCode());
 		result = prime * result + version;
+		result = prime * result + ((views == null) ? 0 : views.hashCode());
 		return result;
 	}
 
 	@Override
-	public final boolean equals(Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -481,7 +488,51 @@ public abstract class AbstractSchema implements Schema {
 		if (getClass() != obj.getClass())
 			return false;
 		AbstractSchema other = (AbstractSchema) obj;
-		return version == other.version;
+		if (classes == null) {
+			if (other.classes != null)
+				return false;
+		} else if (!classes.equals(other.classes)) {
+			return false;
+		}
+		if (functions == null) {
+			if (other.functions != null)
+				return false;
+		} else if (!functions.equals(other.functions)) {
+			return false;
+		}
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location)) {
+			return false;
+		}
+		if (owner == null) {
+			if (other.owner != null)
+				return false;
+		} else if (!owner.equals(other.owner)) {
+			return false;
+		}
+		if (triggers == null) {
+			if (other.triggers != null)
+				return false;
+		} else if (!triggers.equals(other.triggers)) {
+			return false;
+		}
+		if (users == null) {
+			if (other.users != null)
+				return false;
+		} else if (!users.equals(other.users)) {
+			return false;
+		}
+		if (version != other.version)
+			return false;
+		if (views == null) {
+			if (other.views != null)
+				return false;
+		} else if (!views.equals(other.views)) {
+			return false;
+		}
+		return true;
 	}
 
 	public final int getVersion() {
