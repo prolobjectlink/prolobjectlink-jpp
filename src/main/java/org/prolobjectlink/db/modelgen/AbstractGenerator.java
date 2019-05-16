@@ -34,7 +34,6 @@ package org.prolobjectlink.db.modelgen;
 
 import org.prolobjectlink.db.DatabaseEngine;
 import org.prolobjectlink.db.SchemaGenerator;
-import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.prolog.PrologEngine;
 
 /**
@@ -44,12 +43,12 @@ import org.prolobjectlink.prolog.PrologEngine;
  */
 abstract class AbstractGenerator implements SchemaGenerator {
 
-	protected final Schema schema;
 	protected final PrologEngine engine;
+	protected final DatabaseEngine databse;
 
 	protected AbstractGenerator(DatabaseEngine database) {
-		engine = database.getEngine();
-		schema = database.getSchema();
+		this.engine = database.getEngine();
+		this.databse = database;
 	}
 
 }

@@ -70,6 +70,7 @@ public class ModelGenerator extends AbstractGenerator implements SchemaGenerator
 
 	public Schema createSchema() {
 		engine.consult(MODEL_LOCATION);
+		Schema schema = databse.getSchema();
 		for (PrologClause clause : engine) {
 
 			assertValidClassIndicator(clause);
@@ -87,9 +88,9 @@ public class ModelGenerator extends AbstractGenerator implements SchemaGenerator
 
 			DatabaseClass dbclass = schema.addClass(shortName, "");
 			PrologList list = (PrologList) classFields;
-			
+
 			int position = 0;
-			
+
 			for (PrologTerm prologTerm : list) {
 
 				assertValidFieldIndicator(prologTerm);
@@ -105,18 +106,16 @@ public class ModelGenerator extends AbstractGenerator implements SchemaGenerator
 
 			}
 
-			System.out.println(dbclass);
-
 		}
 		return schema;
 	}
 
 	public List<Class<?>> compileSchema() {
-		return schema.compile();
+		return createSchema().compile();
 	}
 
 	public String generateSchema() {
-		return schema.generate();
+		return createSchema().generate();
 	}
 
 	public void writePersistence() {

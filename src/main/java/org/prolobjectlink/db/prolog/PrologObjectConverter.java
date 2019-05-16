@@ -55,6 +55,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -100,9 +101,13 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		} else if (prologType.equals("double")) {
 			return Double.class;
 		} else if (prologType.equals("list")) {
-			return Object[].class;
+			return List.class;
+		} else if (prologType.equals("date")) {
+			return Date.class;
+		} else if (prologType.equals("map")) {
+			return Map.class;
 		}
-		throw new UnknownTermError(prologType);
+		return JavaReflect.classForName(prologType);
 	}
 
 	public Class<?> toClass(PrologTerm prologTerm) {
