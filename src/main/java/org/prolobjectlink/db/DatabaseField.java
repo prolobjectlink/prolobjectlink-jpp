@@ -228,7 +228,8 @@ public final class DatabaseField extends AbstractElement<DatabaseField>
 		mv.visitVarInsn(Type.getType(c).getOpcode(Opcodes.ILOAD), Type.getType(c).getSize());
 		mv.visitFieldInsn(Opcodes.PUTFIELD, className, getName(), type);
 		mv.visitInsn(Opcodes.RETURN);
-		mv.visitMaxs(0, 0);
+		mv.visitMaxs(2, 2);
+		mv.visitEnd();
 	}
 
 	/**
@@ -245,7 +246,8 @@ public final class DatabaseField extends AbstractElement<DatabaseField>
 		mv.visitVarInsn(Opcodes.ALOAD, 0);
 		mv.visitFieldInsn(Opcodes.GETFIELD, className, getName(), returnType);
 		mv.visitInsn(Type.getType(c).getOpcode(Opcodes.IRETURN));
-		mv.visitMaxs(0, 0);
+		mv.visitMaxs(1, 1);
+		mv.visitEnd();
 	}
 
 	public int compareTo(DatabaseField o) {

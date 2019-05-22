@@ -87,20 +87,24 @@ public class ModelGenerator extends AbstractGenerator implements SchemaGenerator
 			String shortName = name.substring(index);
 
 			DatabaseClass dbclass = schema.addClass(shortName, "");
-			PrologList list = (PrologList) classFields;
+			PrologList fields = (PrologList) classFields;
 
 			int position = 0;
 
-			for (PrologTerm prologTerm : list) {
+			for (PrologTerm field : fields) {
 
-				assertValidFieldIndicator(prologTerm);
+				assertValidFieldIndicator(field);
 
-				PrologTerm fieldName = prologTerm.getArgument(0);
-				PrologTerm fieldType = prologTerm.getArgument(1);
+				PrologTerm fieldName = field.getArgument(0);
+				PrologTerm fieldType = field.getArgument(1);
 
 				String fname = (String) converter.toObject(fieldName);
 				String ftype = (String) converter.toObject(fieldType);
 				Class<?> c = converter.toClass(ftype);
+				
+				if (c==null) {
+					// TODO We need generate the class
+				}
 
 				dbclass.addField(fname, "", position++, c);
 

@@ -80,7 +80,7 @@
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<postgresql.version>9.1-901-1.jdbc4</postgresql.version>
-		<asm.version>5.0.3</asm.version>
+		<asm.version>5.2</asm.version>
 	</properties>
 
 	<dependencies>
@@ -91,22 +91,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.ow2.asm</groupId>
-			<artifactId>asm</artifactId>
-			<version>${asm.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ow2.asm</groupId>
-			<artifactId>asm-commons</artifactId>
-			<version>${asm.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ow2.asm</groupId>
-			<artifactId>asm-tree</artifactId>
-			<version>${asm.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ow2.asm</groupId>
-			<artifactId>asm-util</artifactId>
+			<artifactId>asm-all</artifactId>
 			<version>${asm.version}</version>
 		</dependency>
 		<dependency>
@@ -185,7 +170,8 @@
 					<failOnMissingHeader>true</failOnMissingHeader>
 					<acceptPomPackaging>true</acceptPomPackaging>
 					<licenseName>bsd_3</licenseName>
-					<!-- <dryRun>true</dryRun> --><licenseFile>LICENSE.md</licenseFile>
+					<!-- <dryRun>true</dryRun> -->
+					<licenseFile>LICENSE.md</licenseFile>
 					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
 					<excludes>
 						<exclude>src/main/javax</exclude>
