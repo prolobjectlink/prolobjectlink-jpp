@@ -227,8 +227,8 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 
 		con.visitCode();
 		con.visitVarInsn(Opcodes.ALOAD, 0);
-		con.visitMethodInsn(Opcodes.INVOKESPECIAL, Type.getInternalName(Object.class), "<init>",
-				Type.getMethodDescriptor(Type.VOID_TYPE), false);
+		con.visitMethodInsn(Opcodes.INVOKESPECIAL, superclass, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE),
+				false);
 		con.visitInsn(Opcodes.RETURN);
 		con.visitMaxs(1, 1);
 		con.visitEnd();
