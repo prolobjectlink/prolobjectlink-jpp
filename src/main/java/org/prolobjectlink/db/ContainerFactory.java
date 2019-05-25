@@ -33,7 +33,6 @@
 package org.prolobjectlink.db;
 
 import org.prolobjectlink.db.etc.Settings;
-import org.prolobjectlink.prolog.PrologConverter;
 import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologTerm;
 

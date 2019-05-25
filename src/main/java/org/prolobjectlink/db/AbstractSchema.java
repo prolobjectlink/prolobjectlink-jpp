@@ -465,7 +465,7 @@ public abstract class AbstractSchema implements Schema {
 	}
 
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((classes == null) ? 0 : classes.hashCode());
@@ -480,7 +480,7 @@ public abstract class AbstractSchema implements Schema {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public final boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -580,9 +580,11 @@ public abstract class AbstractSchema implements Schema {
 							String inName = linkedClass.getName() + clazz.getName();
 							String outName = clazz.getName() + linkedClass.getName();
 							DatabaseClass in = getOrAddClass(inName, relationEdge);
-							// TODO Add fields here use @Id jpa annotation
 							DatabaseClass out = getOrAddClass(outName, relationEdge);
-							// TODO Add fields here use @Id jpa annotation
+							in.addField(inKey);
+							in.addField(outKey);
+							out.addField(outKey);
+							out.addField(inKey);
 							if (g.getVertex(linkedClass) == null) {
 								g.addVertex(linkedClass);
 							}

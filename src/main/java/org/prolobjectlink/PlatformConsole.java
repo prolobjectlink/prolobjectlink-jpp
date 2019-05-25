@@ -34,8 +34,6 @@ package org.prolobjectlink;
 
 import java.util.Map;
 
-import org.prolobjectlink.Platform;
-
 /**
  * Represent the platform of the running system.
  * 

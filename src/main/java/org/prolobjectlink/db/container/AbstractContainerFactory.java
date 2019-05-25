@@ -40,7 +40,6 @@ import org.prolobjectlink.db.RelationalDatabase;
 import org.prolobjectlink.db.StorageMode;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.prolog.PrologObjectConverter;
-import org.prolobjectlink.prolog.PrologConverter;
 import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologTerm;
 

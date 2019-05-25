@@ -438,6 +438,18 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		return f;
 	}
 
+	/**
+	 * Add a field
+	 * 
+	 * @param field to be added
+	 * @return the given field
+	 * @since 1.0
+	 */
+	public DatabaseField addField(DatabaseField field) {
+		fields.put(field.getName(), field);
+		return field;
+	}
+
 	public DatabaseClass removeField(String name) {
 		fields.remove(name);
 		return this;
