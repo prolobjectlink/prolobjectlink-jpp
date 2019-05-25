@@ -102,8 +102,8 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 					String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
 					String user = unit.getProperties().getProperty(DatabaseProperties.USER);
 					DatabaseUser owner = new DatabaseUser(user, password);
-					HierarchicalCache cache = settings.createHierarchicalCache();
 					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
+					HierarchicalCache cache = settings.createHierarchicalCache();
 					for (String managedClass : unit.getManagedClassNames()) {
 						schema.addClass(JavaReflect.classForName(managedClass), "");
 					}
@@ -138,8 +138,8 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
 			String user = unit.getProperties().getProperty(DatabaseProperties.USER);
 			DatabaseUser owner = new DatabaseUser(user, password);
-			HierarchicalCache cache = settings.createHierarchicalCache();
 			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
+			HierarchicalCache cache = settings.createHierarchicalCache();
 			for (String managedClass : unit.getManagedClassNames()) {
 				schema.addClass(JavaReflect.classForName(managedClass), "");
 			}
@@ -183,8 +183,8 @@ public final class MemoryHierarchical extends AbstractMemoryDatabase implements 
 			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
 			String user = unit.getProperties().getProperty(DatabaseProperties.USER);
 			DatabaseUser owner = new DatabaseUser(user, password);
-			HierarchicalCache cache = settings.createHierarchicalCache();
 			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
+			HierarchicalCache cache = settings.createHierarchicalCache();
 			for (String managedClass : unit.getManagedClassNames()) {
 				schema.addClass(JavaReflect.classForName(managedClass), "");
 			}

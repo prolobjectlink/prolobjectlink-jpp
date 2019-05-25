@@ -168,7 +168,7 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		buffer.append(shortName);
 		buffer.append('(');
 
-		// TODO respect declaration order
+		// TODO respect declaration order resolve this doing field a persistent linked hash map
 
 		Iterator<DatabaseField> j = fields.values().iterator();
 		while (j.hasNext()) {

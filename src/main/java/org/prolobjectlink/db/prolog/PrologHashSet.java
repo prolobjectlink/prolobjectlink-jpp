@@ -164,8 +164,6 @@ class PrologHashSet<E> extends AbstractSet<E> {
 		private boolean canRemove;
 
 		public HashSetIterator() {
-			last = next;
-			lastIndex = nextIndex;
 			next = table[nextIndex++];// FIXME INDEX OUT OF BOUND
 			if (next == null) {
 				while (nextIndex < table.length && next == null) {

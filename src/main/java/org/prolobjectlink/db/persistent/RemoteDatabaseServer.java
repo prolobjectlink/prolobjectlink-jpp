@@ -110,20 +110,23 @@ public final class RemoteDatabaseServer extends AbstractPlatform implements Plat
 		// load relational databases
 		String relational = "dat/relational";
 		File rdat = new File(relational);
-		for (File file : rdat.listFiles()) {
-			String name = file.getName();
+		File[] files = rdat.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				String name = file.getName();
 
-			// create schema instance at "name" location an load
-			Schema schema = new DatabaseSchema(relational + "/" + name, settings.getProvider(), settings, systemAdmin)
-					.load();
+				// create schema instance at "name" location an load
+				Schema schema = new DatabaseSchema(relational + "/" + name, settings.getProvider(), settings,
+						systemAdmin).load();
 
-			StorageGraph storage = settings.createStorageGraph(relational + "/" + name + "/database", schema,
-					StorageMode.STORAGE_POOL);
+				StorageGraph storage = settings.createStorageGraph(relational + "/" + name + "/database", schema,
+						StorageMode.STORAGE_POOL);
 
-			// create remote URL to embedded URL
-			URL embeddedURL = new URL("file:/" + relational + "/" + name);
+				// create remote URL to embedded URL
+				URL embeddedURL = new URL("file:/" + relational + "/" + name);
 
-			relationals.put(name, new EmbeddedRelational(name, embeddedURL, schema, systemAdmin, storage));
+				relationals.put(name, new EmbeddedRelational(name, embeddedURL, schema, systemAdmin, storage));
+			}
 		}
 		return relationals;
 	}
@@ -134,22 +137,25 @@ public final class RemoteDatabaseServer extends AbstractPlatform implements Plat
 		// load hierarchical databases
 		String hierarchical = "dat/hierarchical";
 		File hdat = new File(hierarchical);
-		for (File file : hdat.listFiles()) {
-			String name = file.getName();
+		File[] files = hdat.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				String name = file.getName();
 
-			// create schema instance at "name" location an load
-			Schema schema = new DatabaseSchema(hierarchical + "/" + name, settings.getProvider(), settings, systemAdmin)
-					.load();
+				// create schema instance at "name" location an load
+				Schema schema = new DatabaseSchema(hierarchical + "/" + name, settings.getProvider(), settings,
+						systemAdmin).load();
 
-			// create storage instance at "name" location
-			StorageManager storage = settings.createStorageManager(hierarchical + "/" + name + "/database",
-					StorageMode.STORAGE_POOL);
+				// create storage instance at "name" location
+				StorageManager storage = settings.createStorageManager(hierarchical + "/" + name + "/database",
+						StorageMode.STORAGE_POOL);
 
-			// create remote URL to embedded URL
-			URL embeddedURL = new URL("file:/" + hierarchical + "/" + name);
+				// create remote URL to embedded URL
+				URL embeddedURL = new URL("file:/" + hierarchical + "/" + name);
 
-			// create database using storage and schema
-			hierarchicals.put(name, new EmbeddedHierarchical(name, embeddedURL, schema, systemAdmin, storage));
+				// create database using storage and schema
+				hierarchicals.put(name, new EmbeddedHierarchical(name, embeddedURL, schema, systemAdmin, storage));
+			}
 		}
 		return hierarchicals;
 	}

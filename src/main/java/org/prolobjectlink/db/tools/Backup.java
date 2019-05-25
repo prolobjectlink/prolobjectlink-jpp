@@ -88,8 +88,10 @@ public class Backup extends Tool {
 				if (filePtr.isDirectory()) {
 
 					File[] files = filePtr.listFiles();
-					for (File file : files) {
-						queue.offer(file);
+					if (files != null) {
+						for (File file : files) {
+							queue.offer(file);
+						}
 					}
 
 				} else {

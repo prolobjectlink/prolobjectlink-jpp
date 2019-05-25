@@ -966,9 +966,12 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 
 		// adding rt.jar and others
 		list.add(rt);
-		for (File jar : jars) {
-			list.add(jar);
+		if (jars != null) {
+			for (File jar : jars) {
+				list.add(jar);
+			}
 		}
+
 		try {
 
 			for (File file : list) {

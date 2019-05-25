@@ -33,8 +33,8 @@
 package org.prolobjectlink.db;
 
 /**
- * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
- *             RemoteRelationalHierarchical} instead
+ * @deprecated Use {@link MemoryRelational, EmbeddedRelational, RemoteRelational}
+ *             instead
  * @author Jose Zalacain
  * @since 1.0
  */
