@@ -74,16 +74,6 @@ public final class JavaSets {
 	}
 
 	/**
-	 * Create a new LinkedHashSet.
-	 * 
-	 * @param <T> the type
-	 * @return the object
-	 */
-	public static <T> Set<T> linkedHashSet() {
-		return new LinkedHashSet<T>();
-	}
-
-	/**
 	 * Create a new HashSet.
 	 * 
 	 * @param          <T> the type
@@ -92,6 +82,27 @@ public final class JavaSets {
 	 */
 	public static <T> Set<T> hashSet(int capacity) {
 		return new HashSet<T>(capacity);
+	}
+
+	/**
+	 * Create a new HashSet.
+	 * 
+	 * @param            <T> the type
+	 * @param collection to be include in returning set
+	 * @return the object
+	 */
+	public static <T> Set<T> hashSet(Collection<? extends T> c) {
+		return new HashSet<T>(c);
+	}
+
+	/**
+	 * Create a new LinkedHashSet.
+	 * 
+	 * @param <T> the type
+	 * @return the object
+	 */
+	public static <T> Set<T> linkedHashSet() {
+		return new LinkedHashSet<T>();
 	}
 
 	/**
@@ -106,14 +117,14 @@ public final class JavaSets {
 	}
 
 	/**
-	 * Create a new HashSet.
+	 * Create a new LinkedHashSet.
 	 * 
-	 * @param          <T> the type
-	 * @param capacity the initial capacity
+	 * @param            <T> the type
+	 * @param collection to be include in returning set
 	 * @return the object
 	 */
-	public static <T> Set<T> hashSet(Collection<? extends T> c) {
-		return new HashSet<T>(c);
+	public static <T> Set<T> linkedHashSet(Collection<? extends T> c) {
+		return new LinkedHashSet<T>(c);
 	}
 
 }

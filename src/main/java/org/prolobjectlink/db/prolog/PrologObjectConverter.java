@@ -54,6 +54,8 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -273,6 +275,10 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 				return JavaMaps.treeMap((PrologTreeMap) object);
 			} else if (structureClass == PrologTreeSet.class) {
 				return JavaSets.treeSet((PrologTreeSet) object);
+			} else if (structureClass == PrologLinkedMap.class) {
+				return JavaMaps.linkedHashMap((PrologLinkedMap<?, ?>) object);
+			} else if (structureClass == PrologLinkedSet.class) {
+				return JavaSets.linkedHashSet((PrologLinkedSet<?>) object);
 			}
 
 			return object;
@@ -386,6 +392,12 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		} else if (object instanceof TreeSet) {
 			TreeSet s = (TreeSet) object;
 			return toTerm(PrologSets.treeSet(s));
+		} else if (object instanceof LinkedHashMap) {
+			LinkedHashMap m = (LinkedHashMap<?, ?>) object;
+			return toTerm(PrologMaps.linkedMap(m));
+		} else if (object instanceof LinkedHashSet) {
+			LinkedHashSet<?> s = (LinkedHashSet<?>) object;
+			return toTerm(PrologSets.linkedSet(s));
 		}
 
 		// structure default case

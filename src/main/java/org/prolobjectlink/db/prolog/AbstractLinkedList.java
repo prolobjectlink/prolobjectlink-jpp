@@ -34,16 +34,18 @@ package org.prolobjectlink.db.prolog;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-/** @author Jose Zalacain @since 1.0 */
+/**
+ * @author Jose Zalacain
+ * @since 1.0
+ */
 public abstract class AbstractLinkedList<E> extends AbstractCollection<E> implements List<E> {
 
-	private E element;
-	private AbstractLinkedList<E> next;
+	protected E element;
+	protected AbstractLinkedList<E> next;
 	private static final long serialVersionUID = 2812221898884199941L;
 
 	/**
@@ -95,37 +97,15 @@ public abstract class AbstractLinkedList<E> extends AbstractCollection<E> implem
 
 	public int size() {
 		int counter = 0;
-		if (!isEmpty()) {
-			Iterator<E> i = iterator();
-			for (; i.hasNext(); i.next()) {
-				counter++;
-			}
+		Iterator<E> i = iterator();
+		for (; i.hasNext(); i.next()) {
+			counter++;
 		}
 		return counter;
 	}
 
 	public Iterator<E> iterator() {
 		return listIterator();
-	}
-
-	public boolean add(E e) {
-		throw new UnsupportedOperationException();
-//		if (element == null) {
-//			element = e;
-//			return true;
-//		} else if (next != null) {
-//			PrologLinkedList<E> listPtr = this;
-//			PrologLinkedList<E> nextPtr = listPtr.next;
-//			while (nextPtr != null) {
-//				listPtr = nextPtr;
-//				nextPtr = listPtr.next;
-//			}
-//
-//			// set created list as tail of the current list
-//			listPtr.setNext(new PrologLinkedList<E>(provider, e));
-//			return true;
-//		}
-//		return false;
 	}
 
 	public boolean remove(Object o) {
@@ -233,44 +213,103 @@ public abstract class AbstractLinkedList<E> extends AbstractCollection<E> implem
 		return new PrologSubList(this, size(), 0, fromIndex, toIndex);
 	}
 
-	public Class<?> toClass() {
-		return LinkedList.class;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((element == null) ? 0 : element.hashCode());
+		result = prime * result + ((next == null) ? 0 : next.hashCode());
+		return result;
 	}
 
-	public Object toObject() {
-		return new LinkedList<E>(this);
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractLinkedList<?> other = (AbstractLinkedList<?>) obj;
+		if (element == null) {
+			if (other.element != null)
+				return false;
+		} else if (!element.equals(other.element)) {
+			return false;
+		}
+		if (next == null) {
+			if (other.next != null)
+				return false;
+		} else if (!next.equals(other.next)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder("[");
+		Iterator<E> i = iterator();
+		if (i.hasNext()) {
+			E item = i.next();
+			result.append(item);
+			while (i.hasNext()) {
+				item = i.next();
+				result.append(", ");
+				result.append(item);
+			}
+		}
+		return result + "]";
 	}
 
 	private class PrologIterator implements Iterator<E> {
-
-		// next index to returned
-		protected int nextIndex;
 
 		// check illegal state flag
 		protected boolean canRemove;
 
 		// iterator pointers
-		protected AbstractLinkedList<E> prevPtr;
-		protected AbstractLinkedList<E> listPtr;
-		protected AbstractLinkedList<E> headPtr;
 		protected AbstractLinkedList<E> nextPtr;
+		protected AbstractLinkedList<E> listRef;
 
 		PrologIterator(AbstractLinkedList<E> list) {
-			nextPtr = list;
+			nextPtr = listRef = list;
 		}
 
 		public boolean hasNext() {
+			if (element == null && next == null) {
+				return false;
+			}
 			return nextPtr != null;
 		}
 
 		public E next() {
-			// TODO Auto-generated method stub
-			return null;
+
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
+
+			E e = nextPtr.element;
+			nextPtr = nextPtr.next;
+			canRemove = true;
+			return e;
+
 		}
 
 		public void remove() {
-			// TODO Auto-generated method stub
 
+			if (!canRemove) {
+				throw new IllegalStateException();
+			}
+
+			if (hasNext()) {
+				listRef.element = nextPtr.element;
+				listRef.next = nextPtr.next;
+			} else {
+				listRef.element = null;
+				listRef.next = null;
+			}
+
+			canRemove = false;
 		}
 
 	}
@@ -282,6 +321,9 @@ public abstract class AbstractLinkedList<E> extends AbstractCollection<E> implem
 	 */
 	private class PrologListIterator extends PrologIterator implements ListIterator<E> {
 
+		// next index to return
+		private int nextIndex;
+
 		PrologListIterator(int index, AbstractLinkedList<E> list) {
 			super(list);
 			int i = 0;
@@ -292,7 +334,7 @@ public abstract class AbstractLinkedList<E> extends AbstractCollection<E> implem
 		}
 
 		public void add(E e) {
-			// TODO Auto-generated method stub
+			listRef.setNext(new PrologLinkedList<E>(e, listRef.next));
 		}
 
 		public boolean hasPrevious() {
@@ -312,7 +354,7 @@ public abstract class AbstractLinkedList<E> extends AbstractCollection<E> implem
 		}
 
 		public void set(E e) {
-			listPtr.setElement(e);
+			nextPtr.element = e;
 			canRemove = false;
 		}
 	}

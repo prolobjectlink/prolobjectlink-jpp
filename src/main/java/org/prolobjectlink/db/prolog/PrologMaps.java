@@ -96,4 +96,39 @@ final class PrologMaps {
 		return new PrologHashMap<K, V>(m);
 	}
 
+	/**
+	 * Create a new java.util.LinkedHashMap.
+	 * 
+	 * @param <K> the key type
+	 * @param <V> the value type
+	 * @return the object
+	 */
+	public static <K, V> Map<K, V> linkedMap() {
+		return new PrologLinkedMap<K, V>();
+	}
+
+	/**
+	 * Create a new java.util.LinkedHashMap.
+	 * 
+	 * @param          <K> the key type
+	 * @param          <V> the value type
+	 * @param capacity the initial capacity
+	 * @return the object
+	 */
+	public static <K, V> Map<K, V> linkedMap(int capacity) {
+		return new PrologLinkedMap<K, V>(capacity);
+	}
+
+	/**
+	 * Create a new java.util.LinkedHashMap.
+	 * 
+	 * @param          <K> the key type
+	 * @param          <V> the value type
+	 * @param capacity the initial capacity
+	 * @return the object
+	 */
+	public static <K, V> Map<K, V> linkedMap(Map<? extends K, ? extends V> m) {
+		return new PrologLinkedMap<K, V>(m);
+	}
+
 }

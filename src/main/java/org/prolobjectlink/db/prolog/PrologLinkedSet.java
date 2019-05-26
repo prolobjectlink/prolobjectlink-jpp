@@ -34,21 +34,35 @@ package org.prolobjectlink.db.prolog;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.prolobjectlink.prolog.PrologTerm;
-
-public class PrologLinkedSet<E extends PrologTerm> extends AbstractSet<E> implements Set<E> {
+/**
+ * Persistent {@link Set} interface implementation for persist
+ * {@link LinkedHashSet}. Don't have the same performance like
+ * {@link LinkedHashSet} but is Prolog structure persistent. Is implemented used
+ * a persistent linked list to preserve the insertion order.
+ * 
+ * @author Jose Zalacain
+ *
+ * @param <E> the type of the set elements
+ */
+final class PrologLinkedSet<E> extends AbstractSet<E> implements Set<E> {
 
 	private int size;
 	private final PrologLinkedList<E> elements;
 	private static final long serialVersionUID = 3122037421156085866L;
 
-	public PrologLinkedSet() {
+	PrologLinkedSet() {
 		this(new PrologLinkedList<E>());
 	}
 
-	public PrologLinkedSet(Collection<? extends E> c) {
+	PrologLinkedSet(int capacity) {
+		elements = new PrologLinkedList<E>();
+		size = capacity;
+	}
+
+	PrologLinkedSet(Collection<? extends E> c) {
 		elements = new PrologLinkedList<E>(c);
 	}
 
@@ -73,6 +87,33 @@ public class PrologLinkedSet<E extends PrologTerm> extends AbstractSet<E> implem
 
 	public int size() {
 		return size;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((elements == null) ? 0 : elements.hashCode());
+		result = prime * result + size;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PrologLinkedSet<?> other = (PrologLinkedSet<?>) obj;
+		if (elements == null) {
+			if (other.elements != null)
+				return false;
+		} else if (!elements.equals(other.elements)) {
+			return false;
+		}
+		return size == other.size;
 	}
 
 }

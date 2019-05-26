@@ -35,7 +35,14 @@ package org.prolobjectlink.db.prolog;
 import java.util.Collection;
 import java.util.List;
 
-public class PrologLinkedList<E> extends AbstractLinkedList<E> implements List<E> {
+/**
+ * Persistent {@link List} interface implementation.
+ * 
+ * @author Jose Zalacain
+ *
+ * @param <E>
+ */
+class PrologLinkedList<E> extends AbstractLinkedList<E> implements List<E> {
 
 	private static final long serialVersionUID = 2370240611871530505L;
 
@@ -67,6 +74,25 @@ public class PrologLinkedList<E> extends AbstractLinkedList<E> implements List<E
 
 	PrologLinkedList(Collection<? extends E> c) {
 		super(c);
+	}
+
+	public boolean add(E e) {
+		if (element == null) {
+			element = e;
+		} else if (next == null) {
+			setNext(new PrologLinkedList<E>(e));
+		} else {
+			AbstractLinkedList<E> listPtr = this;
+			AbstractLinkedList<E> nextPtr = listPtr.next;
+			while (nextPtr != null) {
+				listPtr = nextPtr;
+				nextPtr = listPtr.next;
+			}
+
+			// set created list as tail of the current list
+			listPtr.setNext(new PrologLinkedList<E>(e));
+		}
+		return true;
 	}
 
 }

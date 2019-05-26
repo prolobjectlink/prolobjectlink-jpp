@@ -93,4 +93,36 @@ final class PrologSets {
 		return new PrologHashSet<T>(c);
 	}
 
+	/**
+	 * Create a new LinkedHashSet.
+	 * 
+	 * @param <T> the type
+	 * @return the object
+	 */
+	public static <T> Set<T> linkedSet() {
+		return new PrologLinkedSet<T>();
+	}
+
+	/**
+	 * Create a new LinkedHashSet.
+	 * 
+	 * @param          <T> the type
+	 * @param capacity the initial capacity
+	 * @return the object
+	 */
+	public static <T> Set<T> linkedSet(int capacity) {
+		return new PrologLinkedSet<T>(capacity);
+	}
+
+	/**
+	 * Create a new LinkedHashSet.
+	 * 
+	 * @param            <T> the type
+	 * @param collection to be include in returning set
+	 * @return the object
+	 */
+	public static <T> Set<T> linkedSet(Collection<? extends T> c) {
+		return new PrologLinkedSet<T>(c);
+	}
+
 }
