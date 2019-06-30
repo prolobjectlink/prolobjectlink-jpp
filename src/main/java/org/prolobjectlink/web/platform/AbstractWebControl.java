@@ -249,6 +249,13 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 		MenuItem startItem = new MenuItem("Start");
 		startItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					databaseServer.startup();
+				} catch (ClassNotFoundException e1) {
+					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
+				} catch (IOException e1) {
+					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
+				}
 				webServer.start();
 			}
 		});
@@ -257,6 +264,7 @@ public abstract class AbstractWebControl extends AbstractWebPlatform implements 
 		MenuItem stopItem = new MenuItem("Stop");
 		startItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				databaseServer.shutdown();
 				webServer.stop();
 			}
 		});

@@ -32,41 +32,19 @@
  */
 package org.prolobjectlink.db.platform.win32;
 
-import java.io.IOException;
-
 import org.prolobjectlink.db.DatabaseServer;
-import org.prolobjectlink.db.DatabaseServerType;
+import org.prolobjectlink.db.DatabaseUser;
+import org.prolobjectlink.db.etc.Settings;
+import org.prolobjectlink.db.persistent.RemoteDatabaseServer;
 
-public class Win32DatabaseServer implements DatabaseServer {
+public class Win32DatabaseServer extends RemoteDatabaseServer implements DatabaseServer {
 
-	public void startup() throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-
+	protected Win32DatabaseServer(Settings settings, DatabaseUser systemAdmin, int serverPort) {
+		super(settings, systemAdmin, serverPort);
 	}
 
-	public DatabaseServerType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public boolean isRunning() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void shutdown() {
-		// TODO Auto-generated method stub
-
+	public Win32DatabaseServer() {
+		super(new Settings().load(), new DatabaseUser("sa", ""), 5370);
 	}
 
 }

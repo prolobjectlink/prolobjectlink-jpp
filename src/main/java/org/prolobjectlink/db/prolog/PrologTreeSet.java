@@ -32,11 +32,11 @@
  */
 package org.prolobjectlink.db.prolog;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import org.prolobjectlink.prolog.ArrayStack;
 
 class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
@@ -85,18 +85,21 @@ class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 		if (element == null) {
 			if (other.element != null)
 				return false;
-		} else if (!element.equals(other.element))
+		} else if (!element.equals(other.element)) {
 			return false;
+		}
 		if (left == null) {
 			if (other.left != null)
 				return false;
-		} else if (!left.equals(other.left))
+		} else if (!left.equals(other.left)) {
 			return false;
+		}
 		if (right == null) {
 			if (other.right != null)
 				return false;
-		} else if (!right.equals(other.right))
+		} else if (!right.equals(other.right)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -357,10 +360,10 @@ class PrologTreeSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 		private boolean canRemove;
 
 		private final PrologTreeSet<E> root;
-		private final ArrayStack<PrologTreeSet<E>> stack;
+		private final Deque<PrologTreeSet<E>> stack;
 
 		public TreeSetIterator() {
-			stack = new ArrayStack<PrologTreeSet<E>>();
+			stack = new ArrayDeque<PrologTreeSet<E>>();
 			PrologTreeSet<E> ptr = root = PrologTreeSet.this;
 
 			while (ptr != null && !ptr.isEmpty()) {

@@ -34,7 +34,6 @@ package org.prolobjectlink.db.prolog;
 
 import static org.prolobjectlink.prolog.PrologTermType.ATOM_TYPE;
 import static org.prolobjectlink.prolog.PrologTermType.DOUBLE_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.EMPTY_TYPE;
 import static org.prolobjectlink.prolog.PrologTermType.FALSE_TYPE;
 import static org.prolobjectlink.prolog.PrologTermType.FLOAT_TYPE;
 import static org.prolobjectlink.prolog.PrologTermType.INTEGER_TYPE;
@@ -48,10 +47,12 @@ import static org.prolobjectlink.prolog.PrologTermType.VARIABLE_TYPE;
 import java.lang.reflect.Field;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -74,7 +75,6 @@ import org.prolobjectlink.db.util.JavaReflect;
 import org.prolobjectlink.db.util.JavaSets;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
-import org.prolobjectlink.prolog.ArrayStack;
 import org.prolobjectlink.prolog.PrologDouble;
 import org.prolobjectlink.prolog.PrologFloat;
 import org.prolobjectlink.prolog.PrologInteger;
@@ -130,8 +130,6 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			return Long.class;
 		case DOUBLE_TYPE:
 			return Double.class;
-		case EMPTY_TYPE:
-			return Object[].class;
 		case LIST_TYPE:
 			return Object[].class;
 		case STRUCTURE_TYPE:
@@ -160,8 +158,6 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			return true;
 		case FALSE_TYPE:
 			return false;
-		case EMPTY_TYPE:
-			return new Object[0];
 		case ATOM_TYPE:
 			return removeQuotes(prologTerm.getFunctor());
 		case INTEGER_TYPE:
@@ -190,7 +186,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			// creating new instance
 			object = JavaReflect.newInstance(classPtr);
 
-			ArrayStack<Field> stack = new ArrayStack<Field>();
+			Deque<Field> stack = new ArrayDeque<Field>();
 
 			while (classPtr != null && classPtr != Object.class) {
 
@@ -451,7 +447,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			classPtr = Assertions.nonStaticFinal(classPtr, "Non persistent " + classPtr);
 
 			// stack for resolve prolog structure arguments order
-			ArrayStack<PrologTerm> stack = new ArrayStack<PrologTerm>();
+			Deque<PrologTerm> stack = new ArrayDeque<PrologTerm>();
 
 			// class name to convert in predicate functor
 			String className = classPtr.getName();
@@ -525,7 +521,7 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 		classPtr = Assertions.nonStaticFinal(classPtr, "Non persistent " + classPtr);
 
 		// stack for resolve prolog structure arguments order
-		ArrayStack<PrologTerm> stack = new ArrayStack<PrologTerm>();
+		Deque<PrologTerm> stack = new ArrayDeque<PrologTerm>();
 
 		// class name to convert in predicate functor
 		String functor = "'" + classPtr.getName() + "'";

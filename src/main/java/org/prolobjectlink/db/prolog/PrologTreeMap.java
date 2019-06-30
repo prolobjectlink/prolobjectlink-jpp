@@ -34,13 +34,13 @@ package org.prolobjectlink.db.prolog;
 
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-
-import org.prolobjectlink.prolog.ArrayStack;
 
 class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V> implements Map.Entry<K, V> {
 
@@ -104,13 +104,15 @@ class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V
 		if (key == null) {
 			if (other.key != null)
 				return false;
-		} else if (!key.equals(other.key))
+		} else if (!key.equals(other.key)) {
 			return false;
+		}
 		if (value == null) {
 			if (other.value != null)
 				return false;
-		} else if (!value.equals(other.value))
+		} else if (!value.equals(other.value)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -421,10 +423,10 @@ class PrologTreeMap<K extends Comparable<? super K>, V> extends AbstractMap<K, V
 		private boolean canRemove;
 
 		private final PrologTreeMap<K, V> root;
-		private final ArrayStack<PrologTreeMap<K, V>> stack;
+		private final Deque<PrologTreeMap<K, V>> stack;
 
 		public AbstractIterator() {
-			stack = new ArrayStack<PrologTreeMap<K, V>>();
+			stack = new ArrayDeque<PrologTreeMap<K, V>>();
 			PrologTreeMap<K, V> ptr = root = PrologTreeMap.this;
 			while (ptr != null && !ptr.isEmpty()) {
 				stack.push(ptr);

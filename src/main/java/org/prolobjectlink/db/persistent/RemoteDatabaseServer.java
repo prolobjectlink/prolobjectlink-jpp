@@ -62,7 +62,7 @@ import org.prolobjectlink.db.util.JavaMaps;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
 
-public final class RemoteDatabaseServer extends AbstractPlatform implements Platform, DatabaseServer {
+public class RemoteDatabaseServer extends AbstractPlatform implements Platform, DatabaseServer {
 
 	private int threadId;
 	private int serverPort;
@@ -83,7 +83,7 @@ public final class RemoteDatabaseServer extends AbstractPlatform implements Plat
 		return server;
 	}
 
-	private RemoteDatabaseServer(Settings settings, DatabaseUser systemAdmin, int serverPort) {
+	protected RemoteDatabaseServer(Settings settings, DatabaseUser systemAdmin, int serverPort) {
 		this.threads = new HashMap<String, RemoteDatabaseThread>();
 		this.running = Executors.newCachedThreadPool();
 		this.systemAdmin = systemAdmin;
@@ -160,15 +160,15 @@ public final class RemoteDatabaseServer extends AbstractPlatform implements Plat
 		return hierarchicals;
 	}
 
-	public boolean isRunning() {
+	public final boolean isRunning() {
 		return serverSocket != null;
 	}
 
-	public synchronized void shutdown() {
+	public final synchronized void shutdown() {
 		stop = true;
 	}
 
-	public String getURL() {
+	public final String getURL() {
 		try {
 			return "rempdb://" + InetAddress.getLocalHost() + ":" + serverPort;
 		} catch (UnknownHostException e) {
@@ -177,15 +177,15 @@ public final class RemoteDatabaseServer extends AbstractPlatform implements Plat
 		return "Unknown Host";
 	}
 
-	public String getName() {
+	public final String getName() {
 		return "Prolobjectlink Server";
 	}
 
-	public DatabaseServerType getType() {
+	public final DatabaseServerType getType() {
 		return DatabaseServerType.TCP;
 	}
 
-	public synchronized void startup() throws IOException {
+	public final synchronized void startup() throws IOException {
 
 		LoggerUtils.info(getClass(), getName() + " is starting...");
 

@@ -105,7 +105,7 @@ public final class Settings extends AbstractMap<Object, Object>
 	private int port;
 
 	public Settings() {
-
+		this.properties = new Properties();
 	}
 
 	public Settings(String driver) {

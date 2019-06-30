@@ -32,41 +32,19 @@
  */
 package org.prolobjectlink.db.platform.linux;
 
-import java.io.IOException;
-
 import org.prolobjectlink.db.DatabaseServer;
-import org.prolobjectlink.db.DatabaseServerType;
+import org.prolobjectlink.db.DatabaseUser;
+import org.prolobjectlink.db.etc.Settings;
+import org.prolobjectlink.db.persistent.RemoteDatabaseServer;
 
-public class LinuxDatabaseServer implements DatabaseServer {
+public class LinuxDatabaseServer extends RemoteDatabaseServer implements DatabaseServer {
 
-	public void startup() throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-
+	protected LinuxDatabaseServer(Settings settings, DatabaseUser systemAdmin, int serverPort) {
+		super(settings, systemAdmin, serverPort);
 	}
 
-	public DatabaseServerType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public boolean isRunning() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void shutdown() {
-		// TODO Auto-generated method stub
-
+	public LinuxDatabaseServer() {
+		super(new Settings().load(), new DatabaseUser("sa", ""), 5370);
 	}
 
 }
