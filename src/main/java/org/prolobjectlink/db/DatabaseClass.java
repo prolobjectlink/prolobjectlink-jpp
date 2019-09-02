@@ -63,7 +63,7 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 	private final Map<String, DatabaseField> fields;
 	private transient DatabaseField primaryKeyField;
 	private static final long serialVersionUID = -8770366199140961351L;
-	private static final Map<String, Integer> versionMap = new HashMap<String, Integer>();
+	public static final Map<String, Integer> versionMap = new HashMap<String, Integer>();
 
 	static {
 

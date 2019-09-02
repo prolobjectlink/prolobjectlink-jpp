@@ -45,11 +45,11 @@ import org.prolobjectlink.prolog.PrologTerm;
 
 public class ModelGenerator extends AbstractGenerator implements SchemaGenerator {
 
-	private static final String MODEL_LOCATION = "app/model.pl";
 	private static final String CLASS_INDICATOR = "class/3";
 	private static final String FIELD_INDICATOR = "field/2";
 
 	private final ObjectConverter<PrologTerm> converter;
+	private final String modelLocation;
 
 	private void assertValidClassIndicator(PrologClause clause) {
 		if (!clause.getIndicator().equals(CLASS_INDICATOR)) {
@@ -63,13 +63,14 @@ public class ModelGenerator extends AbstractGenerator implements SchemaGenerator
 		}
 	}
 
-	public ModelGenerator(DatabaseEngine database) {
+	public ModelGenerator(DatabaseEngine database, String modelLocation) {
 		super(database);
 		converter = database.getConverter();
+		this.modelLocation = modelLocation;
 	}
 
 	public Schema createSchema() {
-		engine.consult(MODEL_LOCATION);
+		engine.consult(modelLocation);
 		Schema schema = databse.getSchema();
 		for (PrologClause clause : engine) {
 
@@ -101,8 +102,8 @@ public class ModelGenerator extends AbstractGenerator implements SchemaGenerator
 				String fname = (String) converter.toObject(fieldName);
 				String ftype = (String) converter.toObject(fieldType);
 				Class<?> c = converter.toClass(ftype);
-				
-				if (c==null) {
+
+				if (c == null) {
 					// TODO We need generate the class
 				}
 
