@@ -40,6 +40,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Properties;
@@ -145,7 +147,8 @@ public final class Settings extends AbstractMap<Object, Object>
 
 	public Settings load() {
 		try {
-			properties.loadFromXML(new FileInputStream(CONFIG));
+			File configuration = getConfiguration();
+			properties.loadFromXML(new FileInputStream(configuration));
 			String driver = properties.getProperty(FACTORY);
 			String provider = properties.getProperty(PROVIDER);
 			Class<?> clazzDriver = JavaReflect.classForName(driver);
@@ -188,7 +191,8 @@ public final class Settings extends AbstractMap<Object, Object>
 			properties.put(PORT, "" + port + "");
 			properties.put(SECRET, password);
 			properties.put(USER, username);
-			properties.storeToXML(new FileOutputStream(CONFIG), null);
+			File configuration = getConfiguration();
+			properties.storeToXML(new FileOutputStream(configuration), null);
 		} catch (IOException e) {
 			LoggerUtils.error(getClass(), LoggerConstants.IO, e);
 		}
@@ -327,7 +331,7 @@ public final class Settings extends AbstractMap<Object, Object>
 		return properties.entrySet();
 	}
 
-	public Map<Object, Object> asMap() {
+	public final Map<Object, Object> asMap() {
 		return this;
 	}
 
@@ -385,6 +389,27 @@ public final class Settings extends AbstractMap<Object, Object>
 
 	public final void setPort(int port) {
 		this.port = port;
+	}
+
+	public final File getConfiguration() throws IOException {
+		File configuration = null;
+		String folder = getCurrentPath();
+		File plk = new File(folder);
+		File pdk = plk.getParentFile();
+		File prt = pdk.getParentFile();
+		if (prt.getCanonicalPath().contains("prolobjectlink-jpp")) { // dev mode
+			configuration = new File(CONFIG);
+		} else { // production mode
+			configuration = new File(prt.getCanonicalPath() + File.separator + CONFIG);
+		}
+		return configuration;
+	}
+
+	public final String getCurrentPath() {
+		Class<?> c = getClass();
+		ProtectionDomain d = c.getProtectionDomain();
+		CodeSource s = d.getCodeSource();
+		return s.getLocation().getPath();
 	}
 
 }
