@@ -47,6 +47,4 @@ public interface SchemaGenerator {
 
 	public List<Class<?>> compileSchema();
 
-	public void writePersistence();
-
 }

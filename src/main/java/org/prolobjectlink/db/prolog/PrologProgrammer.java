@@ -32,7 +32,9 @@
  */
 package org.prolobjectlink.db.prolog;
 
+import java.io.File;
 import java.io.PrintWriter;
+import java.util.jar.JarFile;
 
 /**
  * Prolog Programmer is a mechanism responsible of generate a Prolog code from
@@ -73,4 +75,12 @@ public interface PrologProgrammer {
 	 */
 	public void codingRuntime(PrintWriter out);
 
+	public void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings);
+
+	public void codingJarFile(PrintWriter stdout, JarFile jarFile, boolean b);
+	
+	public void codingJarFile2(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings);
+
+	public void codingModel(PrintWriter stdout, JarFile jarFile, boolean b);
+	
 }

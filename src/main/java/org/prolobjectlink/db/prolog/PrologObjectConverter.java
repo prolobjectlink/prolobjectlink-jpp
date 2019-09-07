@@ -108,8 +108,18 @@ public final class PrologObjectConverter extends AbstractConverter<PrologTerm> i
 			return Date.class;
 		} else if (prologType.equals("map")) {
 			return Map.class;
+		} else if (prologType.equals("set")) {
+			return Map.class;
+		} else if (prologType.equals("collection")) {
+			return Map.class;
 		}
-		return JavaReflect.classForName(prologType);
+		Class<?> clazz = null;
+		try {
+			return Class.forName(prologType);
+		} catch (ClassNotFoundException e) {
+			// do nothing
+		}
+		return clazz;
 	}
 
 	public Class<?> toClass(PrologTerm prologTerm) {

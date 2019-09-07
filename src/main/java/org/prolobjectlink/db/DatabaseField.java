@@ -48,14 +48,18 @@ import org.objectweb.asm.Type;
  * @since 1.0
  * 
  */
-public final class DatabaseField extends AbstractElement<DatabaseField>
+public class DatabaseField extends AbstractElement<DatabaseField>
 		implements SchemaElement<DatabaseField>, Comparable<DatabaseField> {
 
 	private int position;
-	private String typeName;
+	protected String typeName;
 	private boolean notNull;
 	private String fullName;
 	private boolean version;
+	private boolean oneToOne;
+	private boolean oneToMany;
+	private boolean manyToOne;
+	private boolean manyToMany;
 	private boolean primaryKey;
 	private boolean isTransient;
 	private String linkedTypeName;
@@ -327,6 +331,38 @@ public final class DatabaseField extends AbstractElement<DatabaseField>
 	public DatabaseField setPrimaryKey(boolean primaryKey) {
 		this.primaryKey = primaryKey;
 		return this;
+	}
+
+	public boolean isOneToOne() {
+		return oneToOne;
+	}
+
+	public void setOneToOne(boolean oneToOne) {
+		this.oneToOne = oneToOne;
+	}
+
+	public boolean isOneToMany() {
+		return oneToMany;
+	}
+
+	public void setOneToMany(boolean oneToMany) {
+		this.oneToMany = oneToMany;
+	}
+
+	public boolean isManyToOne() {
+		return manyToOne;
+	}
+
+	public void setManyToOne(boolean manyToOne) {
+		this.manyToOne = manyToOne;
+	}
+
+	public boolean isManyToMany() {
+		return manyToMany;
+	}
+
+	public void setManyToMany(boolean manyToMany) {
+		this.manyToMany = manyToMany;
 	}
 
 	public boolean isVersion() {

@@ -60,6 +60,8 @@ import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.prolobjectlink.logging.LoggerConstants;
+import org.prolobjectlink.logging.LoggerUtils;
 import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologTerm;
 
@@ -773,6 +775,18 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		return runtimeFile;
 	}
 
+	protected final File createModelFile(File prt, String fileName) throws IOException {
+		File runtimeFile = new File(prt.getCanonicalPath() + "/web/"
+				+ fileName.replace("java", "prolog").replace("org/prolobjectlink/", "prologx/"));
+		if (!runtimeFile.exists()) {
+			runtimeFile.getParentFile().mkdirs();
+			if (!runtimeFile.createNewFile()) {
+				System.exit(1);
+			}
+		}
+		return runtimeFile;
+	}
+
 	protected final void codingLicense(PrintWriter programmer) {
 		SimpleDateFormat f = new SimpleDateFormat("yyyy");
 		String year = f.format(new Date(System.currentTimeMillis()));
@@ -961,7 +975,6 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		String jh = System.getProperty("java.home");
 		File rt = new File(jh + "/lib/rt.jar");
 		List<File> list = new ArrayList<File>();
-		ClassLoader l = Thread.currentThread().getContextClassLoader();
 		File[] jars = pdk.listFiles(new JarFileFilter());
 
 		// adding rt.jar and others
@@ -977,38 +990,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 			for (File file : list) {
 				stdout.println("Generating " + file);
 				jarFile = new JarFile(file);
-				Enumeration<JarEntry> entries = jarFile.entries();
-				while (entries.hasMoreElements()) {
-					JarEntry jarEntry = entries.nextElement();
-					String jarEntryName = jarEntry.getName();
-					if (isValidJarEntry(jarEntryName)) {
-						String className = jarEntryName.substring(0, jarEntryName.length() - 6);
-						String fileName = fromCamelCase(className) + ".pl";
-						try {
-							Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
-							if (isValidClass(runtimeClass)) {
-								File runtimeFile = createRuntimeFile(prt, fileName);
-								PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
-								codingLicense(programmer);
-								codingAuthor(programmer);
-								codingInclusion(programmer, jarEntryName);
-								// TODO introspection here
-								codingConstants(programmer, runtimeClass);
-								codingConstructors(programmer, runtimeClass);
-								codingMethods(programmer, runtimeClass);
-								programmer.close();
-							}
-						} catch (NoClassDefFoundError e) {
-							stdout.println("WARNING: No definition of the class could be found " + e);
-							warnings = true;
-							continue;
-						} catch (ClassNotFoundException e) {
-							stdout.println("WARNING: No definition of the class could be found " + e);
-							warnings = true;
-							continue;
-						}
-					}
-				}
+				codingModel(stdout, jarFile, prt, warnings);
 				jarFile.close();
 			}
 
@@ -1027,6 +1009,104 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 			stdout.println("Generation finished with WARNINGS.");
 		} else {
 			stdout.println("Generation finished OK.");
+		}
+	}
+
+	public final void codingJarFile(PrintWriter stdout, JarFile jarFile, boolean b) {
+		Class<?> c = getClass();
+		ProtectionDomain d = c.getProtectionDomain();
+		CodeSource s = d.getCodeSource();
+		String prolobjectlink = s.getLocation().getPath();
+		File plk = new File(prolobjectlink);
+		File pdk = plk.getParentFile();
+		File prt = pdk.getParentFile();
+		codingModel(stdout, jarFile, prt, b);
+	}
+	
+	public final void codingModel(PrintWriter stdout, JarFile jarFile, boolean b) {
+		Class<?> c = getClass();
+		ProtectionDomain d = c.getProtectionDomain();
+		CodeSource s = d.getCodeSource();
+		String prolobjectlink = s.getLocation().getPath();
+		File plk = new File(prolobjectlink);
+		File pdk = plk.getParentFile();
+		File prt = pdk.getParentFile();
+		codingJarFile2(stdout, jarFile, prt, b);
+	}
+
+	public final void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
+		ClassLoader l = Thread.currentThread().getContextClassLoader();
+		Enumeration<JarEntry> entries = jarFile.entries();
+		while (entries.hasMoreElements()) {
+			JarEntry jarEntry = entries.nextElement();
+			String jarEntryName = jarEntry.getName();
+			if (isValidJarEntry(jarEntryName)) {
+				String className = jarEntryName.substring(0, jarEntryName.length() - 6);
+				String fileName = fromCamelCase(className) + ".pl";
+				try {
+					Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
+					if (isValidClass(runtimeClass)) {
+						File runtimeFile = createRuntimeFile(folder, fileName);
+						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
+						codingLicense(programmer);
+						codingAuthor(programmer);
+						codingInclusion(programmer, jarEntryName);
+						// TODO introspection here
+						codingConstants(programmer, runtimeClass);
+						codingConstructors(programmer, runtimeClass);
+						codingMethods(programmer, runtimeClass);
+						programmer.close();
+					}
+				} catch (NoClassDefFoundError e) {
+					stdout.println("WARNING: No definition of the class could be found " + e);
+					warnings = true;
+					continue;
+				} catch (ClassNotFoundException e) {
+					stdout.println("WARNING: No definition of the class could be found " + e);
+					warnings = true;
+					continue;
+				} catch (IOException e) {
+					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
+				}
+			}
+		}
+	}
+	
+	public final void codingJarFile2(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
+		ClassLoader l = Thread.currentThread().getContextClassLoader();
+		Enumeration<JarEntry> entries = jarFile.entries();
+		while (entries.hasMoreElements()) {
+			JarEntry jarEntry = entries.nextElement();
+			String jarEntryName = jarEntry.getName();
+			if (isValidJarEntry(jarEntryName)) {
+				String className = jarEntryName.substring(0, jarEntryName.length() - 6);
+				String fileName = fromCamelCase(className) + ".pl";
+				try {
+					Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
+					if (isValidClass(runtimeClass)) {
+						File runtimeFile = createModelFile(folder, fileName);
+						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
+						codingLicense(programmer);
+						codingAuthor(programmer);
+						codingInclusion(programmer, jarEntryName);
+						// TODO introspection here
+						codingConstants(programmer, runtimeClass);
+						codingConstructors(programmer, runtimeClass);
+						codingMethods(programmer, runtimeClass);
+						programmer.close();
+					}
+				} catch (NoClassDefFoundError e) {
+					stdout.println("WARNING: No definition of the class could be found " + e);
+					warnings = true;
+					continue;
+				} catch (ClassNotFoundException e) {
+					stdout.println("WARNING: No definition of the class could be found " + e);
+					warnings = true;
+					continue;
+				} catch (IOException e) {
+					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
+				}
+			}
 		}
 	}
 

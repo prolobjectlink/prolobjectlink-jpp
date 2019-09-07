@@ -84,7 +84,9 @@ public enum LoggerConstants {
 
 	URL("URL Syntax error"),
 
-	LINK("Link library error");
+	LINK("Link library error"),
+
+	SERVLET_ERROR("Servlet error");
 
 	private final String name;
 

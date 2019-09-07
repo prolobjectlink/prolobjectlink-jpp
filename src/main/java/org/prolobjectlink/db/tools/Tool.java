@@ -40,7 +40,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 
 public abstract class Tool extends AbstractPlatform {
 
-	protected final synchronized long copy(InputStream in, OutputStream out) {
+	public final synchronized long copy(InputStream in, OutputStream out) {
 		long copied = 0;
 		try {
 			long length = MAX_IO_BUFFER_SIZE;

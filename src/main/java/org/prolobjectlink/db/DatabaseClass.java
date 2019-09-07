@@ -50,17 +50,17 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.util.CheckClassAdapter;
 import org.prolobjectlink.db.util.JavaReflect;
 
-public final class DatabaseClass extends AbstractElement<DatabaseClass>
+public class DatabaseClass extends AbstractElement<DatabaseClass>
 		implements Comparable<DatabaseClass>, Serializable, SchemaElement<DatabaseClass> {
 
 	private boolean isView;
-	private String shortName;
+	protected String shortName;
 	private boolean isAbstract;
 	private String javaClassName;
 	private transient Class<?> javaClass;
-	private transient DatabaseClass superClass;
-	private final List<DatabaseClass> superClasses;
-	private final Map<String, DatabaseField> fields;
+	protected transient DatabaseClass superClass;
+	protected final List<DatabaseClass> superClasses;
+	protected final Map<String, DatabaseField> fields;
 	private transient DatabaseField primaryKeyField;
 	private static final long serialVersionUID = -8770366199140961351L;
 	public static final Map<String, Integer> versionMap = new HashMap<String, Integer>();
@@ -78,7 +78,7 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 
 	}
 
-	private DatabaseField newField(String name, String comment, int position, Class<?> type) {
+	protected DatabaseField newField(String name, String comment, int position, Class<?> type) {
 		return new DatabaseField(name, comment, position, type, schema, this);
 	}
 
@@ -168,7 +168,8 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		buffer.append(shortName);
 		buffer.append('(');
 
-		// TODO respect declaration order resolve this doing field a persistent linked hash map
+		// TODO respect declaration order resolve this doing field a persistent linked
+		// hash map
 
 		Iterator<DatabaseField> j = fields.values().iterator();
 		while (j.hasNext()) {
@@ -533,7 +534,7 @@ public final class DatabaseClass extends AbstractElement<DatabaseClass>
 		return true;
 	}
 
-	private class FieldComparator implements Comparator<DatabaseField> {
+	public class FieldComparator implements Comparator<DatabaseField> {
 
 		public int compare(DatabaseField o1, DatabaseField o2) {
 			return o1.compareTo(o2);
