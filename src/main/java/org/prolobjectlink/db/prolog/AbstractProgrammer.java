@@ -60,8 +60,6 @@ import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.prolobjectlink.logging.LoggerConstants;
-import org.prolobjectlink.logging.LoggerUtils;
 import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologTerm;
 
@@ -717,7 +715,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 
 	protected final boolean isValidJarEntry(String name) {
 		for (String string : ignorePackages) {
-			if (name.contains("internal") || name.startsWith(string) || !name.endsWith(".class")
+			if (/* name.contains("internal") || */ name.startsWith(string) || !name.endsWith(".class")
 					|| name.contains("$")) {
 				return false;
 			}
@@ -1022,7 +1020,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		File prt = pdk.getParentFile();
 		codingModel(stdout, jarFile, prt, b);
 	}
-	
+
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, boolean b) {
 		Class<?> c = getClass();
 		ProtectionDomain d = c.getProtectionDomain();
@@ -1071,7 +1069,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 			}
 		}
 	}
-	
+
 	public final void codingJarFile2(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
 		ClassLoader l = Thread.currentThread().getContextClassLoader();
 		Enumeration<JarEntry> entries = jarFile.entries();
