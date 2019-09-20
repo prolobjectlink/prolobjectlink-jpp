@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PrologTreeMap.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.prolog</a> &gt; <span class="el_source">PrologTreeMap.java</span></div><h1>PrologTreeMap.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.prolog;
+
+import java.util.AbstractCollection;
+import java.util.AbstractSet;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+class PrologTreeMap&lt;K extends Comparable&lt;? super K&gt;, V&gt; extends AbstractMap&lt;K, V&gt; implements Map.Entry&lt;K, V&gt; {
+
+	private static final long serialVersionUID = -2244940649007449299L;
+
+	private PrologTreeMap&lt;K, V&gt; left;
+	private K key;
+	private V value;
+	private PrologTreeMap&lt;K, V&gt; right;
+
+<span class="nc" id="L54">	PrologTreeMap() {</span>
+<span class="nc" id="L55">	}</span>
+
+<span class="nc" id="L57">	PrologTreeMap(Map&lt;K, V&gt; map) {</span>
+<span class="nc" id="L58">		putAll(map);</span>
+<span class="nc" id="L59">	}</span>
+
+<span class="nc" id="L61">	PrologTreeMap(K key, V value) {</span>
+<span class="nc" id="L62">		this.key = key;</span>
+<span class="nc" id="L63">		this.value = value;</span>
+<span class="nc" id="L64">	}</span>
+
+	PrologTreeMap(K key, V value, PrologTreeMap&lt;K, V&gt; left, PrologTreeMap&lt;K, V&gt; right) {
+<span class="nc" id="L67">		this(key, value);</span>
+<span class="nc" id="L68">		this.left = left;</span>
+<span class="nc" id="L69">		this.right = right;</span>
+<span class="nc" id="L70">	}</span>
+
+	public K getKey() {
+<span class="nc" id="L73">		return key;</span>
+	}
+
+	public V getValue() {
+<span class="nc" id="L77">		return value;</span>
+	}
+
+	public V setValue(V value) {
+<span class="nc" id="L81">		V old = this.value;</span>
+<span class="nc" id="L82">		this.value = value;</span>
+<span class="nc" id="L83">		return old;</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L88">		final int prime = 31;</span>
+<span class="nc" id="L89">		int result = 1;</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">		result = prime * result + ((key == null) ? 0 : key.hashCode());</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">		result = prime * result + ((value == null) ? 0 : value.hashCode());</span>
+<span class="nc" id="L92">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L98">			return true;</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L100">			return false;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L102">			return false;</span>
+<span class="nc" id="L103">		PrologTreeMap&lt;?, ?&gt; other = (PrologTreeMap&lt;?, ?&gt;) obj;</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">		if (key == null) {</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">			if (other.key != null)</span>
+<span class="nc" id="L106">				return false;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		} else if (!key.equals(other.key)) {</span>
+<span class="nc" id="L108">			return false;</span>
+		}
+<span class="nc bnc" id="L110" title="All 2 branches missed.">		if (value == null) {</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">			if (other.value != null)</span>
+<span class="nc" id="L112">				return false;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		} else if (!value.equals(other.value)) {</span>
+<span class="nc" id="L114">			return false;</span>
+		}
+<span class="nc" id="L116">		return true;</span>
+	}
+
+	protected PrologTreeMap&lt;K, V&gt; copy() {
+<span class="nc" id="L120">		return new PrologTreeMap&lt;K, V&gt;(key, value, left, right);</span>
+	}
+
+	public int size() {
+<span class="nc bnc" id="L124" title="All 4 branches missed.">		if (!(key == null &amp;&amp; value == null)) {</span>
+<span class="nc" id="L125">			int size = 1;</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">			if (left != null) {</span>
+<span class="nc" id="L127">				size += left.size();</span>
+			}
+<span class="nc bnc" id="L129" title="All 2 branches missed.">			if (right != null) {</span>
+<span class="nc" id="L130">				size += right.size();</span>
+			}
+<span class="nc" id="L132">			return size;</span>
+		}
+<span class="nc" id="L134">		return 0;</span>
+	}
+
+	public V put(K key, V value) {
+
+<span class="nc" id="L139">		PrologTreeMap&lt;K, V&gt; root = this;</span>
+
+<span class="nc bnc" id="L141" title="All 2 branches missed.">		if (!isEmpty()) {</span>
+
+<span class="nc" id="L143">			V v = null;</span>
+<span class="nc" id="L144">			PrologTreeMap&lt;K, V&gt; entry = new PrologTreeMap&lt;K, V&gt;(key, value);</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">			if (key.compareTo(root.key) &lt; 0) {</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">				if (root.left == null) {</span>
+<span class="nc" id="L147">					root.left = entry;</span>
+<span class="nc" id="L148">					v = entry.value;</span>
+				} else {
+<span class="nc" id="L150">					v = root.left.put(key, value);</span>
+				}
+<span class="nc bnc" id="L152" title="All 2 branches missed.">			} else if (key.compareTo(root.key) &gt; 0) {</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">				if (root.right == null) {</span>
+<span class="nc" id="L154">					root.right = entry;</span>
+<span class="nc" id="L155">					v = entry.value;</span>
+				} else {
+<span class="nc" id="L157">					v = root.right.put(key, value);</span>
+				}
+			} else {
+<span class="nc" id="L160">				v = root.value = value;</span>
+			}
+
+			// balance if required
+<span class="nc" id="L164">			fixAfterChange(root);</span>
+<span class="nc" id="L165">			return v;</span>
+		}
+
+<span class="nc" id="L168">		root.key = key;</span>
+<span class="nc" id="L169">		root.value = value;</span>
+<span class="nc" id="L170">		return value;</span>
+
+	}
+
+	public V remove(Object key) {
+
+<span class="nc" id="L176">		V v = null;</span>
+<span class="nc" id="L177">		K k = (K) key;</span>
+<span class="nc" id="L178">		PrologTreeMap&lt;K, V&gt; root = this;</span>
+
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		if (k.compareTo(this.key) &lt; 0) {</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">			if (left != null) {</span>
+<span class="nc" id="L182">				v = left.remove(k);</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">				if (left.isEmpty()) {</span>
+<span class="nc" id="L184">					left = null;</span>
+				}
+			}
+<span class="nc bnc" id="L187" title="All 2 branches missed.">		} else if (k.compareTo(this.key) &gt; 0) {</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">			if (right != null) {</span>
+<span class="nc" id="L189">				v = right.remove(k);</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">				if (right.isEmpty()) {</span>
+<span class="nc" id="L191">					right = null;</span>
+				}
+			}
+		} else {
+
+<span class="nc" id="L196">			v = value;</span>
+<span class="nc" id="L197">			PrologTreeMap&lt;K, V&gt; parent = root;</span>
+
+<span class="nc bnc" id="L199" title="All 2 branches missed.">			if (left != null) {</span>
+
+<span class="nc" id="L201">				PrologTreeMap&lt;K, V&gt; treeIter = left;</span>
+<span class="nc" id="L202">				PrologTreeMap&lt;K, V&gt; predeccessor = this;</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">				while (treeIter != null) {</span>
+<span class="nc" id="L204">					parent = predeccessor;</span>
+<span class="nc" id="L205">					predeccessor = treeIter;</span>
+<span class="nc" id="L206">					treeIter = treeIter.right;</span>
+				}
+
+<span class="nc" id="L209">				root.key = predeccessor.key;</span>
+<span class="nc" id="L210">				root.value = predeccessor.value;</span>
+
+				// two subtree children
+<span class="nc bnc" id="L213" title="All 4 branches missed.">				if (root.left != null &amp;&amp; root.right != null) {</span>
+					// two subtree children
+<span class="nc bnc" id="L215" title="All 2 branches missed.">					if (root.left.equals(predeccessor)) {</span>
+<span class="nc" id="L216">						root.left = predeccessor.left;</span>
+					} else {
+<span class="nc" id="L218">						parent.right = predeccessor.left;</span>
+					}
+
+				} else {
+<span class="nc" id="L222">					root.left = predeccessor.left;</span>
+<span class="nc" id="L223">					root.right = predeccessor.right;</span>
+				}
+
+<span class="nc bnc" id="L226" title="All 2 branches missed.">			} else if (right != null) {</span>
+
+<span class="nc" id="L228">				PrologTreeMap&lt;K, V&gt; treeIter = right;</span>
+<span class="nc" id="L229">				PrologTreeMap&lt;K, V&gt; successor = this;</span>
+<span class="nc bnc" id="L230" title="All 2 branches missed.">				while (treeIter != null) {</span>
+<span class="nc" id="L231">					successor = treeIter;</span>
+<span class="nc" id="L232">					treeIter = treeIter.left;</span>
+				}
+
+<span class="nc" id="L235">				root.key = successor.key;</span>
+<span class="nc" id="L236">				root.value = successor.value;</span>
+
+				// two subtree children
+<span class="nc bnc" id="L239" title="All 4 branches missed.">				if (root.left != null &amp;&amp; root.right != null) {</span>
+					// two subtree children
+<span class="nc bnc" id="L241" title="All 2 branches missed.">					if (root.right.equals(successor)) {</span>
+<span class="nc" id="L242">						root.left = successor.right;</span>
+					} else {
+<span class="nc" id="L244">						parent.left = successor.right;</span>
+					}
+
+				} else {
+<span class="nc" id="L248">					root.left = successor.left;</span>
+<span class="nc" id="L249">					root.right = successor.right;</span>
+				}
+
+<span class="nc" id="L252">			} else {</span>
+
+				// put to empty
+<span class="nc" id="L255">				this.key = null;</span>
+<span class="nc" id="L256">				this.value = null;</span>
+
+			}
+
+		}
+
+		// balance if required
+<span class="nc" id="L263">		fixAfterChange(root);</span>
+<span class="nc" id="L264">		return v;</span>
+	}
+
+	public void clear() {
+<span class="nc" id="L268">		key = null;</span>
+<span class="nc" id="L269">		value = null;</span>
+<span class="nc" id="L270">		left = null;</span>
+<span class="nc" id="L271">		right = null;</span>
+<span class="nc" id="L272">	}</span>
+
+	public Set&lt;K&gt; keySet() {
+<span class="nc" id="L275">		return new KeySet();</span>
+	}
+
+	public Collection&lt;V&gt; values() {
+<span class="nc" id="L279">		return new ValueCollection();</span>
+	}
+
+	public Set&lt;Entry&lt;K, V&gt;&gt; entrySet() {
+<span class="nc" id="L283">		return new EntrySet();</span>
+	}
+
+	private int heigh(PrologTreeMap&lt;K, V&gt; tree) {
+<span class="nc bnc" id="L287" title="All 2 branches missed.">		return tree != null ? 1 + Math.max(heigh(tree.left), heigh(tree.right)) : 0;</span>
+	}
+
+	protected PrologTreeMap&lt;K, V&gt; getEntry(Object key) {
+<span class="nc bnc" id="L291" title="All 2 branches missed.">		if (key instanceof Comparable) {</span>
+<span class="nc" id="L292">			Comparable&lt;K&gt; k = (Comparable&lt;K&gt;) key;</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">			if (k.compareTo(this.key) &lt; 0) {</span>
+<span class="nc bnc" id="L294" title="All 2 branches missed.">				if (left != null) {</span>
+<span class="nc" id="L295">					return left.getEntry(key);</span>
+				}
+<span class="nc bnc" id="L297" title="All 4 branches missed.">			} else if (k.compareTo(this.key) &gt; 0 &amp;&amp; right != null) {</span>
+<span class="nc" id="L298">				return right.getEntry(key);</span>
+			}
+<span class="nc" id="L300">			return this;</span>
+		}
+<span class="nc" id="L302">		return null;</span>
+	}
+
+	private void rotateLeft(PrologTreeMap&lt;K, V&gt; root) {
+
+<span class="nc" id="L307">		PrologTreeMap&lt;K, V&gt; toBeLeft = root.copy();</span>
+
+<span class="nc" id="L309">		PrologTreeMap&lt;K, V&gt; r = toBeLeft.right;</span>
+<span class="nc" id="L310">		toBeLeft.right = r.left;</span>
+<span class="nc" id="L311">		r.left = toBeLeft;</span>
+
+<span class="nc" id="L313">		root.key = r.key;</span>
+<span class="nc" id="L314">		root.value = r.value;</span>
+<span class="nc" id="L315">		root.left = toBeLeft;</span>
+<span class="nc" id="L316">		root.right = r.right;</span>
+
+<span class="nc" id="L318">	}</span>
+
+	private void rotateRight(PrologTreeMap&lt;K, V&gt; root) {
+
+<span class="nc" id="L322">		PrologTreeMap&lt;K, V&gt; toBeRight = root.copy();</span>
+
+<span class="nc" id="L324">		PrologTreeMap&lt;K, V&gt; l = toBeRight.left;</span>
+<span class="nc" id="L325">		toBeRight.left = l.right;</span>
+<span class="nc" id="L326">		l.right = toBeRight;</span>
+
+<span class="nc" id="L328">		root.key = l.key;</span>
+<span class="nc" id="L329">		root.value = l.value;</span>
+<span class="nc" id="L330">		root.left = l.left;</span>
+<span class="nc" id="L331">		root.right = toBeRight;</span>
+
+<span class="nc" id="L333">	}</span>
+
+	private void fixAfterChange(PrologTreeMap&lt;K, V&gt; root) {
+
+<span class="nc bnc" id="L337" title="All 2 branches missed.">		if (root != null) {</span>
+
+<span class="nc" id="L339">			int leftHeigh = heigh(root.left);</span>
+<span class="nc" id="L340">			int rightHeigh = heigh(root.right);</span>
+
+<span class="nc bnc" id="L342" title="All 2 branches missed.">			if (leftHeigh - 2 == rightHeigh) {</span>
+<span class="nc bnc" id="L343" title="All 2 branches missed.">				if (root.left != null) {</span>
+
+<span class="nc" id="L345">					leftHeigh = heigh(root.left.left);</span>
+<span class="nc" id="L346">					rightHeigh = heigh(root.left.right);</span>
+
+<span class="nc bnc" id="L348" title="All 2 branches missed.">					if (leftHeigh &lt; rightHeigh) {</span>
+						// rotate left -&gt; root.left.key
+<span class="nc" id="L350">						rotateLeft(root.left);</span>
+					}
+
+				}
+				// rotate right -&gt; root.key
+<span class="nc" id="L355">				rotateRight(root);</span>
+<span class="nc bnc" id="L356" title="All 2 branches missed.">			} else if (leftHeigh == rightHeigh - 2) {</span>
+<span class="nc bnc" id="L357" title="All 2 branches missed.">				if (root.right != null) {</span>
+
+<span class="nc" id="L359">					leftHeigh = heigh(root.right.left);</span>
+<span class="nc" id="L360">					rightHeigh = heigh(root.right.right);</span>
+
+<span class="nc bnc" id="L362" title="All 2 branches missed.">					if (leftHeigh &gt; rightHeigh) {</span>
+						// rotate right -&gt; root.right.key
+<span class="nc" id="L364">						rotateRight(root.right);</span>
+					}
+
+				}
+				// rotate left -&gt; root.key
+<span class="nc" id="L369">				rotateLeft(root);</span>
+			}
+
+		}
+
+<span class="nc" id="L374">	}</span>
+
+<span class="nc" id="L376">	private class KeySet extends AbstractSet&lt;K&gt; {</span>
+
+		@Override
+		public Iterator&lt;K&gt; iterator() {
+<span class="nc" id="L380">			return new KeySetIterator();</span>
+		}
+
+		@Override
+		public int size() {
+<span class="nc" id="L385">			return PrologTreeMap.this.size();</span>
+		}
+
+	}
+
+<span class="nc" id="L390">	private class ValueCollection extends AbstractCollection&lt;V&gt; {</span>
+
+		@Override
+		public Iterator&lt;V&gt; iterator() {
+<span class="nc" id="L394">			return new ValueSetIterator();</span>
+		}
+
+		@Override
+		public int size() {
+<span class="nc" id="L399">			return PrologTreeMap.this.size();</span>
+		}
+
+	}
+
+<span class="nc" id="L404">	private class EntrySet extends AbstractSet&lt;Entry&lt;K, V&gt;&gt; {</span>
+
+		@Override
+		public Iterator&lt;Entry&lt;K, V&gt;&gt; iterator() {
+<span class="nc" id="L408">			return new EntrySetIterator();</span>
+		}
+
+		@Override
+		public int size() {
+<span class="nc" id="L413">			return PrologTreeMap.this.size();</span>
+		}
+
+	}
+
+	private abstract class AbstractIterator {
+
+		private PrologTreeMap&lt;K, V&gt; last;
+
+		// check illegal state
+		private boolean canRemove;
+
+		private final PrologTreeMap&lt;K, V&gt; root;
+		private final Deque&lt;PrologTreeMap&lt;K, V&gt;&gt; stack;
+
+<span class="nc" id="L428">		public AbstractIterator() {</span>
+<span class="nc" id="L429">			stack = new ArrayDeque&lt;PrologTreeMap&lt;K, V&gt;&gt;();</span>
+<span class="nc" id="L430">			PrologTreeMap&lt;K, V&gt; ptr = root = PrologTreeMap.this;</span>
+<span class="nc bnc" id="L431" title="All 4 branches missed.">			while (ptr != null &amp;&amp; !ptr.isEmpty()) {</span>
+<span class="nc" id="L432">				stack.push(ptr);</span>
+<span class="nc" id="L433">				ptr = ptr.left;</span>
+			}
+<span class="nc" id="L435">		}</span>
+
+		public boolean hasNext() {
+<span class="nc bnc" id="L438" title="All 2 branches missed.">			return !stack.isEmpty();</span>
+		}
+
+		public void remove() {
+
+<span class="nc bnc" id="L443" title="All 2 branches missed.">			if (!canRemove) {</span>
+<span class="nc" id="L444">				throw new IllegalStateException();</span>
+			}
+
+<span class="nc" id="L447">			stack.clear();</span>
+
+<span class="nc" id="L449">			PrologTreeMap&lt;K, V&gt; ptr = root;</span>
+<span class="nc" id="L450">			ptr.remove(last.key);</span>
+
+<span class="nc bnc" id="L452" title="All 4 branches missed.">			while (ptr != null &amp;&amp; !ptr.isEmpty()) {</span>
+<span class="nc" id="L453">				stack.push(ptr);</span>
+<span class="nc" id="L454">				ptr = ptr.left;</span>
+			}
+
+<span class="nc" id="L457">		}</span>
+
+		protected Entry&lt;K, V&gt; nextEntry() {
+
+<span class="nc bnc" id="L461" title="All 2 branches missed.">			if (!hasNext()) {</span>
+<span class="nc" id="L462">				throw new NoSuchElementException();</span>
+			}
+
+<span class="nc" id="L465">			canRemove = true;</span>
+
+<span class="nc" id="L467">			last = stack.pop();</span>
+<span class="nc" id="L468">			PrologTreeMap&lt;K, V&gt; ptr = last.right;</span>
+<span class="nc bnc" id="L469" title="All 4 branches missed.">			while (ptr != null &amp;&amp; !ptr.isEmpty()) {</span>
+<span class="nc" id="L470">				stack.push(ptr);</span>
+<span class="nc" id="L471">				ptr = ptr.left;</span>
+			}
+
+<span class="nc" id="L474">			return last;</span>
+		}
+
+	}
+
+<span class="nc" id="L479">	private class KeySetIterator extends AbstractIterator implements Iterator&lt;K&gt; {</span>
+
+		public K next() {
+<span class="nc bnc" id="L482" title="All 2 branches missed.">			if (!hasNext()) {</span>
+<span class="nc" id="L483">				throw new NoSuchElementException();</span>
+			}
+<span class="nc" id="L485">			return nextEntry().getKey();</span>
+		}
+
+	}
+
+<span class="nc" id="L490">	private class ValueSetIterator extends AbstractIterator implements Iterator&lt;V&gt; {</span>
+
+		public V next() {
+<span class="nc bnc" id="L493" title="All 2 branches missed.">			if (!hasNext()) {</span>
+<span class="nc" id="L494">				throw new NoSuchElementException();</span>
+			}
+<span class="nc" id="L496">			return nextEntry().getValue();</span>
+		}
+
+	}
+
+<span class="nc" id="L501">	private class EntrySetIterator extends AbstractIterator implements Iterator&lt;Entry&lt;K, V&gt;&gt; {</span>
+
+		public Entry&lt;K, V&gt; next() {
+<span class="nc bnc" id="L504" title="All 2 branches missed.">			if (!hasNext()) {</span>
+<span class="nc" id="L505">				throw new NoSuchElementException();</span>
+			}
+<span class="nc" id="L507">			return nextEntry();</span>
+		}
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

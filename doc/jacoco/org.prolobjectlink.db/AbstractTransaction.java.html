@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractTransaction.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db</a> &gt; <span class="el_source">AbstractTransaction.java</span></div><h1>AbstractTransaction.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db;
+
+import java.util.Date;
+
+import org.prolobjectlink.AbstractWrapper;
+
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+public abstract class AbstractTransaction extends AbstractWrapper implements Transaction {
+
+	protected boolean active;
+	private final long timestamp;
+
+<span class="nc" id="L49">	public AbstractTransaction(long timestamp) {</span>
+<span class="nc" id="L50">		this.timestamp = timestamp;</span>
+<span class="nc" id="L51">	}</span>
+
+	protected void checkNonActiveTransaction() {
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		if (!isActive()) {</span>
+<span class="nc" id="L55">			throw new IllegalStateException(&quot;Entity Transaction is not active&quot;);</span>
+		}
+<span class="nc" id="L57">	}</span>
+
+	protected void checkActiveTransaction() {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		if (isActive()) {</span>
+<span class="nc" id="L61">			throw new IllegalStateException(&quot;Entity Transaction is active&quot;);</span>
+		}
+<span class="nc" id="L63">	}</span>
+
+	public final boolean before(Transaction t) {
+<span class="nc bnc" id="L66" title="All 2 branches missed.">		return compareTo(t) &lt; 0;</span>
+	}
+
+	public final boolean after(Transaction t) {
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		return compareTo(t) &gt; 0;</span>
+	}
+
+	public final int compareTo(Transaction o) {
+<span class="nc" id="L74">		Date thisDate = new Date(timestamp);</span>
+<span class="nc" id="L75">		Date otherDate = new Date(o.getTimestamp());</span>
+<span class="nc" id="L76">		return thisDate.compareTo(otherDate);</span>
+	}
+
+	public final long getTimestamp() {
+<span class="nc" id="L80">		return timestamp;</span>
+	}
+
+	public final boolean isActive() {
+<span class="nc" id="L84">		return active;</span>
+	}
+
+	public final void close() {
+<span class="nc" id="L88">		active = false;</span>
+<span class="nc" id="L89">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PrologTreeSet.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.prolog</a> &gt; <span class="el_source">PrologTreeSet.java</span></div><h1>PrologTreeSet.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.prolog;
+
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+class PrologTreeSet&lt;E extends Comparable&lt;? super E&gt;&gt; extends AbstractSet&lt;E&gt; {
+
+	private static final long serialVersionUID = 6033570255958454303L;
+
+	private PrologTreeSet&lt;E&gt; left;
+	private E element;
+	private PrologTreeSet&lt;E&gt; right;
+
+<span class="nc" id="L49">	PrologTreeSet() {</span>
+<span class="nc" id="L50">	}</span>
+
+<span class="nc" id="L52">	PrologTreeSet(E element) {</span>
+<span class="nc" id="L53">		this.element = element;</span>
+<span class="nc" id="L54">	}</span>
+
+<span class="nc" id="L56">	PrologTreeSet(Collection&lt;? extends E&gt; c) {</span>
+<span class="nc" id="L57">		addAll(c);</span>
+<span class="nc" id="L58">	}</span>
+
+	PrologTreeSet(PrologTreeSet&lt;E&gt; left, E element, PrologTreeSet&lt;E&gt; right) {
+<span class="nc" id="L61">		this(element);</span>
+<span class="nc" id="L62">		this.left = left;</span>
+<span class="nc" id="L63">		this.right = right;</span>
+<span class="nc" id="L64">	}</span>
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L68">		final int prime = 31;</span>
+<span class="nc" id="L69">		int result = 1;</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		result = prime * result + ((element == null) ? 0 : element.hashCode());</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">		result = prime * result + ((left == null) ? 0 : left.hashCode());</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">		result = prime * result + ((right == null) ? 0 : right.hashCode());</span>
+<span class="nc" id="L73">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L79">			return true;</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L81">			return false;</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L83">			return false;</span>
+<span class="nc" id="L84">		PrologTreeSet&lt;?&gt; other = (PrologTreeSet&lt;?&gt;) obj;</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">		if (element == null) {</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">			if (other.element != null)</span>
+<span class="nc" id="L87">				return false;</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">		} else if (!element.equals(other.element)) {</span>
+<span class="nc" id="L89">			return false;</span>
+		}
+<span class="nc bnc" id="L91" title="All 2 branches missed.">		if (left == null) {</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">			if (other.left != null)</span>
+<span class="nc" id="L93">				return false;</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">		} else if (!left.equals(other.left)) {</span>
+<span class="nc" id="L95">			return false;</span>
+		}
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		if (right == null) {</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">			if (other.right != null)</span>
+<span class="nc" id="L99">				return false;</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">		} else if (!right.equals(other.right)) {</span>
+<span class="nc" id="L101">			return false;</span>
+		}
+<span class="nc" id="L103">		return true;</span>
+	}
+
+	public int size() {
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		if (element != null) {</span>
+<span class="nc" id="L108">			int size = 1;</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">			if (left != null) {</span>
+<span class="nc" id="L110">				size += left.size();</span>
+			}
+<span class="nc bnc" id="L112" title="All 2 branches missed.">			if (right != null) {</span>
+<span class="nc" id="L113">				size += right.size();</span>
+			}
+<span class="nc" id="L115">			return size;</span>
+		}
+<span class="nc" id="L117">		return 0;</span>
+	}
+
+	public boolean contains(Object o) {
+<span class="nc bnc" id="L121" title="All 2 branches missed.">		if (o instanceof Comparable) {</span>
+<span class="nc" id="L122">			E e = (E) o;</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">			if (e.compareTo(element) &lt; 0) {</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">				if (left != null) {</span>
+<span class="nc" id="L125">					return left.contains(e);</span>
+				}
+<span class="nc bnc" id="L127" title="All 4 branches missed.">			} else if (e.compareTo(element) &gt; 0 &amp;&amp; right != null) {</span>
+<span class="nc" id="L128">				return right.contains(e);</span>
+			}
+<span class="nc" id="L130">			return e.equals(element);</span>
+		}
+<span class="nc" id="L132">		return false;</span>
+	}
+
+	public boolean add(E e) {
+
+<span class="nc" id="L137">		PrologTreeSet&lt;E&gt; root = this;</span>
+
+<span class="nc" id="L139">		boolean result = false;</span>
+
+<span class="nc bnc" id="L141" title="All 2 branches missed.">		if (!isEmpty()) {</span>
+
+<span class="nc bnc" id="L143" title="All 2 branches missed.">			if (e.compareTo(element) &lt; 0) {</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">				if (root.left == null) {</span>
+<span class="nc" id="L145">					root.left = new PrologTreeSet&lt;E&gt;(e);</span>
+<span class="nc" id="L146">					result = true;</span>
+				} else {
+<span class="nc" id="L148">					result = root.left.add(e);</span>
+				}
+<span class="nc bnc" id="L150" title="All 2 branches missed.">			} else if (e.compareTo(element) &gt; 0) {</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">				if (root.right == null) {</span>
+<span class="nc" id="L152">					root.right = new PrologTreeSet&lt;E&gt;(e);</span>
+<span class="nc" id="L153">					result = true;</span>
+				} else {
+<span class="nc" id="L155">					result = root.right.add(e);</span>
+				}
+
+			}
+
+			// balance if required
+<span class="nc" id="L161">			fixAfterChange(root);</span>
+<span class="nc" id="L162">			return result;</span>
+
+		}
+
+<span class="nc bnc" id="L166" title="All 2 branches missed.">		root.element = e != null ? e : null;</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">		return e != null;</span>
+	}
+
+	public boolean remove(Object o) {
+
+<span class="nc" id="L172">		boolean isChanged = false;</span>
+
+<span class="nc bnc" id="L174" title="All 2 branches missed.">		if (o instanceof Comparable) {</span>
+
+<span class="nc" id="L176">			PrologTreeSet&lt;E&gt; root = this;</span>
+<span class="nc" id="L177">			Comparable&lt;E&gt; e = (Comparable&lt;E&gt;) o;</span>
+
+<span class="nc bnc" id="L179" title="All 2 branches missed.">			if (e.compareTo(this.element) &lt; 0) {</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">				if (left != null) {</span>
+<span class="nc" id="L181">					isChanged = left.remove(e);</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">					if (left.isEmpty()) {</span>
+<span class="nc" id="L183">						left = null;</span>
+					}
+				}
+<span class="nc bnc" id="L186" title="All 2 branches missed.">			} else if (e.compareTo(this.element) &gt; 0) {</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">				if (right != null) {</span>
+<span class="nc" id="L188">					isChanged = right.remove(e);</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">					if (right.isEmpty()) {</span>
+<span class="nc" id="L190">						right = null;</span>
+					}
+				}
+			} else {
+
+<span class="nc" id="L195">				PrologTreeSet&lt;E&gt; parent = root;</span>
+
+<span class="nc bnc" id="L197" title="All 2 branches missed.">				if (left != null) {</span>
+
+<span class="nc" id="L199">					PrologTreeSet&lt;E&gt; treeIter = left;</span>
+<span class="nc" id="L200">					PrologTreeSet&lt;E&gt; predeccessor = this;</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">					while (treeIter != null) {</span>
+<span class="nc" id="L202">						parent = predeccessor;</span>
+<span class="nc" id="L203">						predeccessor = treeIter;</span>
+<span class="nc" id="L204">						treeIter = treeIter.right;</span>
+					}
+
+<span class="nc" id="L207">					root.element = predeccessor.element;</span>
+
+					// two subtree children
+<span class="nc bnc" id="L210" title="All 4 branches missed.">					if (root.left != null &amp;&amp; root.right != null) {</span>
+						// two subtree children
+<span class="nc bnc" id="L212" title="All 2 branches missed.">						if (root.left.equals(predeccessor)) {</span>
+<span class="nc" id="L213">							root.left = predeccessor.left;</span>
+						} else {
+<span class="nc" id="L215">							parent.right = predeccessor.left;</span>
+						}
+
+					} else {
+<span class="nc" id="L219">						root.left = predeccessor.left;</span>
+<span class="nc" id="L220">						root.right = predeccessor.right;</span>
+					}
+
+<span class="nc bnc" id="L223" title="All 2 branches missed.">				} else if (right != null) {</span>
+
+<span class="nc" id="L225">					PrologTreeSet&lt;E&gt; treeIter = right;</span>
+<span class="nc" id="L226">					PrologTreeSet&lt;E&gt; successor = this;</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">					while (treeIter != null) {</span>
+<span class="nc" id="L228">						successor = treeIter;</span>
+<span class="nc" id="L229">						treeIter = treeIter.left;</span>
+					}
+
+<span class="nc" id="L232">					root.element = successor.element;</span>
+
+					// two subtree children
+<span class="nc bnc" id="L235" title="All 4 branches missed.">					if (root.left != null &amp;&amp; root.right != null) {</span>
+						// two subtree children
+<span class="nc bnc" id="L237" title="All 2 branches missed.">						if (root.right.equals(successor)) {</span>
+<span class="nc" id="L238">							root.left = successor.right;</span>
+						} else {
+<span class="nc" id="L240">							parent.left = successor.right;</span>
+						}
+
+					} else {
+<span class="nc" id="L244">						root.left = successor.left;</span>
+<span class="nc" id="L245">						root.right = successor.right;</span>
+					}
+
+<span class="nc" id="L248">				} else {</span>
+
+					// put to empty
+<span class="nc" id="L251">					this.element = null;</span>
+
+				}
+
+				// tree was changed
+<span class="nc" id="L256">				isChanged = true;</span>
+
+			}
+
+			// balance if required
+<span class="nc" id="L261">			fixAfterChange(root);</span>
+
+		}
+
+<span class="nc" id="L265">		return isChanged;</span>
+	}
+
+	public void clear() {
+<span class="nc" id="L269">		left = null;</span>
+<span class="nc" id="L270">		element = null;</span>
+<span class="nc" id="L271">		right = null;</span>
+<span class="nc" id="L272">	}</span>
+
+	public Iterator&lt;E&gt; iterator() {
+<span class="nc" id="L275">		return new TreeSetIterator();</span>
+	}
+
+	protected PrologTreeSet&lt;E&gt; copy() {
+<span class="nc" id="L279">		return new PrologTreeSet&lt;E&gt;(left, element, right);</span>
+	}
+
+	private int heigh(PrologTreeSet&lt;E&gt; tree) {
+<span class="nc bnc" id="L283" title="All 2 branches missed.">		return tree != null ? 1 + Math.max(heigh(tree.left), heigh(tree.right)) : 0;</span>
+	}
+
+	private void rotateLeft(PrologTreeSet&lt;E&gt; root) {
+
+<span class="nc" id="L288">		PrologTreeSet&lt;E&gt; toBeLeft = root.copy();</span>
+
+<span class="nc" id="L290">		PrologTreeSet&lt;E&gt; r = toBeLeft.right;</span>
+<span class="nc" id="L291">		toBeLeft.right = r.left;</span>
+<span class="nc" id="L292">		r.left = toBeLeft;</span>
+
+<span class="nc" id="L294">		root.element = r.element;</span>
+<span class="nc" id="L295">		root.left = toBeLeft;</span>
+<span class="nc" id="L296">		root.right = r.right;</span>
+
+<span class="nc" id="L298">	}</span>
+
+	private void rotateRight(PrologTreeSet&lt;E&gt; root) {
+
+<span class="nc" id="L302">		PrologTreeSet&lt;E&gt; toBeRight = root.copy();</span>
+
+<span class="nc" id="L304">		PrologTreeSet&lt;E&gt; l = toBeRight.left;</span>
+<span class="nc" id="L305">		toBeRight.left = l.right;</span>
+<span class="nc" id="L306">		l.right = toBeRight;</span>
+
+<span class="nc" id="L308">		root.element = l.element;</span>
+<span class="nc" id="L309">		root.left = l.left;</span>
+<span class="nc" id="L310">		root.right = toBeRight;</span>
+
+<span class="nc" id="L312">	}</span>
+
+	private void fixAfterChange(PrologTreeSet&lt;E&gt; root) {
+
+<span class="nc bnc" id="L316" title="All 2 branches missed.">		if (root != null) {</span>
+
+<span class="nc" id="L318">			int leftHeigh = heigh(root.left);</span>
+<span class="nc" id="L319">			int rightHeigh = heigh(root.right);</span>
+
+<span class="nc bnc" id="L321" title="All 2 branches missed.">			if (leftHeigh - 2 == rightHeigh) {</span>
+<span class="nc bnc" id="L322" title="All 2 branches missed.">				if (root.left != null) {</span>
+
+<span class="nc" id="L324">					leftHeigh = heigh(root.left.left);</span>
+<span class="nc" id="L325">					rightHeigh = heigh(root.left.right);</span>
+
+<span class="nc bnc" id="L327" title="All 2 branches missed.">					if (leftHeigh &lt; rightHeigh) {</span>
+						// rotate left -&gt; root.left.element
+<span class="nc" id="L329">						rotateLeft(root.left);</span>
+					}
+
+				}
+				// rotate right -&gt; root.element
+<span class="nc" id="L334">				rotateRight(root);</span>
+<span class="nc bnc" id="L335" title="All 2 branches missed.">			} else if (leftHeigh == rightHeigh - 2) {</span>
+<span class="nc bnc" id="L336" title="All 2 branches missed.">				if (root.right != null) {</span>
+
+<span class="nc" id="L338">					leftHeigh = heigh(root.right.left);</span>
+<span class="nc" id="L339">					rightHeigh = heigh(root.right.right);</span>
+
+<span class="nc bnc" id="L341" title="All 2 branches missed.">					if (leftHeigh &gt; rightHeigh) {</span>
+						// rotate right -&gt; root.right.element
+<span class="nc" id="L343">						rotateRight(root.right);</span>
+					}
+
+				}
+				// rotate left -&gt; root.element
+<span class="nc" id="L348">				rotateLeft(root);</span>
+			}
+
+		}
+
+<span class="nc" id="L353">	}</span>
+
+	private class TreeSetIterator implements Iterator&lt;E&gt; {
+
+		private PrologTreeSet&lt;E&gt; last;
+
+		// check illegal state
+		private boolean canRemove;
+
+		private final PrologTreeSet&lt;E&gt; root;
+		private final Deque&lt;PrologTreeSet&lt;E&gt;&gt; stack;
+
+<span class="nc" id="L365">		public TreeSetIterator() {</span>
+<span class="nc" id="L366">			stack = new ArrayDeque&lt;PrologTreeSet&lt;E&gt;&gt;();</span>
+<span class="nc" id="L367">			PrologTreeSet&lt;E&gt; ptr = root = PrologTreeSet.this;</span>
+
+<span class="nc bnc" id="L369" title="All 4 branches missed.">			while (ptr != null &amp;&amp; !ptr.isEmpty()) {</span>
+<span class="nc" id="L370">				stack.push(ptr);</span>
+<span class="nc" id="L371">				ptr = ptr.left;</span>
+			}
+<span class="nc" id="L373">		}</span>
+
+		public boolean hasNext() {
+<span class="nc bnc" id="L376" title="All 2 branches missed.">			return !stack.isEmpty();</span>
+		}
+
+		public E next() {
+
+<span class="nc bnc" id="L381" title="All 2 branches missed.">			if (!hasNext()) {</span>
+<span class="nc" id="L382">				throw new NoSuchElementException();</span>
+			}
+
+<span class="nc" id="L385">			canRemove = true;</span>
+
+<span class="nc" id="L387">			last = stack.pop();</span>
+<span class="nc" id="L388">			PrologTreeSet&lt;E&gt; ptr = last.right;</span>
+<span class="nc bnc" id="L389" title="All 4 branches missed.">			while (ptr != null &amp;&amp; !ptr.isEmpty()) {</span>
+<span class="nc" id="L390">				stack.push(ptr);</span>
+<span class="nc" id="L391">				ptr = ptr.left;</span>
+			}
+
+<span class="nc" id="L394">			return last.element;</span>
+
+		}
+
+		public void remove() {
+
+<span class="nc bnc" id="L400" title="All 2 branches missed.">			if (!canRemove) {</span>
+<span class="nc" id="L401">				throw new IllegalStateException();</span>
+			}
+
+<span class="nc" id="L404">			stack.clear();</span>
+
+<span class="nc" id="L406">			PrologTreeSet&lt;E&gt; ptr = root;</span>
+<span class="nc" id="L407">			ptr.remove(last.element);</span>
+
+<span class="nc bnc" id="L409" title="All 4 branches missed.">			while (ptr != null &amp;&amp; !ptr.isEmpty()) {</span>
+<span class="nc" id="L410">				stack.push(ptr);</span>
+<span class="nc" id="L411">				ptr = ptr.left;</span>
+			}
+
+<span class="nc" id="L414">		}</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

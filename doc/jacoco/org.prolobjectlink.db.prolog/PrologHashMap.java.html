@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PrologHashMap.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.prolog</a> &gt; <span class="el_source">PrologHashMap.java</span></div><h1>PrologHashMap.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.prolog;
+
+import java.util.AbstractCollection;
+import java.util.AbstractSet;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+class PrologHashMap&lt;K, V&gt; extends AbstractMap&lt;K, V&gt; {
+
+	private int size;
+	private HashEntry&lt;K, V&gt;[] table;
+	private static final long serialVersionUID = -5488211660761949073L;
+
+	PrologHashMap() {
+<span class="nc" id="L51">		this(16);</span>
+<span class="nc" id="L52">	}</span>
+
+<span class="nc" id="L54">	PrologHashMap(int initialCapacity) {</span>
+<span class="nc" id="L55">		table = new HashEntry[initialCapacity];</span>
+<span class="nc" id="L56">	}</span>
+
+<span class="nc" id="L58">	PrologHashMap(Map&lt;? extends K, ? extends V&gt; m) {</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		if (m != null) {</span>
+<span class="nc" id="L60">			table = new HashEntry[m.size()];</span>
+<span class="nc" id="L61">			putAll(m);</span>
+		}
+<span class="nc" id="L63">	}</span>
+
+	private int indexOf(int hash) {
+<span class="nc" id="L66">		int capacity = table.length;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">		int i = hash &lt; 0 ? -hash % capacity : hash % capacity;</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">		K key = table[i] != null ? table[i].getKey() : null;</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">		while (key != null &amp;&amp; key.hashCode() != hash) {</span>
+<span class="nc" id="L70">			i = (i + 1) % capacity;</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">			key = table[i] != null ? table[i].getKey() : null;</span>
+		}
+<span class="nc" id="L73">		return i;</span>
+	}
+
+	@Override
+	protected HashEntry&lt;K, V&gt; getEntry(Object key) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		int hash = (key == null) ? 0 : key.hashCode();</span>
+<span class="nc" id="L79">		int i = indexOf(hash);</span>
+<span class="nc" id="L80">		return table[i];</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L85">		final int prime = 31;</span>
+<span class="nc" id="L86">		int result = 1;</span>
+<span class="nc" id="L87">		result = prime * result + size;</span>
+<span class="nc" id="L88">		result = prime * result + Arrays.hashCode(table);</span>
+<span class="nc" id="L89">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L95">			return true;</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L97">			return false;</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L99">			return false;</span>
+<span class="nc" id="L100">		PrologHashMap&lt;?, ?&gt; other = (PrologHashMap&lt;?, ?&gt;) obj;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">		if (size != other.size)</span>
+<span class="nc" id="L102">			return false;</span>
+<span class="nc" id="L103">		return Arrays.equals(table, other.table);</span>
+	}
+
+	public int size() {
+<span class="nc" id="L107">		return size;</span>
+	}
+
+	public V put(K key, V value) {
+
+<span class="nc" id="L112">		int hash = key.hashCode();</span>
+<span class="nc" id="L113">		int index = indexOf(hash);</span>
+<span class="nc" id="L114">		HashEntry&lt;K, V&gt; entry = new HashEntry&lt;K, V&gt;(key, value);</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">		V old = table[index] != null ? table[index].getValue() : null;</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">		if (old != null) {</span>
+<span class="nc" id="L117">			table[index].setValue(value);</span>
+		} else {
+<span class="nc" id="L119">			table[index] = entry;</span>
+<span class="nc" id="L120">			size++;</span>
+		}
+
+<span class="nc" id="L123">		float loadFactor = 0.75f;</span>
+<span class="nc" id="L124">		int capacity = table.length;</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">		if (size &gt;= capacity * loadFactor) {</span>
+
+			// rehashing and copy
+
+<span class="nc" id="L129">			int newCapacity = 2 * capacity;</span>
+<span class="nc" id="L130">			HashEntry&lt;K, V&gt;[] oldTable = table;</span>
+
+<span class="nc" id="L132">			size = 0;</span>
+<span class="nc" id="L133">			table = new HashEntry[newCapacity];</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">			for (int i = 0; i &lt; oldTable.length; i++) {</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">				if (oldTable[i] != null) {</span>
+<span class="nc" id="L136">					HashEntry&lt;K, V&gt; e = oldTable[i];</span>
+<span class="nc" id="L137">					put(e.getKey(), e.getValue());</span>
+				}
+			}
+
+		}
+
+<span class="nc" id="L143">		return old;</span>
+
+	}
+
+	public V remove(Object key) {
+<span class="nc" id="L148">		int hash = key.hashCode();</span>
+<span class="nc" id="L149">		int index = indexOf(hash);</span>
+<span class="nc" id="L150">		HashEntry&lt;K, V&gt; e = table[index];</span>
+<span class="nc" id="L151">		V v = e.getValue();</span>
+<span class="nc" id="L152">		table[index] = null;</span>
+<span class="nc" id="L153">		size--;</span>
+<span class="nc" id="L154">		return v;</span>
+	}
+
+	public void clear() {
+<span class="nc" id="L158">		size = 0;</span>
+<span class="nc" id="L159">		int i = 0;</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">		while (i &lt; table.length) {</span>
+<span class="nc" id="L161">			table[i++] = null;</span>
+		}
+<span class="nc" id="L163">	}</span>
+
+	public Set&lt;K&gt; keySet() {
+<span class="nc" id="L166">		return new KeySet();</span>
+	}
+
+	public Collection&lt;V&gt; values() {
+<span class="nc" id="L170">		return new ValueCollection();</span>
+	}
+
+	public Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet() {
+<span class="nc" id="L174">		return new EntrySet();</span>
+	}
+
+	public final class HashEntry&lt;K0, V0&gt; implements Map.Entry&lt;K0, V0&gt; {
+
+		private K0 key;
+		private V0 value;
+
+<span class="nc" id="L182">		public HashEntry(K0 key, V0 value) {</span>
+<span class="nc" id="L183">			this.key = key;</span>
+<span class="nc" id="L184">			this.value = value;</span>
+<span class="nc" id="L185">		}</span>
+
+		public K0 getKey() {
+<span class="nc" id="L188">			return key;</span>
+		}
+
+		public V0 getValue() {
+<span class="nc" id="L192">			return value;</span>
+		}
+
+		public V0 setValue(V0 value) {
+<span class="nc" id="L196">			this.value = value;</span>
+<span class="nc" id="L197">			return value;</span>
+		}
+
+		@Override
+		public String toString() {
+<span class="nc" id="L202">			return key + &quot; = &quot; + value;</span>
+		}
+
+		@Override
+		public int hashCode() {
+<span class="nc" id="L207">			final int prime = 31;</span>
+<span class="nc" id="L208">			int result = 1;</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">			result = prime * result + ((key == null) ? 0 : key.hashCode());</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">			result = prime * result + ((value == null) ? 0 : value.hashCode());</span>
+<span class="nc" id="L211">			return result;</span>
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+<span class="nc bnc" id="L216" title="All 2 branches missed.">			if (this == obj)</span>
+<span class="nc" id="L217">				return true;</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">			if (obj == null)</span>
+<span class="nc" id="L219">				return false;</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">			if (getClass() != obj.getClass())</span>
+<span class="nc" id="L221">				return false;</span>
+<span class="nc" id="L222">			HashEntry&lt;?, ?&gt; other = (HashEntry&lt;?, ?&gt;) obj;</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">			if (key == null) {</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">				if (other.key != null)</span>
+<span class="nc" id="L225">					return false;</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">			} else if (!key.equals(other.key))</span>
+<span class="nc" id="L227">				return false;</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">			if (value == null) {</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">				if (other.value != null)</span>
+<span class="nc" id="L230">					return false;</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">			} else if (!value.equals(other.value))</span>
+<span class="nc" id="L232">				return false;</span>
+<span class="nc" id="L233">			return true;</span>
+		}
+
+	}
+
+<span class="nc" id="L238">	private class KeySet extends AbstractSet&lt;K&gt; {</span>
+
+		@Override
+		public Iterator&lt;K&gt; iterator() {
+<span class="nc" id="L242">			return new KeySetIterator();</span>
+		}
+
+		@Override
+		public int size() {
+<span class="nc" id="L247">			return size;</span>
+		}
+
+	}
+
+<span class="nc" id="L252">	private class ValueCollection extends AbstractCollection&lt;V&gt; {</span>
+
+		@Override
+		public Iterator&lt;V&gt; iterator() {
+<span class="nc" id="L256">			return new ValueSetIterator();</span>
+		}
+
+		@Override
+		public int size() {
+<span class="nc" id="L261">			return size;</span>
+		}
+
+	}
+
+<span class="nc" id="L266">	private class EntrySet extends AbstractSet&lt;Map.Entry&lt;K, V&gt;&gt; {</span>
+
+		@Override
+		public Iterator&lt;Map.Entry&lt;K, V&gt;&gt; iterator() {
+<span class="nc" id="L270">			return new EntrySetIterator();</span>
+		}
+
+		@Override
+		public int size() {
+<span class="nc" id="L275">			return size;</span>
+		}
+
+	}
+
+	private abstract class AbstractIterator {
+
+		private int lastIndex;
+		private HashEntry&lt;K, V&gt; next;
+
+<span class="nc" id="L285">		public AbstractIterator() {</span>
+<span class="nc" id="L286">			int capacity = table.length;</span>
+<span class="nc bnc" id="L287" title="All 4 branches missed.">			while (lastIndex &lt; capacity &amp;&amp; next == null) {</span>
+<span class="nc" id="L288">				next = table[lastIndex];</span>
+<span class="nc" id="L289">				lastIndex++;</span>
+			}
+<span class="nc" id="L291">		}</span>
+
+		public boolean hasNext() {
+<span class="nc bnc" id="L294" title="All 2 branches missed.">			return next != null;</span>
+		}
+
+		public void remove() {
+<span class="nc" id="L298">			table[lastIndex] = null;</span>
+<span class="nc" id="L299">		}</span>
+
+		protected HashEntry&lt;K, V&gt; nextEntry() {
+<span class="nc" id="L302">			int capacity = table.length;</span>
+<span class="nc" id="L303">			HashEntry&lt;K, V&gt; lastReturned = next;</span>
+<span class="nc bnc" id="L304" title="All 2 branches missed.">			next = lastIndex &lt; capacity ? table[lastIndex++] : null;</span>
+<span class="nc bnc" id="L305" title="All 4 branches missed.">			for (; lastIndex &lt; capacity &amp;&amp; next == null; lastIndex++) {</span>
+<span class="nc" id="L306">				next = table[lastIndex];</span>
+			}
+<span class="nc" id="L308">			return lastReturned;</span>
+		}
+
+	}
+
+<span class="nc" id="L313">	private class KeySetIterator extends AbstractIterator implements Iterator&lt;K&gt; {</span>
+
+		public K next() {
+<span class="nc bnc" id="L316" title="All 2 branches missed.">			if (!hasNext()) {</span>
+<span class="nc" id="L317">				throw new NoSuchElementException();</span>
+			}
+<span class="nc" id="L319">			return nextEntry().getKey();</span>
+		}
+
+	}
+
+<span class="nc" id="L324">	private class ValueSetIterator extends AbstractIterator implements Iterator&lt;V&gt; {</span>
+
+		public V next() {
+<span class="nc bnc" id="L327" title="All 2 branches missed.">			if (!hasNext()) {</span>
+<span class="nc" id="L328">				throw new NoSuchElementException();</span>
+			}
+<span class="nc" id="L330">			return nextEntry().getValue();</span>
+		}
+
+	}
+
+<span class="nc" id="L335">	private class EntrySetIterator extends AbstractIterator implements Iterator&lt;Map.Entry&lt;K, V&gt;&gt; {</span>
+
+		public HashEntry&lt;K, V&gt; next() {
+<span class="nc bnc" id="L338" title="All 2 branches missed.">			if (!hasNext()) {</span>
+<span class="nc" id="L339">				throw new NoSuchElementException();</span>
+			}
+<span class="nc" id="L341">			return nextEntry();</span>
+		}
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

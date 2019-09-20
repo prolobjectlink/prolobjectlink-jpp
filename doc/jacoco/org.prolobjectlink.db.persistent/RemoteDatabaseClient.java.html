@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RemoteDatabaseClient.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.persistent</a> &gt; <span class="el_source">RemoteDatabaseClient.java</span></div><h1>RemoteDatabaseClient.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.persistent;
+
+import static org.prolobjectlink.db.OperationType.ACTIVE;
+import static org.prolobjectlink.db.OperationType.BACKUP;
+import static org.prolobjectlink.db.OperationType.BEGIN;
+import static org.prolobjectlink.db.OperationType.CLEAR;
+import static org.prolobjectlink.db.OperationType.CLOSE;
+import static org.prolobjectlink.db.OperationType.COMMIT;
+import static org.prolobjectlink.db.OperationType.CONNECT;
+import static org.prolobjectlink.db.OperationType.CONSTAINS_CLASS;
+import static org.prolobjectlink.db.OperationType.CONSTAINS_INDICATOR;
+import static org.prolobjectlink.db.OperationType.CONSTAINS_OBJECT;
+import static org.prolobjectlink.db.OperationType.CONSTAINS_PREDICATE;
+import static org.prolobjectlink.db.OperationType.CONSTAINS_STRING;
+import static org.prolobjectlink.db.OperationType.CREATE;
+import static org.prolobjectlink.db.OperationType.DEFRAG;
+import static org.prolobjectlink.db.OperationType.DELETE_ARRAY;
+import static org.prolobjectlink.db.OperationType.DELETE_CLASS;
+import static org.prolobjectlink.db.OperationType.DROP;
+import static org.prolobjectlink.db.OperationType.EXIST;
+import static org.prolobjectlink.db.OperationType.INCLUDE;
+import static org.prolobjectlink.db.OperationType.INSERT;
+import static org.prolobjectlink.db.OperationType.PROCEDURE;
+import static org.prolobjectlink.db.OperationType.QUERY_CLASS;
+import static org.prolobjectlink.db.OperationType.QUERY_OBJECT;
+import static org.prolobjectlink.db.OperationType.QUERY_PREDICATE;
+import static org.prolobjectlink.db.OperationType.QUERY_STRING;
+import static org.prolobjectlink.db.OperationType.RESTORE;
+import static org.prolobjectlink.db.OperationType.ROLLBACK;
+import static org.prolobjectlink.db.OperationType.UPDATE;
+
+import java.io.Serializable;
+import java.net.URL;
+
+import org.prolobjectlink.db.DatabaseMode;
+import org.prolobjectlink.db.DatabaseRequest;
+import org.prolobjectlink.db.DatabaseUser;
+import org.prolobjectlink.db.PersistentContainer;
+import org.prolobjectlink.db.Predicate;
+import org.prolobjectlink.db.ProcedureQuery;
+import org.prolobjectlink.db.Query;
+import org.prolobjectlink.db.RemoteDatabase;
+import org.prolobjectlink.db.Schema;
+import org.prolobjectlink.db.Transaction;
+import org.prolobjectlink.db.TypedQuery;
+import org.prolobjectlink.db.engine.AbstractDatabaseEngine;
+import org.prolobjectlink.db.etc.Settings;
+import org.prolobjectlink.db.tx.PersistentContainerTransaction;
+import org.prolobjectlink.prolog.PrologClause;
+import org.prolobjectlink.prolog.PrologEngine;
+import org.prolobjectlink.prolog.PrologProvider;
+
+/** @author Jose Zalacain @since 1.0 */
+public abstract class RemoteDatabaseClient extends AbstractDatabaseEngine implements RemoteDatabase {
+
+<span class="nc" id="L88">	private boolean connected = false;</span>
+	private final Transaction transaction;
+	private final DatabaseRequest activeRequest;
+
+	RemoteDatabaseClient(Settings settings, URL url, String name, Schema schema, DatabaseUser owner) {
+<span class="nc" id="L93">		super(settings, url, name, schema, owner);</span>
+<span class="nc" id="L94">		this.activeRequest = new DatabaseRequest(url.getHost(), url.getPort(), name, getType());</span>
+<span class="nc" id="L95">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L96">	}</span>
+
+	public final PersistentContainer getContainer() {
+<span class="nc" id="L99">		return this;</span>
+	}
+
+	public final String getStorageLocation() {
+<span class="nc" id="L103">		return &quot;&quot; + getURL() + &quot;&quot;;</span>
+	}
+
+	public final boolean isConnected() {
+<span class="nc" id="L107">		return connected;</span>
+	}
+
+	public final void backup(String dir, String zip) {
+<span class="nc" id="L111">		activeRequest.setType(BACKUP);</span>
+<span class="nc" id="L112">		activeRequest.clearArguments();</span>
+<span class="nc" id="L113">		activeRequest.addArgument(dir);</span>
+<span class="nc" id="L114">		activeRequest.addArgument(zip);</span>
+<span class="nc" id="L115">		activeRequest.send();</span>
+<span class="nc" id="L116">	}</span>
+
+	public final void restore(String dir, String zip) {
+<span class="nc" id="L119">		activeRequest.setType(RESTORE);</span>
+<span class="nc" id="L120">		activeRequest.clearArguments();</span>
+<span class="nc" id="L121">		activeRequest.addArgument(dir);</span>
+<span class="nc" id="L122">		activeRequest.addArgument(zip);</span>
+<span class="nc" id="L123">		activeRequest.send();</span>
+<span class="nc" id="L124">	}</span>
+
+	public final RemoteDatabase connect(String name) {
+<span class="nc" id="L127">		activeRequest.setType(CONNECT);</span>
+<span class="nc" id="L128">		activeRequest.clearArguments();</span>
+<span class="nc" id="L129">		connected = activeRequest.send();</span>
+<span class="nc" id="L130">		return this;</span>
+	}
+
+	public final RemoteDatabase create() {
+<span class="nc" id="L134">		activeRequest.clearArguments();</span>
+<span class="nc" id="L135">		activeRequest.setType(CREATE);</span>
+<span class="nc" id="L136">		activeRequest.send();</span>
+<span class="nc" id="L137">		return this;</span>
+	}
+
+	public final RemoteDatabase drop() {
+<span class="nc" id="L141">		activeRequest.clearArguments();</span>
+<span class="nc" id="L142">		activeRequest.setType(DROP);</span>
+<span class="nc" id="L143">		activeRequest.send();</span>
+<span class="nc" id="L144">		return this;</span>
+	}
+
+	public final boolean exist() {
+<span class="nc" id="L148">		activeRequest.clearArguments();</span>
+<span class="nc" id="L149">		activeRequest.setType(EXIST);</span>
+<span class="nc" id="L150">		return activeRequest.send();</span>
+	}
+
+	public final void open() {
+<span class="nc" id="L154">		begin();</span>
+<span class="nc" id="L155">	}</span>
+
+	public final &lt;O&gt; void insert(O... os) {
+<span class="nc" id="L158">		Class&lt;?&gt; c = os.getClass();</span>
+<span class="nc" id="L159">		Class&lt;?&gt; cl = c.getComponentType();</span>
+<span class="nc" id="L160">		activeRequest.clearArguments();</span>
+<span class="nc" id="L161">		activeRequest.setType(INSERT);</span>
+<span class="nc" id="L162">		activeRequest.addArgument(cl);</span>
+<span class="nc" id="L163">		activeRequest.addArgument(os);</span>
+<span class="nc" id="L164">		activeRequest.send();</span>
+<span class="nc" id="L165">	}</span>
+
+	public final &lt;O&gt; void update(O match, O update) {
+<span class="nc" id="L168">		Serializable m = (Serializable) match;</span>
+<span class="nc" id="L169">		Serializable u = (Serializable) update;</span>
+<span class="nc" id="L170">		checkReplacementObject(match, update);</span>
+<span class="nc" id="L171">		Serializable[] a = { m, u };</span>
+<span class="nc" id="L172">		Class&lt;?&gt; mc = match.getClass();</span>
+<span class="nc" id="L173">		activeRequest.clearArguments();</span>
+<span class="nc" id="L174">		activeRequest.setType(UPDATE);</span>
+<span class="nc" id="L175">		activeRequest.addArgument(mc);</span>
+<span class="nc" id="L176">		activeRequest.addArgument(a);</span>
+<span class="nc" id="L177">		activeRequest.send();</span>
+<span class="nc" id="L178">	}</span>
+
+	public final void delete(Class&lt;?&gt; c) {
+<span class="nc" id="L181">		activeRequest.setType(DELETE_CLASS);</span>
+<span class="nc" id="L182">		activeRequest.clearArguments();</span>
+<span class="nc" id="L183">		activeRequest.addArgument(c);</span>
+<span class="nc" id="L184">		activeRequest.send();</span>
+<span class="nc" id="L185">	}</span>
+
+	public final &lt;O&gt; void delete(O... os) {
+<span class="nc" id="L188">		Class&lt;?&gt; c = os.getClass();</span>
+<span class="nc" id="L189">		Class&lt;?&gt; cl = c.getComponentType();</span>
+<span class="nc" id="L190">		activeRequest.setType(DELETE_ARRAY);</span>
+<span class="nc" id="L191">		activeRequest.clearArguments();</span>
+<span class="nc" id="L192">		activeRequest.addArgument(cl);</span>
+<span class="nc" id="L193">		activeRequest.addArgument(os);</span>
+<span class="nc" id="L194">		activeRequest.send();</span>
+<span class="nc" id="L195">	}</span>
+
+	public final Query createQuery(String s) {
+<span class="nc" id="L198">		activeRequest.setType(QUERY_STRING);</span>
+<span class="nc" id="L199">		activeRequest.clearArguments();</span>
+<span class="nc" id="L200">		activeRequest.addArgument(s);</span>
+<span class="nc" id="L201">		return activeRequest.send();</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(O o) {
+<span class="nc" id="L205">		Serializable s = (Serializable) o;</span>
+<span class="nc" id="L206">		activeRequest.setType(QUERY_OBJECT);</span>
+<span class="nc" id="L207">		activeRequest.clearArguments();</span>
+<span class="nc" id="L208">		activeRequest.addArgument(s);</span>
+<span class="nc" id="L209">		return activeRequest.send();</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Class&lt;O&gt; c) {
+<span class="nc" id="L213">		activeRequest.setType(QUERY_CLASS);</span>
+<span class="nc" id="L214">		activeRequest.clearArguments();</span>
+<span class="nc" id="L215">		activeRequest.addArgument(c);</span>
+<span class="nc" id="L216">		return activeRequest.send();</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Predicate&lt;O&gt; p) {
+<span class="nc" id="L220">		activeRequest.setType(QUERY_PREDICATE);</span>
+<span class="nc" id="L221">		activeRequest.clearArguments();</span>
+<span class="nc" id="L222">		activeRequest.addArgument(classOf(p));</span>
+<span class="nc" id="L223">		activeRequest.addArgument(p);</span>
+<span class="nc" id="L224">		return activeRequest.send();</span>
+	}
+
+	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
+<span class="nc" id="L228">		activeRequest.setType(PROCEDURE);</span>
+<span class="nc" id="L229">		activeRequest.clearArguments();</span>
+<span class="nc" id="L230">		activeRequest.addArgument(functor);</span>
+<span class="nc" id="L231">		activeRequest.addArgument(args);</span>
+<span class="nc" id="L232">		return activeRequest.send();</span>
+	}
+
+	public final boolean contains(String s) {
+<span class="nc" id="L236">		activeRequest.setType(CONSTAINS_STRING);</span>
+<span class="nc" id="L237">		activeRequest.clearArguments();</span>
+<span class="nc" id="L238">		activeRequest.addArgument(s);</span>
+<span class="nc" id="L239">		return activeRequest.send();</span>
+	}
+
+	public final &lt;O&gt; boolean contains(O o) {
+<span class="nc" id="L243">		Serializable s = (Serializable) o;</span>
+<span class="nc" id="L244">		activeRequest.setType(CONSTAINS_OBJECT);</span>
+<span class="nc" id="L245">		activeRequest.clearArguments();</span>
+<span class="nc" id="L246">		activeRequest.addArgument(s);</span>
+<span class="nc" id="L247">		return activeRequest.send();</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Class&lt;O&gt; c) {
+<span class="nc" id="L251">		activeRequest.setType(CONSTAINS_CLASS);</span>
+<span class="nc" id="L252">		activeRequest.clearArguments();</span>
+<span class="nc" id="L253">		activeRequest.addArgument(c);</span>
+<span class="nc" id="L254">		return activeRequest.send();</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Predicate&lt;O&gt; p) {
+<span class="nc" id="L258">		activeRequest.clearArguments();</span>
+<span class="nc" id="L259">		activeRequest.setType(CONSTAINS_PREDICATE);</span>
+<span class="nc" id="L260">		activeRequest.addArgument(classOf(p));</span>
+<span class="nc" id="L261">		activeRequest.addArgument(p);</span>
+<span class="nc" id="L262">		return activeRequest.send();</span>
+	}
+
+	public final boolean contains(String functor, int arity) {
+<span class="nc" id="L266">		activeRequest.clearArguments();</span>
+<span class="nc" id="L267">		activeRequest.setType(CONSTAINS_INDICATOR);</span>
+<span class="nc" id="L268">		activeRequest.addArgument(functor);</span>
+<span class="nc" id="L269">		activeRequest.addArgument(arity);</span>
+<span class="nc" id="L270">		return activeRequest.send();</span>
+	}
+
+	public final PersistentContainer containerOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L274">		return this;</span>
+	}
+
+	public final String locationOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L278">		return &quot;&quot; + getURL() + &quot;&quot;;</span>
+	}
+
+	public final void defragment() {
+<span class="nc" id="L282">		activeRequest.clearArguments();</span>
+<span class="nc" id="L283">		activeRequest.setType(DEFRAG);</span>
+<span class="nc" id="L284">		activeRequest.send();</span>
+<span class="nc" id="L285">	}</span>
+
+	public final boolean isOpen() {
+<span class="nc" id="L288">		return isConnected();</span>
+	}
+
+	public final void flush() {
+<span class="nc" id="L292">		commit();</span>
+<span class="nc" id="L293">	}</span>
+
+	public final void clear() {
+<span class="nc" id="L296">		activeRequest.clearArguments();</span>
+<span class="nc" id="L297">		activeRequest.setType(CLEAR);</span>
+<span class="nc" id="L298">		activeRequest.send();</span>
+<span class="nc" id="L299">	}</span>
+
+	public final void include(String path) {
+<span class="nc" id="L302">		PrologProvider p = getProvider();</span>
+<span class="nc" id="L303">		PrologEngine engine = p.newEngine();</span>
+<span class="nc" id="L304">		StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">		for (PrologClause c : engine) {</span>
+<span class="nc" id="L306">			b.append(c);</span>
+<span class="nc" id="L307">		}</span>
+<span class="nc" id="L308">		activeRequest.clearArguments();</span>
+<span class="nc" id="L309">		activeRequest.setType(INCLUDE);</span>
+<span class="nc" id="L310">		activeRequest.addArgument(path);</span>
+<span class="nc" id="L311">		activeRequest.addArgument(b);</span>
+<span class="nc" id="L312">		activeRequest.send();</span>
+<span class="nc" id="L313">		engine.dispose();</span>
+<span class="nc" id="L314">	}</span>
+
+	public final Transaction getTransaction() {
+<span class="nc" id="L317">		return transaction;</span>
+	}
+
+	public final void begin() {
+<span class="nc" id="L321">		activeRequest.clearArguments();</span>
+<span class="nc" id="L322">		activeRequest.setType(BEGIN);</span>
+<span class="nc" id="L323">		activeRequest.send();</span>
+<span class="nc" id="L324">	}</span>
+
+	public final void commit() {
+<span class="nc" id="L327">		activeRequest.clearArguments();</span>
+<span class="nc" id="L328">		activeRequest.setType(COMMIT);</span>
+<span class="nc" id="L329">		activeRequest.send();</span>
+<span class="nc" id="L330">	}</span>
+
+	public final void rollback() {
+<span class="nc" id="L333">		activeRequest.clearArguments();</span>
+<span class="nc" id="L334">		activeRequest.setType(ROLLBACK);</span>
+<span class="nc" id="L335">		activeRequest.send();</span>
+<span class="nc" id="L336">	}</span>
+
+	public final boolean isActive() {
+<span class="nc" id="L339">		activeRequest.clearArguments();</span>
+<span class="nc" id="L340">		activeRequest.setType(ACTIVE);</span>
+<span class="nc" id="L341">		return activeRequest.send();</span>
+	}
+
+	public final void close() {
+<span class="nc" id="L345">		activeRequest.clearArguments();</span>
+<span class="nc" id="L346">		activeRequest.setType(CLOSE);</span>
+<span class="nc" id="L347">		activeRequest.send();</span>
+<span class="nc" id="L348">		connected = false;</span>
+<span class="nc" id="L349">	}</span>
+
+	public final DatabaseMode getMode() {
+<span class="nc" id="L352">		return DatabaseMode.REMOTE;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

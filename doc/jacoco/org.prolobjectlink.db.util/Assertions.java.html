@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Assertions.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.util</a> &gt; <span class="el_source">Assertions.java</span></div><h1>Assertions.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+
+package org.prolobjectlink.db.util;
+
+import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.Map;
+
+public final class Assertions {
+
+	public static &lt;T&gt; T notNull(T object) {
+<span class="nc bnc" id="L43" title="All 2 branches missed.">		if (object == null) {</span>
+<span class="nc" id="L44">			throw new NullPointerException();</span>
+		}
+<span class="nc" id="L46">		return object;</span>
+	}
+
+	public static &lt;T&gt; T notNull(T object, String message) {
+<span class="nc bnc" id="L50" title="All 2 branches missed.">		if (object == null) {</span>
+<span class="nc" id="L51">			throw new NullPointerException(message);</span>
+		}
+<span class="nc" id="L53">		return object;</span>
+	}
+
+	public static &lt;T&gt; T requireNotNull(T object) {
+<span class="nc bnc" id="L57" title="All 2 branches missed.">		if (object == null) {</span>
+<span class="nc" id="L58">			throw new IllegalArgumentException();</span>
+		}
+<span class="nc" id="L60">		return object;</span>
+	}
+
+	public static &lt;T&gt; T requireNotNull(T object, String message) {
+<span class="nc bnc" id="L64" title="All 2 branches missed.">		if (object == null) {</span>
+<span class="nc" id="L65">			throw new IllegalArgumentException(message);</span>
+		}
+<span class="nc" id="L67">		return object;</span>
+	}
+
+	public static &lt;T&gt; T requireNotEqualsRef(T target, T refernce) {
+<span class="nc bnc" id="L71" title="All 2 branches missed.">		if (target == refernce) {</span>
+<span class="nc" id="L72">			throw new IllegalArgumentException();</span>
+		}
+<span class="nc" id="L74">		return target;</span>
+	}
+
+	public static &lt;T&gt; T requireNotEqualsRef(T target, T refernce, String message) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		if (target == refernce) {</span>
+<span class="nc" id="L79">			throw new IllegalArgumentException(message);</span>
+		}
+<span class="nc" id="L81">		return target;</span>
+	}
+
+	public static int checkIndex(int index, int size) {
+<span class="nc" id="L85">		return checkIndex(index, size, &quot;&quot;);</span>
+	}
+
+	public static int checkIndex(int index, int size, String message) {
+<span class="nc bnc" id="L89" title="All 4 branches missed.">		if (index &lt; 0 || index &gt;= size) {</span>
+<span class="nc" id="L90">			throw new IndexOutOfBoundsException(message);</span>
+		}
+<span class="nc" id="L92">		return index;</span>
+	}
+
+	public static Class&lt;?&gt; nonEmpty(Class&lt;?&gt; target) {
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		if (target.getDeclaredFields().length &lt;= 0) {</span>
+<span class="nc" id="L97">			throw new IllegalArgumentException();</span>
+		}
+<span class="nc" id="L99">		return target;</span>
+	}
+
+	public static Class&lt;?&gt; nonEmpty(Class&lt;?&gt; target, String message) {
+<span class="nc bnc" id="L103" title="All 2 branches missed.">		if (target.getDeclaredFields().length &lt;= 0) {</span>
+<span class="nc" id="L104">			throw new IllegalArgumentException(message);</span>
+		}
+<span class="nc" id="L106">		return target;</span>
+	}
+
+	public static &lt;K, V&gt; Map&lt;K, V&gt; nonEmpty(Map&lt;K, V&gt; m) {
+<span class="nc bnc" id="L110" title="All 2 branches missed.">		if (m.isEmpty()) {</span>
+<span class="nc" id="L111">			throw new IllegalArgumentException();</span>
+		}
+<span class="nc" id="L113">		return m;</span>
+	}
+
+	public static &lt;K, V&gt; Map&lt;K, V&gt; nonEmpty(Map&lt;K, V&gt; m, String message) {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">		if (m.isEmpty()) {</span>
+<span class="nc" id="L118">			throw new IllegalArgumentException(message);</span>
+		}
+<span class="nc" id="L120">		return m;</span>
+	}
+
+	public static &lt;E&gt; Collection&lt;E&gt; nonEmpty(Collection&lt;E&gt; c) {
+<span class="nc bnc" id="L124" title="All 2 branches missed.">		if (c.isEmpty()) {</span>
+<span class="nc" id="L125">			throw new IllegalArgumentException();</span>
+		}
+<span class="nc" id="L127">		return c;</span>
+	}
+
+	public static &lt;E&gt; Collection&lt;E&gt; nonEmpty(Collection&lt;E&gt; c, String message) {
+<span class="nc bnc" id="L131" title="All 2 branches missed.">		if (c.isEmpty()) {</span>
+<span class="nc" id="L132">			throw new IllegalArgumentException(message);</span>
+		}
+<span class="nc" id="L134">		return c;</span>
+	}
+
+	/**
+	 * Check that the given class are not field empty or not have persistent fields.
+	 * 
+	 * @param target  the given class reference
+	 * @param message {@link IllegalArgumentException} message if it is threw.
+	 * @return the given class reference or thrown {@link IllegalArgumentException}
+	 * @since 1.0
+	 */
+	public static Class&lt;?&gt; persistent(Class&lt;?&gt; target) {
+<span class="nc" id="L146">		Field[] fields = target.getDeclaredFields();</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">		if (fields.length &lt;= 0) {</span>
+<span class="nc" id="L148">			throw new IllegalArgumentException();</span>
+		}
+
+		// check at least persistent filed
+<span class="nc bnc" id="L152" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">			if (JavaReflect.isPersistent(fields[i])) {</span>
+<span class="nc" id="L154">				return target;</span>
+			}
+		}
+<span class="nc" id="L157">		throw new IllegalArgumentException();</span>
+	}
+
+	/**
+	 * Check that the given class are not field empty or not have persistent fields.
+	 * 
+	 * @param target  the given class reference
+	 * @param message {@link IllegalArgumentException} message if it is threw.
+	 * @return the given class reference or thrown {@link IllegalArgumentException}
+	 * @since 1.0
+	 */
+	public static Class&lt;?&gt; persistent(Class&lt;?&gt; target, String message) {
+<span class="nc" id="L169">		Field[] fields = target.getDeclaredFields();</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">		if (fields.length &lt;= 0) {</span>
+<span class="nc" id="L171">			throw new IllegalArgumentException(message);</span>
+		}
+
+		// check at least persistent filed
+<span class="nc bnc" id="L175" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">			if (JavaReflect.isPersistent(fields[i])) {</span>
+<span class="nc" id="L177">				return target;</span>
+			}
+		}
+<span class="nc" id="L180">		throw new IllegalArgumentException(message);</span>
+	}
+
+	// check at least persistent filed
+	public static Class&lt;?&gt; nonStaticFinal(Class&lt;?&gt; target) {
+<span class="nc" id="L185">		Class&lt;?&gt; classPtr = target;</span>
+<span class="nc bnc" id="L186" title="All 4 branches missed.">		while (classPtr != null &amp;&amp; classPtr != Object.class) {</span>
+<span class="nc" id="L187">			Field[] fields = classPtr.getDeclaredFields();</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">			for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">				if (!JavaReflect.isStaticAndFinal(fields[i])) {</span>
+<span class="nc" id="L190">					return target;</span>
+				}
+			}
+<span class="nc" id="L193">			classPtr = classPtr.getSuperclass();</span>
+<span class="nc" id="L194">		}</span>
+<span class="nc" id="L195">		throw new IllegalArgumentException();</span>
+	}
+
+	// check at least persistent filed
+	public static Class&lt;?&gt; nonStaticFinal(Class&lt;?&gt; target, String message) {
+<span class="nc" id="L200">		Class&lt;?&gt; classPtr = target;</span>
+<span class="nc bnc" id="L201" title="All 4 branches missed.">		while (classPtr != null &amp;&amp; classPtr != Object.class) {</span>
+<span class="nc" id="L202">			Field[] fields = classPtr.getDeclaredFields();</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">			for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">				if (!JavaReflect.isStaticAndFinal(fields[i])) {</span>
+<span class="nc" id="L205">					return target;</span>
+				}
+			}
+<span class="nc" id="L208">			classPtr = classPtr.getSuperclass();</span>
+<span class="nc" id="L209">		}</span>
+<span class="nc" id="L210">		throw new IllegalArgumentException(message);</span>
+	}
+
+<span class="nc" id="L213">	private Assertions() {</span>
+<span class="nc" id="L214">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

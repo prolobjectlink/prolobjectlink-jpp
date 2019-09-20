@@ -1,0 +1,1120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractProgrammer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.prolog</a> &gt; <span class="el_source">AbstractProgrammer.java</span></div><h1>AbstractProgrammer.java</h1><pre class="source lang-java linenums">/*-
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2012 - 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.prolog;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.prolobjectlink.prolog.PrologProvider;
+import org.prolobjectlink.prolog.PrologTerm;
+
+/**
+ * Partial implementation of {@link PrologProgrammer} interface.
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+public abstract class AbstractProgrammer implements PrologProgrammer {
+
+	protected final PrologProvider provider;
+	private static final String NECK = &quot; :- \n\t&quot;;
+<span class="nc" id="L76">	private final Set&lt;String&gt; ignorePackages = new HashSet&lt;String&gt;();</span>
+
+<span class="nc" id="L78">	protected AbstractProgrammer(PrologProvider provider) {</span>
+<span class="nc" id="L79">		this.provider = provider;</span>
+<span class="nc" id="L80">		ignorePackages.add(&quot;sun/java2d/d3d&quot;);</span>
+<span class="nc" id="L81">		ignorePackages.add(&quot;com/sun/jmx/defaults&quot;);</span>
+<span class="nc" id="L82">		ignorePackages.add(&quot;com/sun/jmx/remote/protocol/iiop&quot;);</span>
+<span class="nc" id="L83">		ignorePackages.add(&quot;com/sun/jmx/snmp/daemon&quot;);</span>
+<span class="nc" id="L84">		ignorePackages.add(&quot;sun/util&quot;);</span>
+<span class="nc" id="L85">		ignorePackages.add(&quot;com/sun/istack/internal/localization&quot;);</span>
+<span class="nc" id="L86">		ignorePackages.add(&quot;sun/util/xml&quot;);</span>
+<span class="nc" id="L87">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/sax&quot;);</span>
+<span class="nc" id="L88">		ignorePackages.add(&quot;sun/security/krb5/internal/rcache&quot;);</span>
+<span class="nc" id="L89">		ignorePackages.add(&quot;sun/security/krb5/internal/tools&quot;);</span>
+<span class="nc" id="L90">		ignorePackages.add(&quot;com/sun/corba/se/pept/transport&quot;);</span>
+<span class="nc" id="L91">		ignorePackages.add(&quot;com/sun/demo/jvmti/hprof&quot;);</span>
+<span class="nc" id="L92">		ignorePackages.add(&quot;sun/swing/text/html&quot;);</span>
+<span class="nc" id="L93">		ignorePackages.add(&quot;com/sun/xml/internal/stream/writers&quot;);</span>
+<span class="nc" id="L94">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/packaging/mime/util&quot;);</span>
+<span class="nc" id="L95">		ignorePackages.add(&quot;com/sun/corba/se/impl/protocol/giopmsgheaders&quot;);</span>
+<span class="nc" id="L96">		ignorePackages.add(&quot;com/sun/corba/se/impl/resolver&quot;);</span>
+<span class="nc" id="L97">		ignorePackages.add(&quot;com/sun/jndi/ldap/sasl&quot;);</span>
+<span class="nc" id="L98">		ignorePackages.add(&quot;com/sun/security/auth/login&quot;);</span>
+<span class="nc" id="L99">		ignorePackages.add(&quot;com/sun/org/apache/bcel/internal&quot;);</span>
+<span class="nc" id="L100">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/handler&quot;);</span>
+<span class="nc" id="L101">		ignorePackages.add(&quot;sun/security/jgss&quot;);</span>
+<span class="nc" id="L102">		ignorePackages.add(&quot;sun/security/provider&quot;);</span>
+<span class="nc" id="L103">		ignorePackages.add(&quot;jdk/internal/org/xml/sax/helpers&quot;);</span>
+<span class="nc" id="L104">		ignorePackages.add(&quot;com/sun/xml/internal/ws/wsdl/writer/document/http&quot;);</span>
+<span class="nc" id="L105">		ignorePackages.add(&quot;com/sun/xml/internal/ws/spi/db&quot;);</span>
+<span class="nc" id="L106">		ignorePackages.add(&quot;com/sun/jndi/url/iiop&quot;);</span>
+<span class="nc" id="L107">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/keys/storage/implementations&quot;);</span>
+<span class="nc" id="L108">		ignorePackages.add(&quot;com/sun/org/glassfish/gmbal&quot;);</span>
+<span class="nc" id="L109">		ignorePackages.add(&quot;sun/tracing/dtrace&quot;);</span>
+<span class="nc" id="L110">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/runtime/property&quot;);</span>
+<span class="nc" id="L111">		ignorePackages.add(&quot;com/sun/org/apache/xpath/internal/domapi&quot;);</span>
+<span class="nc" id="L112">		ignorePackages.add(&quot;sun/net/smtp&quot;);</span>
+<span class="nc" id="L113">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/ha&quot;);</span>
+<span class="nc" id="L114">		ignorePackages.add(&quot;com/sun/xml/internal/ws/client/sei&quot;);</span>
+<span class="nc" id="L115">		ignorePackages.add(&quot;com/sun/xml/internal/ws/db&quot;);</span>
+<span class="nc" id="L116">		ignorePackages.add(&quot;com/sun/org/glassfish/external/statistics/impl&quot;);</span>
+<span class="nc" id="L117">		ignorePackages.add(&quot;sun/management/resources&quot;);</span>
+<span class="nc" id="L118">		ignorePackages.add(&quot;sun/misc/resources&quot;);</span>
+<span class="nc" id="L119">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/model/core&quot;);</span>
+<span class="nc" id="L120">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/c14n/helper&quot;);</span>
+<span class="nc" id="L121">		ignorePackages.add(&quot;com/sun/management&quot;);</span>
+<span class="nc" id="L122">		ignorePackages.add(&quot;com/sun/corba/se/impl/orbutil/concurrent&quot;);</span>
+<span class="nc" id="L123">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/stax/util&quot;);</span>
+<span class="nc" id="L124">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/pipe&quot;);</span>
+<span class="nc" id="L125">		ignorePackages.add(&quot;com/sun/xml/internal/ws/wsdl&quot;);</span>
+<span class="nc" id="L126">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/util&quot;);</span>
+<span class="nc" id="L127">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/res&quot;);</span>
+<span class="nc" id="L128">		ignorePackages.add(&quot;sun/net/ftp/impl&quot;);</span>
+<span class="nc" id="L129">		ignorePackages.add(&quot;com/sun/xml/internal/ws/spi&quot;);</span>
+<span class="nc" id="L130">		ignorePackages.add(&quot;com/sun/corba/se/pept/encoding&quot;);</span>
+<span class="nc" id="L131">		ignorePackages.add(&quot;com/sun/istack/internal/logging&quot;);</span>
+<span class="nc" id="L132">		ignorePackages.add(&quot;jdk/management/resource&quot;);</span>
+<span class="nc" id="L133">		ignorePackages.add(&quot;sun/applet&quot;);</span>
+<span class="nc" id="L134">		ignorePackages.add(&quot;com/sun/corba/se/impl/orbutil/closure&quot;);</span>
+<span class="nc" id="L135">		ignorePackages.add(&quot;com/sun/xml/internal/ws/server&quot;);</span>
+<span class="nc" id="L136">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/res&quot;);</span>
+<span class="nc" id="L137">		ignorePackages.add(&quot;com/sun/security/sasl/ntlm&quot;);</span>
+<span class="nc" id="L138">		ignorePackages.add(&quot;com/sun/xml/internal/ws/policy/jaxws&quot;);</span>
+<span class="nc" id="L139">		ignorePackages.add(&quot;sun/reflect/generics/repository&quot;);</span>
+<span class="nc" id="L140">		ignorePackages.add(&quot;com/sun/jndi/toolkit/dir&quot;);</span>
+<span class="nc" id="L141">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/resolver&quot;);</span>
+<span class="nc" id="L142">		ignorePackages.add(&quot;com/sun/rmi/rmid&quot;);</span>
+<span class="nc" id="L143">		ignorePackages.add(&quot;com/sun/imageio/spi&quot;);</span>
+<span class="nc" id="L144">		ignorePackages.add(&quot;sun/swing/plaf/windows&quot;);</span>
+<span class="nc" id="L145">		ignorePackages.add(&quot;com/sun/xml/internal/ws/protocol/xml&quot;);</span>
+<span class="nc" id="L146">		ignorePackages.add(&quot;sun/awt/image/codec&quot;);</span>
+<span class="nc" id="L147">		ignorePackages.add(&quot;sun/net/www/protocol/file&quot;);</span>
+<span class="nc" id="L148">		ignorePackages.add(&quot;sun/nio/ch/sctp&quot;);</span>
+<span class="nc" id="L149">		ignorePackages.add(&quot;sun/util/logging/resources&quot;);</span>
+<span class="nc" id="L150">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/packaging/mime/internet&quot;);</span>
+<span class="nc" id="L151">		ignorePackages.add(&quot;com/sun/xml/internal/ws/util/exception&quot;);</span>
+<span class="nc" id="L152">		ignorePackages.add(&quot;sun/security/tools&quot;);</span>
+<span class="nc" id="L153">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/runtime/reflect&quot;);</span>
+<span class="nc" id="L154">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/c14n&quot;);</span>
+<span class="nc" id="L155">		ignorePackages.add(&quot;com/sun/beans/decoder&quot;);</span>
+<span class="nc" id="L156">		ignorePackages.add(&quot;com/sun/org/apache/xpath/internal&quot;);</span>
+<span class="nc" id="L157">		ignorePackages.add(&quot;com/sun/xml/internal/ws/client/dispatch&quot;);</span>
+<span class="nc" id="L158">		ignorePackages.add(&quot;com/sun/xml/internal/ws/policy/sourcemodel/wspolicy&quot;);</span>
+<span class="nc" id="L159">		ignorePackages.add(&quot;com/sun/corba/se/spi/transport&quot;);</span>
+<span class="nc" id="L160">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/xni&quot;);</span>
+<span class="nc" id="L161">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xsltc/util&quot;);</span>
+<span class="nc" id="L162">		ignorePackages.add(&quot;com/sun/xml/internal/stream/buffer/sax&quot;);</span>
+<span class="nc" id="L163">		ignorePackages.add(&quot;sun/net/www/protocol/netdoc&quot;);</span>
+<span class="nc" id="L164">		ignorePackages.add(&quot;com/sun/corba/se/internal/iiop&quot;);</span>
+<span class="nc" id="L165">		ignorePackages.add(&quot;com/sun/corba/se/impl/javax/rmi/CORBA&quot;);</span>
+<span class="nc" id="L166">		ignorePackages.add(&quot;sun/security/rsa&quot;);</span>
+<span class="nc" id="L167">		ignorePackages.add(&quot;com/sun/corba/se/spi/logging&quot;);</span>
+<span class="nc" id="L168">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/schemagen&quot;);</span>
+<span class="nc" id="L169">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/bytecode&quot;);</span>
+<span class="nc" id="L170">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/xs/util&quot;);</span>
+<span class="nc" id="L171">		ignorePackages.add(&quot;com/sun/xml/internal/ws/config/management/policy&quot;);</span>
+<span class="nc" id="L172">		ignorePackages.add(&quot;com/sun/xml/internal/stream/util&quot;);</span>
+<span class="nc" id="L173">		ignorePackages.add(&quot;com/sun/xml/internal/ws/encoding/soap/streaming&quot;);</span>
+<span class="nc" id="L174">		ignorePackages.add(&quot;com/sun/xml/internal/ws/wsdl/writer/document/soap12&quot;);</span>
+<span class="nc" id="L175">		ignorePackages.add(&quot;sun/security/jca&quot;);</span>
+<span class="nc" id="L176">		ignorePackages.add(&quot;com/sun/corba/se/impl/activation&quot;);</span>
+<span class="nc" id="L177">		ignorePackages.add(&quot;com/sun/security/auth/module&quot;);</span>
+<span class="nc" id="L178">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal&quot;);</span>
+<span class="nc" id="L179">		ignorePackages.add(&quot;sun/security/validator&quot;);</span>
+<span class="nc" id="L180">		ignorePackages.add(&quot;com/sun/corba/se/impl/interceptors&quot;);</span>
+<span class="nc" id="L181">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/transforms/params&quot;);</span>
+<span class="nc" id="L182">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/xs/opti&quot;);</span>
+<span class="nc" id="L183">		ignorePackages.add(&quot;com/sun/jmx/snmp/tasks&quot;);</span>
+<span class="nc" id="L184">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/xs&quot;);</span>
+<span class="nc" id="L185">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xsltc&quot;);</span>
+<span class="nc" id="L186">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xsltc/compiler/util&quot;);</span>
+<span class="nc" id="L187">		ignorePackages.add(&quot;com/sun/xml/internal/bind&quot;);</span>
+<span class="nc" id="L188">		ignorePackages.add(&quot;sun/awt/shell&quot;);</span>
+<span class="nc" id="L189">		ignorePackages.add(&quot;sun/net/www&quot;);</span>
+<span class="nc" id="L190">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/keys/storage&quot;);</span>
+<span class="nc" id="L191">		ignorePackages.add(&quot;com/sun/xml/internal/ws/util/xml&quot;);</span>
+<span class="nc" id="L192">		ignorePackages.add(&quot;com/sun/jndi/url/iiopname&quot;);</span>
+<span class="nc" id="L193">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/model/util&quot;);</span>
+<span class="nc" id="L194">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/signature&quot;);</span>
+<span class="nc" id="L195">		ignorePackages.add(&quot;sun/net/spi&quot;);</span>
+<span class="nc" id="L196">		ignorePackages.add(&quot;com/sun/imageio/plugins/wbmp&quot;);</span>
+<span class="nc" id="L197">		ignorePackages.add(&quot;com/sun/jndi/ldap&quot;);</span>
+<span class="nc" id="L198">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/xpointer&quot;);</span>
+<span class="nc" id="L199">		ignorePackages.add(&quot;sun/security/provider/certpath&quot;);</span>
+<span class="nc" id="L200">		ignorePackages.add(&quot;jdk/internal/org/xml/sax&quot;);</span>
+<span class="nc" id="L201">		ignorePackages.add(&quot;sun/net/www/protocol/jar&quot;);</span>
+<span class="nc" id="L202">		ignorePackages.add(&quot;sun/launcher/resources&quot;);</span>
+<span class="nc" id="L203">		ignorePackages.add(&quot;sun/management/snmp/jvminstr&quot;);</span>
+<span class="nc" id="L204">		ignorePackages.add(&quot;com/sun/imageio/stream&quot;);</span>
+<span class="nc" id="L205">		ignorePackages.add(&quot;jdk/internal/cmm&quot;);</span>
+<span class="nc" id="L206">		ignorePackages.add(&quot;sun/rmi/server&quot;);</span>
+<span class="nc" id="L207">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/templates&quot;);</span>
+<span class="nc" id="L208">		ignorePackages.add(&quot;com/sun/swing/internal/plaf/metal/resources&quot;);</span>
+<span class="nc" id="L209">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xsltc/runtime/output&quot;);</span>
+<span class="nc" id="L210">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/model/wsdl&quot;);</span>
+<span class="nc" id="L211">		ignorePackages.add(&quot;sun/text/resources/en&quot;);</span>
+<span class="nc" id="L212">		ignorePackages.add(&quot;com/sun/corba/se/impl/dynamicany&quot;);</span>
+<span class="nc" id="L213">		ignorePackages.add(&quot;jdk/internal/org/objectweb/asm/util&quot;);</span>
+<span class="nc" id="L214">		ignorePackages.add(&quot;com/sun/activation/registries&quot;);</span>
+<span class="nc" id="L215">		ignorePackages.add(&quot;com/sun/org/omg/CORBA/portable&quot;);</span>
+<span class="nc" id="L216">		ignorePackages.add(&quot;com/sun/beans&quot;);</span>
+<span class="nc" id="L217">		ignorePackages.add(&quot;com/sun/xml/internal/stream/dtd/nonvalidating&quot;);</span>
+<span class="nc" id="L218">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/jaxp/validation&quot;);</span>
+<span class="nc" id="L219">		ignorePackages.add(&quot;com/sun/xml/internal/bind/api/impl&quot;);</span>
+<span class="nc" id="L220">		ignorePackages.add(&quot;com/sun/xml/internal/txw2&quot;);</span>
+<span class="nc" id="L221">		ignorePackages.add(&quot;sun/rmi/runtime&quot;);</span>
+<span class="nc" id="L222">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/exceptions&quot;);</span>
+<span class="nc" id="L223">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/config/management/policy&quot;);</span>
+<span class="nc" id="L224">		ignorePackages.add(&quot;com/sun/corba/se/impl/orb&quot;);</span>
+<span class="nc" id="L225">		ignorePackages.add(&quot;com/sun/xml/internal/ws/transport/http&quot;);</span>
+<span class="nc" id="L226">		ignorePackages.add(&quot;sun/net/ftp&quot;);</span>
+<span class="nc" id="L227">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/xpath&quot;);</span>
+<span class="nc" id="L228">		ignorePackages.add(&quot;com/sun/xml/internal/ws/message/source&quot;);</span>
+<span class="nc" id="L229">		ignorePackages.add(&quot;com/sun/xml/internal/org/jvnet/mimepull&quot;);</span>
+<span class="nc" id="L230">		ignorePackages.add(&quot;sun/security/krb5/internal/crypto/dk&quot;);</span>
+<span class="nc" id="L231">		ignorePackages.add(&quot;com/sun/rowset&quot;);</span>
+<span class="nc" id="L232">		ignorePackages.add(&quot;com/sun/management/jmx&quot;);</span>
+<span class="nc" id="L233">		ignorePackages.add(&quot;com/sun/xml/internal/org/jvnet/fastinfoset/sax/helpers&quot;);</span>
+<span class="nc" id="L234">		ignorePackages.add(&quot;com/sun/xml/internal/org/jvnet/staxex&quot;);</span>
+<span class="nc" id="L235">		ignorePackages.add(&quot;sun/java2d/pipe/hw&quot;);</span>
+<span class="nc" id="L236">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/client/p2p&quot;);</span>
+<span class="nc" id="L237">		ignorePackages.add(&quot;com/sun/corba/se/spi/orbutil/proxy&quot;);</span>
+<span class="nc" id="L238">		ignorePackages.add(&quot;sun/rmi/log&quot;);</span>
+<span class="nc" id="L239">		ignorePackages.add(&quot;sun/security/krb5/internal/util&quot;);</span>
+<span class="nc" id="L240">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xsltc/compiler&quot;);</span>
+<span class="nc" id="L241">		ignorePackages.add(&quot;com/sun/jmx/snmp&quot;);</span>
+<span class="nc" id="L242">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/soap/dynamic&quot;);</span>
+<span class="nc" id="L243">		ignorePackages.add(&quot;sun/net/www/protocol/https&quot;);</span>
+<span class="nc" id="L244">		ignorePackages.add(&quot;com/sun/security/sasl&quot;);</span>
+<span class="nc" id="L245">		ignorePackages.add(&quot;com/sun/xml/internal/ws/wsdl/writer/document&quot;);</span>
+<span class="nc" id="L246">		ignorePackages.add(&quot;com/sun/imageio/plugins/gif&quot;);</span>
+<span class="nc" id="L247">		ignorePackages.add(&quot;com/sun/org/glassfish/external/probe/provider&quot;);</span>
+<span class="nc" id="L248">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/util&quot;);</span>
+<span class="nc" id="L249">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/fastinfoset&quot;);</span>
+<span class="nc" id="L250">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/dtd&quot;);</span>
+<span class="nc" id="L251">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/packaging/mime&quot;);</span>
+<span class="nc" id="L252">		ignorePackages.add(&quot;jdk/management/resource/internal/inst&quot;);</span>
+<span class="nc" id="L253">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/dv&quot;);</span>
+<span class="nc" id="L254">		ignorePackages.add(&quot;com/sun/xml/internal/ws/encoding/soap&quot;);</span>
+<span class="nc" id="L255">		ignorePackages.add(&quot;sun/awt/dnd&quot;);</span>
+<span class="nc" id="L256">		ignorePackages.add(&quot;com/sun/xml/internal/stream/buffer&quot;);</span>
+<span class="nc" id="L257">		ignorePackages.add(&quot;com/sun/corba/se/internal/corba&quot;);</span>
+<span class="nc" id="L258">		ignorePackages.add(&quot;com/sun/image/codec/jpeg&quot;);</span>
+<span class="nc" id="L259">		ignorePackages.add(&quot;com/sun/corba/se/spi/extension&quot;);</span>
+<span class="nc" id="L260">		ignorePackages.add(&quot;com/sun/corba/se/impl/naming/pcosnaming&quot;);</span>
+<span class="nc" id="L261">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/signature/reference&quot;);</span>
+<span class="nc" id="L262">		ignorePackages.add(&quot;sun/java2d/pipe&quot;);</span>
+<span class="nc" id="L263">		ignorePackages.add(&quot;com/sun/corba/se/impl/monitoring&quot;);</span>
+<span class="nc" id="L264">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/schemagen/episode&quot;);</span>
+<span class="nc" id="L265">		ignorePackages.add(&quot;sun/io&quot;);</span>
+<span class="nc" id="L266">		ignorePackages.add(&quot;com/sun/xml/internal/ws/wsdl/writer/document/soap&quot;);</span>
+<span class="nc" id="L267">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/stax/events&quot;);</span>
+<span class="nc" id="L268">		ignorePackages.add(&quot;com/sun/org/omg/SendingContext&quot;);</span>
+<span class="nc" id="L269">		ignorePackages.add(&quot;jdk/internal/org/objectweb/asm/tree&quot;);</span>
+<span class="nc" id="L270">		ignorePackages.add(&quot;sun/management/counter&quot;);</span>
+<span class="nc" id="L271">		ignorePackages.add(&quot;sun/security/pkcs10&quot;);</span>
+<span class="nc" id="L272">		ignorePackages.add(&quot;sun/nio/fs&quot;);</span>
+<span class="nc" id="L273">		ignorePackages.add(&quot;com/oracle/webservices/internal/api/message&quot;);</span>
+<span class="nc" id="L274">		ignorePackages.add(&quot;sun/security/smartcardio&quot;);</span>
+<span class="nc" id="L275">		ignorePackages.add(&quot;sun/net/dns&quot;);</span>
+<span class="nc" id="L276">		ignorePackages.add(&quot;sun/print/resources&quot;);</span>
+<span class="nc" id="L277">		ignorePackages.add(&quot;sun/util/calendar&quot;);</span>
+<span class="nc" id="L278">		ignorePackages.add(&quot;com/sun/corba/se/impl/encoding&quot;);</span>
+<span class="nc" id="L279">		ignorePackages.add(&quot;com/sun/xml/internal/ws/assembler/dev&quot;);</span>
+<span class="nc" id="L280">		ignorePackages.add(&quot;sun/security/pkcs12&quot;);</span>
+<span class="nc" id="L281">		ignorePackages.add(&quot;sun/reflect&quot;);</span>
+<span class="nc" id="L282">		ignorePackages.add(&quot;com/sun/istack/internal&quot;);</span>
+<span class="nc" id="L283">		ignorePackages.add(&quot;com/sun/xml/internal/bind/api&quot;);</span>
+<span class="nc" id="L284">		ignorePackages.add(&quot;sun/security/timestamp&quot;);</span>
+<span class="nc" id="L285">		ignorePackages.add(&quot;sun/awt/windows&quot;);</span>
+<span class="nc" id="L286">		ignorePackages.add(&quot;sun/security/provider/certpath/ldap&quot;);</span>
+<span class="nc" id="L287">		ignorePackages.add(&quot;com/sun/org/glassfish/external/statistics&quot;);</span>
+<span class="nc" id="L288">		ignorePackages.add(&quot;com/sun/jndi/toolkit/url&quot;);</span>
+<span class="nc" id="L289">		ignorePackages.add(&quot;sun/swing/plaf&quot;);</span>
+<span class="nc" id="L290">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/utils&quot;);</span>
+<span class="nc" id="L291">		ignorePackages.add(&quot;com/sun/corba/se/spi/legacy/connection&quot;);</span>
+<span class="nc" id="L292">		ignorePackages.add(&quot;sun/security/krb5/internal/crypto&quot;);</span>
+<span class="nc" id="L293">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/util/transform&quot;);</span>
+<span class="nc" id="L294">		ignorePackages.add(&quot;com/sun/xml/internal/ws/message&quot;);</span>
+<span class="nc" id="L295">		ignorePackages.add(&quot;com/sun/corba/se/spi/activation/InitialNameServicePackage&quot;);</span>
+<span class="nc" id="L296">		ignorePackages.add(&quot;sun/security/acl&quot;);</span>
+<span class="nc" id="L297">		ignorePackages.add(&quot;com/sun/jndi/ldap/ext&quot;);</span>
+<span class="nc" id="L298">		ignorePackages.add(&quot;sun/awt/util&quot;);</span>
+<span class="nc" id="L299">		ignorePackages.add(&quot;com/sun/xml/internal/ws/policy/privateutil&quot;);</span>
+<span class="nc" id="L300">		ignorePackages.add(&quot;sun/invoke/empty&quot;);</span>
+<span class="nc" id="L301">		ignorePackages.add(&quot;com/sun/jmx/snmp/IPAcl&quot;);</span>
+<span class="nc" id="L302">		ignorePackages.add(&quot;sun/text/normalizer&quot;);</span>
+<span class="nc" id="L303">		ignorePackages.add(&quot;com/sun/xml/internal/ws/message/saaj&quot;);</span>
+<span class="nc" id="L304">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/client&quot;);</span>
+<span class="nc" id="L305">		ignorePackages.add(&quot;com/sun/xml/internal/ws/config/metro/dev&quot;);</span>
+<span class="nc" id="L306">		ignorePackages.add(&quot;com/sun/beans/editors&quot;);</span>
+<span class="nc" id="L307">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/xni/grammars&quot;);</span>
+<span class="nc" id="L308">		ignorePackages.add(&quot;com/sun/corba/se/internal/CosNaming&quot;);</span>
+<span class="nc" id="L309">		ignorePackages.add(&quot;sun/net/www/protocol/http/logging&quot;);</span>
+<span class="nc" id="L310">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/util&quot;);</span>
+<span class="nc" id="L311">		ignorePackages.add(&quot;sun/java2d/cmm&quot;);</span>
+<span class="nc" id="L312">		ignorePackages.add(&quot;com/sun/xml/internal/ws/addressing/model&quot;);</span>
+<span class="nc" id="L313">		ignorePackages.add(&quot;sun/management/snmp&quot;);</span>
+<span class="nc" id="L314">		ignorePackages.add(&quot;sun/dc/pr&quot;);</span>
+<span class="nc" id="L315">		ignorePackages.add(&quot;com/sun/xml/internal/ws/transport&quot;);</span>
+<span class="nc" id="L316">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/c14n/implementations&quot;);</span>
+<span class="nc" id="L317">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/runtime/reflect/opt&quot;);</span>
+<span class="nc" id="L318">		ignorePackages.add(&quot;com/sun/beans/infos&quot;);</span>
+<span class="nc" id="L319">		ignorePackages.add(&quot;com/sun/jndi/toolkit/ctx&quot;);</span>
+<span class="nc" id="L320">		ignorePackages.add(&quot;com/sun/jndi/url/ldap&quot;);</span>
+<span class="nc" id="L321">		ignorePackages.add(&quot;sun/awt&quot;);</span>
+<span class="nc" id="L322">		ignorePackages.add(&quot;sun/security/jgss/spi&quot;);</span>
+<span class="nc" id="L323">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/transforms/implementations&quot;);</span>
+<span class="nc" id="L324">		ignorePackages.add(&quot;com/sun/xml/internal/ws/config/metro/util&quot;);</span>
+<span class="nc" id="L325">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/resolver/tools&quot;);</span>
+<span class="nc" id="L326">		ignorePackages.add(&quot;sun/net/www/content/image&quot;);</span>
+<span class="nc" id="L327">		ignorePackages.add(&quot;com/sun/org/apache/xpath/internal/axes&quot;);</span>
+<span class="nc" id="L328">		ignorePackages.add(&quot;sun/net/www/protocol/ftp&quot;);</span>
+<span class="nc" id="L329">		ignorePackages.add(&quot;com/sun/org/apache/xpath/internal/operations&quot;);</span>
+<span class="nc" id="L330">		ignorePackages.add(&quot;com/sun/corba/se/impl/oa/poa&quot;);</span>
+<span class="nc" id="L331">		ignorePackages.add(&quot;sun/awt/geom&quot;);</span>
+<span class="nc" id="L332">		ignorePackages.add(&quot;sun/launcher&quot;);</span>
+<span class="nc" id="L333">		ignorePackages.add(&quot;sun/nio/cs&quot;);</span>
+<span class="nc" id="L334">		ignorePackages.add(&quot;com/sun/jndi/cosnaming&quot;);</span>
+<span class="nc" id="L335">		ignorePackages.add(&quot;sun/net/spi/nameservice&quot;);</span>
+<span class="nc" id="L336">		ignorePackages.add(&quot;com/sun/xml/internal/stream&quot;);</span>
+<span class="nc" id="L337">		ignorePackages.add(&quot;sun/net/httpserver&quot;);</span>
+<span class="nc" id="L338">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/org/apache/xerces/util&quot;);</span>
+<span class="nc" id="L339">		ignorePackages.add(&quot;sun/nio/ch&quot;);</span>
+<span class="nc" id="L340">		ignorePackages.add(&quot;com/sun/jndi/url/ldaps&quot;);</span>
+<span class="nc" id="L341">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/alphabet&quot;);</span>
+<span class="nc" id="L342">		ignorePackages.add(&quot;sun/swing/plaf/synth&quot;);</span>
+<span class="nc" id="L343">		ignorePackages.add(&quot;com/sun/corba/se/impl/presentation/rmi&quot;);</span>
+<span class="nc" id="L344">		ignorePackages.add(&quot;sun/management/jmxremote&quot;);</span>
+<span class="nc" id="L345">		ignorePackages.add(&quot;sun/management/snmp/jvmmib&quot;);</span>
+<span class="nc" id="L346">		ignorePackages.add(&quot;sun/java2d/opengl&quot;);</span>
+<span class="nc" id="L347">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/model/wsdl/editable&quot;);</span>
+<span class="nc" id="L348">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/pipe/helper&quot;);</span>
+<span class="nc" id="L349">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj&quot;);</span>
+<span class="nc" id="L350">		ignorePackages.add(&quot;com/sun/java/browser/net&quot;);</span>
+<span class="nc" id="L351">		ignorePackages.add(&quot;com/oracle/xmlns/internal/webservices/jaxws_databinding&quot;);</span>
+<span class="nc" id="L352">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/parsers&quot;);</span>
+<span class="nc" id="L353">		ignorePackages.add(&quot;com/sun/xml/internal/ws/dump&quot;);</span>
+<span class="nc" id="L354">		ignorePackages.add(&quot;jdk/internal/util/xml/impl&quot;);</span>
+<span class="nc" id="L355">		ignorePackages.add(&quot;com/sun/xml/internal/ws/client&quot;);</span>
+<span class="nc" id="L356">		ignorePackages.add(&quot;sun/security/util&quot;);</span>
+<span class="nc" id="L357">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api&quot;);</span>
+<span class="nc" id="L358">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/model/nav&quot;);</span>
+<span class="nc" id="L359">		ignorePackages.add(&quot;com/sun/corba/se/spi/orbutil/fsm&quot;);</span>
+<span class="nc" id="L360">		ignorePackages.add(&quot;jdk/management/resource/internal&quot;);</span>
+<span class="nc" id="L361">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/policy/subject&quot;);</span>
+<span class="nc" id="L362">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/algorithms&quot;);</span>
+<span class="nc" id="L363">		ignorePackages.add(&quot;com/sun/corba/se/impl/protocol&quot;);</span>
+<span class="nc" id="L364">		ignorePackages.add(&quot;com/sun/xml/internal/ws/addressing&quot;);</span>
+<span class="nc" id="L365">		ignorePackages.add(&quot;sun/dc&quot;);</span>
+<span class="nc" id="L366">		ignorePackages.add(&quot;sun/net/sdp&quot;);</span>
+<span class="nc" id="L367">		ignorePackages.add(&quot;com/sun/java/browser/dom&quot;);</span>
+<span class="nc" id="L368">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/wsdl/parser&quot;);</span>
+<span class="nc" id="L369">		ignorePackages.add(&quot;com/sun/xml/internal/ws/streaming&quot;);</span>
+<span class="nc" id="L370">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/policy&quot;);</span>
+<span class="nc" id="L371">		ignorePackages.add(&quot;com/oracle/webservices/internal/impl/encoding&quot;);</span>
+<span class="nc" id="L372">		ignorePackages.add(&quot;com/sun/xml/internal/ws/assembler/jaxws&quot;);</span>
+<span class="nc" id="L373">		ignorePackages.add(&quot;sun/security/pkcs&quot;);</span>
+<span class="nc" id="L374">		ignorePackages.add(&quot;sun/management/counter/perf&quot;);</span>
+<span class="nc" id="L375">		ignorePackages.add(&quot;com/sun/media/sound&quot;);</span>
+<span class="nc" id="L376">		ignorePackages.add(&quot;com/sun/org/omg/CORBA/ValueDefPackage&quot;);</span>
+<span class="nc" id="L377">		ignorePackages.add(&quot;sun/net/www/protocol/http/ntlm&quot;);</span>
+<span class="nc" id="L378">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/xs/traversers&quot;);</span>
+<span class="nc" id="L379">		ignorePackages.add(&quot;com/sun/xml/internal/ws/message/jaxb&quot;);</span>
+<span class="nc" id="L380">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/dom/events&quot;);</span>
+<span class="nc" id="L381">		ignorePackages.add(&quot;sun/rmi/transport/tcp&quot;);</span>
+<span class="nc" id="L382">		ignorePackages.add(&quot;com/sun/xml/internal/bind/marshaller&quot;);</span>
+<span class="nc" id="L383">		ignorePackages.add(&quot;com/sun/corba/se/spi/orbutil/threadpool&quot;);</span>
+<span class="nc" id="L384">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/resolver/helpers&quot;);</span>
+<span class="nc" id="L385">		ignorePackages.add(&quot;com/sun/jmx/interceptor&quot;);</span>
+<span class="nc" id="L386">		ignorePackages.add(&quot;sun/util/locale/provider&quot;);</span>
+<span class="nc" id="L387">		ignorePackages.add(&quot;com/sun/corba/se/impl/oa&quot;);</span>
+<span class="nc" id="L388">		ignorePackages.add(&quot;com/sun/corba/se/impl/ior/iiop&quot;);</span>
+<span class="nc" id="L389">		ignorePackages.add(&quot;com/sun/jmx/snmp/mpm&quot;);</span>
+<span class="nc" id="L390">		ignorePackages.add(&quot;sun/awt/image&quot;);</span>
+<span class="nc" id="L391">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xsltc/cmdline/getopt&quot;);</span>
+<span class="nc" id="L392">		ignorePackages.add(&quot;sun/security/krb5&quot;);</span>
+<span class="nc" id="L393">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xsltc/cmdline&quot;);</span>
+<span class="nc" id="L394">		ignorePackages.add(&quot;com/sun/xml/internal/ws/encoding&quot;);</span>
+<span class="nc" id="L395">		ignorePackages.add(&quot;sun/security/krb5/internal/ccache&quot;);</span>
+<span class="nc" id="L396">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/model/soap&quot;);</span>
+<span class="nc" id="L397">		ignorePackages.add(&quot;sun/management/snmp/util&quot;);</span>
+<span class="nc" id="L398">		ignorePackages.add(&quot;com/sun/corba/se/impl/copyobject&quot;);</span>
+<span class="nc" id="L399">		ignorePackages.add(&quot;com/sun/java/swing/plaf/motif/resources&quot;);</span>
+<span class="nc" id="L400">		ignorePackages.add(&quot;com/sun/org/apache/xpath/internal/functions&quot;);</span>
+<span class="nc" id="L401">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/util&quot;);</span>
+<span class="nc" id="L402">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/soap&quot;);</span>
+<span class="nc" id="L403">		ignorePackages.add(&quot;com/sun/xml/internal/ws/policy&quot;);</span>
+<span class="nc" id="L404">		ignorePackages.add(&quot;com/sun/xml/internal/ws/fault&quot;);</span>
+<span class="nc" id="L405">		ignorePackages.add(&quot;sun/net/www/protocol/http/spnego&quot;);</span>
+<span class="nc" id="L406">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/xinclude&quot;);</span>
+<span class="nc" id="L407">		ignorePackages.add(&quot;sun/util/resources&quot;);</span>
+<span class="nc" id="L408">		ignorePackages.add(&quot;com/sun/corba/se/spi/copyobject&quot;);</span>
+<span class="nc" id="L409">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security&quot;);</span>
+<span class="nc" id="L410">		ignorePackages.add(&quot;com/sun/corba/se/impl/orbutil/graph&quot;);</span>
+<span class="nc" id="L411">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset&quot;);</span>
+<span class="nc" id="L412">		ignorePackages.add(&quot;jdk/internal/org/objectweb/asm/signature&quot;);</span>
+<span class="nc" id="L413">		ignorePackages.add(&quot;jdk/internal/org/objectweb/asm&quot;);</span>
+<span class="nc" id="L414">		ignorePackages.add(&quot;com/sun/org/glassfish/gmbal/util&quot;);</span>
+<span class="nc" id="L415">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/stax&quot;);</span>
+<span class="nc" id="L416">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/runtime/output&quot;);</span>
+<span class="nc" id="L417">		ignorePackages.add(&quot;com/sun/xml/internal/ws/policy/jaxws/spi&quot;);</span>
+<span class="nc" id="L418">		ignorePackages.add(&quot;sun/java2d/loops&quot;);</span>
+<span class="nc" id="L419">		ignorePackages.add(&quot;com/sun/org/apache/bcel/internal/classfile&quot;);</span>
+<span class="nc" id="L420">		ignorePackages.add(&quot;com/sun/corba/se/impl/javax/rmi&quot;);</span>
+<span class="nc" id="L421">		ignorePackages.add(&quot;sun/security/jgss/wrapper&quot;);</span>
+<span class="nc" id="L422">		ignorePackages.add(&quot;com/sun/xml/internal/ws/db/glassfish&quot;);</span>
+<span class="nc" id="L423">		ignorePackages.add(&quot;com/sun/jndi/url/corbaname&quot;);</span>
+<span class="nc" id="L424">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/lib&quot;);</span>
+<span class="nc" id="L425">		ignorePackages.add(&quot;com/sun/corba/se/spi/oa&quot;);</span>
+<span class="nc" id="L426">		ignorePackages.add(&quot;com/sun/corba/se/impl/corba&quot;);</span>
+<span class="nc" id="L427">		ignorePackages.add(&quot;com/sun/xml/internal/ws/policy/subject&quot;);</span>
+<span class="nc" id="L428">		ignorePackages.add(&quot;com/sun/xml/internal/ws/policy/spi&quot;);</span>
+<span class="nc" id="L429">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/model/annotation&quot;);</span>
+<span class="nc" id="L430">		ignorePackages.add(&quot;com/sun/corba/se/impl/logging&quot;);</span>
+<span class="nc" id="L431">		ignorePackages.add(&quot;com/sun/xml/internal/ws/server/sei&quot;);</span>
+<span class="nc" id="L432">		ignorePackages.add(&quot;sun/reflect/generics/factory&quot;);</span>
+<span class="nc" id="L433">		ignorePackages.add(&quot;com/sun/org/apache/xpath/internal/res&quot;);</span>
+<span class="nc" id="L434">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/utils&quot;);</span>
+<span class="nc" id="L435">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/dv/xs&quot;);</span>
+<span class="nc" id="L436">		ignorePackages.add(&quot;com/sun/org/apache/xpath/internal/compiler&quot;);</span>
+<span class="nc" id="L437">		ignorePackages.add(&quot;com/sun/xml/internal/org/jvnet/fastinfoset/sax&quot;);</span>
+<span class="nc" id="L438">		ignorePackages.add(&quot;com/sun/security/sasl/util&quot;);</span>
+<span class="nc" id="L439">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/utils&quot;);</span>
+<span class="nc" id="L440">		ignorePackages.add(&quot;com/sun/jndi/dns&quot;);</span>
+<span class="nc" id="L441">		ignorePackages.add(&quot;com/sun/jmx/remote/util&quot;);</span>
+<span class="nc" id="L442">		ignorePackages.add(&quot;com/sun/org/glassfish/external/arc&quot;);</span>
+<span class="nc" id="L443">		ignorePackages.add(&quot;sun/java2d/cmm/kcms&quot;);</span>
+<span class="nc" id="L444">		ignorePackages.add(&quot;sun/security/tools/keytool&quot;);</span>
+<span class="nc" id="L445">		ignorePackages.add(&quot;com/sun/naming/internal&quot;);</span>
+<span class="nc" id="L446">		ignorePackages.add(&quot;sun/net/www/content/text&quot;);</span>
+<span class="nc" id="L447">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/tools&quot;);</span>
+<span class="nc" id="L448">		ignorePackages.add(&quot;com/sun/java/util/jar/pack&quot;);</span>
+<span class="nc" id="L449">		ignorePackages.add(&quot;com/sun/corba/se/impl/orbutil/threadpool&quot;);</span>
+<span class="nc" id="L450">		ignorePackages.add(&quot;jdk/management/cmm&quot;);</span>
+<span class="nc" id="L451">		ignorePackages.add(&quot;jdk/internal/org/objectweb/asm/tree/analysis&quot;);</span>
+<span class="nc" id="L452">		ignorePackages.add(&quot;com/sun/corba/se/pept/broker&quot;);</span>
+<span class="nc" id="L453">		ignorePackages.add(&quot;sun/util/locale&quot;);</span>
+<span class="nc" id="L454">		ignorePackages.add(&quot;com/sun/corba/se/spi/activation/RepositoryPackage&quot;);</span>
+<span class="nc" id="L455">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2&quot;);</span>
+<span class="nc" id="L456">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/vocab&quot;);</span>
+<span class="nc" id="L457">		ignorePackages.add(&quot;com/sun/xml/internal/ws/wsdl/writer&quot;);</span>
+<span class="nc" id="L458">		ignorePackages.add(&quot;com/sun/security/ntlm&quot;);</span>
+<span class="nc" id="L459">		ignorePackages.add(&quot;sun/net/util&quot;);</span>
+<span class="nc" id="L460">		ignorePackages.add(&quot;com/sun/xml/internal/ws/encoding/xml&quot;);</span>
+<span class="nc" id="L461">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/dv/dtd&quot;);</span>
+<span class="nc" id="L462">		ignorePackages.add(&quot;sun/reflect/generics/scope&quot;);</span>
+<span class="nc" id="L463">		ignorePackages.add(&quot;sun/net&quot;);</span>
+<span class="nc" id="L464">		ignorePackages.add(&quot;com/sun/java/swing/plaf/nimbus&quot;);</span>
+<span class="nc" id="L465">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/algorithms/implementations&quot;);</span>
+<span class="nc" id="L466">		ignorePackages.add(&quot;sun/rmi/transport/proxy&quot;);</span>
+<span class="nc" id="L467">		ignorePackages.add(&quot;sun/rmi/transport&quot;);</span>
+<span class="nc" id="L468">		ignorePackages.add(&quot;sun/text/resources&quot;);</span>
+<span class="nc" id="L469">		ignorePackages.add(&quot;sun/util/spi&quot;);</span>
+<span class="nc" id="L470">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/keys/content/x509&quot;);</span>
+<span class="nc" id="L471">		ignorePackages.add(&quot;sun/management&quot;);</span>
+<span class="nc" id="L472">		ignorePackages.add(&quot;com/sun/net/ssl/internal/www/protocol/https&quot;);</span>
+<span class="nc" id="L473">		ignorePackages.add(&quot;jdk&quot;);</span>
+<span class="nc" id="L474">		ignorePackages.add(&quot;com/sun/net/ssl&quot;);</span>
+<span class="nc" id="L475">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xslt&quot;);</span>
+<span class="nc" id="L476">		ignorePackages.add(&quot;com/sun/beans/finder&quot;);</span>
+<span class="nc" id="L477">		ignorePackages.add(&quot;com/sun/security/auth&quot;);</span>
+<span class="nc" id="L478">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/io&quot;);</span>
+<span class="nc" id="L479">		ignorePackages.add(&quot;com/sun/xml/internal/ws/transport/http/server&quot;);</span>
+<span class="nc" id="L480">		ignorePackages.add(&quot;com/oracle/nio&quot;);</span>
+<span class="nc" id="L481">		ignorePackages.add(&quot;com/sun/jmx/remote/protocol/rmi&quot;);</span>
+<span class="nc" id="L482">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/schemagen/xmlschema&quot;);</span>
+<span class="nc" id="L483">		ignorePackages.add(&quot;com/sun/corba/se/impl/io&quot;);</span>
+<span class="nc" id="L484">		ignorePackages.add(&quot;com/sun/corba/se/impl/oa/toa&quot;);</span>
+<span class="nc" id="L485">		ignorePackages.add(&quot;com/sun/xml/internal/ws/encoding/fastinfoset&quot;);</span>
+<span class="nc" id="L486">		ignorePackages.add(&quot;sun/java2d&quot;);</span>
+<span class="nc" id="L487">		ignorePackages.add(&quot;com/sun/org/apache/xpath/internal/objects&quot;);</span>
+<span class="nc" id="L488">		ignorePackages.add(&quot;com/sun/xml/internal/ws/policy/sourcemodel/attach&quot;);</span>
+<span class="nc" id="L489">		ignorePackages.add(&quot;com/sun/java/swing/plaf/windows&quot;);</span>
+<span class="nc" id="L490">		ignorePackages.add(&quot;com/sun/xml/internal/ws/model&quot;);</span>
+<span class="nc" id="L491">		ignorePackages.add(&quot;com/sun/jmx/remote/internal&quot;);</span>
+<span class="nc" id="L492">		ignorePackages.add(&quot;com/sun/org/apache/regexp/internal&quot;);</span>
+<span class="nc" id="L493">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/runtime/unmarshaller&quot;);</span>
+<span class="nc" id="L494">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/xs/identity&quot;);</span>
+<span class="nc" id="L495">		ignorePackages.add(&quot;com/sun/net/httpserver&quot;);</span>
+<span class="nc" id="L496">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/dtm&quot;);</span>
+<span class="nc" id="L497">		ignorePackages.add(&quot;com/sun/org/omg/CORBA&quot;);</span>
+<span class="nc" id="L498">		ignorePackages.add(&quot;sun/security/jgss/spnego&quot;);</span>
+<span class="nc" id="L499">		ignorePackages.add(&quot;com/sun/corba/se/internal/POA&quot;);</span>
+<span class="nc" id="L500">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xsltc/runtime&quot;);</span>
+<span class="nc" id="L501">		ignorePackages.add(&quot;com/sun/imageio/plugins/png&quot;);</span>
+<span class="nc" id="L502">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/algorithm&quot;);</span>
+<span class="nc" id="L503">		ignorePackages.add(&quot;com/sun/corba/se/impl/orbutil&quot;);</span>
+<span class="nc" id="L504">		ignorePackages.add(&quot;sun/net/www/protocol/mailto&quot;);</span>
+<span class="nc" id="L505">		ignorePackages.add(&quot;com/sun/security/sasl/gsskerb&quot;);</span>
+<span class="nc" id="L506">		ignorePackages.add(&quot;com/sun/tracing&quot;);</span>
+<span class="nc" id="L507">		ignorePackages.add(&quot;sun/java2d/windows&quot;);</span>
+<span class="nc" id="L508">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/model/impl&quot;);</span>
+<span class="nc" id="L509">		ignorePackages.add(&quot;com/sun/corba/se/spi/ior&quot;);</span>
+<span class="nc" id="L510">		ignorePackages.add(&quot;com/sun/corba/se/spi/monitoring&quot;);</span>
+<span class="nc" id="L511">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/soap/ver1_1&quot;);</span>
+<span class="nc" id="L512">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/soap/ver1_2&quot;);</span>
+<span class="nc" id="L513">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/dtm/ref/dom2dtm&quot;);</span>
+<span class="nc" id="L514">		ignorePackages.add(&quot;com/sun/accessibility/internal/resources&quot;);</span>
+<span class="nc" id="L515">		ignorePackages.add(&quot;com/sun/xml/internal/ws/encoding/policy&quot;);</span>
+<span class="nc" id="L516">		ignorePackages.add(&quot;sun/security/jgss/krb5&quot;);</span>
+<span class="nc" id="L517">		ignorePackages.add(&quot;com/sun/swing/internal/plaf/synth/resources&quot;);</span>
+<span class="nc" id="L518">		ignorePackages.add(&quot;com/sun/xml/internal/txw2/annotation&quot;);</span>
+<span class="nc" id="L519">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/model&quot;);</span>
+<span class="nc" id="L520">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/wsdl/writer&quot;);</span>
+<span class="nc" id="L521">		ignorePackages.add(&quot;com/sun/corba/se/impl/naming/cosnaming&quot;);</span>
+<span class="nc" id="L522">		ignorePackages.add(&quot;com/sun/org/apache/xpath/internal/jaxp&quot;);</span>
+<span class="nc" id="L523">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/utils/resolver&quot;);</span>
+<span class="nc" id="L524">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/xpath/regex&quot;);</span>
+<span class="nc" id="L525">		ignorePackages.add(&quot;com/sun/net/httpserver/spi&quot;);</span>
+<span class="nc" id="L526">		ignorePackages.add(&quot;sun/swing/table&quot;);</span>
+<span class="nc" id="L527">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/keys&quot;);</span>
+<span class="nc" id="L528">		ignorePackages.add(&quot;com/sun/xml/internal/bind/util&quot;);</span>
+<span class="nc" id="L529">		ignorePackages.add(&quot;com/sun/xml/internal/ws/addressing/policy&quot;);</span>
+<span class="nc" id="L530">		ignorePackages.add(&quot;com/sun/xml/internal/ws/handler&quot;);</span>
+<span class="nc" id="L531">		ignorePackages.add(&quot;com/sun/xml/internal/ws/protocol/soap&quot;);</span>
+<span class="nc" id="L532">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/utils/res&quot;);</span>
+<span class="nc" id="L533">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/server&quot;);</span>
+<span class="nc" id="L534">		ignorePackages.add(&quot;com/sun/awt&quot;);</span>
+<span class="nc" id="L535">		ignorePackages.add(&quot;jdk/internal/org/objectweb/asm/commons&quot;);</span>
+<span class="nc" id="L536">		ignorePackages.add(&quot;com/sun/xml/internal/org/jvnet/fastinfoset&quot;);</span>
+<span class="nc" id="L537">		ignorePackages.add(&quot;sun/security/provider/certpath/ssl&quot;);</span>
+<span class="nc" id="L538">		ignorePackages.add(&quot;com/sun/corba/se/impl/legacy/connection&quot;);</span>
+<span class="nc" id="L539">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/dom&quot;);</span>
+<span class="nc" id="L540">		ignorePackages.add(&quot;sun/java2d/cmm/lcms&quot;);</span>
+<span class="nc" id="L541">		ignorePackages.add(&quot;sun/text/bidi&quot;);</span>
+<span class="nc" id="L542">		ignorePackages.add(&quot;com/sun/xml/internal/ws/util/pipe&quot;);</span>
+<span class="nc" id="L543">		ignorePackages.add(&quot;com/sun/jmx/snmp/agent&quot;);</span>
+<span class="nc" id="L544">		ignorePackages.add(&quot;com/sun/org/apache/bcel/internal/util&quot;);</span>
+<span class="nc" id="L545">		ignorePackages.add(&quot;sun/nio&quot;);</span>
+<span class="nc" id="L546">		ignorePackages.add(&quot;com/sun/org/omg/SendingContext/CodeBasePackage&quot;);</span>
+<span class="nc" id="L547">		ignorePackages.add(&quot;com/sun/xml/internal/stream/dtd&quot;);</span>
+<span class="nc" id="L548">		ignorePackages.add(&quot;com/sun/org/apache/xpath/internal/patterns&quot;);</span>
+<span class="nc" id="L549">		ignorePackages.add(&quot;sun/usagetracker&quot;);</span>
+<span class="nc" id="L550">		ignorePackages.add(&quot;sun/text&quot;);</span>
+<span class="nc" id="L551">		ignorePackages.add(&quot;sun/awt/event&quot;);</span>
+<span class="nc" id="L552">		ignorePackages.add(&quot;com/sun/xml/internal/ws/model/wsdl&quot;);</span>
+<span class="nc" id="L553">		ignorePackages.add(&quot;com/oracle/util&quot;);</span>
+<span class="nc" id="L554">		ignorePackages.add(&quot;com/sun/java_cup/internal/runtime&quot;);</span>
+<span class="nc" id="L555">		ignorePackages.add(&quot;com/sun/jndi/url/rmi&quot;);</span>
+<span class="nc" id="L556">		ignorePackages.add(&quot;com/sun/org/glassfish/external/amx&quot;);</span>
+<span class="nc" id="L557">		ignorePackages.add(&quot;com/sun/xml/internal/bind/annotation&quot;);</span>
+<span class="nc" id="L558">		ignorePackages.add(&quot;sun/swing/icon&quot;);</span>
+<span class="nc" id="L559">		ignorePackages.add(&quot;com/sun/java/swing/plaf/windows/resources&quot;);</span>
+<span class="nc" id="L560">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/streaming&quot;);</span>
+<span class="nc" id="L561">		ignorePackages.add(&quot;sun/print&quot;);</span>
+<span class="nc" id="L562">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/extensions&quot;);</span>
+<span class="nc" id="L563">		ignorePackages.add(&quot;sun/audio&quot;);</span>
+<span class="nc" id="L564">		ignorePackages.add(&quot;com/sun/xml/internal/ws&quot;);</span>
+<span class="nc" id="L565">		ignorePackages.add(&quot;com/sun/xml/internal/ws/transport/http/client&quot;);</span>
+<span class="nc" id="L566">		ignorePackages.add(&quot;com/oracle/net&quot;);</span>
+<span class="nc" id="L567">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/transforms&quot;);</span>
+<span class="nc" id="L568">		ignorePackages.add(&quot;com/sun/jndi/ldap/pool&quot;);</span>
+<span class="nc" id="L569">		ignorePackages.add(&quot;com/sun/xml/internal/ws/policy/sourcemodel&quot;);</span>
+<span class="nc" id="L570">		ignorePackages.add(&quot;jdk/net&quot;);</span>
+<span class="nc" id="L571">		ignorePackages.add(&quot;sun/reflect/annotation&quot;);</span>
+<span class="nc" id="L572">		ignorePackages.add(&quot;com/sun/jndi/toolkit/corba&quot;);</span>
+<span class="nc" id="L573">		ignorePackages.add(&quot;sun/net/www/http&quot;);</span>
+<span class="nc" id="L574">		ignorePackages.add(&quot;com/sun/beans/util&quot;);</span>
+<span class="nc" id="L575">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/utils/resolver/implementations&quot;);</span>
+<span class="nc" id="L576">		ignorePackages.add(&quot;sun/applet/resources&quot;);</span>
+<span class="nc" id="L577">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/serialize&quot;);</span>
+<span class="nc" id="L578">		ignorePackages.add(&quot;sun/misc&quot;);</span>
+<span class="nc" id="L579">		ignorePackages.add(&quot;sun/reflect/generics/parser&quot;);</span>
+<span class="nc" id="L580">		ignorePackages.add(&quot;com/sun/nio/file&quot;);</span>
+<span class="nc" id="L581">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl&quot;);</span>
+<span class="nc" id="L582">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/keys/keyresolver&quot;);</span>
+<span class="nc" id="L583">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/message/stream&quot;);</span>
+<span class="nc" id="L584">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/keys/content/keyvalues&quot;);</span>
+<span class="nc" id="L585">		ignorePackages.add(&quot;com/sun/xml/internal/ws/org/objectweb/asm&quot;);</span>
+<span class="nc" id="L586">		ignorePackages.add(&quot;sun/tools/jar&quot;);</span>
+<span class="nc" id="L587">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/dtd/models&quot;);</span>
+<span class="nc" id="L588">		ignorePackages.add(&quot;com/sun/xml/internal/ws/server/provider&quot;);</span>
+<span class="nc" id="L589">		ignorePackages.add(&quot;com/sun/corba/se/spi/activation&quot;);</span>
+<span class="nc" id="L590">		ignorePackages.add(&quot;sun/security/krb5/internal/ktab&quot;);</span>
+<span class="nc" id="L591">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/xs&quot;);</span>
+<span class="nc" id="L592">		ignorePackages.add(&quot;sun/invoke&quot;);</span>
+<span class="nc" id="L593">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/databinding&quot;);</span>
+<span class="nc" id="L594">		ignorePackages.add(&quot;com/sun/tracing/dtrace&quot;);</span>
+<span class="nc" id="L595">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/encryption&quot;);</span>
+<span class="nc" id="L596">		ignorePackages.add(&quot;sun/security/x509&quot;);</span>
+<span class="nc" id="L597">		ignorePackages.add(&quot;sun/swing&quot;);</span>
+<span class="nc" id="L598">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/model/runtime&quot;);</span>
+<span class="nc" id="L599">		ignorePackages.add(&quot;sun/invoke/util&quot;);</span>
+<span class="nc" id="L600">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/config/management&quot;);</span>
+<span class="nc" id="L601">		ignorePackages.add(&quot;com/sun/corba/se/spi/presentation/rmi&quot;);</span>
+<span class="nc" id="L602">		ignorePackages.add(&quot;sun/swing/text&quot;);</span>
+<span class="nc" id="L603">		ignorePackages.add(&quot;com/sun/java/swing/plaf/motif&quot;);</span>
+<span class="nc" id="L604">		ignorePackages.add(&quot;sun/util/cldr&quot;);</span>
+<span class="nc" id="L605">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/message&quot;);</span>
+<span class="nc" id="L606">		ignorePackages.add(&quot;com/sun/xml/internal/ws/message/stream&quot;);</span>
+<span class="nc" id="L607">		ignorePackages.add(&quot;com/sun/xml/internal/ws/addressing/v200408&quot;);</span>
+<span class="nc" id="L608">		ignorePackages.add(&quot;com/sun/corba/se/impl/transport&quot;);</span>
+<span class="nc" id="L609">		ignorePackages.add(&quot;sun/dc/path&quot;);</span>
+<span class="nc" id="L610">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/dv/util&quot;);</span>
+<span class="nc" id="L611">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/msg&quot;);</span>
+<span class="nc" id="L612">		ignorePackages.add(&quot;com/sun/xml/internal/ws/developer&quot;);</span>
+<span class="nc" id="L613">		ignorePackages.add(&quot;com/sun/jndi/url/dns&quot;);</span>
+<span class="nc" id="L614">		ignorePackages.add(&quot;com/sun/xml/internal/stream/buffer/stax&quot;);</span>
+<span class="nc" id="L615">		ignorePackages.add(&quot;com/sun/org/glassfish/external/probe/provider/annotations&quot;);</span>
+<span class="nc" id="L616">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/xni/parser&quot;);</span>
+<span class="nc" id="L617">		ignorePackages.add(&quot;jdk/internal/util/xml&quot;);</span>
+<span class="nc" id="L618">		ignorePackages.add(&quot;com/sun/jmx/mbeanserver&quot;);</span>
+<span class="nc" id="L619">		ignorePackages.add(&quot;com/sun/xml/internal/bind/unmarshaller&quot;);</span>
+<span class="nc" id="L620">		ignorePackages.add(&quot;com/sun/org/glassfish/external/statistics/annotations&quot;);</span>
+<span class="nc" id="L621">		ignorePackages.add(&quot;com/sun/xml/internal/ws/commons/xmlutil&quot;);</span>
+<span class="nc" id="L622">		ignorePackages.add(&quot;com/oracle/webservices/internal/api&quot;);</span>
+<span class="nc" id="L623">		ignorePackages.add(&quot;com/sun/xml/internal/stream/events&quot;);</span>
+<span class="nc" id="L624">		ignorePackages.add(&quot;com/sun/org/apache/bcel/internal/generic&quot;);</span>
+<span class="nc" id="L625">		ignorePackages.add(&quot;sun/net/www/protocol/http&quot;);</span>
+<span class="nc" id="L626">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/jaxp&quot;);</span>
+<span class="nc" id="L627">		ignorePackages.add(&quot;com/sun/xml/internal/fastinfoset/stax/factory&quot;);</span>
+<span class="nc" id="L628">		ignorePackages.add(&quot;com/sun/swing/internal/plaf/basic/resources&quot;);</span>
+<span class="nc" id="L629">		ignorePackages.add(&quot;com/sun/jndi/rmi/registry&quot;);</span>
+<span class="nc" id="L630">		ignorePackages.add(&quot;com/sun/xml/internal/ws/binding&quot;);</span>
+<span class="nc" id="L631">		ignorePackages.add(&quot;com/sun/xml/internal/ws/resources&quot;);</span>
+<span class="nc" id="L632">		ignorePackages.add(&quot;sun/awt/im&quot;);</span>
+<span class="nc" id="L633">		ignorePackages.add(&quot;com/sun/corba/se/spi/orb&quot;);</span>
+<span class="nc" id="L634">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/xs/datatypes&quot;);</span>
+<span class="nc" id="L635">		ignorePackages.add(&quot;sun/management/jdp&quot;);</span>
+<span class="nc" id="L636">		ignorePackages.add(&quot;com/sun/corba/se/org/omg/CORBA&quot;);</span>
+<span class="nc" id="L637">		ignorePackages.add(&quot;sun/security/tools/policytool&quot;);</span>
+<span class="nc" id="L638">		ignorePackages.add(&quot;com/sun/corba/se/impl/naming/namingutil&quot;);</span>
+<span class="nc" id="L639">		ignorePackages.add(&quot;com/sun/xml/internal/ws/assembler&quot;);</span>
+<span class="nc" id="L640">		ignorePackages.add(&quot;com/sun/corba/se/impl/util&quot;);</span>
+<span class="nc" id="L641">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/validation&quot;);</span>
+<span class="nc" id="L642">		ignorePackages.add(&quot;com/sun/security/sasl/digest&quot;);</span>
+<span class="nc" id="L643">		ignorePackages.add(&quot;com/sun/imageio/plugins/jpeg&quot;);</span>
+<span class="nc" id="L644">		ignorePackages.add(&quot;sun/util/logging&quot;);</span>
+<span class="nc" id="L645">		ignorePackages.add(&quot;com/sun/jmx/remote/security&quot;);</span>
+<span class="nc" id="L646">		ignorePackages.add(&quot;sun/instrument&quot;);</span>
+<span class="nc" id="L647">		ignorePackages.add(&quot;com/sun/corba/se/spi/encoding&quot;);</span>
+<span class="nc" id="L648">		ignorePackages.add(&quot;com/sun/corba/se/spi/servicecontext&quot;);</span>
+<span class="nc" id="L649">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/utils&quot;);</span>
+<span class="nc" id="L650">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/addressing&quot;);</span>
+<span class="nc" id="L651">		ignorePackages.add(&quot;com/sun/corba/se/impl/ior&quot;);</span>
+<span class="nc" id="L652">		ignorePackages.add(&quot;sun/reflect/generics/visitor&quot;);</span>
+<span class="nc" id="L653">		ignorePackages.add(&quot;sun/tracing&quot;);</span>
+<span class="nc" id="L654">		ignorePackages.add(&quot;com/sun/jmx/snmp/internal&quot;);</span>
+<span class="nc" id="L655">		ignorePackages.add(&quot;sun/util/resources/en&quot;);</span>
+<span class="nc" id="L656">		ignorePackages.add(&quot;com/sun/corba/se/pept/protocol&quot;);</span>
+<span class="nc" id="L657">		ignorePackages.add(&quot;com/sun/corba/se/spi/orbutil/closure&quot;);</span>
+<span class="nc" id="L658">		ignorePackages.add(&quot;com/sun/xml/internal/ws/util&quot;);</span>
+<span class="nc" id="L659">		ignorePackages.add(&quot;com/sun/security/cert/internal/x509&quot;);</span>
+<span class="nc" id="L660">		ignorePackages.add(&quot;com/sun/xml/internal/ws/api/message/saaj&quot;);</span>
+<span class="nc" id="L661">		ignorePackages.add(&quot;com/sun/imageio/plugins/common&quot;);</span>
+<span class="nc" id="L662">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/dtm/ref&quot;);</span>
+<span class="nc" id="L663">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/soap/impl&quot;);</span>
+<span class="nc" id="L664">		ignorePackages.add(&quot;com/sun/jmx/snmp/defaults&quot;);</span>
+<span class="nc" id="L665">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/keys/content&quot;);</span>
+<span class="nc" id="L666">		ignorePackages.add(&quot;com/sun/xml/internal/txw2/output&quot;);</span>
+<span class="nc" id="L667">		ignorePackages.add(&quot;com/sun/xml/internal/org/jvnet/fastinfoset/stax&quot;);</span>
+<span class="nc" id="L668">		ignorePackages.add(&quot;com/sun/java/swing&quot;);</span>
+<span class="nc" id="L669">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/serializer&quot;);</span>
+<span class="nc" id="L670">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/serializer/utils&quot;);</span>
+<span class="nc" id="L671">		ignorePackages.add(&quot;sun/corba&quot;);</span>
+<span class="nc" id="L672">		ignorePackages.add(&quot;com/sun/xml/internal/ws/wsdl/parser&quot;);</span>
+<span class="nc" id="L673">		ignorePackages.add(&quot;com/sun/corba/se/internal/Interceptors&quot;);</span>
+<span class="nc" id="L674">		ignorePackages.add(&quot;sun/rmi/registry&quot;);</span>
+<span class="nc" id="L675">		ignorePackages.add(&quot;sun/net/idn&quot;);</span>
+<span class="nc" id="L676">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/impl/xs/models&quot;);</span>
+<span class="nc" id="L677">		ignorePackages.add(&quot;sun/awt/datatransfer&quot;);</span>
+<span class="nc" id="L678">		ignorePackages.add(&quot;sun/security/krb5/internal&quot;);</span>
+<span class="nc" id="L679">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/security/keys/keyresolver/implementations&quot;);</span>
+<span class="nc" id="L680">		ignorePackages.add(&quot;com/sun/xml/internal/ws/runtime/config&quot;);</span>
+<span class="nc" id="L681">		ignorePackages.add(&quot;sun/net/www/content/audio&quot;);</span>
+<span class="nc" id="L682">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xsltc/dom&quot;);</span>
+<span class="nc" id="L683">		ignorePackages.add(&quot;com/sun/xml/internal/bind/v2/runtime&quot;);</span>
+<span class="nc" id="L684">		ignorePackages.add(&quot;jdk/internal/instrumentation&quot;);</span>
+<span class="nc" id="L685">		ignorePackages.add(&quot;com/sun/corba/se/spi/protocol&quot;);</span>
+<span class="nc" id="L686">		ignorePackages.add(&quot;com/sun/security/jgss&quot;);</span>
+<span class="nc" id="L687">		ignorePackages.add(&quot;com/sun/security/auth/callback&quot;);</span>
+<span class="nc" id="L688">		ignorePackages.add(&quot;com/sun/imageio/plugins/bmp&quot;);</span>
+<span class="nc" id="L689">		ignorePackages.add(&quot;com/sun/org/apache/xalan/internal/xsltc/trax&quot;);</span>
+<span class="nc" id="L690">		ignorePackages.add(&quot;sun/awt/resources&quot;);</span>
+<span class="nc" id="L691">		ignorePackages.add(&quot;com/oracle/webservices/internal/api/databinding&quot;);</span>
+<span class="nc" id="L692">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/resolver/readers&quot;);</span>
+<span class="nc" id="L693">		ignorePackages.add(&quot;sun/reflect/generics/tree&quot;);</span>
+<span class="nc" id="L694">		ignorePackages.add(&quot;com/sun/xml/internal/messaging/saaj/soap/name&quot;);</span>
+<span class="nc" id="L695">		ignorePackages.add(&quot;sun/tools/jar/resources&quot;);</span>
+<span class="nc" id="L696">		ignorePackages.add(&quot;com/sun/org/apache/xml/internal/dtm/ref/sax2dtm&quot;);</span>
+<span class="nc" id="L697">		ignorePackages.add(&quot;sun/reflect/misc&quot;);</span>
+<span class="nc" id="L698">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/jaxp/datatype&quot;);</span>
+<span class="nc" id="L699">		ignorePackages.add(&quot;com/sun/rowset/providers&quot;);</span>
+<span class="nc" id="L700">		ignorePackages.add(&quot;com/sun/xml/internal/ws/model/soap&quot;);</span>
+<span class="nc" id="L701">		ignorePackages.add(&quot;com/sun/corba/se/spi/legacy/interceptor&quot;);</span>
+<span class="nc" id="L702">		ignorePackages.add(&quot;sun/security/action&quot;);</span>
+<span class="nc" id="L703">		ignorePackages.add(&quot;sun/font&quot;);</span>
+<span class="nc" id="L704">		ignorePackages.add(&quot;com/sun/rowset/internal&quot;);</span>
+<span class="nc" id="L705">		ignorePackages.add(&quot;com/sun/corba/se/spi/resolver&quot;);</span>
+<span class="nc" id="L706">		ignorePackages.add(&quot;com/sun/corba/se/impl/orbutil/fsm&quot;);</span>
+<span class="nc" id="L707">		ignorePackages.add(&quot;com/sun/corba/se/spi/activation/LocatorPackage&quot;);</span>
+<span class="nc" id="L708">		ignorePackages.add(&quot;com/oracle/webservices/internal/impl/internalspi/encoding&quot;);</span>
+<span class="nc" id="L709">		ignorePackages.add(&quot;com/sun/org/apache/xerces/internal/dom&quot;);</span>
+<span class="nc" id="L710">		ignorePackages.add(&quot;com/sun/corba/se/spi/ior/iiop&quot;);</span>
+<span class="nc" id="L711">		ignorePackages.add(&quot;com/sun/nio/sctp&quot;);</span>
+<span class="nc" id="L712">		ignorePackages.add(&quot;com/sun/xml/internal/ws/wsdl/writer/document/xsd&quot;);</span>
+<span class="nc" id="L713">		ignorePackages.add(&quot;sun/reflect/generics/reflectiveObjects&quot;);</span>
+<span class="nc" id="L714">	}</span>
+
+	protected final boolean isValidJarEntry(String name) {
+<span class="nc bnc" id="L717" title="All 2 branches missed.">		for (String string : ignorePackages) {</span>
+<span class="nc bnc" id="L718" title="All 4 branches missed.">			if (/* name.contains(&quot;internal&quot;) || */ name.startsWith(string) || !name.endsWith(&quot;.class&quot;)</span>
+<span class="nc bnc" id="L719" title="All 2 branches missed.">					|| name.contains(&quot;$&quot;)) {</span>
+<span class="nc" id="L720">				return false;</span>
+			}
+<span class="nc" id="L722">		}</span>
+<span class="nc" id="L723">		return true;</span>
+	}
+
+	protected final boolean isValidClass(Class&lt;?&gt; runtimeClass) {
+<span class="nc bnc" id="L727" title="All 4 branches missed.">		return !runtimeClass.isInterface() &amp;&amp; (runtimeClass.getModifiers() == Modifier.PUBLIC</span>
+<span class="nc bnc" id="L728" title="All 2 branches missed.">				|| runtimeClass.getModifiers() == Modifier.PUBLIC + Modifier.FINAL);</span>
+	}
+
+	protected final String toUpperCase(String target) {
+<span class="nc" id="L732">		StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L733" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
+<span class="nc" id="L734">			Character c = target.charAt(i);</span>
+<span class="nc" id="L735">			b.append(Character.toUpperCase(c));</span>
+		}
+<span class="nc" id="L737">		return &quot;&quot; + b + &quot;&quot;;</span>
+	}
+
+	protected final String toLowerCase(String target) {
+<span class="nc" id="L741">		StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L742" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
+<span class="nc" id="L743">			Character c = target.charAt(i);</span>
+<span class="nc" id="L744">			b.append(Character.toLowerCase(c));</span>
+		}
+<span class="nc" id="L746">		return &quot;&quot; + b + &quot;&quot;;</span>
+	}
+
+	protected final String fromCamelCase(String target) {
+<span class="nc" id="L750">		StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L751" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
+<span class="nc" id="L752">			Character c = target.charAt(i);</span>
+<span class="nc bnc" id="L753" title="All 4 branches missed.">			if (i &gt; 0 &amp;&amp; Character.isUpperCase(c)) {</span>
+<span class="nc" id="L754">				Character a = target.charAt(i - 1);</span>
+<span class="nc bnc" id="L755" title="All 2 branches missed.">				if (a != '/') {</span>
+<span class="nc" id="L756">					b.append('_');</span>
+				}
+			}
+<span class="nc" id="L759">			b.append(Character.toLowerCase(c));</span>
+		}
+<span class="nc" id="L761">		return &quot;&quot; + b + &quot;&quot;;</span>
+	}
+
+	protected final File createRuntimeFile(File prt, String fileName) throws IOException {
+<span class="nc" id="L765">		File runtimeFile = new File(prt.getCanonicalPath() + &quot;/prt/&quot;</span>
+<span class="nc" id="L766">				+ fileName.replace(&quot;java&quot;, &quot;prolog&quot;).replace(&quot;org/prolobjectlink/&quot;, &quot;prologx/&quot;));</span>
+<span class="nc bnc" id="L767" title="All 2 branches missed.">		if (!runtimeFile.exists()) {</span>
+<span class="nc" id="L768">			runtimeFile.getParentFile().mkdirs();</span>
+<span class="nc bnc" id="L769" title="All 2 branches missed.">			if (!runtimeFile.createNewFile()) {</span>
+<span class="nc" id="L770">				System.exit(1);</span>
+			}
+		}
+<span class="nc" id="L773">		return runtimeFile;</span>
+	}
+
+	protected final File createModelFile(File prt, String fileName) throws IOException {
+<span class="nc" id="L777">		File runtimeFile = new File(prt.getCanonicalPath() + &quot;/web/&quot;</span>
+<span class="nc" id="L778">				+ fileName.replace(&quot;java&quot;, &quot;prolog&quot;).replace(&quot;org/prolobjectlink/&quot;, &quot;prologx/&quot;));</span>
+<span class="nc bnc" id="L779" title="All 2 branches missed.">		if (!runtimeFile.exists()) {</span>
+<span class="nc" id="L780">			runtimeFile.getParentFile().mkdirs();</span>
+<span class="nc bnc" id="L781" title="All 2 branches missed.">			if (!runtimeFile.createNewFile()) {</span>
+<span class="nc" id="L782">				System.exit(1);</span>
+			}
+		}
+<span class="nc" id="L785">		return runtimeFile;</span>
+	}
+
+	protected final void codingLicense(PrintWriter programmer) {
+<span class="nc" id="L789">		SimpleDateFormat f = new SimpleDateFormat(&quot;yyyy&quot;);</span>
+<span class="nc" id="L790">		String year = f.format(new Date(System.currentTimeMillis()));</span>
+<span class="nc" id="L791">		programmer.println(&quot;% Copyright (c) &quot; + year + &quot; Prolobjectlink Project&quot;);</span>
+<span class="nc" id="L792">		programmer.println();</span>
+<span class="nc" id="L793">		programmer.println(&quot;% Permission is hereby granted, free of charge, to any person obtaining a copy&quot;);</span>
+<span class="nc" id="L794">		programmer.println(&quot;% of this software and associated documentation files (the \&quot;Software\&quot;), to deal&quot;);</span>
+<span class="nc" id="L795">		programmer.println(&quot;% in the Software without restriction, including without limitation the rights&quot;);</span>
+<span class="nc" id="L796">		programmer.println(&quot;% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell&quot;);</span>
+<span class="nc" id="L797">		programmer.println(&quot;% copies of the Software, and to permit persons to whom the Software is&quot;);</span>
+<span class="nc" id="L798">		programmer.println(&quot;% furnished to do so, subject to the following conditions:&quot;);</span>
+<span class="nc" id="L799">		programmer.println();</span>
+<span class="nc" id="L800">		programmer.println(&quot;% The above copyright notice and this permission notice shall be included in&quot;);</span>
+<span class="nc" id="L801">		programmer.println(&quot;% all copies or substantial portions of the Software.&quot;);</span>
+<span class="nc" id="L802">		programmer.println();</span>
+<span class="nc" id="L803">		programmer.println(&quot;% THE SOFTWARE IS PROVIDED \&quot;AS IS\&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR&quot;);</span>
+<span class="nc" id="L804">		programmer.println(&quot;% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,&quot;);</span>
+<span class="nc" id="L805">		programmer.println(&quot;% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE&quot;);</span>
+<span class="nc" id="L806">		programmer.println(&quot;% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER&quot;);</span>
+<span class="nc" id="L807">		programmer.println(&quot;% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,&quot;);</span>
+<span class="nc" id="L808">		programmer.println(&quot;% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN&quot;);</span>
+<span class="nc" id="L809">		programmer.println(&quot;% THE SOFTWARE.&quot;);</span>
+<span class="nc" id="L810">		programmer.println();</span>
+<span class="nc" id="L811">	}</span>
+
+	protected final void codingAuthor(PrintWriter programmer) {
+<span class="nc" id="L814">		programmer.println(&quot;% Author: Jose Zalacain&quot;);</span>
+<span class="nc" id="L815">		programmer.println();</span>
+<span class="nc" id="L816">	}</span>
+
+	protected final void codingConstants(PrintWriter programmer, Class&lt;?&gt; runtimeClass) {
+<span class="nc bnc" id="L819" title="All 2 branches missed.">		if (!runtimeClass.isInterface()) {</span>
+<span class="nc" id="L820">			Field[] fields = runtimeClass.getFields();</span>
+<span class="nc" id="L821">			Set&lt;String&gt; constants = new HashSet&lt;String&gt;();</span>
+<span class="nc bnc" id="L822" title="All 2 branches missed.">			for (Field field : fields) {</span>
+<span class="nc" id="L823">				int modifier = field.getModifiers();</span>
+<span class="nc bnc" id="L824" title="All 2 branches missed.">				if (modifier == Modifier.PUBLIC + Modifier.STATIC + Modifier.FINAL) {</span>
+<span class="nc" id="L825">					String functor = fromCamelCase(runtimeClass.getSimpleName()) + &quot;_&quot; + toUpperCase(field.getName());</span>
+<span class="nc bnc" id="L826" title="All 2 branches missed.">					if (!constants.contains(functor)) {</span>
+<span class="nc" id="L827">						constants.add(functor);</span>
+
+						// procedure head
+<span class="nc" id="L830">						PrologTerm oout = provider.newVariable(&quot;OUT&quot;, 0);</span>
+<span class="nc" id="L831">						PrologTerm head = provider.newStructure(functor, oout);</span>
+
+						// procedure body
+<span class="nc" id="L834">						PrologTerm oclass = provider.newAtom(runtimeClass.getName());</span>
+<span class="nc" id="L835">						PrologTerm oargs = provider.newAtom(toLowerCase(field.getName()));</span>
+<span class="nc" id="L836">						PrologTerm body = provider.newStructure(&quot;object_get&quot;, oclass, oargs, oout);</span>
+<span class="nc" id="L837">						programmer.println(head + NECK + body + &quot;.&quot;);</span>
+<span class="nc" id="L838">						programmer.println();</span>
+					}
+				}
+			}
+		}
+<span class="nc" id="L843">	}</span>
+
+	protected final void codingConstructors(PrintWriter programmer, Class&lt;?&gt; runtimeClass) {
+<span class="nc" id="L846">		Constructor&lt;?&gt;[] cs = runtimeClass.getConstructors();</span>
+<span class="nc" id="L847">		Map&lt;String, List&lt;Constructor&lt;?&gt;&gt;&gt; map = new HashMap&lt;String, List&lt;Constructor&lt;?&gt;&gt;&gt;();</span>
+<span class="nc bnc" id="L848" title="All 2 branches missed.">		for (Constructor&lt;?&gt; constructor : cs) {</span>
+<span class="nc" id="L849">			int arity = constructor.getParameters().length;</span>
+<span class="nc" id="L850">			String functor = fromCamelCase(runtimeClass.getSimpleName());</span>
+<span class="nc" id="L851">			String indicator = functor + &quot;/&quot; + arity;</span>
+<span class="nc" id="L852">			List&lt;Constructor&lt;?&gt;&gt; family = map.get(indicator);</span>
+<span class="nc bnc" id="L853" title="All 2 branches missed.">			if (family == null) {</span>
+<span class="nc" id="L854">				family = new LinkedList&lt;Constructor&lt;?&gt;&gt;();</span>
+			}
+<span class="nc" id="L856">			family.add(constructor);</span>
+<span class="nc" id="L857">			map.put(indicator, family);</span>
+		}
+
+<span class="nc bnc" id="L860" title="All 2 branches missed.">		for (Entry&lt;String, List&lt;Constructor&lt;?&gt;&gt;&gt; entry : map.entrySet()) {</span>
+<span class="nc" id="L861">			List&lt;Constructor&lt;?&gt;&gt; family = entry.getValue();</span>
+<span class="nc bnc" id="L862" title="All 2 branches missed.">			for (Constructor&lt;?&gt; constructor : family) {</span>
+<span class="nc" id="L863">				String functor = fromCamelCase(runtimeClass.getSimpleName());</span>
+<span class="nc" id="L864">				Parameter[] parameters = constructor.getParameters();</span>
+<span class="nc" id="L865">				PrologTerm[] arguments = new PrologTerm[parameters.length + 1];</span>
+<span class="nc bnc" id="L866" title="All 2 branches missed.">				for (int i = 0; i &lt; parameters.length; i++) {</span>
+<span class="nc" id="L867">					String arg = toUpperCase(parameters[i].getName());</span>
+<span class="nc" id="L868">					arguments[i] = provider.newVariable(arg, i);</span>
+				}
+<span class="nc" id="L870">				arguments[parameters.length] = provider.newVariable(&quot;OUT&quot;, parameters.length);</span>
+
+				// procedure head
+<span class="nc" id="L873">				PrologTerm head = provider.newStructure(functor, arguments);</span>
+
+				// procedure body
+<span class="nc" id="L876">				arguments = new PrologTerm[parameters.length];</span>
+<span class="nc bnc" id="L877" title="All 2 branches missed.">				for (int i = 0; i &lt; parameters.length; i++) {</span>
+<span class="nc" id="L878">					String arg = toUpperCase(parameters[i].getName());</span>
+<span class="nc" id="L879">					arguments[i] = provider.newVariable(arg, i);</span>
+				}
+<span class="nc" id="L881">				PrologTerm oclass = provider.newAtom(runtimeClass.getName());</span>
+<span class="nc" id="L882">				PrologTerm oargs = provider.newList(arguments);</span>
+<span class="nc" id="L883">				PrologTerm oout = provider.newVariable(&quot;OUT&quot;, parameters.length);</span>
+<span class="nc" id="L884">				PrologTerm body = provider.newStructure(&quot;object_new&quot;, oclass, oargs, oout);</span>
+<span class="nc" id="L885">				programmer.println(head + NECK + body + &quot;.&quot;);</span>
+<span class="nc" id="L886">				programmer.println();</span>
+<span class="nc" id="L887">			}</span>
+<span class="nc" id="L888">		}</span>
+<span class="nc" id="L889">	}</span>
+
+	protected final void codingMethods(PrintWriter programmer, Class&lt;?&gt; runtimeClass) {
+<span class="nc" id="L892">		Method[] methods = runtimeClass.getMethods();</span>
+<span class="nc" id="L893">		Map&lt;String, List&lt;Method&gt;&gt; map = new HashMap&lt;String, List&lt;Method&gt;&gt;();</span>
+<span class="nc bnc" id="L894" title="All 2 branches missed.">		for (Method method : methods) {</span>
+<span class="nc" id="L895">			int arity = method.getParameters().length;</span>
+<span class="nc" id="L896">			String functor = fromCamelCase(runtimeClass.getSimpleName()) + &quot;_&quot; + fromCamelCase(method.getName());</span>
+
+<span class="nc" id="L898">			String indicator = functor + &quot;/&quot; + arity;</span>
+<span class="nc" id="L899">			List&lt;Method&gt; family = map.get(indicator);</span>
+<span class="nc bnc" id="L900" title="All 2 branches missed.">			if (family == null) {</span>
+<span class="nc" id="L901">				family = new LinkedList&lt;Method&gt;();</span>
+			}
+<span class="nc" id="L903">			family.add(method);</span>
+<span class="nc" id="L904">			map.put(indicator, family);</span>
+
+		}
+
+<span class="nc bnc" id="L908" title="All 2 branches missed.">		for (Entry&lt;String, List&lt;Method&gt;&gt; entry : map.entrySet()) {</span>
+<span class="nc" id="L909">			List&lt;Method&gt; family = entry.getValue();</span>
+<span class="nc bnc" id="L910" title="All 2 branches missed.">			for (Method method : family) {</span>
+<span class="nc" id="L911">				String functor = fromCamelCase(runtimeClass.getSimpleName()) + &quot;_&quot; + fromCamelCase(method.getName());</span>
+<span class="nc" id="L912">				PrologTerm[] arguments = null;</span>
+<span class="nc" id="L913">				Parameter[] parameters = method.getParameters();</span>
+<span class="nc" id="L914">				int argCount = parameters.length;</span>
+
+<span class="nc bnc" id="L916" title="All 2 branches missed.">				if (method.getReturnType() == void.class) {</span>
+<span class="nc" id="L917">					arguments = new PrologTerm[argCount + 1];</span>
+				} else {
+<span class="nc" id="L919">					arguments = new PrologTerm[argCount + 2];</span>
+				}
+
+<span class="nc" id="L922">				arguments[0] = provider.newVariable(&quot;REF&quot;, 0);</span>
+<span class="nc bnc" id="L923" title="All 2 branches missed.">				for (int i = 0; i &lt; argCount; i++) {</span>
+<span class="nc" id="L924">					String arg = toUpperCase(parameters[i].getName());</span>
+<span class="nc" id="L925">					arguments[i + 1] = provider.newVariable(arg, i + 1);</span>
+				}
+
+<span class="nc bnc" id="L928" title="All 2 branches missed.">				if (method.getReturnType() != void.class) {</span>
+<span class="nc" id="L929">					arguments[argCount + 1] = provider.newVariable(&quot;OUT&quot;, argCount + 1);</span>
+				}
+
+				// procedure head
+<span class="nc" id="L933">				PrologTerm head = provider.newStructure(functor, arguments);</span>
+
+				// procedure body
+<span class="nc" id="L936">				arguments = new PrologTerm[argCount];</span>
+<span class="nc bnc" id="L937" title="All 2 branches missed.">				for (int i = 0; i &lt; argCount; i++) {</span>
+<span class="nc" id="L938">					String arg = toUpperCase(parameters[i].getName());</span>
+<span class="nc" id="L939">					arguments[i] = provider.newVariable(arg, i);</span>
+				}
+<span class="nc" id="L941">				PrologTerm oref = provider.newVariable(&quot;REF&quot;, 0);</span>
+<span class="nc" id="L942">				PrologTerm omethod = provider.newAtom(method.getName());</span>
+<span class="nc" id="L943">				PrologTerm oargs = provider.newList(arguments);</span>
+<span class="nc" id="L944">				PrologTerm oout = null;</span>
+
+<span class="nc bnc" id="L946" title="All 2 branches missed.">				if (method.getReturnType() != void.class) {</span>
+<span class="nc" id="L947">					oout = provider.newVariable(&quot;OUT&quot;, argCount + 1);</span>
+				} else {
+<span class="nc" id="L949">					oout = provider.newVariable(argCount + 1);</span>
+				}
+
+<span class="nc" id="L952">				PrologTerm body = provider.newStructure(&quot;object_call&quot;, oref, omethod, oargs, oout);</span>
+<span class="nc" id="L953">				programmer.println(head + NECK + body + &quot;.&quot;);</span>
+<span class="nc" id="L954">				programmer.println();</span>
+<span class="nc" id="L955">			}</span>
+<span class="nc" id="L956">		}</span>
+<span class="nc" id="L957">	}</span>
+
+	public final void codingRuntime(PrintWriter stdout) {
+<span class="nc" id="L960">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L961">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L962">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L963">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L964">		codingRuntime(stdout, prolobjectlink);</span>
+<span class="nc" id="L965">	}</span>
+
+	public final void codingRuntime(PrintWriter stdout, String folder) {
+<span class="nc" id="L968">		JarFile jarFile = null;</span>
+<span class="nc" id="L969">		boolean warnings = false;</span>
+<span class="nc" id="L970">		File plk = new File(folder);</span>
+<span class="nc" id="L971">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L972">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L973">		String jh = System.getProperty(&quot;java.home&quot;);</span>
+<span class="nc" id="L974">		File rt = new File(jh + &quot;/lib/rt.jar&quot;);</span>
+<span class="nc" id="L975">		List&lt;File&gt; list = new ArrayList&lt;File&gt;();</span>
+<span class="nc" id="L976">		File[] jars = pdk.listFiles(new JarFileFilter());</span>
+
+		// adding rt.jar and others
+<span class="nc" id="L979">		list.add(rt);</span>
+<span class="nc bnc" id="L980" title="All 2 branches missed.">		if (jars != null) {</span>
+<span class="nc bnc" id="L981" title="All 2 branches missed.">			for (File jar : jars) {</span>
+<span class="nc" id="L982">				list.add(jar);</span>
+			}
+		}
+
+		try {
+
+<span class="nc bnc" id="L988" title="All 2 branches missed.">			for (File file : list) {</span>
+<span class="nc" id="L989">				stdout.println(&quot;Generating &quot; + file);</span>
+<span class="nc" id="L990">				jarFile = new JarFile(file);</span>
+<span class="nc" id="L991">				codingModel(stdout, jarFile, prt, warnings);</span>
+<span class="nc" id="L992">				jarFile.close();</span>
+<span class="nc" id="L993">			}</span>
+
+<span class="nc" id="L995">		} catch (IOException e) {</span>
+<span class="nc" id="L996">			Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+		} finally {
+<span class="nc bnc" id="L998" title="All 6 branches missed.">			if (jarFile != null) {</span>
+				try {
+<span class="nc" id="L1000">					jarFile.close();</span>
+<span class="nc" id="L1001">				} catch (IOException e) {</span>
+<span class="nc" id="L1002">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1003">				}</span>
+			}
+		}
+<span class="nc bnc" id="L1006" title="All 2 branches missed.">		if (warnings) {</span>
+<span class="nc" id="L1007">			stdout.println(&quot;Generation finished with WARNINGS.&quot;);</span>
+		} else {
+<span class="nc" id="L1009">			stdout.println(&quot;Generation finished OK.&quot;);</span>
+		}
+<span class="nc" id="L1011">	}</span>
+
+	public final void codingJarFile(PrintWriter stdout, JarFile jarFile, boolean b) {
+<span class="nc" id="L1014">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L1015">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L1016">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L1017">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L1018">		File plk = new File(prolobjectlink);</span>
+<span class="nc" id="L1019">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L1020">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L1021">		codingModel(stdout, jarFile, prt, b);</span>
+<span class="nc" id="L1022">	}</span>
+
+	public final void codingModel(PrintWriter stdout, JarFile jarFile, boolean b) {
+<span class="nc" id="L1025">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L1026">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L1027">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L1028">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L1029">		File plk = new File(prolobjectlink);</span>
+<span class="nc" id="L1030">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L1031">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L1032">		codingJarFile2(stdout, jarFile, prt, b);</span>
+<span class="nc" id="L1033">	}</span>
+
+	public final void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
+<span class="nc" id="L1036">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc" id="L1037">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
+<span class="nc bnc" id="L1038" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
+<span class="nc" id="L1039">			JarEntry jarEntry = entries.nextElement();</span>
+<span class="nc" id="L1040">			String jarEntryName = jarEntry.getName();</span>
+<span class="nc bnc" id="L1041" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
+<span class="nc" id="L1042">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
+<span class="nc" id="L1043">				String fileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
+				try {
+<span class="nc" id="L1045">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
+<span class="nc bnc" id="L1046" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
+<span class="nc" id="L1047">						File runtimeFile = createRuntimeFile(folder, fileName);</span>
+<span class="nc" id="L1048">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
+<span class="nc" id="L1049">						codingLicense(programmer);</span>
+<span class="nc" id="L1050">						codingAuthor(programmer);</span>
+<span class="nc" id="L1051">						codingInclusion(programmer, jarEntryName);</span>
+						// TODO introspection here
+<span class="nc" id="L1053">						codingConstants(programmer, runtimeClass);</span>
+<span class="nc" id="L1054">						codingConstructors(programmer, runtimeClass);</span>
+<span class="nc" id="L1055">						codingMethods(programmer, runtimeClass);</span>
+<span class="nc" id="L1056">						programmer.close();</span>
+					}
+<span class="nc" id="L1058">				} catch (NoClassDefFoundError e) {</span>
+<span class="nc" id="L1059">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1060">					warnings = true;</span>
+<span class="nc" id="L1061">					continue;</span>
+<span class="nc" id="L1062">				} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L1063">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1064">					warnings = true;</span>
+<span class="nc" id="L1065">					continue;</span>
+<span class="nc" id="L1066">				} catch (IOException e) {</span>
+<span class="nc" id="L1067">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1068">				}</span>
+			}
+<span class="nc" id="L1070">		}</span>
+<span class="nc" id="L1071">	}</span>
+
+	public final void codingJarFile2(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
+<span class="nc" id="L1074">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc" id="L1075">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
+<span class="nc bnc" id="L1076" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
+<span class="nc" id="L1077">			JarEntry jarEntry = entries.nextElement();</span>
+<span class="nc" id="L1078">			String jarEntryName = jarEntry.getName();</span>
+<span class="nc bnc" id="L1079" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
+<span class="nc" id="L1080">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
+<span class="nc" id="L1081">				String fileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
+				try {
+<span class="nc" id="L1083">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
+<span class="nc bnc" id="L1084" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
+<span class="nc" id="L1085">						File runtimeFile = createModelFile(folder, fileName);</span>
+<span class="nc" id="L1086">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
+<span class="nc" id="L1087">						codingLicense(programmer);</span>
+<span class="nc" id="L1088">						codingAuthor(programmer);</span>
+<span class="nc" id="L1089">						codingInclusion(programmer, jarEntryName);</span>
+						// TODO introspection here
+<span class="nc" id="L1091">						codingConstants(programmer, runtimeClass);</span>
+<span class="nc" id="L1092">						codingConstructors(programmer, runtimeClass);</span>
+<span class="nc" id="L1093">						codingMethods(programmer, runtimeClass);</span>
+<span class="nc" id="L1094">						programmer.close();</span>
+					}
+<span class="nc" id="L1096">				} catch (NoClassDefFoundError e) {</span>
+<span class="nc" id="L1097">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1098">					warnings = true;</span>
+<span class="nc" id="L1099">					continue;</span>
+<span class="nc" id="L1100">				} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L1101">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1102">					warnings = true;</span>
+<span class="nc" id="L1103">					continue;</span>
+<span class="nc" id="L1104">				} catch (IOException e) {</span>
+<span class="nc" id="L1105">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1106">				}</span>
+			}
+<span class="nc" id="L1108">		}</span>
+<span class="nc" id="L1109">	}</span>
+
+<span class="nc" id="L1111">	private class JarFileFilter implements FileFilter {</span>
+
+		public boolean accept(File pathname) {
+<span class="nc" id="L1114">			return pathname.getName().endsWith(&quot;.jar&quot;);</span>
+		}
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

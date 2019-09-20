@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PrologObjectConverter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.prolog</a> &gt; <span class="el_source">PrologObjectConverter.java</span></div><h1>PrologObjectConverter.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.prolog;
+
+import static org.prolobjectlink.prolog.PrologTermType.ATOM_TYPE;
+import static org.prolobjectlink.prolog.PrologTermType.DOUBLE_TYPE;
+import static org.prolobjectlink.prolog.PrologTermType.FALSE_TYPE;
+import static org.prolobjectlink.prolog.PrologTermType.FLOAT_TYPE;
+import static org.prolobjectlink.prolog.PrologTermType.INTEGER_TYPE;
+import static org.prolobjectlink.prolog.PrologTermType.LIST_TYPE;
+import static org.prolobjectlink.prolog.PrologTermType.LONG_TYPE;
+import static org.prolobjectlink.prolog.PrologTermType.NIL_TYPE;
+import static org.prolobjectlink.prolog.PrologTermType.STRUCTURE_TYPE;
+import static org.prolobjectlink.prolog.PrologTermType.TRUE_TYPE;
+import static org.prolobjectlink.prolog.PrologTermType.VARIABLE_TYPE;
+
+import java.lang.reflect.Field;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Currency;
+import java.util.Date;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
+
+import org.prolobjectlink.db.AbstractConverter;
+import org.prolobjectlink.db.ObjectConverter;
+import org.prolobjectlink.db.util.Assertions;
+import org.prolobjectlink.db.util.JavaLists;
+import org.prolobjectlink.db.util.JavaMaps;
+import org.prolobjectlink.db.util.JavaReflect;
+import org.prolobjectlink.db.util.JavaSets;
+import org.prolobjectlink.logging.LoggerConstants;
+import org.prolobjectlink.logging.LoggerUtils;
+import org.prolobjectlink.prolog.PrologDouble;
+import org.prolobjectlink.prolog.PrologFloat;
+import org.prolobjectlink.prolog.PrologInteger;
+import org.prolobjectlink.prolog.PrologLong;
+import org.prolobjectlink.prolog.PrologProvider;
+import org.prolobjectlink.prolog.PrologStructure;
+import org.prolobjectlink.prolog.PrologTerm;
+import org.prolobjectlink.prolog.PrologVariable;
+import org.prolobjectlink.prolog.UnknownTermError;
+
+public final class PrologObjectConverter extends AbstractConverter&lt;PrologTerm&gt; implements ObjectConverter&lt;PrologTerm&gt; {
+
+	public PrologObjectConverter(PrologProvider provider) {
+<span class="nc" id="L91">		super(provider);</span>
+<span class="nc" id="L92">	}</span>
+
+	public Class&lt;?&gt; toClass(String prologType) {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">		if (prologType.equals(&quot;atom&quot;)) {</span>
+<span class="nc" id="L96">			return String.class;</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		} else if (prologType.equals(&quot;integer&quot;)) {</span>
+<span class="nc" id="L98">			return Integer.class;</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">		} else if (prologType.equals(&quot;float&quot;)) {</span>
+<span class="nc" id="L100">			return Float.class;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">		} else if (prologType.equals(&quot;long&quot;)) {</span>
+<span class="nc" id="L102">			return Long.class;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">		} else if (prologType.equals(&quot;double&quot;)) {</span>
+<span class="nc" id="L104">			return Double.class;</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">		} else if (prologType.equals(&quot;list&quot;)) {</span>
+<span class="nc" id="L106">			return List.class;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		} else if (prologType.equals(&quot;date&quot;)) {</span>
+<span class="nc" id="L108">			return Date.class;</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">		} else if (prologType.equals(&quot;map&quot;)) {</span>
+<span class="nc" id="L110">			return Map.class;</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">		} else if (prologType.equals(&quot;set&quot;)) {</span>
+<span class="nc" id="L112">			return Map.class;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		} else if (prologType.equals(&quot;collection&quot;)) {</span>
+<span class="nc" id="L114">			return Map.class;</span>
+		}
+<span class="nc" id="L116">		Class&lt;?&gt; clazz = null;</span>
+		try {
+<span class="nc" id="L118">			return Class.forName(prologType);</span>
+<span class="nc" id="L119">		} catch (ClassNotFoundException e) {</span>
+			// do nothing
+		}
+<span class="nc" id="L122">		return clazz;</span>
+	}
+
+	public Class&lt;?&gt; toClass(PrologTerm prologTerm) {
+<span class="nc bnc" id="L126" title="All 11 branches missed.">		switch (prologTerm.getType()) {</span>
+		case NIL_TYPE:
+<span class="nc" id="L128">			return null;</span>
+		case TRUE_TYPE:
+<span class="nc" id="L130">			return Boolean.class;</span>
+		case FALSE_TYPE:
+<span class="nc" id="L132">			return Boolean.class;</span>
+		case ATOM_TYPE:
+<span class="nc" id="L134">			return String.class;</span>
+		case INTEGER_TYPE:
+<span class="nc" id="L136">			return Integer.class;</span>
+		case FLOAT_TYPE:
+<span class="nc" id="L138">			return Float.class;</span>
+		case LONG_TYPE:
+<span class="nc" id="L140">			return Long.class;</span>
+		case DOUBLE_TYPE:
+<span class="nc" id="L142">			return Double.class;</span>
+		case LIST_TYPE:
+<span class="nc" id="L144">			return Object[].class;</span>
+		case STRUCTURE_TYPE:
+<span class="nc" id="L146">			String className = removeQuotes(prologTerm.getFunctor());</span>
+			try {
+<span class="nc" id="L148">				return Class.forName(className);</span>
+<span class="nc" id="L149">			} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L150">				LoggerUtils.error(getClass(), LoggerConstants.CLASS_NOT_FOUND, e);</span>
+			}
+<span class="nc" id="L152">			return null;</span>
+		default:
+<span class="nc" id="L154">			throw new UnknownTermError(prologTerm);</span>
+		}
+	}
+
+	public Object toObject(PrologTerm prologTerm) {
+
+<span class="nc bnc" id="L160" title="All 2 branches missed.">		if (prologTerm == null) {</span>
+<span class="nc" id="L161">			return null;</span>
+		}
+
+<span class="nc bnc" id="L164" title="All 12 branches missed.">		switch (prologTerm.getType()) {</span>
+		case NIL_TYPE:
+<span class="nc" id="L166">			return null;</span>
+		case TRUE_TYPE:
+<span class="nc" id="L168">			return true;</span>
+		case FALSE_TYPE:
+<span class="nc" id="L170">			return false;</span>
+		case ATOM_TYPE:
+<span class="nc" id="L172">			return removeQuotes(prologTerm.getFunctor());</span>
+		case INTEGER_TYPE:
+<span class="nc" id="L174">			return ((PrologInteger) prologTerm).getIntegerValue();</span>
+		case FLOAT_TYPE:
+<span class="nc" id="L176">			return ((PrologFloat) prologTerm).getFloatValue();</span>
+		case LONG_TYPE:
+<span class="nc" id="L178">			return ((PrologLong) prologTerm).getLongValue();</span>
+		case DOUBLE_TYPE:
+<span class="nc" id="L180">			return ((PrologDouble) prologTerm).getDoubleValue();</span>
+		case VARIABLE_TYPE:
+<span class="nc" id="L182">			return null;</span>
+		case LIST_TYPE:
+<span class="nc" id="L184">			return toObjectsArray(prologTerm.getArguments());</span>
+		case STRUCTURE_TYPE:
+
+			// getting class from structure
+<span class="nc" id="L188">			Class&lt;?&gt; structureClass = toClass(prologTerm);</span>
+
+			//
+<span class="nc" id="L191">			Object object = null;</span>
+
+			// getting class from structure
+<span class="nc" id="L194">			Class&lt;?&gt; classPtr = structureClass;</span>
+
+			// creating new instance
+<span class="nc" id="L197">			object = JavaReflect.newInstance(classPtr);</span>
+
+<span class="nc" id="L199">			Deque&lt;Field&gt; stack = new ArrayDeque&lt;Field&gt;();</span>
+
+<span class="nc bnc" id="L201" title="All 4 branches missed.">			while (classPtr != null &amp;&amp; classPtr != Object.class) {</span>
+
+				// getting declared fields
+<span class="nc" id="L204">				Field[] fields = classPtr.getDeclaredFields();</span>
+
+<span class="nc bnc" id="L206" title="All 2 branches missed.">				for (int i = fields.length - 1; i &gt;= 0; i--) {</span>
+<span class="nc" id="L207">					Field field = fields[i];</span>
+
+					// check persistence condition
+<span class="nc bnc" id="L210" title="All 4 branches missed.">					if (JavaReflect.isPersistent(field) &amp;&amp; !JavaReflect.isStaticAndFinal(field)) {</span>
+<span class="nc" id="L211">						stack.push(field);</span>
+					}
+
+				}
+
+				// update class pointer for the next super class
+<span class="nc" id="L217">				classPtr = classPtr.getSuperclass();</span>
+<span class="nc" id="L218">			}</span>
+
+<span class="nc" id="L220">			PrologTerm[] prologArguments = prologTerm.getArguments();</span>
+
+<span class="nc bnc" id="L222" title="All 4 branches missed.">			for (int i = 0; i &lt; prologArguments.length &amp;&amp; !stack.isEmpty(); i++) {</span>
+
+				//
+<span class="nc" id="L225">				Field field = stack.pop();</span>
+
+				// recovery data object
+<span class="nc" id="L228">				Object value = toObject(prologTerm.getArguments()[i]);</span>
+
+				// write field with argument value
+<span class="nc" id="L231">				JavaReflect.writeValue(field, object, value);</span>
+
+			}
+
+			// java.util.date transformations
+<span class="nc bnc" id="L236" title="All 2 branches missed.">			if (structureClass == PrologDate.class) {</span>
+<span class="nc" id="L237">				return ((PrologDate) object).getJavaUtilDate();</span>
+			}
+
+			// java.sql.time transformations
+<span class="nc bnc" id="L241" title="All 2 branches missed.">			else if (structureClass == Time.class) {</span>
+<span class="nc" id="L242">				return ((PrologTime) object).getJavaSqlTime();</span>
+			}
+
+			// java.sql.time transformations
+<span class="nc bnc" id="L246" title="All 2 branches missed.">			else if (structureClass == Timestamp.class) {</span>
+<span class="nc" id="L247">				return ((PrologTimestamp) object).getJavaSqlTimestamp();</span>
+			}
+
+			// java.util.locale transformations
+<span class="nc bnc" id="L251" title="All 2 branches missed.">			else if (structureClass == PrologLocale.class) {</span>
+<span class="nc" id="L252">				return ((PrologLocale) object).getJavaUtilLocale();</span>
+			}
+
+			// java.util.currency transformations
+<span class="nc bnc" id="L256" title="All 2 branches missed.">			else if (structureClass == PrologCurrency.class) {</span>
+<span class="nc" id="L257">				return ((PrologCurrency) object).getJavaUtilCurrency();</span>
+			}
+
+			// java.util.calendar transformations
+<span class="nc bnc" id="L261" title="All 2 branches missed.">			else if (structureClass == PrologCalendar.class) {</span>
+<span class="nc" id="L262">				return ((PrologCalendar) object).getJavaUtilCalendar();</span>
+			}
+
+			// java.util.collections transformations
+<span class="nc bnc" id="L266" title="All 2 branches missed.">			else if (structureClass == PrologVector.class) {</span>
+<span class="nc" id="L267">				return JavaLists.vector((PrologVector&lt;?&gt;) object);</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">			} else if (structureClass == PrologStack.class) {</span>
+<span class="nc" id="L269">				return JavaLists.stack((PrologStack&lt;?&gt;) object);</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">			} else if (structureClass == PrologArrayList.class) {</span>
+<span class="nc" id="L271">				return JavaLists.arrayList((PrologArrayList&lt;?&gt;) object);</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">			} else if (structureClass == PrologLinkedList.class) {</span>
+<span class="nc" id="L273">				return JavaLists.linkedList((PrologLinkedList&lt;?&gt;) object);</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">			} else if (structureClass == PrologPriorityQueue.class) {</span>
+<span class="nc" id="L275">				return JavaLists.priorityQueue((PrologPriorityQueue&lt;?&gt;) object);</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">			} else if (structureClass == PrologHashMap.class) {</span>
+<span class="nc" id="L277">				return JavaMaps.hashMap((PrologHashMap&lt;?, ?&gt;) object);</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">			} else if (structureClass == PrologHashSet.class) {</span>
+<span class="nc" id="L279">				return JavaSets.hashSet((PrologHashSet&lt;?&gt;) object);</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">			} else if (structureClass == PrologTreeMap.class) {</span>
+<span class="nc" id="L281">				return JavaMaps.treeMap((PrologTreeMap) object);</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">			} else if (structureClass == PrologTreeSet.class) {</span>
+<span class="nc" id="L283">				return JavaSets.treeSet((PrologTreeSet) object);</span>
+<span class="nc bnc" id="L284" title="All 2 branches missed.">			} else if (structureClass == PrologLinkedMap.class) {</span>
+<span class="nc" id="L285">				return JavaMaps.linkedHashMap((PrologLinkedMap&lt;?, ?&gt;) object);</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">			} else if (structureClass == PrologLinkedSet.class) {</span>
+<span class="nc" id="L287">				return JavaSets.linkedHashSet((PrologLinkedSet&lt;?&gt;) object);</span>
+			}
+
+<span class="nc" id="L290">			return object;</span>
+
+		default:
+<span class="nc" id="L293">			throw new UnknownTermError(prologTerm);</span>
+		}
+	}
+
+	public PrologTerm toTerm(Object object) {
+
+		// null pointer
+<span class="nc bnc" id="L300" title="All 2 branches missed.">		if (object == null) {</span>
+<span class="nc" id="L301">			return provider.prologNil();</span>
+		}
+
+		// class data type
+<span class="nc bnc" id="L305" title="All 2 branches missed.">		else if (object instanceof Class) {</span>
+<span class="nc" id="L306">			return toStructure((Class&lt;?&gt;) object, null);</span>
+		}
+
+		// string data type
+<span class="nc bnc" id="L310" title="All 2 branches missed.">		else if (object instanceof String) {</span>
+<span class="nc" id="L311">			return provider.newAtom(&quot;&quot; + (String) object + &quot;&quot;);</span>
+		}
+
+		// primitives and wrappers data types
+<span class="nc bnc" id="L315" title="All 4 branches missed.">		else if (object.getClass() == boolean.class || object instanceof Boolean) {</span>
+<span class="nc bnc" id="L316" title="All 2 branches missed.">			return (Boolean) object ? provider.prologTrue() : provider.prologFalse();</span>
+<span class="nc bnc" id="L317" title="All 4 branches missed.">		} else if (object.getClass() == int.class || object instanceof Integer) {</span>
+<span class="nc" id="L318">			return provider.newInteger((Integer) object);</span>
+<span class="nc bnc" id="L319" title="All 4 branches missed.">		} else if (object.getClass() == float.class || object instanceof Float) {</span>
+<span class="nc" id="L320">			return provider.newFloat((Float) object);</span>
+<span class="nc bnc" id="L321" title="All 4 branches missed.">		} else if (object.getClass() == long.class || object instanceof Long) {</span>
+<span class="nc" id="L322">			return provider.newLong((Long) object);</span>
+<span class="nc bnc" id="L323" title="All 4 branches missed.">		} else if (object.getClass() == double.class || object instanceof Double) {</span>
+<span class="nc" id="L324">			return provider.newDouble((Double) object);</span>
+		}
+
+		// object array
+<span class="nc bnc" id="L328" title="All 2 branches missed.">		else if (object instanceof Object[]) {</span>
+<span class="nc" id="L329">			return provider.newList(toTermsArray((Object[]) object));</span>
+		}
+
+		// java.util.date transformations
+<span class="nc bnc" id="L333" title="All 2 branches missed.">		else if (object instanceof Date) {</span>
+<span class="nc" id="L334">			return toTerm(new PrologDate(((Date) object).getTime()));</span>
+		}
+
+		// java.sql.time transformations
+<span class="nc bnc" id="L338" title="All 2 branches missed.">		else if (object instanceof Time) {</span>
+<span class="nc" id="L339">			return toTerm(new PrologTime(((Time) object).getTime()));</span>
+		}
+
+		// java.sql.timestamp transformations
+<span class="nc bnc" id="L343" title="All 2 branches missed.">		else if (object instanceof Timestamp) {</span>
+<span class="nc" id="L344">			return toTerm(new PrologTime(((Timestamp) object).getTime()));</span>
+		}
+
+		// java.util.locale transformations
+<span class="nc bnc" id="L348" title="All 2 branches missed.">		else if (object instanceof Locale) {</span>
+<span class="nc" id="L349">			Locale locale = (Locale) object;</span>
+<span class="nc" id="L350">			String l = locale.getLanguage();</span>
+<span class="nc" id="L351">			String c = locale.getCountry();</span>
+<span class="nc" id="L352">			String v = locale.getVariant();</span>
+<span class="nc" id="L353">			return toTerm(new PrologLocale(l, c, v));</span>
+		}
+
+		// java.util.currency transformations
+<span class="nc bnc" id="L357" title="All 2 branches missed.">		else if (object instanceof Currency) {</span>
+<span class="nc" id="L358">			Currency currency = (Currency) object;</span>
+<span class="nc" id="L359">			String c = currency.getCurrencyCode();</span>
+<span class="nc" id="L360">			return toTerm(new PrologCurrency(c));</span>
+		}
+
+		// java.util.calendar transformations
+<span class="nc bnc" id="L364" title="All 2 branches missed.">		else if (object instanceof Calendar) {</span>
+<span class="nc" id="L365">			Calendar c = (Calendar) object;</span>
+<span class="nc" id="L366">			int minimalDaysInFirstWeek = c.getMinimalDaysInFirstWeek();</span>
+<span class="nc" id="L367">			int firstDayOfWeek = c.getFirstDayOfWeek();</span>
+<span class="nc" id="L368">			long timeInMillis = c.getTimeInMillis();</span>
+<span class="nc" id="L369">			boolean lenient = c.isLenient();</span>
+<span class="nc" id="L370">			return toTerm(new PrologCalendar(lenient, timeInMillis, firstDayOfWeek, minimalDaysInFirstWeek));</span>
+		}
+
+		// java.util.collections transformations
+<span class="nc bnc" id="L374" title="All 2 branches missed.">		else if (object instanceof Vector) {</span>
+<span class="nc" id="L375">			Vector&lt;?&gt; l = (Vector&lt;?&gt;) object;</span>
+<span class="nc" id="L376">			return toTerm(PrologLists.vector(l));</span>
+<span class="nc bnc" id="L377" title="All 2 branches missed.">		} else if (object instanceof java.util.Stack) {</span>
+<span class="nc" id="L378">			java.util.Stack&lt;?&gt; l = (java.util.Stack&lt;?&gt;) object;</span>
+<span class="nc" id="L379">			return toTerm(PrologLists.stack(l));</span>
+<span class="nc bnc" id="L380" title="All 2 branches missed.">		} else if (object instanceof ArrayList) {</span>
+<span class="nc" id="L381">			ArrayList&lt;?&gt; l = (ArrayList&lt;?&gt;) object;</span>
+<span class="nc" id="L382">			return toTerm(PrologLists.arrayList(l));</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">		} else if (object instanceof LinkedList) {</span>
+<span class="nc" id="L384">			LinkedList&lt;?&gt; l = (LinkedList&lt;?&gt;) object;</span>
+<span class="nc" id="L385">			return toTerm(PrologLists.linkedList(l));</span>
+<span class="nc bnc" id="L386" title="All 2 branches missed.">		} else if (object instanceof PriorityQueue) {</span>
+<span class="nc" id="L387">			PriorityQueue&lt;?&gt; l = (PriorityQueue&lt;?&gt;) object;</span>
+<span class="nc" id="L388">			return toTerm(PrologLists.priorityQueue(l));</span>
+<span class="nc bnc" id="L389" title="All 2 branches missed.">		} else if (object instanceof HashMap) {</span>
+<span class="nc" id="L390">			HashMap&lt;?, ?&gt; m = (HashMap&lt;?, ?&gt;) object;</span>
+<span class="nc" id="L391">			return toTerm(PrologMaps.hashMap(m));</span>
+<span class="nc bnc" id="L392" title="All 2 branches missed.">		} else if (object instanceof HashSet) {</span>
+<span class="nc" id="L393">			HashSet&lt;?&gt; s = (HashSet&lt;?&gt;) object;</span>
+<span class="nc" id="L394">			return toTerm(PrologSets.hashSet(s));</span>
+<span class="nc bnc" id="L395" title="All 2 branches missed.">		} else if (object instanceof TreeMap) {</span>
+<span class="nc" id="L396">			TreeMap m = (TreeMap) object;</span>
+<span class="nc" id="L397">			return toTerm(PrologMaps.treeMap(m));</span>
+<span class="nc bnc" id="L398" title="All 2 branches missed.">		} else if (object instanceof TreeSet) {</span>
+<span class="nc" id="L399">			TreeSet s = (TreeSet) object;</span>
+<span class="nc" id="L400">			return toTerm(PrologSets.treeSet(s));</span>
+<span class="nc bnc" id="L401" title="All 2 branches missed.">		} else if (object instanceof LinkedHashMap) {</span>
+<span class="nc" id="L402">			LinkedHashMap m = (LinkedHashMap&lt;?, ?&gt;) object;</span>
+<span class="nc" id="L403">			return toTerm(PrologMaps.linkedMap(m));</span>
+<span class="nc bnc" id="L404" title="All 2 branches missed.">		} else if (object instanceof LinkedHashSet) {</span>
+<span class="nc" id="L405">			LinkedHashSet&lt;?&gt; s = (LinkedHashSet&lt;?&gt;) object;</span>
+<span class="nc" id="L406">			return toTerm(PrologSets.linkedSet(s));</span>
+		}
+
+		// structure default case
+		else {
+
+<span class="nc" id="L412">			return toStructure(object.getClass(), object);</span>
+		}
+
+	}
+
+	public PrologTerm toTerm(Object object, Map&lt;String, PrologTerm&gt; solutionsMap) {
+
+		// null pointer
+<span class="nc bnc" id="L420" title="All 2 branches missed.">		if (object == null) {</span>
+<span class="nc" id="L421">			return provider.prologNil();</span>
+		}
+
+		// class data type
+<span class="nc bnc" id="L425" title="All 2 branches missed.">		else if (object instanceof Class) {</span>
+<span class="nc" id="L426">			return toStructure((Class&lt;?&gt;) object, null);</span>
+		}
+
+		// string data type
+<span class="nc bnc" id="L430" title="All 2 branches missed.">		else if (object instanceof String) {</span>
+<span class="nc" id="L431">			return provider.newAtom(&quot;&quot; + (String) object + &quot;&quot;);</span>
+		}
+
+		// primitives and wrappers data types
+<span class="nc bnc" id="L435" title="All 4 branches missed.">		else if (object.getClass() == boolean.class || object instanceof Boolean) {</span>
+<span class="nc bnc" id="L436" title="All 2 branches missed.">			return (Boolean) object ? provider.prologTrue() : provider.prologFalse();</span>
+<span class="nc bnc" id="L437" title="All 4 branches missed.">		} else if (object.getClass() == int.class || object instanceof Integer) {</span>
+<span class="nc" id="L438">			return provider.newInteger((Integer) object);</span>
+<span class="nc bnc" id="L439" title="All 4 branches missed.">		} else if (object.getClass() == float.class || object instanceof Float) {</span>
+<span class="nc" id="L440">			return provider.newFloat((Float) object);</span>
+<span class="nc bnc" id="L441" title="All 4 branches missed.">		} else if (object.getClass() == long.class || object instanceof Long) {</span>
+<span class="nc" id="L442">			return provider.newLong((Long) object);</span>
+<span class="nc bnc" id="L443" title="All 4 branches missed.">		} else if (object.getClass() == double.class || object instanceof Double) {</span>
+<span class="nc" id="L444">			return provider.newDouble((Double) object);</span>
+		}
+
+		//
+<span class="nc bnc" id="L448" title="All 2 branches missed.">		else if (object instanceof Object[]) {</span>
+<span class="nc" id="L449">			return provider.newList(toTermsArray((Object[]) object));</span>
+		} else {
+
+			// retrieve object class
+<span class="nc" id="L453">			Class&lt;?&gt; classPtr = object.getClass();</span>
+
+			// check non empty attribute class or non persistent fields
+<span class="nc" id="L456">			classPtr = Assertions.persistent(classPtr, &quot;Non persistent &quot; + classPtr);</span>
+<span class="nc" id="L457">			classPtr = Assertions.nonStaticFinal(classPtr, &quot;Non persistent &quot; + classPtr);</span>
+
+			// stack for resolve prolog structure arguments order
+<span class="nc" id="L460">			Deque&lt;PrologTerm&gt; stack = new ArrayDeque&lt;PrologTerm&gt;();</span>
+
+			// class name to convert in predicate functor
+<span class="nc" id="L463">			String className = classPtr.getName();</span>
+
+			// setting quotes to complex class name
+<span class="nc" id="L466">			String functor = &quot;'&quot; + className + &quot;'&quot;;</span>
+
+			// loop for resolve inheritance classes
+<span class="nc bnc" id="L469" title="All 4 branches missed.">			while (classPtr != null &amp;&amp; classPtr != Object.class) {</span>
+
+				// getting declared fields
+<span class="nc" id="L472">				Field[] fields = classPtr.getDeclaredFields();</span>
+
+<span class="nc bnc" id="L474" title="All 2 branches missed.">				for (int i = fields.length - 1; i &gt;= 0; i--) {</span>
+<span class="nc" id="L475">					Field field = fields[i];</span>
+
+<span class="nc bnc" id="L477" title="All 4 branches missed.">					if (JavaReflect.isPersistent(field) &amp;&amp; !JavaReflect.isStaticAndFinal(field)) {</span>
+
+<span class="nc" id="L479">						String fieldName = field.getName();</span>
+
+<span class="nc" id="L481">						Object argument = JavaReflect.readValue(field, object);</span>
+
+						// variable name = field name first char in upper case
+<span class="nc" id="L484">						String variableName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);</span>
+
+<span class="nc bnc" id="L486" title="All 2 branches missed.">						if (argument == null) {</span>
+<span class="nc bnc" id="L487" title="All 2 branches missed.">							if (solutionsMap.containsKey(variableName)) {</span>
+<span class="nc" id="L488">								stack.push(solutionsMap.get(variableName));</span>
+							} else {
+<span class="nc" id="L490">								PrologVariable variableArgument = provider.newVariable(variableName, i);</span>
+<span class="nc" id="L491">								stack.push(variableArgument);</span>
+<span class="nc" id="L492">							}</span>
+						} else {
+<span class="nc" id="L494">							PrologTerm prologArgument = toTerm(argument);</span>
+<span class="nc" id="L495">							stack.push(prologArgument);</span>
+<span class="nc" id="L496">							solutionsMap.put(variableName, prologArgument);</span>
+						}
+
+					}
+
+				}
+
+				// update class pointer for the next super class
+<span class="nc" id="L504">				classPtr = classPtr.getSuperclass();</span>
+<span class="nc" id="L505">			}</span>
+
+<span class="nc" id="L507">			PrologTerm[] prologArguments = new PrologTerm[stack.size()];</span>
+<span class="nc bnc" id="L508" title="All 4 branches missed.">			for (int i = 0; i &lt; prologArguments.length || !stack.isEmpty(); i++) {</span>
+<span class="nc" id="L509">				prologArguments[i] = stack.pop();</span>
+			}
+
+<span class="nc" id="L512">			return provider.newStructure(functor, prologArguments);</span>
+
+		}
+	}
+
+	public PrologTerm[] toTermsArray(Object[] objects) {
+<span class="nc" id="L518">		PrologTerm[] terms = new PrologTerm[objects.length];</span>
+<span class="nc bnc" id="L519" title="All 2 branches missed.">		for (int i = 0; i &lt; objects.length; i++) {</span>
+<span class="nc" id="L520">			terms[i] = toTerm(objects[i]);</span>
+		}
+<span class="nc" id="L522">		return terms;</span>
+	}
+
+	private PrologStructure toStructure(Class&lt;?&gt; clazz, Object object) {
+
+<span class="nc" id="L527">		Class&lt;?&gt; classPtr = clazz;</span>
+
+		// check non empty attribute class or non persistent fields
+<span class="nc" id="L530">		classPtr = Assertions.persistent(classPtr, &quot;Non persistent &quot; + classPtr);</span>
+<span class="nc" id="L531">		classPtr = Assertions.nonStaticFinal(classPtr, &quot;Non persistent &quot; + classPtr);</span>
+
+		// stack for resolve prolog structure arguments order
+<span class="nc" id="L534">		Deque&lt;PrologTerm&gt; stack = new ArrayDeque&lt;PrologTerm&gt;();</span>
+
+		// class name to convert in predicate functor
+<span class="nc" id="L537">		String functor = &quot;'&quot; + classPtr.getName() + &quot;'&quot;;</span>
+
+		// loop for resolve term inheritance classes
+<span class="nc bnc" id="L540" title="All 4 branches missed.">		while (classPtr != null &amp;&amp; classPtr != Object.class) {</span>
+
+			// getting declared fields
+<span class="nc" id="L543">			Field[] fields = classPtr.getDeclaredFields();</span>
+
+<span class="nc bnc" id="L545" title="All 2 branches missed.">			for (int i = fields.length - 1; i &gt;= 0; i--) {</span>
+<span class="nc" id="L546">				Field field = fields[i];</span>
+
+				// check persistence condition
+<span class="nc bnc" id="L549" title="All 4 branches missed.">				if (JavaReflect.isPersistent(field) &amp;&amp; !JavaReflect.isStaticAndFinal(field)) {</span>
+
+<span class="nc" id="L551">					String fieldName = field.getName();</span>
+
+<span class="nc bnc" id="L553" title="All 2 branches missed.">					if (object != null) {</span>
+
+<span class="nc" id="L555">						Object argument = JavaReflect.readValue(field, object);</span>
+<span class="nc" id="L556">						PrologTerm prologArgument = toTerm(argument);</span>
+<span class="nc" id="L557">						stack.push(prologArgument);</span>
+
+<span class="nc" id="L559">					} else {</span>
+
+						// variable name = field name first char in upper case
+<span class="nc" id="L562">						String varName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);</span>
+
+						// pushing the variable name for create predicate
+<span class="nc" id="L565">						stack.push(provider.newVariable(varName, i));</span>
+					}
+
+				}
+
+			}
+
+			// update class pointer for the next super class
+<span class="nc" id="L573">			classPtr = classPtr.getSuperclass();</span>
+<span class="nc" id="L574">		}</span>
+
+<span class="nc" id="L576">		PrologTerm[] prologArguments = new PrologTerm[stack.size()];</span>
+<span class="nc bnc" id="L577" title="All 4 branches missed.">		for (int i = 0; i &lt; prologArguments.length || !stack.isEmpty(); i++) {</span>
+<span class="nc" id="L578">			prologArguments[i] = stack.pop();</span>
+		}
+
+<span class="nc" id="L581">		return provider.newStructure(functor, prologArguments);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

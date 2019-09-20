@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractGenerator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db</a> &gt; <span class="el_source">AbstractGenerator.java</span></div><h1>AbstractGenerator.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.prolobjectlink.prolog.IndicatorError;
+import org.prolobjectlink.prolog.PrologClause;
+import org.prolobjectlink.prolog.PrologEngine;
+import org.prolobjectlink.prolog.PrologList;
+import org.prolobjectlink.prolog.PrologTerm;
+
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+public abstract class AbstractGenerator implements SchemaGenerator {
+
+	private static final String KEY = &quot;key/2&quot;;
+	private static final String FIELD = &quot;field/2&quot;;
+	private static final String CLASS = &quot;entity/3&quot;;
+	private static final String ONETOONE = &quot;oneToOne/2&quot;;
+	private static final String ONETOMANY = &quot;oneToMany/2&quot;;
+	private static final String MANYTOONE = &quot;manyToOne/2&quot;;
+	private static final String MANYTOMANY = &quot;manyToMany/2&quot;;
+
+	private final PrologEngine engine;
+	private final String modelLocation;
+	private final DatabaseEngine database;
+	private final ObjectConverter&lt;PrologTerm&gt; converter;
+
+<span class="nc" id="L67">	protected AbstractGenerator(DatabaseEngine database, String modelLocation) {</span>
+<span class="nc" id="L68">		this.converter = database.getConverter();</span>
+<span class="nc" id="L69">		this.modelLocation = modelLocation;</span>
+<span class="nc" id="L70">		this.engine = database.getEngine();</span>
+<span class="nc" id="L71">		this.database = database;</span>
+<span class="nc" id="L72">	}</span>
+
+	private void assertValidClassIndicator(PrologClause clause) {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">		if (!clause.getIndicator().equals(CLASS)) {</span>
+<span class="nc" id="L76">			throw new IndicatorError(&quot;No valid class descriptor predicate &quot; + clause);</span>
+		}
+<span class="nc" id="L78">	}</span>
+
+	private void assertValidFieldIndicator(PrologTerm prologTerm) {
+<span class="nc" id="L81">		String indicator = prologTerm.getIndicator();</span>
+<span class="nc bnc" id="L82" title="All 6 branches missed.">		if (!indicator.equals(FIELD) &amp;&amp; !indicator.equals(KEY) &amp;&amp; !indicator.equals(ONETOONE)</span>
+<span class="nc bnc" id="L83" title="All 6 branches missed.">				&amp;&amp; !indicator.equals(ONETOMANY) &amp;&amp; !indicator.equals(MANYTOONE) &amp;&amp; !indicator.equals(MANYTOMANY)) {</span>
+<span class="nc" id="L84">			throw new IndicatorError(&quot;No valid field descriptor predicate &quot; + prologTerm);</span>
+		}
+<span class="nc" id="L86">	}</span>
+
+	public final Schema createSchema() {
+<span class="nc" id="L89">		engine.consult(modelLocation);</span>
+<span class="nc" id="L90">		Schema schema = database.getSchema();</span>
+
+<span class="nc" id="L92">		Map&lt;String, DatabaseClass&gt; pending = new HashMap&lt;String, DatabaseClass&gt;();</span>
+//		Map&lt;String, Class&lt;?&gt;&gt; resolved = new HashMap&lt;String, Class&lt;?&gt;&gt;();
+
+<span class="nc bnc" id="L95" title="All 2 branches missed.">		for (PrologClause clause : engine) {</span>
+
+<span class="nc" id="L97">			assertValidClassIndicator(clause);</span>
+
+<span class="nc" id="L99">			PrologTerm head = clause.getHead();</span>
+<span class="nc" id="L100">			PrologTerm className = head.getArgument(0);</span>
+<span class="nc" id="L101">			PrologTerm classFields = head.getArgument(2);</span>
+
+			// class qualified name
+<span class="nc" id="L104">			String name = (String) converter.toObject(className);</span>
+
+			// class short name
+<span class="nc" id="L107">			int index = name.lastIndexOf('.') + 1;</span>
+<span class="nc" id="L108">			String shortName = name.substring(index);</span>
+
+<span class="nc" id="L110">			DatabaseClass dbclass = schema.addClass(shortName, &quot;&quot;);</span>
+<span class="nc" id="L111">			PrologList fields = (PrologList) classFields;</span>
+
+<span class="nc" id="L113">			int position = 0;</span>
+
+<span class="nc bnc" id="L115" title="All 2 branches missed.">			for (PrologTerm field : fields) {</span>
+
+<span class="nc" id="L117">				String ftype = &quot;&quot;;</span>
+<span class="nc" id="L118">				Class&lt;?&gt; c = null;</span>
+<span class="nc" id="L119">				Class&lt;?&gt; linkedClass = null;</span>
+<span class="nc" id="L120">				DatabaseField attribute = null;</span>
+
+<span class="nc" id="L122">				assertValidFieldIndicator(field);</span>
+
+<span class="nc" id="L124">				PrologTerm fieldName = field.getArgument(0);</span>
+<span class="nc" id="L125">				PrologTerm fieldType = field.getArgument(1);</span>
+
+<span class="nc" id="L127">				String fname = (String) converter.toObject(fieldName);</span>
+
+<span class="nc bnc" id="L129" title="All 2 branches missed.">				if (fieldType.hasIndicator(&quot;set&quot;, 1)) {</span>
+<span class="nc" id="L130">					PrologTerm linkedType = fieldType.getArgument(0);</span>
+<span class="nc" id="L131">					linkedClass = converter.toClass(linkedType);</span>
+<span class="nc" id="L132">					c = Set.class;</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">				} else if (fieldType.hasIndicator(&quot;list&quot;, 1)) {</span>
+<span class="nc" id="L134">					PrologTerm linkedType = fieldType.getArgument(0);</span>
+<span class="nc" id="L135">					linkedClass = converter.toClass(linkedType);</span>
+<span class="nc" id="L136">					c = List.class;</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">				} else if (fieldType.hasIndicator(&quot;collection&quot;, 1)) {</span>
+<span class="nc" id="L138">					PrologTerm linkedType = fieldType.getArgument(0);</span>
+<span class="nc" id="L139">					linkedClass = converter.toClass(linkedType);</span>
+<span class="nc" id="L140">					c = Collection.class;</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">				} else if (fieldType.hasIndicator(&quot;map&quot;, 2)) {</span>
+<span class="nc" id="L142">					PrologTerm linkedKeyType = fieldType.getArgument(0);</span>
+<span class="nc" id="L143">					PrologTerm linkedValueType = fieldType.getArgument(1);</span>
+<span class="nc" id="L144">					c = Map.class;</span>
+<span class="nc" id="L145">				} else {</span>
+<span class="nc" id="L146">					ftype = (String) converter.toObject(fieldType);</span>
+<span class="nc" id="L147">					c = converter.toClass(ftype);</span>
+				}
+
+<span class="nc bnc" id="L150" title="All 2 branches missed.">				if (c == null) {</span>
+
+<span class="nc bnc" id="L152" title="All 2 branches missed.">					if (linkedClass != null) {</span>
+<span class="nc" id="L153">						attribute = dbclass.addField(fname, &quot;&quot;, position++, c, linkedClass);</span>
+					} else {
+<span class="nc" id="L155">						DatabaseClass type = new DatabaseClass(ftype, &quot;&quot;, schema);</span>
+<span class="nc" id="L156">						attribute = dbclass.addField(fname, &quot;&quot;, position++, Object.class);</span>
+<span class="nc" id="L157">						pending.put(fname, type);</span>
+<span class="nc" id="L158">					}</span>
+
+				} else {
+
+<span class="nc bnc" id="L162" title="All 2 branches missed.">					if (linkedClass != null) {</span>
+<span class="nc" id="L163">						attribute = dbclass.addField(fname, &quot;&quot;, position++, c, linkedClass);</span>
+					} else {
+<span class="nc" id="L165">						attribute = dbclass.addField(fname, &quot;&quot;, position++, c);</span>
+					}
+
+				}
+
+<span class="nc bnc" id="L170" title="All 2 branches missed.">				if (field.hasIndicator(&quot;key&quot;, 2)) {</span>
+<span class="nc" id="L171">					attribute.setPrimaryKey(true);</span>
+				}
+<span class="nc bnc" id="L173" title="All 2 branches missed.">				if (field.hasIndicator(&quot;oneToOne&quot;, 2)) {</span>
+<span class="nc" id="L174">					attribute.setOneToOne(true);</span>
+<span class="nc" id="L175">					attribute.setOneToMany(false);</span>
+<span class="nc" id="L176">					attribute.setManyToOne(false);</span>
+<span class="nc" id="L177">					attribute.setManyToMany(false);</span>
+				}
+<span class="nc bnc" id="L179" title="All 2 branches missed.">				if (field.hasIndicator(&quot;oneToMany&quot;, 2)) {</span>
+<span class="nc" id="L180">					attribute.setOneToOne(false);</span>
+<span class="nc" id="L181">					attribute.setOneToMany(true);</span>
+<span class="nc" id="L182">					attribute.setManyToOne(false);</span>
+<span class="nc" id="L183">					attribute.setManyToMany(false);</span>
+				}
+<span class="nc bnc" id="L185" title="All 2 branches missed.">				if (field.hasIndicator(&quot;manyToOne&quot;, 2)) {</span>
+<span class="nc" id="L186">					attribute.setOneToOne(false);</span>
+<span class="nc" id="L187">					attribute.setOneToMany(false);</span>
+<span class="nc" id="L188">					attribute.setManyToOne(true);</span>
+<span class="nc" id="L189">					attribute.setManyToMany(false);</span>
+				}
+<span class="nc bnc" id="L191" title="All 2 branches missed.">				if (field.hasIndicator(&quot;manyToMany&quot;, 2)) {</span>
+<span class="nc" id="L192">					attribute.setOneToOne(false);</span>
+<span class="nc" id="L193">					attribute.setOneToMany(false);</span>
+<span class="nc" id="L194">					attribute.setManyToOne(false);</span>
+<span class="nc" id="L195">					attribute.setManyToMany(true);</span>
+				}
+
+<span class="nc" id="L198">			}</span>
+
+<span class="nc" id="L200">		}</span>
+<span class="nc" id="L201">		return schema;</span>
+	}
+
+	public final List&lt;Class&lt;?&gt;&gt; compileSchema() {
+<span class="nc" id="L205">		return createSchema().compile();</span>
+	}
+
+	public final String generateSchema() {
+<span class="nc" id="L209">		return createSchema().generate();</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

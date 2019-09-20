@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RemoteHierarchical.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.persistent</a> &gt; <span class="el_source">RemoteHierarchical.java</span></div><h1>RemoteHierarchical.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.persistent;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.prolobjectlink.db.DatabaseEngine;
+import org.prolobjectlink.db.DatabaseProperties;
+import org.prolobjectlink.db.DatabaseSchema;
+import org.prolobjectlink.db.DatabaseType;
+import org.prolobjectlink.db.DatabaseUnitInfo;
+import org.prolobjectlink.db.DatabaseUser;
+import org.prolobjectlink.db.Protocol;
+import org.prolobjectlink.db.RemoteDatabase;
+import org.prolobjectlink.db.Schema;
+import org.prolobjectlink.db.etc.Settings;
+import org.prolobjectlink.db.memory.MemoryHierarchical;
+import org.prolobjectlink.db.util.Assertions;
+import org.prolobjectlink.db.util.JavaReflect;
+import org.prolobjectlink.db.xml.PersistenceXmlParser;
+import org.prolobjectlink.logging.LoggerConstants;
+import org.prolobjectlink.logging.LoggerUtils;
+
+<span class="nc bnc" id="L59" title="All 2 branches missed.">public final class RemoteHierarchical extends RemoteDatabaseClient implements RemoteDatabase {</span>
+
+	private static RemoteDatabase remoteHierarchicalDatabase;
+	private final Map&lt;String, DatabaseUnitInfo&gt; units;
+
+	private RemoteHierarchical(Settings properties, URL url, String name, Schema schema, DatabaseUser owner,
+			Map&lt;String, DatabaseUnitInfo&gt; units) {
+<span class="nc" id="L66">		super(properties, url, name, schema, owner);</span>
+<span class="nc" id="L67">		this.units = units;</span>
+<span class="nc" id="L68">	}</span>
+
+	private RemoteHierarchical(Settings properties, URL url, String name, Schema schema, DatabaseUser owner) {
+<span class="nc" id="L71">		super(properties, url, name, schema, owner);</span>
+<span class="nc" id="L72">		this.units = new HashMap&lt;String, DatabaseUnitInfo&gt;();</span>
+<span class="nc" id="L73">	}</span>
+
+	public static final RemoteDatabase newInstance(String name) {
+<span class="nc" id="L76">		return newInstance(name, new HashMap&lt;Object, Object&gt;());</span>
+	}
+
+	public static final RemoteDatabase newInstance(String name, Map&lt;?, ?&gt; map) {
+<span class="nc bnc" id="L80" title="All 2 branches missed.">		if (remoteHierarchicalDatabase == null) {</span>
+<span class="nc" id="L81">			PersistenceXmlParser p = new PersistenceXmlParser();</span>
+<span class="nc" id="L82">			Map&lt;String, DatabaseUnitInfo&gt; m = p.parsePersistenceXml(persistenceXml);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">			for (DatabaseUnitInfo unit : m.values()) {</span>
+<span class="nc" id="L84">				String unitName = unit.getPersistenceUnitName();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">				if (unitName.equals(name)) {</span>
+<span class="nc" id="L86">					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));</span>
+<span class="nc" id="L87">					URL url = null;</span>
+					try {
+<span class="nc" id="L89">						System.setProperty(&quot;java.protocol.handler.pkgs&quot;, Protocol.class.getPackage().getName());</span>
+<span class="nc" id="L90">						url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, &quot;&quot;));</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {</span>
+<span class="nc" id="L92">							throw new MalformedURLException(&quot;The URL path don't have database name at the end&quot;);</span>
+						}
+<span class="nc" id="L94">					} catch (MalformedURLException e) {</span>
+<span class="nc" id="L95">						LoggerUtils.error(RemoteHierarchical.class, LoggerConstants.IO, e);</span>
+<span class="nc" id="L96">					}</span>
+
+<span class="nc bnc" id="L98" title="All 4 branches missed.">					assert url != null;</span>
+
+<span class="nc" id="L100">					String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);</span>
+<span class="nc" id="L101">					String user = unit.getProperties().getProperty(DatabaseProperties.USER);</span>
+<span class="nc" id="L102">					DatabaseUser owner = new DatabaseUser(user, password);</span>
+<span class="nc" id="L103">					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">					for (String managedClass : unit.getManagedClassNames()) {</span>
+<span class="nc" id="L105">						schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
+<span class="nc" id="L106">					}</span>
+<span class="nc" id="L107">					remoteHierarchicalDatabase = new RemoteHierarchical(settings, url, name, schema, owner)</span>
+<span class="nc" id="L108">							.connect(name).create();</span>
+<span class="nc" id="L109">				} else {</span>
+<span class="nc" id="L110">					LoggerUtils.error(RemoteHierarchical.class,</span>
+							&quot;The given name don't match with persistence unit name&quot;);
+				}
+<span class="nc" id="L113">			}</span>
+		}
+<span class="nc" id="L115">		return remoteHierarchicalDatabase;</span>
+	}
+
+	public static final RemoteDatabase newInstance(DatabaseUnitInfo unit, Map&lt;?, ?&gt; map) {
+<span class="nc bnc" id="L119" title="All 2 branches missed.">		if (remoteHierarchicalDatabase == null) {</span>
+<span class="nc" id="L120">			String name = unit.getPersistenceUnitName();</span>
+<span class="nc" id="L121">			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));</span>
+<span class="nc" id="L122">			URL url = null;</span>
+			try {
+<span class="nc" id="L124">				System.setProperty(&quot;java.protocol.handler.pkgs&quot;, Protocol.class.getPackage().getName());</span>
+<span class="nc" id="L125">				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, &quot;&quot;));</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {</span>
+<span class="nc" id="L127">					throw new MalformedURLException(&quot;The URL path don't have database name at the end&quot;);</span>
+				}
+<span class="nc" id="L129">			} catch (MalformedURLException e) {</span>
+<span class="nc" id="L130">				LoggerUtils.error(RemoteHierarchical.class, LoggerConstants.IO, e);</span>
+<span class="nc" id="L131">			}</span>
+
+<span class="nc bnc" id="L133" title="All 4 branches missed.">			assert url != null;</span>
+
+<span class="nc" id="L135">			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);</span>
+<span class="nc" id="L136">			String user = unit.getProperties().getProperty(DatabaseProperties.USER);</span>
+<span class="nc" id="L137">			DatabaseUser owner = new DatabaseUser(user, password);</span>
+<span class="nc" id="L138">			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">			for (String managedClass : unit.getManagedClassNames()) {</span>
+<span class="nc" id="L140">				schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
+<span class="nc" id="L141">			}</span>
+<span class="nc" id="L142">			remoteHierarchicalDatabase = new RemoteHierarchical(settings, url, name, schema, owner).connect(name)</span>
+<span class="nc" id="L143">					.create();</span>
+		}
+<span class="nc" id="L145">		return remoteHierarchicalDatabase;</span>
+	}
+
+	/**
+	 * Get or create an instance for the first persistence unit contained in the
+	 * given persistence unit map.
+	 * 
+	 * @param m persistence unit map.
+	 * @return an instance of the database for the first persistence unit contained
+	 *         in the given persistence unit map.
+	 * @since 1.0
+	 */
+	public static final DatabaseEngine newInstance(Map&lt;String, DatabaseUnitInfo&gt; m) {
+<span class="nc bnc" id="L158" title="All 2 branches missed.">		if (remoteHierarchicalDatabase == null) {</span>
+<span class="nc" id="L159">			m = Assertions.notNull(m);</span>
+<span class="nc" id="L160">			m = Assertions.nonEmpty(m);</span>
+<span class="nc" id="L161">			Collection&lt;DatabaseUnitInfo&gt; c = m.values();</span>
+<span class="nc" id="L162">			Iterator&lt;DatabaseUnitInfo&gt; i = c.iterator();</span>
+<span class="nc" id="L163">			DatabaseUnitInfo unit = i.next();</span>
+<span class="nc" id="L164">			String name = unit.getPersistenceUnitName();</span>
+<span class="nc" id="L165">			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));</span>
+<span class="nc" id="L166">			URL url = null;</span>
+			try {
+<span class="nc" id="L168">				System.setProperty(&quot;java.protocol.handler.pkgs&quot;, Protocol.class.getPackage().getName());</span>
+<span class="nc" id="L169">				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, &quot;&quot;));</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {</span>
+<span class="nc" id="L171">					throw new MalformedURLException(&quot;The URL path don't have database named &quot; + name);</span>
+				}
+<span class="nc" id="L173">			} catch (MalformedURLException e) {</span>
+<span class="nc" id="L174">				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);</span>
+<span class="nc" id="L175">			}</span>
+
+<span class="nc bnc" id="L177" title="All 4 branches missed.">			assert url != null;</span>
+
+<span class="nc" id="L179">			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);</span>
+<span class="nc" id="L180">			String user = unit.getProperties().getProperty(DatabaseProperties.USER);</span>
+<span class="nc" id="L181">			DatabaseUser owner = new DatabaseUser(user, password);</span>
+<span class="nc" id="L182">			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">			for (String managedClass : unit.getManagedClassNames()) {</span>
+<span class="nc" id="L184">				schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
+<span class="nc" id="L185">			}</span>
+<span class="nc" id="L186">			remoteHierarchicalDatabase = new RemoteHierarchical(settings, url, name, schema, owner).connect(name)</span>
+<span class="nc" id="L187">					.create();</span>
+
+		}
+<span class="nc" id="L190">		return remoteHierarchicalDatabase;</span>
+	}
+
+	public DatabaseType getType() {
+<span class="nc" id="L194">		return DatabaseType.HIERARCHICAL;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

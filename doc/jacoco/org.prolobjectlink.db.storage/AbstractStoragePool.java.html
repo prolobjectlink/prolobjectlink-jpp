@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractStoragePool.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.storage</a> &gt; <span class="el_source">AbstractStoragePool.java</span></div><h1>AbstractStoragePool.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.storage;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+
+import org.prolobjectlink.db.ContainerFactory;
+import org.prolobjectlink.db.ObjectConverter;
+import org.prolobjectlink.db.PersistentContainer;
+import org.prolobjectlink.db.Predicate;
+import org.prolobjectlink.db.ProcedureQuery;
+import org.prolobjectlink.db.Storage;
+import org.prolobjectlink.db.StoragePool;
+import org.prolobjectlink.db.Transaction;
+import org.prolobjectlink.db.container.AbstractPersistentContainer;
+import org.prolobjectlink.db.container.AbstractProcedureQuery;
+import org.prolobjectlink.db.etc.Settings;
+import org.prolobjectlink.db.tx.PersistentContainerTransaction;
+import org.prolobjectlink.logging.LoggerConstants;
+import org.prolobjectlink.logging.LoggerUtils;
+import org.prolobjectlink.prolog.PrologProvider;
+import org.prolobjectlink.prolog.PrologTerm;
+
+/** @author Jose Zalacain @since 1.0 */
+public abstract class AbstractStoragePool extends AbstractPersistentContainer implements StoragePool {
+
+	// pool name
+	private final String name;
+
+	// disposed storage
+	private Storage lastStorage;
+
+	// capacity per storage to store clauses
+	private final int storageCapacity;
+
+	//
+	private final File rootDirectory;
+
+	// elimination counter for defrag
+<span class="nc" id="L76">	private volatile int counter = 0;</span>
+
+	// transaction
+	private final Transaction transaction;
+
+	// list of storages in the pool
+<span class="nc" id="L82">	private List&lt;Storage&gt; storages = new ArrayList&lt;Storage&gt;();</span>
+
+	// file filter for pool files
+<span class="nc" id="L85">	private final FileFilter filter = new StoragePoolFileFilter();</span>
+
+	protected AbstractStoragePool(PrologProvider provider, Settings properties, ObjectConverter&lt;PrologTerm&gt; converter,
+			String location, String name, ContainerFactory containerFactory, int storageCapacity) {
+<span class="nc" id="L89">		super(provider, properties, converter, location + SEPARATOR + name, containerFactory);</span>
+<span class="nc" id="L90">		this.rootDirectory = new File(location + SEPARATOR + name);</span>
+<span class="nc" id="L91">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L92">		this.storageCapacity = storageCapacity;</span>
+<span class="nc" id="L93">		this.rootDirectory.mkdir();</span>
+<span class="nc" id="L94">		this.open = false;</span>
+<span class="nc" id="L95">		this.name = name;</span>
+<span class="nc" id="L96">	}</span>
+
+	public final Object find(String string) {
+<span class="nc" id="L99">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc" id="L101">			Object object = storage.find(string);</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">			if (object != null) {</span>
+<span class="nc" id="L103">				return object;</span>
+			}
+<span class="nc" id="L105">		}</span>
+<span class="nc" id="L106">		return null;</span>
+	}
+
+	public final Object find(String functor, Object... args) {
+<span class="nc" id="L110">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc" id="L112">			Object object = storage.find(functor, args);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">			if (object != null) {</span>
+<span class="nc" id="L114">				return object;</span>
+			}
+<span class="nc" id="L116">		}</span>
+<span class="nc" id="L117">		return null;</span>
+	}
+
+	public final &lt;O&gt; O find(O o) {
+<span class="nc" id="L121">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc" id="L123">			O object = storage.find(o);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">			if (object != null) {</span>
+<span class="nc" id="L125">				return object;</span>
+			}
+<span class="nc" id="L127">		}</span>
+<span class="nc" id="L128">		return null;</span>
+	}
+
+	public final &lt;O&gt; O find(Class&lt;O&gt; clazz) {
+<span class="nc" id="L132">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc" id="L134">			O object = storage.find(clazz);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">			if (object != null) {</span>
+<span class="nc" id="L136">				return object;</span>
+			}
+<span class="nc" id="L138">		}</span>
+<span class="nc" id="L139">		return null;</span>
+	}
+
+	public final &lt;O&gt; O find(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L143">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc" id="L145">			O object = storage.find(predicate);</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">			if (object != null) {</span>
+<span class="nc" id="L147">				return object;</span>
+			}
+<span class="nc" id="L149">		}</span>
+<span class="nc" id="L150">		return null;</span>
+	}
+
+	public final List&lt;Object&gt; findAll(String string) {
+<span class="nc" id="L154">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L155">		List&lt;Object&gt; list = new ArrayList&lt;Object&gt;();</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">		for (int i = 0; i &lt; getStorages().size(); i++) {</span>
+<span class="nc" id="L157">			Storage storage = getStorages().get(i);</span>
+<span class="nc" id="L158">			list.addAll(storage.findAll(string));</span>
+		}
+<span class="nc" id="L160">		return list;</span>
+	}
+
+	public final List&lt;Object&gt; findAll(String functor, Object... args) {
+<span class="nc" id="L164">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L165">		List&lt;Object&gt; list = new ArrayList&lt;Object&gt;();</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">		for (int i = 0; i &lt; getStorages().size(); i++) {</span>
+<span class="nc" id="L167">			Storage storage = getStorages().get(i);</span>
+<span class="nc" id="L168">			list.addAll(storage.findAll(functor, args));</span>
+		}
+<span class="nc" id="L170">		return list;</span>
+	}
+
+	public final &lt;O&gt; List&lt;O&gt; findAll(O o) {
+<span class="nc" id="L174">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L175">		List&lt;O&gt; list = new ArrayList&lt;O&gt;();</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">		for (int i = 0; i &lt; getStorages().size(); i++) {</span>
+<span class="nc" id="L177">			Storage storage = getStorages().get(i);</span>
+<span class="nc" id="L178">			list.addAll(storage.findAll(o));</span>
+		}
+<span class="nc" id="L180">		return list;</span>
+	}
+
+	public final &lt;O&gt; List&lt;O&gt; findAll(Class&lt;O&gt; clazz) {
+<span class="nc" id="L184">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L185">		List&lt;O&gt; list = new ArrayList&lt;O&gt;();</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">		for (int i = 0; i &lt; getStorages().size(); i++) {</span>
+<span class="nc" id="L187">			Storage storage = getStorages().get(i);</span>
+<span class="nc" id="L188">			list.addAll(storage.findAll(clazz));</span>
+		}
+<span class="nc" id="L190">		return list;</span>
+	}
+
+	public final &lt;O&gt; List&lt;O&gt; findAll(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L194">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L195">		List&lt;O&gt; list = new ArrayList&lt;O&gt;();</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">		for (int i = 0; i &lt; getStorages().size(); i++) {</span>
+<span class="nc" id="L197">			Storage storage = getStorages().get(i);</span>
+<span class="nc" id="L198">			list.addAll(storage.findAll(predicate));</span>
+		}
+<span class="nc" id="L200">		return list;</span>
+	}
+
+	public final boolean contains(String string) {
+<span class="nc" id="L204">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">			if (storage.contains(string)) {</span>
+<span class="nc" id="L207">				return true;</span>
+			}
+<span class="nc" id="L209">		}</span>
+<span class="nc" id="L210">		return false;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(O object) {
+<span class="nc" id="L214">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">			if (storage.contains(object)) {</span>
+<span class="nc" id="L217">				return true;</span>
+			}
+<span class="nc" id="L219">		}</span>
+<span class="nc" id="L220">		return false;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Class&lt;O&gt; clazz) {
+<span class="nc" id="L224">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">			if (storage.contains(clazz)) {</span>
+<span class="nc" id="L227">				return true;</span>
+			}
+<span class="nc" id="L229">		}</span>
+<span class="nc" id="L230">		return false;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L234">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">			if (storage.contains(predicate)) {</span>
+<span class="nc" id="L237">				return true;</span>
+			}
+<span class="nc" id="L239">		}</span>
+<span class="nc" id="L240">		return false;</span>
+	}
+
+	public final boolean contains(String functor, int arity) {
+<span class="nc" id="L244">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">			if (storage.contains(functor, arity)) {</span>
+<span class="nc" id="L247">				return true;</span>
+			}
+<span class="nc" id="L249">		}</span>
+<span class="nc" id="L250">		return false;</span>
+	}
+
+	public final void defragment() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L255">	}</span>
+
+	public final void clear() {
+<span class="nc" id="L258">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">		for (Storage s : storages) {</span>
+<span class="nc" id="L260">			s.clear();</span>
+<span class="nc" id="L261">		}</span>
+<span class="nc" id="L262">	}</span>
+
+	public final &lt;O&gt; void insert(O... facts) {
+<span class="nc" id="L265">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L266">		int index = getPoolSize();</span>
+<span class="nc" id="L267">		String root = getLocation();</span>
+<span class="nc" id="L268">		String path = root + SEPARATOR + name + &quot;.&quot; + index;</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">		if (lastStorage == null) {</span>
+<span class="nc" id="L270">			lastStorage = createStorage(path, storageCapacity);</span>
+<span class="nc" id="L271">			storages.add(lastStorage);</span>
+		}
+<span class="nc bnc" id="L273" title="All 2 branches missed.">		if (!lastStorage.hasCapacity()) {</span>
+<span class="nc" id="L274">			lastStorage = createStorage(path, storageCapacity);</span>
+<span class="nc" id="L275">			storages.add(lastStorage);</span>
+		} else {
+<span class="nc" id="L277">			lastStorage.insert(facts);</span>
+		}
+<span class="nc" id="L279">	}</span>
+
+	public final &lt;O&gt; void update(O match, O merge) {
+<span class="nc" id="L282">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc" id="L284">			storage.update(match, merge);</span>
+<span class="nc" id="L285">		}</span>
+<span class="nc" id="L286">	}</span>
+
+	public final &lt;O&gt; void delete(O... facts) {
+<span class="nc bnc" id="L289" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc" id="L290">			storage.delete(facts);</span>
+<span class="nc" id="L291">		}</span>
+<span class="nc" id="L292">		counter += facts.length;</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">		if (counter &gt;= getCapacity()) {</span>
+<span class="nc" id="L294">			defragment();</span>
+<span class="nc" id="L295">			counter = 0;</span>
+		}
+<span class="nc" id="L297">	}</span>
+
+	public final void delete(Class&lt;?&gt; clazz) {
+<span class="nc" id="L300">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L301" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc" id="L302">			storage.delete(clazz);</span>
+<span class="nc" id="L303">		}</span>
+<span class="nc" id="L304">		defragment();</span>
+<span class="nc" id="L305">		counter = 0;</span>
+<span class="nc" id="L306">	}</span>
+
+	public final void include(String path) {
+<span class="nc bnc" id="L309" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc" id="L310">			storage.include(path);</span>
+<span class="nc" id="L311">		}</span>
+<span class="nc" id="L312">	}</span>
+
+	public final String locationOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L315">		return getLocation();</span>
+	}
+
+	public final PersistentContainer containerOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L319">		return this;</span>
+	}
+
+	public final Collection&lt;Class&lt;?&gt;&gt; classes() {
+<span class="nc" id="L323">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L324">		List&lt;Class&lt;?&gt;&gt; c = new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc" id="L326">			c.addAll(storage.classes());</span>
+<span class="nc" id="L327">		}</span>
+<span class="nc" id="L328">		return c;</span>
+	}
+
+	public final void close() {
+<span class="nc" id="L332">		getTransaction().close();</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">		for (Storage s : storages) {</span>
+<span class="nc" id="L334">			s.clear();</span>
+<span class="nc" id="L335">			s.close();</span>
+<span class="nc" id="L336">		}</span>
+<span class="nc" id="L337">		storages.clear();</span>
+<span class="nc" id="L338">		open = false;</span>
+<span class="nc" id="L339">	}</span>
+
+	public final void open() {
+<span class="nc" id="L342">		File[] files = rootDirectory.listFiles(filter);</span>
+<span class="nc bnc" id="L343" title="All 2 branches missed.">		if (files != null) {</span>
+<span class="nc bnc" id="L344" title="All 2 branches missed.">			for (File filex : files) {</span>
+				try {
+<span class="nc" id="L346">					String canonical = filex.getCanonicalPath();</span>
+<span class="nc" id="L347">					int lastDotIndex = canonical.lastIndexOf('.');</span>
+<span class="nc" id="L348">					String index = canonical.substring(lastDotIndex + 1);</span>
+<span class="nc" id="L349">					storages = new ArrayList&lt;Storage&gt;(files.length);</span>
+<span class="nc bnc" id="L350" title="All 2 branches missed.">					if (index.matches(StoragePoolFileFilter.NUMBER_REGEX)) {</span>
+<span class="nc" id="L351">						lastStorage = createStorage(canonical, storageCapacity);</span>
+<span class="nc" id="L352">						lastStorage.begin();</span>
+<span class="nc" id="L353">						storages.add(lastStorage);</span>
+					}
+<span class="nc" id="L355">				} catch (IOException e) {</span>
+<span class="nc" id="L356">					LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
+<span class="nc" id="L357">				}</span>
+			}
+		}
+<span class="nc" id="L360">		open = true;</span>
+<span class="nc" id="L361">	}</span>
+
+	public final Transaction getTransaction() {
+<span class="nc" id="L364">		return transaction;</span>
+	}
+
+	public final List&lt;Storage&gt; getStorages() {
+<span class="nc" id="L368">		return storages;</span>
+	}
+
+	public final String getPoolName() {
+<span class="nc" id="L372">		return name;</span>
+	}
+
+	public final int getCapacity() {
+<span class="nc" id="L376">		return storageCapacity;</span>
+	}
+
+	public final int getPoolSize() {
+<span class="nc" id="L380">		return storages.size();</span>
+	}
+
+	public final boolean isEmpty() {
+<span class="nc" id="L384">		return storages.isEmpty();</span>
+	}
+
+	public final FileFilter getFilter() {
+<span class="nc" id="L388">		return filter;</span>
+	}
+
+	public final void flush() {
+<span class="nc bnc" id="L392" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
+<span class="nc bnc" id="L393" title="All 2 branches missed.">			if (storage.isDirty()) {</span>
+<span class="nc bnc" id="L394" title="All 2 branches missed.">				if (!storage.isActive()) {</span>
+<span class="nc" id="L395">					storage.begin();</span>
+				}
+<span class="nc" id="L397">				storage.commit();</span>
+			}
+<span class="nc" id="L399">		}</span>
+<span class="nc" id="L400">	}</span>
+
+	protected class StoragePoolProcedureQuery extends AbstractProcedureQuery implements ProcedureQuery {
+
+<span class="nc" id="L404">		private ArrayList&lt;Object&gt; list = new ArrayList&lt;Object&gt;();</span>
+		private static final long serialVersionUID = -6828890841047794331L;
+<span class="nc" id="L406">		private final ArrayList&lt;ProcedureQuery&gt; queries = new ArrayList&lt;ProcedureQuery&gt;();</span>
+
+<span class="nc" id="L408">		protected StoragePoolProcedureQuery(String functor, String[] arguments) {</span>
+<span class="nc" id="L409">			super(functor, arguments);</span>
+<span class="nc" id="L410">			AbstractStoragePool.this.open();</span>
+<span class="nc bnc" id="L411" title="All 2 branches missed.">			for (Storage storage : storages) {</span>
+<span class="nc" id="L412">				queries.add(storage.createProcedureQuery(functor, arguments));</span>
+<span class="nc" id="L413">			}</span>
+<span class="nc" id="L414">		}</span>
+
+		public ProcedureQuery setMaxSolution(int maxSolution) {
+<span class="nc bnc" id="L417" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
+<span class="nc" id="L418">				procedureQuery.setMaxSolution(maxSolution);</span>
+<span class="nc" id="L419">			}</span>
+<span class="nc" id="L420">			return this;</span>
+		}
+
+		public ProcedureQuery setFirstSolution(int firstSolution) {
+<span class="nc bnc" id="L424" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
+<span class="nc" id="L425">				procedureQuery.setFirstSolution(maxSolution);</span>
+<span class="nc" id="L426">			}</span>
+<span class="nc" id="L427">			return this;</span>
+		}
+
+		public Object getArgumentValue(int position) {
+<span class="nc" id="L431">			checkSolutionAt(position, list.size());</span>
+<span class="nc" id="L432">			return list.get(position);</span>
+		}
+
+		public ProcedureQuery setArgumentValue(int position, Object value) {
+<span class="nc bnc" id="L436" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
+<span class="nc" id="L437">				procedureQuery.setArgumentValue(position, value);</span>
+<span class="nc" id="L438">			}</span>
+<span class="nc" id="L439">			return this;</span>
+		}
+
+		public ProcedureQuery execute() {
+<span class="nc bnc" id="L443" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
+<span class="nc" id="L444">				procedureQuery.execute();</span>
+<span class="nc" id="L445">			}</span>
+<span class="nc" id="L446">			return this;</span>
+		}
+
+		public List&lt;Object&gt; getSolutions() {
+<span class="nc" id="L450">			return list;</span>
+		}
+
+		public Object getSolution() {
+<span class="nc" id="L454">			return next();</span>
+		}
+
+		public void dispose() {
+<span class="nc bnc" id="L458" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
+<span class="nc" id="L459">				procedureQuery.dispose();</span>
+<span class="nc" id="L460">			}</span>
+<span class="nc" id="L461">		}</span>
+
+		protected final List&lt;ProcedureQuery&gt; getQueries() {
+<span class="nc" id="L464">			return queries;</span>
+		}
+
+		@Override
+		public int hashCode() {
+<span class="nc" id="L469">			final int prime = 31;</span>
+<span class="nc" id="L470">			int result = super.hashCode();</span>
+<span class="nc" id="L471">			result = prime * result + getOuterType().hashCode();</span>
+<span class="nc" id="L472">			result = prime * result + Objects.hashCode(queries);</span>
+<span class="nc" id="L473">			return result;</span>
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+<span class="nc bnc" id="L478" title="All 2 branches missed.">			if (this == obj)</span>
+<span class="nc" id="L479">				return true;</span>
+<span class="nc bnc" id="L480" title="All 2 branches missed.">			if (!super.equals(obj))</span>
+<span class="nc" id="L481">				return false;</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">			if (getClass() != obj.getClass())</span>
+<span class="nc" id="L483">				return false;</span>
+<span class="nc" id="L484">			StoragePoolProcedureQuery other = (StoragePoolProcedureQuery) obj;</span>
+<span class="nc bnc" id="L485" title="All 2 branches missed.">			if (!getOuterType().equals(other.getOuterType()))</span>
+<span class="nc" id="L486">				return false;</span>
+<span class="nc" id="L487">			return Objects.equals(queries, other.queries);</span>
+		}
+
+		private AbstractStoragePool getOuterType() {
+<span class="nc" id="L491">			return AbstractStoragePool.this;</span>
+		}
+
+		public boolean hasNext() {
+<span class="nc bnc" id="L495" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
+<span class="nc bnc" id="L496" title="All 2 branches missed.">				if (procedureQuery.hasNext()) {</span>
+<span class="nc" id="L497">					return true;</span>
+				}
+<span class="nc" id="L499">			}</span>
+<span class="nc" id="L500">			return false;</span>
+		}
+
+		public Object next() {
+<span class="nc bnc" id="L504" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
+<span class="nc bnc" id="L505" title="All 2 branches missed.">				if (procedureQuery.hasNext()) {</span>
+<span class="nc" id="L506">					Object object = procedureQuery.next();</span>
+<span class="nc bnc" id="L507" title="All 2 branches missed.">					if (object instanceof Object[]) {</span>
+<span class="nc" id="L508">						Object[] a = (Object[]) object;</span>
+<span class="nc" id="L509">						list = new ArrayList&lt;Object&gt;(a.length);</span>
+<span class="nc bnc" id="L510" title="All 2 branches missed.">						for (int i = 0; i &lt; a.length; i++) {</span>
+<span class="nc" id="L511">							list.add(a[i]);</span>
+						}
+					}
+				}
+<span class="nc" id="L515">			}</span>
+<span class="nc" id="L516">			return list.toArray();</span>
+		}
+
+		@Override
+		public void remove() {
+			// skip the current solution
+<span class="nc" id="L522">			next();</span>
+<span class="nc" id="L523">		}</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

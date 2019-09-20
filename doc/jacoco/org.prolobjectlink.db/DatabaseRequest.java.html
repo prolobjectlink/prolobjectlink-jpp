@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DatabaseRequest.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db</a> &gt; <span class="el_source">DatabaseRequest.java</span></div><h1>DatabaseRequest.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.prolobjectlink.AbstractWrapper;
+import org.prolobjectlink.Wrapper;
+import org.prolobjectlink.logging.LoggerConstants;
+import org.prolobjectlink.logging.LoggerUtils;
+
+public final class DatabaseRequest extends AbstractWrapper
+		implements Wrapper, Serializable, Comparable&lt;DatabaseRequest&gt; {
+
+	private final int port;
+	private long timestamp;
+	private OperationType type;
+	private DatabaseType dbtype;
+	private final String dbname;
+	private final String server;
+	private static final int MAX_ARG_NUM = 2;
+	private static final long serialVersionUID = -8793751981186352447L;
+<span class="nc" id="L59">	private final ArrayList&lt;Serializable&gt; arguments = new ArrayList&lt;Serializable&gt;(MAX_ARG_NUM);</span>
+
+	public DatabaseRequest(String server, int port, String dbname, DatabaseType dbtype) {
+<span class="nc" id="L62">		this(OperationType.NOOP, server, port, dbname, dbtype);</span>
+<span class="nc" id="L63">	}</span>
+
+<span class="nc" id="L65">	public DatabaseRequest(OperationType type, String server, int port, String dbname, DatabaseType dbtype) {</span>
+<span class="nc" id="L66">		this.server = server;</span>
+<span class="nc" id="L67">		this.dbtype = dbtype;</span>
+<span class="nc" id="L68">		this.dbname = dbname;</span>
+<span class="nc" id="L69">		this.port = port;</span>
+<span class="nc" id="L70">		this.type = type;</span>
+<span class="nc" id="L71">	}</span>
+
+	public boolean lessThan(DatabaseRequest o) {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">		return compareTo(o) &lt; 0;</span>
+	}
+
+	public boolean greatherThan(DatabaseRequest o) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		return compareTo(o) &gt; 0;</span>
+	}
+
+	public int compareTo(DatabaseRequest o) {
+<span class="nc" id="L82">		return Long.compare(timestamp, o.timestamp);</span>
+	}
+
+	public String getDatabaseName() {
+<span class="nc" id="L86">		return dbname;</span>
+	}
+
+	public DatabaseType getDatabaseType() {
+<span class="nc" id="L90">		return dbtype;</span>
+	}
+
+	public void setType(OperationType type) {
+<span class="nc" id="L94">		this.type = type;</span>
+<span class="nc" id="L95">	}</span>
+
+	public OperationType getType() {
+<span class="nc" id="L98">		return type;</span>
+	}
+
+	public boolean addArgument(Serializable e) {
+<span class="nc" id="L102">		return arguments.add(e);</span>
+	}
+
+	public boolean removeArgument(Serializable e) {
+<span class="nc" id="L106">		return arguments.remove(e);</span>
+	}
+
+	public boolean containsArgument(Serializable e) {
+<span class="nc" id="L110">		return arguments.contains(e);</span>
+	}
+
+	public List&lt;Serializable&gt; getArguments() {
+<span class="nc" id="L114">		return arguments;</span>
+	}
+
+	public Serializable getArgument(int i) {
+<span class="nc" id="L118">		return arguments.get(i);</span>
+	}
+
+	public int countArguments() {
+<span class="nc" id="L122">		return arguments.size();</span>
+	}
+
+	public void clearArguments() {
+<span class="nc" id="L126">		arguments.clear();</span>
+<span class="nc" id="L127">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L131">		return &quot;DatabaseRequest [timestamp=&quot; + timestamp + &quot;, type=&quot; + type + &quot;, dbtype=&quot; + dbtype + &quot;, dbname=&quot;</span>
+				+ dbname + &quot;, arguments=&quot; + arguments + &quot;]&quot;;
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L137">		final int prime = 31;</span>
+<span class="nc" id="L138">		int result = 1;</span>
+<span class="nc" id="L139">		result = prime * result + arguments.hashCode();</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">		result = prime * result + ((dbname == null) ? 0 : dbname.hashCode());</span>
+<span class="nc" id="L141">		result = prime * result + port;</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">		result = prime * result + ((server == null) ? 0 : server.hashCode());</span>
+<span class="nc" id="L143">		result = prime * result + (int) (timestamp ^ (timestamp &gt;&gt;&gt; 32));</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">		result = prime * result + ((type == null) ? 0 : type.hashCode());</span>
+<span class="nc" id="L145">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L150" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L151">			return true;</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L153">			return false;</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L155">			return false;</span>
+<span class="nc" id="L156">		DatabaseRequest other = (DatabaseRequest) obj;</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">		if (!arguments.equals(other.arguments))</span>
+<span class="nc" id="L158">			return false;</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">		if (dbname == null) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">			if (other.dbname != null)</span>
+<span class="nc" id="L161">				return false;</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">		} else if (!dbname.equals(other.dbname))</span>
+<span class="nc" id="L163">			return false;</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">		if (port != other.port)</span>
+<span class="nc" id="L165">			return false;</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">		if (server == null) {</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">			if (other.server != null)</span>
+<span class="nc" id="L168">				return false;</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">		} else if (!server.equals(other.server))</span>
+<span class="nc" id="L170">			return false;</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">		if (timestamp != other.timestamp)</span>
+<span class="nc" id="L172">			return false;</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">		return type == other.type;</span>
+	}
+
+	public void close() {
+<span class="nc" id="L177">		arguments.clear();</span>
+<span class="nc" id="L178">	}</span>
+
+	public &lt;R extends Serializable&gt; R send() {
+
+<span class="nc" id="L182">		Socket socket = null;</span>
+<span class="nc" id="L183">		timestamp = System.currentTimeMillis();</span>
+
+		try {
+
+<span class="nc" id="L187">			socket = new Socket(server, port);</span>
+
+<span class="nc" id="L189">			ObjectInputStream is = new ObjectInputStream(socket.getInputStream());</span>
+<span class="nc" id="L190">			ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());</span>
+
+<span class="nc" id="L192">			LoggerUtils.debug(getClass(), &quot;Sended: &quot; + this);</span>
+
+			// client send data object
+<span class="nc" id="L195">			os.writeObject(this);</span>
+
+			// client received data object
+<span class="nc" id="L198">			DatabaseResponse response = unwrap(is.readObject(), DatabaseResponse.class);</span>
+
+			// handle result
+<span class="nc" id="L201">			LoggerUtils.debug(getClass(), &quot;Received: &quot; + response);</span>
+
+<span class="nc" id="L203">			os.close();</span>
+<span class="nc" id="L204">			is.close();</span>
+
+<span class="nc bnc" id="L206" title="All 2 branches missed.">			if (response != null) {</span>
+<span class="nc" id="L207">				return response.get();</span>
+			}
+
+<span class="nc" id="L210">		} catch (IOException e) {</span>
+<span class="nc" id="L211">			LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
+<span class="nc" id="L212">		} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L213">			LoggerUtils.error(getClass(), LoggerConstants.CLASS_NOT_FOUND, e);</span>
+		} finally {
+<span class="nc bnc" id="L215" title="All 10 branches missed.">			if (socket != null) {</span>
+				try {
+<span class="nc" id="L217">					socket.close();</span>
+<span class="nc" id="L218">				} catch (IOException e) {</span>
+					// close silently
+<span class="nc" id="L220">				}</span>
+			}
+		}
+
+<span class="nc" id="L224">		return null;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

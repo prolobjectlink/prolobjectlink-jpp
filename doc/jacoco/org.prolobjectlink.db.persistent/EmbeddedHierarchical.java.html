@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EmbeddedHierarchical.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.persistent</a> &gt; <span class="el_source">EmbeddedHierarchical.java</span></div><h1>EmbeddedHierarchical.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.persistent;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.prolobjectlink.db.DatabaseEngine;
+import org.prolobjectlink.db.DatabaseMode;
+import org.prolobjectlink.db.DatabaseProperties;
+import org.prolobjectlink.db.DatabaseSchema;
+import org.prolobjectlink.db.DatabaseType;
+import org.prolobjectlink.db.DatabaseUnitInfo;
+import org.prolobjectlink.db.DatabaseUser;
+import org.prolobjectlink.db.EmbeddedDatabase;
+import org.prolobjectlink.db.PersistentContainer;
+import org.prolobjectlink.db.Protocol;
+import org.prolobjectlink.db.Schema;
+import org.prolobjectlink.db.StorageManager;
+import org.prolobjectlink.db.StorageMode;
+import org.prolobjectlink.db.etc.Settings;
+import org.prolobjectlink.db.memory.MemoryHierarchical;
+import org.prolobjectlink.db.util.Assertions;
+import org.prolobjectlink.db.util.JavaReflect;
+import org.prolobjectlink.db.xml.PersistenceXmlParser;
+import org.prolobjectlink.logging.LoggerConstants;
+import org.prolobjectlink.logging.LoggerUtils;
+
+<span class="nc bnc" id="L63" title="All 2 branches missed.">public final class EmbeddedHierarchical extends EmbeddedDatabaseClient implements EmbeddedDatabase {</span>
+
+	private static EmbeddedDatabase embeddedHierarchicalDatabase;
+	private final Map&lt;String, DatabaseUnitInfo&gt; units;
+
+	private EmbeddedHierarchical(String name, URL url, Schema schema, DatabaseUser owner, PersistentContainer storage,
+			Map&lt;String, DatabaseUnitInfo&gt; units) {
+<span class="nc" id="L70">		super(storage.getProperties(), url, name, schema, owner, storage);</span>
+<span class="nc" id="L71">		this.units = units;</span>
+<span class="nc" id="L72">	}</span>
+
+	EmbeddedHierarchical(String name, URL url, Schema schema, DatabaseUser owner, PersistentContainer storage) {
+<span class="nc" id="L75">		super(storage.getProperties(), url, name, schema, owner, storage);</span>
+<span class="nc" id="L76">		this.units = new HashMap&lt;String, DatabaseUnitInfo&gt;();</span>
+<span class="nc" id="L77">	}</span>
+
+	public static final EmbeddedDatabase newInstance(String name) {
+<span class="nc" id="L80">		return newInstance(name, new HashMap&lt;Object, Object&gt;());</span>
+	}
+
+	public static final EmbeddedDatabase newInstance(String name, Map&lt;?, ?&gt; map) {
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		if (embeddedHierarchicalDatabase == null) {</span>
+<span class="nc" id="L85">			StorageMode mode = StorageMode.STORAGE_POOL;</span>
+<span class="nc" id="L86">			PersistenceXmlParser p = new PersistenceXmlParser();</span>
+<span class="nc" id="L87">			Map&lt;String, DatabaseUnitInfo&gt; m = p.parsePersistenceXml(persistenceXml);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">			for (DatabaseUnitInfo unit : m.values()) {</span>
+<span class="nc" id="L89">				String unitName = unit.getPersistenceUnitName();</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">				if (unitName.equals(name)) {</span>
+<span class="nc" id="L91">					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));</span>
+<span class="nc" id="L92">					URL url = null;</span>
+					try {
+<span class="nc" id="L94">						url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, &quot;&quot;));</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {</span>
+<span class="nc" id="L96">							throw new MalformedURLException(&quot;The URL path don't have database name at the end&quot;);</span>
+						}
+<span class="nc" id="L98">					} catch (MalformedURLException e) {</span>
+<span class="nc" id="L99">						LoggerUtils.error(EmbeddedHierarchical.class, LoggerConstants.IO, e);</span>
+<span class="nc" id="L100">					}</span>
+
+<span class="nc bnc" id="L102" title="All 4 branches missed.">					assert url != null;</span>
+
+<span class="nc" id="L104">					String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);</span>
+<span class="nc" id="L105">					String user = unit.getProperties().getProperty(DatabaseProperties.USER);</span>
+<span class="nc" id="L106">					DatabaseUser owner = new DatabaseUser(user, password);</span>
+<span class="nc" id="L107">					StorageManager storage = settings.createStorageManager(url.getFile() + &quot;/database&quot;, mode);</span>
+<span class="nc" id="L108">					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">					for (String managedClass : unit.getManagedClassNames()) {</span>
+<span class="nc" id="L110">						schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
+<span class="nc" id="L111">					}</span>
+<span class="nc" id="L112">					embeddedHierarchicalDatabase = new EmbeddedHierarchical(name, url, schema, owner, storage).create();</span>
+<span class="nc" id="L113">				} else {</span>
+<span class="nc" id="L114">					LoggerUtils.error(EmbeddedHierarchical.class,</span>
+							&quot;The given name don't match with persistence unit name&quot;);
+				}
+<span class="nc" id="L117">			}</span>
+		}
+<span class="nc" id="L119">		return embeddedHierarchicalDatabase;</span>
+	}
+
+	public static final EmbeddedDatabase newInstance(DatabaseUnitInfo unit, Map&lt;?, ?&gt; map) {
+<span class="nc" id="L123">		StorageMode mode = StorageMode.STORAGE_POOL;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">		if (embeddedHierarchicalDatabase == null) {</span>
+<span class="nc" id="L125">			String name = unit.getPersistenceUnitName();</span>
+<span class="nc" id="L126">			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));</span>
+<span class="nc" id="L127">			URL url = null;</span>
+			try {
+<span class="nc" id="L129">				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, &quot;&quot;));</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {</span>
+<span class="nc" id="L131">					throw new MalformedURLException(&quot;The URL path don't have database name at the end&quot;);</span>
+				}
+<span class="nc" id="L133">			} catch (MalformedURLException e) {</span>
+<span class="nc" id="L134">				LoggerUtils.error(EmbeddedHierarchical.class, LoggerConstants.IO, e);</span>
+<span class="nc" id="L135">			}</span>
+
+<span class="nc bnc" id="L137" title="All 4 branches missed.">			assert url != null;</span>
+
+<span class="nc" id="L139">			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);</span>
+<span class="nc" id="L140">			String user = unit.getProperties().getProperty(DatabaseProperties.USER);</span>
+<span class="nc" id="L141">			DatabaseUser owner = new DatabaseUser(user, password);</span>
+<span class="nc" id="L142">			StorageManager storage = settings.createStorageManager(url.getFile() + &quot;/database&quot;, mode);</span>
+<span class="nc" id="L143">			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">			for (String managedClass : unit.getManagedClassNames()) {</span>
+<span class="nc" id="L145">				schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
+<span class="nc" id="L146">			}</span>
+<span class="nc" id="L147">			embeddedHierarchicalDatabase = new EmbeddedHierarchical(name, url, schema, owner, storage).create();</span>
+		}
+<span class="nc" id="L149">		return embeddedHierarchicalDatabase;</span>
+	}
+
+	/**
+	 * Get or create an instance for the first persistence unit contained in the
+	 * given persistence unit map.
+	 * 
+	 * @param m persistence unit map.
+	 * @return an instance of the database for the first persistence unit contained
+	 *         in the given persistence unit map.
+	 * @since 1.0
+	 */
+	public static final DatabaseEngine newInstance(Map&lt;String, DatabaseUnitInfo&gt; m) {
+<span class="nc" id="L162">		StorageMode mode = StorageMode.STORAGE_POOL;</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">		if (embeddedHierarchicalDatabase == null) {</span>
+<span class="nc" id="L164">			m = Assertions.notNull(m);</span>
+<span class="nc" id="L165">			m = Assertions.nonEmpty(m);</span>
+<span class="nc" id="L166">			Collection&lt;DatabaseUnitInfo&gt; c = m.values();</span>
+<span class="nc" id="L167">			Iterator&lt;DatabaseUnitInfo&gt; i = c.iterator();</span>
+<span class="nc" id="L168">			DatabaseUnitInfo unit = i.next();</span>
+<span class="nc" id="L169">			String name = unit.getPersistenceUnitName();</span>
+<span class="nc" id="L170">			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));</span>
+<span class="nc" id="L171">			URL url = null;</span>
+			try {
+<span class="nc" id="L173">				System.setProperty(&quot;java.protocol.handler.pkgs&quot;, Protocol.class.getPackage().getName());</span>
+<span class="nc" id="L174">				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, &quot;&quot;));</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {</span>
+<span class="nc" id="L176">					throw new MalformedURLException(&quot;The URL path don't have database named &quot; + name);</span>
+				}
+<span class="nc" id="L178">			} catch (MalformedURLException e) {</span>
+<span class="nc" id="L179">				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);</span>
+<span class="nc" id="L180">			}</span>
+
+<span class="nc bnc" id="L182" title="All 4 branches missed.">			assert url != null;</span>
+
+<span class="nc" id="L184">			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);</span>
+<span class="nc" id="L185">			String user = unit.getProperties().getProperty(DatabaseProperties.USER);</span>
+<span class="nc" id="L186">			DatabaseUser owner = new DatabaseUser(user, password);</span>
+<span class="nc" id="L187">			StorageManager storage = settings.createStorageManager(url.getFile() + &quot;/database&quot;, mode);</span>
+<span class="nc" id="L188">			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">			for (String managedClass : unit.getManagedClassNames()) {</span>
+<span class="nc" id="L190">				schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
+<span class="nc" id="L191">			}</span>
+<span class="nc" id="L192">			embeddedHierarchicalDatabase = new EmbeddedHierarchical(name, url, schema, owner, storage).create();</span>
+
+		}
+<span class="nc" id="L195">		return embeddedHierarchicalDatabase;</span>
+	}
+
+	public DatabaseMode getMode() {
+<span class="nc" id="L199">		return DatabaseMode.EMBEDDED;</span>
+	}
+
+	public DatabaseType getType() {
+<span class="nc" id="L203">		return DatabaseType.HIERARCHICAL;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

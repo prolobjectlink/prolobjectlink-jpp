@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JavaReflect.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.util</a> &gt; <span class="el_source">JavaReflect.java</span></div><h1>JavaReflect.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.util;
+
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+
+import org.prolobjectlink.logging.LoggerConstants;
+import org.prolobjectlink.logging.LoggerUtils;
+
+public class JavaReflect {
+
+	public static boolean isFinal(Field field) {
+<span class="nc" id="L49">		int modifiers = field.getModifiers();</span>
+<span class="nc" id="L50">		return Modifier.isFinal(modifiers);</span>
+	}
+
+	public static boolean isStatic(Field field) {
+<span class="nc" id="L54">		int modifiers = field.getModifiers();</span>
+<span class="nc" id="L55">		return Modifier.isStatic(modifiers);</span>
+	}
+
+	/**
+	 * Check if the given field is {@code this} result of inner classes
+	 * instantiation.
+	 * 
+	 * @param field field to check if is Synthetic
+	 * @return true if the given field is Synthetic false in otherwise
+	 * @since 1.0
+	 */
+	public static boolean isSynthetic(Field field) {
+<span class="nc" id="L67">		return field.isSynthetic();</span>
+	}
+
+	public static boolean isTransient(Field field) {
+<span class="nc" id="L71">		int modifiers = field.getModifiers();</span>
+<span class="nc" id="L72">		return Modifier.isTransient(modifiers);</span>
+	}
+
+	/**
+	 * Check if the given field
+	 * {@code !ObjectReflector#isTransient(Field)&amp;&amp;!ObjectReflector#isSynthetic(Field)}
+	 * 
+	 * @param field field to check if is Persistent
+	 * @return true if the given field is Persistent false in otherwise
+	 * @since 1.0
+	 */
+	public static boolean isPersistent(Field field) {
+<span class="nc bnc" id="L84" title="All 4 branches missed.">		return !isTransient(field) &amp;&amp; !isSynthetic(field);</span>
+	}
+
+	public static boolean isStaticAndFinal(Field field) {
+<span class="nc bnc" id="L88" title="All 4 branches missed.">		return isStatic(field) &amp;&amp; isFinal(field);</span>
+	}
+
+	/**
+	 * Check if the given java class member (filed, method or constructor) is
+	 * accessible or not.
+	 * 
+	 * @param member java member (filed, method or constructor) to be checked
+	 * @return true if the given java class member is accessible, false if not.
+	 * @since 1.0
+	 */
+	public static boolean isAccessible(AccessibleObject member) {
+<span class="nc" id="L100">		return member.isAccessible();</span>
+	}
+
+	public static void doAccessibleIfNeed(AccessibleObject member) {
+<span class="nc bnc" id="L104" title="All 2 branches missed.">		if (!isAccessible(member)) {</span>
+<span class="nc" id="L105">			member.setAccessible(true);</span>
+		}
+<span class="nc" id="L107">	}</span>
+
+	public static void undoAccessibleIfNeed(AccessibleObject member) {
+<span class="nc bnc" id="L110" title="All 2 branches missed.">		if (!isAccessible(member)) {</span>
+<span class="nc" id="L111">			member.setAccessible(false);</span>
+		}
+<span class="nc" id="L113">	}</span>
+
+	public static &lt;O&gt; Class&lt;O&gt; classOf(O o) {
+<span class="nc" id="L116">		return (Class&lt;O&gt;) o.getClass();</span>
+	}
+
+	public static Class&lt;?&gt; classForName(String className) {
+<span class="nc" id="L120">		Class&lt;?&gt; clazz = null;</span>
+		try {
+<span class="nc" id="L122">			return Class.forName(className);</span>
+<span class="nc" id="L123">		} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L124">			LoggerUtils.error(JavaReflect.class, LoggerConstants.CLASS_NOT_FOUND, e);</span>
+		}
+<span class="nc" id="L126">		return clazz;</span>
+	}
+
+	/**
+	 * Find some constructor for create an empty instance. This method create an
+	 * object instance under critical situations. There are non-empty declared
+	 * constructor, restricted access for alternative constructor with any number
+	 * and type of parameters. The alternative constructor with any number and type
+	 * of parameter will be create with an array with the default value (0 for
+	 * primitive types, false for boolean and null for any class type). This is the
+	 * way for invoke {@link Constructor#newInstance(Object...)}. The public empty
+	 * constructor simplify the situation because no have additional parameters
+	 * analysis.
+	 * 
+	 * @param clazz type to be create an instance
+	 * @return instance from given class.
+	 * @since 1.0
+	 */
+	public static Object newInstance(Class&lt;?&gt; clazz) {
+<span class="nc" id="L145">		Object instance = null;</span>
+<span class="nc" id="L146">		Constructor&lt;?&gt;[] constructors = clazz.getDeclaredConstructors();</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">		if (constructors.length &gt; 0) {</span>
+<span class="nc" id="L148">			Constructor&lt;?&gt; constructor = constructors[0];</span>
+<span class="nc" id="L149">			Class&lt;?&gt;[] classes = constructor.getParameterTypes();</span>
+<span class="nc" id="L150">			Object[] arguments = new Object[classes.length];</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">			for (int i = 0; i &lt; classes.length; i++) {</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">				if (classes[i] == String.class) {</span>
+<span class="nc" id="L153">					arguments[i] = &quot;&quot;;</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">				} else if (classes[i] == boolean.class) {</span>
+<span class="nc" id="L155">					arguments[i] = false;</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">				} else if (classes[i].isPrimitive()) {</span>
+<span class="nc" id="L157">					arguments[i] = 0;</span>
+				}
+			}
+			try {
+
+<span class="nc" id="L162">				doAccessibleIfNeed(constructor);</span>
+<span class="nc" id="L163">				instance = constructor.newInstance(arguments);</span>
+<span class="nc" id="L164">				undoAccessibleIfNeed(constructor);</span>
+
+<span class="nc" id="L166">			} catch (InstantiationException e) {</span>
+<span class="nc" id="L167">				LoggerUtils.error(JavaReflect.class, LoggerConstants.INSTANTIATION, e);</span>
+<span class="nc" id="L168">			} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L169">				LoggerUtils.error(JavaReflect.class, LoggerConstants.ILLEGAL_ARGUMENT, e);</span>
+<span class="nc" id="L170">			} catch (IllegalAccessException e) {</span>
+<span class="nc" id="L171">				LoggerUtils.error(JavaReflect.class, LoggerConstants.ILLEGAL_ACCESS, e);</span>
+<span class="nc" id="L172">			} catch (InvocationTargetException e) {</span>
+
+				// This exception is reported when a constructor not
+				// initialize directly yours fields, but make the job
+
+<span class="nc" id="L177">			}</span>
+
+		}
+<span class="nc" id="L180">		return instance;</span>
+	}
+
+	public static &lt;T&gt; T newInstance(Class&lt;T&gt; cls, Class&lt;?&gt;[] parameterTypes, Object[] parameterValues) {
+<span class="nc" id="L184">		T value = null;</span>
+		try {
+<span class="nc" id="L186">			Constructor&lt;T&gt; constructor = cls.getDeclaredConstructor(parameterTypes);</span>
+<span class="nc" id="L187">			doAccessibleIfNeed(constructor);</span>
+<span class="nc" id="L188">			value = constructor.newInstance(parameterValues);</span>
+<span class="nc" id="L189">			undoAccessibleIfNeed(constructor);</span>
+<span class="nc" id="L190">		} catch (InstantiationException e) {</span>
+<span class="nc" id="L191">			LoggerUtils.error(JavaReflect.class, LoggerConstants.INSTANTIATION, e);</span>
+<span class="nc" id="L192">		} catch (IllegalAccessException e) {</span>
+<span class="nc" id="L193">			LoggerUtils.error(JavaReflect.class, LoggerConstants.ILLEGAL_ACCESS, e);</span>
+<span class="nc" id="L194">		} catch (NoSuchMethodException e) {</span>
+<span class="nc" id="L195">			LoggerUtils.error(JavaReflect.class, LoggerConstants.NO_SUCH_METHOD, e);</span>
+<span class="nc" id="L196">		} catch (SecurityException e) {</span>
+<span class="nc" id="L197">			LoggerUtils.error(JavaReflect.class, LoggerConstants.SECURITY, e);</span>
+<span class="nc" id="L198">		} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L199">			LoggerUtils.error(JavaReflect.class, LoggerConstants.ILLEGAL_ARGUMENT, e);</span>
+<span class="nc" id="L200">		} catch (InvocationTargetException e) {</span>
+<span class="nc" id="L201">			LoggerUtils.error(JavaReflect.class, LoggerConstants.INVOCATION_TARGET, e);</span>
+<span class="nc" id="L202">		}</span>
+<span class="nc" id="L203">		return value;</span>
+	}
+
+	/**
+	 * Read field value given some object owner
+	 * 
+	 * @param field  class field for read object value
+	 * @param object object that contain the filed to read
+	 * @return object value read from given field
+	 * @since 1.0
+	 */
+	public static Object readValue(Field field, Object object) {
+<span class="nc" id="L215">		Object value = null;</span>
+		try {
+<span class="nc" id="L217">			doAccessibleIfNeed(field);</span>
+<span class="nc" id="L218">			value = field.get(object);</span>
+<span class="nc" id="L219">			undoAccessibleIfNeed(field);</span>
+<span class="nc" id="L220">		} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L221">			LoggerUtils.error(JavaReflect.class, LoggerConstants.ILLEGAL_ARGUMENT, e);</span>
+<span class="nc" id="L222">		} catch (IllegalAccessException e) {</span>
+<span class="nc" id="L223">			LoggerUtils.error(JavaReflect.class, LoggerConstants.ILLEGAL_ACCESS, e);</span>
+<span class="nc" id="L224">		}</span>
+<span class="nc" id="L225">		return value;</span>
+	}
+
+	/**
+	 * Write in a field value given some owner object and object value. This method
+	 * treated an special case when try write an object array. In this case the
+	 * array will be a copy with the array component type expected and defined in
+	 * the filed.
+	 * 
+	 * @param field  class field for write object value
+	 * @param object object field owner where will be wrote the value
+	 * @param value  value to be write.
+	 * @since 1.0
+	 */
+	public static void writeValue(Field field, Object object, Object value) {
+		try {
+
+<span class="nc" id="L242">			Class&lt;?&gt; clazz = field.getType();</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">			if (value == null) {</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">				if (clazz == boolean.class) {</span>
+<span class="nc" id="L245">					value = false;</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">				} else if (clazz == int.class) {</span>
+<span class="nc" id="L247">					value = 0;</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">				} else if (clazz == long.class) {</span>
+<span class="nc" id="L249">					value = 0L;</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">				} else if (clazz == float.class) {</span>
+<span class="nc" id="L251">					value = 0F;</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">				} else if (clazz == double.class) {</span>
+<span class="nc" id="L253">					value = 0D;</span>
+				}
+<span class="nc bnc" id="L255" title="All 4 branches missed.">			} else if (value instanceof Object[] &amp;&amp; clazz != Object[].class) {</span>
+<span class="nc" id="L256">				value = castComponentType((Object[]) value, clazz);</span>
+			}
+
+<span class="nc" id="L259">			doAccessibleIfNeed(field);</span>
+<span class="nc" id="L260">			field.set(object, value);</span>
+<span class="nc" id="L261">			undoAccessibleIfNeed(field);</span>
+<span class="nc" id="L262">		} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L263">			LoggerUtils.error(JavaReflect.class, LoggerConstants.ILLEGAL_ARGUMENT, e);</span>
+<span class="nc" id="L264">		} catch (IllegalAccessException e) {</span>
+<span class="nc" id="L265">			LoggerUtils.error(JavaReflect.class, LoggerConstants.ILLEGAL_ACCESS, e);</span>
+<span class="nc" id="L266">		}</span>
+<span class="nc" id="L267">	}</span>
+
+	/**
+	 * Make a copy from given array to new array whit cast component type.
+	 * 
+	 * 
+	 * @param array object array to be copied
+	 * @param type  new component type
+	 * @return new array of the class type
+	 * @since 1.0
+	 */
+	public static Object castComponentType(Object[] array, Class&lt;?&gt; type) {
+<span class="nc" id="L279">		Class&lt;? extends Object[]&gt; clazz = (Class&lt;? extends Object[]&gt;) type;</span>
+<span class="nc" id="L280">		return Arrays.copyOf(array, array.length, clazz);</span>
+	}
+
+	public static Field getDeclaredField(Class&lt;?&gt; clazz, String attributeName) {
+<span class="nc" id="L284">		Field field = null;</span>
+		try {
+<span class="nc" id="L286">			field = clazz.getDeclaredField(attributeName);</span>
+<span class="nc" id="L287">		} catch (NoSuchFieldException e) {</span>
+<span class="nc" id="L288">			LoggerUtils.error(JavaReflect.class, LoggerConstants.NO_SUCH_FIELD, e);</span>
+<span class="nc" id="L289">		} catch (SecurityException e) {</span>
+<span class="nc" id="L290">			LoggerUtils.error(JavaReflect.class, LoggerConstants.SECURITY, e);</span>
+<span class="nc" id="L291">		}</span>
+<span class="nc" id="L292">		return field;</span>
+	}
+
+	/**
+	 * Invoke a method from some given owner object with given arguments.
+	 * 
+	 * @param object    method owner.
+	 * @param method    method to be invoke.
+	 * @param arguments signature method arguments required.
+	 * @return object result of invoke the given method.
+	 */
+	public static Object invoke(Object object, Method method, Object... arguments) {
+<span class="nc" id="L304">		Object ret = null;</span>
+		try {
+<span class="nc" id="L306">			doAccessibleIfNeed(method);</span>
+<span class="nc" id="L307">			ret = method.invoke(object, arguments);</span>
+<span class="nc" id="L308">			undoAccessibleIfNeed(method);</span>
+<span class="nc" id="L309">		} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L310">			LoggerUtils.error(JavaReflect.class, LoggerConstants.ILLEGAL_ARGUMENT, e);</span>
+<span class="nc" id="L311">		} catch (IllegalAccessException e) {</span>
+<span class="nc" id="L312">			LoggerUtils.error(JavaReflect.class, LoggerConstants.ILLEGAL_ACCESS, e);</span>
+<span class="nc" id="L313">		} catch (InvocationTargetException e) {</span>
+<span class="nc" id="L314">			LoggerUtils.error(JavaReflect.class, LoggerConstants.INVOCATION_TARGET, e);</span>
+<span class="nc" id="L315">		}</span>
+<span class="nc" id="L316">		return ret;</span>
+	}
+
+<span class="nc" id="L319">	protected JavaReflect() {</span>
+<span class="nc" id="L320">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

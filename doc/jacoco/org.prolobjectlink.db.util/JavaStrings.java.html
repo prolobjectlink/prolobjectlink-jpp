@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JavaStrings.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db.util</a> &gt; <span class="el_source">JavaStrings.java</span></div><h1>JavaStrings.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db.util;
+
+import java.util.Random;
+
+public class JavaStrings {
+
+<span class="nc" id="L39">	private static final Random r = new Random();</span>
+	private static final String ALPHANUM =
+
+			&quot;abcdefghijklmnopqrstuvwxyz&quot;
+
+					+ &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;
+
+					+ &quot;1234567890&quot;;
+
+	public static String randomCharString32() {
+<span class="nc" id="L49">		return randomCharString(32);</span>
+	}
+
+	public static String randomCharString64() {
+<span class="nc" id="L53">		return randomCharString(64);</span>
+	}
+
+	public static String randomCharString(int length) {
+<span class="nc" id="L57">		StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		for (int i = 0; i &lt; length; i++) {</span>
+<span class="nc" id="L59">			int n = r.nextInt(ALPHANUM.length());</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">			int number = n - 1 == -1 ? n : n - 1;</span>
+<span class="nc" id="L61">			char ch = ALPHANUM.charAt(number);</span>
+<span class="nc" id="L62">			b.append(ch);</span>
+		}
+<span class="nc" id="L64">		return &quot;&quot; + b + &quot;&quot;;</span>
+	}
+
+	public static String toUpperCase(String target) {
+<span class="nc" id="L68">		StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
+<span class="nc" id="L70">			Character c = target.charAt(i);</span>
+<span class="nc" id="L71">			b.append(Character.toUpperCase(c));</span>
+		}
+<span class="nc" id="L73">		return &quot;&quot; + b + &quot;&quot;;</span>
+	}
+
+	public static String toLowerCase(String target) {
+<span class="nc" id="L77">		StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
+<span class="nc" id="L79">			Character c = target.charAt(i);</span>
+<span class="nc" id="L80">			b.append(Character.toLowerCase(c));</span>
+		}
+<span class="nc" id="L82">		return &quot;&quot; + b + &quot;&quot;;</span>
+	}
+
+<span class="nc" id="L85">	private JavaStrings() {</span>
+<span class="nc" id="L86">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

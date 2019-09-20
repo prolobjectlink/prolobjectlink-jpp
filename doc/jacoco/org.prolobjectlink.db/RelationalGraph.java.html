@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RelationalGraph.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db</a> &gt; <span class="el_source">RelationalGraph.java</span></div><h1>RelationalGraph.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
+
+import org.prolobjectlink.Direction;
+import org.prolobjectlink.Graph;
+import org.prolobjectlink.GraphEdge;
+import org.prolobjectlink.GraphVertex;
+import org.prolobjectlink.graph.AbstractGraphEdge;
+import org.prolobjectlink.graph.DirectedGraph;
+import org.prolobjectlink.graph.RelationalType;
+import org.prolobjectlink.prolog.PrologTerm;
+
+public class RelationalGraph&lt;V, R&gt; extends DirectedGraph&lt;V, R&gt; implements Graph&lt;V, R&gt; {
+
+<span class="nc" id="L52">	public RelationalGraph() {</span>
+
+<span class="nc" id="L54">	}</span>
+
+	public RelationalGraph(RelationalGraph&lt;V, R&gt; graph) {
+<span class="nc" id="L57">		super(graph);</span>
+<span class="nc" id="L58">	}</span>
+
+	public GraphEdge&lt;R&gt; addEdge(GraphVertex&lt;V&gt; from, GraphVertex&lt;V&gt; to, R edge, Direction direction) {
+<span class="nc" id="L61">		GraphEdge&lt;R&gt; e = getEdge(from, to);</span>
+
+		// determining the relation type from R edge
+<span class="nc bnc" id="L64" title="All 6 branches missed.">		if (e == null &amp;&amp; from != null &amp;&amp; to != null) {</span>
+
+			// one to one
+<span class="nc bnc" id="L67" title="All 2 branches missed.">			if (isLinkLink(from, to)) {</span>
+<span class="nc" id="L68">				e = new OneToOneEdge(edge, from, to, direction);</span>
+			}
+
+			// one to many
+<span class="nc bnc" id="L72" title="All 6 branches missed.">			else if (isLinkLinkList(from, to) || isLinkLinkSet(from, to) || isLinkLinkMap(from, to)) {</span>
+<span class="nc" id="L73">				e = new OneToManyEdge(edge, from, to, direction);</span>
+			}
+
+			// many to one
+<span class="nc bnc" id="L77" title="All 6 branches missed.">			else if (isLinkListLink(from, to) || isLinkSetLink(from, to) || isLinkMapLink(from, to)) {</span>
+<span class="nc" id="L78">				e = new ManyToOneEdge(edge, from, to, direction);</span>
+			}
+
+			// many to many
+			else {
+<span class="nc" id="L83">				e = new ManyToManyEdge(edge, from, to, direction);</span>
+			}
+
+<span class="nc" id="L86">			from.unwrap(GenericGraphVertex.class).outgoing.put(to, e);</span>
+<span class="nc" id="L87">			to.unwrap(GenericGraphVertex.class).incoming.put(from, e);</span>
+<span class="nc" id="L88">			edges.add(e);</span>
+
+		}
+<span class="nc" id="L91">		return e;</span>
+	}
+
+	// one to one
+
+	public final boolean isLinkLink(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L97">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L98">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L99" title="All 4 branches missed.">		return !isCollection(from) &amp;&amp; !isCollection(to);</span>
+	}
+
+	// one to many
+
+	public final boolean isLinkLinkList(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L105">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L106">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L107" title="All 4 branches missed.">		return !isCollection(from) &amp;&amp; isList(to);</span>
+	}
+
+	public final boolean isLinkLinkMap(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L111">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L112">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L113" title="All 4 branches missed.">		return !isCollection(from) &amp;&amp; isMap(to);</span>
+	}
+
+	public final boolean isLinkLinkSet(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L117">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L118">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">		return !isCollection(from) &amp;&amp; isSet(to);</span>
+	}
+
+	// many to one
+
+	public final boolean isLinkListLink(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L125">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L126">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L127" title="All 4 branches missed.">		return isList(from) &amp;&amp; !isCollection(to);</span>
+	}
+
+	public final boolean isLinkMapLink(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L131">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L132">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L133" title="All 4 branches missed.">		return isMap(from) &amp;&amp; !isCollection(to);</span>
+	}
+
+	public final boolean isLinkSetLink(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L137">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L138">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L139" title="All 4 branches missed.">		return isSet(from) &amp;&amp; !isCollection(to);</span>
+	}
+
+	// many to many
+
+	public final boolean isLinkListLinkList(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L145">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L146">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L147" title="All 4 branches missed.">		return isList(from) &amp;&amp; isList(to);</span>
+	}
+
+	public final boolean isLinkMapLinkList(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L151">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L152">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L153" title="All 4 branches missed.">		return isMap(from) &amp;&amp; isList(to);</span>
+	}
+
+	public final boolean isLinkSetLinkList(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L157">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L158">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L159" title="All 4 branches missed.">		return isSet(from) &amp;&amp; isList(to);</span>
+	}
+
+	public final boolean isLinkListLinkMap(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L163">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L164">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L165" title="All 4 branches missed.">		return isList(from) &amp;&amp; isMap(to);</span>
+	}
+
+	public final boolean isLinkMapLinkMap(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L169">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L170">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L171" title="All 4 branches missed.">		return isMap(from) &amp;&amp; isMap(to);</span>
+	}
+
+	public final boolean isLinkSetLinkMap(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L175">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L176">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L177" title="All 4 branches missed.">		return isSet(from) &amp;&amp; isMap(to);</span>
+	}
+
+	public final boolean isLinkListLinkSet(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L181">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L182">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L183" title="All 4 branches missed.">		return isList(from) &amp;&amp; isSet(to);</span>
+	}
+
+	public final boolean isLinkMapLinkSet(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L187">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L188">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L189" title="All 4 branches missed.">		return isMap(from) &amp;&amp; isSet(to);</span>
+	}
+
+	public final boolean isLinkSetLinkSet(GraphVertex&lt;V&gt; f, GraphVertex&lt;V&gt; t) {
+<span class="nc" id="L193">		Class&lt;?&gt; from = f.getElementClass();</span>
+<span class="nc" id="L194">		Class&lt;?&gt; to = t.getElementClass();</span>
+<span class="nc bnc" id="L195" title="All 4 branches missed.">		return isSet(from) &amp;&amp; isSet(to);</span>
+	}
+
+	public final boolean isList(Class&lt;?&gt; clazz) {
+<span class="nc" id="L199">		return clazz.isAssignableFrom(List.class);</span>
+	}
+
+	public final boolean isMap(Class&lt;?&gt; clazz) {
+<span class="nc" id="L203">		return clazz.isAssignableFrom(Map.class);</span>
+	}
+
+	public final boolean isSet(Class&lt;?&gt; clazz) {
+<span class="nc" id="L207">		return clazz.isAssignableFrom(Set.class);</span>
+	}
+
+	public final boolean isCollection(Class&lt;?&gt; clazz) {
+<span class="nc" id="L211">		return clazz.isAssignableFrom(Collection.class);</span>
+	}
+
+	/**
+	 * Partial implementation of {@link RelationalEdge} interface.
+	 * 
+	 * @author Jose Zalacain
+	 *
+	 * @param &lt;R&gt; involved relation object type
+	 * @since 1.0
+	 */
+	public abstract class AbstractRelationEdge extends AbstractGraphEdge&lt;R&gt; implements RelationalEdge&lt;R&gt; {
+
+		private final RelationalType relationType;
+		private final Map&lt;PrologTerm, PrologTerm&gt; cache;
+
+<span class="nc" id="L227">		public AbstractRelationEdge(R element, Direction direction, RelationalType relationType) {</span>
+<span class="nc" id="L228">			super(element, direction);</span>
+<span class="nc" id="L229">			this.relationType = relationType;</span>
+<span class="nc" id="L230">			this.cache = new WeakHashMap&lt;PrologTerm, PrologTerm&gt;();</span>
+<span class="nc" id="L231">		}</span>
+
+		// one to one
+
+		public final boolean isLinkLink() {
+<span class="nc" id="L236">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L237">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L238" title="All 4 branches missed.">			return !isCollection(from) &amp;&amp; !isCollection(to);</span>
+		}
+
+		// one to many
+
+		public final boolean isLinkLinkList() {
+<span class="nc" id="L244">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L245">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L246" title="All 4 branches missed.">			return !isCollection(from) &amp;&amp; isList(to);</span>
+		}
+
+		public final boolean isLinkLinkMap() {
+<span class="nc" id="L250">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L251">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L252" title="All 4 branches missed.">			return !isCollection(from) &amp;&amp; isMap(to);</span>
+		}
+
+		public final boolean isLinkLinkSet() {
+<span class="nc" id="L256">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L257">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L258" title="All 4 branches missed.">			return !isCollection(from) &amp;&amp; isSet(to);</span>
+		}
+
+		// many to one
+
+		public final boolean isLinkListLink() {
+<span class="nc" id="L264">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L265">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L266" title="All 4 branches missed.">			return isList(from) &amp;&amp; !isCollection(to);</span>
+		}
+
+		public final boolean isLinkMapLink() {
+<span class="nc" id="L270">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L271">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L272" title="All 4 branches missed.">			return isMap(from) &amp;&amp; !isCollection(to);</span>
+		}
+
+		public final boolean isLinkSetLink() {
+<span class="nc" id="L276">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L277">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L278" title="All 4 branches missed.">			return isSet(from) &amp;&amp; !isCollection(to);</span>
+		}
+
+		// many to many
+
+		public final boolean isLinkListLinkList() {
+<span class="nc" id="L284">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L285">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L286" title="All 4 branches missed.">			return isList(from) &amp;&amp; isList(to);</span>
+		}
+
+		public final boolean isLinkMapLinkList() {
+<span class="nc" id="L290">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L291">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L292" title="All 4 branches missed.">			return isMap(from) &amp;&amp; isList(to);</span>
+		}
+
+		public final boolean isLinkSetLinkList() {
+<span class="nc" id="L296">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L297">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L298" title="All 4 branches missed.">			return isSet(from) &amp;&amp; isList(to);</span>
+		}
+
+		public final boolean isLinkListLinkMap() {
+<span class="nc" id="L302">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L303">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L304" title="All 4 branches missed.">			return isList(from) &amp;&amp; isMap(to);</span>
+		}
+
+		public final boolean isLinkMapLinkMap() {
+<span class="nc" id="L308">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L309">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L310" title="All 4 branches missed.">			return isMap(from) &amp;&amp; isMap(to);</span>
+		}
+
+		public final boolean isLinkSetLinkMap() {
+<span class="nc" id="L314">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L315">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L316" title="All 4 branches missed.">			return isSet(from) &amp;&amp; isMap(to);</span>
+		}
+
+		public final boolean isLinkListLinkSet() {
+<span class="nc" id="L320">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L321">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L322" title="All 4 branches missed.">			return isList(from) &amp;&amp; isSet(to);</span>
+		}
+
+		public final boolean isLinkMapLinkSet() {
+<span class="nc" id="L326">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L327">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L328" title="All 4 branches missed.">			return isMap(from) &amp;&amp; isSet(to);</span>
+		}
+
+		public final boolean isLinkSetLinkSet() {
+<span class="nc" id="L332">			Class&lt;?&gt; from = getFromVertexElementClass();</span>
+<span class="nc" id="L333">			Class&lt;?&gt; to = getToVertexElementClass();</span>
+<span class="nc bnc" id="L334" title="All 4 branches missed.">			return isSet(from) &amp;&amp; isSet(to);</span>
+		}
+
+		public final boolean isList(Class&lt;?&gt; clazz) {
+<span class="nc" id="L338">			return clazz.isAssignableFrom(List.class);</span>
+		}
+
+		public final boolean isMap(Class&lt;?&gt; clazz) {
+<span class="nc" id="L342">			return clazz.isAssignableFrom(Map.class);</span>
+		}
+
+		public final boolean isSet(Class&lt;?&gt; clazz) {
+<span class="nc" id="L346">			return clazz.isAssignableFrom(Set.class);</span>
+		}
+
+		public final boolean isCollection(Class&lt;?&gt; clazz) {
+<span class="nc" id="L350">			return clazz.isAssignableFrom(Collection.class);</span>
+		}
+
+		public final Map&lt;PrologTerm, PrologTerm&gt; getCache() {
+<span class="nc" id="L354">			return cache;</span>
+		}
+
+		public final RelationalType getRelationType() {
+<span class="nc" id="L358">			return relationType;</span>
+		}
+
+	}
+
+	private abstract class RelationalGraphEdge extends AbstractRelationEdge implements RelationalEdge&lt;R&gt; {
+
+		private final GraphVertex&lt;V&gt; from;
+		private final GraphVertex&lt;V&gt; to;
+
+		private RelationalGraphEdge(R relation, GraphVertex&lt;V&gt; from, GraphVertex&lt;V&gt; to, Direction direction,
+<span class="nc" id="L369">				RelationalType relationType) {</span>
+<span class="nc" id="L370">			super(relation, direction, relationType);</span>
+<span class="nc" id="L371">			this.from = from;</span>
+<span class="nc" id="L372">			this.to = to;</span>
+<span class="nc" id="L373">		}</span>
+
+		public GraphVertex&lt;V&gt; getFrom() {
+<span class="nc" id="L376">			return from;</span>
+		}
+
+		public GraphVertex&lt;V&gt; getTo() {
+<span class="nc" id="L380">			return to;</span>
+		}
+
+	}
+
+	private final class OneToOneEdge extends RelationalGraphEdge implements RelationalEdge&lt;R&gt; {
+
+<span class="nc" id="L387">		private OneToOneEdge(R relation, GraphVertex&lt;V&gt; from, GraphVertex&lt;V&gt; to, Direction direction) {</span>
+<span class="nc" id="L388">			super(relation, from, to, direction, RelationalType.ONE_TO_ONE);</span>
+<span class="nc" id="L389">		}</span>
+
+	}
+
+	private final class OneToManyEdge extends RelationalGraphEdge implements RelationalEdge&lt;R&gt; {
+
+<span class="nc" id="L395">		private OneToManyEdge(R relation, GraphVertex&lt;V&gt; from, GraphVertex&lt;V&gt; to, Direction direction) {</span>
+<span class="nc" id="L396">			super(relation, from, to, direction, RelationalType.ONE_TO_MANY);</span>
+<span class="nc" id="L397">		}</span>
+
+	}
+
+	private final class ManyToOneEdge extends RelationalGraphEdge implements RelationalEdge&lt;R&gt; {
+
+<span class="nc" id="L403">		private ManyToOneEdge(R relation, GraphVertex&lt;V&gt; from, GraphVertex&lt;V&gt; to, Direction direction) {</span>
+<span class="nc" id="L404">			super(relation, from, to, direction, RelationalType.MANY_TO_ONE);</span>
+<span class="nc" id="L405">		}</span>
+
+	}
+
+	private final class ManyToManyEdge extends RelationalGraphEdge implements RelationalEdge&lt;R&gt; {
+
+<span class="nc" id="L411">		private ManyToManyEdge(R relation, GraphVertex&lt;V&gt; from, GraphVertex&lt;V&gt; to, Direction direction) {</span>
+<span class="nc" id="L412">			super(relation, from, to, direction, RelationalType.MANY_TO_MANY);</span>
+<span class="nc" id="L413">		}</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

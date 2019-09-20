@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DatabaseResponse.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">org.prolobjectlink.db</a> &gt; <span class="el_source">DatabaseResponse.java</span></div><h1>DatabaseResponse.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.prolobjectlink.db;
+
+import java.io.Serializable;
+import java.util.Collection;
+
+public final class DatabaseResponse implements Serializable {
+
+	private static final long serialVersionUID = -4194616833844740667L;
+<span class="nc" id="L41">	private static final Class&lt;?&gt; VOID = Void.TYPE;</span>
+
+	private Serializable response;
+
+<span class="nc" id="L45">	public DatabaseResponse() {</span>
+		// do nothing
+<span class="nc" id="L47">	}</span>
+
+	public &lt;R extends Serializable&gt; void set(R response) {
+<span class="nc" id="L50">		this.response = response;</span>
+<span class="nc" id="L51">	}</span>
+
+	public &lt;R extends Serializable&gt; R get() {
+<span class="nc" id="L54">		return (R) response;</span>
+	}
+
+	public void setVoid() {
+<span class="nc" id="L58">		this.response = VOID;</span>
+<span class="nc" id="L59">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L63">		return &quot;DatabaseResponse [response=&quot; + response + &quot;]&quot;;</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L68">		final int prime = 31;</span>
+<span class="nc" id="L69">		int result = 1;</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		result = prime * result + ((response == null) ? 0 : response.hashCode());</span>
+<span class="nc" id="L71">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L77">			return true;</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L79">			return false;</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L81">			return false;</span>
+<span class="nc" id="L82">		DatabaseResponse other = (DatabaseResponse) obj;</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">		if (response == null) {</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">			if (other.response != null)</span>
+<span class="nc" id="L85">				return false;</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">		} else if (!response.equals(other.response))</span>
+<span class="nc" id="L87">			return false;</span>
+<span class="nc" id="L88">		return true;</span>
+	}
+
+	public void close() {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">		if (response instanceof Collection) {</span>
+<span class="nc" id="L93">			((Collection&lt;?&gt;) response).clear();</span>
+		}
+<span class="nc" id="L95">		response = null;</span>
+<span class="nc" id="L96">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
