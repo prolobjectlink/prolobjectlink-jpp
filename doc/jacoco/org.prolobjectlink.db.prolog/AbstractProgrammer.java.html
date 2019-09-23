@@ -956,162 +956,198 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 <span class="nc" id="L956">		}</span>
 <span class="nc" id="L957">	}</span>
 
+	public final void codingActiveRecord(PrintWriter programmer, String fileName) {
+<span class="nc" id="L960">		String modelName = fileName.replace('/', '_');</span>
+<span class="nc" id="L961">		programmer.print(modelName + &quot;_query_one(ARG0, OUT) :- \n&quot;);</span>
+<span class="nc" id="L962">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L963">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_query_one(DAO, ARG0, OUT).\n\n&quot;);</span>
+
+<span class="nc" id="L965">		programmer.print(modelName + &quot;_query_all(ARG0, OUT) :- \n&quot;);</span>
+<span class="nc" id="L966">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L967">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_query_all(DAO, ARG0, OUT).\n\n&quot;);</span>
+
+<span class="nc" id="L969">		programmer.print(modelName + &quot;_query_all(ARG0, ARG1, ARG2, OUT) :- \n&quot;);</span>
+<span class="nc" id="L970">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L971">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_query_all(DAO, ARG0, ARG1, ARG2, OUT).\n\n&quot;);</span>
+
+<span class="nc" id="L973">		programmer.print(modelName + &quot;_retrieve_one(ARG0, OUT) :- \n&quot;);</span>
+<span class="nc" id="L974">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L975">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_retrieve_one(DAO, ARG0, OUT).\n\n&quot;);</span>
+
+<span class="nc" id="L977">		programmer.print(modelName + &quot;_retrieve_all(OUT) :- \n&quot;);</span>
+<span class="nc" id="L978">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L979">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_retrieve_all(DAO, OUT).\n\n&quot;);</span>
+
+<span class="nc" id="L981">		programmer.print(modelName + &quot;_retrieve_all(ARG0, ARG1, OUT) :- \n&quot;);</span>
+<span class="nc" id="L982">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L983">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_retrieve_all(DAO, ARG0, ARG1, OUT).\n\n&quot;);</span>
+<span class="nc" id="L984">	}</span>
+
 	public final void codingRuntime(PrintWriter stdout) {
-<span class="nc" id="L960">		Class&lt;?&gt; c = getClass();</span>
-<span class="nc" id="L961">		ProtectionDomain d = c.getProtectionDomain();</span>
-<span class="nc" id="L962">		CodeSource s = d.getCodeSource();</span>
-<span class="nc" id="L963">		String prolobjectlink = s.getLocation().getPath();</span>
-<span class="nc" id="L964">		codingRuntime(stdout, prolobjectlink);</span>
-<span class="nc" id="L965">	}</span>
+<span class="nc" id="L987">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L988">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L989">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L990">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L991">		codingRuntime(stdout, prolobjectlink);</span>
+<span class="nc" id="L992">	}</span>
 
 	public final void codingRuntime(PrintWriter stdout, String folder) {
-<span class="nc" id="L968">		JarFile jarFile = null;</span>
-<span class="nc" id="L969">		boolean warnings = false;</span>
-<span class="nc" id="L970">		File plk = new File(folder);</span>
-<span class="nc" id="L971">		File pdk = plk.getParentFile();</span>
-<span class="nc" id="L972">		File prt = pdk.getParentFile();</span>
-<span class="nc" id="L973">		String jh = System.getProperty(&quot;java.home&quot;);</span>
-<span class="nc" id="L974">		File rt = new File(jh + &quot;/lib/rt.jar&quot;);</span>
-<span class="nc" id="L975">		List&lt;File&gt; list = new ArrayList&lt;File&gt;();</span>
-<span class="nc" id="L976">		File[] jars = pdk.listFiles(new JarFileFilter());</span>
+<span class="nc" id="L995">		JarFile jarFile = null;</span>
+<span class="nc" id="L996">		boolean warnings = false;</span>
+<span class="nc" id="L997">		File plk = new File(folder);</span>
+<span class="nc" id="L998">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L999">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L1000">		String jh = System.getProperty(&quot;java.home&quot;);</span>
+<span class="nc" id="L1001">		File rt = new File(jh + &quot;/lib/rt.jar&quot;);</span>
+<span class="nc" id="L1002">		List&lt;File&gt; list = new ArrayList&lt;File&gt;();</span>
+<span class="nc" id="L1003">		File[] jars = pdk.listFiles(new JarFileFilter());</span>
 
 		// adding rt.jar and others
-<span class="nc" id="L979">		list.add(rt);</span>
-<span class="nc bnc" id="L980" title="All 2 branches missed.">		if (jars != null) {</span>
-<span class="nc bnc" id="L981" title="All 2 branches missed.">			for (File jar : jars) {</span>
-<span class="nc" id="L982">				list.add(jar);</span>
+<span class="nc" id="L1006">		list.add(rt);</span>
+<span class="nc bnc" id="L1007" title="All 2 branches missed.">		if (jars != null) {</span>
+<span class="nc bnc" id="L1008" title="All 2 branches missed.">			for (File jar : jars) {</span>
+<span class="nc" id="L1009">				list.add(jar);</span>
 			}
 		}
 
 		try {
 
-<span class="nc bnc" id="L988" title="All 2 branches missed.">			for (File file : list) {</span>
-<span class="nc" id="L989">				stdout.println(&quot;Generating &quot; + file);</span>
-<span class="nc" id="L990">				jarFile = new JarFile(file);</span>
-<span class="nc" id="L991">				codingModel(stdout, jarFile, prt, warnings);</span>
-<span class="nc" id="L992">				jarFile.close();</span>
-<span class="nc" id="L993">			}</span>
+<span class="nc bnc" id="L1015" title="All 2 branches missed.">			for (File file : list) {</span>
+<span class="nc" id="L1016">				stdout.println(&quot;Generating &quot; + file);</span>
+<span class="nc" id="L1017">				jarFile = new JarFile(file);</span>
+<span class="nc" id="L1018">				codingModel(stdout, jarFile, prt, warnings);</span>
+<span class="nc" id="L1019">				jarFile.close();</span>
+<span class="nc" id="L1020">			}</span>
 
-<span class="nc" id="L995">		} catch (IOException e) {</span>
-<span class="nc" id="L996">			Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1022">		} catch (IOException e) {</span>
+<span class="nc" id="L1023">			Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
 		} finally {
-<span class="nc bnc" id="L998" title="All 6 branches missed.">			if (jarFile != null) {</span>
+<span class="nc bnc" id="L1025" title="All 6 branches missed.">			if (jarFile != null) {</span>
 				try {
-<span class="nc" id="L1000">					jarFile.close();</span>
-<span class="nc" id="L1001">				} catch (IOException e) {</span>
-<span class="nc" id="L1002">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-<span class="nc" id="L1003">				}</span>
+<span class="nc" id="L1027">					jarFile.close();</span>
+<span class="nc" id="L1028">				} catch (IOException e) {</span>
+<span class="nc" id="L1029">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1030">				}</span>
 			}
 		}
-<span class="nc bnc" id="L1006" title="All 2 branches missed.">		if (warnings) {</span>
-<span class="nc" id="L1007">			stdout.println(&quot;Generation finished with WARNINGS.&quot;);</span>
+<span class="nc bnc" id="L1033" title="All 2 branches missed.">		if (warnings) {</span>
+<span class="nc" id="L1034">			stdout.println(&quot;Generation finished with WARNINGS.&quot;);</span>
 		} else {
-<span class="nc" id="L1009">			stdout.println(&quot;Generation finished OK.&quot;);</span>
+<span class="nc" id="L1036">			stdout.println(&quot;Generation finished OK.&quot;);</span>
 		}
-<span class="nc" id="L1011">	}</span>
+<span class="nc" id="L1038">	}</span>
 
 	public final void codingJarFile(PrintWriter stdout, JarFile jarFile, boolean b) {
-<span class="nc" id="L1014">		Class&lt;?&gt; c = getClass();</span>
-<span class="nc" id="L1015">		ProtectionDomain d = c.getProtectionDomain();</span>
-<span class="nc" id="L1016">		CodeSource s = d.getCodeSource();</span>
-<span class="nc" id="L1017">		String prolobjectlink = s.getLocation().getPath();</span>
-<span class="nc" id="L1018">		File plk = new File(prolobjectlink);</span>
-<span class="nc" id="L1019">		File pdk = plk.getParentFile();</span>
-<span class="nc" id="L1020">		File prt = pdk.getParentFile();</span>
-<span class="nc" id="L1021">		codingModel(stdout, jarFile, prt, b);</span>
-<span class="nc" id="L1022">	}</span>
+<span class="nc" id="L1041">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L1042">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L1043">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L1044">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L1045">		File plk = new File(prolobjectlink);</span>
+<span class="nc" id="L1046">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L1047">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L1048">		codingModel(stdout, jarFile, prt, b);</span>
+<span class="nc" id="L1049">	}</span>
+
+	public final void codingJarFile(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
+<span class="nc" id="L1052">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc" id="L1053">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
+<span class="nc bnc" id="L1054" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
+<span class="nc" id="L1055">			JarEntry jarEntry = entries.nextElement();</span>
+<span class="nc" id="L1056">			String jarEntryName = jarEntry.getName();</span>
+<span class="nc bnc" id="L1057" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
+<span class="nc" id="L1058">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
+<span class="nc" id="L1059">				String fileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
+				try {
+<span class="nc" id="L1061">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
+<span class="nc bnc" id="L1062" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
+<span class="nc" id="L1063">						File runtimeFile = createModelFile(folder, fileName);</span>
+<span class="nc" id="L1064">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
+<span class="nc" id="L1065">						codingLicense(programmer);</span>
+<span class="nc" id="L1066">						codingAuthor(programmer);</span>
+<span class="nc" id="L1067">						codingObjInclusion(programmer, jarEntryName);</span>
+<span class="nc bnc" id="L1068" title="All 2 branches missed.">						if (!className.contains(&quot;Dao&quot;)) {</span>
+<span class="nc" id="L1069">							String dao = fromCamelCase(className) + &quot;_dao.pl&quot;;</span>
+<span class="nc" id="L1070">							codingDaoInclusion(programmer, jarEntryName, dao);</span>
+						}
+						// TODO introspection here
+<span class="nc" id="L1073">						codingConstants(programmer, runtimeClass);</span>
+<span class="nc" id="L1074">						codingConstructors(programmer, runtimeClass);</span>
+<span class="nc" id="L1075">						codingMethods(programmer, runtimeClass);</span>
+<span class="nc bnc" id="L1076" title="All 2 branches missed.">						if (!className.contains(&quot;Dao&quot;)) {</span>
+<span class="nc" id="L1077">							String name = fileName.substring(0, fileName.lastIndexOf(&quot;.pl&quot;));</span>
+<span class="nc" id="L1078">							name = fileName.substring(name.lastIndexOf('/') + 1, name.length());</span>
+<span class="nc" id="L1079">							codingActiveRecord(programmer, name);</span>
+						}
+<span class="nc" id="L1081">						programmer.close();</span>
+					}
+<span class="nc" id="L1083">				} catch (NoClassDefFoundError e) {</span>
+<span class="nc" id="L1084">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1085">					warnings = true;</span>
+<span class="nc" id="L1086">					continue;</span>
+<span class="nc" id="L1087">				} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L1088">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1089">					warnings = true;</span>
+<span class="nc" id="L1090">					continue;</span>
+<span class="nc" id="L1091">				} catch (IOException e) {</span>
+<span class="nc" id="L1092">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1093">				}</span>
+			}
+<span class="nc" id="L1095">		}</span>
+<span class="nc" id="L1096">	}</span>
 
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, boolean b) {
-<span class="nc" id="L1025">		Class&lt;?&gt; c = getClass();</span>
-<span class="nc" id="L1026">		ProtectionDomain d = c.getProtectionDomain();</span>
-<span class="nc" id="L1027">		CodeSource s = d.getCodeSource();</span>
-<span class="nc" id="L1028">		String prolobjectlink = s.getLocation().getPath();</span>
-<span class="nc" id="L1029">		File plk = new File(prolobjectlink);</span>
-<span class="nc" id="L1030">		File pdk = plk.getParentFile();</span>
-<span class="nc" id="L1031">		File prt = pdk.getParentFile();</span>
-<span class="nc" id="L1032">		codingJarFile2(stdout, jarFile, prt, b);</span>
-<span class="nc" id="L1033">	}</span>
+<span class="nc" id="L1099">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L1100">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L1101">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L1102">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L1103">		File plk = new File(prolobjectlink);</span>
+<span class="nc" id="L1104">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L1105">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L1106">		codingJarFile(stdout, jarFile, prt, b);</span>
+<span class="nc" id="L1107">	}</span>
 
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
-<span class="nc" id="L1036">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
-<span class="nc" id="L1037">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
-<span class="nc bnc" id="L1038" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
-<span class="nc" id="L1039">			JarEntry jarEntry = entries.nextElement();</span>
-<span class="nc" id="L1040">			String jarEntryName = jarEntry.getName();</span>
-<span class="nc bnc" id="L1041" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
-<span class="nc" id="L1042">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
-<span class="nc" id="L1043">				String fileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
+<span class="nc" id="L1110">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc" id="L1111">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
+<span class="nc bnc" id="L1112" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
+<span class="nc" id="L1113">			JarEntry jarEntry = entries.nextElement();</span>
+<span class="nc" id="L1114">			String jarEntryName = jarEntry.getName();</span>
+<span class="nc bnc" id="L1115" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
+<span class="nc" id="L1116">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
+<span class="nc" id="L1117">				String fileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
 				try {
-<span class="nc" id="L1045">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
-<span class="nc bnc" id="L1046" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
-<span class="nc" id="L1047">						File runtimeFile = createRuntimeFile(folder, fileName);</span>
-<span class="nc" id="L1048">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
-<span class="nc" id="L1049">						codingLicense(programmer);</span>
-<span class="nc" id="L1050">						codingAuthor(programmer);</span>
-<span class="nc" id="L1051">						codingInclusion(programmer, jarEntryName);</span>
+<span class="nc" id="L1119">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
+<span class="nc bnc" id="L1120" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
+<span class="nc" id="L1121">						File runtimeFile = createRuntimeFile(folder, fileName);</span>
+<span class="nc" id="L1122">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
+<span class="nc" id="L1123">						codingLicense(programmer);</span>
+<span class="nc" id="L1124">						codingAuthor(programmer);</span>
+<span class="nc" id="L1125">						codingObjInclusion(programmer, jarEntryName);</span>
 						// TODO introspection here
-<span class="nc" id="L1053">						codingConstants(programmer, runtimeClass);</span>
-<span class="nc" id="L1054">						codingConstructors(programmer, runtimeClass);</span>
-<span class="nc" id="L1055">						codingMethods(programmer, runtimeClass);</span>
-<span class="nc" id="L1056">						programmer.close();</span>
+<span class="nc" id="L1127">						codingConstants(programmer, runtimeClass);</span>
+<span class="nc" id="L1128">						codingConstructors(programmer, runtimeClass);</span>
+<span class="nc" id="L1129">						codingMethods(programmer, runtimeClass);</span>
+<span class="nc" id="L1130">						programmer.close();</span>
 					}
-<span class="nc" id="L1058">				} catch (NoClassDefFoundError e) {</span>
-<span class="nc" id="L1059">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
-<span class="nc" id="L1060">					warnings = true;</span>
-<span class="nc" id="L1061">					continue;</span>
-<span class="nc" id="L1062">				} catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L1063">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
-<span class="nc" id="L1064">					warnings = true;</span>
-<span class="nc" id="L1065">					continue;</span>
-<span class="nc" id="L1066">				} catch (IOException e) {</span>
-<span class="nc" id="L1067">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-<span class="nc" id="L1068">				}</span>
+<span class="nc" id="L1132">				} catch (NoClassDefFoundError e) {</span>
+<span class="nc" id="L1133">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1134">					warnings = true;</span>
+<span class="nc" id="L1135">					continue;</span>
+<span class="nc" id="L1136">				} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L1137">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1138">					warnings = true;</span>
+<span class="nc" id="L1139">					continue;</span>
+<span class="nc" id="L1140">				} catch (IOException e) {</span>
+<span class="nc" id="L1141">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1142">				}</span>
 			}
-<span class="nc" id="L1070">		}</span>
-<span class="nc" id="L1071">	}</span>
+<span class="nc" id="L1144">		}</span>
+<span class="nc" id="L1145">	}</span>
 
-	public final void codingJarFile2(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
-<span class="nc" id="L1074">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
-<span class="nc" id="L1075">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
-<span class="nc bnc" id="L1076" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
-<span class="nc" id="L1077">			JarEntry jarEntry = entries.nextElement();</span>
-<span class="nc" id="L1078">			String jarEntryName = jarEntry.getName();</span>
-<span class="nc bnc" id="L1079" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
-<span class="nc" id="L1080">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
-<span class="nc" id="L1081">				String fileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
-				try {
-<span class="nc" id="L1083">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
-<span class="nc bnc" id="L1084" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
-<span class="nc" id="L1085">						File runtimeFile = createModelFile(folder, fileName);</span>
-<span class="nc" id="L1086">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
-<span class="nc" id="L1087">						codingLicense(programmer);</span>
-<span class="nc" id="L1088">						codingAuthor(programmer);</span>
-<span class="nc" id="L1089">						codingInclusion(programmer, jarEntryName);</span>
-						// TODO introspection here
-<span class="nc" id="L1091">						codingConstants(programmer, runtimeClass);</span>
-<span class="nc" id="L1092">						codingConstructors(programmer, runtimeClass);</span>
-<span class="nc" id="L1093">						codingMethods(programmer, runtimeClass);</span>
-<span class="nc" id="L1094">						programmer.close();</span>
-					}
-<span class="nc" id="L1096">				} catch (NoClassDefFoundError e) {</span>
-<span class="nc" id="L1097">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
-<span class="nc" id="L1098">					warnings = true;</span>
-<span class="nc" id="L1099">					continue;</span>
-<span class="nc" id="L1100">				} catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L1101">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
-<span class="nc" id="L1102">					warnings = true;</span>
-<span class="nc" id="L1103">					continue;</span>
-<span class="nc" id="L1104">				} catch (IOException e) {</span>
-<span class="nc" id="L1105">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-<span class="nc" id="L1106">				}</span>
-			}
-<span class="nc" id="L1108">		}</span>
-<span class="nc" id="L1109">	}</span>
-
-<span class="nc" id="L1111">	private class JarFileFilter implements FileFilter {</span>
+<span class="nc" id="L1147">	private class JarFileFilter implements FileFilter {</span>
 
 		public boolean accept(File pathname) {
-<span class="nc" id="L1114">			return pathname.getName().endsWith(&quot;.jar&quot;);</span>
+<span class="nc" id="L1150">			return pathname.getName().endsWith(&quot;.jar&quot;);</span>
 		}
 
 	}

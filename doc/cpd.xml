@@ -1059,11 +1059,11 @@
 </codefragment>
 </duplication>
 <duplication lines="13" tokens="128">
-<file line="1035" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
-<file line="1073" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
+<file line="1051" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
+<file line="1109" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
 <codefragment>
 <![CDATA[
-	public final void codingJarFile2(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
+	public final void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
 		ClassLoader l = Thread.currentThread().getContextClassLoader();
 		Enumeration<JarEntry> entries = jarFile.entries();
 		while (entries.hasMoreElements()) {
@@ -1075,7 +1075,7 @@
 				try {
 					Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
 					if (isValidClass(runtimeClass)) {
-						File runtimeFile = createModelFile(folder, fileName);
+						File runtimeFile = createRuntimeFile(folder, fileName);
 ]]>
 </codefragment>
 </duplication>
@@ -1107,39 +1107,6 @@ public interface StoragePool extends PersistentContainer {
 	public <O> List<O> findAll(Predicate<O> predicate);
 
 	public Storage createStorage(String location, int maxCapacity);
-]]>
-</codefragment>
-</duplication>
-<duplication lines="25" tokens="127">
-<file line="1047" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
-<file line="1085" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
-<codefragment>
-<![CDATA[
-						File runtimeFile = createModelFile(folder, fileName);
-						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
-						codingLicense(programmer);
-						codingAuthor(programmer);
-						codingInclusion(programmer, jarEntryName);
-						// TODO introspection here
-						codingConstants(programmer, runtimeClass);
-						codingConstructors(programmer, runtimeClass);
-						codingMethods(programmer, runtimeClass);
-						programmer.close();
-					}
-				} catch (NoClassDefFoundError e) {
-					stdout.println("WARNING: No definition of the class could be found " + e);
-					warnings = true;
-					continue;
-				} catch (ClassNotFoundException e) {
-					stdout.println("WARNING: No definition of the class could be found " + e);
-					warnings = true;
-					continue;
-				} catch (IOException e) {
-					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
-				}
-			}
-		}
-	}
 ]]>
 </codefragment>
 </duplication>

@@ -956,6 +956,33 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		}
 	}
 
+	public final void codingActiveRecord(PrintWriter programmer, String fileName) {
+		String modelName = fileName.replace('/', '_');
+		programmer.print(modelName + "_query_one(ARG0, OUT) :- \n");
+		programmer.print("\t" + modelName + "_dao(DAO),\n");
+		programmer.print("\t" + modelName + "_dao_query_one(DAO, ARG0, OUT).\n\n");
+
+		programmer.print(modelName + "_query_all(ARG0, OUT) :- \n");
+		programmer.print("\t" + modelName + "_dao(DAO),\n");
+		programmer.print("\t" + modelName + "_dao_query_all(DAO, ARG0, OUT).\n\n");
+
+		programmer.print(modelName + "_query_all(ARG0, ARG1, ARG2, OUT) :- \n");
+		programmer.print("\t" + modelName + "_dao(DAO),\n");
+		programmer.print("\t" + modelName + "_dao_query_all(DAO, ARG0, ARG1, ARG2, OUT).\n\n");
+
+		programmer.print(modelName + "_retrieve_one(ARG0, OUT) :- \n");
+		programmer.print("\t" + modelName + "_dao(DAO),\n");
+		programmer.print("\t" + modelName + "_dao_retrieve_one(DAO, ARG0, OUT).\n\n");
+
+		programmer.print(modelName + "_retrieve_all(OUT) :- \n");
+		programmer.print("\t" + modelName + "_dao(DAO),\n");
+		programmer.print("\t" + modelName + "_dao_retrieve_all(DAO, OUT).\n\n");
+
+		programmer.print(modelName + "_retrieve_all(ARG0, ARG1, OUT) :- \n");
+		programmer.print("\t" + modelName + "_dao(DAO),\n");
+		programmer.print("\t" + modelName + "_dao_retrieve_all(DAO, ARG0, ARG1, OUT).\n\n");
+	}
+
 	public final void codingRuntime(PrintWriter stdout) {
 		Class<?> c = getClass();
 		ProtectionDomain d = c.getProtectionDomain();
@@ -1021,6 +1048,53 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		codingModel(stdout, jarFile, prt, b);
 	}
 
+	public final void codingJarFile(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
+		ClassLoader l = Thread.currentThread().getContextClassLoader();
+		Enumeration<JarEntry> entries = jarFile.entries();
+		while (entries.hasMoreElements()) {
+			JarEntry jarEntry = entries.nextElement();
+			String jarEntryName = jarEntry.getName();
+			if (isValidJarEntry(jarEntryName)) {
+				String className = jarEntryName.substring(0, jarEntryName.length() - 6);
+				String fileName = fromCamelCase(className) + ".pl";
+				try {
+					Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
+					if (isValidClass(runtimeClass)) {
+						File runtimeFile = createModelFile(folder, fileName);
+						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
+						codingLicense(programmer);
+						codingAuthor(programmer);
+						codingObjInclusion(programmer, jarEntryName);
+						if (!className.contains("Dao")) {
+							String dao = fromCamelCase(className) + "_dao.pl";
+							codingDaoInclusion(programmer, jarEntryName, dao);
+						}
+						// TODO introspection here
+						codingConstants(programmer, runtimeClass);
+						codingConstructors(programmer, runtimeClass);
+						codingMethods(programmer, runtimeClass);
+						if (!className.contains("Dao")) {
+							String name = fileName.substring(0, fileName.lastIndexOf(".pl"));
+							name = fileName.substring(name.lastIndexOf('/') + 1, name.length());
+							codingActiveRecord(programmer, name);
+						}
+						programmer.close();
+					}
+				} catch (NoClassDefFoundError e) {
+					stdout.println("WARNING: No definition of the class could be found " + e);
+					warnings = true;
+					continue;
+				} catch (ClassNotFoundException e) {
+					stdout.println("WARNING: No definition of the class could be found " + e);
+					warnings = true;
+					continue;
+				} catch (IOException e) {
+					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
+				}
+			}
+		}
+	}
+
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, boolean b) {
 		Class<?> c = getClass();
 		ProtectionDomain d = c.getProtectionDomain();
@@ -1029,7 +1103,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		File plk = new File(prolobjectlink);
 		File pdk = plk.getParentFile();
 		File prt = pdk.getParentFile();
-		codingJarFile2(stdout, jarFile, prt, b);
+		codingJarFile(stdout, jarFile, prt, b);
 	}
 
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
@@ -1048,45 +1122,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
 						codingLicense(programmer);
 						codingAuthor(programmer);
-						codingInclusion(programmer, jarEntryName);
-						// TODO introspection here
-						codingConstants(programmer, runtimeClass);
-						codingConstructors(programmer, runtimeClass);
-						codingMethods(programmer, runtimeClass);
-						programmer.close();
-					}
-				} catch (NoClassDefFoundError e) {
-					stdout.println("WARNING: No definition of the class could be found " + e);
-					warnings = true;
-					continue;
-				} catch (ClassNotFoundException e) {
-					stdout.println("WARNING: No definition of the class could be found " + e);
-					warnings = true;
-					continue;
-				} catch (IOException e) {
-					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
-				}
-			}
-		}
-	}
-
-	public final void codingJarFile2(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
-		ClassLoader l = Thread.currentThread().getContextClassLoader();
-		Enumeration<JarEntry> entries = jarFile.entries();
-		while (entries.hasMoreElements()) {
-			JarEntry jarEntry = entries.nextElement();
-			String jarEntryName = jarEntry.getName();
-			if (isValidJarEntry(jarEntryName)) {
-				String className = jarEntryName.substring(0, jarEntryName.length() - 6);
-				String fileName = fromCamelCase(className) + ".pl";
-				try {
-					Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
-					if (isValidClass(runtimeClass)) {
-						File runtimeFile = createModelFile(folder, fileName);
-						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
-						codingLicense(programmer);
-						codingAuthor(programmer);
-						codingInclusion(programmer, jarEntryName);
+						codingObjInclusion(programmer, jarEntryName);
 						// TODO introspection here
 						codingConstants(programmer, runtimeClass);
 						codingConstructors(programmer, runtimeClass);

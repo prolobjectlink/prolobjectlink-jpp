@@ -56,7 +56,19 @@ public interface PrologProgrammer {
 	 *                     inside jar file
 	 * @since 1.0
 	 */
-	public void codingInclusion(PrintWriter out, String jarEntryName);
+	public void codingObjInclusion(PrintWriter out, String jarEntryName);
+
+	public void codingDaoInclusion(PrintWriter out, String jarEntryName, String file);
+
+	public void codingActiveRecord(PrintWriter out, String modelName);
+
+	/**
+	 * Generate the Prolog Runtime in the given folder.
+	 * 
+	 * @param out writer to print generation messages
+	 * @since 1.0
+	 */
+	public void codingRuntime(PrintWriter out);
 
 	/**
 	 * Generate the Prolog Runtime inside distribution folder
@@ -67,20 +79,12 @@ public interface PrologProgrammer {
 	 */
 	public void codingRuntime(PrintWriter out, String folder);
 
-	/**
-	 * Generate the Prolog Runtime in the given folder.
-	 * 
-	 * @param out writer to print generation messages
-	 * @since 1.0
-	 */
-	public void codingRuntime(PrintWriter out);
+	public void codingJarFile(PrintWriter stdout, JarFile jarFile, boolean b);
+
+	public void codingJarFile(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings);
+
+	public void codingModel(PrintWriter stdout, JarFile jarFile, boolean b);
 
 	public void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings);
 
-	public void codingJarFile(PrintWriter stdout, JarFile jarFile, boolean b);
-	
-	public void codingJarFile2(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings);
-
-	public void codingModel(PrintWriter stdout, JarFile jarFile, boolean b);
-	
 }
