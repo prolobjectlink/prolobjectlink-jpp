@@ -773,7 +773,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 <span class="nc" id="L773">		return runtimeFile;</span>
 	}
 
-	protected final File createModelFile(File prt, String fileName) throws IOException {
+	protected final File createWebFile(File prt, String fileName) throws IOException {
 <span class="nc" id="L777">		File runtimeFile = new File(prt.getCanonicalPath() + &quot;/web/&quot;</span>
 <span class="nc" id="L778">				+ fileName.replace(&quot;java&quot;, &quot;prolog&quot;).replace(&quot;org/prolobjectlink/&quot;, &quot;prologx/&quot;));</span>
 <span class="nc bnc" id="L779" title="All 2 branches missed.">		if (!runtimeFile.exists()) {</span>
@@ -1060,14 +1060,14 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 				try {
 <span class="nc" id="L1061">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
 <span class="nc bnc" id="L1062" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
-<span class="nc" id="L1063">						File runtimeFile = createModelFile(folder, fileName);</span>
+<span class="nc" id="L1063">						File runtimeFile = createWebFile(folder, fileName);</span>
 <span class="nc" id="L1064">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
 <span class="nc" id="L1065">						codingLicense(programmer);</span>
 <span class="nc" id="L1066">						codingAuthor(programmer);</span>
-<span class="nc" id="L1067">						codingObjInclusion(programmer, jarEntryName);</span>
+<span class="nc" id="L1067">						codingInclusion(programmer, jarEntryName);</span>
 <span class="nc bnc" id="L1068" title="All 2 branches missed.">						if (!className.contains(&quot;Dao&quot;)) {</span>
 <span class="nc" id="L1069">							String dao = fromCamelCase(className) + &quot;_dao.pl&quot;;</span>
-<span class="nc" id="L1070">							codingDaoInclusion(programmer, jarEntryName, dao);</span>
+<span class="nc" id="L1070">							codingInclusion(programmer, jarEntryName, &quot;web/&quot; + dao);</span>
 						}
 						// TODO introspection here
 <span class="nc" id="L1073">						codingConstants(programmer, runtimeClass);</span>
@@ -1122,7 +1122,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 <span class="nc" id="L1122">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
 <span class="nc" id="L1123">						codingLicense(programmer);</span>
 <span class="nc" id="L1124">						codingAuthor(programmer);</span>
-<span class="nc" id="L1125">						codingObjInclusion(programmer, jarEntryName);</span>
+<span class="nc" id="L1125">						codingInclusion(programmer, jarEntryName);</span>
 						// TODO introspection here
 <span class="nc" id="L1127">						codingConstants(programmer, runtimeClass);</span>
 <span class="nc" id="L1128">						codingConstructors(programmer, runtimeClass);</span>
@@ -1144,10 +1144,129 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 <span class="nc" id="L1144">		}</span>
 <span class="nc" id="L1145">	}</span>
 
-<span class="nc" id="L1147">	private class JarFileFilter implements FileFilter {</span>
+	public final void codingController(PrintWriter stdout, JarFile jarFile, boolean b) {
+<span class="nc" id="L1148">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L1149">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L1150">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L1151">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L1152">		File plk = new File(prolobjectlink);</span>
+<span class="nc" id="L1153">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L1154">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L1155">		codingController(stdout, jarFile, prt, b);</span>
+<span class="nc" id="L1156">	}</span>
+
+	public final void codingController(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
+<span class="nc" id="L1159">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc" id="L1160">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
+<span class="nc bnc" id="L1161" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
+<span class="nc" id="L1162">			JarEntry jarEntry = entries.nextElement();</span>
+<span class="nc" id="L1163">			String jarEntryName = jarEntry.getName();</span>
+<span class="nc bnc" id="L1164" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
+<span class="nc" id="L1165">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
+<span class="nc bnc" id="L1166" title="All 2 branches missed.">				if (!className.contains(&quot;Dao&quot;)) {</span>
+<span class="nc" id="L1167">					String modelFileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
+<span class="nc" id="L1168">					String controllerFileName = fromCamelCase(className) + &quot;_controller.pl&quot;;</span>
+<span class="nc" id="L1169">					controllerFileName = controllerFileName.replaceFirst(&quot;model&quot;, &quot;controller&quot;);</span>
+					try {
+<span class="nc" id="L1171">						Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
+<span class="nc bnc" id="L1172" title="All 2 branches missed.">						if (isValidClass(runtimeClass)) {</span>
+<span class="nc" id="L1173">							File runtimeFile = createWebFile(folder, controllerFileName);</span>
+<span class="nc" id="L1174">							PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
+<span class="nc" id="L1175">							codingInclusion(programmer, jarEntryName);</span>
+<span class="nc" id="L1176">							codingInclusion(programmer, jarEntryName, &quot;misc/http.pl&quot;);</span>
+<span class="nc" id="L1177">							codingInclusion(programmer, jarEntryName, &quot;misc/integer.pl&quot;);</span>
+<span class="nc" id="L1178">							codingInclusion(programmer, jarEntryName, &quot;web/&quot; + modelFileName);</span>
+<span class="nc" id="L1179">							String name = modelFileName.substring(0, modelFileName.lastIndexOf(&quot;.pl&quot;));</span>
+<span class="nc" id="L1180">							name = modelFileName.substring(name.lastIndexOf('/') + 1, name.length());</span>
+<span class="nc" id="L1181">							String clsName = className.substring(className.lastIndexOf('/') + 1, className.length());</span>
+<span class="nc" id="L1182">							codingProcedures(programmer, name, clsName);</span>
+<span class="nc" id="L1183">							programmer.close();</span>
+						}
+<span class="nc" id="L1185">					} catch (NoClassDefFoundError e) {</span>
+<span class="nc" id="L1186">						stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1187">						warnings = true;</span>
+<span class="nc" id="L1188">						continue;</span>
+<span class="nc" id="L1189">					} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L1190">						stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1191">						warnings = true;</span>
+<span class="nc" id="L1192">						continue;</span>
+<span class="nc" id="L1193">					} catch (IOException e) {</span>
+<span class="nc" id="L1194">						Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1195">					}</span>
+				}
+			}
+<span class="nc" id="L1198">		}</span>
+
+<span class="nc" id="L1200">	}</span>
+
+	public final void codingProcedures(PrintWriter programmer, String modelFileName, String clsName) {
+
+<span class="nc" id="L1204">		String modelName = modelFileName.replace('/', '_');</span>
+
+<span class="nc" id="L1206">		programmer.print(modelName + &quot;_find_all_users(RESULT) :- \n&quot;);</span>
+<span class="nc" id="L1207">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_all(RESULT),\n&quot;);</span>
+<span class="nc" id="L1208">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+
+<span class="nc" id="L1210">		programmer.print(modelName + &quot;_query_all_users(RESULT) :- \n&quot;);</span>
+<span class="nc" id="L1211">		programmer.print(&quot;\t&quot; + modelName + &quot;_query_all('select a from &quot; + clsName + &quot; a', RESULT),\n&quot;);</span>
+<span class="nc" id="L1212">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+
+<span class="nc" id="L1214">		programmer.print(modelName + &quot;_find_all_users_range(MAX,FIRST,RESULT) :- \n&quot;);</span>
+<span class="nc" id="L1215">		programmer.print(&quot;\tinteger_parse_int(MAX, A),\n&quot;);</span>
+<span class="nc" id="L1216">		programmer.print(&quot;\tinteger_parse_int(FIRST, B),\n&quot;);</span>
+<span class="nc" id="L1217">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_all(A,B,RESULT),\n&quot;);</span>
+<span class="nc" id="L1218">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+
+<span class="nc" id="L1220">		programmer.print(modelName + &quot;_query_all_users_range(MAX,FIRST,RESULT) :- \n&quot;);</span>
+<span class="nc" id="L1221">		programmer.print(&quot;\tinteger_parse_int(MAX, A),\n&quot;);</span>
+<span class="nc" id="L1222">		programmer.print(&quot;\tinteger_parse_int(FIRST, B),\n&quot;);</span>
+<span class="nc" id="L1223">		programmer.print(&quot;\t&quot; + modelName + &quot;_query_all('select a from &quot; + clsName + &quot; a',A,B,RESULT),\n&quot;);</span>
+<span class="nc" id="L1224">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+
+<span class="nc" id="L1226">		programmer.print(modelName + &quot;_find_user(ID,RESULT) :- \n&quot;);</span>
+<span class="nc" id="L1227">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
+<span class="nc" id="L1228">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_one(A, RESULT),\n&quot;);</span>
+<span class="nc" id="L1229">		programmer.print(&quot;\trender('view/show.html').\n\n&quot;);</span>
+
+<span class="nc" id="L1231">		programmer.print(modelName + &quot;_query_user(ID,RESULT) :- \n&quot;);</span>
+<span class="nc" id="L1232">		programmer.print(&quot;\tatom_concat('select a from &quot; + clsName + &quot; a where a.id =', ID, QUERY),\n&quot;);</span>
+<span class="nc" id="L1233">		programmer.print(&quot;\t&quot; + modelName + &quot;_query_one(QUERY, RESULT),\n&quot;);</span>
+<span class="nc" id="L1234">		programmer.print(&quot;\trender(\'view/show.html\').\n\n&quot;);</span>
+
+<span class="nc" id="L1236">		programmer.print(modelName + &quot;_update_user(ID,STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n&quot;);</span>
+<span class="nc" id="L1237">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
+<span class="nc" id="L1238">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_one(A, ENTITY),\n&quot;);</span>
+<span class="nc" id="L1239">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_street(ENTITY, STREET),\n&quot;);</span>
+<span class="nc" id="L1240">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_state(ENTITY, STATE),\n&quot;);</span>
+<span class="nc" id="L1241">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_zip(ENTITY, ZIP),\n&quot;);</span>
+<span class="nc" id="L1242">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_city(ENTITY, CITY),\n&quot;);</span>
+<span class="nc" id="L1243">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_country(ENTITY, COUNTRY),\n&quot;);</span>
+<span class="nc" id="L1244">		programmer.print(&quot;\t&quot; + modelName + &quot;_update(ENTITY),\n&quot;);</span>
+<span class="nc" id="L1245">		programmer.print(&quot;\trender('view/show.html').\n\n&quot;);</span>
+
+<span class="nc" id="L1247">		programmer.print(modelName + &quot;_create_user(STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n&quot;);</span>
+<span class="nc" id="L1248">		programmer.print(&quot;\t&quot; + modelName + &quot;(ENTITY),\n&quot;);</span>
+<span class="nc" id="L1249">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_street(ENTITY, STREET),\n&quot;);</span>
+<span class="nc" id="L1250">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_state(ENTITY, STATE),\n&quot;);</span>
+<span class="nc" id="L1251">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_zip(ENTITY, ZIP),\n&quot;);</span>
+<span class="nc" id="L1252">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_city(ENTITY, CITY),\n&quot;);</span>
+<span class="nc" id="L1253">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_country(ENTITY, COUNTRY),\n&quot;);</span>
+<span class="nc" id="L1254">		programmer.print(&quot;\t&quot; + modelName + &quot;_create(ENTITY),\n&quot;);</span>
+<span class="nc" id="L1255">		programmer.print(&quot;\trender('view/show.html').\n\n&quot;);</span>
+
+<span class="nc" id="L1257">		programmer.print(modelName + &quot;_delete_user(ID,RESULT) :- \n&quot;);</span>
+<span class="nc" id="L1258">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
+<span class="nc" id="L1259">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_one(A, ENTITY),\n&quot;);</span>
+<span class="nc" id="L1260">		programmer.print(&quot;\t&quot; + modelName + &quot;_delete(ENTITY),\n&quot;);</span>
+<span class="nc" id="L1261">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_all(RESULT),\n&quot;);</span>
+<span class="nc" id="L1262">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+
+<span class="nc" id="L1264">	}</span>
+
+<span class="nc" id="L1266">	private class JarFileFilter implements FileFilter {</span>
 
 		public boolean accept(File pathname) {
-<span class="nc" id="L1150">			return pathname.getName().endsWith(&quot;.jar&quot;);</span>
+<span class="nc" id="L1269">			return pathname.getName().endsWith(&quot;.jar&quot;);</span>
 		}
 
 	}

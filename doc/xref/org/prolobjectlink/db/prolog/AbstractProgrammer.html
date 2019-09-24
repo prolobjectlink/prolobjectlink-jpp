@@ -783,7 +783,7 @@
 <a class="jxr_linenumber" name="773" href="#773">773</a> 		<strong class="jxr_keyword">return</strong> runtimeFile;
 <a class="jxr_linenumber" name="774" href="#774">774</a> 	}
 <a class="jxr_linenumber" name="775" href="#775">775</a> 
-<a class="jxr_linenumber" name="776" href="#776">776</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> File createModelFile(File prt, String fileName) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="776" href="#776">776</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> File createWebFile(File prt, String fileName) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="777" href="#777">777</a> 		File runtimeFile = <strong class="jxr_keyword">new</strong> File(prt.getCanonicalPath() + <span class="jxr_string">"/web/"</span>
 <a class="jxr_linenumber" name="778" href="#778">778</a> 				+ fileName.replace(<span class="jxr_string">"java"</span>, <span class="jxr_string">"prolog"</span>).replace(<span class="jxr_string">"org/prolobjectlink/"</span>, <span class="jxr_string">"prologx/"</span>));
 <a class="jxr_linenumber" name="779" href="#779">779</a> 		<strong class="jxr_keyword">if</strong> (!runtimeFile.exists()) {
@@ -1070,14 +1070,14 @@
 <a class="jxr_linenumber" name="1060" href="#1060">1060</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="1061" href="#1061">1061</a> 					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));
 <a class="jxr_linenumber" name="1062" href="#1062">1062</a> 					<strong class="jxr_keyword">if</strong> (isValidClass(runtimeClass)) {
-<a class="jxr_linenumber" name="1063" href="#1063">1063</a> 						File runtimeFile = createModelFile(folder, fileName);
+<a class="jxr_linenumber" name="1063" href="#1063">1063</a> 						File runtimeFile = createWebFile(folder, fileName);
 <a class="jxr_linenumber" name="1064" href="#1064">1064</a> 						PrintWriter programmer = <strong class="jxr_keyword">new</strong> PrintWriter(<strong class="jxr_keyword">new</strong> FileOutputStream(runtimeFile));
 <a class="jxr_linenumber" name="1065" href="#1065">1065</a> 						codingLicense(programmer);
 <a class="jxr_linenumber" name="1066" href="#1066">1066</a> 						codingAuthor(programmer);
-<a class="jxr_linenumber" name="1067" href="#1067">1067</a> 						codingObjInclusion(programmer, jarEntryName);
+<a class="jxr_linenumber" name="1067" href="#1067">1067</a> 						codingInclusion(programmer, jarEntryName);
 <a class="jxr_linenumber" name="1068" href="#1068">1068</a> 						<strong class="jxr_keyword">if</strong> (!className.contains(<span class="jxr_string">"Dao"</span>)) {
 <a class="jxr_linenumber" name="1069" href="#1069">1069</a> 							String dao = fromCamelCase(className) + <span class="jxr_string">"_dao.pl"</span>;
-<a class="jxr_linenumber" name="1070" href="#1070">1070</a> 							codingDaoInclusion(programmer, jarEntryName, dao);
+<a class="jxr_linenumber" name="1070" href="#1070">1070</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"web/"</span> + dao);
 <a class="jxr_linenumber" name="1071" href="#1071">1071</a> 						}
 <a class="jxr_linenumber" name="1072" href="#1072">1072</a> 						<em class="jxr_comment">// TODO introspection here</em>
 <a class="jxr_linenumber" name="1073" href="#1073">1073</a> 						codingConstants(programmer, runtimeClass);
@@ -1132,7 +1132,7 @@
 <a class="jxr_linenumber" name="1122" href="#1122">1122</a> 						PrintWriter programmer = <strong class="jxr_keyword">new</strong> PrintWriter(<strong class="jxr_keyword">new</strong> FileOutputStream(runtimeFile));
 <a class="jxr_linenumber" name="1123" href="#1123">1123</a> 						codingLicense(programmer);
 <a class="jxr_linenumber" name="1124" href="#1124">1124</a> 						codingAuthor(programmer);
-<a class="jxr_linenumber" name="1125" href="#1125">1125</a> 						codingObjInclusion(programmer, jarEntryName);
+<a class="jxr_linenumber" name="1125" href="#1125">1125</a> 						codingInclusion(programmer, jarEntryName);
 <a class="jxr_linenumber" name="1126" href="#1126">1126</a> 						<em class="jxr_comment">// TODO introspection here</em>
 <a class="jxr_linenumber" name="1127" href="#1127">1127</a> 						codingConstants(programmer, runtimeClass);
 <a class="jxr_linenumber" name="1128" href="#1128">1128</a> 						codingConstructors(programmer, runtimeClass);
@@ -1154,15 +1154,134 @@
 <a class="jxr_linenumber" name="1144" href="#1144">1144</a> 		}
 <a class="jxr_linenumber" name="1145" href="#1145">1145</a> 	}
 <a class="jxr_linenumber" name="1146" href="#1146">1146</a> 
-<a class="jxr_linenumber" name="1147" href="#1147">1147</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/prolobjectlink/db/prolog/AbstractProgrammer.html">JarFileFilter</a> <strong class="jxr_keyword">implements</strong> FileFilter {
-<a class="jxr_linenumber" name="1148" href="#1148">1148</a> 
-<a class="jxr_linenumber" name="1149" href="#1149">1149</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> accept(File pathname) {
-<a class="jxr_linenumber" name="1150" href="#1150">1150</a> 			<strong class="jxr_keyword">return</strong> pathname.getName().endsWith(<span class="jxr_string">".jar"</span>);
-<a class="jxr_linenumber" name="1151" href="#1151">1151</a> 		}
-<a class="jxr_linenumber" name="1152" href="#1152">1152</a> 
-<a class="jxr_linenumber" name="1153" href="#1153">1153</a> 	}
-<a class="jxr_linenumber" name="1154" href="#1154">1154</a> 
-<a class="jxr_linenumber" name="1155" href="#1155">1155</a> }
+<a class="jxr_linenumber" name="1147" href="#1147">1147</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> codingController(PrintWriter stdout, JarFile jarFile, <strong class="jxr_keyword">boolean</strong> b) {
+<a class="jxr_linenumber" name="1148" href="#1148">1148</a> 		Class&lt;?&gt; c = getClass();
+<a class="jxr_linenumber" name="1149" href="#1149">1149</a> 		ProtectionDomain d = c.getProtectionDomain();
+<a class="jxr_linenumber" name="1150" href="#1150">1150</a> 		CodeSource s = d.getCodeSource();
+<a class="jxr_linenumber" name="1151" href="#1151">1151</a> 		String prolobjectlink = s.getLocation().getPath();
+<a class="jxr_linenumber" name="1152" href="#1152">1152</a> 		File plk = <strong class="jxr_keyword">new</strong> File(prolobjectlink);
+<a class="jxr_linenumber" name="1153" href="#1153">1153</a> 		File pdk = plk.getParentFile();
+<a class="jxr_linenumber" name="1154" href="#1154">1154</a> 		File prt = pdk.getParentFile();
+<a class="jxr_linenumber" name="1155" href="#1155">1155</a> 		codingController(stdout, jarFile, prt, b);
+<a class="jxr_linenumber" name="1156" href="#1156">1156</a> 	}
+<a class="jxr_linenumber" name="1157" href="#1157">1157</a> 
+<a class="jxr_linenumber" name="1158" href="#1158">1158</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> codingController(PrintWriter stdout, JarFile jarFile, File folder, <strong class="jxr_keyword">boolean</strong> warnings) {
+<a class="jxr_linenumber" name="1159" href="#1159">1159</a> 		ClassLoader l = Thread.currentThread().getContextClassLoader();
+<a class="jxr_linenumber" name="1160" href="#1160">1160</a> 		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();
+<a class="jxr_linenumber" name="1161" href="#1161">1161</a> 		<strong class="jxr_keyword">while</strong> (entries.hasMoreElements()) {
+<a class="jxr_linenumber" name="1162" href="#1162">1162</a> 			JarEntry jarEntry = entries.nextElement();
+<a class="jxr_linenumber" name="1163" href="#1163">1163</a> 			String jarEntryName = jarEntry.getName();
+<a class="jxr_linenumber" name="1164" href="#1164">1164</a> 			<strong class="jxr_keyword">if</strong> (isValidJarEntry(jarEntryName)) {
+<a class="jxr_linenumber" name="1165" href="#1165">1165</a> 				String className = jarEntryName.substring(0, jarEntryName.length() - 6);
+<a class="jxr_linenumber" name="1166" href="#1166">1166</a> 				<strong class="jxr_keyword">if</strong> (!className.contains(<span class="jxr_string">"Dao"</span>)) {
+<a class="jxr_linenumber" name="1167" href="#1167">1167</a> 					String modelFileName = fromCamelCase(className) + <span class="jxr_string">".pl"</span>;
+<a class="jxr_linenumber" name="1168" href="#1168">1168</a> 					String controllerFileName = fromCamelCase(className) + <span class="jxr_string">"_controller.pl"</span>;
+<a class="jxr_linenumber" name="1169" href="#1169">1169</a> 					controllerFileName = controllerFileName.replaceFirst(<span class="jxr_string">"model"</span>, <span class="jxr_string">"controller"</span>);
+<a class="jxr_linenumber" name="1170" href="#1170">1170</a> 					<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="1171" href="#1171">1171</a> 						Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));
+<a class="jxr_linenumber" name="1172" href="#1172">1172</a> 						<strong class="jxr_keyword">if</strong> (isValidClass(runtimeClass)) {
+<a class="jxr_linenumber" name="1173" href="#1173">1173</a> 							File runtimeFile = createWebFile(folder, controllerFileName);
+<a class="jxr_linenumber" name="1174" href="#1174">1174</a> 							PrintWriter programmer = <strong class="jxr_keyword">new</strong> PrintWriter(<strong class="jxr_keyword">new</strong> FileOutputStream(runtimeFile));
+<a class="jxr_linenumber" name="1175" href="#1175">1175</a> 							codingInclusion(programmer, jarEntryName);
+<a class="jxr_linenumber" name="1176" href="#1176">1176</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"misc/http.pl"</span>);
+<a class="jxr_linenumber" name="1177" href="#1177">1177</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"misc/integer.pl"</span>);
+<a class="jxr_linenumber" name="1178" href="#1178">1178</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"web/"</span> + modelFileName);
+<a class="jxr_linenumber" name="1179" href="#1179">1179</a> 							String name = modelFileName.substring(0, modelFileName.lastIndexOf(<span class="jxr_string">".pl"</span>));
+<a class="jxr_linenumber" name="1180" href="#1180">1180</a> 							name = modelFileName.substring(name.lastIndexOf('/') + 1, name.length());
+<a class="jxr_linenumber" name="1181" href="#1181">1181</a> 							String clsName = className.substring(className.lastIndexOf('/') + 1, className.length());
+<a class="jxr_linenumber" name="1182" href="#1182">1182</a> 							codingProcedures(programmer, name, clsName);
+<a class="jxr_linenumber" name="1183" href="#1183">1183</a> 							programmer.close();
+<a class="jxr_linenumber" name="1184" href="#1184">1184</a> 						}
+<a class="jxr_linenumber" name="1185" href="#1185">1185</a> 					} <strong class="jxr_keyword">catch</strong> (NoClassDefFoundError e) {
+<a class="jxr_linenumber" name="1186" href="#1186">1186</a> 						stdout.println(<span class="jxr_string">"WARNING: No definition of the class could be found "</span> + e);
+<a class="jxr_linenumber" name="1187" href="#1187">1187</a> 						warnings = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="1188" href="#1188">1188</a> 						<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="1189" href="#1189">1189</a> 					} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
+<a class="jxr_linenumber" name="1190" href="#1190">1190</a> 						stdout.println(<span class="jxr_string">"WARNING: No definition of the class could be found "</span> + e);
+<a class="jxr_linenumber" name="1191" href="#1191">1191</a> 						warnings = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="1192" href="#1192">1192</a> 						<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="1193" href="#1193">1193</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="1194" href="#1194">1194</a> 						Logger.getLogger(getClass().getName()).log(Level.SEVERE, <strong class="jxr_keyword">null</strong>, e);
+<a class="jxr_linenumber" name="1195" href="#1195">1195</a> 					}
+<a class="jxr_linenumber" name="1196" href="#1196">1196</a> 				}
+<a class="jxr_linenumber" name="1197" href="#1197">1197</a> 			}
+<a class="jxr_linenumber" name="1198" href="#1198">1198</a> 		}
+<a class="jxr_linenumber" name="1199" href="#1199">1199</a> 
+<a class="jxr_linenumber" name="1200" href="#1200">1200</a> 	}
+<a class="jxr_linenumber" name="1201" href="#1201">1201</a> 
+<a class="jxr_linenumber" name="1202" href="#1202">1202</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> codingProcedures(PrintWriter programmer, String modelFileName, String clsName) {
+<a class="jxr_linenumber" name="1203" href="#1203">1203</a> 
+<a class="jxr_linenumber" name="1204" href="#1204">1204</a> 		String modelName = modelFileName.replace('/', '_');
+<a class="jxr_linenumber" name="1205" href="#1205">1205</a> 
+<a class="jxr_linenumber" name="1206" href="#1206">1206</a> 		programmer.print(modelName + <span class="jxr_string">"_find_all_users(RESULT) :- \n"</span>);
+<a class="jxr_linenumber" name="1207" href="#1207">1207</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_retrieve_all(RESULT),\n"</span>);
+<a class="jxr_linenumber" name="1208" href="#1208">1208</a> 		programmer.print(<span class="jxr_string">"\trender('view/list.html').\n\n"</span>);
+<a class="jxr_linenumber" name="1209" href="#1209">1209</a> 
+<a class="jxr_linenumber" name="1210" href="#1210">1210</a> 		programmer.print(modelName + <span class="jxr_string">"_query_all_users(RESULT) :- \n"</span>);
+<a class="jxr_linenumber" name="1211" href="#1211">1211</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_query_all('select a from "</span> + clsName + <span class="jxr_string">" a', RESULT),\n"</span>);
+<a class="jxr_linenumber" name="1212" href="#1212">1212</a> 		programmer.print(<span class="jxr_string">"\trender('view/list.html').\n\n"</span>);
+<a class="jxr_linenumber" name="1213" href="#1213">1213</a> 
+<a class="jxr_linenumber" name="1214" href="#1214">1214</a> 		programmer.print(modelName + <span class="jxr_string">"_find_all_users_range(MAX,FIRST,RESULT) :- \n"</span>);
+<a class="jxr_linenumber" name="1215" href="#1215">1215</a> 		programmer.print(<span class="jxr_string">"\tinteger_parse_int(MAX, A),\n"</span>);
+<a class="jxr_linenumber" name="1216" href="#1216">1216</a> 		programmer.print(<span class="jxr_string">"\tinteger_parse_int(FIRST, B),\n"</span>);
+<a class="jxr_linenumber" name="1217" href="#1217">1217</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_retrieve_all(A,B,RESULT),\n"</span>);
+<a class="jxr_linenumber" name="1218" href="#1218">1218</a> 		programmer.print(<span class="jxr_string">"\trender('view/list.html').\n\n"</span>);
+<a class="jxr_linenumber" name="1219" href="#1219">1219</a> 
+<a class="jxr_linenumber" name="1220" href="#1220">1220</a> 		programmer.print(modelName + <span class="jxr_string">"_query_all_users_range(MAX,FIRST,RESULT) :- \n"</span>);
+<a class="jxr_linenumber" name="1221" href="#1221">1221</a> 		programmer.print(<span class="jxr_string">"\tinteger_parse_int(MAX, A),\n"</span>);
+<a class="jxr_linenumber" name="1222" href="#1222">1222</a> 		programmer.print(<span class="jxr_string">"\tinteger_parse_int(FIRST, B),\n"</span>);
+<a class="jxr_linenumber" name="1223" href="#1223">1223</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_query_all('select a from "</span> + clsName + <span class="jxr_string">" a',A,B,RESULT),\n"</span>);
+<a class="jxr_linenumber" name="1224" href="#1224">1224</a> 		programmer.print(<span class="jxr_string">"\trender('view/list.html').\n\n"</span>);
+<a class="jxr_linenumber" name="1225" href="#1225">1225</a> 
+<a class="jxr_linenumber" name="1226" href="#1226">1226</a> 		programmer.print(modelName + <span class="jxr_string">"_find_user(ID,RESULT) :- \n"</span>);
+<a class="jxr_linenumber" name="1227" href="#1227">1227</a> 		programmer.print(<span class="jxr_string">"\tinteger_parse_int(ID, A),\n"</span>);
+<a class="jxr_linenumber" name="1228" href="#1228">1228</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_retrieve_one(A, RESULT),\n"</span>);
+<a class="jxr_linenumber" name="1229" href="#1229">1229</a> 		programmer.print(<span class="jxr_string">"\trender('view/show.html').\n\n"</span>);
+<a class="jxr_linenumber" name="1230" href="#1230">1230</a> 
+<a class="jxr_linenumber" name="1231" href="#1231">1231</a> 		programmer.print(modelName + <span class="jxr_string">"_query_user(ID,RESULT) :- \n"</span>);
+<a class="jxr_linenumber" name="1232" href="#1232">1232</a> 		programmer.print(<span class="jxr_string">"\tatom_concat('select a from "</span> + clsName + <span class="jxr_string">" a where a.id =', ID, QUERY),\n"</span>);
+<a class="jxr_linenumber" name="1233" href="#1233">1233</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_query_one(QUERY, RESULT),\n"</span>);
+<a class="jxr_linenumber" name="1234" href="#1234">1234</a> 		programmer.print(<span class="jxr_string">"\trender(\'view/show.html\').\n\n"</span>);
+<a class="jxr_linenumber" name="1235" href="#1235">1235</a> 
+<a class="jxr_linenumber" name="1236" href="#1236">1236</a> 		programmer.print(modelName + <span class="jxr_string">"_update_user(ID,STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n"</span>);
+<a class="jxr_linenumber" name="1237" href="#1237">1237</a> 		programmer.print(<span class="jxr_string">"\tinteger_parse_int(ID, A),\n"</span>);
+<a class="jxr_linenumber" name="1238" href="#1238">1238</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_retrieve_one(A, ENTITY),\n"</span>);
+<a class="jxr_linenumber" name="1239" href="#1239">1239</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_set_street(ENTITY, STREET),\n"</span>);
+<a class="jxr_linenumber" name="1240" href="#1240">1240</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_set_state(ENTITY, STATE),\n"</span>);
+<a class="jxr_linenumber" name="1241" href="#1241">1241</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_set_zip(ENTITY, ZIP),\n"</span>);
+<a class="jxr_linenumber" name="1242" href="#1242">1242</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_set_city(ENTITY, CITY),\n"</span>);
+<a class="jxr_linenumber" name="1243" href="#1243">1243</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_set_country(ENTITY, COUNTRY),\n"</span>);
+<a class="jxr_linenumber" name="1244" href="#1244">1244</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_update(ENTITY),\n"</span>);
+<a class="jxr_linenumber" name="1245" href="#1245">1245</a> 		programmer.print(<span class="jxr_string">"\trender('view/show.html').\n\n"</span>);
+<a class="jxr_linenumber" name="1246" href="#1246">1246</a> 
+<a class="jxr_linenumber" name="1247" href="#1247">1247</a> 		programmer.print(modelName + <span class="jxr_string">"_create_user(STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n"</span>);
+<a class="jxr_linenumber" name="1248" href="#1248">1248</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"(ENTITY),\n"</span>);
+<a class="jxr_linenumber" name="1249" href="#1249">1249</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_set_street(ENTITY, STREET),\n"</span>);
+<a class="jxr_linenumber" name="1250" href="#1250">1250</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_set_state(ENTITY, STATE),\n"</span>);
+<a class="jxr_linenumber" name="1251" href="#1251">1251</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_set_zip(ENTITY, ZIP),\n"</span>);
+<a class="jxr_linenumber" name="1252" href="#1252">1252</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_set_city(ENTITY, CITY),\n"</span>);
+<a class="jxr_linenumber" name="1253" href="#1253">1253</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_set_country(ENTITY, COUNTRY),\n"</span>);
+<a class="jxr_linenumber" name="1254" href="#1254">1254</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_create(ENTITY),\n"</span>);
+<a class="jxr_linenumber" name="1255" href="#1255">1255</a> 		programmer.print(<span class="jxr_string">"\trender('view/show.html').\n\n"</span>);
+<a class="jxr_linenumber" name="1256" href="#1256">1256</a> 
+<a class="jxr_linenumber" name="1257" href="#1257">1257</a> 		programmer.print(modelName + <span class="jxr_string">"_delete_user(ID,RESULT) :- \n"</span>);
+<a class="jxr_linenumber" name="1258" href="#1258">1258</a> 		programmer.print(<span class="jxr_string">"\tinteger_parse_int(ID, A),\n"</span>);
+<a class="jxr_linenumber" name="1259" href="#1259">1259</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_retrieve_one(A, ENTITY),\n"</span>);
+<a class="jxr_linenumber" name="1260" href="#1260">1260</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_delete(ENTITY),\n"</span>);
+<a class="jxr_linenumber" name="1261" href="#1261">1261</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_retrieve_all(RESULT),\n"</span>);
+<a class="jxr_linenumber" name="1262" href="#1262">1262</a> 		programmer.print(<span class="jxr_string">"\trender('view/list.html').\n\n"</span>);
+<a class="jxr_linenumber" name="1263" href="#1263">1263</a> 
+<a class="jxr_linenumber" name="1264" href="#1264">1264</a> 	}
+<a class="jxr_linenumber" name="1265" href="#1265">1265</a> 
+<a class="jxr_linenumber" name="1266" href="#1266">1266</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/prolobjectlink/db/prolog/AbstractProgrammer.html">JarFileFilter</a> <strong class="jxr_keyword">implements</strong> FileFilter {
+<a class="jxr_linenumber" name="1267" href="#1267">1267</a> 
+<a class="jxr_linenumber" name="1268" href="#1268">1268</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> accept(File pathname) {
+<a class="jxr_linenumber" name="1269" href="#1269">1269</a> 			<strong class="jxr_keyword">return</strong> pathname.getName().endsWith(<span class="jxr_string">".jar"</span>);
+<a class="jxr_linenumber" name="1270" href="#1270">1270</a> 		}
+<a class="jxr_linenumber" name="1271" href="#1271">1271</a> 
+<a class="jxr_linenumber" name="1272" href="#1272">1272</a> 	}
+<a class="jxr_linenumber" name="1273" href="#1273">1273</a> 
+<a class="jxr_linenumber" name="1274" href="#1274">1274</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

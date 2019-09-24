@@ -55,10 +55,13 @@ public interface PrologProgrammer {
 	 * @param jarEntryName String that represent the full qualified jar entry name
 	 *                     inside jar file
 	 * @since 1.0
+	 * @deprecated Use {@link #codingInclusion(PrintWriter, String, String)}
+	 *             instead.
 	 */
-	public void codingObjInclusion(PrintWriter out, String jarEntryName);
+	@Deprecated
+	public void codingInclusion(PrintWriter out, String jarEntryName);
 
-	public void codingDaoInclusion(PrintWriter out, String jarEntryName, String file);
+	public void codingInclusion(PrintWriter out, String jarEntryName, String file);
 
 	public void codingActiveRecord(PrintWriter out, String modelName);
 
@@ -86,5 +89,11 @@ public interface PrologProgrammer {
 	public void codingModel(PrintWriter stdout, JarFile jarFile, boolean b);
 
 	public void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings);
+
+	public void codingController(PrintWriter stdout, JarFile jarFile, boolean warnings);
+
+	public void codingController(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings);
+
+	public void codingProcedures(PrintWriter programmer, String modelFileName, String clsName);
 
 }

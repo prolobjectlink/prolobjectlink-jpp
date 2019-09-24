@@ -773,7 +773,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		return runtimeFile;
 	}
 
-	protected final File createModelFile(File prt, String fileName) throws IOException {
+	protected final File createWebFile(File prt, String fileName) throws IOException {
 		File runtimeFile = new File(prt.getCanonicalPath() + "/web/"
 				+ fileName.replace("java", "prolog").replace("org/prolobjectlink/", "prologx/"));
 		if (!runtimeFile.exists()) {
@@ -1060,14 +1060,14 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 				try {
 					Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
 					if (isValidClass(runtimeClass)) {
-						File runtimeFile = createModelFile(folder, fileName);
+						File runtimeFile = createWebFile(folder, fileName);
 						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
 						codingLicense(programmer);
 						codingAuthor(programmer);
-						codingObjInclusion(programmer, jarEntryName);
+						codingInclusion(programmer, jarEntryName);
 						if (!className.contains("Dao")) {
 							String dao = fromCamelCase(className) + "_dao.pl";
-							codingDaoInclusion(programmer, jarEntryName, dao);
+							codingInclusion(programmer, jarEntryName, "web/" + dao);
 						}
 						// TODO introspection here
 						codingConstants(programmer, runtimeClass);
@@ -1122,7 +1122,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
 						codingLicense(programmer);
 						codingAuthor(programmer);
-						codingObjInclusion(programmer, jarEntryName);
+						codingInclusion(programmer, jarEntryName);
 						// TODO introspection here
 						codingConstants(programmer, runtimeClass);
 						codingConstructors(programmer, runtimeClass);
@@ -1142,6 +1142,125 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 				}
 			}
 		}
+	}
+
+	public final void codingController(PrintWriter stdout, JarFile jarFile, boolean b) {
+		Class<?> c = getClass();
+		ProtectionDomain d = c.getProtectionDomain();
+		CodeSource s = d.getCodeSource();
+		String prolobjectlink = s.getLocation().getPath();
+		File plk = new File(prolobjectlink);
+		File pdk = plk.getParentFile();
+		File prt = pdk.getParentFile();
+		codingController(stdout, jarFile, prt, b);
+	}
+
+	public final void codingController(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
+		ClassLoader l = Thread.currentThread().getContextClassLoader();
+		Enumeration<JarEntry> entries = jarFile.entries();
+		while (entries.hasMoreElements()) {
+			JarEntry jarEntry = entries.nextElement();
+			String jarEntryName = jarEntry.getName();
+			if (isValidJarEntry(jarEntryName)) {
+				String className = jarEntryName.substring(0, jarEntryName.length() - 6);
+				if (!className.contains("Dao")) {
+					String modelFileName = fromCamelCase(className) + ".pl";
+					String controllerFileName = fromCamelCase(className) + "_controller.pl";
+					controllerFileName = controllerFileName.replaceFirst("model", "controller");
+					try {
+						Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
+						if (isValidClass(runtimeClass)) {
+							File runtimeFile = createWebFile(folder, controllerFileName);
+							PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
+							codingInclusion(programmer, jarEntryName);
+							codingInclusion(programmer, jarEntryName, "misc/http.pl");
+							codingInclusion(programmer, jarEntryName, "misc/integer.pl");
+							codingInclusion(programmer, jarEntryName, "web/" + modelFileName);
+							String name = modelFileName.substring(0, modelFileName.lastIndexOf(".pl"));
+							name = modelFileName.substring(name.lastIndexOf('/') + 1, name.length());
+							String clsName = className.substring(className.lastIndexOf('/') + 1, className.length());
+							codingProcedures(programmer, name, clsName);
+							programmer.close();
+						}
+					} catch (NoClassDefFoundError e) {
+						stdout.println("WARNING: No definition of the class could be found " + e);
+						warnings = true;
+						continue;
+					} catch (ClassNotFoundException e) {
+						stdout.println("WARNING: No definition of the class could be found " + e);
+						warnings = true;
+						continue;
+					} catch (IOException e) {
+						Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
+					}
+				}
+			}
+		}
+
+	}
+
+	public final void codingProcedures(PrintWriter programmer, String modelFileName, String clsName) {
+
+		String modelName = modelFileName.replace('/', '_');
+
+		programmer.print(modelName + "_find_all_users(RESULT) :- \n");
+		programmer.print("\t" + modelName + "_retrieve_all(RESULT),\n");
+		programmer.print("\trender('view/list.html').\n\n");
+
+		programmer.print(modelName + "_query_all_users(RESULT) :- \n");
+		programmer.print("\t" + modelName + "_query_all('select a from " + clsName + " a', RESULT),\n");
+		programmer.print("\trender('view/list.html').\n\n");
+
+		programmer.print(modelName + "_find_all_users_range(MAX,FIRST,RESULT) :- \n");
+		programmer.print("\tinteger_parse_int(MAX, A),\n");
+		programmer.print("\tinteger_parse_int(FIRST, B),\n");
+		programmer.print("\t" + modelName + "_retrieve_all(A,B,RESULT),\n");
+		programmer.print("\trender('view/list.html').\n\n");
+
+		programmer.print(modelName + "_query_all_users_range(MAX,FIRST,RESULT) :- \n");
+		programmer.print("\tinteger_parse_int(MAX, A),\n");
+		programmer.print("\tinteger_parse_int(FIRST, B),\n");
+		programmer.print("\t" + modelName + "_query_all('select a from " + clsName + " a',A,B,RESULT),\n");
+		programmer.print("\trender('view/list.html').\n\n");
+
+		programmer.print(modelName + "_find_user(ID,RESULT) :- \n");
+		programmer.print("\tinteger_parse_int(ID, A),\n");
+		programmer.print("\t" + modelName + "_retrieve_one(A, RESULT),\n");
+		programmer.print("\trender('view/show.html').\n\n");
+
+		programmer.print(modelName + "_query_user(ID,RESULT) :- \n");
+		programmer.print("\tatom_concat('select a from " + clsName + " a where a.id =', ID, QUERY),\n");
+		programmer.print("\t" + modelName + "_query_one(QUERY, RESULT),\n");
+		programmer.print("\trender(\'view/show.html\').\n\n");
+
+		programmer.print(modelName + "_update_user(ID,STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n");
+		programmer.print("\tinteger_parse_int(ID, A),\n");
+		programmer.print("\t" + modelName + "_retrieve_one(A, ENTITY),\n");
+		programmer.print("\t" + modelName + "_set_street(ENTITY, STREET),\n");
+		programmer.print("\t" + modelName + "_set_state(ENTITY, STATE),\n");
+		programmer.print("\t" + modelName + "_set_zip(ENTITY, ZIP),\n");
+		programmer.print("\t" + modelName + "_set_city(ENTITY, CITY),\n");
+		programmer.print("\t" + modelName + "_set_country(ENTITY, COUNTRY),\n");
+		programmer.print("\t" + modelName + "_update(ENTITY),\n");
+		programmer.print("\trender('view/show.html').\n\n");
+
+		programmer.print(modelName + "_create_user(STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n");
+		programmer.print("\t" + modelName + "(ENTITY),\n");
+		programmer.print("\t" + modelName + "_set_street(ENTITY, STREET),\n");
+		programmer.print("\t" + modelName + "_set_state(ENTITY, STATE),\n");
+		programmer.print("\t" + modelName + "_set_zip(ENTITY, ZIP),\n");
+		programmer.print("\t" + modelName + "_set_city(ENTITY, CITY),\n");
+		programmer.print("\t" + modelName + "_set_country(ENTITY, COUNTRY),\n");
+		programmer.print("\t" + modelName + "_create(ENTITY),\n");
+		programmer.print("\trender('view/show.html').\n\n");
+
+		programmer.print(modelName + "_delete_user(ID,RESULT) :- \n");
+		programmer.print("\tinteger_parse_int(ID, A),\n");
+		programmer.print("\t" + modelName + "_retrieve_one(A, ENTITY),\n");
+		programmer.print("\t" + modelName + "_delete(ENTITY),\n");
+		programmer.print("\t" + modelName + "_retrieve_all(RESULT),\n");
+		programmer.print("\trender('view/list.html').\n\n");
+
 	}
 
 	private class JarFileFilter implements FileFilter {
