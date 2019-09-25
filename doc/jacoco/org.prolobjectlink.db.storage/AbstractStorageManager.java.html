@@ -155,10 +155,10 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 <span class="nc bnc" id="L155" title="All 2 branches missed.">				for (Storage storage : storages) {</span>
 <span class="nc" id="L156">					String path = storage.getLocation();</span>
 <span class="nc" id="L157">					getEngine().include(path);</span>
-<span class="nc" id="L158">				}</span>
+				}
 <span class="nc" id="L159">				sp.getTransaction().close();</span>
 			}
-<span class="nc" id="L161">		}</span>
+		}
 <span class="nc" id="L162">		return getEngine().contains(string);</span>
 	}
 
@@ -231,10 +231,10 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 <span class="nc bnc" id="L231" title="All 2 branches missed.">				for (Storage storage : storages) {</span>
 <span class="nc" id="L232">					String path = storage.getLocation();</span>
 <span class="nc" id="L233">					getEngine().include(path);</span>
-<span class="nc" id="L234">				}</span>
+				}
 <span class="nc" id="L235">				sp.getTransaction().close();</span>
 			}
-<span class="nc" id="L237">		}</span>
+		}
 <span class="nc" id="L238">		return new PrologContainerQuery(solutionsOf(terms, classes));</span>
 	}
 
@@ -342,7 +342,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	public final void include(String path) {
 <span class="nc bnc" id="L343" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
 <span class="nc" id="L344">			c.include(path);</span>
-<span class="nc" id="L345">		}</span>
+		}
 <span class="nc" id="L346">	}</span>
 
 	public final String locationOf(Class&lt;?&gt; clazz) {
@@ -355,7 +355,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	public final void defragment() {
 <span class="nc bnc" id="L356" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
 <span class="nc" id="L357">			c.defragment();</span>
-<span class="nc" id="L358">		}</span>
+		}
 <span class="nc" id="L359">	}</span>
 
 	public final Collection&lt;Class&lt;?&gt;&gt; classes() {
@@ -364,14 +364,14 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 <span class="nc" id="L364">			c.getTransaction().begin();</span>
 <span class="nc" id="L365">			l.addAll(c.classes());</span>
 <span class="nc" id="L366">			c.getTransaction().close();</span>
-<span class="nc" id="L367">		}</span>
+		}
 <span class="nc" id="L368">		return l;</span>
 	}
 
 	public final void flush() {
 <span class="nc bnc" id="L372" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
 <span class="nc" id="L373">			c.flush();</span>
-<span class="nc" id="L374">		}</span>
+		}
 <span class="nc" id="L375">	}</span>
 
 	public final void clear() {
@@ -381,7 +381,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 <span class="nc" id="L381">			c.clear();</span>
 <span class="nc" id="L382">			c.commit();</span>
 <span class="nc" id="L383">			c.close();</span>
-<span class="nc" id="L384">		}</span>
+		}
 <span class="nc" id="L385">		master.clear();</span>
 <span class="nc" id="L386">	}</span>
 
@@ -391,7 +391,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 <span class="nc" id="L391">			c.clear();</span>
 <span class="nc" id="L392">			c.commit();</span>
 <span class="nc" id="L393">			c.close();</span>
-<span class="nc" id="L394">		}</span>
+		}
 <span class="nc" id="L395">		master.clear();</span>
 <span class="nc" id="L396">		open = false;</span>
 <span class="nc" id="L397">	}</span>

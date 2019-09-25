@@ -711,6 +711,12 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		ignorePackages.add("com/sun/nio/sctp");
 		ignorePackages.add("com/sun/xml/internal/ws/wsdl/writer/document/xsd");
 		ignorePackages.add("sun/reflect/generics/reflectiveObjects");
+
+		// jaspert report transitive dependency
+		ignorePackages.add("schemaorg_apache_xmlbeans");
+		ignorePackages.add("schemasMicrosoftComOfficeExcel");
+		ignorePackages.add("schemasMicrosoftComOfficeOffice");
+		ignorePackages.add("schemasMicrosoftComVml");
 	}
 
 	protected final boolean isValidJarEntry(String name) {
@@ -960,27 +966,33 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		String modelName = fileName.replace('/', '_');
 		programmer.print(modelName + "_query_one(ARG0, OUT) :- \n");
 		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_query_one(DAO, ARG0, OUT).\n\n");
+		programmer.print("\t" + modelName + "_dao_query_one(DAO, ARG0, OUT),\n");
+		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
 
 		programmer.print(modelName + "_query_all(ARG0, OUT) :- \n");
 		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_query_all(DAO, ARG0, OUT).\n\n");
+		programmer.print("\t" + modelName + "_dao_query_all(DAO, ARG0, OUT),\n");
+		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
 
 		programmer.print(modelName + "_query_all(ARG0, ARG1, ARG2, OUT) :- \n");
 		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_query_all(DAO, ARG0, ARG1, ARG2, OUT).\n\n");
+		programmer.print("\t" + modelName + "_dao_query_all(DAO, ARG0, ARG1, ARG2, OUT),\n");
+		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
 
 		programmer.print(modelName + "_retrieve_one(ARG0, OUT) :- \n");
 		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_retrieve_one(DAO, ARG0, OUT).\n\n");
+		programmer.print("\t" + modelName + "_dao_retrieve_one(DAO, ARG0, OUT),\n");
+		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
 
 		programmer.print(modelName + "_retrieve_all(OUT) :- \n");
 		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_retrieve_all(DAO, OUT).\n\n");
+		programmer.print("\t" + modelName + "_dao_retrieve_all(DAO, OUT),\n");
+		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
 
 		programmer.print(modelName + "_retrieve_all(ARG0, ARG1, OUT) :- \n");
 		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_retrieve_all(DAO, ARG0, ARG1, OUT).\n\n");
+		programmer.print("\t" + modelName + "_dao_retrieve_all(DAO, ARG0, ARG1, OUT),\n");
+		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
 	}
 
 	public final void codingRuntime(PrintWriter stdout) {
@@ -1203,37 +1215,45 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 
 		String modelName = modelFileName.replace('/', '_');
 
-		programmer.print(modelName + "_find_all_users(RESULT) :- \n");
-		programmer.print("\t" + modelName + "_retrieve_all(RESULT),\n");
-		programmer.print("\trender('view/list.html').\n\n");
+		programmer.print(modelName + "_new(_) :- \n");
+		programmer.print("\trender('view/new.html').\n\n");
 
-		programmer.print(modelName + "_query_all_users(RESULT) :- \n");
-		programmer.print("\t" + modelName + "_query_all('select a from " + clsName + " a', RESULT),\n");
-		programmer.print("\trender('view/list.html').\n\n");
-
-		programmer.print(modelName + "_find_all_users_range(MAX,FIRST,RESULT) :- \n");
-		programmer.print("\tinteger_parse_int(MAX, A),\n");
-		programmer.print("\tinteger_parse_int(FIRST, B),\n");
-		programmer.print("\t" + modelName + "_retrieve_all(A,B,RESULT),\n");
-		programmer.print("\trender('view/list.html').\n\n");
-
-		programmer.print(modelName + "_query_all_users_range(MAX,FIRST,RESULT) :- \n");
-		programmer.print("\tinteger_parse_int(MAX, A),\n");
-		programmer.print("\tinteger_parse_int(FIRST, B),\n");
-		programmer.print("\t" + modelName + "_query_all('select a from " + clsName + " a',A,B,RESULT),\n");
-		programmer.print("\trender('view/list.html').\n\n");
-
-		programmer.print(modelName + "_find_user(ID,RESULT) :- \n");
+		programmer.print(modelName + "_edit(ID,ENTITY) :- \n");
 		programmer.print("\tinteger_parse_int(ID, A),\n");
-		programmer.print("\t" + modelName + "_retrieve_one(A, RESULT),\n");
+		programmer.print("\t" + modelName + "_retrieve_one(A, ENTITY),\n");
+		programmer.print("\trender('view/edit.html').\n\n");
+
+		programmer.print(modelName + "_find_all(LIST) :- \n");
+		programmer.print("\t" + modelName + "_retrieve_all(LIST),\n");
+		programmer.print("\trender('view/list.html').\n\n");
+
+		programmer.print(modelName + "_query_all(LIST) :- \n");
+		programmer.print("\t" + modelName + "_query_all('select a from " + clsName + " a', LIST),\n");
+		programmer.print("\trender('view/list.html').\n\n");
+
+		programmer.print(modelName + "_find_all_range(MAX,FIRST,LIST) :- \n");
+		programmer.print("\tinteger_parse_int(MAX, A),\n");
+		programmer.print("\tinteger_parse_int(FIRST, B),\n");
+		programmer.print("\t" + modelName + "_retrieve_all(A,B,LIST),\n");
+		programmer.print("\trender('view/list.html').\n\n");
+
+		programmer.print(modelName + "_query_all_range(MAX,FIRST,LIST) :- \n");
+		programmer.print("\tinteger_parse_int(MAX, A),\n");
+		programmer.print("\tinteger_parse_int(FIRST, B),\n");
+		programmer.print("\t" + modelName + "_query_all('select a from " + clsName + " a',A,B,LIST),\n");
+		programmer.print("\trender('view/list.html').\n\n");
+
+		programmer.print(modelName + "_find(ID,ENTITY) :- \n");
+		programmer.print("\tinteger_parse_int(ID, A),\n");
+		programmer.print("\t" + modelName + "_retrieve_one(A, ENTITY),\n");
 		programmer.print("\trender('view/show.html').\n\n");
 
-		programmer.print(modelName + "_query_user(ID,RESULT) :- \n");
+		programmer.print(modelName + "_query(ID,ENTITY) :- \n");
 		programmer.print("\tatom_concat('select a from " + clsName + " a where a.id =', ID, QUERY),\n");
-		programmer.print("\t" + modelName + "_query_one(QUERY, RESULT),\n");
+		programmer.print("\t" + modelName + "_query_one(QUERY, ENTITY),\n");
 		programmer.print("\trender(\'view/show.html\').\n\n");
 
-		programmer.print(modelName + "_update_user(ID,STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n");
+		programmer.print(modelName + "_update(ID,STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n");
 		programmer.print("\tinteger_parse_int(ID, A),\n");
 		programmer.print("\t" + modelName + "_retrieve_one(A, ENTITY),\n");
 		programmer.print("\t" + modelName + "_set_street(ENTITY, STREET),\n");
@@ -1244,7 +1264,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		programmer.print("\t" + modelName + "_update(ENTITY),\n");
 		programmer.print("\trender('view/show.html').\n\n");
 
-		programmer.print(modelName + "_create_user(STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n");
+		programmer.print(modelName + "_create(STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n");
 		programmer.print("\t" + modelName + "(ENTITY),\n");
 		programmer.print("\t" + modelName + "_set_street(ENTITY, STREET),\n");
 		programmer.print("\t" + modelName + "_set_state(ENTITY, STATE),\n");
@@ -1254,11 +1274,11 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		programmer.print("\t" + modelName + "_create(ENTITY),\n");
 		programmer.print("\trender('view/show.html').\n\n");
 
-		programmer.print(modelName + "_delete_user(ID,RESULT) :- \n");
+		programmer.print(modelName + "_delete(ID,ENTITY) :- \n");
 		programmer.print("\tinteger_parse_int(ID, A),\n");
 		programmer.print("\t" + modelName + "_retrieve_one(A, ENTITY),\n");
 		programmer.print("\t" + modelName + "_delete(ENTITY),\n");
-		programmer.print("\t" + modelName + "_retrieve_all(RESULT),\n");
+		programmer.print("\t" + modelName + "_retrieve_all(ENTITY),\n");
 		programmer.print("\trender('view/list.html').\n\n");
 
 	}

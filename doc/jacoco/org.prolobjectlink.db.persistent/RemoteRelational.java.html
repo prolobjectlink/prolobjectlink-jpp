@@ -58,7 +58,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 
 <span class="nc bnc" id="L59" title="All 2 branches missed.">public final class RemoteRelational extends RemoteDatabaseClient implements RemoteDatabase {</span>
 
-	private static RemoteDatabase remoteRelationalDatabase;
+<span class="nc" id="L61">	private static RemoteDatabase remoteRelationalDatabase;</span>
 	private final Map&lt;String, DatabaseUnitInfo&gt; units;
 
 	private RemoteRelational(Settings properties, URL url, String name, Schema schema, DatabaseUser owner,
@@ -93,7 +93,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 						}
 <span class="nc" id="L94">					} catch (MalformedURLException e) {</span>
 <span class="nc" id="L95">						LoggerUtils.error(RemoteHierarchical.class, LoggerConstants.IO, e);</span>
-<span class="nc" id="L96">					}</span>
+					}
 
 <span class="nc bnc" id="L98" title="All 4 branches missed.">					assert url != null;</span>
 
@@ -103,14 +103,14 @@ import org.prolobjectlink.logging.LoggerUtils;
 <span class="nc" id="L103">					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
 <span class="nc bnc" id="L104" title="All 2 branches missed.">					for (String managedClass : unit.getManagedClassNames()) {</span>
 <span class="nc" id="L105">						schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
-<span class="nc" id="L106">					}</span>
+					}
 <span class="nc" id="L107">					remoteRelationalDatabase = new RemoteRelational(settings, url, name, schema, owner).connect(name)</span>
 <span class="nc" id="L108">							.create();</span>
 <span class="nc" id="L109">				} else {</span>
 <span class="nc" id="L110">					LoggerUtils.error(RemoteRelational.class,</span>
-							&quot;The given name don't match with persistence unit name&quot;);
+<span class="nc" id="L111">							&quot;The given name don't match with persistence unit name&quot;);</span>
 				}
-<span class="nc" id="L113">			}</span>
+			}
 		}
 <span class="nc" id="L115">		return remoteRelationalDatabase;</span>
 	}
@@ -128,7 +128,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 				}
 <span class="nc" id="L129">			} catch (MalformedURLException e) {</span>
 <span class="nc" id="L130">				LoggerUtils.error(RemoteHierarchical.class, LoggerConstants.IO, e);</span>
-<span class="nc" id="L131">			}</span>
+			}
 
 <span class="nc bnc" id="L133" title="All 4 branches missed.">			assert url != null;</span>
 
@@ -138,7 +138,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 <span class="nc" id="L138">			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
 <span class="nc bnc" id="L139" title="All 2 branches missed.">			for (String managedClass : unit.getManagedClassNames()) {</span>
 <span class="nc" id="L140">				schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
-<span class="nc" id="L141">			}</span>
+			}
 <span class="nc" id="L142">			remoteRelationalDatabase = new RemoteRelational(settings, url, name, schema, owner).connect(name).create();</span>
 		}
 <span class="nc" id="L144">		return remoteRelationalDatabase;</span>
@@ -171,7 +171,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 				}
 <span class="nc" id="L172">			} catch (MalformedURLException e) {</span>
 <span class="nc" id="L173">				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);</span>
-<span class="nc" id="L174">			}</span>
+			}
 
 <span class="nc bnc" id="L176" title="All 4 branches missed.">			assert url != null;</span>
 
@@ -181,7 +181,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 <span class="nc" id="L181">			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
 <span class="nc bnc" id="L182" title="All 2 branches missed.">			for (String managedClass : unit.getManagedClassNames()) {</span>
 <span class="nc" id="L183">				schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
-<span class="nc" id="L184">			}</span>
+			}
 <span class="nc" id="L185">			remoteRelationalDatabase = new RemoteRelational(settings, url, name, schema, owner).connect(name).create();</span>
 
 		}

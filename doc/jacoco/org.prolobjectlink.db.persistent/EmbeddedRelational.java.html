@@ -62,7 +62,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 
 <span class="nc bnc" id="L63" title="All 2 branches missed.">public final class EmbeddedRelational extends EmbeddedDatabaseClient implements EmbeddedDatabase {</span>
 
-	protected static EmbeddedDatabase embeddedRelationalDB;
+<span class="nc" id="L65">	protected static EmbeddedDatabase embeddedRelationalDB;</span>
 	private final Map&lt;String, DatabaseUnitInfo&gt; units;
 
 	EmbeddedRelational(String name, URL url, Schema schema, DatabaseUser owner, PersistentContainer storage,
@@ -97,7 +97,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 						}
 <span class="nc" id="L98">					} catch (MalformedURLException e) {</span>
 <span class="nc" id="L99">						LoggerUtils.error(EmbeddedHierarchical.class, LoggerConstants.IO, e);</span>
-<span class="nc" id="L100">					}</span>
+					}
 
 <span class="nc bnc" id="L102" title="All 4 branches missed.">					assert url != null;</span>
 
@@ -108,13 +108,13 @@ import org.prolobjectlink.logging.LoggerUtils;
 <span class="nc" id="L108">					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
 <span class="nc bnc" id="L109" title="All 2 branches missed.">					for (String managedClass : unit.getManagedClassNames()) {</span>
 <span class="nc" id="L110">						schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
-<span class="nc" id="L111">					}</span>
+					}
 <span class="nc" id="L112">					embeddedRelationalDB = new EmbeddedRelational(name, url, schema, owner, storage).create();</span>
 <span class="nc" id="L113">				} else {</span>
 <span class="nc" id="L114">					LoggerUtils.error(EmbeddedRelational.class,</span>
-							&quot;The given name don't match with persistence unit name&quot;);
+<span class="nc" id="L115">							&quot;The given name don't match with persistence unit name&quot;);</span>
 				}
-<span class="nc" id="L117">			}</span>
+			}
 		}
 <span class="nc" id="L119">		return embeddedRelationalDB;</span>
 	}
@@ -132,7 +132,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 				}
 <span class="nc" id="L133">			} catch (MalformedURLException e) {</span>
 <span class="nc" id="L134">				LoggerUtils.error(EmbeddedHierarchical.class, LoggerConstants.IO, e);</span>
-<span class="nc" id="L135">			}</span>
+			}
 
 <span class="nc bnc" id="L137" title="All 4 branches missed.">			assert url != null;</span>
 
@@ -143,7 +143,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 <span class="nc" id="L143">			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
 <span class="nc bnc" id="L144" title="All 2 branches missed.">			for (String managedClass : unit.getManagedClassNames()) {</span>
 <span class="nc" id="L145">				schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
-<span class="nc" id="L146">			}</span>
+			}
 <span class="nc" id="L147">			embeddedRelationalDB = new EmbeddedRelational(name, url, schema, owner, storage).create();</span>
 		}
 <span class="nc" id="L149">		return embeddedRelationalDB;</span>
@@ -177,7 +177,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 				}
 <span class="nc" id="L178">			} catch (MalformedURLException e) {</span>
 <span class="nc" id="L179">				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);</span>
-<span class="nc" id="L180">			}</span>
+			}
 
 <span class="nc bnc" id="L182" title="All 4 branches missed.">			assert url != null;</span>
 
@@ -188,7 +188,7 @@ import org.prolobjectlink.logging.LoggerUtils;
 <span class="nc" id="L188">			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);</span>
 <span class="nc bnc" id="L189" title="All 2 branches missed.">			for (String managedClass : unit.getManagedClassNames()) {</span>
 <span class="nc" id="L190">				schema.addClass(JavaReflect.classForName(managedClass), &quot;&quot;);</span>
-<span class="nc" id="L191">			}</span>
+			}
 <span class="nc" id="L192">			embeddedRelationalDB = new EmbeddedRelational(name, url, schema, owner, storage).create();</span>
 
 		}

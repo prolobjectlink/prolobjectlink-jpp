@@ -100,7 +100,7 @@ public class RemoteDatabaseServer extends AbstractPlatform implements Platform, 
 				});
 <span class="nc" id="L101">			} catch (IOException e) {</span>
 <span class="nc" id="L102">				LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
-<span class="nc" id="L103">			}</span>
+			}
 		}
 <span class="nc" id="L105">	}</span>
 
@@ -120,7 +120,7 @@ public class RemoteDatabaseServer extends AbstractPlatform implements Platform, 
 <span class="nc" id="L120">						systemAdmin).load();</span>
 
 <span class="nc" id="L122">				StorageGraph storage = settings.createStorageGraph(relational + &quot;/&quot; + name + &quot;/database&quot;, schema,</span>
-						StorageMode.STORAGE_POOL);
+<span class="nc" id="L123">						StorageMode.STORAGE_POOL);</span>
 
 				// create remote URL to embedded URL
 <span class="nc" id="L126">				URL embeddedURL = new URL(&quot;file:/&quot; + relational + &quot;/&quot; + name);</span>
@@ -148,7 +148,7 @@ public class RemoteDatabaseServer extends AbstractPlatform implements Platform, 
 
 				// create storage instance at &quot;name&quot; location
 <span class="nc" id="L150">				StorageManager storage = settings.createStorageManager(hierarchical + &quot;/&quot; + name + &quot;/database&quot;,</span>
-						StorageMode.STORAGE_POOL);
+<span class="nc" id="L151">						StorageMode.STORAGE_POOL);</span>
 
 				// create remote URL to embedded URL
 <span class="nc" id="L154">				URL embeddedURL = new URL(&quot;file:/&quot; + hierarchical + &quot;/&quot; + name);</span>
@@ -212,18 +212,18 @@ public class RemoteDatabaseServer extends AbstractPlatform implements Platform, 
 <span class="nc" id="L212">			thread.setSocket(socket);</span>
 <span class="nc" id="L213">			thread.setServer(this);</span>
 <span class="nc" id="L214">			running.submit(thread);</span>
-<span class="nc" id="L215">		}</span>
+		}
 
 <span class="nc" id="L217">		LoggerUtils.info(getClass(), getName() + &quot; is shutting down...&quot;);</span>
 
 		// close all databases after stop listening loop
 <span class="nc bnc" id="L220" title="All 2 branches missed.">		for (DatabaseEngine e : hierarchicals.values()) {</span>
 <span class="nc" id="L221">			e.close();</span>
-<span class="nc" id="L222">		}</span>
+		}
 <span class="nc" id="L223">		hierarchicals.clear();</span>
 <span class="nc bnc" id="L224" title="All 2 branches missed.">		for (DatabaseEngine e : relationals.values()) {</span>
 <span class="nc" id="L225">			e.close();</span>
-<span class="nc" id="L226">		}</span>
+		}
 <span class="nc" id="L227">		relationals.clear();</span>
 
 		// shutdown the executor

@@ -91,7 +91,7 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 	private static final int DEFAULT_TIME_GRANULARITY = 80;
 	private static final int DEFAULT_LOCK_SLEEP = 40;
 	private static final int DEFAULT_SLEEP_GAP = 1;
-	private static final int DEFAULT_PORT = 5370;
+<span class="nc" id="L94">	private static final int DEFAULT_PORT = 5370;</span>
 
 	private ContainerFactory containerFactory;
 	private PrologProvider prologProvider;
@@ -165,7 +165,7 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 <span class="nc" id="L165">			String storage = properties.getProperty(STORAGE);</span>
 <span class="nc bnc" id="L166" title="All 2 branches missed.">			if (storage.equals(&quot;&quot; + StorageMode.SINGLE_STORAGE + &quot;&quot;)) {</span>
 <span class="nc" id="L167">				this.storageMode = StorageMode.SINGLE_STORAGE;</span>
-			} else {
+<span class="nc" id="L168">			} else {</span>
 <span class="nc" id="L169">				this.storageMode = StorageMode.STORAGE_POOL;</span>
 			}
 <span class="nc" id="L171">			prologProvider = (PrologProvider) JavaReflect.newInstance(clazzProvider);</span>
@@ -176,7 +176,7 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 <span class="nc" id="L176">			LoggerUtils.error(getClass(), LoggerConstants.FILE_NOT_FOUND, e);</span>
 <span class="nc" id="L177">		} catch (IOException e) {</span>
 <span class="nc" id="L178">			LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
-<span class="nc" id="L179">		}</span>
+		}
 <span class="nc" id="L180">		return this;</span>
 	}
 
@@ -195,7 +195,7 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 <span class="nc" id="L195">			properties.storeToXML(new FileOutputStream(configuration), null);</span>
 <span class="nc" id="L196">		} catch (IOException e) {</span>
 <span class="nc" id="L197">			LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
-<span class="nc" id="L198">		}</span>
+		}
 <span class="nc" id="L199">		return this;</span>
 	}
 
@@ -399,7 +399,7 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 <span class="nc" id="L399">		File prt = pdk.getParentFile();</span>
 <span class="nc bnc" id="L400" title="All 2 branches missed.">		if (prt.getCanonicalPath().contains(&quot;prolobjectlink-jpp&quot;)) { // dev mode</span>
 <span class="nc" id="L401">			configuration = new File(CONFIG);</span>
-		} else { // production mode
+<span class="nc" id="L402">		} else { // production mode</span>
 <span class="nc" id="L403">			configuration = new File(prt.getCanonicalPath() + File.separator + CONFIG);</span>
 		}
 <span class="nc" id="L405">		return configuration;</span>

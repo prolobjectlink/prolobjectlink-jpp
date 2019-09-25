@@ -1059,8 +1059,8 @@
 </codefragment>
 </duplication>
 <duplication lines="13" tokens="128">
-<file line="1051" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
-<file line="1109" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
+<file line="1063" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
+<file line="1121" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
 <codefragment>
 <![CDATA[
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {

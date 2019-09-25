@@ -711,562 +711,582 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 <span class="nc" id="L711">		ignorePackages.add(&quot;com/sun/nio/sctp&quot;);</span>
 <span class="nc" id="L712">		ignorePackages.add(&quot;com/sun/xml/internal/ws/wsdl/writer/document/xsd&quot;);</span>
 <span class="nc" id="L713">		ignorePackages.add(&quot;sun/reflect/generics/reflectiveObjects&quot;);</span>
-<span class="nc" id="L714">	}</span>
+
+		// jaspert report transitive dependency
+<span class="nc" id="L716">		ignorePackages.add(&quot;schemaorg_apache_xmlbeans&quot;);</span>
+<span class="nc" id="L717">		ignorePackages.add(&quot;schemasMicrosoftComOfficeExcel&quot;);</span>
+<span class="nc" id="L718">		ignorePackages.add(&quot;schemasMicrosoftComOfficeOffice&quot;);</span>
+<span class="nc" id="L719">		ignorePackages.add(&quot;schemasMicrosoftComVml&quot;);</span>
+<span class="nc" id="L720">	}</span>
 
 	protected final boolean isValidJarEntry(String name) {
-<span class="nc bnc" id="L717" title="All 2 branches missed.">		for (String string : ignorePackages) {</span>
-<span class="nc bnc" id="L718" title="All 4 branches missed.">			if (/* name.contains(&quot;internal&quot;) || */ name.startsWith(string) || !name.endsWith(&quot;.class&quot;)</span>
-<span class="nc bnc" id="L719" title="All 2 branches missed.">					|| name.contains(&quot;$&quot;)) {</span>
-<span class="nc" id="L720">				return false;</span>
+<span class="nc bnc" id="L723" title="All 2 branches missed.">		for (String string : ignorePackages) {</span>
+<span class="nc bnc" id="L724" title="All 4 branches missed.">			if (/* name.contains(&quot;internal&quot;) || */ name.startsWith(string) || !name.endsWith(&quot;.class&quot;)</span>
+<span class="nc bnc" id="L725" title="All 2 branches missed.">					|| name.contains(&quot;$&quot;)) {</span>
+<span class="nc" id="L726">				return false;</span>
 			}
-<span class="nc" id="L722">		}</span>
-<span class="nc" id="L723">		return true;</span>
+<span class="nc" id="L728">		}</span>
+<span class="nc" id="L729">		return true;</span>
 	}
 
 	protected final boolean isValidClass(Class&lt;?&gt; runtimeClass) {
-<span class="nc bnc" id="L727" title="All 4 branches missed.">		return !runtimeClass.isInterface() &amp;&amp; (runtimeClass.getModifiers() == Modifier.PUBLIC</span>
-<span class="nc bnc" id="L728" title="All 2 branches missed.">				|| runtimeClass.getModifiers() == Modifier.PUBLIC + Modifier.FINAL);</span>
+<span class="nc bnc" id="L733" title="All 4 branches missed.">		return !runtimeClass.isInterface() &amp;&amp; (runtimeClass.getModifiers() == Modifier.PUBLIC</span>
+<span class="nc bnc" id="L734" title="All 2 branches missed.">				|| runtimeClass.getModifiers() == Modifier.PUBLIC + Modifier.FINAL);</span>
 	}
 
 	protected final String toUpperCase(String target) {
-<span class="nc" id="L732">		StringBuilder b = new StringBuilder();</span>
-<span class="nc bnc" id="L733" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
-<span class="nc" id="L734">			Character c = target.charAt(i);</span>
-<span class="nc" id="L735">			b.append(Character.toUpperCase(c));</span>
+<span class="nc" id="L738">		StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L739" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
+<span class="nc" id="L740">			Character c = target.charAt(i);</span>
+<span class="nc" id="L741">			b.append(Character.toUpperCase(c));</span>
 		}
-<span class="nc" id="L737">		return &quot;&quot; + b + &quot;&quot;;</span>
+<span class="nc" id="L743">		return &quot;&quot; + b + &quot;&quot;;</span>
 	}
 
 	protected final String toLowerCase(String target) {
-<span class="nc" id="L741">		StringBuilder b = new StringBuilder();</span>
-<span class="nc bnc" id="L742" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
-<span class="nc" id="L743">			Character c = target.charAt(i);</span>
-<span class="nc" id="L744">			b.append(Character.toLowerCase(c));</span>
+<span class="nc" id="L747">		StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L748" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
+<span class="nc" id="L749">			Character c = target.charAt(i);</span>
+<span class="nc" id="L750">			b.append(Character.toLowerCase(c));</span>
 		}
-<span class="nc" id="L746">		return &quot;&quot; + b + &quot;&quot;;</span>
+<span class="nc" id="L752">		return &quot;&quot; + b + &quot;&quot;;</span>
 	}
 
 	protected final String fromCamelCase(String target) {
-<span class="nc" id="L750">		StringBuilder b = new StringBuilder();</span>
-<span class="nc bnc" id="L751" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
-<span class="nc" id="L752">			Character c = target.charAt(i);</span>
-<span class="nc bnc" id="L753" title="All 4 branches missed.">			if (i &gt; 0 &amp;&amp; Character.isUpperCase(c)) {</span>
-<span class="nc" id="L754">				Character a = target.charAt(i - 1);</span>
-<span class="nc bnc" id="L755" title="All 2 branches missed.">				if (a != '/') {</span>
-<span class="nc" id="L756">					b.append('_');</span>
+<span class="nc" id="L756">		StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L757" title="All 2 branches missed.">		for (int i = 0; i &lt; target.length(); i++) {</span>
+<span class="nc" id="L758">			Character c = target.charAt(i);</span>
+<span class="nc bnc" id="L759" title="All 4 branches missed.">			if (i &gt; 0 &amp;&amp; Character.isUpperCase(c)) {</span>
+<span class="nc" id="L760">				Character a = target.charAt(i - 1);</span>
+<span class="nc bnc" id="L761" title="All 2 branches missed.">				if (a != '/') {</span>
+<span class="nc" id="L762">					b.append('_');</span>
 				}
 			}
-<span class="nc" id="L759">			b.append(Character.toLowerCase(c));</span>
+<span class="nc" id="L765">			b.append(Character.toLowerCase(c));</span>
 		}
-<span class="nc" id="L761">		return &quot;&quot; + b + &quot;&quot;;</span>
+<span class="nc" id="L767">		return &quot;&quot; + b + &quot;&quot;;</span>
 	}
 
 	protected final File createRuntimeFile(File prt, String fileName) throws IOException {
-<span class="nc" id="L765">		File runtimeFile = new File(prt.getCanonicalPath() + &quot;/prt/&quot;</span>
-<span class="nc" id="L766">				+ fileName.replace(&quot;java&quot;, &quot;prolog&quot;).replace(&quot;org/prolobjectlink/&quot;, &quot;prologx/&quot;));</span>
-<span class="nc bnc" id="L767" title="All 2 branches missed.">		if (!runtimeFile.exists()) {</span>
-<span class="nc" id="L768">			runtimeFile.getParentFile().mkdirs();</span>
-<span class="nc bnc" id="L769" title="All 2 branches missed.">			if (!runtimeFile.createNewFile()) {</span>
-<span class="nc" id="L770">				System.exit(1);</span>
+<span class="nc" id="L771">		File runtimeFile = new File(prt.getCanonicalPath() + &quot;/prt/&quot;</span>
+<span class="nc" id="L772">				+ fileName.replace(&quot;java&quot;, &quot;prolog&quot;).replace(&quot;org/prolobjectlink/&quot;, &quot;prologx/&quot;));</span>
+<span class="nc bnc" id="L773" title="All 2 branches missed.">		if (!runtimeFile.exists()) {</span>
+<span class="nc" id="L774">			runtimeFile.getParentFile().mkdirs();</span>
+<span class="nc bnc" id="L775" title="All 2 branches missed.">			if (!runtimeFile.createNewFile()) {</span>
+<span class="nc" id="L776">				System.exit(1);</span>
 			}
 		}
-<span class="nc" id="L773">		return runtimeFile;</span>
+<span class="nc" id="L779">		return runtimeFile;</span>
 	}
 
 	protected final File createWebFile(File prt, String fileName) throws IOException {
-<span class="nc" id="L777">		File runtimeFile = new File(prt.getCanonicalPath() + &quot;/web/&quot;</span>
-<span class="nc" id="L778">				+ fileName.replace(&quot;java&quot;, &quot;prolog&quot;).replace(&quot;org/prolobjectlink/&quot;, &quot;prologx/&quot;));</span>
-<span class="nc bnc" id="L779" title="All 2 branches missed.">		if (!runtimeFile.exists()) {</span>
-<span class="nc" id="L780">			runtimeFile.getParentFile().mkdirs();</span>
-<span class="nc bnc" id="L781" title="All 2 branches missed.">			if (!runtimeFile.createNewFile()) {</span>
-<span class="nc" id="L782">				System.exit(1);</span>
+<span class="nc" id="L783">		File runtimeFile = new File(prt.getCanonicalPath() + &quot;/web/&quot;</span>
+<span class="nc" id="L784">				+ fileName.replace(&quot;java&quot;, &quot;prolog&quot;).replace(&quot;org/prolobjectlink/&quot;, &quot;prologx/&quot;));</span>
+<span class="nc bnc" id="L785" title="All 2 branches missed.">		if (!runtimeFile.exists()) {</span>
+<span class="nc" id="L786">			runtimeFile.getParentFile().mkdirs();</span>
+<span class="nc bnc" id="L787" title="All 2 branches missed.">			if (!runtimeFile.createNewFile()) {</span>
+<span class="nc" id="L788">				System.exit(1);</span>
 			}
 		}
-<span class="nc" id="L785">		return runtimeFile;</span>
+<span class="nc" id="L791">		return runtimeFile;</span>
 	}
 
 	protected final void codingLicense(PrintWriter programmer) {
-<span class="nc" id="L789">		SimpleDateFormat f = new SimpleDateFormat(&quot;yyyy&quot;);</span>
-<span class="nc" id="L790">		String year = f.format(new Date(System.currentTimeMillis()));</span>
-<span class="nc" id="L791">		programmer.println(&quot;% Copyright (c) &quot; + year + &quot; Prolobjectlink Project&quot;);</span>
-<span class="nc" id="L792">		programmer.println();</span>
-<span class="nc" id="L793">		programmer.println(&quot;% Permission is hereby granted, free of charge, to any person obtaining a copy&quot;);</span>
-<span class="nc" id="L794">		programmer.println(&quot;% of this software and associated documentation files (the \&quot;Software\&quot;), to deal&quot;);</span>
-<span class="nc" id="L795">		programmer.println(&quot;% in the Software without restriction, including without limitation the rights&quot;);</span>
-<span class="nc" id="L796">		programmer.println(&quot;% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell&quot;);</span>
-<span class="nc" id="L797">		programmer.println(&quot;% copies of the Software, and to permit persons to whom the Software is&quot;);</span>
-<span class="nc" id="L798">		programmer.println(&quot;% furnished to do so, subject to the following conditions:&quot;);</span>
-<span class="nc" id="L799">		programmer.println();</span>
-<span class="nc" id="L800">		programmer.println(&quot;% The above copyright notice and this permission notice shall be included in&quot;);</span>
-<span class="nc" id="L801">		programmer.println(&quot;% all copies or substantial portions of the Software.&quot;);</span>
-<span class="nc" id="L802">		programmer.println();</span>
-<span class="nc" id="L803">		programmer.println(&quot;% THE SOFTWARE IS PROVIDED \&quot;AS IS\&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR&quot;);</span>
-<span class="nc" id="L804">		programmer.println(&quot;% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,&quot;);</span>
-<span class="nc" id="L805">		programmer.println(&quot;% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE&quot;);</span>
-<span class="nc" id="L806">		programmer.println(&quot;% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER&quot;);</span>
-<span class="nc" id="L807">		programmer.println(&quot;% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,&quot;);</span>
-<span class="nc" id="L808">		programmer.println(&quot;% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN&quot;);</span>
-<span class="nc" id="L809">		programmer.println(&quot;% THE SOFTWARE.&quot;);</span>
-<span class="nc" id="L810">		programmer.println();</span>
-<span class="nc" id="L811">	}</span>
+<span class="nc" id="L795">		SimpleDateFormat f = new SimpleDateFormat(&quot;yyyy&quot;);</span>
+<span class="nc" id="L796">		String year = f.format(new Date(System.currentTimeMillis()));</span>
+<span class="nc" id="L797">		programmer.println(&quot;% Copyright (c) &quot; + year + &quot; Prolobjectlink Project&quot;);</span>
+<span class="nc" id="L798">		programmer.println();</span>
+<span class="nc" id="L799">		programmer.println(&quot;% Permission is hereby granted, free of charge, to any person obtaining a copy&quot;);</span>
+<span class="nc" id="L800">		programmer.println(&quot;% of this software and associated documentation files (the \&quot;Software\&quot;), to deal&quot;);</span>
+<span class="nc" id="L801">		programmer.println(&quot;% in the Software without restriction, including without limitation the rights&quot;);</span>
+<span class="nc" id="L802">		programmer.println(&quot;% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell&quot;);</span>
+<span class="nc" id="L803">		programmer.println(&quot;% copies of the Software, and to permit persons to whom the Software is&quot;);</span>
+<span class="nc" id="L804">		programmer.println(&quot;% furnished to do so, subject to the following conditions:&quot;);</span>
+<span class="nc" id="L805">		programmer.println();</span>
+<span class="nc" id="L806">		programmer.println(&quot;% The above copyright notice and this permission notice shall be included in&quot;);</span>
+<span class="nc" id="L807">		programmer.println(&quot;% all copies or substantial portions of the Software.&quot;);</span>
+<span class="nc" id="L808">		programmer.println();</span>
+<span class="nc" id="L809">		programmer.println(&quot;% THE SOFTWARE IS PROVIDED \&quot;AS IS\&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR&quot;);</span>
+<span class="nc" id="L810">		programmer.println(&quot;% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,&quot;);</span>
+<span class="nc" id="L811">		programmer.println(&quot;% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE&quot;);</span>
+<span class="nc" id="L812">		programmer.println(&quot;% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER&quot;);</span>
+<span class="nc" id="L813">		programmer.println(&quot;% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,&quot;);</span>
+<span class="nc" id="L814">		programmer.println(&quot;% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN&quot;);</span>
+<span class="nc" id="L815">		programmer.println(&quot;% THE SOFTWARE.&quot;);</span>
+<span class="nc" id="L816">		programmer.println();</span>
+<span class="nc" id="L817">	}</span>
 
 	protected final void codingAuthor(PrintWriter programmer) {
-<span class="nc" id="L814">		programmer.println(&quot;% Author: Jose Zalacain&quot;);</span>
-<span class="nc" id="L815">		programmer.println();</span>
-<span class="nc" id="L816">	}</span>
+<span class="nc" id="L820">		programmer.println(&quot;% Author: Jose Zalacain&quot;);</span>
+<span class="nc" id="L821">		programmer.println();</span>
+<span class="nc" id="L822">	}</span>
 
 	protected final void codingConstants(PrintWriter programmer, Class&lt;?&gt; runtimeClass) {
-<span class="nc bnc" id="L819" title="All 2 branches missed.">		if (!runtimeClass.isInterface()) {</span>
-<span class="nc" id="L820">			Field[] fields = runtimeClass.getFields();</span>
-<span class="nc" id="L821">			Set&lt;String&gt; constants = new HashSet&lt;String&gt;();</span>
-<span class="nc bnc" id="L822" title="All 2 branches missed.">			for (Field field : fields) {</span>
-<span class="nc" id="L823">				int modifier = field.getModifiers();</span>
-<span class="nc bnc" id="L824" title="All 2 branches missed.">				if (modifier == Modifier.PUBLIC + Modifier.STATIC + Modifier.FINAL) {</span>
-<span class="nc" id="L825">					String functor = fromCamelCase(runtimeClass.getSimpleName()) + &quot;_&quot; + toUpperCase(field.getName());</span>
-<span class="nc bnc" id="L826" title="All 2 branches missed.">					if (!constants.contains(functor)) {</span>
-<span class="nc" id="L827">						constants.add(functor);</span>
+<span class="nc bnc" id="L825" title="All 2 branches missed.">		if (!runtimeClass.isInterface()) {</span>
+<span class="nc" id="L826">			Field[] fields = runtimeClass.getFields();</span>
+<span class="nc" id="L827">			Set&lt;String&gt; constants = new HashSet&lt;String&gt;();</span>
+<span class="nc bnc" id="L828" title="All 2 branches missed.">			for (Field field : fields) {</span>
+<span class="nc" id="L829">				int modifier = field.getModifiers();</span>
+<span class="nc bnc" id="L830" title="All 2 branches missed.">				if (modifier == Modifier.PUBLIC + Modifier.STATIC + Modifier.FINAL) {</span>
+<span class="nc" id="L831">					String functor = fromCamelCase(runtimeClass.getSimpleName()) + &quot;_&quot; + toUpperCase(field.getName());</span>
+<span class="nc bnc" id="L832" title="All 2 branches missed.">					if (!constants.contains(functor)) {</span>
+<span class="nc" id="L833">						constants.add(functor);</span>
 
 						// procedure head
-<span class="nc" id="L830">						PrologTerm oout = provider.newVariable(&quot;OUT&quot;, 0);</span>
-<span class="nc" id="L831">						PrologTerm head = provider.newStructure(functor, oout);</span>
+<span class="nc" id="L836">						PrologTerm oout = provider.newVariable(&quot;OUT&quot;, 0);</span>
+<span class="nc" id="L837">						PrologTerm head = provider.newStructure(functor, oout);</span>
 
 						// procedure body
-<span class="nc" id="L834">						PrologTerm oclass = provider.newAtom(runtimeClass.getName());</span>
-<span class="nc" id="L835">						PrologTerm oargs = provider.newAtom(toLowerCase(field.getName()));</span>
-<span class="nc" id="L836">						PrologTerm body = provider.newStructure(&quot;object_get&quot;, oclass, oargs, oout);</span>
-<span class="nc" id="L837">						programmer.println(head + NECK + body + &quot;.&quot;);</span>
-<span class="nc" id="L838">						programmer.println();</span>
+<span class="nc" id="L840">						PrologTerm oclass = provider.newAtom(runtimeClass.getName());</span>
+<span class="nc" id="L841">						PrologTerm oargs = provider.newAtom(toLowerCase(field.getName()));</span>
+<span class="nc" id="L842">						PrologTerm body = provider.newStructure(&quot;object_get&quot;, oclass, oargs, oout);</span>
+<span class="nc" id="L843">						programmer.println(head + NECK + body + &quot;.&quot;);</span>
+<span class="nc" id="L844">						programmer.println();</span>
 					}
 				}
 			}
 		}
-<span class="nc" id="L843">	}</span>
+<span class="nc" id="L849">	}</span>
 
 	protected final void codingConstructors(PrintWriter programmer, Class&lt;?&gt; runtimeClass) {
-<span class="nc" id="L846">		Constructor&lt;?&gt;[] cs = runtimeClass.getConstructors();</span>
-<span class="nc" id="L847">		Map&lt;String, List&lt;Constructor&lt;?&gt;&gt;&gt; map = new HashMap&lt;String, List&lt;Constructor&lt;?&gt;&gt;&gt;();</span>
-<span class="nc bnc" id="L848" title="All 2 branches missed.">		for (Constructor&lt;?&gt; constructor : cs) {</span>
-<span class="nc" id="L849">			int arity = constructor.getParameters().length;</span>
-<span class="nc" id="L850">			String functor = fromCamelCase(runtimeClass.getSimpleName());</span>
-<span class="nc" id="L851">			String indicator = functor + &quot;/&quot; + arity;</span>
-<span class="nc" id="L852">			List&lt;Constructor&lt;?&gt;&gt; family = map.get(indicator);</span>
-<span class="nc bnc" id="L853" title="All 2 branches missed.">			if (family == null) {</span>
-<span class="nc" id="L854">				family = new LinkedList&lt;Constructor&lt;?&gt;&gt;();</span>
+<span class="nc" id="L852">		Constructor&lt;?&gt;[] cs = runtimeClass.getConstructors();</span>
+<span class="nc" id="L853">		Map&lt;String, List&lt;Constructor&lt;?&gt;&gt;&gt; map = new HashMap&lt;String, List&lt;Constructor&lt;?&gt;&gt;&gt;();</span>
+<span class="nc bnc" id="L854" title="All 2 branches missed.">		for (Constructor&lt;?&gt; constructor : cs) {</span>
+<span class="nc" id="L855">			int arity = constructor.getParameters().length;</span>
+<span class="nc" id="L856">			String functor = fromCamelCase(runtimeClass.getSimpleName());</span>
+<span class="nc" id="L857">			String indicator = functor + &quot;/&quot; + arity;</span>
+<span class="nc" id="L858">			List&lt;Constructor&lt;?&gt;&gt; family = map.get(indicator);</span>
+<span class="nc bnc" id="L859" title="All 2 branches missed.">			if (family == null) {</span>
+<span class="nc" id="L860">				family = new LinkedList&lt;Constructor&lt;?&gt;&gt;();</span>
 			}
-<span class="nc" id="L856">			family.add(constructor);</span>
-<span class="nc" id="L857">			map.put(indicator, family);</span>
+<span class="nc" id="L862">			family.add(constructor);</span>
+<span class="nc" id="L863">			map.put(indicator, family);</span>
 		}
 
-<span class="nc bnc" id="L860" title="All 2 branches missed.">		for (Entry&lt;String, List&lt;Constructor&lt;?&gt;&gt;&gt; entry : map.entrySet()) {</span>
-<span class="nc" id="L861">			List&lt;Constructor&lt;?&gt;&gt; family = entry.getValue();</span>
-<span class="nc bnc" id="L862" title="All 2 branches missed.">			for (Constructor&lt;?&gt; constructor : family) {</span>
-<span class="nc" id="L863">				String functor = fromCamelCase(runtimeClass.getSimpleName());</span>
-<span class="nc" id="L864">				Parameter[] parameters = constructor.getParameters();</span>
-<span class="nc" id="L865">				PrologTerm[] arguments = new PrologTerm[parameters.length + 1];</span>
-<span class="nc bnc" id="L866" title="All 2 branches missed.">				for (int i = 0; i &lt; parameters.length; i++) {</span>
-<span class="nc" id="L867">					String arg = toUpperCase(parameters[i].getName());</span>
-<span class="nc" id="L868">					arguments[i] = provider.newVariable(arg, i);</span>
+<span class="nc bnc" id="L866" title="All 2 branches missed.">		for (Entry&lt;String, List&lt;Constructor&lt;?&gt;&gt;&gt; entry : map.entrySet()) {</span>
+<span class="nc" id="L867">			List&lt;Constructor&lt;?&gt;&gt; family = entry.getValue();</span>
+<span class="nc bnc" id="L868" title="All 2 branches missed.">			for (Constructor&lt;?&gt; constructor : family) {</span>
+<span class="nc" id="L869">				String functor = fromCamelCase(runtimeClass.getSimpleName());</span>
+<span class="nc" id="L870">				Parameter[] parameters = constructor.getParameters();</span>
+<span class="nc" id="L871">				PrologTerm[] arguments = new PrologTerm[parameters.length + 1];</span>
+<span class="nc bnc" id="L872" title="All 2 branches missed.">				for (int i = 0; i &lt; parameters.length; i++) {</span>
+<span class="nc" id="L873">					String arg = toUpperCase(parameters[i].getName());</span>
+<span class="nc" id="L874">					arguments[i] = provider.newVariable(arg, i);</span>
 				}
-<span class="nc" id="L870">				arguments[parameters.length] = provider.newVariable(&quot;OUT&quot;, parameters.length);</span>
+<span class="nc" id="L876">				arguments[parameters.length] = provider.newVariable(&quot;OUT&quot;, parameters.length);</span>
 
 				// procedure head
-<span class="nc" id="L873">				PrologTerm head = provider.newStructure(functor, arguments);</span>
+<span class="nc" id="L879">				PrologTerm head = provider.newStructure(functor, arguments);</span>
 
 				// procedure body
-<span class="nc" id="L876">				arguments = new PrologTerm[parameters.length];</span>
-<span class="nc bnc" id="L877" title="All 2 branches missed.">				for (int i = 0; i &lt; parameters.length; i++) {</span>
-<span class="nc" id="L878">					String arg = toUpperCase(parameters[i].getName());</span>
-<span class="nc" id="L879">					arguments[i] = provider.newVariable(arg, i);</span>
+<span class="nc" id="L882">				arguments = new PrologTerm[parameters.length];</span>
+<span class="nc bnc" id="L883" title="All 2 branches missed.">				for (int i = 0; i &lt; parameters.length; i++) {</span>
+<span class="nc" id="L884">					String arg = toUpperCase(parameters[i].getName());</span>
+<span class="nc" id="L885">					arguments[i] = provider.newVariable(arg, i);</span>
 				}
-<span class="nc" id="L881">				PrologTerm oclass = provider.newAtom(runtimeClass.getName());</span>
-<span class="nc" id="L882">				PrologTerm oargs = provider.newList(arguments);</span>
-<span class="nc" id="L883">				PrologTerm oout = provider.newVariable(&quot;OUT&quot;, parameters.length);</span>
-<span class="nc" id="L884">				PrologTerm body = provider.newStructure(&quot;object_new&quot;, oclass, oargs, oout);</span>
-<span class="nc" id="L885">				programmer.println(head + NECK + body + &quot;.&quot;);</span>
-<span class="nc" id="L886">				programmer.println();</span>
-<span class="nc" id="L887">			}</span>
-<span class="nc" id="L888">		}</span>
-<span class="nc" id="L889">	}</span>
+<span class="nc" id="L887">				PrologTerm oclass = provider.newAtom(runtimeClass.getName());</span>
+<span class="nc" id="L888">				PrologTerm oargs = provider.newList(arguments);</span>
+<span class="nc" id="L889">				PrologTerm oout = provider.newVariable(&quot;OUT&quot;, parameters.length);</span>
+<span class="nc" id="L890">				PrologTerm body = provider.newStructure(&quot;object_new&quot;, oclass, oargs, oout);</span>
+<span class="nc" id="L891">				programmer.println(head + NECK + body + &quot;.&quot;);</span>
+<span class="nc" id="L892">				programmer.println();</span>
+<span class="nc" id="L893">			}</span>
+<span class="nc" id="L894">		}</span>
+<span class="nc" id="L895">	}</span>
 
 	protected final void codingMethods(PrintWriter programmer, Class&lt;?&gt; runtimeClass) {
-<span class="nc" id="L892">		Method[] methods = runtimeClass.getMethods();</span>
-<span class="nc" id="L893">		Map&lt;String, List&lt;Method&gt;&gt; map = new HashMap&lt;String, List&lt;Method&gt;&gt;();</span>
-<span class="nc bnc" id="L894" title="All 2 branches missed.">		for (Method method : methods) {</span>
-<span class="nc" id="L895">			int arity = method.getParameters().length;</span>
-<span class="nc" id="L896">			String functor = fromCamelCase(runtimeClass.getSimpleName()) + &quot;_&quot; + fromCamelCase(method.getName());</span>
+<span class="nc" id="L898">		Method[] methods = runtimeClass.getMethods();</span>
+<span class="nc" id="L899">		Map&lt;String, List&lt;Method&gt;&gt; map = new HashMap&lt;String, List&lt;Method&gt;&gt;();</span>
+<span class="nc bnc" id="L900" title="All 2 branches missed.">		for (Method method : methods) {</span>
+<span class="nc" id="L901">			int arity = method.getParameters().length;</span>
+<span class="nc" id="L902">			String functor = fromCamelCase(runtimeClass.getSimpleName()) + &quot;_&quot; + fromCamelCase(method.getName());</span>
 
-<span class="nc" id="L898">			String indicator = functor + &quot;/&quot; + arity;</span>
-<span class="nc" id="L899">			List&lt;Method&gt; family = map.get(indicator);</span>
-<span class="nc bnc" id="L900" title="All 2 branches missed.">			if (family == null) {</span>
-<span class="nc" id="L901">				family = new LinkedList&lt;Method&gt;();</span>
+<span class="nc" id="L904">			String indicator = functor + &quot;/&quot; + arity;</span>
+<span class="nc" id="L905">			List&lt;Method&gt; family = map.get(indicator);</span>
+<span class="nc bnc" id="L906" title="All 2 branches missed.">			if (family == null) {</span>
+<span class="nc" id="L907">				family = new LinkedList&lt;Method&gt;();</span>
 			}
-<span class="nc" id="L903">			family.add(method);</span>
-<span class="nc" id="L904">			map.put(indicator, family);</span>
+<span class="nc" id="L909">			family.add(method);</span>
+<span class="nc" id="L910">			map.put(indicator, family);</span>
 
 		}
 
-<span class="nc bnc" id="L908" title="All 2 branches missed.">		for (Entry&lt;String, List&lt;Method&gt;&gt; entry : map.entrySet()) {</span>
-<span class="nc" id="L909">			List&lt;Method&gt; family = entry.getValue();</span>
-<span class="nc bnc" id="L910" title="All 2 branches missed.">			for (Method method : family) {</span>
-<span class="nc" id="L911">				String functor = fromCamelCase(runtimeClass.getSimpleName()) + &quot;_&quot; + fromCamelCase(method.getName());</span>
-<span class="nc" id="L912">				PrologTerm[] arguments = null;</span>
-<span class="nc" id="L913">				Parameter[] parameters = method.getParameters();</span>
-<span class="nc" id="L914">				int argCount = parameters.length;</span>
+<span class="nc bnc" id="L914" title="All 2 branches missed.">		for (Entry&lt;String, List&lt;Method&gt;&gt; entry : map.entrySet()) {</span>
+<span class="nc" id="L915">			List&lt;Method&gt; family = entry.getValue();</span>
+<span class="nc bnc" id="L916" title="All 2 branches missed.">			for (Method method : family) {</span>
+<span class="nc" id="L917">				String functor = fromCamelCase(runtimeClass.getSimpleName()) + &quot;_&quot; + fromCamelCase(method.getName());</span>
+<span class="nc" id="L918">				PrologTerm[] arguments = null;</span>
+<span class="nc" id="L919">				Parameter[] parameters = method.getParameters();</span>
+<span class="nc" id="L920">				int argCount = parameters.length;</span>
 
-<span class="nc bnc" id="L916" title="All 2 branches missed.">				if (method.getReturnType() == void.class) {</span>
-<span class="nc" id="L917">					arguments = new PrologTerm[argCount + 1];</span>
+<span class="nc bnc" id="L922" title="All 2 branches missed.">				if (method.getReturnType() == void.class) {</span>
+<span class="nc" id="L923">					arguments = new PrologTerm[argCount + 1];</span>
 				} else {
-<span class="nc" id="L919">					arguments = new PrologTerm[argCount + 2];</span>
+<span class="nc" id="L925">					arguments = new PrologTerm[argCount + 2];</span>
 				}
 
-<span class="nc" id="L922">				arguments[0] = provider.newVariable(&quot;REF&quot;, 0);</span>
-<span class="nc bnc" id="L923" title="All 2 branches missed.">				for (int i = 0; i &lt; argCount; i++) {</span>
-<span class="nc" id="L924">					String arg = toUpperCase(parameters[i].getName());</span>
-<span class="nc" id="L925">					arguments[i + 1] = provider.newVariable(arg, i + 1);</span>
+<span class="nc" id="L928">				arguments[0] = provider.newVariable(&quot;REF&quot;, 0);</span>
+<span class="nc bnc" id="L929" title="All 2 branches missed.">				for (int i = 0; i &lt; argCount; i++) {</span>
+<span class="nc" id="L930">					String arg = toUpperCase(parameters[i].getName());</span>
+<span class="nc" id="L931">					arguments[i + 1] = provider.newVariable(arg, i + 1);</span>
 				}
 
-<span class="nc bnc" id="L928" title="All 2 branches missed.">				if (method.getReturnType() != void.class) {</span>
-<span class="nc" id="L929">					arguments[argCount + 1] = provider.newVariable(&quot;OUT&quot;, argCount + 1);</span>
+<span class="nc bnc" id="L934" title="All 2 branches missed.">				if (method.getReturnType() != void.class) {</span>
+<span class="nc" id="L935">					arguments[argCount + 1] = provider.newVariable(&quot;OUT&quot;, argCount + 1);</span>
 				}
 
 				// procedure head
-<span class="nc" id="L933">				PrologTerm head = provider.newStructure(functor, arguments);</span>
+<span class="nc" id="L939">				PrologTerm head = provider.newStructure(functor, arguments);</span>
 
 				// procedure body
-<span class="nc" id="L936">				arguments = new PrologTerm[argCount];</span>
-<span class="nc bnc" id="L937" title="All 2 branches missed.">				for (int i = 0; i &lt; argCount; i++) {</span>
-<span class="nc" id="L938">					String arg = toUpperCase(parameters[i].getName());</span>
-<span class="nc" id="L939">					arguments[i] = provider.newVariable(arg, i);</span>
+<span class="nc" id="L942">				arguments = new PrologTerm[argCount];</span>
+<span class="nc bnc" id="L943" title="All 2 branches missed.">				for (int i = 0; i &lt; argCount; i++) {</span>
+<span class="nc" id="L944">					String arg = toUpperCase(parameters[i].getName());</span>
+<span class="nc" id="L945">					arguments[i] = provider.newVariable(arg, i);</span>
 				}
-<span class="nc" id="L941">				PrologTerm oref = provider.newVariable(&quot;REF&quot;, 0);</span>
-<span class="nc" id="L942">				PrologTerm omethod = provider.newAtom(method.getName());</span>
-<span class="nc" id="L943">				PrologTerm oargs = provider.newList(arguments);</span>
-<span class="nc" id="L944">				PrologTerm oout = null;</span>
+<span class="nc" id="L947">				PrologTerm oref = provider.newVariable(&quot;REF&quot;, 0);</span>
+<span class="nc" id="L948">				PrologTerm omethod = provider.newAtom(method.getName());</span>
+<span class="nc" id="L949">				PrologTerm oargs = provider.newList(arguments);</span>
+<span class="nc" id="L950">				PrologTerm oout = null;</span>
 
-<span class="nc bnc" id="L946" title="All 2 branches missed.">				if (method.getReturnType() != void.class) {</span>
-<span class="nc" id="L947">					oout = provider.newVariable(&quot;OUT&quot;, argCount + 1);</span>
+<span class="nc bnc" id="L952" title="All 2 branches missed.">				if (method.getReturnType() != void.class) {</span>
+<span class="nc" id="L953">					oout = provider.newVariable(&quot;OUT&quot;, argCount + 1);</span>
 				} else {
-<span class="nc" id="L949">					oout = provider.newVariable(argCount + 1);</span>
+<span class="nc" id="L955">					oout = provider.newVariable(argCount + 1);</span>
 				}
 
-<span class="nc" id="L952">				PrologTerm body = provider.newStructure(&quot;object_call&quot;, oref, omethod, oargs, oout);</span>
-<span class="nc" id="L953">				programmer.println(head + NECK + body + &quot;.&quot;);</span>
-<span class="nc" id="L954">				programmer.println();</span>
-<span class="nc" id="L955">			}</span>
-<span class="nc" id="L956">		}</span>
-<span class="nc" id="L957">	}</span>
+<span class="nc" id="L958">				PrologTerm body = provider.newStructure(&quot;object_call&quot;, oref, omethod, oargs, oout);</span>
+<span class="nc" id="L959">				programmer.println(head + NECK + body + &quot;.&quot;);</span>
+<span class="nc" id="L960">				programmer.println();</span>
+<span class="nc" id="L961">			}</span>
+<span class="nc" id="L962">		}</span>
+<span class="nc" id="L963">	}</span>
 
 	public final void codingActiveRecord(PrintWriter programmer, String fileName) {
-<span class="nc" id="L960">		String modelName = fileName.replace('/', '_');</span>
-<span class="nc" id="L961">		programmer.print(modelName + &quot;_query_one(ARG0, OUT) :- \n&quot;);</span>
-<span class="nc" id="L962">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
-<span class="nc" id="L963">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_query_one(DAO, ARG0, OUT).\n\n&quot;);</span>
+<span class="nc" id="L966">		String modelName = fileName.replace('/', '_');</span>
+<span class="nc" id="L967">		programmer.print(modelName + &quot;_query_one(ARG0, OUT) :- \n&quot;);</span>
+<span class="nc" id="L968">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L969">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_query_one(DAO, ARG0, OUT),\n&quot;);</span>
+<span class="nc" id="L970">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_close(DAO).\n\n&quot;);</span>
 
-<span class="nc" id="L965">		programmer.print(modelName + &quot;_query_all(ARG0, OUT) :- \n&quot;);</span>
-<span class="nc" id="L966">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
-<span class="nc" id="L967">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_query_all(DAO, ARG0, OUT).\n\n&quot;);</span>
+<span class="nc" id="L972">		programmer.print(modelName + &quot;_query_all(ARG0, OUT) :- \n&quot;);</span>
+<span class="nc" id="L973">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L974">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_query_all(DAO, ARG0, OUT),\n&quot;);</span>
+<span class="nc" id="L975">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_close(DAO).\n\n&quot;);</span>
 
-<span class="nc" id="L969">		programmer.print(modelName + &quot;_query_all(ARG0, ARG1, ARG2, OUT) :- \n&quot;);</span>
-<span class="nc" id="L970">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
-<span class="nc" id="L971">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_query_all(DAO, ARG0, ARG1, ARG2, OUT).\n\n&quot;);</span>
-
-<span class="nc" id="L973">		programmer.print(modelName + &quot;_retrieve_one(ARG0, OUT) :- \n&quot;);</span>
-<span class="nc" id="L974">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
-<span class="nc" id="L975">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_retrieve_one(DAO, ARG0, OUT).\n\n&quot;);</span>
-
-<span class="nc" id="L977">		programmer.print(modelName + &quot;_retrieve_all(OUT) :- \n&quot;);</span>
+<span class="nc" id="L977">		programmer.print(modelName + &quot;_query_all(ARG0, ARG1, ARG2, OUT) :- \n&quot;);</span>
 <span class="nc" id="L978">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
-<span class="nc" id="L979">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_retrieve_all(DAO, OUT).\n\n&quot;);</span>
+<span class="nc" id="L979">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_query_all(DAO, ARG0, ARG1, ARG2, OUT),\n&quot;);</span>
+<span class="nc" id="L980">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_close(DAO).\n\n&quot;);</span>
 
-<span class="nc" id="L981">		programmer.print(modelName + &quot;_retrieve_all(ARG0, ARG1, OUT) :- \n&quot;);</span>
-<span class="nc" id="L982">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
-<span class="nc" id="L983">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_retrieve_all(DAO, ARG0, ARG1, OUT).\n\n&quot;);</span>
-<span class="nc" id="L984">	}</span>
+<span class="nc" id="L982">		programmer.print(modelName + &quot;_retrieve_one(ARG0, OUT) :- \n&quot;);</span>
+<span class="nc" id="L983">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L984">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_retrieve_one(DAO, ARG0, OUT),\n&quot;);</span>
+<span class="nc" id="L985">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_close(DAO).\n\n&quot;);</span>
+
+<span class="nc" id="L987">		programmer.print(modelName + &quot;_retrieve_all(OUT) :- \n&quot;);</span>
+<span class="nc" id="L988">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L989">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_retrieve_all(DAO, OUT),\n&quot;);</span>
+<span class="nc" id="L990">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_close(DAO).\n\n&quot;);</span>
+
+<span class="nc" id="L992">		programmer.print(modelName + &quot;_retrieve_all(ARG0, ARG1, OUT) :- \n&quot;);</span>
+<span class="nc" id="L993">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao(DAO),\n&quot;);</span>
+<span class="nc" id="L994">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_retrieve_all(DAO, ARG0, ARG1, OUT),\n&quot;);</span>
+<span class="nc" id="L995">		programmer.print(&quot;\t&quot; + modelName + &quot;_dao_close(DAO).\n\n&quot;);</span>
+<span class="nc" id="L996">	}</span>
 
 	public final void codingRuntime(PrintWriter stdout) {
-<span class="nc" id="L987">		Class&lt;?&gt; c = getClass();</span>
-<span class="nc" id="L988">		ProtectionDomain d = c.getProtectionDomain();</span>
-<span class="nc" id="L989">		CodeSource s = d.getCodeSource();</span>
-<span class="nc" id="L990">		String prolobjectlink = s.getLocation().getPath();</span>
-<span class="nc" id="L991">		codingRuntime(stdout, prolobjectlink);</span>
-<span class="nc" id="L992">	}</span>
+<span class="nc" id="L999">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L1000">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L1001">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L1002">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L1003">		codingRuntime(stdout, prolobjectlink);</span>
+<span class="nc" id="L1004">	}</span>
 
 	public final void codingRuntime(PrintWriter stdout, String folder) {
-<span class="nc" id="L995">		JarFile jarFile = null;</span>
-<span class="nc" id="L996">		boolean warnings = false;</span>
-<span class="nc" id="L997">		File plk = new File(folder);</span>
-<span class="nc" id="L998">		File pdk = plk.getParentFile();</span>
-<span class="nc" id="L999">		File prt = pdk.getParentFile();</span>
-<span class="nc" id="L1000">		String jh = System.getProperty(&quot;java.home&quot;);</span>
-<span class="nc" id="L1001">		File rt = new File(jh + &quot;/lib/rt.jar&quot;);</span>
-<span class="nc" id="L1002">		List&lt;File&gt; list = new ArrayList&lt;File&gt;();</span>
-<span class="nc" id="L1003">		File[] jars = pdk.listFiles(new JarFileFilter());</span>
+<span class="nc" id="L1007">		JarFile jarFile = null;</span>
+<span class="nc" id="L1008">		boolean warnings = false;</span>
+<span class="nc" id="L1009">		File plk = new File(folder);</span>
+<span class="nc" id="L1010">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L1011">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L1012">		String jh = System.getProperty(&quot;java.home&quot;);</span>
+<span class="nc" id="L1013">		File rt = new File(jh + &quot;/lib/rt.jar&quot;);</span>
+<span class="nc" id="L1014">		List&lt;File&gt; list = new ArrayList&lt;File&gt;();</span>
+<span class="nc" id="L1015">		File[] jars = pdk.listFiles(new JarFileFilter());</span>
 
 		// adding rt.jar and others
-<span class="nc" id="L1006">		list.add(rt);</span>
-<span class="nc bnc" id="L1007" title="All 2 branches missed.">		if (jars != null) {</span>
-<span class="nc bnc" id="L1008" title="All 2 branches missed.">			for (File jar : jars) {</span>
-<span class="nc" id="L1009">				list.add(jar);</span>
+<span class="nc" id="L1018">		list.add(rt);</span>
+<span class="nc bnc" id="L1019" title="All 2 branches missed.">		if (jars != null) {</span>
+<span class="nc bnc" id="L1020" title="All 2 branches missed.">			for (File jar : jars) {</span>
+<span class="nc" id="L1021">				list.add(jar);</span>
 			}
 		}
 
 		try {
 
-<span class="nc bnc" id="L1015" title="All 2 branches missed.">			for (File file : list) {</span>
-<span class="nc" id="L1016">				stdout.println(&quot;Generating &quot; + file);</span>
-<span class="nc" id="L1017">				jarFile = new JarFile(file);</span>
-<span class="nc" id="L1018">				codingModel(stdout, jarFile, prt, warnings);</span>
-<span class="nc" id="L1019">				jarFile.close();</span>
-<span class="nc" id="L1020">			}</span>
+<span class="nc bnc" id="L1027" title="All 2 branches missed.">			for (File file : list) {</span>
+<span class="nc" id="L1028">				stdout.println(&quot;Generating &quot; + file);</span>
+<span class="nc" id="L1029">				jarFile = new JarFile(file);</span>
+<span class="nc" id="L1030">				codingModel(stdout, jarFile, prt, warnings);</span>
+<span class="nc" id="L1031">				jarFile.close();</span>
+<span class="nc" id="L1032">			}</span>
 
-<span class="nc" id="L1022">		} catch (IOException e) {</span>
-<span class="nc" id="L1023">			Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1034">		} catch (IOException e) {</span>
+<span class="nc" id="L1035">			Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
 		} finally {
-<span class="nc bnc" id="L1025" title="All 6 branches missed.">			if (jarFile != null) {</span>
+<span class="nc bnc" id="L1037" title="All 6 branches missed.">			if (jarFile != null) {</span>
 				try {
-<span class="nc" id="L1027">					jarFile.close();</span>
-<span class="nc" id="L1028">				} catch (IOException e) {</span>
-<span class="nc" id="L1029">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-<span class="nc" id="L1030">				}</span>
+<span class="nc" id="L1039">					jarFile.close();</span>
+<span class="nc" id="L1040">				} catch (IOException e) {</span>
+<span class="nc" id="L1041">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1042">				}</span>
 			}
 		}
-<span class="nc bnc" id="L1033" title="All 2 branches missed.">		if (warnings) {</span>
-<span class="nc" id="L1034">			stdout.println(&quot;Generation finished with WARNINGS.&quot;);</span>
+<span class="nc bnc" id="L1045" title="All 2 branches missed.">		if (warnings) {</span>
+<span class="nc" id="L1046">			stdout.println(&quot;Generation finished with WARNINGS.&quot;);</span>
 		} else {
-<span class="nc" id="L1036">			stdout.println(&quot;Generation finished OK.&quot;);</span>
+<span class="nc" id="L1048">			stdout.println(&quot;Generation finished OK.&quot;);</span>
 		}
-<span class="nc" id="L1038">	}</span>
+<span class="nc" id="L1050">	}</span>
 
 	public final void codingJarFile(PrintWriter stdout, JarFile jarFile, boolean b) {
-<span class="nc" id="L1041">		Class&lt;?&gt; c = getClass();</span>
-<span class="nc" id="L1042">		ProtectionDomain d = c.getProtectionDomain();</span>
-<span class="nc" id="L1043">		CodeSource s = d.getCodeSource();</span>
-<span class="nc" id="L1044">		String prolobjectlink = s.getLocation().getPath();</span>
-<span class="nc" id="L1045">		File plk = new File(prolobjectlink);</span>
-<span class="nc" id="L1046">		File pdk = plk.getParentFile();</span>
-<span class="nc" id="L1047">		File prt = pdk.getParentFile();</span>
-<span class="nc" id="L1048">		codingModel(stdout, jarFile, prt, b);</span>
-<span class="nc" id="L1049">	}</span>
+<span class="nc" id="L1053">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L1054">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L1055">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L1056">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L1057">		File plk = new File(prolobjectlink);</span>
+<span class="nc" id="L1058">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L1059">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L1060">		codingModel(stdout, jarFile, prt, b);</span>
+<span class="nc" id="L1061">	}</span>
 
 	public final void codingJarFile(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
-<span class="nc" id="L1052">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
-<span class="nc" id="L1053">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
-<span class="nc bnc" id="L1054" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
-<span class="nc" id="L1055">			JarEntry jarEntry = entries.nextElement();</span>
-<span class="nc" id="L1056">			String jarEntryName = jarEntry.getName();</span>
-<span class="nc bnc" id="L1057" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
-<span class="nc" id="L1058">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
-<span class="nc" id="L1059">				String fileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
+<span class="nc" id="L1064">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc" id="L1065">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
+<span class="nc bnc" id="L1066" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
+<span class="nc" id="L1067">			JarEntry jarEntry = entries.nextElement();</span>
+<span class="nc" id="L1068">			String jarEntryName = jarEntry.getName();</span>
+<span class="nc bnc" id="L1069" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
+<span class="nc" id="L1070">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
+<span class="nc" id="L1071">				String fileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
 				try {
-<span class="nc" id="L1061">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
-<span class="nc bnc" id="L1062" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
-<span class="nc" id="L1063">						File runtimeFile = createWebFile(folder, fileName);</span>
-<span class="nc" id="L1064">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
-<span class="nc" id="L1065">						codingLicense(programmer);</span>
-<span class="nc" id="L1066">						codingAuthor(programmer);</span>
-<span class="nc" id="L1067">						codingInclusion(programmer, jarEntryName);</span>
-<span class="nc bnc" id="L1068" title="All 2 branches missed.">						if (!className.contains(&quot;Dao&quot;)) {</span>
-<span class="nc" id="L1069">							String dao = fromCamelCase(className) + &quot;_dao.pl&quot;;</span>
-<span class="nc" id="L1070">							codingInclusion(programmer, jarEntryName, &quot;web/&quot; + dao);</span>
+<span class="nc" id="L1073">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
+<span class="nc bnc" id="L1074" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
+<span class="nc" id="L1075">						File runtimeFile = createWebFile(folder, fileName);</span>
+<span class="nc" id="L1076">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
+<span class="nc" id="L1077">						codingLicense(programmer);</span>
+<span class="nc" id="L1078">						codingAuthor(programmer);</span>
+<span class="nc" id="L1079">						codingInclusion(programmer, jarEntryName);</span>
+<span class="nc bnc" id="L1080" title="All 2 branches missed.">						if (!className.contains(&quot;Dao&quot;)) {</span>
+<span class="nc" id="L1081">							String dao = fromCamelCase(className) + &quot;_dao.pl&quot;;</span>
+<span class="nc" id="L1082">							codingInclusion(programmer, jarEntryName, &quot;web/&quot; + dao);</span>
 						}
 						// TODO introspection here
-<span class="nc" id="L1073">						codingConstants(programmer, runtimeClass);</span>
-<span class="nc" id="L1074">						codingConstructors(programmer, runtimeClass);</span>
-<span class="nc" id="L1075">						codingMethods(programmer, runtimeClass);</span>
-<span class="nc bnc" id="L1076" title="All 2 branches missed.">						if (!className.contains(&quot;Dao&quot;)) {</span>
-<span class="nc" id="L1077">							String name = fileName.substring(0, fileName.lastIndexOf(&quot;.pl&quot;));</span>
-<span class="nc" id="L1078">							name = fileName.substring(name.lastIndexOf('/') + 1, name.length());</span>
-<span class="nc" id="L1079">							codingActiveRecord(programmer, name);</span>
+<span class="nc" id="L1085">						codingConstants(programmer, runtimeClass);</span>
+<span class="nc" id="L1086">						codingConstructors(programmer, runtimeClass);</span>
+<span class="nc" id="L1087">						codingMethods(programmer, runtimeClass);</span>
+<span class="nc bnc" id="L1088" title="All 2 branches missed.">						if (!className.contains(&quot;Dao&quot;)) {</span>
+<span class="nc" id="L1089">							String name = fileName.substring(0, fileName.lastIndexOf(&quot;.pl&quot;));</span>
+<span class="nc" id="L1090">							name = fileName.substring(name.lastIndexOf('/') + 1, name.length());</span>
+<span class="nc" id="L1091">							codingActiveRecord(programmer, name);</span>
 						}
-<span class="nc" id="L1081">						programmer.close();</span>
+<span class="nc" id="L1093">						programmer.close();</span>
 					}
-<span class="nc" id="L1083">				} catch (NoClassDefFoundError e) {</span>
-<span class="nc" id="L1084">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
-<span class="nc" id="L1085">					warnings = true;</span>
-<span class="nc" id="L1086">					continue;</span>
-<span class="nc" id="L1087">				} catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L1088">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
-<span class="nc" id="L1089">					warnings = true;</span>
-<span class="nc" id="L1090">					continue;</span>
-<span class="nc" id="L1091">				} catch (IOException e) {</span>
-<span class="nc" id="L1092">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-<span class="nc" id="L1093">				}</span>
+<span class="nc" id="L1095">				} catch (NoClassDefFoundError e) {</span>
+<span class="nc" id="L1096">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1097">					warnings = true;</span>
+<span class="nc" id="L1098">					continue;</span>
+<span class="nc" id="L1099">				} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L1100">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1101">					warnings = true;</span>
+<span class="nc" id="L1102">					continue;</span>
+<span class="nc" id="L1103">				} catch (IOException e) {</span>
+<span class="nc" id="L1104">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1105">				}</span>
 			}
-<span class="nc" id="L1095">		}</span>
-<span class="nc" id="L1096">	}</span>
+<span class="nc" id="L1107">		}</span>
+<span class="nc" id="L1108">	}</span>
 
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, boolean b) {
-<span class="nc" id="L1099">		Class&lt;?&gt; c = getClass();</span>
-<span class="nc" id="L1100">		ProtectionDomain d = c.getProtectionDomain();</span>
-<span class="nc" id="L1101">		CodeSource s = d.getCodeSource();</span>
-<span class="nc" id="L1102">		String prolobjectlink = s.getLocation().getPath();</span>
-<span class="nc" id="L1103">		File plk = new File(prolobjectlink);</span>
-<span class="nc" id="L1104">		File pdk = plk.getParentFile();</span>
-<span class="nc" id="L1105">		File prt = pdk.getParentFile();</span>
-<span class="nc" id="L1106">		codingJarFile(stdout, jarFile, prt, b);</span>
-<span class="nc" id="L1107">	}</span>
+<span class="nc" id="L1111">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L1112">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L1113">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L1114">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L1115">		File plk = new File(prolobjectlink);</span>
+<span class="nc" id="L1116">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L1117">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L1118">		codingJarFile(stdout, jarFile, prt, b);</span>
+<span class="nc" id="L1119">	}</span>
 
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
-<span class="nc" id="L1110">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
-<span class="nc" id="L1111">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
-<span class="nc bnc" id="L1112" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
-<span class="nc" id="L1113">			JarEntry jarEntry = entries.nextElement();</span>
-<span class="nc" id="L1114">			String jarEntryName = jarEntry.getName();</span>
-<span class="nc bnc" id="L1115" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
-<span class="nc" id="L1116">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
-<span class="nc" id="L1117">				String fileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
+<span class="nc" id="L1122">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc" id="L1123">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
+<span class="nc bnc" id="L1124" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
+<span class="nc" id="L1125">			JarEntry jarEntry = entries.nextElement();</span>
+<span class="nc" id="L1126">			String jarEntryName = jarEntry.getName();</span>
+<span class="nc bnc" id="L1127" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
+<span class="nc" id="L1128">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
+<span class="nc" id="L1129">				String fileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
 				try {
-<span class="nc" id="L1119">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
-<span class="nc bnc" id="L1120" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
-<span class="nc" id="L1121">						File runtimeFile = createRuntimeFile(folder, fileName);</span>
-<span class="nc" id="L1122">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
-<span class="nc" id="L1123">						codingLicense(programmer);</span>
-<span class="nc" id="L1124">						codingAuthor(programmer);</span>
-<span class="nc" id="L1125">						codingInclusion(programmer, jarEntryName);</span>
+<span class="nc" id="L1131">					Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
+<span class="nc bnc" id="L1132" title="All 2 branches missed.">					if (isValidClass(runtimeClass)) {</span>
+<span class="nc" id="L1133">						File runtimeFile = createRuntimeFile(folder, fileName);</span>
+<span class="nc" id="L1134">						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
+<span class="nc" id="L1135">						codingLicense(programmer);</span>
+<span class="nc" id="L1136">						codingAuthor(programmer);</span>
+<span class="nc" id="L1137">						codingInclusion(programmer, jarEntryName);</span>
 						// TODO introspection here
-<span class="nc" id="L1127">						codingConstants(programmer, runtimeClass);</span>
-<span class="nc" id="L1128">						codingConstructors(programmer, runtimeClass);</span>
-<span class="nc" id="L1129">						codingMethods(programmer, runtimeClass);</span>
-<span class="nc" id="L1130">						programmer.close();</span>
+<span class="nc" id="L1139">						codingConstants(programmer, runtimeClass);</span>
+<span class="nc" id="L1140">						codingConstructors(programmer, runtimeClass);</span>
+<span class="nc" id="L1141">						codingMethods(programmer, runtimeClass);</span>
+<span class="nc" id="L1142">						programmer.close();</span>
 					}
-<span class="nc" id="L1132">				} catch (NoClassDefFoundError e) {</span>
-<span class="nc" id="L1133">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
-<span class="nc" id="L1134">					warnings = true;</span>
-<span class="nc" id="L1135">					continue;</span>
-<span class="nc" id="L1136">				} catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L1137">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
-<span class="nc" id="L1138">					warnings = true;</span>
-<span class="nc" id="L1139">					continue;</span>
-<span class="nc" id="L1140">				} catch (IOException e) {</span>
-<span class="nc" id="L1141">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-<span class="nc" id="L1142">				}</span>
+<span class="nc" id="L1144">				} catch (NoClassDefFoundError e) {</span>
+<span class="nc" id="L1145">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1146">					warnings = true;</span>
+<span class="nc" id="L1147">					continue;</span>
+<span class="nc" id="L1148">				} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L1149">					stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1150">					warnings = true;</span>
+<span class="nc" id="L1151">					continue;</span>
+<span class="nc" id="L1152">				} catch (IOException e) {</span>
+<span class="nc" id="L1153">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1154">				}</span>
 			}
-<span class="nc" id="L1144">		}</span>
-<span class="nc" id="L1145">	}</span>
+<span class="nc" id="L1156">		}</span>
+<span class="nc" id="L1157">	}</span>
 
 	public final void codingController(PrintWriter stdout, JarFile jarFile, boolean b) {
-<span class="nc" id="L1148">		Class&lt;?&gt; c = getClass();</span>
-<span class="nc" id="L1149">		ProtectionDomain d = c.getProtectionDomain();</span>
-<span class="nc" id="L1150">		CodeSource s = d.getCodeSource();</span>
-<span class="nc" id="L1151">		String prolobjectlink = s.getLocation().getPath();</span>
-<span class="nc" id="L1152">		File plk = new File(prolobjectlink);</span>
-<span class="nc" id="L1153">		File pdk = plk.getParentFile();</span>
-<span class="nc" id="L1154">		File prt = pdk.getParentFile();</span>
-<span class="nc" id="L1155">		codingController(stdout, jarFile, prt, b);</span>
-<span class="nc" id="L1156">	}</span>
+<span class="nc" id="L1160">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L1161">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L1162">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L1163">		String prolobjectlink = s.getLocation().getPath();</span>
+<span class="nc" id="L1164">		File plk = new File(prolobjectlink);</span>
+<span class="nc" id="L1165">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L1166">		File prt = pdk.getParentFile();</span>
+<span class="nc" id="L1167">		codingController(stdout, jarFile, prt, b);</span>
+<span class="nc" id="L1168">	}</span>
 
 	public final void codingController(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
-<span class="nc" id="L1159">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
-<span class="nc" id="L1160">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
-<span class="nc bnc" id="L1161" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
-<span class="nc" id="L1162">			JarEntry jarEntry = entries.nextElement();</span>
-<span class="nc" id="L1163">			String jarEntryName = jarEntry.getName();</span>
-<span class="nc bnc" id="L1164" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
-<span class="nc" id="L1165">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
-<span class="nc bnc" id="L1166" title="All 2 branches missed.">				if (!className.contains(&quot;Dao&quot;)) {</span>
-<span class="nc" id="L1167">					String modelFileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
-<span class="nc" id="L1168">					String controllerFileName = fromCamelCase(className) + &quot;_controller.pl&quot;;</span>
-<span class="nc" id="L1169">					controllerFileName = controllerFileName.replaceFirst(&quot;model&quot;, &quot;controller&quot;);</span>
+<span class="nc" id="L1171">		ClassLoader l = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc" id="L1172">		Enumeration&lt;JarEntry&gt; entries = jarFile.entries();</span>
+<span class="nc bnc" id="L1173" title="All 2 branches missed.">		while (entries.hasMoreElements()) {</span>
+<span class="nc" id="L1174">			JarEntry jarEntry = entries.nextElement();</span>
+<span class="nc" id="L1175">			String jarEntryName = jarEntry.getName();</span>
+<span class="nc bnc" id="L1176" title="All 2 branches missed.">			if (isValidJarEntry(jarEntryName)) {</span>
+<span class="nc" id="L1177">				String className = jarEntryName.substring(0, jarEntryName.length() - 6);</span>
+<span class="nc bnc" id="L1178" title="All 2 branches missed.">				if (!className.contains(&quot;Dao&quot;)) {</span>
+<span class="nc" id="L1179">					String modelFileName = fromCamelCase(className) + &quot;.pl&quot;;</span>
+<span class="nc" id="L1180">					String controllerFileName = fromCamelCase(className) + &quot;_controller.pl&quot;;</span>
+<span class="nc" id="L1181">					controllerFileName = controllerFileName.replaceFirst(&quot;model&quot;, &quot;controller&quot;);</span>
 					try {
-<span class="nc" id="L1171">						Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
-<span class="nc bnc" id="L1172" title="All 2 branches missed.">						if (isValidClass(runtimeClass)) {</span>
-<span class="nc" id="L1173">							File runtimeFile = createWebFile(folder, controllerFileName);</span>
-<span class="nc" id="L1174">							PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
-<span class="nc" id="L1175">							codingInclusion(programmer, jarEntryName);</span>
-<span class="nc" id="L1176">							codingInclusion(programmer, jarEntryName, &quot;misc/http.pl&quot;);</span>
-<span class="nc" id="L1177">							codingInclusion(programmer, jarEntryName, &quot;misc/integer.pl&quot;);</span>
-<span class="nc" id="L1178">							codingInclusion(programmer, jarEntryName, &quot;web/&quot; + modelFileName);</span>
-<span class="nc" id="L1179">							String name = modelFileName.substring(0, modelFileName.lastIndexOf(&quot;.pl&quot;));</span>
-<span class="nc" id="L1180">							name = modelFileName.substring(name.lastIndexOf('/') + 1, name.length());</span>
-<span class="nc" id="L1181">							String clsName = className.substring(className.lastIndexOf('/') + 1, className.length());</span>
-<span class="nc" id="L1182">							codingProcedures(programmer, name, clsName);</span>
-<span class="nc" id="L1183">							programmer.close();</span>
+<span class="nc" id="L1183">						Class&lt;?&gt; runtimeClass = l.loadClass(className.replace('/', '.'));</span>
+<span class="nc bnc" id="L1184" title="All 2 branches missed.">						if (isValidClass(runtimeClass)) {</span>
+<span class="nc" id="L1185">							File runtimeFile = createWebFile(folder, controllerFileName);</span>
+<span class="nc" id="L1186">							PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));</span>
+<span class="nc" id="L1187">							codingInclusion(programmer, jarEntryName);</span>
+<span class="nc" id="L1188">							codingInclusion(programmer, jarEntryName, &quot;misc/http.pl&quot;);</span>
+<span class="nc" id="L1189">							codingInclusion(programmer, jarEntryName, &quot;misc/integer.pl&quot;);</span>
+<span class="nc" id="L1190">							codingInclusion(programmer, jarEntryName, &quot;web/&quot; + modelFileName);</span>
+<span class="nc" id="L1191">							String name = modelFileName.substring(0, modelFileName.lastIndexOf(&quot;.pl&quot;));</span>
+<span class="nc" id="L1192">							name = modelFileName.substring(name.lastIndexOf('/') + 1, name.length());</span>
+<span class="nc" id="L1193">							String clsName = className.substring(className.lastIndexOf('/') + 1, className.length());</span>
+<span class="nc" id="L1194">							codingProcedures(programmer, name, clsName);</span>
+<span class="nc" id="L1195">							programmer.close();</span>
 						}
-<span class="nc" id="L1185">					} catch (NoClassDefFoundError e) {</span>
-<span class="nc" id="L1186">						stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
-<span class="nc" id="L1187">						warnings = true;</span>
-<span class="nc" id="L1188">						continue;</span>
-<span class="nc" id="L1189">					} catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L1190">						stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
-<span class="nc" id="L1191">						warnings = true;</span>
-<span class="nc" id="L1192">						continue;</span>
-<span class="nc" id="L1193">					} catch (IOException e) {</span>
-<span class="nc" id="L1194">						Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-<span class="nc" id="L1195">					}</span>
+<span class="nc" id="L1197">					} catch (NoClassDefFoundError e) {</span>
+<span class="nc" id="L1198">						stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1199">						warnings = true;</span>
+<span class="nc" id="L1200">						continue;</span>
+<span class="nc" id="L1201">					} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L1202">						stdout.println(&quot;WARNING: No definition of the class could be found &quot; + e);</span>
+<span class="nc" id="L1203">						warnings = true;</span>
+<span class="nc" id="L1204">						continue;</span>
+<span class="nc" id="L1205">					} catch (IOException e) {</span>
+<span class="nc" id="L1206">						Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
+<span class="nc" id="L1207">					}</span>
 				}
 			}
-<span class="nc" id="L1198">		}</span>
+<span class="nc" id="L1210">		}</span>
 
-<span class="nc" id="L1200">	}</span>
+<span class="nc" id="L1212">	}</span>
 
 	public final void codingProcedures(PrintWriter programmer, String modelFileName, String clsName) {
 
-<span class="nc" id="L1204">		String modelName = modelFileName.replace('/', '_');</span>
+<span class="nc" id="L1216">		String modelName = modelFileName.replace('/', '_');</span>
 
-<span class="nc" id="L1206">		programmer.print(modelName + &quot;_find_all_users(RESULT) :- \n&quot;);</span>
-<span class="nc" id="L1207">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_all(RESULT),\n&quot;);</span>
-<span class="nc" id="L1208">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+<span class="nc" id="L1218">		programmer.print(modelName + &quot;_new(_) :- \n&quot;);</span>
+<span class="nc" id="L1219">		programmer.print(&quot;\trender('view/new.html').\n\n&quot;);</span>
 
-<span class="nc" id="L1210">		programmer.print(modelName + &quot;_query_all_users(RESULT) :- \n&quot;);</span>
-<span class="nc" id="L1211">		programmer.print(&quot;\t&quot; + modelName + &quot;_query_all('select a from &quot; + clsName + &quot; a', RESULT),\n&quot;);</span>
-<span class="nc" id="L1212">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+<span class="nc" id="L1221">		programmer.print(modelName + &quot;_edit(ID,ENTITY) :- \n&quot;);</span>
+<span class="nc" id="L1222">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
+<span class="nc" id="L1223">		programmer.print(&quot;\tweblog_address_retrieve_one(A, ENTITY),\n&quot;);</span>
+<span class="nc" id="L1224">		programmer.print(&quot;\trender('view/edit.html').\n\n&quot;);</span>
 
-<span class="nc" id="L1214">		programmer.print(modelName + &quot;_find_all_users_range(MAX,FIRST,RESULT) :- \n&quot;);</span>
-<span class="nc" id="L1215">		programmer.print(&quot;\tinteger_parse_int(MAX, A),\n&quot;);</span>
-<span class="nc" id="L1216">		programmer.print(&quot;\tinteger_parse_int(FIRST, B),\n&quot;);</span>
-<span class="nc" id="L1217">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_all(A,B,RESULT),\n&quot;);</span>
-<span class="nc" id="L1218">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+<span class="nc" id="L1226">		programmer.print(modelName + &quot;_find_all(LIST) :- \n&quot;);</span>
+<span class="nc" id="L1227">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_all(LIST),\n&quot;);</span>
+<span class="nc" id="L1228">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
 
-<span class="nc" id="L1220">		programmer.print(modelName + &quot;_query_all_users_range(MAX,FIRST,RESULT) :- \n&quot;);</span>
-<span class="nc" id="L1221">		programmer.print(&quot;\tinteger_parse_int(MAX, A),\n&quot;);</span>
-<span class="nc" id="L1222">		programmer.print(&quot;\tinteger_parse_int(FIRST, B),\n&quot;);</span>
-<span class="nc" id="L1223">		programmer.print(&quot;\t&quot; + modelName + &quot;_query_all('select a from &quot; + clsName + &quot; a',A,B,RESULT),\n&quot;);</span>
-<span class="nc" id="L1224">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+<span class="nc" id="L1230">		programmer.print(modelName + &quot;_query_all(LIST) :- \n&quot;);</span>
+<span class="nc" id="L1231">		programmer.print(&quot;\t&quot; + modelName + &quot;_query_all('select a from &quot; + clsName + &quot; a', LIST),\n&quot;);</span>
+<span class="nc" id="L1232">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
 
-<span class="nc" id="L1226">		programmer.print(modelName + &quot;_find_user(ID,RESULT) :- \n&quot;);</span>
-<span class="nc" id="L1227">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
-<span class="nc" id="L1228">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_one(A, RESULT),\n&quot;);</span>
-<span class="nc" id="L1229">		programmer.print(&quot;\trender('view/show.html').\n\n&quot;);</span>
+<span class="nc" id="L1234">		programmer.print(modelName + &quot;_find_all_range(MAX,FIRST,LIST) :- \n&quot;);</span>
+<span class="nc" id="L1235">		programmer.print(&quot;\tinteger_parse_int(MAX, A),\n&quot;);</span>
+<span class="nc" id="L1236">		programmer.print(&quot;\tinteger_parse_int(FIRST, B),\n&quot;);</span>
+<span class="nc" id="L1237">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_all(A,B,LIST),\n&quot;);</span>
+<span class="nc" id="L1238">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
 
-<span class="nc" id="L1231">		programmer.print(modelName + &quot;_query_user(ID,RESULT) :- \n&quot;);</span>
-<span class="nc" id="L1232">		programmer.print(&quot;\tatom_concat('select a from &quot; + clsName + &quot; a where a.id =', ID, QUERY),\n&quot;);</span>
-<span class="nc" id="L1233">		programmer.print(&quot;\t&quot; + modelName + &quot;_query_one(QUERY, RESULT),\n&quot;);</span>
-<span class="nc" id="L1234">		programmer.print(&quot;\trender(\'view/show.html\').\n\n&quot;);</span>
+<span class="nc" id="L1240">		programmer.print(modelName + &quot;_query_all_range(MAX,FIRST,LIST) :- \n&quot;);</span>
+<span class="nc" id="L1241">		programmer.print(&quot;\tinteger_parse_int(MAX, A),\n&quot;);</span>
+<span class="nc" id="L1242">		programmer.print(&quot;\tinteger_parse_int(FIRST, B),\n&quot;);</span>
+<span class="nc" id="L1243">		programmer.print(&quot;\t&quot; + modelName + &quot;_query_all('select a from &quot; + clsName + &quot; a',A,B,LIST),\n&quot;);</span>
+<span class="nc" id="L1244">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
 
-<span class="nc" id="L1236">		programmer.print(modelName + &quot;_update_user(ID,STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n&quot;);</span>
-<span class="nc" id="L1237">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
-<span class="nc" id="L1238">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_one(A, ENTITY),\n&quot;);</span>
-<span class="nc" id="L1239">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_street(ENTITY, STREET),\n&quot;);</span>
-<span class="nc" id="L1240">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_state(ENTITY, STATE),\n&quot;);</span>
-<span class="nc" id="L1241">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_zip(ENTITY, ZIP),\n&quot;);</span>
-<span class="nc" id="L1242">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_city(ENTITY, CITY),\n&quot;);</span>
-<span class="nc" id="L1243">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_country(ENTITY, COUNTRY),\n&quot;);</span>
-<span class="nc" id="L1244">		programmer.print(&quot;\t&quot; + modelName + &quot;_update(ENTITY),\n&quot;);</span>
-<span class="nc" id="L1245">		programmer.print(&quot;\trender('view/show.html').\n\n&quot;);</span>
+<span class="nc" id="L1246">		programmer.print(modelName + &quot;_find(ID,ENTITY) :- \n&quot;);</span>
+<span class="nc" id="L1247">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
+<span class="nc" id="L1248">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_one(A, ENTITY),\n&quot;);</span>
+<span class="nc" id="L1249">		programmer.print(&quot;\trender('view/show.html').\n\n&quot;);</span>
 
-<span class="nc" id="L1247">		programmer.print(modelName + &quot;_create_user(STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n&quot;);</span>
-<span class="nc" id="L1248">		programmer.print(&quot;\t&quot; + modelName + &quot;(ENTITY),\n&quot;);</span>
-<span class="nc" id="L1249">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_street(ENTITY, STREET),\n&quot;);</span>
-<span class="nc" id="L1250">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_state(ENTITY, STATE),\n&quot;);</span>
-<span class="nc" id="L1251">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_zip(ENTITY, ZIP),\n&quot;);</span>
-<span class="nc" id="L1252">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_city(ENTITY, CITY),\n&quot;);</span>
-<span class="nc" id="L1253">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_country(ENTITY, COUNTRY),\n&quot;);</span>
-<span class="nc" id="L1254">		programmer.print(&quot;\t&quot; + modelName + &quot;_create(ENTITY),\n&quot;);</span>
-<span class="nc" id="L1255">		programmer.print(&quot;\trender('view/show.html').\n\n&quot;);</span>
+<span class="nc" id="L1251">		programmer.print(modelName + &quot;_query(ID,ENTITY) :- \n&quot;);</span>
+<span class="nc" id="L1252">		programmer.print(&quot;\tatom_concat('select a from &quot; + clsName + &quot; a where a.id =', ID, QUERY),\n&quot;);</span>
+<span class="nc" id="L1253">		programmer.print(&quot;\t&quot; + modelName + &quot;_query_one(QUERY, ENTITY),\n&quot;);</span>
+<span class="nc" id="L1254">		programmer.print(&quot;\trender(\'view/show.html\').\n\n&quot;);</span>
 
-<span class="nc" id="L1257">		programmer.print(modelName + &quot;_delete_user(ID,RESULT) :- \n&quot;);</span>
-<span class="nc" id="L1258">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
-<span class="nc" id="L1259">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_one(A, ENTITY),\n&quot;);</span>
-<span class="nc" id="L1260">		programmer.print(&quot;\t&quot; + modelName + &quot;_delete(ENTITY),\n&quot;);</span>
-<span class="nc" id="L1261">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_all(RESULT),\n&quot;);</span>
-<span class="nc" id="L1262">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+<span class="nc" id="L1256">		programmer.print(modelName + &quot;_update(ID,STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n&quot;);</span>
+<span class="nc" id="L1257">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
+<span class="nc" id="L1258">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_one(A, ENTITY),\n&quot;);</span>
+<span class="nc" id="L1259">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_street(ENTITY, STREET),\n&quot;);</span>
+<span class="nc" id="L1260">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_state(ENTITY, STATE),\n&quot;);</span>
+<span class="nc" id="L1261">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_zip(ENTITY, ZIP),\n&quot;);</span>
+<span class="nc" id="L1262">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_city(ENTITY, CITY),\n&quot;);</span>
+<span class="nc" id="L1263">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_country(ENTITY, COUNTRY),\n&quot;);</span>
+<span class="nc" id="L1264">		programmer.print(&quot;\t&quot; + modelName + &quot;_update(ENTITY),\n&quot;);</span>
+<span class="nc" id="L1265">		programmer.print(&quot;\trender('view/show.html').\n\n&quot;);</span>
 
-<span class="nc" id="L1264">	}</span>
+<span class="nc" id="L1267">		programmer.print(modelName + &quot;_create(STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n&quot;);</span>
+<span class="nc" id="L1268">		programmer.print(&quot;\t&quot; + modelName + &quot;(ENTITY),\n&quot;);</span>
+<span class="nc" id="L1269">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_street(ENTITY, STREET),\n&quot;);</span>
+<span class="nc" id="L1270">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_state(ENTITY, STATE),\n&quot;);</span>
+<span class="nc" id="L1271">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_zip(ENTITY, ZIP),\n&quot;);</span>
+<span class="nc" id="L1272">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_city(ENTITY, CITY),\n&quot;);</span>
+<span class="nc" id="L1273">		programmer.print(&quot;\t&quot; + modelName + &quot;_set_country(ENTITY, COUNTRY),\n&quot;);</span>
+<span class="nc" id="L1274">		programmer.print(&quot;\t&quot; + modelName + &quot;_create(ENTITY),\n&quot;);</span>
+<span class="nc" id="L1275">		programmer.print(&quot;\trender('view/show.html').\n\n&quot;);</span>
 
-<span class="nc" id="L1266">	private class JarFileFilter implements FileFilter {</span>
+<span class="nc" id="L1277">		programmer.print(modelName + &quot;_delete(ID,ENTITY) :- \n&quot;);</span>
+<span class="nc" id="L1278">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
+<span class="nc" id="L1279">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_one(A, ENTITY),\n&quot;);</span>
+<span class="nc" id="L1280">		programmer.print(&quot;\t&quot; + modelName + &quot;_delete(ENTITY),\n&quot;);</span>
+<span class="nc" id="L1281">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_all(ENTITY),\n&quot;);</span>
+<span class="nc" id="L1282">		programmer.print(&quot;\trender('view/list.html').\n\n&quot;);</span>
+
+<span class="nc" id="L1284">	}</span>
+
+<span class="nc" id="L1286">	private class JarFileFilter implements FileFilter {</span>
 
 		public boolean accept(File pathname) {
-<span class="nc" id="L1269">			return pathname.getName().endsWith(&quot;.jar&quot;);</span>
+<span class="nc" id="L1289">			return pathname.getName().endsWith(&quot;.jar&quot;);</span>
 		}
 
 	}

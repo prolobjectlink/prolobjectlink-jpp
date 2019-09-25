@@ -177,8 +177,8 @@ public final class PrologTypedQuery&lt;T&gt; extends AbstractContainerQuery impl
 <span class="nc" id="L177">				solutionList.add(JavaReflect.readValue(field, object));</span>
 <span class="nc" id="L178">			} catch (NoSuchFieldException e) {</span>
 <span class="nc" id="L179">				LoggerUtils.error(getClass(), LoggerConstants.NO_SUCH_FIELD, e);</span>
-<span class="nc" id="L180">			}</span>
-<span class="nc" id="L181">		}</span>
+			}
+		}
 <span class="nc" id="L182">		return new PrologTypedQuery&lt;Object&gt;(solutionList);</span>
 	}
 

@@ -136,7 +136,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 <span class="nc" id="L136">				database = dbs.get(request.getDatabaseName());</span>
 <span class="nc bnc" id="L137" title="All 2 branches missed.">				if (database == null) {</span>
 <span class="nc" id="L138">					response.set(false);</span>
-				} else {
+<span class="nc" id="L139">				} else {</span>
 <span class="nc" id="L140">					response.set(true);</span>
 				}
 <span class="nc" id="L142">				os.writeObject(response);</span>
@@ -441,7 +441,7 @@ public final class RemoteDatabaseThread extends AbstractWrapper implements Runna
 <span class="nc" id="L441">			LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
 <span class="nc" id="L442">		} catch (ClassNotFoundException e) {</span>
 <span class="nc" id="L443">			LoggerUtils.error(getClass(), LoggerConstants.CLASS_NOT_FOUND, e);</span>
-<span class="nc" id="L444">		}</span>
+		}
 
 <span class="nc" id="L446">	}</span>
 
