@@ -215,7 +215,7 @@ public final class PrologObjectConverter extends AbstractConverter&lt;PrologTerm
 
 				// update class pointer for the next super class
 <span class="nc" id="L217">				classPtr = classPtr.getSuperclass();</span>
-			}
+<span class="nc" id="L218">			}</span>
 
 <span class="nc" id="L220">			PrologTerm[] prologArguments = prologTerm.getArguments();</span>
 
@@ -486,11 +486,11 @@ public final class PrologObjectConverter extends AbstractConverter&lt;PrologTerm
 <span class="nc bnc" id="L486" title="All 2 branches missed.">						if (argument == null) {</span>
 <span class="nc bnc" id="L487" title="All 2 branches missed.">							if (solutionsMap.containsKey(variableName)) {</span>
 <span class="nc" id="L488">								stack.push(solutionsMap.get(variableName));</span>
-<span class="nc" id="L489">							} else {</span>
+							} else {
 <span class="nc" id="L490">								PrologVariable variableArgument = provider.newVariable(variableName, i);</span>
 <span class="nc" id="L491">								stack.push(variableArgument);</span>
-							}
-<span class="nc" id="L493">						} else {</span>
+<span class="nc" id="L492">							}</span>
+						} else {
 <span class="nc" id="L494">							PrologTerm prologArgument = toTerm(argument);</span>
 <span class="nc" id="L495">							stack.push(prologArgument);</span>
 <span class="nc" id="L496">							solutionsMap.put(variableName, prologArgument);</span>
@@ -502,7 +502,7 @@ public final class PrologObjectConverter extends AbstractConverter&lt;PrologTerm
 
 				// update class pointer for the next super class
 <span class="nc" id="L504">				classPtr = classPtr.getSuperclass();</span>
-			}
+<span class="nc" id="L505">			}</span>
 
 <span class="nc" id="L507">			PrologTerm[] prologArguments = new PrologTerm[stack.size()];</span>
 <span class="nc bnc" id="L508" title="All 4 branches missed.">			for (int i = 0; i &lt; prologArguments.length || !stack.isEmpty(); i++) {</span>
@@ -571,7 +571,7 @@ public final class PrologObjectConverter extends AbstractConverter&lt;PrologTerm
 
 			// update class pointer for the next super class
 <span class="nc" id="L573">			classPtr = classPtr.getSuperclass();</span>
-		}
+<span class="nc" id="L574">		}</span>
 
 <span class="nc" id="L576">		PrologTerm[] prologArguments = new PrologTerm[stack.size()];</span>
 <span class="nc bnc" id="L577" title="All 4 branches missed.">		for (int i = 0; i &lt; prologArguments.length || !stack.isEmpty(); i++) {</span>

@@ -1364,23 +1364,23 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="13" tokens="113">
-<file line="99" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
-<file line="179" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="179" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="99" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
 <codefragment>
 <![CDATA[
-				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
-			}
+						LoggerUtils.error(EmbeddedHierarchical.class, LoggerConstants.IO, e);
+					}
 
-			assert url != null;
+					assert url != null;
 
-			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
-			String user = unit.getProperties().getProperty(DatabaseProperties.USER);
-			DatabaseUser owner = new DatabaseUser(user, password);
-			StorageManager storage = settings.createStorageManager(url.getFile() + "/database", mode);
-			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
-			for (String managedClass : unit.getManagedClassNames()) {
-				schema.addClass(JavaReflect.classForName(managedClass), "");
-			}
+					String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
+					String user = unit.getProperties().getProperty(DatabaseProperties.USER);
+					DatabaseUser owner = new DatabaseUser(user, password);
+					StorageManager storage = settings.createStorageManager(url.getFile() + "/database", mode);
+					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
+					for (String managedClass : unit.getManagedClassNames()) {
+						schema.addClass(JavaReflect.classForName(managedClass), "");
+					}
 ]]>
 </codefragment>
 </duplication>
@@ -1588,17 +1588,17 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="7" tokens="103">
-<file line="88" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
 <file line="169" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="88" path="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
 <codefragment>
 <![CDATA[
-			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
-			URL url = null;
-			try {
-				System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
-				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
-				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
-					throw new MalformedURLException("The URL path don't have database named " + name);
+					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
+					URL url = null;
+					try {
+						System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
+						url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
+						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
+							throw new MalformedURLException("The URL path don't have database name at the end");
 ]]>
 </codefragment>
 </duplication>

@@ -1220,7 +1220,7 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 
 <span class="nc" id="L1221">		programmer.print(modelName + &quot;_edit(ID,ENTITY) :- \n&quot;);</span>
 <span class="nc" id="L1222">		programmer.print(&quot;\tinteger_parse_int(ID, A),\n&quot;);</span>
-<span class="nc" id="L1223">		programmer.print(&quot;\tweblog_address_retrieve_one(A, ENTITY),\n&quot;);</span>
+<span class="nc" id="L1223">		programmer.print(&quot;\t&quot; + modelName + &quot;_retrieve_one(A, ENTITY),\n&quot;);</span>
 <span class="nc" id="L1224">		programmer.print(&quot;\trender('view/edit.html').\n\n&quot;);</span>
 
 <span class="nc" id="L1226">		programmer.print(modelName + &quot;_find_all(LIST) :- \n&quot;);</span>

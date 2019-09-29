@@ -108,7 +108,7 @@ public class RemoteDatabaseServer extends AbstractPlatform implements Platform, 
 		Map<String, DatabaseEngine> relationals = JavaMaps.hashMap();
 
 		// load relational databases
-		String relational = "dat/relational";
+		String relational = "db/pdb/relational";
 		File rdat = new File(relational);
 		File[] files = rdat.listFiles();
 		if (files != null) {
@@ -135,7 +135,7 @@ public class RemoteDatabaseServer extends AbstractPlatform implements Platform, 
 		Map<String, DatabaseEngine> hierarchicals = JavaMaps.hashMap();
 
 		// load hierarchical databases
-		String hierarchical = "dat/hierarchical";
+		String hierarchical = "db/pdb/hierarchical";
 		File hdat = new File(hierarchical);
 		File[] files = hdat.listFiles();
 		if (files != null) {

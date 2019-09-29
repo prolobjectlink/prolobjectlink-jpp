@@ -61,7 +61,7 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 
 	private final StorageManager storage;
 	private final Transaction transaction;
-	protected static final String LOCATION = "dat" + SEPARATOR + "hierarchical";
+	protected static final String LOCATION = "db/pdb/hierarchical";
 
 	/**
 	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,

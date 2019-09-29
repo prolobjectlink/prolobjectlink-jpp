@@ -103,34 +103,34 @@ import org.prolobjectlink.logging.LoggerUtils;
 <span class="nc" id="L103">					copy(in, zipOut);</span>
 <span class="nc" id="L104">					zipOut.closeEntry();</span>
 
-				}
+<span class="nc" id="L106">				}</span>
 			}
 
 <span class="nc" id="L109">		} catch (IOException e) {</span>
 <span class="nc" id="L110">			LoggerUtils.error(getClass(), IO, e);</span>
-<span class="nc" id="L111">		} finally {</span>
+		} finally {
 <span class="nc bnc" id="L112" title="All 6 branches missed.">			if (zipOut != null) {</span>
 				try {
 <span class="nc" id="L114">					zipOut.close();</span>
 <span class="nc" id="L115">				} catch (IOException e) {</span>
 <span class="nc" id="L116">					LoggerUtils.error(getClass(), IO, e);</span>
-				}
+<span class="nc" id="L117">				}</span>
 			}
 <span class="nc bnc" id="L119" title="All 6 branches missed.">			if (out != null) {</span>
 				try {
 <span class="nc" id="L121">					out.close();</span>
 <span class="nc" id="L122">				} catch (IOException e) {</span>
 <span class="nc" id="L123">					LoggerUtils.error(getClass(), IO, e);</span>
-				}
+<span class="nc" id="L124">				}</span>
 			}
 <span class="nc bnc" id="L126" title="All 6 branches missed.">			if (in != null) {</span>
 				try {
 <span class="nc" id="L128">					in.close();</span>
 <span class="nc" id="L129">				} catch (IOException e) {</span>
 <span class="nc" id="L130">					LoggerUtils.error(getClass(), IO, e);</span>
-				}
+<span class="nc" id="L131">				}</span>
 			}
-<span class="nc" id="L133">		}</span>
+		}
 
 <span class="nc" id="L135">	}</span>
 

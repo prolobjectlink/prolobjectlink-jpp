@@ -1230,7 +1230,7 @@
 <a class="jxr_linenumber" name="1220" href="#1220">1220</a> 
 <a class="jxr_linenumber" name="1221" href="#1221">1221</a> 		programmer.print(modelName + <span class="jxr_string">"_edit(ID,ENTITY) :- \n"</span>);
 <a class="jxr_linenumber" name="1222" href="#1222">1222</a> 		programmer.print(<span class="jxr_string">"\tinteger_parse_int(ID, A),\n"</span>);
-<a class="jxr_linenumber" name="1223" href="#1223">1223</a> 		programmer.print(<span class="jxr_string">"\tweblog_address_retrieve_one(A, ENTITY),\n"</span>);
+<a class="jxr_linenumber" name="1223" href="#1223">1223</a> 		programmer.print(<span class="jxr_string">"\t"</span> + modelName + <span class="jxr_string">"_retrieve_one(A, ENTITY),\n"</span>);
 <a class="jxr_linenumber" name="1224" href="#1224">1224</a> 		programmer.print(<span class="jxr_string">"\trender('view/edit.html').\n\n"</span>);
 <a class="jxr_linenumber" name="1225" href="#1225">1225</a> 
 <a class="jxr_linenumber" name="1226" href="#1226">1226</a> 		programmer.print(modelName + <span class="jxr_string">"_find_all(LIST) :- \n"</span>);

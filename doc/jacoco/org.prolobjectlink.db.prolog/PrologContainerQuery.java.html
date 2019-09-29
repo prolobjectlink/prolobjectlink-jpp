@@ -234,11 +234,11 @@ public class PrologContainerQuery extends AbstractContainerQuery implements Quer
 <span class="nc" id="L234">						array[i] = JavaReflect.readValue(field, objectInArray);</span>
 <span class="nc" id="L235">					} catch (NoSuchFieldException e) {</span>
 <span class="nc" id="L236">						LoggerUtils.error(getClass(), LoggerConstants.NO_SUCH_FIELD, e);</span>
-					}
+<span class="nc" id="L237">					}</span>
 				}
 <span class="nc" id="L239">				solutionList.add(array);</span>
 			}
-		}
+<span class="nc" id="L241">		}</span>
 <span class="nc" id="L242">		return new PrologContainerQuery(solutionList);</span>
 	}
 

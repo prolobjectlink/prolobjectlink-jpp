@@ -97,19 +97,19 @@ import org.prolobjectlink.logging.LoggerUtils;
 				// retrieve next entry
 <span class="nc" id="L98">				entry = zipIn.getNextEntry();</span>
 
-			}
+<span class="nc" id="L100">			}</span>
 
 <span class="nc" id="L102">		} catch (IOException e) {</span>
 <span class="nc" id="L103">			LoggerUtils.error(getClass(), IO + zipFileName, e);</span>
-<span class="nc" id="L104">		} finally {</span>
+		} finally {
 <span class="nc bnc" id="L105" title="All 6 branches missed.">			if (zipIn != null) {</span>
 				try {
 <span class="nc" id="L107">					zipIn.close();</span>
 <span class="nc" id="L108">				} catch (IOException e) {</span>
 <span class="nc" id="L109">					LoggerUtils.error(getClass(), IO, e);</span>
-				}
+<span class="nc" id="L110">				}</span>
 			}
-<span class="nc" id="L112">		}</span>
+		}
 
 <span class="nc" id="L114">	}</span>
 }

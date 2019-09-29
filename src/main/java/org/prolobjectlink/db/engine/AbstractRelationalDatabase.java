@@ -61,7 +61,7 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 
 	private final StorageGraph storage;
 	private final Transaction transaction;
-	protected static final String LOCATION = "dat" + File.separator + "relational";
+	protected static final String LOCATION = "db/pdb/relational";
 
 	/**
 	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,

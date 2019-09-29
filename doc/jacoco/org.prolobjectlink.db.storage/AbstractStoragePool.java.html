@@ -102,7 +102,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L102" title="All 2 branches missed.">			if (object != null) {</span>
 <span class="nc" id="L103">				return object;</span>
 			}
-		}
+<span class="nc" id="L105">		}</span>
 <span class="nc" id="L106">		return null;</span>
 	}
 
@@ -113,7 +113,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L113" title="All 2 branches missed.">			if (object != null) {</span>
 <span class="nc" id="L114">				return object;</span>
 			}
-		}
+<span class="nc" id="L116">		}</span>
 <span class="nc" id="L117">		return null;</span>
 	}
 
@@ -124,7 +124,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L124" title="All 2 branches missed.">			if (object != null) {</span>
 <span class="nc" id="L125">				return object;</span>
 			}
-		}
+<span class="nc" id="L127">		}</span>
 <span class="nc" id="L128">		return null;</span>
 	}
 
@@ -135,7 +135,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L135" title="All 2 branches missed.">			if (object != null) {</span>
 <span class="nc" id="L136">				return object;</span>
 			}
-		}
+<span class="nc" id="L138">		}</span>
 <span class="nc" id="L139">		return null;</span>
 	}
 
@@ -146,7 +146,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L146" title="All 2 branches missed.">			if (object != null) {</span>
 <span class="nc" id="L147">				return object;</span>
 			}
-		}
+<span class="nc" id="L149">		}</span>
 <span class="nc" id="L150">		return null;</span>
 	}
 
@@ -206,7 +206,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L206" title="All 2 branches missed.">			if (storage.contains(string)) {</span>
 <span class="nc" id="L207">				return true;</span>
 			}
-		}
+<span class="nc" id="L209">		}</span>
 <span class="nc" id="L210">		return false;</span>
 	}
 
@@ -216,7 +216,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L216" title="All 2 branches missed.">			if (storage.contains(object)) {</span>
 <span class="nc" id="L217">				return true;</span>
 			}
-		}
+<span class="nc" id="L219">		}</span>
 <span class="nc" id="L220">		return false;</span>
 	}
 
@@ -226,7 +226,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L226" title="All 2 branches missed.">			if (storage.contains(clazz)) {</span>
 <span class="nc" id="L227">				return true;</span>
 			}
-		}
+<span class="nc" id="L229">		}</span>
 <span class="nc" id="L230">		return false;</span>
 	}
 
@@ -236,7 +236,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L236" title="All 2 branches missed.">			if (storage.contains(predicate)) {</span>
 <span class="nc" id="L237">				return true;</span>
 			}
-		}
+<span class="nc" id="L239">		}</span>
 <span class="nc" id="L240">		return false;</span>
 	}
 
@@ -246,7 +246,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L246" title="All 2 branches missed.">			if (storage.contains(functor, arity)) {</span>
 <span class="nc" id="L247">				return true;</span>
 			}
-		}
+<span class="nc" id="L249">		}</span>
 <span class="nc" id="L250">		return false;</span>
 	}
 
@@ -258,7 +258,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc" id="L258">		checkActiveTransaction(transaction);</span>
 <span class="nc bnc" id="L259" title="All 2 branches missed.">		for (Storage s : storages) {</span>
 <span class="nc" id="L260">			s.clear();</span>
-		}
+<span class="nc" id="L261">		}</span>
 <span class="nc" id="L262">	}</span>
 
 	public final &lt;O&gt; void insert(O... facts) {
@@ -273,7 +273,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L273" title="All 2 branches missed.">		if (!lastStorage.hasCapacity()) {</span>
 <span class="nc" id="L274">			lastStorage = createStorage(path, storageCapacity);</span>
 <span class="nc" id="L275">			storages.add(lastStorage);</span>
-<span class="nc" id="L276">		} else {</span>
+		} else {
 <span class="nc" id="L277">			lastStorage.insert(facts);</span>
 		}
 <span class="nc" id="L279">	}</span>
@@ -282,13 +282,13 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc" id="L282">		checkActiveTransaction(transaction);</span>
 <span class="nc bnc" id="L283" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
 <span class="nc" id="L284">			storage.update(match, merge);</span>
-		}
+<span class="nc" id="L285">		}</span>
 <span class="nc" id="L286">	}</span>
 
 	public final &lt;O&gt; void delete(O... facts) {
 <span class="nc bnc" id="L289" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
 <span class="nc" id="L290">			storage.delete(facts);</span>
-		}
+<span class="nc" id="L291">		}</span>
 <span class="nc" id="L292">		counter += facts.length;</span>
 <span class="nc bnc" id="L293" title="All 2 branches missed.">		if (counter &gt;= getCapacity()) {</span>
 <span class="nc" id="L294">			defragment();</span>
@@ -300,7 +300,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc" id="L300">		checkActiveTransaction(transaction);</span>
 <span class="nc bnc" id="L301" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
 <span class="nc" id="L302">			storage.delete(clazz);</span>
-		}
+<span class="nc" id="L303">		}</span>
 <span class="nc" id="L304">		defragment();</span>
 <span class="nc" id="L305">		counter = 0;</span>
 <span class="nc" id="L306">	}</span>
@@ -308,7 +308,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 	public final void include(String path) {
 <span class="nc bnc" id="L309" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
 <span class="nc" id="L310">			storage.include(path);</span>
-		}
+<span class="nc" id="L311">		}</span>
 <span class="nc" id="L312">	}</span>
 
 	public final String locationOf(Class&lt;?&gt; clazz) {
@@ -324,7 +324,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc" id="L324">		List&lt;Class&lt;?&gt;&gt; c = new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
 <span class="nc bnc" id="L325" title="All 2 branches missed.">		for (Storage storage : storages) {</span>
 <span class="nc" id="L326">			c.addAll(storage.classes());</span>
-		}
+<span class="nc" id="L327">		}</span>
 <span class="nc" id="L328">		return c;</span>
 	}
 
@@ -333,7 +333,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L333" title="All 2 branches missed.">		for (Storage s : storages) {</span>
 <span class="nc" id="L334">			s.clear();</span>
 <span class="nc" id="L335">			s.close();</span>
-		}
+<span class="nc" id="L336">		}</span>
 <span class="nc" id="L337">		storages.clear();</span>
 <span class="nc" id="L338">		open = false;</span>
 <span class="nc" id="L339">	}</span>
@@ -354,7 +354,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 					}
 <span class="nc" id="L355">				} catch (IOException e) {</span>
 <span class="nc" id="L356">					LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
-				}
+<span class="nc" id="L357">				}</span>
 			}
 		}
 <span class="nc" id="L360">		open = true;</span>
@@ -396,7 +396,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 				}
 <span class="nc" id="L397">				storage.commit();</span>
 			}
-		}
+<span class="nc" id="L399">		}</span>
 <span class="nc" id="L400">	}</span>
 
 	protected class StoragePoolProcedureQuery extends AbstractProcedureQuery implements ProcedureQuery {
@@ -410,20 +410,20 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc" id="L410">			AbstractStoragePool.this.open();</span>
 <span class="nc bnc" id="L411" title="All 2 branches missed.">			for (Storage storage : storages) {</span>
 <span class="nc" id="L412">				queries.add(storage.createProcedureQuery(functor, arguments));</span>
-			}
+<span class="nc" id="L413">			}</span>
 <span class="nc" id="L414">		}</span>
 
 		public ProcedureQuery setMaxSolution(int maxSolution) {
 <span class="nc bnc" id="L417" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
 <span class="nc" id="L418">				procedureQuery.setMaxSolution(maxSolution);</span>
-			}
+<span class="nc" id="L419">			}</span>
 <span class="nc" id="L420">			return this;</span>
 		}
 
 		public ProcedureQuery setFirstSolution(int firstSolution) {
 <span class="nc bnc" id="L424" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
 <span class="nc" id="L425">				procedureQuery.setFirstSolution(maxSolution);</span>
-			}
+<span class="nc" id="L426">			}</span>
 <span class="nc" id="L427">			return this;</span>
 		}
 
@@ -435,14 +435,14 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		public ProcedureQuery setArgumentValue(int position, Object value) {
 <span class="nc bnc" id="L436" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
 <span class="nc" id="L437">				procedureQuery.setArgumentValue(position, value);</span>
-			}
+<span class="nc" id="L438">			}</span>
 <span class="nc" id="L439">			return this;</span>
 		}
 
 		public ProcedureQuery execute() {
 <span class="nc bnc" id="L443" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
 <span class="nc" id="L444">				procedureQuery.execute();</span>
-			}
+<span class="nc" id="L445">			}</span>
 <span class="nc" id="L446">			return this;</span>
 		}
 
@@ -457,7 +457,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 		public void dispose() {
 <span class="nc bnc" id="L458" title="All 2 branches missed.">			for (ProcedureQuery procedureQuery : queries) {</span>
 <span class="nc" id="L459">				procedureQuery.dispose();</span>
-			}
+<span class="nc" id="L460">			}</span>
 <span class="nc" id="L461">		}</span>
 
 		protected final List&lt;ProcedureQuery&gt; getQueries() {
@@ -496,7 +496,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 <span class="nc bnc" id="L496" title="All 2 branches missed.">				if (procedureQuery.hasNext()) {</span>
 <span class="nc" id="L497">					return true;</span>
 				}
-			}
+<span class="nc" id="L499">			}</span>
 <span class="nc" id="L500">			return false;</span>
 		}
 
@@ -512,7 +512,7 @@ public abstract class AbstractStoragePool extends AbstractPersistentContainer im
 						}
 					}
 				}
-			}
+<span class="nc" id="L515">			}</span>
 <span class="nc" id="L516">			return list.toArray();</span>
 		}
 

@@ -129,7 +129,7 @@ public final class DatabaseRequest extends AbstractWrapper
 	@Override
 	public String toString() {
 <span class="nc" id="L131">		return &quot;DatabaseRequest [timestamp=&quot; + timestamp + &quot;, type=&quot; + type + &quot;, dbtype=&quot; + dbtype + &quot;, dbname=&quot;</span>
-<span class="nc" id="L132">				+ dbname + &quot;, arguments=&quot; + arguments + &quot;]&quot;;</span>
+				+ dbname + &quot;, arguments=&quot; + arguments + &quot;]&quot;;
 	}
 
 	@Override
@@ -211,15 +211,15 @@ public final class DatabaseRequest extends AbstractWrapper
 <span class="nc" id="L211">			LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
 <span class="nc" id="L212">		} catch (ClassNotFoundException e) {</span>
 <span class="nc" id="L213">			LoggerUtils.error(getClass(), LoggerConstants.CLASS_NOT_FOUND, e);</span>
-<span class="nc" id="L214">		} finally {</span>
+		} finally {
 <span class="nc bnc" id="L215" title="All 10 branches missed.">			if (socket != null) {</span>
 				try {
 <span class="nc" id="L217">					socket.close();</span>
 <span class="nc" id="L218">				} catch (IOException e) {</span>
 					// close silently
-				}
+<span class="nc" id="L220">				}</span>
 			}
-<span class="nc" id="L222">		}</span>
+		}
 
 <span class="nc" id="L224">		return null;</span>
 	}
