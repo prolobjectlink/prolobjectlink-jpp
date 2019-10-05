@@ -43,6 +43,10 @@ public abstract class AbstractPlatform implements Platform {
 	protected static final int IO_BUFFER_SIZE = 4 * 1024;
 	protected static final long MAX_IO_BUFFER_SIZE = Long.MAX_VALUE;
 
+	public final String getUserName() {
+		return System.getProperty("user.name");
+	}
+
 	public final String getJavaVersion() {
 		return System.getProperty("java.version");
 	}

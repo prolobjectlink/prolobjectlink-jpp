@@ -60,6 +60,8 @@ import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.prolobjectlink.AbstractPlatform;
+import org.prolobjectlink.prolog.PrologEngine;
 import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologTerm;
 
@@ -69,7 +71,7 @@ import org.prolobjectlink.prolog.PrologTerm;
  * @author Jose Zalacain
  * @since 1.0
  */
-public abstract class AbstractProgrammer implements PrologProgrammer {
+public abstract class AbstractProgrammer extends AbstractPlatform implements PrologProgrammer {
 
 	protected final PrologProvider provider;
 	private static final String NECK = " :- \n\t";
@@ -791,6 +793,17 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		return runtimeFile;
 	}
 
+	protected final File createViewFile(File prt, String modelName) throws IOException {
+		String name = modelName.substring(0, modelName.lastIndexOf(".pl"));
+		name = modelName.substring(name.lastIndexOf('/') + 1, name.length());
+		String app = name.substring(0, name.indexOf('_'));
+		File runtimeFile = new File(prt.getCanonicalPath() + "/web/" + app + "/view/" + name);
+		if (!runtimeFile.exists()) {
+			runtimeFile.mkdirs();
+		}
+		return runtimeFile;
+	}
+
 	protected final void codingLicense(PrintWriter programmer) {
 		SimpleDateFormat f = new SimpleDateFormat("yyyy");
 		String year = f.format(new Date(System.currentTimeMillis()));
@@ -818,6 +831,11 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 
 	protected final void codingAuthor(PrintWriter programmer) {
 		programmer.println("% Author: Jose Zalacain");
+		programmer.println();
+	}
+
+	protected final void codingUser(PrintWriter programmer) {
+		programmer.println("% Author: " + getUserName());
 		programmer.println();
 	}
 
@@ -962,39 +980,6 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 		}
 	}
 
-	public final void codingActiveRecord(PrintWriter programmer, String fileName) {
-		String modelName = fileName.replace('/', '_');
-		programmer.print(modelName + "_query_one(ARG0, OUT) :- \n");
-		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_query_one(DAO, ARG0, OUT),\n");
-		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
-
-		programmer.print(modelName + "_query_all(ARG0, OUT) :- \n");
-		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_query_all(DAO, ARG0, OUT),\n");
-		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
-
-		programmer.print(modelName + "_query_all(ARG0, ARG1, ARG2, OUT) :- \n");
-		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_query_all(DAO, ARG0, ARG1, ARG2, OUT),\n");
-		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
-
-		programmer.print(modelName + "_retrieve_one(ARG0, OUT) :- \n");
-		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_retrieve_one(DAO, ARG0, OUT),\n");
-		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
-
-		programmer.print(modelName + "_retrieve_all(OUT) :- \n");
-		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_retrieve_all(DAO, OUT),\n");
-		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
-
-		programmer.print(modelName + "_retrieve_all(ARG0, ARG1, OUT) :- \n");
-		programmer.print("\t" + modelName + "_dao(DAO),\n");
-		programmer.print("\t" + modelName + "_dao_retrieve_all(DAO, ARG0, ARG1, OUT),\n");
-		programmer.print("\t" + modelName + "_dao_close(DAO).\n\n");
-	}
-
 	public final void codingRuntime(PrintWriter stdout) {
 		Class<?> c = getClass();
 		ProtectionDomain d = c.getProtectionDomain();
@@ -1133,9 +1118,8 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 						File runtimeFile = createRuntimeFile(folder, fileName);
 						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
 						codingLicense(programmer);
-						codingAuthor(programmer);
+						codingUser(programmer);
 						codingInclusion(programmer, jarEntryName);
-						// TODO introspection here
 						codingConstants(programmer, runtimeClass);
 						codingConstructors(programmer, runtimeClass);
 						codingMethods(programmer, runtimeClass);
@@ -1184,15 +1168,28 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 						if (isValidClass(runtimeClass)) {
 							File runtimeFile = createWebFile(folder, controllerFileName);
 							PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
+							// codingLicense(programmer);
+							// codingUser(programmer);
 							codingInclusion(programmer, jarEntryName);
 							codingInclusion(programmer, jarEntryName, "misc/http.pl");
 							codingInclusion(programmer, jarEntryName, "misc/integer.pl");
 							codingInclusion(programmer, jarEntryName, "web/" + modelFileName);
 							String name = modelFileName.substring(0, modelFileName.lastIndexOf(".pl"));
 							name = modelFileName.substring(name.lastIndexOf('/') + 1, name.length());
+							String application = name.substring(0, name.indexOf('_'));
 							String clsName = className.substring(className.lastIndexOf('/') + 1, className.length());
-							codingProcedures(programmer, name, clsName);
+							codingProcedures(programmer, name, clsName, runtimeClass);
 							programmer.close();
+
+							// register controller
+							String path = runtimeFile.getParentFile().getParent() + "/controller.pl";
+							PrologTerm location = provider.newAtom("controller/" + name + "_controller.pl");
+							PrologTerm register = provider.newStructure(application + "_controller", location);
+							PrologEngine engine = provider.newEngine(path);
+							engine.assertz(register);
+							engine.persist(path);
+							engine.dispose();
+
 						}
 					} catch (NoClassDefFoundError e) {
 						stdout.println("WARNING: No definition of the class could be found " + e);
@@ -1211,76 +1208,15 @@ public abstract class AbstractProgrammer implements PrologProgrammer {
 
 	}
 
-	public final void codingProcedures(PrintWriter programmer, String modelFileName, String clsName) {
-
-		String modelName = modelFileName.replace('/', '_');
-
-		programmer.print(modelName + "_new(_) :- \n");
-		programmer.print("\trender('view/new.html').\n\n");
-
-		programmer.print(modelName + "_edit(ID,ENTITY) :- \n");
-		programmer.print("\tinteger_parse_int(ID, A),\n");
-		programmer.print("\t" + modelName + "_retrieve_one(A, ENTITY),\n");
-		programmer.print("\trender('view/edit.html').\n\n");
-
-		programmer.print(modelName + "_find_all(LIST) :- \n");
-		programmer.print("\t" + modelName + "_retrieve_all(LIST),\n");
-		programmer.print("\trender('view/list.html').\n\n");
-
-		programmer.print(modelName + "_query_all(LIST) :- \n");
-		programmer.print("\t" + modelName + "_query_all('select a from " + clsName + " a', LIST),\n");
-		programmer.print("\trender('view/list.html').\n\n");
-
-		programmer.print(modelName + "_find_all_range(MAX,FIRST,LIST) :- \n");
-		programmer.print("\tinteger_parse_int(MAX, A),\n");
-		programmer.print("\tinteger_parse_int(FIRST, B),\n");
-		programmer.print("\t" + modelName + "_retrieve_all(A,B,LIST),\n");
-		programmer.print("\trender('view/list.html').\n\n");
-
-		programmer.print(modelName + "_query_all_range(MAX,FIRST,LIST) :- \n");
-		programmer.print("\tinteger_parse_int(MAX, A),\n");
-		programmer.print("\tinteger_parse_int(FIRST, B),\n");
-		programmer.print("\t" + modelName + "_query_all('select a from " + clsName + " a',A,B,LIST),\n");
-		programmer.print("\trender('view/list.html').\n\n");
-
-		programmer.print(modelName + "_find(ID,ENTITY) :- \n");
-		programmer.print("\tinteger_parse_int(ID, A),\n");
-		programmer.print("\t" + modelName + "_retrieve_one(A, ENTITY),\n");
-		programmer.print("\trender('view/show.html').\n\n");
-
-		programmer.print(modelName + "_query(ID,ENTITY) :- \n");
-		programmer.print("\tatom_concat('select a from " + clsName + " a where a.id =', ID, QUERY),\n");
-		programmer.print("\t" + modelName + "_query_one(QUERY, ENTITY),\n");
-		programmer.print("\trender(\'view/show.html\').\n\n");
-
-		programmer.print(modelName + "_update(ID,STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n");
-		programmer.print("\tinteger_parse_int(ID, A),\n");
-		programmer.print("\t" + modelName + "_retrieve_one(A, ENTITY),\n");
-		programmer.print("\t" + modelName + "_set_street(ENTITY, STREET),\n");
-		programmer.print("\t" + modelName + "_set_state(ENTITY, STATE),\n");
-		programmer.print("\t" + modelName + "_set_zip(ENTITY, ZIP),\n");
-		programmer.print("\t" + modelName + "_set_city(ENTITY, CITY),\n");
-		programmer.print("\t" + modelName + "_set_country(ENTITY, COUNTRY),\n");
-		programmer.print("\t" + modelName + "_update(ENTITY),\n");
-		programmer.print("\trender('view/show.html').\n\n");
-
-		programmer.print(modelName + "_create(STREET,STATE,ZIP,CITY,COUNTRY,ENTITY) :- \n");
-		programmer.print("\t" + modelName + "(ENTITY),\n");
-		programmer.print("\t" + modelName + "_set_street(ENTITY, STREET),\n");
-		programmer.print("\t" + modelName + "_set_state(ENTITY, STATE),\n");
-		programmer.print("\t" + modelName + "_set_zip(ENTITY, ZIP),\n");
-		programmer.print("\t" + modelName + "_set_city(ENTITY, CITY),\n");
-		programmer.print("\t" + modelName + "_set_country(ENTITY, COUNTRY),\n");
-		programmer.print("\t" + modelName + "_create(ENTITY),\n");
-		programmer.print("\trender('view/show.html').\n\n");
-
-		programmer.print(modelName + "_delete(ID,ENTITY) :- \n");
-		programmer.print("\tinteger_parse_int(ID, A),\n");
-		programmer.print("\t" + modelName + "_retrieve_one(A, ENTITY),\n");
-		programmer.print("\t" + modelName + "_delete(ENTITY),\n");
-		programmer.print("\t" + modelName + "_retrieve_all(ENTITY),\n");
-		programmer.print("\trender('view/list.html').\n\n");
-
+	public final void codingView(PrintWriter stdout, JarFile jarFile, boolean b) {
+		Class<?> c = getClass();
+		ProtectionDomain d = c.getProtectionDomain();
+		CodeSource s = d.getCodeSource();
+		String prolobjectlink = s.getLocation().getPath();
+		File plk = new File(prolobjectlink);
+		File pdk = plk.getParentFile();
+		File prt = pdk.getParentFile();
+		codingView(stdout, jarFile, prt, b);
 	}
 
 	private class JarFileFilter implements FileFilter {

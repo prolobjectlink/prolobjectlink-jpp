@@ -8,7 +8,7 @@ prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologLocale,187,0,30,0,49,0,27,
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologVector,11,0,0,0,6,0,3,0,3,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologHashMap.KeySetIterator,18,0,2,0,4,0,3,0,2,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologHashSet,258,0,32,0,62,0,27,0,11,0
-prolobjectlink-jpp,org.prolobjectlink.db.prolog,AbstractProgrammer,5702,0,110,0,1060,0,78,0,23,0
+prolobjectlink-jpp,org.prolobjectlink.db.prolog,AbstractProgrammer,5101,0,112,0,1004,0,80,0,24,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologHashMap.EntrySet,17,0,0,0,3,0,3,0,3,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologContainerFactory,77,0,0,0,9,0,8,0,8,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologHashMap.KeySet,17,0,0,0,3,0,3,0,3,0
@@ -80,7 +80,7 @@ prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologTypedQuery.AscendantCompar
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologTypedQuery,327,0,32,0,74,0,36,0,20,0
 prolobjectlink-jpp,org.prolobjectlink,ArrayQueue,47,0,8,0,14,0,10,0,6,0
 prolobjectlink-jpp,org.prolobjectlink,AbstractWrapper,47,0,2,0,11,0,6,0,5,0
-prolobjectlink-jpp,org.prolobjectlink,AbstractPlatform,87,0,10,0,24,0,24,0,19,0
+prolobjectlink-jpp,org.prolobjectlink,AbstractPlatform,90,0,10,0,25,0,25,0,20,0
 prolobjectlink-jpp,org.prolobjectlink,Direction,5,43,0,0,0,4,1,3,1,3
 prolobjectlink-jpp,org.prolobjectlink.db.persistent,RemoteHierarchical,455,0,36,0,87,0,26,0,8,0
 prolobjectlink-jpp,org.prolobjectlink.db.persistent,EmbeddedDatabaseClient,420,0,2,0,113,0,36,0,35,0

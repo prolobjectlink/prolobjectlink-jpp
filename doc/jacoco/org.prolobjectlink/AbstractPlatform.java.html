@@ -43,81 +43,85 @@ package org.prolobjectlink;
 	protected static final int IO_BUFFER_SIZE = 4 * 1024;
 	protected static final long MAX_IO_BUFFER_SIZE = Long.MAX_VALUE;
 
+	public final String getUserName() {
+<span class="nc" id="L47">		return System.getProperty(&quot;user.name&quot;);</span>
+	}
+
 	public final String getJavaVersion() {
-<span class="nc" id="L47">		return System.getProperty(&quot;java.version&quot;);</span>
+<span class="nc" id="L51">		return System.getProperty(&quot;java.version&quot;);</span>
 	}
 
 	public final String getJavaVendor() {
-<span class="nc" id="L51">		return System.getProperty(&quot;java.vendor&quot;);</span>
+<span class="nc" id="L55">		return System.getProperty(&quot;java.vendor&quot;);</span>
 	}
 
 	public final String getJavaName() {
-<span class="nc" id="L55">		return System.getProperty(&quot;java.vm.name&quot;);</span>
+<span class="nc" id="L59">		return System.getProperty(&quot;java.vm.name&quot;);</span>
 	}
 
 	public final String getJavaHome() {
-<span class="nc" id="L59">		return System.getProperty(&quot;java.home&quot;);</span>
+<span class="nc" id="L63">		return System.getProperty(&quot;java.home&quot;);</span>
 	}
 
 	public final boolean runOnOsX() {
-<span class="nc bnc" id="L63" title="All 4 branches missed.">		return getOsName().equals(&quot;Mac OS X&quot;) || getOsName().equals(&quot;Darwin&quot;);</span>
+<span class="nc bnc" id="L67" title="All 4 branches missed.">		return getOsName().equals(&quot;Mac OS X&quot;) || getOsName().equals(&quot;Darwin&quot;);</span>
 	}
 
 	public final boolean runOnWindows() {
-<span class="nc" id="L67">		return getOsName().startsWith(&quot;Windows&quot;);</span>
+<span class="nc" id="L71">		return getOsName().startsWith(&quot;Windows&quot;);</span>
 	}
 
 	public final boolean runOnLinux() {
-<span class="nc" id="L71">		return getOsName().equals(&quot;Linux&quot;);</span>
+<span class="nc" id="L75">		return getOsName().equals(&quot;Linux&quot;);</span>
 	}
 
 	public final String getOsName() {
-<span class="nc" id="L75">		String os = System.getProperty(&quot;os.name&quot;);</span>
-<span class="nc bnc" id="L76" title="All 2 branches missed.">		if (os == null)</span>
-<span class="nc" id="L77">			return &quot;unknow&quot;;</span>
-<span class="nc" id="L78">		return os;</span>
+<span class="nc" id="L79">		String os = System.getProperty(&quot;os.name&quot;);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">		if (os == null)</span>
+<span class="nc" id="L81">			return &quot;unknow&quot;;</span>
+<span class="nc" id="L82">		return os;</span>
 	}
 
 	public String getClassPath() {
-<span class="nc" id="L82">		return System.getenv(&quot;java.class.path&quot;);</span>
+<span class="nc" id="L86">		return System.getenv(&quot;java.class.path&quot;);</span>
 	}
 
 	public final String getPath() {
-<span class="nc" id="L86">		return System.getenv(&quot;Path&quot;);</span>
+<span class="nc" id="L90">		return System.getenv(&quot;Path&quot;);</span>
 	}
 
 	public final String getPathSeparator() {
-<span class="nc" id="L90">		return System.getProperty(&quot;path.separator&quot;);</span>
+<span class="nc" id="L94">		return System.getProperty(&quot;path.separator&quot;);</span>
 	}
 
 	public final String getPathExt() {
-<span class="nc" id="L94">		return System.getenv(&quot;PATHEXT&quot;);</span>
+<span class="nc" id="L98">		return System.getenv(&quot;PATHEXT&quot;);</span>
 	}
 
 	public final Runtime getRuntime() {
-<span class="nc" id="L98">		return Runtime.getRuntime();</span>
+<span class="nc" id="L102">		return Runtime.getRuntime();</span>
 	}
 
 	public final String getUserHome() {
-<span class="nc" id="L102">		return System.getProperty(&quot;user.home&quot;);</span>
+<span class="nc" id="L106">		return System.getProperty(&quot;user.home&quot;);</span>
 	}
 
 	public final String getUserDir() {
-<span class="nc" id="L106">		return System.getProperty(&quot;user.dir&quot;);</span>
-	}
-
-	public final String getWorkDir() {
 <span class="nc" id="L110">		return System.getProperty(&quot;user.dir&quot;);</span>
 	}
 
+	public final String getWorkDir() {
+<span class="nc" id="L114">		return System.getProperty(&quot;user.dir&quot;);</span>
+	}
+
 	public final void checkJDKInstalation() {
-<span class="nc bnc" id="L114" title="All 4 branches missed.">		if (getJavaHome() == null || getJavaHome().isEmpty()) {</span>
-<span class="nc" id="L115">			throw new RuntimeException(&quot;You need install JDK 1.7 or above&quot;);</span>
+<span class="nc bnc" id="L118" title="All 4 branches missed.">		if (getJavaHome() == null || getJavaHome().isEmpty()) {</span>
+<span class="nc" id="L119">			throw new RuntimeException(&quot;You need install JDK 1.7 or above&quot;);</span>
 		}
-<span class="nc" id="L117">	}</span>
+<span class="nc" id="L121">	}</span>
 
 	public final String getArch() {
-<span class="nc" id="L120">		return System.getProperty(&quot;os.arch&quot;);</span>
+<span class="nc" id="L124">		return System.getProperty(&quot;os.arch&quot;);</span>
 	}
 
 }

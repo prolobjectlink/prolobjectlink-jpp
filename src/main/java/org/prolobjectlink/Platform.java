@@ -46,6 +46,14 @@ public interface Platform {
 	public void checkJDKInstalation();
 
 	/**
+	 * Return the current user name.
+	 * 
+	 * @return the current user name.
+	 * @since 1.0
+	 */
+	public String getUserName();
+
+	/**
 	 * Return the java vm name. Is a shortcut to
 	 * {@code System.getProperty("java.vm.name");}
 	 * 

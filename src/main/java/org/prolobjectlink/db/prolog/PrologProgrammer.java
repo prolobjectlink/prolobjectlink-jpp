@@ -36,6 +36,8 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.jar.JarFile;
 
+import org.prolobjectlink.Platform;
+
 /**
  * Prolog Programmer is a mechanism responsible of generate a Prolog code from
  * Java classes include in Java runtime jars. Every class found in Java runtime
@@ -44,7 +46,7 @@ import java.util.jar.JarFile;
  * @author Jose Zalacain
  * @since 1.0
  */
-public interface PrologProgrammer {
+public interface PrologProgrammer extends Platform {
 
 	/**
 	 * Set the file inclusion directive used by Prolog implementation for include
@@ -94,6 +96,10 @@ public interface PrologProgrammer {
 
 	public void codingController(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings);
 
-	public void codingProcedures(PrintWriter programmer, String modelFileName, String clsName);
+	public void codingProcedures(PrintWriter programmer, String modelFileName, String clsName, Class<?> runtimeClass);
+
+	public void codingView(PrintWriter stdout, JarFile jarFile, boolean warnings);
+
+	public void codingView(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings);
 
 }
