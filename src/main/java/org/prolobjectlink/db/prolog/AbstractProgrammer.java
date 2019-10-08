@@ -1171,8 +1171,9 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 							// codingLicense(programmer);
 							// codingUser(programmer);
 							codingInclusion(programmer, jarEntryName);
-							codingInclusion(programmer, jarEntryName, "misc/http.pl");
-							codingInclusion(programmer, jarEntryName, "misc/integer.pl");
+							codingInclusion(programmer, jarEntryName, "misc/pl/http.pl");
+							codingInclusion(programmer, jarEntryName, "misc/pl/float.pl");
+							codingInclusion(programmer, jarEntryName, "misc/pl/integer.pl");
 							codingInclusion(programmer, jarEntryName, "web/" + modelFileName);
 							String name = modelFileName.substring(0, modelFileName.lastIndexOf(".pl"));
 							name = modelFileName.substring(name.lastIndexOf('/') + 1, name.length());

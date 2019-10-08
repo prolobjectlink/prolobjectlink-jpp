@@ -1181,63 +1181,64 @@
 <a class="jxr_linenumber" name="1171" href="#1171">1171</a> 							<em class="jxr_comment">// codingLicense(programmer);</em>
 <a class="jxr_linenumber" name="1172" href="#1172">1172</a> 							<em class="jxr_comment">// codingUser(programmer);</em>
 <a class="jxr_linenumber" name="1173" href="#1173">1173</a> 							codingInclusion(programmer, jarEntryName);
-<a class="jxr_linenumber" name="1174" href="#1174">1174</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"misc/http.pl"</span>);
-<a class="jxr_linenumber" name="1175" href="#1175">1175</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"misc/integer.pl"</span>);
-<a class="jxr_linenumber" name="1176" href="#1176">1176</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"web/"</span> + modelFileName);
-<a class="jxr_linenumber" name="1177" href="#1177">1177</a> 							String name = modelFileName.substring(0, modelFileName.lastIndexOf(<span class="jxr_string">".pl"</span>));
-<a class="jxr_linenumber" name="1178" href="#1178">1178</a> 							name = modelFileName.substring(name.lastIndexOf('/') + 1, name.length());
-<a class="jxr_linenumber" name="1179" href="#1179">1179</a> 							String application = name.substring(0, name.indexOf('_'));
-<a class="jxr_linenumber" name="1180" href="#1180">1180</a> 							String clsName = className.substring(className.lastIndexOf('/') + 1, className.length());
-<a class="jxr_linenumber" name="1181" href="#1181">1181</a> 							codingProcedures(programmer, name, clsName, runtimeClass);
-<a class="jxr_linenumber" name="1182" href="#1182">1182</a> 							programmer.close();
-<a class="jxr_linenumber" name="1183" href="#1183">1183</a> 
-<a class="jxr_linenumber" name="1184" href="#1184">1184</a> 							<em class="jxr_comment">// register controller</em>
-<a class="jxr_linenumber" name="1185" href="#1185">1185</a> 							String path = runtimeFile.getParentFile().getParent() + <span class="jxr_string">"/controller.pl"</span>;
-<a class="jxr_linenumber" name="1186" href="#1186">1186</a> 							PrologTerm location = provider.newAtom(<span class="jxr_string">"controller/"</span> + name + <span class="jxr_string">"_controller.pl"</span>);
-<a class="jxr_linenumber" name="1187" href="#1187">1187</a> 							PrologTerm register = provider.newStructure(application + <span class="jxr_string">"_controller"</span>, location);
-<a class="jxr_linenumber" name="1188" href="#1188">1188</a> 							PrologEngine engine = provider.newEngine(path);
-<a class="jxr_linenumber" name="1189" href="#1189">1189</a> 							engine.assertz(register);
-<a class="jxr_linenumber" name="1190" href="#1190">1190</a> 							engine.persist(path);
-<a class="jxr_linenumber" name="1191" href="#1191">1191</a> 							engine.dispose();
-<a class="jxr_linenumber" name="1192" href="#1192">1192</a> 
-<a class="jxr_linenumber" name="1193" href="#1193">1193</a> 						}
-<a class="jxr_linenumber" name="1194" href="#1194">1194</a> 					} <strong class="jxr_keyword">catch</strong> (NoClassDefFoundError e) {
-<a class="jxr_linenumber" name="1195" href="#1195">1195</a> 						stdout.println(<span class="jxr_string">"WARNING: No definition of the class could be found "</span> + e);
-<a class="jxr_linenumber" name="1196" href="#1196">1196</a> 						warnings = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="1197" href="#1197">1197</a> 						<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="1198" href="#1198">1198</a> 					} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
-<a class="jxr_linenumber" name="1199" href="#1199">1199</a> 						stdout.println(<span class="jxr_string">"WARNING: No definition of the class could be found "</span> + e);
-<a class="jxr_linenumber" name="1200" href="#1200">1200</a> 						warnings = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="1201" href="#1201">1201</a> 						<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="1202" href="#1202">1202</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="1203" href="#1203">1203</a> 						Logger.getLogger(getClass().getName()).log(Level.SEVERE, <strong class="jxr_keyword">null</strong>, e);
-<a class="jxr_linenumber" name="1204" href="#1204">1204</a> 					}
-<a class="jxr_linenumber" name="1205" href="#1205">1205</a> 				}
-<a class="jxr_linenumber" name="1206" href="#1206">1206</a> 			}
-<a class="jxr_linenumber" name="1207" href="#1207">1207</a> 		}
-<a class="jxr_linenumber" name="1208" href="#1208">1208</a> 
-<a class="jxr_linenumber" name="1209" href="#1209">1209</a> 	}
-<a class="jxr_linenumber" name="1210" href="#1210">1210</a> 
-<a class="jxr_linenumber" name="1211" href="#1211">1211</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> codingView(PrintWriter stdout, JarFile jarFile, <strong class="jxr_keyword">boolean</strong> b) {
-<a class="jxr_linenumber" name="1212" href="#1212">1212</a> 		Class&lt;?&gt; c = getClass();
-<a class="jxr_linenumber" name="1213" href="#1213">1213</a> 		ProtectionDomain d = c.getProtectionDomain();
-<a class="jxr_linenumber" name="1214" href="#1214">1214</a> 		CodeSource s = d.getCodeSource();
-<a class="jxr_linenumber" name="1215" href="#1215">1215</a> 		String prolobjectlink = s.getLocation().getPath();
-<a class="jxr_linenumber" name="1216" href="#1216">1216</a> 		File plk = <strong class="jxr_keyword">new</strong> File(prolobjectlink);
-<a class="jxr_linenumber" name="1217" href="#1217">1217</a> 		File pdk = plk.getParentFile();
-<a class="jxr_linenumber" name="1218" href="#1218">1218</a> 		File prt = pdk.getParentFile();
-<a class="jxr_linenumber" name="1219" href="#1219">1219</a> 		codingView(stdout, jarFile, prt, b);
-<a class="jxr_linenumber" name="1220" href="#1220">1220</a> 	}
-<a class="jxr_linenumber" name="1221" href="#1221">1221</a> 
-<a class="jxr_linenumber" name="1222" href="#1222">1222</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/prolobjectlink/db/prolog/AbstractProgrammer.html">JarFileFilter</a> <strong class="jxr_keyword">implements</strong> FileFilter {
-<a class="jxr_linenumber" name="1223" href="#1223">1223</a> 
-<a class="jxr_linenumber" name="1224" href="#1224">1224</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> accept(File pathname) {
-<a class="jxr_linenumber" name="1225" href="#1225">1225</a> 			<strong class="jxr_keyword">return</strong> pathname.getName().endsWith(<span class="jxr_string">".jar"</span>);
-<a class="jxr_linenumber" name="1226" href="#1226">1226</a> 		}
-<a class="jxr_linenumber" name="1227" href="#1227">1227</a> 
-<a class="jxr_linenumber" name="1228" href="#1228">1228</a> 	}
-<a class="jxr_linenumber" name="1229" href="#1229">1229</a> 
-<a class="jxr_linenumber" name="1230" href="#1230">1230</a> }
+<a class="jxr_linenumber" name="1174" href="#1174">1174</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"misc/pl/http.pl"</span>);
+<a class="jxr_linenumber" name="1175" href="#1175">1175</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"misc/pl/float.pl"</span>);
+<a class="jxr_linenumber" name="1176" href="#1176">1176</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"misc/pl/integer.pl"</span>);
+<a class="jxr_linenumber" name="1177" href="#1177">1177</a> 							codingInclusion(programmer, jarEntryName, <span class="jxr_string">"web/"</span> + modelFileName);
+<a class="jxr_linenumber" name="1178" href="#1178">1178</a> 							String name = modelFileName.substring(0, modelFileName.lastIndexOf(<span class="jxr_string">".pl"</span>));
+<a class="jxr_linenumber" name="1179" href="#1179">1179</a> 							name = modelFileName.substring(name.lastIndexOf('/') + 1, name.length());
+<a class="jxr_linenumber" name="1180" href="#1180">1180</a> 							String application = name.substring(0, name.indexOf('_'));
+<a class="jxr_linenumber" name="1181" href="#1181">1181</a> 							String clsName = className.substring(className.lastIndexOf('/') + 1, className.length());
+<a class="jxr_linenumber" name="1182" href="#1182">1182</a> 							codingProcedures(programmer, name, clsName, runtimeClass);
+<a class="jxr_linenumber" name="1183" href="#1183">1183</a> 							programmer.close();
+<a class="jxr_linenumber" name="1184" href="#1184">1184</a> 
+<a class="jxr_linenumber" name="1185" href="#1185">1185</a> 							<em class="jxr_comment">// register controller</em>
+<a class="jxr_linenumber" name="1186" href="#1186">1186</a> 							String path = runtimeFile.getParentFile().getParent() + <span class="jxr_string">"/controller.pl"</span>;
+<a class="jxr_linenumber" name="1187" href="#1187">1187</a> 							PrologTerm location = provider.newAtom(<span class="jxr_string">"controller/"</span> + name + <span class="jxr_string">"_controller.pl"</span>);
+<a class="jxr_linenumber" name="1188" href="#1188">1188</a> 							PrologTerm register = provider.newStructure(application + <span class="jxr_string">"_controller"</span>, location);
+<a class="jxr_linenumber" name="1189" href="#1189">1189</a> 							PrologEngine engine = provider.newEngine(path);
+<a class="jxr_linenumber" name="1190" href="#1190">1190</a> 							engine.assertz(register);
+<a class="jxr_linenumber" name="1191" href="#1191">1191</a> 							engine.persist(path);
+<a class="jxr_linenumber" name="1192" href="#1192">1192</a> 							engine.dispose();
+<a class="jxr_linenumber" name="1193" href="#1193">1193</a> 
+<a class="jxr_linenumber" name="1194" href="#1194">1194</a> 						}
+<a class="jxr_linenumber" name="1195" href="#1195">1195</a> 					} <strong class="jxr_keyword">catch</strong> (NoClassDefFoundError e) {
+<a class="jxr_linenumber" name="1196" href="#1196">1196</a> 						stdout.println(<span class="jxr_string">"WARNING: No definition of the class could be found "</span> + e);
+<a class="jxr_linenumber" name="1197" href="#1197">1197</a> 						warnings = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="1198" href="#1198">1198</a> 						<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="1199" href="#1199">1199</a> 					} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
+<a class="jxr_linenumber" name="1200" href="#1200">1200</a> 						stdout.println(<span class="jxr_string">"WARNING: No definition of the class could be found "</span> + e);
+<a class="jxr_linenumber" name="1201" href="#1201">1201</a> 						warnings = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="1202" href="#1202">1202</a> 						<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="1203" href="#1203">1203</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="1204" href="#1204">1204</a> 						Logger.getLogger(getClass().getName()).log(Level.SEVERE, <strong class="jxr_keyword">null</strong>, e);
+<a class="jxr_linenumber" name="1205" href="#1205">1205</a> 					}
+<a class="jxr_linenumber" name="1206" href="#1206">1206</a> 				}
+<a class="jxr_linenumber" name="1207" href="#1207">1207</a> 			}
+<a class="jxr_linenumber" name="1208" href="#1208">1208</a> 		}
+<a class="jxr_linenumber" name="1209" href="#1209">1209</a> 
+<a class="jxr_linenumber" name="1210" href="#1210">1210</a> 	}
+<a class="jxr_linenumber" name="1211" href="#1211">1211</a> 
+<a class="jxr_linenumber" name="1212" href="#1212">1212</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> codingView(PrintWriter stdout, JarFile jarFile, <strong class="jxr_keyword">boolean</strong> b) {
+<a class="jxr_linenumber" name="1213" href="#1213">1213</a> 		Class&lt;?&gt; c = getClass();
+<a class="jxr_linenumber" name="1214" href="#1214">1214</a> 		ProtectionDomain d = c.getProtectionDomain();
+<a class="jxr_linenumber" name="1215" href="#1215">1215</a> 		CodeSource s = d.getCodeSource();
+<a class="jxr_linenumber" name="1216" href="#1216">1216</a> 		String prolobjectlink = s.getLocation().getPath();
+<a class="jxr_linenumber" name="1217" href="#1217">1217</a> 		File plk = <strong class="jxr_keyword">new</strong> File(prolobjectlink);
+<a class="jxr_linenumber" name="1218" href="#1218">1218</a> 		File pdk = plk.getParentFile();
+<a class="jxr_linenumber" name="1219" href="#1219">1219</a> 		File prt = pdk.getParentFile();
+<a class="jxr_linenumber" name="1220" href="#1220">1220</a> 		codingView(stdout, jarFile, prt, b);
+<a class="jxr_linenumber" name="1221" href="#1221">1221</a> 	}
+<a class="jxr_linenumber" name="1222" href="#1222">1222</a> 
+<a class="jxr_linenumber" name="1223" href="#1223">1223</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/prolobjectlink/db/prolog/AbstractProgrammer.html">JarFileFilter</a> <strong class="jxr_keyword">implements</strong> FileFilter {
+<a class="jxr_linenumber" name="1224" href="#1224">1224</a> 
+<a class="jxr_linenumber" name="1225" href="#1225">1225</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> accept(File pathname) {
+<a class="jxr_linenumber" name="1226" href="#1226">1226</a> 			<strong class="jxr_keyword">return</strong> pathname.getName().endsWith(<span class="jxr_string">".jar"</span>);
+<a class="jxr_linenumber" name="1227" href="#1227">1227</a> 		}
+<a class="jxr_linenumber" name="1228" href="#1228">1228</a> 
+<a class="jxr_linenumber" name="1229" href="#1229">1229</a> 	}
+<a class="jxr_linenumber" name="1230" href="#1230">1230</a> 
+<a class="jxr_linenumber" name="1231" href="#1231">1231</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
