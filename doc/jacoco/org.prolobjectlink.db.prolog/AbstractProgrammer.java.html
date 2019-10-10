@@ -727,7 +727,7 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 <span class="nc bnc" id="L727" title="All 2 branches missed.">					|| name.contains(&quot;$&quot;)) {</span>
 <span class="nc" id="L728">				return false;</span>
 			}
-		}
+<span class="nc" id="L730">		}</span>
 <span class="nc" id="L731">		return true;</span>
 	}
 
@@ -908,8 +908,8 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 <span class="nc" id="L908">				PrologTerm body = provider.newStructure(&quot;object_new&quot;, oclass, oargs, oout);</span>
 <span class="nc" id="L909">				programmer.println(head + NECK + body + &quot;.&quot;);</span>
 <span class="nc" id="L910">				programmer.println();</span>
-			}
-		}
+<span class="nc" id="L911">			}</span>
+<span class="nc" id="L912">		}</span>
 <span class="nc" id="L913">	}</span>
 
 	protected final void codingMethods(PrintWriter programmer, Class&lt;?&gt; runtimeClass) {
@@ -939,7 +939,7 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 
 <span class="nc bnc" id="L940" title="All 2 branches missed.">				if (method.getReturnType() == void.class) {</span>
 <span class="nc" id="L941">					arguments = new PrologTerm[argCount + 1];</span>
-<span class="nc" id="L942">				} else {</span>
+				} else {
 <span class="nc" id="L943">					arguments = new PrologTerm[argCount + 2];</span>
 				}
 
@@ -969,15 +969,15 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 
 <span class="nc bnc" id="L970" title="All 2 branches missed.">				if (method.getReturnType() != void.class) {</span>
 <span class="nc" id="L971">					oout = provider.newVariable(&quot;OUT&quot;, argCount + 1);</span>
-<span class="nc" id="L972">				} else {</span>
+				} else {
 <span class="nc" id="L973">					oout = provider.newVariable(argCount + 1);</span>
 				}
 
 <span class="nc" id="L976">				PrologTerm body = provider.newStructure(&quot;object_call&quot;, oref, omethod, oargs, oout);</span>
 <span class="nc" id="L977">				programmer.println(head + NECK + body + &quot;.&quot;);</span>
 <span class="nc" id="L978">				programmer.println();</span>
-			}
-		}
+<span class="nc" id="L979">			}</span>
+<span class="nc" id="L980">		}</span>
 <span class="nc" id="L981">	}</span>
 
 	public final void codingRuntime(PrintWriter stdout) {
@@ -1014,22 +1014,22 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 <span class="nc" id="L1014">				jarFile = new JarFile(file);</span>
 <span class="nc" id="L1015">				codingModel(stdout, jarFile, prt, warnings);</span>
 <span class="nc" id="L1016">				jarFile.close();</span>
-			}
+<span class="nc" id="L1017">			}</span>
 
 <span class="nc" id="L1019">		} catch (IOException e) {</span>
 <span class="nc" id="L1020">			Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-<span class="nc" id="L1021">		} finally {</span>
+		} finally {
 <span class="nc bnc" id="L1022" title="All 6 branches missed.">			if (jarFile != null) {</span>
 				try {
 <span class="nc" id="L1024">					jarFile.close();</span>
 <span class="nc" id="L1025">				} catch (IOException e) {</span>
 <span class="nc" id="L1026">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-				}
+<span class="nc" id="L1027">				}</span>
 			}
-<span class="nc" id="L1029">		}</span>
+		}
 <span class="nc bnc" id="L1030" title="All 2 branches missed.">		if (warnings) {</span>
 <span class="nc" id="L1031">			stdout.println(&quot;Generation finished with WARNINGS.&quot;);</span>
-<span class="nc" id="L1032">		} else {</span>
+		} else {
 <span class="nc" id="L1033">			stdout.println(&quot;Generation finished OK.&quot;);</span>
 		}
 <span class="nc" id="L1035">	}</span>
@@ -1087,9 +1087,9 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 <span class="nc" id="L1087">					continue;</span>
 <span class="nc" id="L1088">				} catch (IOException e) {</span>
 <span class="nc" id="L1089">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-				}
+<span class="nc" id="L1090">				}</span>
 			}
-		}
+<span class="nc" id="L1092">		}</span>
 <span class="nc" id="L1093">	}</span>
 
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, boolean b) {
@@ -1135,9 +1135,9 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 <span class="nc" id="L1135">					continue;</span>
 <span class="nc" id="L1136">				} catch (IOException e) {</span>
 <span class="nc" id="L1137">					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-				}
+<span class="nc" id="L1138">				}</span>
 			}
-		}
+<span class="nc" id="L1140">		}</span>
 <span class="nc" id="L1141">	}</span>
 
 	public final void codingController(PrintWriter stdout, JarFile jarFile, boolean b) {
@@ -1202,10 +1202,10 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 <span class="nc" id="L1202">						continue;</span>
 <span class="nc" id="L1203">					} catch (IOException e) {</span>
 <span class="nc" id="L1204">						Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);</span>
-					}
+<span class="nc" id="L1205">					}</span>
 				}
 			}
-		}
+<span class="nc" id="L1208">		}</span>
 
 <span class="nc" id="L1210">	}</span>
 

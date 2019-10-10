@@ -36,6 +36,20 @@ import org.prolobjectlink.prolog.PrologEngine;
 
 public interface PrologDatabaseEngine extends PrologEngine {
 
+	/**
+	 * Check that two object (x and y) unify. This operation convert x and y object
+	 * to prolog terms and call terms unification. This operation is defined like
+	 * object unification.
+	 * 
+	 * 
+	 * @param x the term to unify.
+	 * @param y the term to unify.
+	 * @return true if the specified term unify whit the current term, false
+	 *         otherwise.
+	 * @since 1.0
+	 */
+	public boolean unify(Object x, Object y);
+
 	public PrologProgrammer getProgrammer();
 
 }

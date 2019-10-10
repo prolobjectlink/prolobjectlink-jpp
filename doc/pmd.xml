@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2019-10-08T18:23:14.093">
+<pmd version="4.2.5" timestamp="2019-10-10T16:24:54.679">
 <file name="D:\Programacion\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\AbstractGenerator.java">
 <violation beginline="142" endline="142" begincolumn="52" endcolumn="64" rule="UnusedLocalVariable" ruleset="Unused Code Rules" package="org.prolobjectlink.db" class="AbstractGenerator" method="createSchema" variable="linkedKeyType" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedLocalVariable" priority="3">
 Avoid unused local variables such as 'linkedKeyType'.
