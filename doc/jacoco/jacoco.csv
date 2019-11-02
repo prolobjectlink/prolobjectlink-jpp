@@ -8,7 +8,7 @@ prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologLocale,187,0,30,0,49,0,27,
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologVector,11,0,0,0,6,0,3,0,3,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologHashMap.KeySetIterator,18,0,2,0,4,0,3,0,2,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologHashSet,258,0,32,0,62,0,27,0,11,0
-prolobjectlink-jpp,org.prolobjectlink.db.prolog,AbstractProgrammer,5106,0,112,0,1005,0,80,0,24,0
+prolobjectlink-jpp,org.prolobjectlink.db.prolog,AbstractProgrammer,5104,0,112,0,1005,0,80,0,24,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologHashMap.EntrySet,17,0,0,0,3,0,3,0,3,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologContainerFactory,77,0,0,0,9,0,8,0,8,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologHashMap.KeySet,17,0,0,0,3,0,3,0,3,0
@@ -37,7 +37,6 @@ prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologStoragePool,90,0,0,0,16,0,
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologMaps,40,0,0,0,10,0,9,0,9,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologLinkedMap.PrologEntry,26,0,0,0,9,0,4,0,4,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologTreeMap,635,0,98,0,173,0,71,0,22,0
-prolobjectlink-jpp,org.prolobjectlink.db.prolog,AbstractProgrammer.JarFileFilter,11,0,0,0,2,0,2,0,2,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologTime,25,0,0,0,6,0,4,0,4,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,AbstractDatabaseProvider,4,0,0,0,2,0,1,0,1,0
 prolobjectlink-jpp,org.prolobjectlink.db.prolog,PrologArrayList.ArrayIterator,69,0,6,0,15,0,8,0,5,0
@@ -216,6 +215,7 @@ prolobjectlink-jpp,org.prolobjectlink.db.util,JavaLists,73,0,2,0,18,0,14,0,13,0
 prolobjectlink-jpp,org.prolobjectlink.db.util,JavaMaps,40,0,0,0,10,0,9,0,9,0
 prolobjectlink-jpp,org.prolobjectlink.db.util,JavaStrings,128,0,8,0,22,0,11,0,7,0
 prolobjectlink-jpp,org.prolobjectlink.db.util,JavaSets,40,0,0,0,10,0,9,0,9,0
+prolobjectlink-jpp,org.prolobjectlink.db.util,JarFileFilter,8,0,0,0,2,0,2,0,2,0
 prolobjectlink-jpp,org.prolobjectlink.db.util,JavaReflect,372,0,38,0,123,0,38,0,19,0
 prolobjectlink-jpp,org.prolobjectlink.db.predicate,FalsePredicate,5,0,0,0,2,0,2,0,2,0
 prolobjectlink-jpp,org.prolobjectlink.db.predicate,NullPredicate,9,0,2,0,2,0,3,0,2,0

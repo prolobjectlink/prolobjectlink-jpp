@@ -33,7 +33,6 @@
 package org.prolobjectlink.db.prolog;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -61,6 +60,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.prolobjectlink.AbstractPlatform;
+import org.prolobjectlink.db.util.JarFileFilter;
 import org.prolobjectlink.prolog.PrologEngine;
 import org.prolobjectlink.prolog.PrologProvider;
 import org.prolobjectlink.prolog.PrologTerm;
@@ -1218,14 +1218,6 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 		File pdk = plk.getParentFile();
 		File prt = pdk.getParentFile();
 		codingView(stdout, jarFile, prt, b);
-	}
-
-	private class JarFileFilter implements FileFilter {
-
-		public boolean accept(File pathname) {
-			return pathname.getName().endsWith(".jar");
-		}
-
 	}
 
 }
