@@ -301,100 +301,99 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	}
 
 	/**
-	 * @deprecated Use {@link #containerOf(Class, Map)},{@link #masterOf(Class)}
-	 *             instead
+	 * @deprecated Use containerOf(Class, Map), masterOf(Class) instead
 	 */
 	@Deprecated
 	public final PersistentContainer containerOf(Class&lt;?&gt; clazz) {
-<span class="nc" id="L309">		return masterOf(clazz);</span>
+<span class="nc" id="L308">		return masterOf(clazz);</span>
 	}
 
 	public final PersistentContainer masterOf(Class&lt;?&gt; clazz) {
-<span class="nc" id="L313">		PersistentContainer container = master.get(clazz);</span>
-<span class="nc bnc" id="L314" title="All 2 branches missed.">		if (container == null) {</span>
-<span class="nc" id="L315">			String path = locationOf(clazz);</span>
-<span class="nc bnc" id="L316" title="All 2 branches missed.">			if (storageMode == StorageMode.STORAGE_POOL) {</span>
-<span class="nc" id="L317">				String name = clazz.getSimpleName();</span>
-<span class="nc" id="L318">				container = containerFactory.createStoragePool(path, name);</span>
-<span class="nc bnc" id="L319" title="All 2 branches missed.">			} else if (storageMode == StorageMode.SINGLE_STORAGE) {</span>
-<span class="nc" id="L320">				container = containerFactory.createStorage(path);</span>
+<span class="nc" id="L312">		PersistentContainer container = master.get(clazz);</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">		if (container == null) {</span>
+<span class="nc" id="L314">			String path = locationOf(clazz);</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">			if (storageMode == StorageMode.STORAGE_POOL) {</span>
+<span class="nc" id="L316">				String name = clazz.getSimpleName();</span>
+<span class="nc" id="L317">				container = containerFactory.createStoragePool(path, name);</span>
+<span class="nc bnc" id="L318" title="All 2 branches missed.">			} else if (storageMode == StorageMode.SINGLE_STORAGE) {</span>
+<span class="nc" id="L319">				container = containerFactory.createStorage(path);</span>
 			}
-<span class="nc" id="L322">			master.put(clazz, container);</span>
+<span class="nc" id="L321">			master.put(clazz, container);</span>
 		}
-<span class="nc" id="L324">		return container;</span>
+<span class="nc" id="L323">		return container;</span>
 	}
 
 	public final PersistentContainer loggerOf(Class&lt;?&gt; clazz) {
-<span class="nc" id="L328">		PersistentContainer container = logger.get(clazz);</span>
-<span class="nc bnc" id="L329" title="All 2 branches missed.">		if (container == null) {</span>
-<span class="nc" id="L330">			String path = locationOf(clazz);</span>
-<span class="nc bnc" id="L331" title="All 2 branches missed.">			if (storageMode == StorageMode.STORAGE_POOL) {</span>
-<span class="nc" id="L332">				String name = clazz.getSimpleName();</span>
-<span class="nc" id="L333">				container = containerFactory.createStoragePool(path, name + &quot;-log&quot;);</span>
-<span class="nc bnc" id="L334" title="All 2 branches missed.">			} else if (storageMode == StorageMode.SINGLE_STORAGE) {</span>
-<span class="nc" id="L335">				container = containerFactory.createStorage(path + &quot;-log&quot;);</span>
+<span class="nc" id="L327">		PersistentContainer container = logger.get(clazz);</span>
+<span class="nc bnc" id="L328" title="All 2 branches missed.">		if (container == null) {</span>
+<span class="nc" id="L329">			String path = locationOf(clazz);</span>
+<span class="nc bnc" id="L330" title="All 2 branches missed.">			if (storageMode == StorageMode.STORAGE_POOL) {</span>
+<span class="nc" id="L331">				String name = clazz.getSimpleName();</span>
+<span class="nc" id="L332">				container = containerFactory.createStoragePool(path, name + &quot;-log&quot;);</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">			} else if (storageMode == StorageMode.SINGLE_STORAGE) {</span>
+<span class="nc" id="L334">				container = containerFactory.createStorage(path + &quot;-log&quot;);</span>
 			}
-<span class="nc" id="L337">			logger.put(clazz, container);</span>
+<span class="nc" id="L336">			logger.put(clazz, container);</span>
 		}
-<span class="nc" id="L339">		return container;</span>
+<span class="nc" id="L338">		return container;</span>
 	}
 
 	public final void include(String path) {
-<span class="nc bnc" id="L343" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
-<span class="nc" id="L344">			c.include(path);</span>
-<span class="nc" id="L345">		}</span>
-<span class="nc" id="L346">	}</span>
+<span class="nc bnc" id="L342" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L343">			c.include(path);</span>
+<span class="nc" id="L344">		}</span>
+<span class="nc" id="L345">	}</span>
 
 	public final String locationOf(Class&lt;?&gt; clazz) {
-<span class="nc" id="L349">		String name = clazz.getName();</span>
-<span class="nc" id="L350">		String path = name.replace('.', SEPARATOR);</span>
-<span class="nc" id="L351">		path = path.substring(0, path.lastIndexOf(SEPARATOR));</span>
-<span class="nc" id="L352">		return getLocation() + SEPARATOR + path;</span>
+<span class="nc" id="L348">		String name = clazz.getName();</span>
+<span class="nc" id="L349">		String path = name.replace('.', SEPARATOR);</span>
+<span class="nc" id="L350">		path = path.substring(0, path.lastIndexOf(SEPARATOR));</span>
+<span class="nc" id="L351">		return getLocation() + SEPARATOR + path;</span>
 	}
 
 	public final void defragment() {
-<span class="nc bnc" id="L356" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
-<span class="nc" id="L357">			c.defragment();</span>
-<span class="nc" id="L358">		}</span>
-<span class="nc" id="L359">	}</span>
+<span class="nc bnc" id="L355" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L356">			c.defragment();</span>
+<span class="nc" id="L357">		}</span>
+<span class="nc" id="L358">	}</span>
 
 	public final Collection&lt;Class&lt;?&gt;&gt; classes() {
-<span class="nc" id="L362">		List&lt;Class&lt;?&gt;&gt; l = JavaLists.arrayList(master.size());</span>
-<span class="nc bnc" id="L363" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
-<span class="nc" id="L364">			c.getTransaction().begin();</span>
-<span class="nc" id="L365">			l.addAll(c.classes());</span>
-<span class="nc" id="L366">			c.getTransaction().close();</span>
-<span class="nc" id="L367">		}</span>
-<span class="nc" id="L368">		return l;</span>
+<span class="nc" id="L361">		List&lt;Class&lt;?&gt;&gt; l = JavaLists.arrayList(master.size());</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L363">			c.getTransaction().begin();</span>
+<span class="nc" id="L364">			l.addAll(c.classes());</span>
+<span class="nc" id="L365">			c.getTransaction().close();</span>
+<span class="nc" id="L366">		}</span>
+<span class="nc" id="L367">		return l;</span>
 	}
 
 	public final void flush() {
-<span class="nc bnc" id="L372" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
-<span class="nc" id="L373">			c.flush();</span>
-<span class="nc" id="L374">		}</span>
-<span class="nc" id="L375">	}</span>
+<span class="nc bnc" id="L371" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L372">			c.flush();</span>
+<span class="nc" id="L373">		}</span>
+<span class="nc" id="L374">	}</span>
 
 	public final void clear() {
-<span class="nc" id="L378">		checkActiveTransaction(transaction);</span>
-<span class="nc bnc" id="L379" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
-<span class="nc" id="L380">			c.begin();</span>
-<span class="nc" id="L381">			c.clear();</span>
-<span class="nc" id="L382">			c.commit();</span>
-<span class="nc" id="L383">			c.close();</span>
-<span class="nc" id="L384">		}</span>
-<span class="nc" id="L385">		master.clear();</span>
-<span class="nc" id="L386">	}</span>
+<span class="nc" id="L377">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L378" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L379">			c.begin();</span>
+<span class="nc" id="L380">			c.clear();</span>
+<span class="nc" id="L381">			c.commit();</span>
+<span class="nc" id="L382">			c.close();</span>
+<span class="nc" id="L383">		}</span>
+<span class="nc" id="L384">		master.clear();</span>
+<span class="nc" id="L385">	}</span>
 
 	public final void close() {
-<span class="nc bnc" id="L389" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
-<span class="nc" id="L390">			c.begin();</span>
-<span class="nc" id="L391">			c.clear();</span>
-<span class="nc" id="L392">			c.commit();</span>
-<span class="nc" id="L393">			c.close();</span>
-<span class="nc" id="L394">		}</span>
-<span class="nc" id="L395">		master.clear();</span>
-<span class="nc" id="L396">		open = false;</span>
-<span class="nc" id="L397">	}</span>
+<span class="nc bnc" id="L388" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L389">			c.begin();</span>
+<span class="nc" id="L390">			c.clear();</span>
+<span class="nc" id="L391">			c.commit();</span>
+<span class="nc" id="L392">			c.close();</span>
+<span class="nc" id="L393">		}</span>
+<span class="nc" id="L394">		master.clear();</span>
+<span class="nc" id="L395">		open = false;</span>
+<span class="nc" id="L396">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

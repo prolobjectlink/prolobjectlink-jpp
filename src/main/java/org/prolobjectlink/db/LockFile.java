@@ -58,10 +58,11 @@ public class LockFile implements Runnable {
 	private static final int TIME_GRANULARITY = 80;
 
 	// milliseconds to sleep after file checking.
+	// the number of milliseconds to sleep
 	private final long sleep;
 
 	// The lock file
-	private volatile File file;
+	private File file;
 
 	// lock indicator flag
 	private volatile boolean locked;
@@ -79,12 +80,12 @@ public class LockFile implements Runnable {
 	 * Create a new file locking object.
 	 * 
 	 * @param fileName the file name
-	 * @param sleep    the number of milliseconds to sleep
+	 * @param settings the lock settings
 	 */
 	public LockFile(String fileName, Settings settings) {
+		this.sleep = settings.getLockSleep();
 		properties = new Properties();
 		file = new File(fileName);
-		this.sleep = LOCK_SLEEP;
 	}
 
 	/**

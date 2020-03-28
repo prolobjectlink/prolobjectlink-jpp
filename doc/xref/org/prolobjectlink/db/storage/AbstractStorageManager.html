@@ -311,102 +311,101 @@
 <a class="jxr_linenumber" name="301" href="#301">301</a> 	}
 <a class="jxr_linenumber" name="302" href="#302">302</a> 
 <a class="jxr_linenumber" name="303" href="#303">303</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="304" href="#304">304</a> <em class="jxr_javadoccomment">	 * @deprecated Use {@link #containerOf(Class, Map)},{@link #masterOf(Class)}</em>
-<a class="jxr_linenumber" name="305" href="#305">305</a> <em class="jxr_javadoccomment">	 *             instead</em>
-<a class="jxr_linenumber" name="306" href="#306">306</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="307" href="#307">307</a> 	@Deprecated
-<a class="jxr_linenumber" name="308" href="#308">308</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../org/prolobjectlink/db/PersistentContainer.html">PersistentContainer</a> containerOf(Class&lt;?&gt; clazz) {
-<a class="jxr_linenumber" name="309" href="#309">309</a> 		<strong class="jxr_keyword">return</strong> masterOf(clazz);
-<a class="jxr_linenumber" name="310" href="#310">310</a> 	}
-<a class="jxr_linenumber" name="311" href="#311">311</a> 
-<a class="jxr_linenumber" name="312" href="#312">312</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../org/prolobjectlink/db/PersistentContainer.html">PersistentContainer</a> masterOf(Class&lt;?&gt; clazz) {
-<a class="jxr_linenumber" name="313" href="#313">313</a> 		PersistentContainer container = master.get(clazz);
-<a class="jxr_linenumber" name="314" href="#314">314</a> 		<strong class="jxr_keyword">if</strong> (container == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="315" href="#315">315</a> 			String path = locationOf(clazz);
-<a class="jxr_linenumber" name="316" href="#316">316</a> 			<strong class="jxr_keyword">if</strong> (storageMode == StorageMode.STORAGE_POOL) {
-<a class="jxr_linenumber" name="317" href="#317">317</a> 				String name = clazz.getSimpleName();
-<a class="jxr_linenumber" name="318" href="#318">318</a> 				container = containerFactory.createStoragePool(path, name);
-<a class="jxr_linenumber" name="319" href="#319">319</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (storageMode == StorageMode.SINGLE_STORAGE) {
-<a class="jxr_linenumber" name="320" href="#320">320</a> 				container = containerFactory.createStorage(path);
-<a class="jxr_linenumber" name="321" href="#321">321</a> 			}
-<a class="jxr_linenumber" name="322" href="#322">322</a> 			master.put(clazz, container);
-<a class="jxr_linenumber" name="323" href="#323">323</a> 		}
-<a class="jxr_linenumber" name="324" href="#324">324</a> 		<strong class="jxr_keyword">return</strong> container;
-<a class="jxr_linenumber" name="325" href="#325">325</a> 	}
-<a class="jxr_linenumber" name="326" href="#326">326</a> 
-<a class="jxr_linenumber" name="327" href="#327">327</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../org/prolobjectlink/db/PersistentContainer.html">PersistentContainer</a> loggerOf(Class&lt;?&gt; clazz) {
-<a class="jxr_linenumber" name="328" href="#328">328</a> 		PersistentContainer container = logger.get(clazz);
-<a class="jxr_linenumber" name="329" href="#329">329</a> 		<strong class="jxr_keyword">if</strong> (container == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="330" href="#330">330</a> 			String path = locationOf(clazz);
-<a class="jxr_linenumber" name="331" href="#331">331</a> 			<strong class="jxr_keyword">if</strong> (storageMode == StorageMode.STORAGE_POOL) {
-<a class="jxr_linenumber" name="332" href="#332">332</a> 				String name = clazz.getSimpleName();
-<a class="jxr_linenumber" name="333" href="#333">333</a> 				container = containerFactory.createStoragePool(path, name + <span class="jxr_string">"-log"</span>);
-<a class="jxr_linenumber" name="334" href="#334">334</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (storageMode == StorageMode.SINGLE_STORAGE) {
-<a class="jxr_linenumber" name="335" href="#335">335</a> 				container = containerFactory.createStorage(path + <span class="jxr_string">"-log"</span>);
-<a class="jxr_linenumber" name="336" href="#336">336</a> 			}
-<a class="jxr_linenumber" name="337" href="#337">337</a> 			logger.put(clazz, container);
-<a class="jxr_linenumber" name="338" href="#338">338</a> 		}
-<a class="jxr_linenumber" name="339" href="#339">339</a> 		<strong class="jxr_keyword">return</strong> container;
-<a class="jxr_linenumber" name="340" href="#340">340</a> 	}
-<a class="jxr_linenumber" name="341" href="#341">341</a> 
-<a class="jxr_linenumber" name="342" href="#342">342</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> include(String path) {
-<a class="jxr_linenumber" name="343" href="#343">343</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
-<a class="jxr_linenumber" name="344" href="#344">344</a> 			c.include(path);
-<a class="jxr_linenumber" name="345" href="#345">345</a> 		}
-<a class="jxr_linenumber" name="346" href="#346">346</a> 	}
-<a class="jxr_linenumber" name="347" href="#347">347</a> 
-<a class="jxr_linenumber" name="348" href="#348">348</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String locationOf(Class&lt;?&gt; clazz) {
-<a class="jxr_linenumber" name="349" href="#349">349</a> 		String name = clazz.getName();
-<a class="jxr_linenumber" name="350" href="#350">350</a> 		String path = name.replace('.', SEPARATOR);
-<a class="jxr_linenumber" name="351" href="#351">351</a> 		path = path.substring(0, path.lastIndexOf(SEPARATOR));
-<a class="jxr_linenumber" name="352" href="#352">352</a> 		<strong class="jxr_keyword">return</strong> getLocation() + SEPARATOR + path;
-<a class="jxr_linenumber" name="353" href="#353">353</a> 	}
-<a class="jxr_linenumber" name="354" href="#354">354</a> 
-<a class="jxr_linenumber" name="355" href="#355">355</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> defragment() {
-<a class="jxr_linenumber" name="356" href="#356">356</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
-<a class="jxr_linenumber" name="357" href="#357">357</a> 			c.defragment();
-<a class="jxr_linenumber" name="358" href="#358">358</a> 		}
-<a class="jxr_linenumber" name="359" href="#359">359</a> 	}
-<a class="jxr_linenumber" name="360" href="#360">360</a> 
-<a class="jxr_linenumber" name="361" href="#361">361</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Collection&lt;Class&lt;?&gt;&gt; classes() {
-<a class="jxr_linenumber" name="362" href="#362">362</a> 		List&lt;Class&lt;?&gt;&gt; l = JavaLists.arrayList(master.size());
-<a class="jxr_linenumber" name="363" href="#363">363</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
-<a class="jxr_linenumber" name="364" href="#364">364</a> 			c.getTransaction().begin();
-<a class="jxr_linenumber" name="365" href="#365">365</a> 			l.addAll(c.classes());
-<a class="jxr_linenumber" name="366" href="#366">366</a> 			c.getTransaction().close();
-<a class="jxr_linenumber" name="367" href="#367">367</a> 		}
-<a class="jxr_linenumber" name="368" href="#368">368</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="369" href="#369">369</a> 	}
-<a class="jxr_linenumber" name="370" href="#370">370</a> 
-<a class="jxr_linenumber" name="371" href="#371">371</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> flush() {
-<a class="jxr_linenumber" name="372" href="#372">372</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
-<a class="jxr_linenumber" name="373" href="#373">373</a> 			c.flush();
-<a class="jxr_linenumber" name="374" href="#374">374</a> 		}
-<a class="jxr_linenumber" name="375" href="#375">375</a> 	}
-<a class="jxr_linenumber" name="376" href="#376">376</a> 
-<a class="jxr_linenumber" name="377" href="#377">377</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> clear() {
-<a class="jxr_linenumber" name="378" href="#378">378</a> 		checkActiveTransaction(transaction);
-<a class="jxr_linenumber" name="379" href="#379">379</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
-<a class="jxr_linenumber" name="380" href="#380">380</a> 			c.begin();
-<a class="jxr_linenumber" name="381" href="#381">381</a> 			c.clear();
-<a class="jxr_linenumber" name="382" href="#382">382</a> 			c.commit();
-<a class="jxr_linenumber" name="383" href="#383">383</a> 			c.close();
-<a class="jxr_linenumber" name="384" href="#384">384</a> 		}
-<a class="jxr_linenumber" name="385" href="#385">385</a> 		master.clear();
-<a class="jxr_linenumber" name="386" href="#386">386</a> 	}
-<a class="jxr_linenumber" name="387" href="#387">387</a> 
-<a class="jxr_linenumber" name="388" href="#388">388</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> close() {
-<a class="jxr_linenumber" name="389" href="#389">389</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
-<a class="jxr_linenumber" name="390" href="#390">390</a> 			c.begin();
-<a class="jxr_linenumber" name="391" href="#391">391</a> 			c.clear();
-<a class="jxr_linenumber" name="392" href="#392">392</a> 			c.commit();
-<a class="jxr_linenumber" name="393" href="#393">393</a> 			c.close();
-<a class="jxr_linenumber" name="394" href="#394">394</a> 		}
-<a class="jxr_linenumber" name="395" href="#395">395</a> 		master.clear();
-<a class="jxr_linenumber" name="396" href="#396">396</a> 		open = false;
-<a class="jxr_linenumber" name="397" href="#397">397</a> 	}
-<a class="jxr_linenumber" name="398" href="#398">398</a> 
-<a class="jxr_linenumber" name="399" href="#399">399</a> }
+<a class="jxr_linenumber" name="304" href="#304">304</a> <em class="jxr_javadoccomment">	 * @deprecated Use containerOf(Class, Map), masterOf(Class) instead</em>
+<a class="jxr_linenumber" name="305" href="#305">305</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="306" href="#306">306</a> 	@Deprecated
+<a class="jxr_linenumber" name="307" href="#307">307</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../org/prolobjectlink/db/PersistentContainer.html">PersistentContainer</a> containerOf(Class&lt;?&gt; clazz) {
+<a class="jxr_linenumber" name="308" href="#308">308</a> 		<strong class="jxr_keyword">return</strong> masterOf(clazz);
+<a class="jxr_linenumber" name="309" href="#309">309</a> 	}
+<a class="jxr_linenumber" name="310" href="#310">310</a> 
+<a class="jxr_linenumber" name="311" href="#311">311</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../org/prolobjectlink/db/PersistentContainer.html">PersistentContainer</a> masterOf(Class&lt;?&gt; clazz) {
+<a class="jxr_linenumber" name="312" href="#312">312</a> 		PersistentContainer container = master.get(clazz);
+<a class="jxr_linenumber" name="313" href="#313">313</a> 		<strong class="jxr_keyword">if</strong> (container == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="314" href="#314">314</a> 			String path = locationOf(clazz);
+<a class="jxr_linenumber" name="315" href="#315">315</a> 			<strong class="jxr_keyword">if</strong> (storageMode == StorageMode.STORAGE_POOL) {
+<a class="jxr_linenumber" name="316" href="#316">316</a> 				String name = clazz.getSimpleName();
+<a class="jxr_linenumber" name="317" href="#317">317</a> 				container = containerFactory.createStoragePool(path, name);
+<a class="jxr_linenumber" name="318" href="#318">318</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (storageMode == StorageMode.SINGLE_STORAGE) {
+<a class="jxr_linenumber" name="319" href="#319">319</a> 				container = containerFactory.createStorage(path);
+<a class="jxr_linenumber" name="320" href="#320">320</a> 			}
+<a class="jxr_linenumber" name="321" href="#321">321</a> 			master.put(clazz, container);
+<a class="jxr_linenumber" name="322" href="#322">322</a> 		}
+<a class="jxr_linenumber" name="323" href="#323">323</a> 		<strong class="jxr_keyword">return</strong> container;
+<a class="jxr_linenumber" name="324" href="#324">324</a> 	}
+<a class="jxr_linenumber" name="325" href="#325">325</a> 
+<a class="jxr_linenumber" name="326" href="#326">326</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../org/prolobjectlink/db/PersistentContainer.html">PersistentContainer</a> loggerOf(Class&lt;?&gt; clazz) {
+<a class="jxr_linenumber" name="327" href="#327">327</a> 		PersistentContainer container = logger.get(clazz);
+<a class="jxr_linenumber" name="328" href="#328">328</a> 		<strong class="jxr_keyword">if</strong> (container == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="329" href="#329">329</a> 			String path = locationOf(clazz);
+<a class="jxr_linenumber" name="330" href="#330">330</a> 			<strong class="jxr_keyword">if</strong> (storageMode == StorageMode.STORAGE_POOL) {
+<a class="jxr_linenumber" name="331" href="#331">331</a> 				String name = clazz.getSimpleName();
+<a class="jxr_linenumber" name="332" href="#332">332</a> 				container = containerFactory.createStoragePool(path, name + <span class="jxr_string">"-log"</span>);
+<a class="jxr_linenumber" name="333" href="#333">333</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (storageMode == StorageMode.SINGLE_STORAGE) {
+<a class="jxr_linenumber" name="334" href="#334">334</a> 				container = containerFactory.createStorage(path + <span class="jxr_string">"-log"</span>);
+<a class="jxr_linenumber" name="335" href="#335">335</a> 			}
+<a class="jxr_linenumber" name="336" href="#336">336</a> 			logger.put(clazz, container);
+<a class="jxr_linenumber" name="337" href="#337">337</a> 		}
+<a class="jxr_linenumber" name="338" href="#338">338</a> 		<strong class="jxr_keyword">return</strong> container;
+<a class="jxr_linenumber" name="339" href="#339">339</a> 	}
+<a class="jxr_linenumber" name="340" href="#340">340</a> 
+<a class="jxr_linenumber" name="341" href="#341">341</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> include(String path) {
+<a class="jxr_linenumber" name="342" href="#342">342</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
+<a class="jxr_linenumber" name="343" href="#343">343</a> 			c.include(path);
+<a class="jxr_linenumber" name="344" href="#344">344</a> 		}
+<a class="jxr_linenumber" name="345" href="#345">345</a> 	}
+<a class="jxr_linenumber" name="346" href="#346">346</a> 
+<a class="jxr_linenumber" name="347" href="#347">347</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String locationOf(Class&lt;?&gt; clazz) {
+<a class="jxr_linenumber" name="348" href="#348">348</a> 		String name = clazz.getName();
+<a class="jxr_linenumber" name="349" href="#349">349</a> 		String path = name.replace('.', SEPARATOR);
+<a class="jxr_linenumber" name="350" href="#350">350</a> 		path = path.substring(0, path.lastIndexOf(SEPARATOR));
+<a class="jxr_linenumber" name="351" href="#351">351</a> 		<strong class="jxr_keyword">return</strong> getLocation() + SEPARATOR + path;
+<a class="jxr_linenumber" name="352" href="#352">352</a> 	}
+<a class="jxr_linenumber" name="353" href="#353">353</a> 
+<a class="jxr_linenumber" name="354" href="#354">354</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> defragment() {
+<a class="jxr_linenumber" name="355" href="#355">355</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
+<a class="jxr_linenumber" name="356" href="#356">356</a> 			c.defragment();
+<a class="jxr_linenumber" name="357" href="#357">357</a> 		}
+<a class="jxr_linenumber" name="358" href="#358">358</a> 	}
+<a class="jxr_linenumber" name="359" href="#359">359</a> 
+<a class="jxr_linenumber" name="360" href="#360">360</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Collection&lt;Class&lt;?&gt;&gt; classes() {
+<a class="jxr_linenumber" name="361" href="#361">361</a> 		List&lt;Class&lt;?&gt;&gt; l = JavaLists.arrayList(master.size());
+<a class="jxr_linenumber" name="362" href="#362">362</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
+<a class="jxr_linenumber" name="363" href="#363">363</a> 			c.getTransaction().begin();
+<a class="jxr_linenumber" name="364" href="#364">364</a> 			l.addAll(c.classes());
+<a class="jxr_linenumber" name="365" href="#365">365</a> 			c.getTransaction().close();
+<a class="jxr_linenumber" name="366" href="#366">366</a> 		}
+<a class="jxr_linenumber" name="367" href="#367">367</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="368" href="#368">368</a> 	}
+<a class="jxr_linenumber" name="369" href="#369">369</a> 
+<a class="jxr_linenumber" name="370" href="#370">370</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> flush() {
+<a class="jxr_linenumber" name="371" href="#371">371</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
+<a class="jxr_linenumber" name="372" href="#372">372</a> 			c.flush();
+<a class="jxr_linenumber" name="373" href="#373">373</a> 		}
+<a class="jxr_linenumber" name="374" href="#374">374</a> 	}
+<a class="jxr_linenumber" name="375" href="#375">375</a> 
+<a class="jxr_linenumber" name="376" href="#376">376</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> clear() {
+<a class="jxr_linenumber" name="377" href="#377">377</a> 		checkActiveTransaction(transaction);
+<a class="jxr_linenumber" name="378" href="#378">378</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
+<a class="jxr_linenumber" name="379" href="#379">379</a> 			c.begin();
+<a class="jxr_linenumber" name="380" href="#380">380</a> 			c.clear();
+<a class="jxr_linenumber" name="381" href="#381">381</a> 			c.commit();
+<a class="jxr_linenumber" name="382" href="#382">382</a> 			c.close();
+<a class="jxr_linenumber" name="383" href="#383">383</a> 		}
+<a class="jxr_linenumber" name="384" href="#384">384</a> 		master.clear();
+<a class="jxr_linenumber" name="385" href="#385">385</a> 	}
+<a class="jxr_linenumber" name="386" href="#386">386</a> 
+<a class="jxr_linenumber" name="387" href="#387">387</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> close() {
+<a class="jxr_linenumber" name="388" href="#388">388</a> 		<strong class="jxr_keyword">for</strong> (PersistentContainer c : master.values()) {
+<a class="jxr_linenumber" name="389" href="#389">389</a> 			c.begin();
+<a class="jxr_linenumber" name="390" href="#390">390</a> 			c.clear();
+<a class="jxr_linenumber" name="391" href="#391">391</a> 			c.commit();
+<a class="jxr_linenumber" name="392" href="#392">392</a> 			c.close();
+<a class="jxr_linenumber" name="393" href="#393">393</a> 		}
+<a class="jxr_linenumber" name="394" href="#394">394</a> 		master.clear();
+<a class="jxr_linenumber" name="395" href="#395">395</a> 		open = false;
+<a class="jxr_linenumber" name="396" href="#396">396</a> 	}
+<a class="jxr_linenumber" name="397" href="#397">397</a> 
+<a class="jxr_linenumber" name="398" href="#398">398</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

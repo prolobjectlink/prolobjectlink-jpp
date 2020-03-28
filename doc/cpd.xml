@@ -1651,7 +1651,7 @@ public interface Storage extends PersistentContainer {
 </duplication>
 <duplication lines="21" tokens="102">
 <file line="194" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\RelationalGraph.java"/>
-<file line="333" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\RelationalGraph.java"/>
+<file line="332" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\RelationalGraph.java"/>
 <codefragment>
 <![CDATA[
 			Class<?> to = getToVertexElementClass();

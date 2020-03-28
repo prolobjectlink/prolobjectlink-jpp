@@ -216,7 +216,6 @@ public class RelationalGraph<V, R> extends DirectedGraph<V, R> implements Graph<
 	 * 
 	 * @author Jose Zalacain
 	 *
-	 * @param <R> involved relation object type
 	 * @since 1.0
 	 */
 	public abstract class AbstractRelationEdge extends AbstractGraphEdge<R> implements RelationalEdge<R> {

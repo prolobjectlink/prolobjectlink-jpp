@@ -97,13 +97,13 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * The string query allow the arithmetic comparison and term comparison but this
 	 * operators will not be resolve to predicate classes. Only will be resolve
 	 * predicate class that was specified in the configuration.
+	 * </p>
 	 * 
 	 * <pre>
 	 * query = pm.createQuery(&quot;point(Idp, X, Y), X =:= 3, Y =:= 14&quot;);
 	 * query = pm.createQuery(&quot;segment(Ids, Point0, Point1), Point0 == point(a, 3,14), Point1 == point(b, 3,14)&quot;);
 	 * </pre>
 	 * 
-	 * </p>
 	 * 
 	 * <p>
 	 * This query variant support the projection that is the presence of various
@@ -126,8 +126,6 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * @param string string with standard prolog syntax.
 	 * @return Query builded from a string with standard prolog syntax.
 	 * @since 1.0
-	 * @see PredicateManager#createQuery(S)
-	 * @see PredicateManager#createQuery(Class)
 	 */
 	public Query createQuery(String string);
 
@@ -143,10 +141,10 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * </p>
 	 * 
 	 * <p>
-	 * 
-	 * <li>If the Object term are fully instantiated only one solution is possible
-	 * and will be a new Object term obtained from the predicate context that is
-	 * equals to the template object.</li>
+	 * If the Object term are fully instantiated only one solution is possible and
+	 * will be a new Object term obtained from the predicate context that is equals
+	 * to the template object.
+	 * </p>
 	 * 
 	 * <pre>
 	 * query = pm.createQuery(new Point(new Atom(&quot;a&quot;), new Float(3.5), new Float(10.14)));
@@ -158,11 +156,13 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * ?-point(a, 3,14).
 	 * </pre>
 	 * 
-	 * <li>If the Object term are fully empty (all field are null values) the query
-	 * will be formulated from the most general Object term using as prolog
-	 * variables names the names specified on fields arguments annotations. The
-	 * solution for this query variant will be builded for all Object that match
-	 * with the most general relation obtained</li>
+	 * <p>
+	 * If the Object term are fully empty (all field are null values) the query will
+	 * be formulated from the most general Object term using as prolog variables
+	 * names the names specified on fields arguments annotations. The solution for
+	 * this query variant will be builded for all Object that match with the most
+	 * general relation obtained
+	 * </p>
 	 * 
 	 * <pre>
 	 * query = pm.createQuery(new Point());
@@ -176,10 +176,12 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * ?-segment(Ips, Point0, Point1).
 	 * </pre>
 	 * 
-	 * <li>If the Object term are partially instantiated/empty the query will be
+	 * <p>
+	 * If the Object term are partially instantiated/empty the query will be
 	 * formulated as a combination of the two variants before mentioned. The
 	 * instantiate fields preserve your values and null fields values will be
-	 * replaced by your corresponded variable name.</li>
+	 * replaced by your corresponded variable name.
+	 * </p>
 	 * 
 	 * <pre>
 	 * 
@@ -192,13 +194,10 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * ?-point(Ipd, 3,14).
 	 * </pre>
 	 * 
-	 * </p>
 	 * 
 	 * @param o object template
 	 * @return TypedQuery builded from a object template.
 	 * @since 1.0
-	 * @see Storage#createQuery(Class)
-	 * @see Storage#createQuery(String)
 	 */
 	public <O> TypedQuery<O> createQuery(O o);
 
@@ -227,8 +226,6 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * @param clazz class for build the query
 	 * @return TypedQuery builded from a Object class
 	 * @since 1.0
-	 * @see Storage#createQuery(O)
-	 * @see Storage#createQuery(String)
 	 */
 	public <O> TypedQuery<O> createQuery(Class<O> clazz);
 

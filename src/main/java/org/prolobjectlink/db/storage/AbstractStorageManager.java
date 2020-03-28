@@ -301,8 +301,7 @@ public abstract class AbstractStorageManager extends AbstractPersistentContainer
 	}
 
 	/**
-	 * @deprecated Use {@link #containerOf(Class, Map)},{@link #masterOf(Class)}
-	 *             instead
+	 * @deprecated Use containerOf(Class, Map), masterOf(Class) instead
 	 */
 	@Deprecated
 	public final PersistentContainer containerOf(Class<?> clazz) {

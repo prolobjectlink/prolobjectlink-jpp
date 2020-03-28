@@ -82,7 +82,7 @@ import java.util.List;
  * <p>
  * {@link TypedQuery} object allow select the objects to retrieve from all
  * solution internal list given a {@link Predicate} implementation of the match
- * method. See {@link TypedQuery#having(Predicate)}
+ * method. See TypedQuery#having(Predicate)
  * </p>
  * 
  * <p>

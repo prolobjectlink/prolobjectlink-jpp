@@ -125,7 +125,7 @@ prolobjectlink-jpp,org.prolobjectlink.db,ObjectConverterFactory,19,0,0,0,3,0,2,0
 prolobjectlink-jpp,org.prolobjectlink.db,Timestamp,7,0,0,0,4,0,2,0,2,0
 prolobjectlink-jpp,org.prolobjectlink.db,DatabaseResponse,97,0,16,0,30,0,17,0,9,0
 prolobjectlink-jpp,org.prolobjectlink.db,AbstractConverter,230,0,38,0,53,0,29,0,10,0
-prolobjectlink-jpp,org.prolobjectlink.db,LockFile,438,0,50,0,127,0,39,0,14,0
+prolobjectlink-jpp,org.prolobjectlink.db,LockFile,440,0,50,0,127,0,39,0,14,0
 prolobjectlink-jpp,org.prolobjectlink.db,Modifier,109,0,14,0,30,0,13,0,6,0
 prolobjectlink-jpp,org.prolobjectlink.db,Protocol,48,0,0,0,2,0,4,0,4,0
 prolobjectlink-jpp,org.prolobjectlink.db,Time,114,0,16,0,24,0,17,0,9,0
