@@ -50,8 +50,8 @@ import org.prolobjectlink.db.TypedQuery;
 import org.prolobjectlink.db.tx.PersistentContainerTransaction;
 
 /**
- * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
- *             RemoteHierarchical} instead
+ * @deprecated Use MemoryHierarchical,EmbeddedHierarchical,
+ *             RemoteHierarchical instead
  * @author Jose Zalacain
  *
  */
@@ -64,236 +64,234 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 	protected static final String LOCATION = &quot;db/pdb/hierarchical&quot;;
 
 	/**
-	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
-	 *             RemoteHierarchical} instead
-	 * @author Jose Zalacain
-	 *
+	 * @deprecated Use MemoryHierarchical,EmbeddedHierarchical,
+	 *             RemoteHierarchical instead
 	 */
 	@Deprecated
 	public AbstractHierarchicalDatabase(String name, Schema schema, DatabaseUser user, StorageManager storage) {
-<span class="nc" id="L74">		super(storage.getProperties(), LOCATION + SEPARATOR + name + SEPARATOR + &quot;database&quot;, name, schema, user);</span>
-<span class="nc" id="L75">		this.transaction = new PersistentContainerTransaction(this);</span>
-<span class="nc" id="L76">		this.storage = storage;</span>
-<span class="nc" id="L77">	}</span>
+<span class="nc" id="L72">		super(storage.getProperties(), LOCATION + SEPARATOR + name + SEPARATOR + &quot;database&quot;, name, schema, user);</span>
+<span class="nc" id="L73">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L74">		this.storage = storage;</span>
+<span class="nc" id="L75">	}</span>
 
 	public final void open() {
-<span class="nc" id="L80">		storage.open();</span>
-<span class="nc" id="L81">	}</span>
+<span class="nc" id="L78">		storage.open();</span>
+<span class="nc" id="L79">	}</span>
 
 	public final &lt;O&gt; void insert(O... facts) {
-<span class="nc" id="L84">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L85">		storage.getTransaction().begin();</span>
-<span class="nc" id="L86">		storage.insert(facts);</span>
-<span class="nc" id="L87">		storage.getTransaction().commit();</span>
-<span class="nc" id="L88">		storage.getTransaction().close();</span>
-<span class="nc" id="L89">	}</span>
+<span class="nc" id="L82">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L83">		storage.getTransaction().begin();</span>
+<span class="nc" id="L84">		storage.insert(facts);</span>
+<span class="nc" id="L85">		storage.getTransaction().commit();</span>
+<span class="nc" id="L86">		storage.getTransaction().close();</span>
+<span class="nc" id="L87">	}</span>
 
 	public final &lt;O&gt; void update(O match, O update) {
-<span class="nc" id="L92">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L93">		storage.getTransaction().begin();</span>
-<span class="nc" id="L94">		storage.update(match, update);</span>
-<span class="nc" id="L95">		storage.getTransaction().commit();</span>
-<span class="nc" id="L96">		storage.getTransaction().close();</span>
-<span class="nc" id="L97">	}</span>
+<span class="nc" id="L90">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L91">		storage.getTransaction().begin();</span>
+<span class="nc" id="L92">		storage.update(match, update);</span>
+<span class="nc" id="L93">		storage.getTransaction().commit();</span>
+<span class="nc" id="L94">		storage.getTransaction().close();</span>
+<span class="nc" id="L95">	}</span>
 
 	public final void delete(Class&lt;?&gt; clazz) {
-<span class="nc" id="L100">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L101">		storage.getTransaction().begin();</span>
-<span class="nc" id="L102">		storage.delete(clazz);</span>
-<span class="nc" id="L103">		storage.getTransaction().commit();</span>
-<span class="nc" id="L104">		storage.getTransaction().close();</span>
-<span class="nc" id="L105">	}</span>
+<span class="nc" id="L98">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L99">		storage.getTransaction().begin();</span>
+<span class="nc" id="L100">		storage.delete(clazz);</span>
+<span class="nc" id="L101">		storage.getTransaction().commit();</span>
+<span class="nc" id="L102">		storage.getTransaction().close();</span>
+<span class="nc" id="L103">	}</span>
 
 	public final &lt;O&gt; void delete(O... facts) {
-<span class="nc" id="L108">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L109">		storage.getTransaction().begin();</span>
-<span class="nc" id="L110">		storage.delete(facts);</span>
-<span class="nc" id="L111">		storage.getTransaction().commit();</span>
-<span class="nc" id="L112">		storage.getTransaction().close();</span>
-<span class="nc" id="L113">	}</span>
+<span class="nc" id="L106">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L107">		storage.getTransaction().begin();</span>
+<span class="nc" id="L108">		storage.delete(facts);</span>
+<span class="nc" id="L109">		storage.getTransaction().commit();</span>
+<span class="nc" id="L110">		storage.getTransaction().close();</span>
+<span class="nc" id="L111">	}</span>
 
 	public final boolean contains(String string) {
-<span class="nc" id="L116">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L117">		storage.getTransaction().begin();</span>
-<span class="nc" id="L118">		boolean b = storage.contains(string);</span>
-<span class="nc" id="L119">		storage.getTransaction().commit();</span>
-<span class="nc" id="L120">		storage.getTransaction().close();</span>
-<span class="nc" id="L121">		return b;</span>
+<span class="nc" id="L114">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L115">		storage.getTransaction().begin();</span>
+<span class="nc" id="L116">		boolean b = storage.contains(string);</span>
+<span class="nc" id="L117">		storage.getTransaction().commit();</span>
+<span class="nc" id="L118">		storage.getTransaction().close();</span>
+<span class="nc" id="L119">		return b;</span>
 	}
 
 	public final &lt;O&gt; boolean contains(O object) {
-<span class="nc" id="L125">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L126">		storage.getTransaction().begin();</span>
-<span class="nc" id="L127">		boolean b = storage.contains(object);</span>
-<span class="nc" id="L128">		storage.getTransaction().commit();</span>
-<span class="nc" id="L129">		storage.getTransaction().close();</span>
-<span class="nc" id="L130">		return b;</span>
+<span class="nc" id="L123">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L124">		storage.getTransaction().begin();</span>
+<span class="nc" id="L125">		boolean b = storage.contains(object);</span>
+<span class="nc" id="L126">		storage.getTransaction().commit();</span>
+<span class="nc" id="L127">		storage.getTransaction().close();</span>
+<span class="nc" id="L128">		return b;</span>
 	}
 
 	public final &lt;O&gt; boolean contains(Class&lt;O&gt; clazz) {
-<span class="nc" id="L134">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L135">		storage.getTransaction().begin();</span>
-<span class="nc" id="L136">		boolean b = storage.contains(clazz);</span>
-<span class="nc" id="L137">		storage.getTransaction().commit();</span>
-<span class="nc" id="L138">		storage.getTransaction().close();</span>
-<span class="nc" id="L139">		return b;</span>
+<span class="nc" id="L132">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L133">		storage.getTransaction().begin();</span>
+<span class="nc" id="L134">		boolean b = storage.contains(clazz);</span>
+<span class="nc" id="L135">		storage.getTransaction().commit();</span>
+<span class="nc" id="L136">		storage.getTransaction().close();</span>
+<span class="nc" id="L137">		return b;</span>
 	}
 
 	public final &lt;O&gt; boolean contains(Predicate&lt;O&gt; predicate) {
-<span class="nc" id="L143">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L144">		storage.getTransaction().begin();</span>
-<span class="nc" id="L145">		boolean b = storage.contains(predicate);</span>
-<span class="nc" id="L146">		storage.getTransaction().commit();</span>
-<span class="nc" id="L147">		storage.getTransaction().close();</span>
-<span class="nc" id="L148">		return b;</span>
+<span class="nc" id="L141">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L142">		storage.getTransaction().begin();</span>
+<span class="nc" id="L143">		boolean b = storage.contains(predicate);</span>
+<span class="nc" id="L144">		storage.getTransaction().commit();</span>
+<span class="nc" id="L145">		storage.getTransaction().close();</span>
+<span class="nc" id="L146">		return b;</span>
 	}
 
 	public final boolean contains(String functor, int arity) {
-<span class="nc" id="L152">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L153">		storage.getTransaction().begin();</span>
-<span class="nc" id="L154">		boolean b = storage.contains(functor, arity);</span>
-<span class="nc" id="L155">		storage.getTransaction().commit();</span>
-<span class="nc" id="L156">		storage.getTransaction().close();</span>
-<span class="nc" id="L157">		return b;</span>
+<span class="nc" id="L150">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L151">		storage.getTransaction().begin();</span>
+<span class="nc" id="L152">		boolean b = storage.contains(functor, arity);</span>
+<span class="nc" id="L153">		storage.getTransaction().commit();</span>
+<span class="nc" id="L154">		storage.getTransaction().close();</span>
+<span class="nc" id="L155">		return b;</span>
 	}
 
 	public final Query createQuery(String string) {
-<span class="nc" id="L161">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L162">		storage.getTransaction().begin();</span>
-<span class="nc" id="L163">		Query q = storage.createQuery(string);</span>
-<span class="nc" id="L164">		storage.getTransaction().commit();</span>
-<span class="nc" id="L165">		storage.getTransaction().close();</span>
-<span class="nc" id="L166">		return q;</span>
+<span class="nc" id="L159">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L160">		storage.getTransaction().begin();</span>
+<span class="nc" id="L161">		Query q = storage.createQuery(string);</span>
+<span class="nc" id="L162">		storage.getTransaction().commit();</span>
+<span class="nc" id="L163">		storage.getTransaction().close();</span>
+<span class="nc" id="L164">		return q;</span>
 	}
 
 	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(O o) {
-<span class="nc" id="L170">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L171">		storage.getTransaction().begin();</span>
-<span class="nc" id="L172">		TypedQuery&lt;O&gt; q = storage.createQuery(o);</span>
-<span class="nc" id="L173">		storage.getTransaction().commit();</span>
-<span class="nc" id="L174">		storage.getTransaction().close();</span>
-<span class="nc" id="L175">		return q;</span>
+<span class="nc" id="L168">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L169">		storage.getTransaction().begin();</span>
+<span class="nc" id="L170">		TypedQuery&lt;O&gt; q = storage.createQuery(o);</span>
+<span class="nc" id="L171">		storage.getTransaction().commit();</span>
+<span class="nc" id="L172">		storage.getTransaction().close();</span>
+<span class="nc" id="L173">		return q;</span>
 	}
 
 	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Class&lt;O&gt; clazz) {
-<span class="nc" id="L179">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L180">		storage.getTransaction().begin();</span>
-<span class="nc" id="L181">		TypedQuery&lt;O&gt; q = storage.createQuery(clazz);</span>
-<span class="nc" id="L182">		storage.getTransaction().commit();</span>
-<span class="nc" id="L183">		storage.getTransaction().close();</span>
-<span class="nc" id="L184">		return q;</span>
+<span class="nc" id="L177">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L178">		storage.getTransaction().begin();</span>
+<span class="nc" id="L179">		TypedQuery&lt;O&gt; q = storage.createQuery(clazz);</span>
+<span class="nc" id="L180">		storage.getTransaction().commit();</span>
+<span class="nc" id="L181">		storage.getTransaction().close();</span>
+<span class="nc" id="L182">		return q;</span>
 	}
 
 	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Predicate&lt;O&gt; predicate) {
-<span class="nc" id="L188">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L189">		storage.getTransaction().begin();</span>
-<span class="nc" id="L190">		TypedQuery&lt;O&gt; q = storage.createQuery(predicate);</span>
-<span class="nc" id="L191">		storage.getTransaction().commit();</span>
-<span class="nc" id="L192">		storage.getTransaction().close();</span>
-<span class="nc" id="L193">		return q;</span>
+<span class="nc" id="L186">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L187">		storage.getTransaction().begin();</span>
+<span class="nc" id="L188">		TypedQuery&lt;O&gt; q = storage.createQuery(predicate);</span>
+<span class="nc" id="L189">		storage.getTransaction().commit();</span>
+<span class="nc" id="L190">		storage.getTransaction().close();</span>
+<span class="nc" id="L191">		return q;</span>
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
-<span class="nc" id="L197">		checkActiveTransaction(transaction);</span>
-<span class="nc" id="L198">		storage.getTransaction().begin();</span>
-<span class="nc" id="L199">		ProcedureQuery pq = storage.createProcedureQuery(functor, args);</span>
-<span class="nc" id="L200">		storage.getTransaction().commit();</span>
-<span class="nc" id="L201">		storage.getTransaction().close();</span>
-<span class="nc" id="L202">		return pq;</span>
+<span class="nc" id="L195">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L196">		storage.getTransaction().begin();</span>
+<span class="nc" id="L197">		ProcedureQuery pq = storage.createProcedureQuery(functor, args);</span>
+<span class="nc" id="L198">		storage.getTransaction().commit();</span>
+<span class="nc" id="L199">		storage.getTransaction().close();</span>
+<span class="nc" id="L200">		return pq;</span>
 	}
 
 	public final PersistentContainer containerOf(Class&lt;?&gt; clazz) {
-<span class="nc" id="L206">		return storage.containerOf(clazz);</span>
+<span class="nc" id="L204">		return storage.containerOf(clazz);</span>
 	}
 
 	public final PersistentContainer getContainer() {
-<span class="nc" id="L210">		return storage;</span>
+<span class="nc" id="L208">		return storage;</span>
 	}
 
 	public final String locationOf(Class&lt;?&gt; clazz) {
-<span class="nc" id="L214">		return storage.locationOf(clazz);</span>
+<span class="nc" id="L212">		return storage.locationOf(clazz);</span>
 	}
 
 	public final String getStorageLocation() {
-<span class="nc" id="L218">		return storage.getLocation();</span>
+<span class="nc" id="L216">		return storage.getLocation();</span>
 	}
 
 	public final void include(String path) {
-<span class="nc" id="L222">		storage.include(path);</span>
-<span class="nc" id="L223">	}</span>
+<span class="nc" id="L220">		storage.include(path);</span>
+<span class="nc" id="L221">	}</span>
 
 	public final Transaction getTransaction() {
-<span class="nc" id="L226">		return transaction;</span>
+<span class="nc" id="L224">		return transaction;</span>
 	}
 
 	public final boolean isOpen() {
-<span class="nc" id="L230">		return storage.isOpen();</span>
+<span class="nc" id="L228">		return storage.isOpen();</span>
 	}
 
 	public final void flush() {
-<span class="nc" id="L234">		storage.flush();</span>
-<span class="nc" id="L235">	}</span>
+<span class="nc" id="L232">		storage.flush();</span>
+<span class="nc" id="L233">	}</span>
 
 	public final void clear() {
-<span class="nc" id="L238">		storage.getTransaction().begin();</span>
-<span class="nc" id="L239">		storage.clear();</span>
-<span class="nc" id="L240">		storage.getTransaction().commit();</span>
-<span class="nc" id="L241">		storage.getTransaction().close();</span>
-<span class="nc" id="L242">	}</span>
+<span class="nc" id="L236">		storage.getTransaction().begin();</span>
+<span class="nc" id="L237">		storage.clear();</span>
+<span class="nc" id="L238">		storage.getTransaction().commit();</span>
+<span class="nc" id="L239">		storage.getTransaction().close();</span>
+<span class="nc" id="L240">	}</span>
 
 	public final void close() {
-<span class="nc bnc" id="L245" title="All 2 branches missed.">		if (transaction.isActive()) {</span>
-<span class="nc" id="L246">			transaction.close();</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">		if (transaction.isActive()) {</span>
+<span class="nc" id="L244">			transaction.close();</span>
 		}
-<span class="nc" id="L248">		storage.close();</span>
-<span class="nc" id="L249">	}</span>
+<span class="nc" id="L246">		storage.close();</span>
+<span class="nc" id="L247">	}</span>
 
 	public final void begin() {
-<span class="nc" id="L252">		getTransaction().begin();</span>
-<span class="nc" id="L253">	}</span>
+<span class="nc" id="L250">		getTransaction().begin();</span>
+<span class="nc" id="L251">	}</span>
 
 	public final void commit() {
-<span class="nc" id="L256">		getTransaction().commit();</span>
-<span class="nc" id="L257">	}</span>
+<span class="nc" id="L254">		getTransaction().commit();</span>
+<span class="nc" id="L255">	}</span>
 
 	public final void rollback() {
-<span class="nc" id="L260">		getTransaction().rollback();</span>
-<span class="nc" id="L261">	}</span>
+<span class="nc" id="L258">		getTransaction().rollback();</span>
+<span class="nc" id="L259">	}</span>
 
 	public boolean isActive() {
-<span class="nc" id="L264">		return getTransaction().isActive();</span>
+<span class="nc" id="L262">		return getTransaction().isActive();</span>
 	}
 
 	public final void defragment() {
-<span class="nc" id="L268">		storage.defragment();</span>
-<span class="nc" id="L269">	}</span>
+<span class="nc" id="L266">		storage.defragment();</span>
+<span class="nc" id="L267">	}</span>
 
 	public final DatabaseEngine create() {
-<span class="nc" id="L272">		new File(getRootLocation() + &quot;/functions.pl&quot;);</span>
-<span class="nc" id="L273">		new File(getRootLocation() + &quot;/triggers.pl&quot;);</span>
-<span class="nc" id="L274">		new File(getRootLocation() + &quot;/views.pl&quot;);</span>
-<span class="nc" id="L275">		getSchema().flush();</span>
-<span class="nc" id="L276">		return this;</span>
+<span class="nc" id="L270">		new File(getRootLocation() + &quot;/functions.pl&quot;);</span>
+<span class="nc" id="L271">		new File(getRootLocation() + &quot;/triggers.pl&quot;);</span>
+<span class="nc" id="L272">		new File(getRootLocation() + &quot;/views.pl&quot;);</span>
+<span class="nc" id="L273">		getSchema().flush();</span>
+<span class="nc" id="L274">		return this;</span>
 	}
 
 	public final DatabaseEngine drop() {
-<span class="nc" id="L280">		storage.clear();</span>
-<span class="nc" id="L281">		storage.commit();</span>
-<span class="nc" id="L282">		getSchema().clear();</span>
-<span class="nc" id="L283">		getSchema().flush();</span>
-<span class="nc" id="L284">		return this;</span>
+<span class="nc" id="L278">		storage.clear();</span>
+<span class="nc" id="L279">		storage.commit();</span>
+<span class="nc" id="L280">		getSchema().clear();</span>
+<span class="nc" id="L281">		getSchema().flush();</span>
+<span class="nc" id="L282">		return this;</span>
 	}
 
 	public final boolean exist() {
-<span class="nc bnc" id="L288" title="All 2 branches missed.">		return getSchema().countUsers() &gt; 0;</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">		return getSchema().countUsers() &gt; 0;</span>
 	}
 
 	public final DatabaseMode getMode() {
-<span class="nc" id="L292">		return DatabaseMode.EMBEDDED;</span>
+<span class="nc" id="L290">		return DatabaseMode.EMBEDDED;</span>
 	}
 
 	public final DatabaseType getType() {
-<span class="nc" id="L296">		return DatabaseType.HIERARCHICAL;</span>
+<span class="nc" id="L294">		return DatabaseType.HIERARCHICAL;</span>
 	}
 
 }

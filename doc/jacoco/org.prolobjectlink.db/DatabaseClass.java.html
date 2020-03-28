@@ -398,13 +398,15 @@ public class DatabaseClass extends AbstractElement&lt;DatabaseClass&gt;
 	 * Add a field with your respective type. The created field is not marked like
 	 * primary key.
 	 * 
-	 * @param name field name
-	 * @param type type of the field
+	 * @param name     field name
+	 * @param type     type of the field
+	 * @param comment  the comment of field
+	 * @param position position of the field in the class
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */
 	public DatabaseField addField(String name, String comment, int position, Class&lt;?&gt; type) {
-<span class="nc" id="L407">		return addField(name, comment, position, type, false);</span>
+<span class="nc" id="L409">		return addField(name, comment, position, type, false);</span>
 	}
 
 	/**
@@ -412,15 +414,17 @@ public class DatabaseClass extends AbstractElement&lt;DatabaseClass&gt;
 	 * 
 	 * @param name       field name
 	 * @param type       type of the field
+	 * @param comment    the comment of field
+	 * @param position   position of the field in the class
 	 * @param primaryKey true if this field is marked like primary key
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */
 	public DatabaseField addField(String name, String comment, int position, Class&lt;?&gt; type, boolean primaryKey) {
-<span class="nc" id="L420">		DatabaseField f = newField(name, comment, position, type);</span>
-<span class="nc" id="L421">		f.setPrimaryKey(primaryKey);</span>
-<span class="nc" id="L422">		fields.put(name, f);</span>
-<span class="nc" id="L423">		return f;</span>
+<span class="nc" id="L424">		DatabaseField f = newField(name, comment, position, type);</span>
+<span class="nc" id="L425">		f.setPrimaryKey(primaryKey);</span>
+<span class="nc" id="L426">		fields.put(name, f);</span>
+<span class="nc" id="L427">		return f;</span>
 	}
 
 	/**
@@ -428,15 +432,17 @@ public class DatabaseClass extends AbstractElement&lt;DatabaseClass&gt;
 	 * 
 	 * @param name       field name
 	 * @param type       type of the field
+	 * @param comment    the comment of field
+	 * @param position   position of the field in the class
 	 * @param linkedType Generic class for collection/Map
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */
 	public DatabaseField addField(String name, String comment, int position, Class&lt;?&gt; type, Class&lt;?&gt; linkedType) {
-<span class="nc" id="L436">		DatabaseField f = newField(name, comment, position, type);</span>
-<span class="nc" id="L437">		f.setLinkedType(linkedType);</span>
-<span class="nc" id="L438">		fields.put(name, f);</span>
-<span class="nc" id="L439">		return f;</span>
+<span class="nc" id="L442">		DatabaseField f = newField(name, comment, position, type);</span>
+<span class="nc" id="L443">		f.setLinkedType(linkedType);</span>
+<span class="nc" id="L444">		fields.put(name, f);</span>
+<span class="nc" id="L445">		return f;</span>
 	}
 
 	/**
@@ -447,107 +453,107 @@ public class DatabaseClass extends AbstractElement&lt;DatabaseClass&gt;
 	 * @since 1.0
 	 */
 	public DatabaseField addField(DatabaseField field) {
-<span class="nc" id="L450">		fields.put(field.getName(), field);</span>
-<span class="nc" id="L451">		return field;</span>
+<span class="nc" id="L456">		fields.put(field.getName(), field);</span>
+<span class="nc" id="L457">		return field;</span>
 	}
 
 	public DatabaseClass removeField(String name) {
-<span class="nc" id="L455">		fields.remove(name);</span>
-<span class="nc" id="L456">		return this;</span>
+<span class="nc" id="L461">		fields.remove(name);</span>
+<span class="nc" id="L462">		return this;</span>
 	}
 
 	public int countFields() {
-<span class="nc" id="L460">		return fields.size();</span>
+<span class="nc" id="L466">		return fields.size();</span>
 	}
 
 	public boolean isSubClassOf(String name) {
-<span class="nc bnc" id="L464" title="All 4 branches missed.">		if (superClass != null &amp;&amp; superClass.getName().equals(name)) {</span>
-<span class="nc" id="L465">			return true;</span>
+<span class="nc bnc" id="L470" title="All 4 branches missed.">		if (superClass != null &amp;&amp; superClass.getName().equals(name)) {</span>
+<span class="nc" id="L471">			return true;</span>
 		}
-<span class="nc bnc" id="L467" title="All 2 branches missed.">		for (DatabaseClass c : superClasses) {</span>
-<span class="nc bnc" id="L468" title="All 2 branches missed.">			if (c.getName().equals(name)) {</span>
-<span class="nc" id="L469">				return true;</span>
+<span class="nc bnc" id="L473" title="All 2 branches missed.">		for (DatabaseClass c : superClasses) {</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">			if (c.getName().equals(name)) {</span>
+<span class="nc" id="L475">				return true;</span>
 			}
-<span class="nc" id="L471">		}</span>
-<span class="nc" id="L472">		return false;</span>
+<span class="nc" id="L477">		}</span>
+<span class="nc" id="L478">		return false;</span>
 	}
 
 	public boolean isSubClassOf(DatabaseClass clazz) {
-<span class="nc" id="L476">		return isSubClassOf(clazz.getName());</span>
+<span class="nc" id="L482">		return isSubClassOf(clazz.getName());</span>
 	}
 
 	public Collection&lt;DatabaseClass&gt; getSubclasses() {
-<span class="nc" id="L480">		Collection&lt;DatabaseClass&gt; sub = new ArrayList&lt;DatabaseClass&gt;();</span>
-<span class="nc" id="L481">		Collection&lt;DatabaseClass&gt; all = schema.getClasses();</span>
-<span class="nc bnc" id="L482" title="All 2 branches missed.">		for (DatabaseClass databaseClass : all) {</span>
-<span class="nc" id="L483">			DatabaseClass sc = databaseClass.getSuperClass();</span>
-<span class="nc bnc" id="L484" title="All 4 branches missed.">			if (sc != null &amp;&amp; sc.equals(this)) {</span>
-<span class="nc" id="L485">				sub.add(databaseClass);</span>
+<span class="nc" id="L486">		Collection&lt;DatabaseClass&gt; sub = new ArrayList&lt;DatabaseClass&gt;();</span>
+<span class="nc" id="L487">		Collection&lt;DatabaseClass&gt; all = schema.getClasses();</span>
+<span class="nc bnc" id="L488" title="All 2 branches missed.">		for (DatabaseClass databaseClass : all) {</span>
+<span class="nc" id="L489">			DatabaseClass sc = databaseClass.getSuperClass();</span>
+<span class="nc bnc" id="L490" title="All 4 branches missed.">			if (sc != null &amp;&amp; sc.equals(this)) {</span>
+<span class="nc" id="L491">				sub.add(databaseClass);</span>
 			} else {
-<span class="nc" id="L487">				Collection&lt;DatabaseClass&gt; s = databaseClass.getSuperClasses();</span>
-<span class="nc bnc" id="L488" title="All 2 branches missed.">				for (DatabaseClass databaseClass2 : s) {</span>
-<span class="nc" id="L489">					DatabaseClass sc2 = databaseClass.getSuperClass();</span>
-<span class="nc bnc" id="L490" title="All 4 branches missed.">					if (sc2 != null &amp;&amp; sc2.getSuperClass().equals(this)) {</span>
-<span class="nc" id="L491">						sub.add(databaseClass2);</span>
+<span class="nc" id="L493">				Collection&lt;DatabaseClass&gt; s = databaseClass.getSuperClasses();</span>
+<span class="nc bnc" id="L494" title="All 2 branches missed.">				for (DatabaseClass databaseClass2 : s) {</span>
+<span class="nc" id="L495">					DatabaseClass sc2 = databaseClass.getSuperClass();</span>
+<span class="nc bnc" id="L496" title="All 4 branches missed.">					if (sc2 != null &amp;&amp; sc2.getSuperClass().equals(this)) {</span>
+<span class="nc" id="L497">						sub.add(databaseClass2);</span>
 					}
-<span class="nc" id="L493">				}</span>
+<span class="nc" id="L499">				}</span>
 			}
-<span class="nc" id="L495">		}</span>
-<span class="nc" id="L496">		return sub;</span>
+<span class="nc" id="L501">		}</span>
+<span class="nc" id="L502">		return sub;</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="nc" id="L501">		return getName();</span>
+<span class="nc" id="L507">		return getName();</span>
 	}
 
 	@Override
 	public int hashCode() {
-<span class="nc" id="L506">		final int prime = 31;</span>
-<span class="nc" id="L507">		int result = 1;</span>
-<span class="nc bnc" id="L508" title="All 2 branches missed.">		result = prime * result + ((fields == null) ? 0 : fields.hashCode());</span>
-<span class="nc bnc" id="L509" title="All 2 branches missed.">		result = prime * result + ((name == null) ? 0 : name.hashCode());</span>
-<span class="nc" id="L510">		return result;</span>
+<span class="nc" id="L512">		final int prime = 31;</span>
+<span class="nc" id="L513">		int result = 1;</span>
+<span class="nc bnc" id="L514" title="All 2 branches missed.">		result = prime * result + ((fields == null) ? 0 : fields.hashCode());</span>
+<span class="nc bnc" id="L515" title="All 2 branches missed.">		result = prime * result + ((name == null) ? 0 : name.hashCode());</span>
+<span class="nc" id="L516">		return result;</span>
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-<span class="nc bnc" id="L515" title="All 2 branches missed.">		if (this == obj)</span>
-<span class="nc" id="L516">			return true;</span>
-<span class="nc bnc" id="L517" title="All 2 branches missed.">		if (obj == null)</span>
-<span class="nc" id="L518">			return false;</span>
-<span class="nc bnc" id="L519" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
-<span class="nc" id="L520">			return false;</span>
-<span class="nc" id="L521">		DatabaseClass other = (DatabaseClass) obj;</span>
-<span class="nc bnc" id="L522" title="All 2 branches missed.">		if (fields == null) {</span>
-<span class="nc bnc" id="L523" title="All 2 branches missed.">			if (other.fields != null)</span>
-<span class="nc" id="L524">				return false;</span>
-<span class="nc bnc" id="L525" title="All 2 branches missed.">		} else if (!fields.equals(other.fields)) {</span>
+<span class="nc bnc" id="L521" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L522">			return true;</span>
+<span class="nc bnc" id="L523" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L524">			return false;</span>
+<span class="nc bnc" id="L525" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
 <span class="nc" id="L526">			return false;</span>
-		}
-<span class="nc bnc" id="L528" title="All 2 branches missed.">		if (name == null) {</span>
-<span class="nc bnc" id="L529" title="All 2 branches missed.">			if (other.name != null)</span>
+<span class="nc" id="L527">		DatabaseClass other = (DatabaseClass) obj;</span>
+<span class="nc bnc" id="L528" title="All 2 branches missed.">		if (fields == null) {</span>
+<span class="nc bnc" id="L529" title="All 2 branches missed.">			if (other.fields != null)</span>
 <span class="nc" id="L530">				return false;</span>
-<span class="nc bnc" id="L531" title="All 2 branches missed.">		} else if (!name.equals(other.name)) {</span>
+<span class="nc bnc" id="L531" title="All 2 branches missed.">		} else if (!fields.equals(other.fields)) {</span>
 <span class="nc" id="L532">			return false;</span>
 		}
-<span class="nc" id="L534">		return true;</span>
+<span class="nc bnc" id="L534" title="All 2 branches missed.">		if (name == null) {</span>
+<span class="nc bnc" id="L535" title="All 2 branches missed.">			if (other.name != null)</span>
+<span class="nc" id="L536">				return false;</span>
+<span class="nc bnc" id="L537" title="All 2 branches missed.">		} else if (!name.equals(other.name)) {</span>
+<span class="nc" id="L538">			return false;</span>
+		}
+<span class="nc" id="L540">		return true;</span>
 	}
 
-<span class="nc" id="L537">	public class FieldComparator implements Comparator&lt;DatabaseField&gt; {</span>
+<span class="nc" id="L543">	public class FieldComparator implements Comparator&lt;DatabaseField&gt; {</span>
 
 		public int compare(DatabaseField o1, DatabaseField o2) {
-<span class="nc" id="L540">			return o1.compareTo(o2);</span>
+<span class="nc" id="L546">			return o1.compareTo(o2);</span>
 		}
 	}
 
 	public DatabaseClass setComment(String comment) {
-<span class="nc" id="L545">		this.comment = comment;</span>
-<span class="nc" id="L546">		return this;</span>
+<span class="nc" id="L551">		this.comment = comment;</span>
+<span class="nc" id="L552">		return this;</span>
 	}
 
 	public SchemaElementType geElementType() {
-<span class="nc" id="L550">		return SchemaElementType.CLASS;</span>
+<span class="nc" id="L556">		return SchemaElementType.CLASS;</span>
 	}
 
 	/**
@@ -555,6 +561,8 @@ public class DatabaseClass extends AbstractElement&lt;DatabaseClass&gt;
 	 * 
 	 * @param name        field name
 	 * @param type        type of the field
+	 * @param comment     the comment of field
+	 * @param position    position of the field in the class
 	 * @param linkedClass Generic class for collection/Map
 	 * @return the field created and added to this class
 	 * @since 1.0
@@ -562,41 +570,41 @@ public class DatabaseClass extends AbstractElement&lt;DatabaseClass&gt;
 	 */
 	@Deprecated
 	public DatabaseField addField(String name, String comment, int position, Class&lt;?&gt; type, DatabaseClass linkedClass) {
-<span class="nc" id="L565">		DatabaseField f = newField(name, comment, position, type);</span>
-<span class="nc" id="L566">		f.setLinkedClass(linkedClass);</span>
-<span class="nc" id="L567">		fields.put(name, f);</span>
-<span class="nc" id="L568">		return f;</span>
+<span class="nc" id="L573">		DatabaseField f = newField(name, comment, position, type);</span>
+<span class="nc" id="L574">		f.setLinkedClass(linkedClass);</span>
+<span class="nc" id="L575">		fields.put(name, f);</span>
+<span class="nc" id="L576">		return f;</span>
 	}
 
 	public boolean isAnnotationPresent(Class&lt;? extends Annotation&gt; annotationClass) {
-<span class="nc" id="L572">		return getJavaClass().isAnnotationPresent(annotationClass);</span>
+<span class="nc" id="L580">		return getJavaClass().isAnnotationPresent(annotationClass);</span>
 	}
 
 	public DatabaseField getIdField() {
-<span class="nc bnc" id="L576" title="All 2 branches missed.">		for (DatabaseField f : getFields()) {</span>
-<span class="nc bnc" id="L577" title="All 2 branches missed.">			if (f.isPrimaryKey()) {</span>
-<span class="nc" id="L578">				return f;</span>
+<span class="nc bnc" id="L584" title="All 2 branches missed.">		for (DatabaseField f : getFields()) {</span>
+<span class="nc bnc" id="L585" title="All 2 branches missed.">			if (f.isPrimaryKey()) {</span>
+<span class="nc" id="L586">				return f;</span>
 			}
-<span class="nc" id="L580">		}</span>
-<span class="nc" id="L581">		return null;</span>
+<span class="nc" id="L588">		}</span>
+<span class="nc" id="L589">		return null;</span>
 	}
 
 	public DatabaseField getVersionField() {
-<span class="nc bnc" id="L585" title="All 2 branches missed.">		for (DatabaseField f : getFields()) {</span>
-<span class="nc bnc" id="L586" title="All 2 branches missed.">			if (f.isVersion()) {</span>
-<span class="nc" id="L587">				return f;</span>
+<span class="nc bnc" id="L593" title="All 2 branches missed.">		for (DatabaseField f : getFields()) {</span>
+<span class="nc bnc" id="L594" title="All 2 branches missed.">			if (f.isVersion()) {</span>
+<span class="nc" id="L595">				return f;</span>
 			}
-<span class="nc" id="L589">		}</span>
-<span class="nc" id="L590">		return null;</span>
+<span class="nc" id="L597">		}</span>
+<span class="nc" id="L598">		return null;</span>
 	}
 
 	public boolean hasVersionField() {
-<span class="nc bnc" id="L594" title="All 2 branches missed.">		for (DatabaseField f : getFields()) {</span>
-<span class="nc bnc" id="L595" title="All 2 branches missed.">			if (f.isVersion()) {</span>
-<span class="nc" id="L596">				return true;</span>
+<span class="nc bnc" id="L602" title="All 2 branches missed.">		for (DatabaseField f : getFields()) {</span>
+<span class="nc bnc" id="L603" title="All 2 branches missed.">			if (f.isVersion()) {</span>
+<span class="nc" id="L604">				return true;</span>
 			}
-<span class="nc" id="L598">		}</span>
-<span class="nc" id="L599">		return false;</span>
+<span class="nc" id="L606">		}</span>
+<span class="nc" id="L607">		return false;</span>
 	}
 
 }

@@ -138,23 +138,22 @@ public final class Assertions {
 	 * Check that the given class are not field empty or not have persistent fields.
 	 * 
 	 * @param target  the given class reference
-	 * @param message {@link IllegalArgumentException} message if it is threw.
 	 * @return the given class reference or thrown {@link IllegalArgumentException}
 	 * @since 1.0
 	 */
 	public static Class&lt;?&gt; persistent(Class&lt;?&gt; target) {
-<span class="nc" id="L146">		Field[] fields = target.getDeclaredFields();</span>
-<span class="nc bnc" id="L147" title="All 2 branches missed.">		if (fields.length &lt;= 0) {</span>
-<span class="nc" id="L148">			throw new IllegalArgumentException();</span>
+<span class="nc" id="L145">		Field[] fields = target.getDeclaredFields();</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">		if (fields.length &lt;= 0) {</span>
+<span class="nc" id="L147">			throw new IllegalArgumentException();</span>
 		}
 
 		// check at least persistent filed
-<span class="nc bnc" id="L152" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
-<span class="nc bnc" id="L153" title="All 2 branches missed.">			if (JavaReflect.isPersistent(fields[i])) {</span>
-<span class="nc" id="L154">				return target;</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">			if (JavaReflect.isPersistent(fields[i])) {</span>
+<span class="nc" id="L153">				return target;</span>
 			}
 		}
-<span class="nc" id="L157">		throw new IllegalArgumentException();</span>
+<span class="nc" id="L156">		throw new IllegalArgumentException();</span>
 	}
 
 	/**
@@ -166,51 +165,51 @@ public final class Assertions {
 	 * @since 1.0
 	 */
 	public static Class&lt;?&gt; persistent(Class&lt;?&gt; target, String message) {
-<span class="nc" id="L169">		Field[] fields = target.getDeclaredFields();</span>
-<span class="nc bnc" id="L170" title="All 2 branches missed.">		if (fields.length &lt;= 0) {</span>
-<span class="nc" id="L171">			throw new IllegalArgumentException(message);</span>
+<span class="nc" id="L168">		Field[] fields = target.getDeclaredFields();</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">		if (fields.length &lt;= 0) {</span>
+<span class="nc" id="L170">			throw new IllegalArgumentException(message);</span>
 		}
 
 		// check at least persistent filed
-<span class="nc bnc" id="L175" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
-<span class="nc bnc" id="L176" title="All 2 branches missed.">			if (JavaReflect.isPersistent(fields[i])) {</span>
-<span class="nc" id="L177">				return target;</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">			if (JavaReflect.isPersistent(fields[i])) {</span>
+<span class="nc" id="L176">				return target;</span>
 			}
 		}
-<span class="nc" id="L180">		throw new IllegalArgumentException(message);</span>
+<span class="nc" id="L179">		throw new IllegalArgumentException(message);</span>
 	}
 
 	// check at least persistent filed
 	public static Class&lt;?&gt; nonStaticFinal(Class&lt;?&gt; target) {
-<span class="nc" id="L185">		Class&lt;?&gt; classPtr = target;</span>
-<span class="nc bnc" id="L186" title="All 4 branches missed.">		while (classPtr != null &amp;&amp; classPtr != Object.class) {</span>
-<span class="nc" id="L187">			Field[] fields = classPtr.getDeclaredFields();</span>
-<span class="nc bnc" id="L188" title="All 2 branches missed.">			for (int i = 0; i &lt; fields.length; i++) {</span>
-<span class="nc bnc" id="L189" title="All 2 branches missed.">				if (!JavaReflect.isStaticAndFinal(fields[i])) {</span>
-<span class="nc" id="L190">					return target;</span>
+<span class="nc" id="L184">		Class&lt;?&gt; classPtr = target;</span>
+<span class="nc bnc" id="L185" title="All 4 branches missed.">		while (classPtr != null &amp;&amp; classPtr != Object.class) {</span>
+<span class="nc" id="L186">			Field[] fields = classPtr.getDeclaredFields();</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">			for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">				if (!JavaReflect.isStaticAndFinal(fields[i])) {</span>
+<span class="nc" id="L189">					return target;</span>
 				}
 			}
-<span class="nc" id="L193">			classPtr = classPtr.getSuperclass();</span>
-<span class="nc" id="L194">		}</span>
-<span class="nc" id="L195">		throw new IllegalArgumentException();</span>
+<span class="nc" id="L192">			classPtr = classPtr.getSuperclass();</span>
+<span class="nc" id="L193">		}</span>
+<span class="nc" id="L194">		throw new IllegalArgumentException();</span>
 	}
 
 	// check at least persistent filed
 	public static Class&lt;?&gt; nonStaticFinal(Class&lt;?&gt; target, String message) {
-<span class="nc" id="L200">		Class&lt;?&gt; classPtr = target;</span>
-<span class="nc bnc" id="L201" title="All 4 branches missed.">		while (classPtr != null &amp;&amp; classPtr != Object.class) {</span>
-<span class="nc" id="L202">			Field[] fields = classPtr.getDeclaredFields();</span>
-<span class="nc bnc" id="L203" title="All 2 branches missed.">			for (int i = 0; i &lt; fields.length; i++) {</span>
-<span class="nc bnc" id="L204" title="All 2 branches missed.">				if (!JavaReflect.isStaticAndFinal(fields[i])) {</span>
-<span class="nc" id="L205">					return target;</span>
+<span class="nc" id="L199">		Class&lt;?&gt; classPtr = target;</span>
+<span class="nc bnc" id="L200" title="All 4 branches missed.">		while (classPtr != null &amp;&amp; classPtr != Object.class) {</span>
+<span class="nc" id="L201">			Field[] fields = classPtr.getDeclaredFields();</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">			for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">				if (!JavaReflect.isStaticAndFinal(fields[i])) {</span>
+<span class="nc" id="L204">					return target;</span>
 				}
 			}
-<span class="nc" id="L208">			classPtr = classPtr.getSuperclass();</span>
-<span class="nc" id="L209">		}</span>
-<span class="nc" id="L210">		throw new IllegalArgumentException(message);</span>
+<span class="nc" id="L207">			classPtr = classPtr.getSuperclass();</span>
+<span class="nc" id="L208">		}</span>
+<span class="nc" id="L209">		throw new IllegalArgumentException(message);</span>
 	}
 
-<span class="nc" id="L213">	private Assertions() {</span>
-<span class="nc" id="L214">	}</span>
+<span class="nc" id="L212">	private Assertions() {</span>
+<span class="nc" id="L213">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

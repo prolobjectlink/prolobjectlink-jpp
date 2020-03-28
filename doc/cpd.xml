@@ -1706,8 +1706,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="24" tokens="101">
-<file line="268" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\engine\AbstractHierarchicalDatabase.java"/>
-<file line="185" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\engine\AbstractRelationalDatabase.java"/>
+<file line="266" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\engine\AbstractHierarchicalDatabase.java"/>
+<file line="183" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\engine\AbstractRelationalDatabase.java"/>
 <codefragment>
 <![CDATA[
 		return storage.isOpen();

@@ -42,8 +42,8 @@ import org.prolobjectlink.db.engine.AbstractRelationalDatabase;
 import org.prolobjectlink.db.etc.Settings;
 
 /**
- * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
- *             RemoteRelationalHierarchical} instead
+ * @deprecated Use MemoryRelational,EmbeddedRelational,
+ *             RemoteRelationalHierarchical instead
  * @author Jose Zalacain
  *
  */
@@ -51,21 +51,20 @@ import org.prolobjectlink.db.etc.Settings;
 public final class PrologRelationalDatabase extends AbstractRelationalDatabase implements RelationalDatabase {
 
 	/**
-	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
-	 *             RemoteRelationalHierarchical} instead
-	 * @author Jose Zalacain
+	 * @deprecated Use MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical instead
 	 *
 	 */
 	@Deprecated
 	public PrologRelationalDatabase(Settings properties, StorageMode storageMode, String name, DatabaseUser user) {
-<span class="nc" id="L61">		super(name, new DatabaseSchema(LOCATION + File.separator + name, properties.getProvider(), properties, user),</span>
+<span class="nc" id="L60">		super(name, new DatabaseSchema(LOCATION + File.separator + name, properties.getProvider(), properties, user),</span>
 				user,
 				new PrologStorageGraph(LOCATION + File.separator + name + File.separator + &quot;database&quot;,
-<span class="nc" id="L64">						new DatabaseSchema(LOCATION + File.separator + name, properties.getProvider(), properties,</span>
+<span class="nc" id="L63">						new DatabaseSchema(LOCATION + File.separator + name, properties.getProvider(), properties,</span>
 								user),
-<span class="nc" id="L66">						properties, properties.getProvider(), properties,</span>
-<span class="nc" id="L67">						new PrologObjectConverter(properties.getProvider()), storageMode));</span>
-<span class="nc" id="L68">	}</span>
+<span class="nc" id="L65">						properties, properties.getProvider(), properties,</span>
+<span class="nc" id="L66">						new PrologObjectConverter(properties.getProvider()), storageMode));</span>
+<span class="nc" id="L67">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

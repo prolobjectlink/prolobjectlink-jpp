@@ -50,8 +50,8 @@ import org.prolobjectlink.db.TypedQuery;
 import org.prolobjectlink.db.tx.PersistentContainerTransaction;
 
 /**
- * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
- *             RemoteRelationalHierarchical} instead
+ * @deprecated Use MemoryRelational,EmbeddedRelational,
+ *             RemoteRelationalHierarchical instead
  * @author Jose Zalacain
  *
  */
@@ -64,10 +64,8 @@ public abstract class AbstractRelationalDatabase extends AbstractDatabaseEngine 
 	protected static final String LOCATION = "db/pdb/relational";
 
 	/**
-	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
-	 *             RemoteRelationalHierarchical} instead
-	 * @author Jose Zalacain
-	 *
+	 * @deprecated Use MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical instead
 	 */
 	@Deprecated
 	public AbstractRelationalDatabase(String name, Schema schema, DatabaseUser user, StorageGraph storage) {

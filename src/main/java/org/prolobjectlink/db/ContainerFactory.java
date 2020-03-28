@@ -54,19 +54,15 @@ public interface ContainerFactory {
 	public RelationalCache createRelationalCache(Schema schema);
 
 	/**
-	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
-	 *             RemoteRelationalHierarchical} instead
-	 * @author Jose Zalacain
-	 *
+	 * @deprecated Use MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical instead
 	 */
 	@Deprecated
 	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user);
 
 	/**
-	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
-	 *             RemoteRelationalHierarchical} instead
-	 * @author Jose Zalacain
-	 *
+	 * @deprecated Use MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical instead
 	 */
 	@Deprecated
 	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, String username,
@@ -75,19 +71,15 @@ public interface ContainerFactory {
 	public HierarchicalCache createHierarchicalCache();
 
 	/**
-	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
-	 *             RemoteHierarchical} instead
-	 * @author Jose Zalacain
-	 *
+	 * @deprecated Use MemoryHierarchical,EmbeddedHierarchical, RemoteHierarchical
+	 *             instead
 	 */
 	@Deprecated
 	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, DatabaseUser user);
 
 	/**
-	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
-	 *             RemoteHierarchical} instead
-	 * @author Jose Zalacain
-	 *
+	 * @deprecated Use MemoryHierarchical,EmbeddedHierarchical, RemoteHierarchical
+	 *             instead
 	 */
 	@Deprecated
 	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, String username,

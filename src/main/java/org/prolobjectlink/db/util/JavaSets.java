@@ -47,6 +47,7 @@ public final class JavaSets {
 	 * Create a new TreeSet.
 	 * 
 	 * @param <T> the type
+	 * @param c initial collection
 	 * @return the object
 	 */
 	public static <T extends Comparable<? super T>> Set<T> treeSet(Collection<? extends T> c) {
@@ -88,7 +89,7 @@ public final class JavaSets {
 	 * Create a new HashSet.
 	 * 
 	 * @param            <T> the type
-	 * @param collection to be include in returning set
+	 * @param c to be include in returning set
 	 * @return the object
 	 */
 	public static <T> Set<T> hashSet(Collection<? extends T> c) {
@@ -120,7 +121,7 @@ public final class JavaSets {
 	 * Create a new LinkedHashSet.
 	 * 
 	 * @param            <T> the type
-	 * @param collection to be include in returning set
+	 * @param c to be include in returning set
 	 * @return the object
 	 */
 	public static <T> Set<T> linkedHashSet(Collection<? extends T> c) {

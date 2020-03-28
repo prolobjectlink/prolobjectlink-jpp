@@ -47,10 +47,11 @@ public final class JavaSets {
 	 * Create a new TreeSet.
 	 * 
 	 * @param &lt;T&gt; the type
+	 * @param c initial collection
 	 * @return the object
 	 */
 	public static &lt;T extends Comparable&lt;? super T&gt;&gt; Set&lt;T&gt; treeSet(Collection&lt;? extends T&gt; c) {
-<span class="nc" id="L53">		return new TreeSet&lt;T&gt;(c);</span>
+<span class="nc" id="L54">		return new TreeSet&lt;T&gt;(c);</span>
 	}
 
 	/**
@@ -60,7 +61,7 @@ public final class JavaSets {
 	 * @return the object
 	 */
 	public static &lt;T extends Comparable&lt;? super T&gt;&gt; Set&lt;T&gt; treeSet() {
-<span class="nc" id="L63">		return new TreeSet&lt;T&gt;();</span>
+<span class="nc" id="L64">		return new TreeSet&lt;T&gt;();</span>
 	}
 
 	/**
@@ -70,7 +71,7 @@ public final class JavaSets {
 	 * @return the object
 	 */
 	public static &lt;T&gt; Set&lt;T&gt; hashSet() {
-<span class="nc" id="L73">		return new HashSet&lt;T&gt;();</span>
+<span class="nc" id="L74">		return new HashSet&lt;T&gt;();</span>
 	}
 
 	/**
@@ -81,18 +82,18 @@ public final class JavaSets {
 	 * @return the object
 	 */
 	public static &lt;T&gt; Set&lt;T&gt; hashSet(int capacity) {
-<span class="nc" id="L84">		return new HashSet&lt;T&gt;(capacity);</span>
+<span class="nc" id="L85">		return new HashSet&lt;T&gt;(capacity);</span>
 	}
 
 	/**
 	 * Create a new HashSet.
 	 * 
 	 * @param            &lt;T&gt; the type
-	 * @param collection to be include in returning set
+	 * @param c to be include in returning set
 	 * @return the object
 	 */
 	public static &lt;T&gt; Set&lt;T&gt; hashSet(Collection&lt;? extends T&gt; c) {
-<span class="nc" id="L95">		return new HashSet&lt;T&gt;(c);</span>
+<span class="nc" id="L96">		return new HashSet&lt;T&gt;(c);</span>
 	}
 
 	/**
@@ -102,7 +103,7 @@ public final class JavaSets {
 	 * @return the object
 	 */
 	public static &lt;T&gt; Set&lt;T&gt; linkedHashSet() {
-<span class="nc" id="L105">		return new LinkedHashSet&lt;T&gt;();</span>
+<span class="nc" id="L106">		return new LinkedHashSet&lt;T&gt;();</span>
 	}
 
 	/**
@@ -113,18 +114,18 @@ public final class JavaSets {
 	 * @return the object
 	 */
 	public static &lt;T&gt; Set&lt;T&gt; linkedHashSet(int capacity) {
-<span class="nc" id="L116">		return new LinkedHashSet&lt;T&gt;(capacity);</span>
+<span class="nc" id="L117">		return new LinkedHashSet&lt;T&gt;(capacity);</span>
 	}
 
 	/**
 	 * Create a new LinkedHashSet.
 	 * 
 	 * @param            &lt;T&gt; the type
-	 * @param collection to be include in returning set
+	 * @param c to be include in returning set
 	 * @return the object
 	 */
 	public static &lt;T&gt; Set&lt;T&gt; linkedHashSet(Collection&lt;? extends T&gt; c) {
-<span class="nc" id="L127">		return new LinkedHashSet&lt;T&gt;(c);</span>
+<span class="nc" id="L128">		return new LinkedHashSet&lt;T&gt;(c);</span>
 	}
 
 }

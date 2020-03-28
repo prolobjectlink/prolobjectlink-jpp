@@ -138,7 +138,6 @@ public final class Assertions {
 	 * Check that the given class are not field empty or not have persistent fields.
 	 * 
 	 * @param target  the given class reference
-	 * @param message {@link IllegalArgumentException} message if it is threw.
 	 * @return the given class reference or thrown {@link IllegalArgumentException}
 	 * @since 1.0
 	 */

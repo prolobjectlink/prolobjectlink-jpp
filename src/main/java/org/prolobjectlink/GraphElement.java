@@ -35,7 +35,7 @@ package org.prolobjectlink;
 /**
  * Graph Element
  *
- * @param <E>
+ * @param <E> Generic Type of Graph Edge
  * @author Jose Zalacain
  * @since 1.0
  */

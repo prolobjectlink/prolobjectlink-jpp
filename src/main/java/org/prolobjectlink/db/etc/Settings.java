@@ -230,9 +230,8 @@ public final class Settings extends AbstractMap<Object, Object>
 	}
 
 	/**
-	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
-	 *             RemoteHierarchical} instead
-	 * @author Jose Zalacain
+	 * @deprecated Use MemoryHierarchical,EmbeddedHierarchical, RemoteHierarchical
+	 *             instead
 	 *
 	 */
 	@Deprecated
@@ -241,9 +240,8 @@ public final class Settings extends AbstractMap<Object, Object>
 	}
 
 	/**
-	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
-	 *             RemoteHierarchical} instead
-	 * @author Jose Zalacain
+	 * @deprecated Use MemoryHierarchical,EmbeddedHierarchical, RemoteHierarchical
+	 *             instead
 	 *
 	 */
 	@Deprecated
@@ -273,9 +271,8 @@ public final class Settings extends AbstractMap<Object, Object>
 	}
 
 	/**
-	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
-	 *             RemoteRelationalHierarchical} instead
-	 * @author Jose Zalacain
+	 * @deprecated Use MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical instead
 	 *
 	 */
 	@Deprecated
@@ -284,8 +281,8 @@ public final class Settings extends AbstractMap<Object, Object>
 	}
 
 	/**
-	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
-	 *             RemoteRelationalHierarchical} instead
+	 * @deprecated Use MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical instead
 	 * @author Jose Zalacain
 	 *
 	 */

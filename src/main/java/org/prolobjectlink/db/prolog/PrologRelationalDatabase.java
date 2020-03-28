@@ -42,8 +42,8 @@ import org.prolobjectlink.db.engine.AbstractRelationalDatabase;
 import org.prolobjectlink.db.etc.Settings;
 
 /**
- * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
- *             RemoteRelationalHierarchical} instead
+ * @deprecated Use MemoryRelational,EmbeddedRelational,
+ *             RemoteRelationalHierarchical instead
  * @author Jose Zalacain
  *
  */
@@ -51,9 +51,8 @@ import org.prolobjectlink.db.etc.Settings;
 public final class PrologRelationalDatabase extends AbstractRelationalDatabase implements RelationalDatabase {
 
 	/**
-	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
-	 *             RemoteRelationalHierarchical} instead
-	 * @author Jose Zalacain
+	 * @deprecated Use MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical instead
 	 *
 	 */
 	@Deprecated

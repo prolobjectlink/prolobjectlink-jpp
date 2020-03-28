@@ -57,7 +57,9 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	/**
 	 * Bulk insertion for non null and non empty objects array
 	 * 
-	 * @param objects objects arrays
+	 * @param facts objects arrays
+	 * @param       <O> type of facts array
+	 * @since 1.0
 	 */
 	public <O> void insert(O... facts);
 
@@ -68,8 +70,8 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	/**
 	 * bulk deletion for non null objects array
 	 * 
-	 * @param         <O>
-	 * @param objects
+	 * @param facts objects arrays
+	 * @param       <O> type of facts array
 	 */
 	public <O> void delete(O... facts);
 
@@ -82,13 +84,14 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * resolved. The predicate classes present in the prolog string will be store
 	 * for resolve and return instances of those classes as result of querying and
 	 * build predicates classes from result obtained of the prolog engine.
+	 * </p>
 	 * 
 	 * <pre>
 	 * query = pm.createQuery(&quot;point(Idp, X, Y)&quot;);
 	 * query = pm.createQuery(&quot;segment(Ids, Point0, Point1)&quot;);
 	 * </pre>
 	 * 
-	 * </p>
+	 * 
 	 * 
 	 * <p>
 	 * The string query allow the arithmetic comparison and term comparison but this
@@ -105,12 +108,13 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * <p>
 	 * This query variant support the projection that is the presence of various
 	 * predicate classes in the prolog string query.
+	 * </p>
 	 * 
 	 * <pre>
 	 * query = pm.createQuery(&quot;point(Idp, X, Y), segment(Ids, Point0, Point1)&quot;);
 	 * </pre>
 	 * 
-	 * </p>
+	 * 
 	 * 
 	 * <p>
 	 * Waring with equals variables in different class. This cause that in the
@@ -136,8 +140,8 @@ public interface PersistentContainer extends Closeable, Restorable, Container, T
 	 * conserved and fields with null values are substituting by the variable name
 	 * specified on field argument annotations. This process is named inspection.
 	 * The inspection process find three variants for resolve the term to query.
-	 * 
 	 * </p>
+	 * 
 	 * <p>
 	 * 
 	 * <li>If the Object term are fully instantiated only one solution is possible

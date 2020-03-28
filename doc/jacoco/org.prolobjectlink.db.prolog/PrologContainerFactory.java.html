@@ -75,8 +75,8 @@ public abstract class PrologContainerFactory extends AbstractContainerFactory im
 	}
 
 	/**
-	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
-	 *             RemoteRelationalHierarchical} instead
+	 * @deprecated Use MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical instead
 	 * @author Jose Zalacain
 	 *
 	 */
@@ -86,8 +86,8 @@ public abstract class PrologContainerFactory extends AbstractContainerFactory im
 	}
 
 	/**
-	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
-	 *             RemoteHierarchical} instead
+	 * @deprecated Use MemoryHierarchical,EmbeddedHierarchical, RemoteHierarchical
+	 *             instead
 	 * @author Jose Zalacain
 	 *
 	 */

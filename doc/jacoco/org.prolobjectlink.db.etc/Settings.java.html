@@ -230,96 +230,93 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 	}
 
 	/**
-	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
-	 *             RemoteHierarchical} instead
-	 * @author Jose Zalacain
+	 * @deprecated Use MemoryHierarchical,EmbeddedHierarchical, RemoteHierarchical
+	 *             instead
 	 *
 	 */
 	@Deprecated
 	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
-<span class="nc" id="L240">		return getContainerFactory().createHierarchicalDatabase(storageMode, name, user);</span>
+<span class="nc" id="L239">		return getContainerFactory().createHierarchicalDatabase(storageMode, name, user);</span>
 	}
 
 	/**
-	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
-	 *             RemoteHierarchical} instead
-	 * @author Jose Zalacain
+	 * @deprecated Use MemoryHierarchical,EmbeddedHierarchical, RemoteHierarchical
+	 *             instead
 	 *
 	 */
 	@Deprecated
 	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, String username,
 			String password) {
-<span class="nc" id="L252">		return containerFactory.createHierarchicalDatabase(storageMode, name, username, password);</span>
+<span class="nc" id="L250">		return containerFactory.createHierarchicalDatabase(storageMode, name, username, password);</span>
 	}
 
 	public Storage createStorage(String location) {
-<span class="nc" id="L256">		return getContainerFactory().createStorage(location);</span>
+<span class="nc" id="L254">		return getContainerFactory().createStorage(location);</span>
 	}
 
 	public StoragePool createStoragePool(String poolRoot, String poolName) {
-<span class="nc" id="L260">		return getContainerFactory().createStoragePool(poolRoot, poolName);</span>
+<span class="nc" id="L258">		return getContainerFactory().createStoragePool(poolRoot, poolName);</span>
 	}
 
 	public StorageGraph createStorageGraph(String path, Schema schema, StorageMode storageMode) {
-<span class="nc" id="L264">		return containerFactory.createStorageGraph(path, schema, storageMode);</span>
+<span class="nc" id="L262">		return containerFactory.createStorageGraph(path, schema, storageMode);</span>
 	}
 
 	public StorageManager createStorageManager(String path, StorageMode storageMode) {
-<span class="nc" id="L268">		return getContainerFactory().createStorageManager(path, storageMode);</span>
+<span class="nc" id="L266">		return getContainerFactory().createStorageManager(path, storageMode);</span>
 	}
 
 	public RelationalCache createRelationalCache(Schema schema) {
-<span class="nc" id="L272">		return containerFactory.createRelationalCache(schema);</span>
+<span class="nc" id="L270">		return containerFactory.createRelationalCache(schema);</span>
 	}
 
 	/**
-	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
-	 *             RemoteRelationalHierarchical} instead
-	 * @author Jose Zalacain
+	 * @deprecated Use MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical instead
 	 *
 	 */
 	@Deprecated
 	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
-<span class="nc" id="L283">		return getContainerFactory().createRelationalDatabase(storageMode, name, user);</span>
+<span class="nc" id="L280">		return getContainerFactory().createRelationalDatabase(storageMode, name, user);</span>
 	}
 
 	/**
-	 * @deprecated Use {@link MemoryRelational,EmbeddedRelational,
-	 *             RemoteRelationalHierarchical} instead
+	 * @deprecated Use MemoryRelational,EmbeddedRelational,
+	 *             RemoteRelationalHierarchical instead
 	 * @author Jose Zalacain
 	 *
 	 */
 	@Deprecated
 	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, String username,
 			String password) {
-<span class="nc" id="L295">		return containerFactory.createRelationalDatabase(storageMode, name, username, password);</span>
+<span class="nc" id="L292">		return containerFactory.createRelationalDatabase(storageMode, name, username, password);</span>
 	}
 
 	public ObjectConverter&lt;PrologTerm&gt; getObjectConverter() {
-<span class="nc" id="L299">		return containerFactory.getObjectConverter();</span>
+<span class="nc" id="L296">		return containerFactory.getObjectConverter();</span>
 	}
 
 	public void setProvider(PrologProvider provider) {
-<span class="nc" id="L303">		this.prologProvider = provider;</span>
-<span class="nc" id="L304">	}</span>
+<span class="nc" id="L300">		this.prologProvider = provider;</span>
+<span class="nc" id="L301">	}</span>
 
 	public void setSettings(Settings s) {
-<span class="nc" id="L307">		containerFactory = s.containerFactory;</span>
-<span class="nc" id="L308">		prologProvider = s.prologProvider;</span>
-<span class="nc" id="L309">		properties = s.properties;</span>
-<span class="nc" id="L310">	}</span>
+<span class="nc" id="L304">		containerFactory = s.containerFactory;</span>
+<span class="nc" id="L305">		prologProvider = s.prologProvider;</span>
+<span class="nc" id="L306">		properties = s.properties;</span>
+<span class="nc" id="L307">	}</span>
 
 	public Settings getSettings() {
-<span class="nc" id="L313">		return this;</span>
+<span class="nc" id="L310">		return this;</span>
 	}
 
 	public PrologProvider getProvider() {
-<span class="nc" id="L317">		return prologProvider;</span>
+<span class="nc" id="L314">		return prologProvider;</span>
 	}
 
 	@Override
 	public Object put(Object key, Object value) {
-<span class="nc" id="L322">		return properties.put(key, value);</span>
+<span class="nc" id="L319">		return properties.put(key, value);</span>
 	}
 
 //	public &lt;K&gt; PrologConverter&lt;K&gt; getConverter() {
@@ -328,88 +325,88 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 
 	@Override
 	public Set&lt;Entry&lt;Object, Object&gt;&gt; entrySet() {
-<span class="nc" id="L331">		return properties.entrySet();</span>
+<span class="nc" id="L328">		return properties.entrySet();</span>
 	}
 
 	public final Map&lt;Object, Object&gt; asMap() {
-<span class="nc" id="L335">		return this;</span>
+<span class="nc" id="L332">		return this;</span>
 	}
 
 	public final StorageMode getStorageMode() {
-<span class="nc" id="L339">		return storageMode;</span>
+<span class="nc" id="L336">		return storageMode;</span>
 	}
 
 	public final void setStorageMode(StorageMode storageMode) {
-<span class="nc" id="L343">		this.storageMode = storageMode;</span>
-<span class="nc" id="L344">	}</span>
+<span class="nc" id="L340">		this.storageMode = storageMode;</span>
+<span class="nc" id="L341">	}</span>
 
 	public final String getUsername() {
-<span class="nc" id="L347">		return username;</span>
+<span class="nc" id="L344">		return username;</span>
 	}
 
 	public final void setUsername(String username) {
-<span class="nc" id="L351">		this.username = username;</span>
-<span class="nc" id="L352">	}</span>
+<span class="nc" id="L348">		this.username = username;</span>
+<span class="nc" id="L349">	}</span>
 
 	public final String getPassword() {
-<span class="nc" id="L355">		return password;</span>
+<span class="nc" id="L352">		return password;</span>
 	}
 
 	public final void setPassword(String password) {
-<span class="nc" id="L359">		this.password = password;</span>
-<span class="nc" id="L360">	}</span>
+<span class="nc" id="L356">		this.password = password;</span>
+<span class="nc" id="L357">	}</span>
 
 	public final int getTimeGranularity() {
-<span class="nc" id="L363">		return timeGranularity;</span>
+<span class="nc" id="L360">		return timeGranularity;</span>
 	}
 
 	public final void setTimeGranularity(int timeGranularity) {
-<span class="nc" id="L367">		this.timeGranularity = timeGranularity;</span>
-<span class="nc" id="L368">	}</span>
+<span class="nc" id="L364">		this.timeGranularity = timeGranularity;</span>
+<span class="nc" id="L365">	}</span>
 
 	public final int getLockSleep() {
-<span class="nc" id="L371">		return lockSleep;</span>
+<span class="nc" id="L368">		return lockSleep;</span>
 	}
 
 	public final void setLockSleep(int lockSleep) {
-<span class="nc" id="L375">		this.lockSleep = lockSleep;</span>
-<span class="nc" id="L376">	}</span>
+<span class="nc" id="L372">		this.lockSleep = lockSleep;</span>
+<span class="nc" id="L373">	}</span>
 
 	public final int getSleepGap() {
-<span class="nc" id="L379">		return sleepGap;</span>
+<span class="nc" id="L376">		return sleepGap;</span>
 	}
 
 	public final void setSleepGap(int sleepGap) {
-<span class="nc" id="L383">		this.sleepGap = sleepGap;</span>
-<span class="nc" id="L384">	}</span>
+<span class="nc" id="L380">		this.sleepGap = sleepGap;</span>
+<span class="nc" id="L381">	}</span>
 
 	public final int getPort() {
-<span class="nc" id="L387">		return port;</span>
+<span class="nc" id="L384">		return port;</span>
 	}
 
 	public final void setPort(int port) {
-<span class="nc" id="L391">		this.port = port;</span>
-<span class="nc" id="L392">	}</span>
+<span class="nc" id="L388">		this.port = port;</span>
+<span class="nc" id="L389">	}</span>
 
 	public final File getConfiguration() throws IOException {
-<span class="nc" id="L395">		File configuration = null;</span>
-<span class="nc" id="L396">		String folder = getCurrentPath();</span>
-<span class="nc" id="L397">		File plk = new File(folder);</span>
-<span class="nc" id="L398">		File pdk = plk.getParentFile();</span>
-<span class="nc" id="L399">		File prt = pdk.getParentFile();</span>
-<span class="nc bnc" id="L400" title="All 2 branches missed.">		if (prt.getCanonicalPath().contains(&quot;prolobjectlink-jpp&quot;)) { // dev mode</span>
-<span class="nc" id="L401">			configuration = new File(CONFIG);</span>
+<span class="nc" id="L392">		File configuration = null;</span>
+<span class="nc" id="L393">		String folder = getCurrentPath();</span>
+<span class="nc" id="L394">		File plk = new File(folder);</span>
+<span class="nc" id="L395">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L396">		File prt = pdk.getParentFile();</span>
+<span class="nc bnc" id="L397" title="All 2 branches missed.">		if (prt.getCanonicalPath().contains(&quot;prolobjectlink-jpp&quot;)) { // dev mode</span>
+<span class="nc" id="L398">			configuration = new File(CONFIG);</span>
 		} else { // production mode
-<span class="nc" id="L403">			configuration = new File(prt.getCanonicalPath() + File.separator + CONFIG);</span>
+<span class="nc" id="L400">			configuration = new File(prt.getCanonicalPath() + File.separator + CONFIG);</span>
 		}
-<span class="nc" id="L405">		return configuration;</span>
+<span class="nc" id="L402">		return configuration;</span>
 	}
 
 	public final String getCurrentPath() {
-<span class="nc" id="L409">		Class&lt;?&gt; c = getClass();</span>
-<span class="nc" id="L410">		ProtectionDomain d = c.getProtectionDomain();</span>
-<span class="nc" id="L411">		CodeSource s = d.getCodeSource();</span>
-<span class="nc" id="L412">		return s.getLocation().getPath();</span>
+<span class="nc" id="L406">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L407">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L408">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L409">		return s.getLocation().getPath();</span>
 	}
 
 }

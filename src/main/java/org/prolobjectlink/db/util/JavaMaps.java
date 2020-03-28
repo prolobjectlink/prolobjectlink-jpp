@@ -56,8 +56,9 @@ public final class JavaMaps {
 	/**
 	 * Create a new java.util.TreeMap.
 	 * 
-	 * @param <K> the key type
-	 * @param <V> the value type
+	 * @param   <K> the key type
+	 * @param   <V> the value type
+	 * @param m initial map
 	 * @return the object
 	 */
 	public static <K extends Comparable<? super K>, V> Map<K, V> treeMap(Map<? extends K, ? extends V> m) {
@@ -90,9 +91,9 @@ public final class JavaMaps {
 	/**
 	 * Create a new java.util.HashMap.
 	 * 
-	 * @param          <K> the key type
-	 * @param          <V> the value type
-	 * @param capacity the initial capacity
+	 * @param   <K> the key type
+	 * @param   <V> the value type
+	 * @param m initial map
 	 * @return the object
 	 */
 	public static <K, V> Map<K, V> hashMap(Map<? extends K, ? extends V> m) {
@@ -125,9 +126,9 @@ public final class JavaMaps {
 	/**
 	 * Create a new java.util.LinkedHashMap.
 	 * 
-	 * @param          <K> the key type
-	 * @param          <V> the value type
-	 * @param capacity the initial capacity
+	 * @param   <K> the key type
+	 * @param   <V> the value type
+	 * @param m initial map
 	 * @return the object
 	 */
 	public static <K, V> Map<K, V> linkedHashMap(Map<? extends K, ? extends V> m) {

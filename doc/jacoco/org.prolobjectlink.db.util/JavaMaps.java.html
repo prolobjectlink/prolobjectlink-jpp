@@ -56,12 +56,13 @@ public final class JavaMaps {
 	/**
 	 * Create a new java.util.TreeMap.
 	 * 
-	 * @param &lt;K&gt; the key type
-	 * @param &lt;V&gt; the value type
+	 * @param   &lt;K&gt; the key type
+	 * @param   &lt;V&gt; the value type
+	 * @param m initial map
 	 * @return the object
 	 */
 	public static &lt;K extends Comparable&lt;? super K&gt;, V&gt; Map&lt;K, V&gt; treeMap(Map&lt;? extends K, ? extends V&gt; m) {
-<span class="nc" id="L64">		return new TreeMap&lt;K, V&gt;(m);</span>
+<span class="nc" id="L65">		return new TreeMap&lt;K, V&gt;(m);</span>
 	}
 
 	/**
@@ -72,7 +73,7 @@ public final class JavaMaps {
 	 * @return the object
 	 */
 	public static &lt;K, V&gt; Map&lt;K, V&gt; hashMap() {
-<span class="nc" id="L75">		return new HashMap&lt;K, V&gt;();</span>
+<span class="nc" id="L76">		return new HashMap&lt;K, V&gt;();</span>
 	}
 
 	/**
@@ -84,19 +85,19 @@ public final class JavaMaps {
 	 * @return the object
 	 */
 	public static &lt;K, V&gt; Map&lt;K, V&gt; hashMap(int capacity) {
-<span class="nc" id="L87">		return new HashMap&lt;K, V&gt;(capacity);</span>
+<span class="nc" id="L88">		return new HashMap&lt;K, V&gt;(capacity);</span>
 	}
 
 	/**
 	 * Create a new java.util.HashMap.
 	 * 
-	 * @param          &lt;K&gt; the key type
-	 * @param          &lt;V&gt; the value type
-	 * @param capacity the initial capacity
+	 * @param   &lt;K&gt; the key type
+	 * @param   &lt;V&gt; the value type
+	 * @param m initial map
 	 * @return the object
 	 */
 	public static &lt;K, V&gt; Map&lt;K, V&gt; hashMap(Map&lt;? extends K, ? extends V&gt; m) {
-<span class="nc" id="L99">		return new HashMap&lt;K, V&gt;(m);</span>
+<span class="nc" id="L100">		return new HashMap&lt;K, V&gt;(m);</span>
 	}
 
 	/**
@@ -107,7 +108,7 @@ public final class JavaMaps {
 	 * @return the object
 	 */
 	public static &lt;K, V&gt; Map&lt;K, V&gt; linkedHashMap() {
-<span class="nc" id="L110">		return new LinkedHashMap&lt;K, V&gt;();</span>
+<span class="nc" id="L111">		return new LinkedHashMap&lt;K, V&gt;();</span>
 	}
 
 	/**
@@ -119,19 +120,19 @@ public final class JavaMaps {
 	 * @return the object
 	 */
 	public static &lt;K, V&gt; Map&lt;K, V&gt; linkedHashMap(int capacity) {
-<span class="nc" id="L122">		return new LinkedHashMap&lt;K, V&gt;(capacity);</span>
+<span class="nc" id="L123">		return new LinkedHashMap&lt;K, V&gt;(capacity);</span>
 	}
 
 	/**
 	 * Create a new java.util.LinkedHashMap.
 	 * 
-	 * @param          &lt;K&gt; the key type
-	 * @param          &lt;V&gt; the value type
-	 * @param capacity the initial capacity
+	 * @param   &lt;K&gt; the key type
+	 * @param   &lt;V&gt; the value type
+	 * @param m initial map
 	 * @return the object
 	 */
 	public static &lt;K, V&gt; Map&lt;K, V&gt; linkedHashMap(Map&lt;? extends K, ? extends V&gt; m) {
-<span class="nc" id="L134">		return new LinkedHashMap&lt;K, V&gt;(m);</span>
+<span class="nc" id="L135">		return new LinkedHashMap&lt;K, V&gt;(m);</span>
 	}
 
 }

@@ -116,8 +116,10 @@ public interface Container extends Wrapper {
 	 * ?- clause('org.prolobjectlink.domain.geometry.Point'( a, 3,14 ),true).
 	 * </pre>
 	 * 
-	 * @param <O> object to be converted to equivalent prolog term and querying to
-	 *        the prolog engine.
+	 * @param o object to be converted to equivalent prolog term and querying to the
+	 *          prolog engine.
+	 * @param   <O> type to be converted to equivalent prolog term and querying to
+	 *          the prolog engine.
 	 * @return true if the converted object to prolog term is defined in this
 	 *         {@link Container}, false otherwise.
 	 * @see Container#contains(String)
@@ -153,6 +155,8 @@ public interface Container extends Wrapper {
 	 * 
 	 * @param clazz class to be converted to equivalent prolog term and querying to
 	 *              the prolog engine.
+	 * @param       <O> type to be converted to equivalent prolog term and querying
+	 *              to the prolog engine.
 	 * @return true if the converted class to prolog term is defined in this
 	 *         {@link Container}, false otherwise.
 	 * @see Container#contains(String)
@@ -234,6 +238,7 @@ public interface Container extends Wrapper {
 	 * Allow known the class of some given object
 	 * 
 	 * @param o object to known your class
+	 * @param   <O> type of the object to known your class
 	 * @return class of object {@code o}
 	 * @since 1.0
 	 */

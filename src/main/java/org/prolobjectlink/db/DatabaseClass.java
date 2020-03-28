@@ -398,8 +398,10 @@ public class DatabaseClass extends AbstractElement<DatabaseClass>
 	 * Add a field with your respective type. The created field is not marked like
 	 * primary key.
 	 * 
-	 * @param name field name
-	 * @param type type of the field
+	 * @param name     field name
+	 * @param type     type of the field
+	 * @param comment  the comment of field
+	 * @param position position of the field in the class
 	 * @return the field created and added to this class
 	 * @since 1.0
 	 */
@@ -412,6 +414,8 @@ public class DatabaseClass extends AbstractElement<DatabaseClass>
 	 * 
 	 * @param name       field name
 	 * @param type       type of the field
+	 * @param comment    the comment of field
+	 * @param position   position of the field in the class
 	 * @param primaryKey true if this field is marked like primary key
 	 * @return the field created and added to this class
 	 * @since 1.0
@@ -428,6 +432,8 @@ public class DatabaseClass extends AbstractElement<DatabaseClass>
 	 * 
 	 * @param name       field name
 	 * @param type       type of the field
+	 * @param comment    the comment of field
+	 * @param position   position of the field in the class
 	 * @param linkedType Generic class for collection/Map
 	 * @return the field created and added to this class
 	 * @since 1.0
@@ -555,6 +561,8 @@ public class DatabaseClass extends AbstractElement<DatabaseClass>
 	 * 
 	 * @param name        field name
 	 * @param type        type of the field
+	 * @param comment     the comment of field
+	 * @param position    position of the field in the class
 	 * @param linkedClass Generic class for collection/Map
 	 * @return the field created and added to this class
 	 * @since 1.0

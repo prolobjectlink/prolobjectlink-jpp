@@ -40,8 +40,8 @@ import org.prolobjectlink.db.engine.AbstractHierarchicalDatabase;
 import org.prolobjectlink.db.etc.Settings;
 
 /**
- * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
- *             RemoteHierarchical} instead
+ * @deprecated Use MemoryHierarchical,EmbeddedHierarchical, RemoteHierarchical
+ *             instead
  * @author Jose Zalacain
  *
  */
@@ -49,8 +49,8 @@ import org.prolobjectlink.db.etc.Settings;
 public class PrologHierarchicalDatabase extends AbstractHierarchicalDatabase implements HierarchicalDatabase {
 
 	/**
-	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
-	 *             RemoteHierarchical} instead
+	 * @deprecated Use MemoryHierarchical,EmbeddedHierarchical, RemoteHierarchical
+	 *             instead
 	 * @author Jose Zalacain
 	 *
 	 */

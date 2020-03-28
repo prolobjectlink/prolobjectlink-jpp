@@ -50,8 +50,8 @@ import org.prolobjectlink.db.TypedQuery;
 import org.prolobjectlink.db.tx.PersistentContainerTransaction;
 
 /**
- * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
- *             RemoteHierarchical} instead
+ * @deprecated Use MemoryHierarchical,EmbeddedHierarchical,
+ *             RemoteHierarchical instead
  * @author Jose Zalacain
  *
  */
@@ -64,10 +64,8 @@ public abstract class AbstractHierarchicalDatabase extends AbstractDatabaseEngin
 	protected static final String LOCATION = "db/pdb/hierarchical";
 
 	/**
-	 * @deprecated Use {@link MemoryHierarchical,EmbeddedHierarchical,
-	 *             RemoteHierarchical} instead
-	 * @author Jose Zalacain
-	 *
+	 * @deprecated Use MemoryHierarchical,EmbeddedHierarchical,
+	 *             RemoteHierarchical instead
 	 */
 	@Deprecated
 	public AbstractHierarchicalDatabase(String name, Schema schema, DatabaseUser user, StorageManager storage) {

@@ -49,6 +49,7 @@ public final class JavaLists {
 	/**
 	 * Creates a new empty stack.
 	 * 
+	 * @param <T> type of the elements
 	 * @return an empty stack.
 	 * @since 1.0
 	 */
@@ -67,6 +68,7 @@ public final class JavaLists {
 	/**
 	 * Creates a new empty vector
 	 * 
+	 * @param <T> type of the elements
 	 * @return an empty stack
 	 * @since 1.0
 	 */
@@ -124,6 +126,7 @@ public final class JavaLists {
 	/**
 	 * Creates a new empty priority queue of natural order items.
 	 * 
+	 * @param <T> type of the elements
 	 * @return an empty priority queue of natural order items.
 	 * @since 1.0
 	 */
@@ -135,6 +138,8 @@ public final class JavaLists {
 	 * Creates a new empty priority queue of natural order items and specified
 	 * capacity.
 	 * 
+	 * @param          <T> type of the elements
+	 * @param capacity initial capacity of the priority queue
 	 * @return an empty priority queue of natural order items and specified
 	 *         capacity.
 	 * @since 1.0

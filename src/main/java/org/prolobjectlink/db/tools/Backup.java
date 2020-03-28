@@ -52,7 +52,7 @@ public class Backup extends Tool {
 	/**
 	 * Create backs up database file.
 	 * 
-	 * @param path        the path to copy into zip backup file
+	 * @param db        the path to copy into zip backup file
 	 * @param zipFileName the name of the target backup file (including path)
 	 * @param directory   the destiny directory name
 	 */

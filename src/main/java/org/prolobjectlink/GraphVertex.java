@@ -35,7 +35,7 @@ package org.prolobjectlink;
 /**
  * Graph Vertex
  * 
- * @param <V>
+ * @param <V> Generic Type of Graph Vertex
  * @author Jose Zalacain
  * @since 1.0
  */
