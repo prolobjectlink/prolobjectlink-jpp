@@ -45,7 +45,8 @@ import org.prolobjectlink.GraphVertex;
 import org.prolobjectlink.graph.AbstractGraphEdge;
 import org.prolobjectlink.graph.DirectedGraph;
 import org.prolobjectlink.graph.RelationalType;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 public class RelationalGraph<V, R> extends DirectedGraph<V, R> implements Graph<V, R> {
 

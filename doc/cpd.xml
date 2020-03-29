@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="121" tokens="855">
-<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
-<file line="116" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\AbstractStorage.java"/>
+<file line="89" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
+<file line="117" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\AbstractStorage.java"/>
 <codefragment>
 <![CDATA[
 		return getEngine().currentPredicate(functor, arity);
@@ -436,8 +436,8 @@
 </codefragment>
 </duplication>
 <duplication lines="34" tokens="240">
-<file line="297" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologObjectConverter.java"/>
-<file line="417" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologObjectConverter.java"/>
+<file line="298" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologObjectConverter.java"/>
+<file line="418" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologObjectConverter.java"/>
 <codefragment>
 <![CDATA[
 	public PrologTerm toTerm(Object object, Map<String, PrologTerm> solutionsMap) {
@@ -663,8 +663,8 @@
 </codefragment>
 </duplication>
 <duplication lines="34" tokens="214">
-<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
-<file line="86" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\AbstractStorage.java"/>
+<file line="89" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="87" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\AbstractStorage.java"/>
 <codefragment>
 <![CDATA[
 	}
@@ -705,8 +705,8 @@
 </codefragment>
 </duplication>
 <duplication lines="26" tokens="188">
-<file line="158" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
-<file line="188" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="159" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
+<file line="189" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
 <codefragment>
 <![CDATA[
 	public <O> List<O> findAll(O o) {
@@ -839,8 +839,8 @@
 </codefragment>
 </duplication>
 <duplication lines="20" tokens="143">
-<file line="137" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractContainer.java"/>
-<file line="85" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologStorageGraph.java"/>
+<file line="138" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractContainer.java"/>
+<file line="86" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologStorageGraph.java"/>
 <codefragment>
 <![CDATA[
 	public <O> Class<O> classOf(Predicate<O> predicate) {
@@ -867,8 +867,8 @@
 </codefragment>
 </duplication>
 <duplication lines="32" tokens="142">
-<file line="240" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractRelationalCache.java"/>
-<file line="97" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\AbstractStorageGraph.java"/>
+<file line="241" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractRelationalCache.java"/>
+<file line="98" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\AbstractStorageGraph.java"/>
 <codefragment>
 <![CDATA[
 	}
@@ -1088,8 +1088,8 @@
 </codefragment>
 </duplication>
 <duplication lines="13" tokens="128">
-<file line="1048" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
-<file line="1106" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
+<file line="1049" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
+<file line="1107" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
 <codefragment>
 <![CDATA[
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
@@ -1543,7 +1543,7 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="12" tokens="107">
-<file line="177" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="178" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
 <file line="164" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\engine\AbstractDatabaseEngine.java"/>
 <codefragment>
 <![CDATA[
@@ -1563,8 +1563,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="14" tokens="106">
-<file line="183" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
-<file line="213" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="184" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
+<file line="214" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
 <codefragment>
 <![CDATA[
 	public <O> List<O> findAll(Class<O> clazz) {
@@ -1585,7 +1585,7 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="15" tokens="104">
-<file line="124" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="125" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
 <file line="134" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\engine\AbstractDatabaseEngine.java"/>
 <codefragment>
 <![CDATA[
@@ -1650,8 +1650,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="21" tokens="102">
-<file line="194" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\RelationalGraph.java"/>
-<file line="332" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\RelationalGraph.java"/>
+<file line="195" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\RelationalGraph.java"/>
+<file line="333" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\RelationalGraph.java"/>
 <codefragment>
 <![CDATA[
 			Class<?> to = getToVertexElementClass();
@@ -1679,8 +1679,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="19" tokens="102">
-<file line="108" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
-<file line="138" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="109" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
+<file line="139" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
 <codefragment>
 <![CDATA[
 	public <O> O find(O o) {

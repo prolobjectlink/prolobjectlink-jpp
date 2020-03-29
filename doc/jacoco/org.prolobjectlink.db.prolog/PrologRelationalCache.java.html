@@ -39,31 +39,32 @@ import org.prolobjectlink.db.RelationalGraph;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.cache.AbstractRelationalCache;
 import org.prolobjectlink.db.etc.Settings;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 public final class PrologRelationalCache extends AbstractRelationalCache implements RelationalCache {
 
 	public PrologRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory) {
-<span class="nc" id="L49">		super(schema, properties, provider, containerFactory, new PrologObjectConverter(provider));</span>
-<span class="nc" id="L50">	}</span>
+<span class="nc" id="L50">		super(schema, properties, provider, containerFactory, new PrologObjectConverter(provider));</span>
+<span class="nc" id="L51">	}</span>
 
 	public PrologRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, RelationalGraph&lt;Object, Object&gt; graph) {
-<span class="nc" id="L54">		super(schema, properties, provider, containerFactory, new PrologObjectConverter(provider), graph);</span>
-<span class="nc" id="L55">	}</span>
+<span class="nc" id="L55">		super(schema, properties, provider, containerFactory, new PrologObjectConverter(provider), graph);</span>
+<span class="nc" id="L56">	}</span>
 
 	public PrologRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, ObjectConverter&lt;PrologTerm&gt; converter) {
-<span class="nc" id="L59">		super(schema, properties, provider, containerFactory, converter);</span>
-<span class="nc" id="L60">	}</span>
+<span class="nc" id="L60">		super(schema, properties, provider, containerFactory, converter);</span>
+<span class="nc" id="L61">	}</span>
 
 	public PrologRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, ObjectConverter&lt;PrologTerm&gt; converter,
 			RelationalGraph&lt;Object, Object&gt; graph) {
-<span class="nc" id="L65">		super(schema, properties, provider, containerFactory, converter, graph);</span>
-<span class="nc" id="L66">	}</span>
+<span class="nc" id="L66">		super(schema, properties, provider, containerFactory, converter, graph);</span>
+<span class="nc" id="L67">	}</span>
 
 	// public PrologRelationalCache(PrologProvider provider, Settings
 	// properties) {

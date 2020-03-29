@@ -40,8 +40,9 @@ import org.prolobjectlink.db.RelationalDatabase;
 import org.prolobjectlink.db.StorageMode;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.prolog.PrologObjectConverter;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class AbstractContainerFactory implements ContainerFactory {
@@ -49,39 +50,39 @@ public abstract class AbstractContainerFactory implements ContainerFactory {
 	private Settings properties;
 	private PrologProvider provider;
 
-<span class="nc" id="L52">	protected AbstractContainerFactory(Settings properties, PrologProvider provider) {</span>
-<span class="nc" id="L53">		this.properties = properties;</span>
-<span class="nc" id="L54">		this.provider = provider;</span>
-<span class="nc" id="L55">	}</span>
+<span class="nc" id="L53">	protected AbstractContainerFactory(Settings properties, PrologProvider provider) {</span>
+<span class="nc" id="L54">		this.properties = properties;</span>
+<span class="nc" id="L55">		this.provider = provider;</span>
+<span class="nc" id="L56">	}</span>
 
 	public final RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, String username,
 			String password) {
-<span class="nc" id="L59">		return createRelationalDatabase(storageMode, name, new DatabaseUser(username, password));</span>
+<span class="nc" id="L60">		return createRelationalDatabase(storageMode, name, new DatabaseUser(username, password));</span>
 	}
 
 	public final HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, String username,
 			String password) {
-<span class="nc" id="L64">		return createHierarchicalDatabase(storageMode, name, new DatabaseUser(username, password));</span>
+<span class="nc" id="L65">		return createHierarchicalDatabase(storageMode, name, new DatabaseUser(username, password));</span>
 	}
 
 	public final ObjectConverter&lt;PrologTerm&gt; getObjectConverter() {
-<span class="nc" id="L68">		return new PrologObjectConverter(provider);</span>
+<span class="nc" id="L69">		return new PrologObjectConverter(provider);</span>
 	}
 
 	public final void setProvider(PrologProvider provider) {
-<span class="nc" id="L72">		this.provider = provider;</span>
-<span class="nc" id="L73">	}</span>
+<span class="nc" id="L73">		this.provider = provider;</span>
+<span class="nc" id="L74">	}</span>
 
 	public final void setSettings(Settings properties) {
-<span class="nc" id="L76">		this.properties = properties;</span>
-<span class="nc" id="L77">	}</span>
+<span class="nc" id="L77">		this.properties = properties;</span>
+<span class="nc" id="L78">	}</span>
 
 	public final Settings getSettings() {
-<span class="nc" id="L80">		return properties;</span>
+<span class="nc" id="L81">		return properties;</span>
 	}
 
 	public final PrologProvider getProvider() {
-<span class="nc" id="L84">		return provider;</span>
+<span class="nc" id="L85">		return provider;</span>
 	}
 
 //	public final &lt;K&gt; PrologConverter&lt;K&gt; getConverter() {
@@ -90,38 +91,38 @@ public abstract class AbstractContainerFactory implements ContainerFactory {
 
 	@Override
 	public final int hashCode() {
-<span class="nc" id="L93">		final int prime = 31;</span>
-<span class="nc" id="L94">		int result = 1;</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">		result = prime * result + ((properties == null) ? 0 : properties.hashCode());</span>
-<span class="nc bnc" id="L96" title="All 2 branches missed.">		result = prime * result + ((provider == null) ? 0 : provider.hashCode());</span>
-<span class="nc" id="L97">		return result;</span>
+<span class="nc" id="L94">		final int prime = 31;</span>
+<span class="nc" id="L95">		int result = 1;</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		result = prime * result + ((properties == null) ? 0 : properties.hashCode());</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		result = prime * result + ((provider == null) ? 0 : provider.hashCode());</span>
+<span class="nc" id="L98">		return result;</span>
 	}
 
 	@Override
 	public final boolean equals(Object obj) {
-<span class="nc bnc" id="L102" title="All 2 branches missed.">		if (this == obj)</span>
-<span class="nc" id="L103">			return true;</span>
-<span class="nc bnc" id="L104" title="All 2 branches missed.">		if (obj == null)</span>
-<span class="nc" id="L105">			return false;</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
-<span class="nc" id="L107">			return false;</span>
-<span class="nc" id="L108">		AbstractContainerFactory other = (AbstractContainerFactory) obj;</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">		if (properties == null) {</span>
-<span class="nc bnc" id="L110" title="All 2 branches missed.">			if (other.properties != null)</span>
-<span class="nc" id="L111">				return false;</span>
-<span class="nc bnc" id="L112" title="All 2 branches missed.">		} else if (!properties.equals(other.properties))</span>
-<span class="nc" id="L113">			return false;</span>
-<span class="nc bnc" id="L114" title="All 2 branches missed.">		if (provider == null) {</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">			if (other.provider != null)</span>
-<span class="nc" id="L116">				return false;</span>
-<span class="nc bnc" id="L117" title="All 2 branches missed.">		} else if (!provider.equals(other.provider))</span>
-<span class="nc" id="L118">			return false;</span>
-<span class="nc" id="L119">		return true;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L104">			return true;</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L106">			return false;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L108">			return false;</span>
+<span class="nc" id="L109">		AbstractContainerFactory other = (AbstractContainerFactory) obj;</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">		if (properties == null) {</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">			if (other.properties != null)</span>
+<span class="nc" id="L112">				return false;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		} else if (!properties.equals(other.properties))</span>
+<span class="nc" id="L114">			return false;</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">		if (provider == null) {</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">			if (other.provider != null)</span>
+<span class="nc" id="L117">				return false;</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">		} else if (!provider.equals(other.provider))</span>
+<span class="nc" id="L119">			return false;</span>
+<span class="nc" id="L120">		return true;</span>
 	}
 
 	@Override
 	public final String toString() {
-<span class="nc" id="L124">		return &quot;[properties=&quot; + properties + &quot;, provider=&quot; + provider + &quot;]&quot;;</span>
+<span class="nc" id="L125">		return &quot;[properties=&quot; + properties + &quot;, provider=&quot; + provider + &quot;]&quot;;</span>
 	}
 
 }

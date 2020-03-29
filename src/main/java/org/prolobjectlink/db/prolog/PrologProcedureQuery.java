@@ -41,10 +41,11 @@ import java.util.NoSuchElementException;
 import org.prolobjectlink.db.ObjectConverter;
 import org.prolobjectlink.db.ProcedureQuery;
 import org.prolobjectlink.db.container.AbstractProcedureQuery;
-import org.prolobjectlink.prolog.PrologEngine;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologQuery;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologQuery;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /**
  * Prolog Procedure Query implementation. Is an query extension for procedures

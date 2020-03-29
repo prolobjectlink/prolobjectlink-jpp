@@ -33,7 +33,8 @@
 package org.prolobjectlink.db;
 
 import org.prolobjectlink.db.util.JavaReflect;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 public final class ObjectConverterFactory {
 

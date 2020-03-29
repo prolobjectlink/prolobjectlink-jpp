@@ -42,8 +42,9 @@ import org.prolobjectlink.db.StoragePool;
 import org.prolobjectlink.db.TypedQuery;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.storage.AbstractStoragePool;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 public class PrologStoragePool extends AbstractStoragePool implements StoragePool {
 

@@ -47,8 +47,9 @@ import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.storage.AbstractStorageGraph;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 public class PrologStorageGraph extends AbstractStorageGraph implements StorageGraph {
 

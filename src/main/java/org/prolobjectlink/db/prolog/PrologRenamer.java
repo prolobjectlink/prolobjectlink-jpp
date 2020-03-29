@@ -38,8 +38,9 @@ import org.prolobjectlink.db.Renamer;
 import org.prolobjectlink.db.util.Assertions;
 import org.prolobjectlink.db.util.JavaReflect;
 import org.prolobjectlink.db.util.JavaStrings;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologVariable;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologVariable;
 
 final class PrologRenamer extends AbstractRenamer implements Renamer {
 

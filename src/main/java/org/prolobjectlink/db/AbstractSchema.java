@@ -45,8 +45,9 @@ import org.prolobjectlink.Direction;
 import org.prolobjectlink.db.prolog.PrologDatabaseFunction;
 import org.prolobjectlink.db.prolog.PrologDatabaseTrigger;
 import org.prolobjectlink.db.prolog.PrologDatabaseView;
-import org.prolobjectlink.prolog.PrologEngine;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 /**
  * 

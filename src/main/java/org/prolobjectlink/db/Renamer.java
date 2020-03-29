@@ -35,8 +35,8 @@ package org.prolobjectlink.db;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologVariable;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologVariable;
 
 /**
  * Attribute renamer to prevent variable clashes in prolog queries. Basically

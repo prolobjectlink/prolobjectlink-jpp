@@ -41,10 +41,11 @@ import java.util.NoSuchElementException;
 import org.prolobjectlink.db.ObjectConverter;
 import org.prolobjectlink.db.ProcedureQuery;
 import org.prolobjectlink.db.container.AbstractProcedureQuery;
-import org.prolobjectlink.prolog.PrologEngine;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologQuery;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologQuery;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /**
  * Prolog Procedure Query implementation. Is an query extension for procedures
@@ -81,180 +82,180 @@ public final class PrologProcedureQuery extends AbstractProcedureQuery implement
 	private static final long serialVersionUID = -4371082961137952685L;
 
 	public PrologProcedureQuery(String path, PrologProvider provider, String functor, String... arguments) {
-<span class="nc" id="L84">		super(functor, arguments);</span>
-<span class="nc" id="L85">		this.converter = new PrologObjectConverter(provider);</span>
-<span class="nc" id="L86">		this.currentTerms = new PrologTerm[arguments.length];</span>
-<span class="nc" id="L87">		this.engine = provider.newEngine();</span>
-<span class="nc" id="L88">		this.provider = provider;</span>
-<span class="nc" id="L89">		this.path = path;</span>
-<span class="nc" id="L90">	}</span>
+<span class="nc" id="L85">		super(functor, arguments);</span>
+<span class="nc" id="L86">		this.converter = new PrologObjectConverter(provider);</span>
+<span class="nc" id="L87">		this.currentTerms = new PrologTerm[arguments.length];</span>
+<span class="nc" id="L88">		this.engine = provider.newEngine();</span>
+<span class="nc" id="L89">		this.provider = provider;</span>
+<span class="nc" id="L90">		this.path = path;</span>
+<span class="nc" id="L91">	}</span>
 
 	public ProcedureQuery setMaxSolution(int maxSolution) {
-<span class="nc" id="L93">		this.maxSolution = maxSolution;</span>
-<span class="nc" id="L94">		return this;</span>
+<span class="nc" id="L94">		this.maxSolution = maxSolution;</span>
+<span class="nc" id="L95">		return this;</span>
 	}
 
 	public ProcedureQuery setFirstSolution(int firstSolution) {
-<span class="nc" id="L98">		this.firstSolution = firstSolution;</span>
-<span class="nc" id="L99">		return this;</span>
+<span class="nc" id="L99">		this.firstSolution = firstSolution;</span>
+<span class="nc" id="L100">		return this;</span>
 	}
 
 	public Object getArgumentValue(int position) {
-<span class="nc" id="L103">		checkSolutionAt(position, currentTerms.length);</span>
-<span class="nc bnc" id="L104" title="All 2 branches missed.">		if (returnedTerms != null) {</span>
-<span class="nc" id="L105">			checkSolutionAt(position, returnedTerms.length);</span>
-<span class="nc" id="L106">			return converter.toObject(returnedTerms[position]);</span>
+<span class="nc" id="L104">		checkSolutionAt(position, currentTerms.length);</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">		if (returnedTerms != null) {</span>
+<span class="nc" id="L106">			checkSolutionAt(position, returnedTerms.length);</span>
+<span class="nc" id="L107">			return converter.toObject(returnedTerms[position]);</span>
 		}
-<span class="nc" id="L108">		return converter.toObject(currentTerms[position]);</span>
+<span class="nc" id="L109">		return converter.toObject(currentTerms[position]);</span>
 	}
 
 	public ProcedureQuery setArgumentValue(int position, Object value) {
-<span class="nc" id="L112">		checkSolutionAt(position, currentTerms.length);</span>
-<span class="nc bnc" id="L113" title="All 2 branches missed.">		if (returnedTerms != null) {</span>
-<span class="nc" id="L114">			returnedTerms[position] = converter.toTerm(value);</span>
+<span class="nc" id="L113">		checkSolutionAt(position, currentTerms.length);</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">		if (returnedTerms != null) {</span>
+<span class="nc" id="L115">			returnedTerms[position] = converter.toTerm(value);</span>
 		}
-<span class="nc" id="L116">		currentTerms[position] = converter.toTerm(value);</span>
-<span class="nc" id="L117">		return this;</span>
+<span class="nc" id="L117">		currentTerms[position] = converter.toTerm(value);</span>
+<span class="nc" id="L118">		return this;</span>
 	}
 
 	public ProcedureQuery execute() {
-<span class="nc bnc" id="L121" title="All 4 branches missed.">		if (path != null &amp;&amp; !path.isEmpty()) {</span>
-<span class="nc" id="L122">			engine.consult(path);</span>
+<span class="nc bnc" id="L122" title="All 4 branches missed.">		if (path != null &amp;&amp; !path.isEmpty()) {</span>
+<span class="nc" id="L123">			engine.consult(path);</span>
 		}
-<span class="nc" id="L124">		PrologTerm[] ts = new PrologTerm[getArguments().length];</span>
-<span class="nc bnc" id="L125" title="All 2 branches missed.">		for (int i = 0; i &lt; getArguments().length; i++) {</span>
-<span class="nc" id="L126">			String argumentName = getArguments()[i];</span>
-<span class="nc" id="L127">			Object argumentValue = converter.toObject(currentTerms[i]);</span>
-<span class="nc bnc" id="L128" title="All 2 branches missed.">			if (argumentValue == null) {</span>
-<span class="nc" id="L129">				ts[i] = provider.newVariable(argumentName, i);</span>
+<span class="nc" id="L125">		PrologTerm[] ts = new PrologTerm[getArguments().length];</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">		for (int i = 0; i &lt; getArguments().length; i++) {</span>
+<span class="nc" id="L127">			String argumentName = getArguments()[i];</span>
+<span class="nc" id="L128">			Object argumentValue = converter.toObject(currentTerms[i]);</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">			if (argumentValue == null) {</span>
+<span class="nc" id="L130">				ts[i] = provider.newVariable(argumentName, i);</span>
 			} else {
-<span class="nc" id="L131">				ts[i] = converter.toTerm(argumentValue);</span>
+<span class="nc" id="L132">				ts[i] = converter.toTerm(argumentValue);</span>
 			}
 		}
-<span class="nc" id="L134">		query = engine.query(provider.newStructure(getFunctor(), ts));</span>
-<span class="nc" id="L135">		PrologTerm[] x = query.nextSolution();</span>
-<span class="nc bnc" id="L136" title="All 2 branches missed.">		for (int i = 0; i &lt; x.length; i++) {</span>
-<span class="nc" id="L137">			currentTerms[i] = x[i];</span>
+<span class="nc" id="L135">		query = engine.query(provider.newStructure(getFunctor(), ts));</span>
+<span class="nc" id="L136">		PrologTerm[] x = query.nextSolution();</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">		for (int i = 0; i &lt; x.length; i++) {</span>
+<span class="nc" id="L138">			currentTerms[i] = x[i];</span>
 		}
-<span class="nc" id="L139">		executed = true;</span>
-<span class="nc" id="L140">		return this;</span>
+<span class="nc" id="L140">		executed = true;</span>
+<span class="nc" id="L141">		return this;</span>
 	}
 
 	public List&lt;Object&gt; getSolutions() {
-<span class="nc" id="L144">		int index = 0;</span>
-<span class="nc" id="L145">		List&lt;Object&gt; solutions = new ArrayList&lt;Object&gt;();</span>
-<span class="nc bnc" id="L146" title="All 2 branches missed.">		for (Iterator&lt;Object&gt; i = this; i.hasNext(); index++) {</span>
-<span class="nc" id="L147">			Object object = i.next();</span>
-<span class="nc bnc" id="L148" title="All 4 branches missed.">			if (index &gt;= firstSolution &amp;&amp; index &lt; maxSolution) {</span>
-<span class="nc" id="L149">				solutions.add(object);</span>
+<span class="nc" id="L145">		int index = 0;</span>
+<span class="nc" id="L146">		List&lt;Object&gt; solutions = new ArrayList&lt;Object&gt;();</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">		for (Iterator&lt;Object&gt; i = this; i.hasNext(); index++) {</span>
+<span class="nc" id="L148">			Object object = i.next();</span>
+<span class="nc bnc" id="L149" title="All 4 branches missed.">			if (index &gt;= firstSolution &amp;&amp; index &lt; maxSolution) {</span>
+<span class="nc" id="L150">				solutions.add(object);</span>
 			}
 		}
-<span class="nc" id="L152">		return solutions;</span>
+<span class="nc" id="L153">		return solutions;</span>
 	}
 
 	public Object getSolution() {
-<span class="nc" id="L156">		return next();</span>
+<span class="nc" id="L157">		return next();</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="nc" id="L161">		return &quot;&quot; + query + &quot;&quot;;</span>
+<span class="nc" id="L162">		return &quot;&quot; + query + &quot;&quot;;</span>
 	}
 
 	public void dispose() {
-<span class="nc" id="L165">		firstSolution = 0;</span>
-<span class="nc" id="L166">		maxSolution = MAX;</span>
-<span class="nc bnc" id="L167" title="All 2 branches missed.">		if (query != null) {</span>
-<span class="nc" id="L168">			query.dispose();</span>
-<span class="nc" id="L169">			query = null;</span>
+<span class="nc" id="L166">		firstSolution = 0;</span>
+<span class="nc" id="L167">		maxSolution = MAX;</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">		if (query != null) {</span>
+<span class="nc" id="L169">			query.dispose();</span>
+<span class="nc" id="L170">			query = null;</span>
 		}
-<span class="nc" id="L171">	}</span>
+<span class="nc" id="L172">	}</span>
 
 	@Override
 	public int hashCode() {
-<span class="nc" id="L175">		final int prime = 31;</span>
-<span class="nc" id="L176">		int result = super.hashCode();</span>
-<span class="nc" id="L177">		result = prime * result + Arrays.hashCode(currentTerms);</span>
-<span class="nc bnc" id="L178" title="All 2 branches missed.">		result = prime * result + (executed ? 1231 : 1237);</span>
-<span class="nc bnc" id="L179" title="All 2 branches missed.">		result = prime * result + ((path == null) ? 0 : path.hashCode());</span>
-<span class="nc bnc" id="L180" title="All 2 branches missed.">		result = prime * result + ((query == null) ? 0 : query.hashCode());</span>
-<span class="nc" id="L181">		result = prime * result + Arrays.hashCode(returnedTerms);</span>
-<span class="nc" id="L182">		return result;</span>
+<span class="nc" id="L176">		final int prime = 31;</span>
+<span class="nc" id="L177">		int result = super.hashCode();</span>
+<span class="nc" id="L178">		result = prime * result + Arrays.hashCode(currentTerms);</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">		result = prime * result + (executed ? 1231 : 1237);</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		result = prime * result + ((path == null) ? 0 : path.hashCode());</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">		result = prime * result + ((query == null) ? 0 : query.hashCode());</span>
+<span class="nc" id="L182">		result = prime * result + Arrays.hashCode(returnedTerms);</span>
+<span class="nc" id="L183">		return result;</span>
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-<span class="nc bnc" id="L187" title="All 2 branches missed.">		if (this == obj)</span>
-<span class="nc" id="L188">			return true;</span>
-<span class="nc bnc" id="L189" title="All 2 branches missed.">		if (!super.equals(obj))</span>
-<span class="nc" id="L190">			return false;</span>
-<span class="nc bnc" id="L191" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
-<span class="nc" id="L192">			return false;</span>
-<span class="nc" id="L193">		PrologProcedureQuery other = (PrologProcedureQuery) obj;</span>
-<span class="nc bnc" id="L194" title="All 2 branches missed.">		if (!Arrays.equals(currentTerms, other.currentTerms))</span>
-<span class="nc" id="L195">			return false;</span>
-<span class="nc bnc" id="L196" title="All 2 branches missed.">		if (executed != other.executed)</span>
-<span class="nc" id="L197">			return false;</span>
-<span class="nc bnc" id="L198" title="All 2 branches missed.">		if (path == null) {</span>
-<span class="nc bnc" id="L199" title="All 2 branches missed.">			if (other.path != null)</span>
-<span class="nc" id="L200">				return false;</span>
-<span class="nc bnc" id="L201" title="All 2 branches missed.">		} else if (!path.equals(other.path)) {</span>
-<span class="nc" id="L202">			return false;</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L189">			return true;</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L191">			return false;</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L193">			return false;</span>
+<span class="nc" id="L194">		PrologProcedureQuery other = (PrologProcedureQuery) obj;</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">		if (!Arrays.equals(currentTerms, other.currentTerms))</span>
+<span class="nc" id="L196">			return false;</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">		if (executed != other.executed)</span>
+<span class="nc" id="L198">			return false;</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">		if (path == null) {</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">			if (other.path != null)</span>
+<span class="nc" id="L201">				return false;</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">		} else if (!path.equals(other.path)) {</span>
+<span class="nc" id="L203">			return false;</span>
 		}
-<span class="nc bnc" id="L204" title="All 2 branches missed.">		if (query == null) {</span>
-<span class="nc bnc" id="L205" title="All 2 branches missed.">			if (other.query != null)</span>
-<span class="nc" id="L206">				return false;</span>
-<span class="nc bnc" id="L207" title="All 2 branches missed.">		} else if (!query.equals(other.query)) {</span>
-<span class="nc" id="L208">			return false;</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">		if (query == null) {</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">			if (other.query != null)</span>
+<span class="nc" id="L207">				return false;</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">		} else if (!query.equals(other.query)) {</span>
+<span class="nc" id="L209">			return false;</span>
 		}
-<span class="nc" id="L210">		return Arrays.equals(returnedTerms, other.returnedTerms);</span>
+<span class="nc" id="L211">		return Arrays.equals(returnedTerms, other.returnedTerms);</span>
 	}
 
 	public boolean hasNext() {
-<span class="nc bnc" id="L214" title="All 2 branches missed.">		if (!executed) {</span>
-<span class="nc" id="L215">			throw new IllegalStateException(&quot;Call execute method&quot;);</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">		if (!executed) {</span>
+<span class="nc" id="L216">			throw new IllegalStateException(&quot;Call execute method&quot;);</span>
 		}
 
-<span class="nc bnc" id="L218" title="All 4 branches missed.">		if (returnedTerms == null &amp;&amp; currentTerms != null) {</span>
-<span class="nc" id="L219">			return true;</span>
-<span class="nc bnc" id="L220" title="All 4 branches missed.">		} else if (returnedTerms != null &amp;&amp; currentTerms != null) {</span>
-<span class="nc bnc" id="L221" title="All 2 branches missed.">			return !Arrays.equals(returnedTerms, currentTerms);</span>
+<span class="nc bnc" id="L219" title="All 4 branches missed.">		if (returnedTerms == null &amp;&amp; currentTerms != null) {</span>
+<span class="nc" id="L220">			return true;</span>
+<span class="nc bnc" id="L221" title="All 4 branches missed.">		} else if (returnedTerms != null &amp;&amp; currentTerms != null) {</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">			return !Arrays.equals(returnedTerms, currentTerms);</span>
 		}
 
-<span class="nc" id="L224">		return false;</span>
+<span class="nc" id="L225">		return false;</span>
 	}
 
 	public Object next() {
-<span class="nc bnc" id="L228" title="All 2 branches missed.">		if (!executed) {</span>
-<span class="nc" id="L229">			throw new IllegalStateException(&quot;Call execute method&quot;);</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">		if (!executed) {</span>
+<span class="nc" id="L230">			throw new IllegalStateException(&quot;Call execute method&quot;);</span>
 		}
 
-<span class="nc bnc" id="L232" title="All 2 branches missed.">		if (!hasNext()) {</span>
-<span class="nc" id="L233">			throw new NoSuchElementException();</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">		if (!hasNext()) {</span>
+<span class="nc" id="L234">			throw new NoSuchElementException();</span>
 		}
 
-<span class="nc" id="L236">		returnedTerms = Arrays.copyOf(currentTerms, currentTerms.length);</span>
+<span class="nc" id="L237">		returnedTerms = Arrays.copyOf(currentTerms, currentTerms.length);</span>
 
 		// Never use query.hasNext() or query.hasMoreSolutions()
 		try {
-<span class="nc" id="L240">			currentTerms = query.nextSolution();</span>
-<span class="nc" id="L241">		} catch (Exception e) {</span>
+<span class="nc" id="L241">			currentTerms = query.nextSolution();</span>
+<span class="nc" id="L242">		} catch (Exception e) {</span>
 			// NoSuchElement exception or others
-<span class="nc" id="L243">			currentTerms = null;</span>
-<span class="nc" id="L244">		}</span>
+<span class="nc" id="L244">			currentTerms = null;</span>
+<span class="nc" id="L245">		}</span>
 
-<span class="nc" id="L246">		Object[] values = new Object[returnedTerms.length];</span>
-<span class="nc bnc" id="L247" title="All 2 branches missed.">		for (int i = 0; i &lt; returnedTerms.length; i++) {</span>
-<span class="nc" id="L248">			values[i] = converter.toObject(returnedTerms[i]);</span>
+<span class="nc" id="L247">		Object[] values = new Object[returnedTerms.length];</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">		for (int i = 0; i &lt; returnedTerms.length; i++) {</span>
+<span class="nc" id="L249">			values[i] = converter.toObject(returnedTerms[i]);</span>
 		}
-<span class="nc" id="L250">		return values;</span>
+<span class="nc" id="L251">		return values;</span>
 	}
 
 	@Override
 	public void remove() {
 		// skip
-<span class="nc" id="L256">		next();</span>
-<span class="nc" id="L257">	}</span>
+<span class="nc" id="L257">		next();</span>
+<span class="nc" id="L258">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

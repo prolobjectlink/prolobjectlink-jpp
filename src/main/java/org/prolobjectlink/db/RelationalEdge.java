@@ -35,7 +35,8 @@ package org.prolobjectlink.db;
 import java.util.Map;
 
 import org.prolobjectlink.GraphEdge;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /**
  * 

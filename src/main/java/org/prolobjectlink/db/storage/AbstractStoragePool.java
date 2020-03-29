@@ -54,8 +54,9 @@ import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.tx.PersistentContainerTransaction;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class AbstractStoragePool extends AbstractPersistentContainer implements StoragePool {

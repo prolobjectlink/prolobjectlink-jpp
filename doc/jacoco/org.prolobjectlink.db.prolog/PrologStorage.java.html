@@ -44,8 +44,9 @@ import org.prolobjectlink.db.TypedQuery;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.storage.AbstractStorage;
 import org.prolobjectlink.db.tx.PersistentContainerTransaction;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 public final class PrologStorage extends AbstractStorage implements Storage {
 
@@ -53,50 +54,50 @@ public final class PrologStorage extends AbstractStorage implements Storage {
 
 	public PrologStorage(PrologProvider provider, Settings properties, String location,
 			ContainerFactory containerFactory) {
-<span class="nc" id="L56">		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory);</span>
-<span class="nc" id="L57">		this.transaction = new PersistentContainerTransaction(this);</span>
-<span class="nc" id="L58">	}</span>
+<span class="nc" id="L57">		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory);</span>
+<span class="nc" id="L58">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L59">	}</span>
 
 	public PrologStorage(PrologProvider provider, Settings properties, String location,
 			ContainerFactory containerFactory, int maxCapacity) {
-<span class="nc" id="L62">		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory, maxCapacity);</span>
-<span class="nc" id="L63">		this.transaction = new PersistentContainerTransaction(this);</span>
-<span class="nc" id="L64">	}</span>
+<span class="nc" id="L63">		super(provider, properties, new PrologObjectConverter(provider), location, containerFactory, maxCapacity);</span>
+<span class="nc" id="L64">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L65">	}</span>
 
 	public PrologStorage(PrologProvider provider, Settings properties, ObjectConverter&lt;PrologTerm&gt; converter,
 			String location, ContainerFactory containerFactory, int maxCapacity) {
-<span class="nc" id="L68">		super(provider, properties, converter, location, containerFactory, maxCapacity);</span>
-<span class="nc" id="L69">		this.transaction = new PersistentContainerTransaction(this);</span>
-<span class="nc" id="L70">	}</span>
+<span class="nc" id="L69">		super(provider, properties, converter, location, containerFactory, maxCapacity);</span>
+<span class="nc" id="L70">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L71">	}</span>
 
 	public PrologStorage(PrologProvider provider, Settings properties, ObjectConverter&lt;PrologTerm&gt; converter,
 			String location, ContainerFactory containerFactory, LockFile lock, int maxCapacity) {
-<span class="nc" id="L74">		super(provider, properties, converter, location, containerFactory, lock, maxCapacity);</span>
-<span class="nc" id="L75">		this.transaction = new PersistentContainerTransaction(this);</span>
-<span class="nc" id="L76">	}</span>
+<span class="nc" id="L75">		super(provider, properties, converter, location, containerFactory, lock, maxCapacity);</span>
+<span class="nc" id="L76">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L77">	}</span>
 
 	public Transaction getTransaction() {
-<span class="nc" id="L79">		return transaction;</span>
+<span class="nc" id="L80">		return transaction;</span>
 	}
 
 	public Query createQuery(String string) {
-<span class="nc" id="L83">		return new PrologContainerQuery(findAll(string));</span>
+<span class="nc" id="L84">		return new PrologContainerQuery(findAll(string));</span>
 	}
 
 	public &lt;O&gt; TypedQuery&lt;O&gt; createQuery(O o) {
-<span class="nc" id="L87">		return new PrologTypedQuery&lt;O&gt;(findAll(o));</span>
+<span class="nc" id="L88">		return new PrologTypedQuery&lt;O&gt;(findAll(o));</span>
 	}
 
 	public &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Class&lt;O&gt; clazz) {
-<span class="nc" id="L91">		return new PrologTypedQuery&lt;O&gt;(findAll(clazz));</span>
+<span class="nc" id="L92">		return new PrologTypedQuery&lt;O&gt;(findAll(clazz));</span>
 	}
 
 	public &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Predicate&lt;O&gt; predicate) {
-<span class="nc" id="L95">		return new PrologTypedQuery&lt;O&gt;(findAll(predicate));</span>
+<span class="nc" id="L96">		return new PrologTypedQuery&lt;O&gt;(findAll(predicate));</span>
 	}
 
 	public ProcedureQuery createProcedureQuery(String functor, String... args) {
-<span class="nc" id="L99">		return new PrologProcedureQuery(getLocation(), getProvider(), functor, args);</span>
+<span class="nc" id="L100">		return new PrologProcedureQuery(getLocation(), getProvider(), functor, args);</span>
 	}
 
 }

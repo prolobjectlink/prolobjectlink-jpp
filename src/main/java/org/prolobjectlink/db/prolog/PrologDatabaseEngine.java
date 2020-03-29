@@ -32,7 +32,7 @@
  */
 package org.prolobjectlink.db.prolog;
 
-import org.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologEngine;
 
 public interface PrologDatabaseEngine extends PrologEngine {
 

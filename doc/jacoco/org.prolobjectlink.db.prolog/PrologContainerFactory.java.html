@@ -45,33 +45,34 @@ import org.prolobjectlink.db.StorageMode;
 import org.prolobjectlink.db.StoragePool;
 import org.prolobjectlink.db.container.AbstractContainerFactory;
 import org.prolobjectlink.db.etc.Settings;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class PrologContainerFactory extends AbstractContainerFactory implements ContainerFactory {
 
 	protected PrologContainerFactory(Settings properties, PrologProvider provider) {
-<span class="nc" id="L54">		super(properties, provider);</span>
-<span class="nc" id="L55">	}</span>
+<span class="nc" id="L55">		super(properties, provider);</span>
+<span class="nc" id="L56">	}</span>
 
 	public final RelationalCache createRelationalCache(Schema schema) {
-<span class="nc" id="L58">		return new PrologRelationalCache(schema, getSettings(), getProvider(), this);</span>
+<span class="nc" id="L59">		return new PrologRelationalCache(schema, getSettings(), getProvider(), this);</span>
 	}
 
 	public final Storage createStorage(String path) {
-<span class="nc" id="L62">		return new PrologStorage(getProvider(), getSettings(), path, this);</span>
+<span class="nc" id="L63">		return new PrologStorage(getProvider(), getSettings(), path, this);</span>
 	}
 
 	public final StoragePool createStoragePool(String path, String name) {
-<span class="nc" id="L66">		return new PrologStoragePool(getProvider(), getSettings(), path, name, this);</span>
+<span class="nc" id="L67">		return new PrologStoragePool(getProvider(), getSettings(), path, name, this);</span>
 	}
 
 	public final StorageManager createStorageManager(String path, StorageMode storageMode) {
-<span class="nc" id="L70">		return new PrologStorageManager(getProvider(), getSettings(), path, this, storageMode);</span>
+<span class="nc" id="L71">		return new PrologStorageManager(getProvider(), getSettings(), path, this, storageMode);</span>
 	}
 
 	public final StorageGraph createStorageGraph(String path, Schema schema, StorageMode storageMode) {
-<span class="nc" id="L74">		return new PrologStorageGraph(getProvider(), getSettings(), path, schema, this, storageMode);</span>
+<span class="nc" id="L75">		return new PrologStorageGraph(getProvider(), getSettings(), path, schema, this, storageMode);</span>
 	}
 
 	/**
@@ -82,7 +83,7 @@ public abstract class PrologContainerFactory extends AbstractContainerFactory im
 	 */
 	@Deprecated
 	public final RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
-<span class="nc" id="L85">		return new PrologRelationalDatabase(getSettings(), storageMode, name, user);</span>
+<span class="nc" id="L86">		return new PrologRelationalDatabase(getSettings(), storageMode, name, user);</span>
 	}
 
 	/**
@@ -94,7 +95,7 @@ public abstract class PrologContainerFactory extends AbstractContainerFactory im
 	@Deprecated
 	public final HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name,
 			DatabaseUser user) {
-<span class="nc" id="L97">		return new PrologHierarchicalDatabase(getSettings(), storageMode, name, user);</span>
+<span class="nc" id="L98">		return new PrologHierarchicalDatabase(getSettings(), storageMode, name, user);</span>
 	}
 
 }

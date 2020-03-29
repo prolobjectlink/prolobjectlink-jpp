@@ -32,7 +32,7 @@
  */
 package org.prolobjectlink.db;
 
-import org.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 public class DatabaseSchema extends AbstractSchema implements Schema {
 

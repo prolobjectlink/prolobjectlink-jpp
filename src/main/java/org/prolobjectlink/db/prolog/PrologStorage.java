@@ -44,8 +44,9 @@ import org.prolobjectlink.db.TypedQuery;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.storage.AbstractStorage;
 import org.prolobjectlink.db.tx.PersistentContainerTransaction;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 public final class PrologStorage extends AbstractStorage implements Storage {
 

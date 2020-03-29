@@ -64,8 +64,9 @@ import org.prolobjectlink.db.StoragePool;
 import org.prolobjectlink.db.util.JavaReflect;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 public final class Settings extends AbstractMap<Object, Object>
 		implements Map<Object, Object>, ContainerFactory, SaveLoad<Settings> {

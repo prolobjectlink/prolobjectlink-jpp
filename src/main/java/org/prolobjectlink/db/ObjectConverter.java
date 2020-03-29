@@ -34,7 +34,7 @@ package org.prolobjectlink.db;
 
 import java.util.Map;
 
-import org.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 /**
  * 

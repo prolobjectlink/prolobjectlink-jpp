@@ -38,7 +38,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.prolobjectlink.db.util.JavaReflect;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 /**
  * 

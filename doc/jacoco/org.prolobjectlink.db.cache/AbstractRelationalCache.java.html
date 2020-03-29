@@ -42,9 +42,10 @@ import org.prolobjectlink.db.RelationalCache;
 import org.prolobjectlink.db.RelationalGraph;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.etc.Settings;
-import org.prolobjectlink.prolog.PrologEngine;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 public class AbstractRelationalCache extends RelationalGraph&lt;Object, Object&gt; implements RelationalCache {
 
@@ -58,259 +59,259 @@ public class AbstractRelationalCache extends RelationalGraph&lt;Object, Object&g
 	private final ObjectConverter&lt;PrologTerm&gt; converter;
 
 	public AbstractRelationalCache(Schema schema, Settings properties, PrologProvider provider,
-<span class="nc" id="L61">			ContainerFactory containerFactory, ObjectConverter&lt;PrologTerm&gt; converter) {</span>
+<span class="nc" id="L62">			ContainerFactory containerFactory, ObjectConverter&lt;PrologTerm&gt; converter) {</span>
 		// this.transaction = new DefaultTransaction(this);
-<span class="nc" id="L63">		this.containerFactory = containerFactory;</span>
-<span class="nc" id="L64">		this.engine = provider.newEngine();</span>
-<span class="nc" id="L65">		this.properties = properties;</span>
-<span class="nc" id="L66">		this.converter = converter;</span>
-<span class="nc" id="L67">		this.provider = provider;</span>
-<span class="nc" id="L68">		this.schema = schema;</span>
-<span class="nc" id="L69">	}</span>
+<span class="nc" id="L64">		this.containerFactory = containerFactory;</span>
+<span class="nc" id="L65">		this.engine = provider.newEngine();</span>
+<span class="nc" id="L66">		this.properties = properties;</span>
+<span class="nc" id="L67">		this.converter = converter;</span>
+<span class="nc" id="L68">		this.provider = provider;</span>
+<span class="nc" id="L69">		this.schema = schema;</span>
+<span class="nc" id="L70">	}</span>
 
 	public AbstractRelationalCache(Schema schema, Settings properties, PrologProvider provider,
 			ContainerFactory containerFactory, ObjectConverter&lt;PrologTerm&gt; converter,
 			RelationalGraph&lt;Object, Object&gt; graph) {
-<span class="nc" id="L74">		super(graph);</span>
+<span class="nc" id="L75">		super(graph);</span>
 		// this.transaction = new DefaultTransaction(this);
-<span class="nc" id="L76">		this.containerFactory = containerFactory;</span>
-<span class="nc" id="L77">		this.engine = provider.newEngine();</span>
-<span class="nc" id="L78">		this.properties = properties;</span>
-<span class="nc" id="L79">		this.converter = converter;</span>
-<span class="nc" id="L80">		this.provider = provider;</span>
-<span class="nc" id="L81">		this.schema = schema;</span>
-<span class="nc" id="L82">	}</span>
+<span class="nc" id="L77">		this.containerFactory = containerFactory;</span>
+<span class="nc" id="L78">		this.engine = provider.newEngine();</span>
+<span class="nc" id="L79">		this.properties = properties;</span>
+<span class="nc" id="L80">		this.converter = converter;</span>
+<span class="nc" id="L81">		this.provider = provider;</span>
+<span class="nc" id="L82">		this.schema = schema;</span>
+<span class="nc" id="L83">	}</span>
 
 	public final &lt;O&gt; void add(O... facts) {
 		// TODO Auto-generated method stub
 
-<span class="nc" id="L87">	}</span>
+<span class="nc" id="L88">	}</span>
 
 	public final &lt;O&gt; void modify(O match, O merge) {
 		// TODO Auto-generated method stub
 
-<span class="nc" id="L92">	}</span>
+<span class="nc" id="L93">	}</span>
 
 	public final void remove(Class&lt;?&gt; clazz) {
 		// TODO Auto-generated method stub
 
-<span class="nc" id="L97">	}</span>
+<span class="nc" id="L98">	}</span>
 
 	public final &lt;O&gt; void remove(O... facts) {
 		// TODO Auto-generated method stub
 
-<span class="nc" id="L102">	}</span>
+<span class="nc" id="L103">	}</span>
 
 	public final Object find(String string) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L106">		return null;</span>
+<span class="nc" id="L107">		return null;</span>
 	}
 
 	public final Object find(String functor, Object... args) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L111">		return null;</span>
+<span class="nc" id="L112">		return null;</span>
 	}
 
 	public final &lt;O&gt; O find(O o) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L116">		return null;</span>
+<span class="nc" id="L117">		return null;</span>
 	}
 
 	public final &lt;O&gt; O find(Class&lt;O&gt; clazz) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L121">		return null;</span>
+<span class="nc" id="L122">		return null;</span>
 	}
 
 	public final &lt;O&gt; O find(Predicate&lt;O&gt; predicate) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L126">		return null;</span>
+<span class="nc" id="L127">		return null;</span>
 	}
 
 	public final List&lt;Object&gt; findAll(String string) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L131">		return new ArrayList&lt;Object&gt;();</span>
+<span class="nc" id="L132">		return new ArrayList&lt;Object&gt;();</span>
 	}
 
 	public final List&lt;Object&gt; findAll(String functor, Object... args) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L136">		return new ArrayList&lt;Object&gt;();</span>
+<span class="nc" id="L137">		return new ArrayList&lt;Object&gt;();</span>
 	}
 
 	public final &lt;O&gt; List&lt;O&gt; findAll(O o) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L141">		return new ArrayList&lt;O&gt;();</span>
+<span class="nc" id="L142">		return new ArrayList&lt;O&gt;();</span>
 	}
 
 	public final &lt;O&gt; List&lt;O&gt; findAll(Class&lt;O&gt; clazz) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L146">		return new ArrayList&lt;O&gt;();</span>
+<span class="nc" id="L147">		return new ArrayList&lt;O&gt;();</span>
 	}
 
 	public final &lt;O&gt; List&lt;O&gt; findAll(Predicate&lt;O&gt; predicate) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L151">		return new ArrayList&lt;O&gt;();</span>
+<span class="nc" id="L152">		return new ArrayList&lt;O&gt;();</span>
 	}
 
 	public final void evict(Class&lt;?&gt; cls) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L156">	}</span>
+<span class="nc" id="L157">	}</span>
 
 	public final void evictAll() {
 		// TODO Auto-generated method stub
-<span class="nc" id="L160">	}</span>
+<span class="nc" id="L161">	}</span>
 
 	public final boolean contains(String string) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L164">		return false;</span>
+<span class="nc" id="L165">		return false;</span>
 	}
 
 	public final &lt;O&gt; boolean contains(O o) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L169">		return false;</span>
+<span class="nc" id="L170">		return false;</span>
 	}
 
 	public final &lt;O&gt; boolean contains(Class&lt;O&gt; clazz) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L174">		return false;</span>
+<span class="nc" id="L175">		return false;</span>
 	}
 
 	public final &lt;O&gt; boolean contains(Predicate&lt;O&gt; predicate) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L179">		return false;</span>
+<span class="nc" id="L180">		return false;</span>
 	}
 
 	public final boolean contains(String functor, int arity) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L184">		return false;</span>
+<span class="nc" id="L185">		return false;</span>
 	}
 
 	public final ObjectConverter&lt;PrologTerm&gt; getConverter() {
-<span class="nc" id="L188">		return converter;</span>
+<span class="nc" id="L189">		return converter;</span>
 	}
 
 	public final Settings getProperties() {
-<span class="nc" id="L192">		return properties;</span>
+<span class="nc" id="L193">		return properties;</span>
 	}
 
 	public final PrologProvider getProvider() {
-<span class="nc" id="L196">		return provider;</span>
+<span class="nc" id="L197">		return provider;</span>
 	}
 
 	public final PrologEngine getEngine() {
-<span class="nc" id="L200">		return engine;</span>
+<span class="nc" id="L201">		return engine;</span>
 	}
 
 	public final List&lt;Object&gt; solutionsOf(PrologTerm[] prologTerms, List&lt;Class&lt;?&gt;&gt; classes) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L205">		return new ArrayList&lt;Object&gt;();</span>
+<span class="nc" id="L206">		return new ArrayList&lt;Object&gt;();</span>
 	}
 
 	public final Object[] solutionOf(PrologTerm[] prologTerms, List&lt;Class&lt;?&gt;&gt; classes) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L210">		return new Object[0];</span>
+<span class="nc" id="L211">		return new Object[0];</span>
 	}
 
 	public final List&lt;Class&lt;?&gt;&gt; classesOf(PrologTerm[] prologTerms) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L215">		return new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
+<span class="nc" id="L216">		return new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
 	}
 
 	public final List&lt;Class&lt;?&gt;&gt; classesOf(String string) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L220">		return new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
+<span class="nc" id="L221">		return new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
 	}
 
 	public final &lt;O&gt; Class&lt;O&gt; classOf(Predicate&lt;O&gt; predicate) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L225">		return null;</span>
+<span class="nc" id="L226">		return null;</span>
 	}
 
 	public final Class&lt;?&gt; classOf(String functor, int arity) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L230">		return null;</span>
+<span class="nc" id="L231">		return null;</span>
 	}
 
 	public final &lt;O&gt; Class&lt;O&gt; classOf(O o) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L235">		return null;</span>
+<span class="nc" id="L236">		return null;</span>
 	}
 
 	public final List&lt;Class&lt;?&gt;&gt; classes() {
-<span class="nc" id="L239">		return getSchema().getJavaClasses();</span>
+<span class="nc" id="L240">		return getSchema().getJavaClasses();</span>
 	}
 
 	public final &lt;K&gt; K unwrap(Class&lt;K&gt; cls) {
-<span class="nc" id="L243">		return unwrap(this, cls);</span>
+<span class="nc" id="L244">		return unwrap(this, cls);</span>
 	}
 
 	public final &lt;K&gt; K unwrap(Object o, Class&lt;K&gt; cls) {
 		try {
-<span class="nc bnc" id="L248" title="All 2 branches missed.">			if (cls.isAssignableFrom(o.getClass())) {</span>
-<span class="nc" id="L249">				return cls.cast(o);</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">			if (cls.isAssignableFrom(o.getClass())) {</span>
+<span class="nc" id="L250">				return cls.cast(o);</span>
 			}
-<span class="nc" id="L251">		} catch (Exception e) {</span>
-<span class="nc" id="L252">			throw new RuntimeException(</span>
+<span class="nc" id="L252">		} catch (Exception e) {</span>
+<span class="nc" id="L253">			throw new RuntimeException(</span>
 
-<span class="nc" id="L254">					&quot;Impossible unwrap &quot; + getClass()</span>
+<span class="nc" id="L255">					&quot;Impossible unwrap &quot; + getClass()</span>
 
-<span class="nc" id="L256">							+ &quot; to &quot; + cls.getName()</span>
+<span class="nc" id="L257">							+ &quot; to &quot; + cls.getName()</span>
 
 					, e);
-<span class="nc" id="L259">		}</span>
-<span class="nc" id="L260">		return null;</span>
+<span class="nc" id="L260">		}</span>
+<span class="nc" id="L261">		return null;</span>
 	}
 
 	public final boolean isWrappedFor(Class&lt;?&gt; cls) {
-<span class="nc" id="L264">		return cls.isInstance(this);</span>
+<span class="nc" id="L265">		return cls.isInstance(this);</span>
 	}
 
 	public final boolean isWrappedFor(Object o, Class&lt;?&gt; cls) {
-<span class="nc" id="L268">		return cls.isInstance(o);</span>
+<span class="nc" id="L269">		return cls.isInstance(o);</span>
 	}
 
 	public final ContainerFactory getContainerFactory() {
-<span class="nc" id="L272">		return containerFactory;</span>
+<span class="nc" id="L273">		return containerFactory;</span>
 	}
 
 	public final Schema getSchema() {
-<span class="nc" id="L276">		return schema;</span>
+<span class="nc" id="L277">		return schema;</span>
 	}
 
 	@Override
 	public int hashCode() {
-<span class="nc" id="L281">		final int prime = 31;</span>
-<span class="nc" id="L282">		int result = super.hashCode();</span>
-<span class="nc bnc" id="L283" title="All 2 branches missed.">		result = prime * result + ((properties == null) ? 0 : properties.hashCode());</span>
-<span class="nc bnc" id="L284" title="All 2 branches missed.">		result = prime * result + ((provider == null) ? 0 : provider.hashCode());</span>
-<span class="nc bnc" id="L285" title="All 2 branches missed.">		result = prime * result + ((schema == null) ? 0 : schema.hashCode());</span>
-<span class="nc" id="L286">		return result;</span>
+<span class="nc" id="L282">		final int prime = 31;</span>
+<span class="nc" id="L283">		int result = super.hashCode();</span>
+<span class="nc bnc" id="L284" title="All 2 branches missed.">		result = prime * result + ((properties == null) ? 0 : properties.hashCode());</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">		result = prime * result + ((provider == null) ? 0 : provider.hashCode());</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">		result = prime * result + ((schema == null) ? 0 : schema.hashCode());</span>
+<span class="nc" id="L287">		return result;</span>
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-<span class="nc bnc" id="L291" title="All 2 branches missed.">		if (this == obj)</span>
-<span class="nc" id="L292">			return true;</span>
-<span class="nc bnc" id="L293" title="All 2 branches missed.">		if (!super.equals(obj))</span>
-<span class="nc" id="L294">			return false;</span>
-<span class="nc bnc" id="L295" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
-<span class="nc" id="L296">			return false;</span>
-<span class="nc" id="L297">		AbstractRelationalCache other = (AbstractRelationalCache) obj;</span>
-<span class="nc bnc" id="L298" title="All 2 branches missed.">		if (properties == null) {</span>
-<span class="nc bnc" id="L299" title="All 2 branches missed.">			if (other.properties != null)</span>
-<span class="nc" id="L300">				return false;</span>
-<span class="nc bnc" id="L301" title="All 2 branches missed.">		} else if (!properties.equals(other.properties))</span>
-<span class="nc" id="L302">			return false;</span>
-<span class="nc bnc" id="L303" title="All 2 branches missed.">		if (provider == null) {</span>
-<span class="nc bnc" id="L304" title="All 2 branches missed.">			if (other.provider != null)</span>
-<span class="nc" id="L305">				return false;</span>
-<span class="nc bnc" id="L306" title="All 2 branches missed.">		} else if (!provider.equals(other.provider))</span>
-<span class="nc" id="L307">			return false;</span>
-<span class="nc bnc" id="L308" title="All 2 branches missed.">		if (schema == null) {</span>
-<span class="nc bnc" id="L309" title="All 2 branches missed.">			if (other.schema != null)</span>
-<span class="nc" id="L310">				return false;</span>
-<span class="nc bnc" id="L311" title="All 2 branches missed.">		} else if (!schema.equals(other.schema))</span>
-<span class="nc" id="L312">			return false;</span>
-<span class="nc" id="L313">		return true;</span>
+<span class="nc bnc" id="L292" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L293">			return true;</span>
+<span class="nc bnc" id="L294" title="All 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L295">			return false;</span>
+<span class="nc bnc" id="L296" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L297">			return false;</span>
+<span class="nc" id="L298">		AbstractRelationalCache other = (AbstractRelationalCache) obj;</span>
+<span class="nc bnc" id="L299" title="All 2 branches missed.">		if (properties == null) {</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">			if (other.properties != null)</span>
+<span class="nc" id="L301">				return false;</span>
+<span class="nc bnc" id="L302" title="All 2 branches missed.">		} else if (!properties.equals(other.properties))</span>
+<span class="nc" id="L303">			return false;</span>
+<span class="nc bnc" id="L304" title="All 2 branches missed.">		if (provider == null) {</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">			if (other.provider != null)</span>
+<span class="nc" id="L306">				return false;</span>
+<span class="nc bnc" id="L307" title="All 2 branches missed.">		} else if (!provider.equals(other.provider))</span>
+<span class="nc" id="L308">			return false;</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">		if (schema == null) {</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">			if (other.schema != null)</span>
+<span class="nc" id="L311">				return false;</span>
+<span class="nc bnc" id="L312" title="All 2 branches missed.">		} else if (!schema.equals(other.schema))</span>
+<span class="nc" id="L313">			return false;</span>
+<span class="nc" id="L314">		return true;</span>
 	}
 
 }

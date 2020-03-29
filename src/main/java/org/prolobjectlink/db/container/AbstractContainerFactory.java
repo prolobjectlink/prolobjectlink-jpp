@@ -40,8 +40,9 @@ import org.prolobjectlink.db.RelationalDatabase;
 import org.prolobjectlink.db.StorageMode;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.prolog.PrologObjectConverter;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class AbstractContainerFactory implements ContainerFactory {

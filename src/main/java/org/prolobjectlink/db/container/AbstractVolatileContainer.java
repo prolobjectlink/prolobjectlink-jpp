@@ -43,9 +43,10 @@ import org.prolobjectlink.db.Predicate;
 import org.prolobjectlink.db.VolatileContainer;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.util.JavaReflect;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologQuery;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologQuery;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class AbstractVolatileContainer extends AbstractContainer implements VolatileContainer {

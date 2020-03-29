@@ -32,17 +32,17 @@
  */
 package org.prolobjectlink.db.prolog;
 
-import static org.prolobjectlink.prolog.PrologTermType.ATOM_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.DOUBLE_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.FALSE_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.FLOAT_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.INTEGER_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.LIST_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.LONG_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.NIL_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.STRUCTURE_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.TRUE_TYPE;
-import static org.prolobjectlink.prolog.PrologTermType.VARIABLE_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.ATOM_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.DOUBLE_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.FALSE_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.FLOAT_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.INTEGER_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.LIST_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.LONG_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.NIL_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.STRUCTURE_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.TRUE_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.VARIABLE_TYPE;
 
 import java.lang.reflect.Field;
 import java.sql.Time;
@@ -75,15 +75,16 @@ import org.prolobjectlink.db.util.JavaReflect;
 import org.prolobjectlink.db.util.JavaSets;
 import org.prolobjectlink.logging.LoggerConstants;
 import org.prolobjectlink.logging.LoggerUtils;
-import org.prolobjectlink.prolog.PrologDouble;
-import org.prolobjectlink.prolog.PrologFloat;
-import org.prolobjectlink.prolog.PrologInteger;
-import org.prolobjectlink.prolog.PrologLong;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologStructure;
-import org.prolobjectlink.prolog.PrologTerm;
-import org.prolobjectlink.prolog.PrologVariable;
-import org.prolobjectlink.prolog.UnknownTermError;
+
+import io.github.prolobjectlink.prolog.PrologDouble;
+import io.github.prolobjectlink.prolog.PrologFloat;
+import io.github.prolobjectlink.prolog.PrologInteger;
+import io.github.prolobjectlink.prolog.PrologLong;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologStructure;
+import io.github.prolobjectlink.prolog.PrologTerm;
+import io.github.prolobjectlink.prolog.PrologVariable;
+import io.github.prolobjectlink.prolog.UnknownTermError;
 
 public final class PrologObjectConverter extends AbstractConverter<PrologTerm> implements ObjectConverter<PrologTerm> {
 

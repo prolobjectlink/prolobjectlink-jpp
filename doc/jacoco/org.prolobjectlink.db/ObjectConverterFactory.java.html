@@ -33,17 +33,18 @@
 package org.prolobjectlink.db;
 
 import org.prolobjectlink.db.util.JavaReflect;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 public final class ObjectConverterFactory {
 
 	public static &lt;T&gt; ObjectConverter&lt;T&gt; createConverter(Class&lt;T&gt; cls, PrologProvider provider) {
-<span class="nc" id="L41">		return (ObjectConverter&lt;T&gt;) JavaReflect.newInstance(cls, new Class[] { PrologProvider.class },</span>
+<span class="nc" id="L42">		return (ObjectConverter&lt;T&gt;) JavaReflect.newInstance(cls, new Class[] { PrologProvider.class },</span>
 				new PrologProvider[] { provider });
 	}
 
-<span class="nc" id="L45">	private ObjectConverterFactory() {</span>
-<span class="nc" id="L46">	}</span>
+<span class="nc" id="L46">	private ObjectConverterFactory() {</span>
+<span class="nc" id="L47">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

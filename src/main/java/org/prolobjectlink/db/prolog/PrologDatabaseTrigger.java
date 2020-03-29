@@ -35,7 +35,8 @@ package org.prolobjectlink.db.prolog;
 import org.prolobjectlink.db.DatabaseTrigger;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.Trigger;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 public class PrologDatabaseTrigger extends DatabaseTrigger implements Trigger {
 

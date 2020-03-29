@@ -49,10 +49,11 @@ import org.prolobjectlink.db.Storage;
 import org.prolobjectlink.db.container.AbstractPersistentContainer;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.util.JavaReflect;
-import org.prolobjectlink.prolog.PrologClause;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologQuery;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologClause;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologQuery;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class AbstractStorage extends AbstractPersistentContainer implements Storage {
@@ -69,288 +70,288 @@ public abstract class AbstractStorage extends AbstractPersistentContainer implem
 
 	protected AbstractStorage(PrologProvider provider, Settings properties, ObjectConverter&lt;PrologTerm&gt; converter,
 			String location, ContainerFactory containerFactory) {
-<span class="nc" id="L72">		this(provider, properties, converter, location, containerFactory, Integer.MAX_VALUE);</span>
-<span class="nc" id="L73">	}</span>
+<span class="nc" id="L73">		this(provider, properties, converter, location, containerFactory, Integer.MAX_VALUE);</span>
+<span class="nc" id="L74">	}</span>
 
 	protected AbstractStorage(PrologProvider provider, Settings settings, ObjectConverter&lt;PrologTerm&gt; converter,
 			String location, ContainerFactory containerFactory, int maxCapacity) {
-<span class="nc" id="L77">		this(provider, settings, converter, location, containerFactory, new LockFile(location + &quot;.lock&quot;, settings),</span>
+<span class="nc" id="L78">		this(provider, settings, converter, location, containerFactory, new LockFile(location + &quot;.lock&quot;, settings),</span>
 				maxCapacity);
-<span class="nc" id="L79">	}</span>
+<span class="nc" id="L80">	}</span>
 
 	protected AbstractStorage(PrologProvider provider, Settings properties, ObjectConverter&lt;PrologTerm&gt; converter,
 			String location, ContainerFactory containerFactory, LockFile lock, int maxCapacity) {
-<span class="nc" id="L83">		super(provider, properties, converter, location, containerFactory);</span>
-<span class="nc" id="L84">		this.maxCapacity = maxCapacity;</span>
-<span class="nc" id="L85">		this.lock = lock;</span>
-<span class="nc" id="L86">	}</span>
+<span class="nc" id="L84">		super(provider, properties, converter, location, containerFactory);</span>
+<span class="nc" id="L85">		this.maxCapacity = maxCapacity;</span>
+<span class="nc" id="L86">		this.lock = lock;</span>
+<span class="nc" id="L87">	}</span>
 
 	public final boolean contains(String string) {
-<span class="nc" id="L89">		return getEngine().contains(string);</span>
+<span class="nc" id="L90">		return getEngine().contains(string);</span>
 	}
 
 	public final &lt;O&gt; boolean contains(O object) {
-<span class="nc" id="L93">		return getEngine().contains(getConverter().toTerm(object));</span>
+<span class="nc" id="L94">		return getEngine().contains(getConverter().toTerm(object));</span>
 	}
 
 	public final &lt;O&gt; boolean contains(Class&lt;O&gt; clazz) {
-<span class="nc" id="L97">		return getEngine().contains(getConverter().toTerm(clazz));</span>
+<span class="nc" id="L98">		return getEngine().contains(getConverter().toTerm(clazz));</span>
 	}
 
 	public final &lt;O&gt; boolean contains(Predicate&lt;O&gt; predicate) {
-<span class="nc" id="L101">		Class&lt;O&gt; clazz = classOf(predicate);</span>
-<span class="nc" id="L102">		PrologQuery query = prologQueryOf(clazz);</span>
-<span class="nc bnc" id="L103" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
-<span class="nc" id="L104">			Map&lt;String, PrologTerm&gt;[] solutionsMap = query.allVariablesSolutions();</span>
-<span class="nc bnc" id="L105" title="All 2 branches missed.">			for (int i = 0; i &lt; solutionsMap.length; i++) {</span>
-<span class="nc" id="L106">				O solution = (O) getConverter().toObject(clazz, solutionsMap[i]);</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">				if (predicate.evaluate(solution)) {</span>
-<span class="nc" id="L108">					return true;</span>
+<span class="nc" id="L102">		Class&lt;O&gt; clazz = classOf(predicate);</span>
+<span class="nc" id="L103">		PrologQuery query = prologQueryOf(clazz);</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L105">			Map&lt;String, PrologTerm&gt;[] solutionsMap = query.allVariablesSolutions();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">			for (int i = 0; i &lt; solutionsMap.length; i++) {</span>
+<span class="nc" id="L107">				O solution = (O) getConverter().toObject(clazz, solutionsMap[i]);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">				if (predicate.evaluate(solution)) {</span>
+<span class="nc" id="L109">					return true;</span>
 				}
 			}
 		}
-<span class="nc" id="L112">		return false;</span>
+<span class="nc" id="L113">		return false;</span>
 	}
 
 	public final boolean contains(String functor, int arity) {
-<span class="nc" id="L116">		return getEngine().currentPredicate(functor, arity);</span>
+<span class="nc" id="L117">		return getEngine().currentPredicate(functor, arity);</span>
 	}
 
 	public final Object find(String string) {
-<span class="nc" id="L120">		PrologTerm[] prologTerms = getConverter().toTermsArray(string);</span>
-<span class="nc" id="L121">		List&lt;Class&lt;?&gt;&gt; classes = classesOf(prologTerms);</span>
-<span class="nc" id="L122">		return solutionOf(prologTerms, classes);</span>
+<span class="nc" id="L121">		PrologTerm[] prologTerms = getConverter().toTermsArray(string);</span>
+<span class="nc" id="L122">		List&lt;Class&lt;?&gt;&gt; classes = classesOf(prologTerms);</span>
+<span class="nc" id="L123">		return solutionOf(prologTerms, classes);</span>
 	}
 
 	public final Object find(String functor, Object... args) {
-<span class="nc" id="L126">		Class&lt;?&gt; clazz = classOf(functor, args.length);</span>
-<span class="nc" id="L127">		Object instance = JavaReflect.newInstance(clazz);</span>
-<span class="nc" id="L128">		Field[] fields = clazz.getDeclaredFields();</span>
-<span class="nc" id="L129">		checkProcedureInvokation(functor, fields, args);</span>
-<span class="nc bnc" id="L130" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
-<span class="nc" id="L131">			JavaReflect.writeValue(fields[i], instance, args[i]);</span>
+<span class="nc" id="L127">		Class&lt;?&gt; clazz = classOf(functor, args.length);</span>
+<span class="nc" id="L128">		Object instance = JavaReflect.newInstance(clazz);</span>
+<span class="nc" id="L129">		Field[] fields = clazz.getDeclaredFields();</span>
+<span class="nc" id="L130">		checkProcedureInvokation(functor, fields, args);</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc" id="L132">			JavaReflect.writeValue(fields[i], instance, args[i]);</span>
 		}
-<span class="nc" id="L133">		return find(instance);</span>
+<span class="nc" id="L134">		return find(instance);</span>
 	}
 
 	public final &lt;O&gt; O find(O o) {
-<span class="nc" id="L137">		Map&lt;String, PrologTerm&gt; inspectionMap = new HashMap&lt;String, PrologTerm&gt;();</span>
-<span class="nc" id="L138">		PrologQuery query = prologQueryOf(o, inspectionMap);</span>
-<span class="nc bnc" id="L139" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
-<span class="nc" id="L140">			Map&lt;String, PrologTerm&gt; solutionMap = query.oneVariablesSolution();</span>
-<span class="nc bnc" id="L141" title="All 2 branches missed.">			if (!solutionMap.isEmpty()) {</span>
+<span class="nc" id="L138">		Map&lt;String, PrologTerm&gt; inspectionMap = new HashMap&lt;String, PrologTerm&gt;();</span>
+<span class="nc" id="L139">		PrologQuery query = prologQueryOf(o, inspectionMap);</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L141">			Map&lt;String, PrologTerm&gt; solutionMap = query.oneVariablesSolution();</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">			if (!solutionMap.isEmpty()) {</span>
 
 				// put all resolved by inspection
-<span class="nc" id="L144">				solutionMap.putAll(inspectionMap);</span>
-<span class="nc" id="L145">				return (O) getConverter().toObject(classOf(o), solutionMap);</span>
+<span class="nc" id="L145">				solutionMap.putAll(inspectionMap);</span>
+<span class="nc" id="L146">				return (O) getConverter().toObject(classOf(o), solutionMap);</span>
 			} else {
 				// the term exist and is equivalent to the query term
-<span class="nc" id="L148">				return o;</span>
+<span class="nc" id="L149">				return o;</span>
 			}
 		}
-<span class="nc" id="L151">		return null;</span>
+<span class="nc" id="L152">		return null;</span>
 	}
 
 	public final &lt;O&gt; O find(Class&lt;O&gt; clazz) {
-<span class="nc" id="L155">		PrologQuery query = prologQueryOf(clazz);</span>
-<span class="nc bnc" id="L156" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
-<span class="nc" id="L157">			Map&lt;String, PrologTerm&gt; solutionMap = query.oneVariablesSolution();</span>
-<span class="nc" id="L158">			return (O) getConverter().toObject(clazz, solutionMap);</span>
+<span class="nc" id="L156">		PrologQuery query = prologQueryOf(clazz);</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L158">			Map&lt;String, PrologTerm&gt; solutionMap = query.oneVariablesSolution();</span>
+<span class="nc" id="L159">			return (O) getConverter().toObject(clazz, solutionMap);</span>
 		}
-<span class="nc" id="L160">		return null;</span>
+<span class="nc" id="L161">		return null;</span>
 	}
 
 	public final &lt;O&gt; O find(Predicate&lt;O&gt; query) {
-<span class="nc" id="L164">		List&lt;O&gt; all = findAll(query);</span>
-<span class="nc bnc" id="L165" title="All 2 branches missed.">		if (!all.isEmpty())</span>
-<span class="nc" id="L166">			return all.get(0);</span>
-<span class="nc" id="L167">		return null;</span>
+<span class="nc" id="L165">		List&lt;O&gt; all = findAll(query);</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">		if (!all.isEmpty())</span>
+<span class="nc" id="L167">			return all.get(0);</span>
+<span class="nc" id="L168">		return null;</span>
 	}
 
 	public final List&lt;Object&gt; findAll(String string) {
-<span class="nc" id="L171">		PrologTerm[] prologTerms = getConverter().toTermsArray(string);</span>
-<span class="nc" id="L172">		return solutionsOf(prologTerms, classesOf(prologTerms));</span>
+<span class="nc" id="L172">		PrologTerm[] prologTerms = getConverter().toTermsArray(string);</span>
+<span class="nc" id="L173">		return solutionsOf(prologTerms, classesOf(prologTerms));</span>
 	}
 
 	public final List&lt;Object&gt; findAll(String functor, Object... args) {
-<span class="nc" id="L176">		Class&lt;?&gt; clazz = classOf(functor, args.length);</span>
-<span class="nc" id="L177">		Object instance = JavaReflect.newInstance(clazz);</span>
-<span class="nc" id="L178">		Field[] fields = clazz.getDeclaredFields();</span>
-<span class="nc" id="L179">		checkProcedureInvokation(functor, fields, args);</span>
-<span class="nc bnc" id="L180" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
-<span class="nc" id="L181">			JavaReflect.writeValue(fields[i], instance, args[i]);</span>
+<span class="nc" id="L177">		Class&lt;?&gt; clazz = classOf(functor, args.length);</span>
+<span class="nc" id="L178">		Object instance = JavaReflect.newInstance(clazz);</span>
+<span class="nc" id="L179">		Field[] fields = clazz.getDeclaredFields();</span>
+<span class="nc" id="L180">		checkProcedureInvokation(functor, fields, args);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc" id="L182">			JavaReflect.writeValue(fields[i], instance, args[i]);</span>
 		}
-<span class="nc" id="L183">		return findAll(instance);</span>
+<span class="nc" id="L184">		return findAll(instance);</span>
 	}
 
 	public final &lt;O&gt; List&lt;O&gt; findAll(O o) {
-<span class="nc" id="L187">		Map&lt;String, PrologTerm&gt; inspectionMap = new HashMap&lt;String, PrologTerm&gt;();</span>
-<span class="nc" id="L188">		PrologTerm goal = getConverter().toTerm(o, inspectionMap);</span>
-<span class="nc" id="L189">		PrologQuery query = getEngine().query(goal);</span>
-<span class="nc" id="L190">		List&lt;O&gt; solutionSet = new ArrayList&lt;O&gt;();</span>
-<span class="nc bnc" id="L191" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
-<span class="nc" id="L192">			Map&lt;String, PrologTerm&gt;[] solutionsMap = query.allVariablesSolutions();</span>
-<span class="nc bnc" id="L193" title="All 2 branches missed.">			if (solutionsMap.length &gt; 0) {</span>
-<span class="nc bnc" id="L194" title="All 2 branches missed.">				for (int i = 0; i &lt; solutionsMap.length; i++) {</span>
-<span class="nc" id="L195">					Map&lt;String, PrologTerm&gt; solutionMap = solutionsMap[i];</span>
-<span class="nc" id="L196">					solutionMap.putAll(inspectionMap);</span>
-<span class="nc" id="L197">					O solution = (O) getConverter().toObject(classOf(o), solutionMap);</span>
-<span class="nc" id="L198">					solutionSet.add(solution);</span>
+<span class="nc" id="L188">		Map&lt;String, PrologTerm&gt; inspectionMap = new HashMap&lt;String, PrologTerm&gt;();</span>
+<span class="nc" id="L189">		PrologTerm goal = getConverter().toTerm(o, inspectionMap);</span>
+<span class="nc" id="L190">		PrologQuery query = getEngine().query(goal);</span>
+<span class="nc" id="L191">		List&lt;O&gt; solutionSet = new ArrayList&lt;O&gt;();</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L193">			Map&lt;String, PrologTerm&gt;[] solutionsMap = query.allVariablesSolutions();</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">			if (solutionsMap.length &gt; 0) {</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">				for (int i = 0; i &lt; solutionsMap.length; i++) {</span>
+<span class="nc" id="L196">					Map&lt;String, PrologTerm&gt; solutionMap = solutionsMap[i];</span>
+<span class="nc" id="L197">					solutionMap.putAll(inspectionMap);</span>
+<span class="nc" id="L198">					O solution = (O) getConverter().toObject(classOf(o), solutionMap);</span>
+<span class="nc" id="L199">					solutionSet.add(solution);</span>
 				}
 			} else {
 				// a new term is built from the goal because
 				// the term exist but is equivalent to the query term
-<span class="nc" id="L203">				O solution = (O) getConverter().toObject(goal);</span>
+<span class="nc" id="L204">				O solution = (O) getConverter().toObject(goal);</span>
 				// add to the solution as unique solution
-<span class="nc" id="L205">				solutionSet.add(solution);</span>
+<span class="nc" id="L206">				solutionSet.add(solution);</span>
 			}
 		}
-<span class="nc" id="L208">		return solutionSet;</span>
+<span class="nc" id="L209">		return solutionSet;</span>
 	}
 
 	public final &lt;O&gt; List&lt;O&gt; findAll(Class&lt;O&gt; clazz) {
-<span class="nc" id="L212">		PrologQuery query = prologQueryOf(clazz);</span>
-<span class="nc" id="L213">		List&lt;O&gt; solutionSet = new ArrayList&lt;O&gt;();</span>
-<span class="nc bnc" id="L214" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
-<span class="nc" id="L215">			Map&lt;String, PrologTerm&gt;[] solutionsMap = query.allVariablesSolutions();</span>
-<span class="nc bnc" id="L216" title="All 2 branches missed.">			for (int i = 0; i &lt; solutionsMap.length; i++) {</span>
-<span class="nc" id="L217">				O solution = (O) getConverter().toObject(clazz, solutionsMap[i]);</span>
-<span class="nc" id="L218">				solutionSet.add(solution);</span>
+<span class="nc" id="L213">		PrologQuery query = prologQueryOf(clazz);</span>
+<span class="nc" id="L214">		List&lt;O&gt; solutionSet = new ArrayList&lt;O&gt;();</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L216">			Map&lt;String, PrologTerm&gt;[] solutionsMap = query.allVariablesSolutions();</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">			for (int i = 0; i &lt; solutionsMap.length; i++) {</span>
+<span class="nc" id="L218">				O solution = (O) getConverter().toObject(clazz, solutionsMap[i]);</span>
+<span class="nc" id="L219">				solutionSet.add(solution);</span>
 			}
 		}
-<span class="nc" id="L221">		return solutionSet;</span>
+<span class="nc" id="L222">		return solutionSet;</span>
 	}
 
 	public final &lt;O&gt; List&lt;O&gt; findAll(Predicate&lt;O&gt; predicate) {
-<span class="nc" id="L225">		List&lt;O&gt; selection = new ArrayList&lt;O&gt;();</span>
-<span class="nc" id="L226">		Class&lt;O&gt; toBeFound = classOf(predicate);</span>
-<span class="nc" id="L227">		List&lt;O&gt; allObjects = findAll(toBeFound);</span>
-<span class="nc bnc" id="L228" title="All 2 branches missed.">		for (O o : allObjects) {</span>
-<span class="nc bnc" id="L229" title="All 2 branches missed.">			if (predicate.evaluate(o)) {</span>
-<span class="nc" id="L230">				selection.add(o);</span>
+<span class="nc" id="L226">		List&lt;O&gt; selection = new ArrayList&lt;O&gt;();</span>
+<span class="nc" id="L227">		Class&lt;O&gt; toBeFound = classOf(predicate);</span>
+<span class="nc" id="L228">		List&lt;O&gt; allObjects = findAll(toBeFound);</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">		for (O o : allObjects) {</span>
+<span class="nc bnc" id="L230" title="All 2 branches missed.">			if (predicate.evaluate(o)) {</span>
+<span class="nc" id="L231">				selection.add(o);</span>
 			}
-<span class="nc" id="L232">		}</span>
-<span class="nc" id="L233">		return selection;</span>
+<span class="nc" id="L233">		}</span>
+<span class="nc" id="L234">		return selection;</span>
 	}
 
 	public final Collection&lt;Class&lt;?&gt;&gt; classes() {
-<span class="nc" id="L237">		Map&lt;String, Class&lt;?&gt;&gt; m = new HashMap&lt;String, Class&lt;?&gt;&gt;();</span>
-<span class="nc bnc" id="L238" title="All 2 branches missed.">		for (PrologClause clause : getEngine()) {</span>
-<span class="nc" id="L239">			String functor = removeQuoted(clause.getFunctor());</span>
-<span class="nc" id="L240">			m.put(functor, JavaReflect.classForName(functor));</span>
-<span class="nc" id="L241">		}</span>
-<span class="nc" id="L242">		return m.values();</span>
+<span class="nc" id="L238">		Map&lt;String, Class&lt;?&gt;&gt; m = new HashMap&lt;String, Class&lt;?&gt;&gt;();</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">		for (PrologClause clause : getEngine()) {</span>
+<span class="nc" id="L240">			String functor = removeQuoted(clause.getFunctor());</span>
+<span class="nc" id="L241">			m.put(functor, JavaReflect.classForName(functor));</span>
+<span class="nc" id="L242">		}</span>
+<span class="nc" id="L243">		return m.values();</span>
 	}
 
 	public final void clear() {
-<span class="nc" id="L246">		getEngine().dispose();</span>
-<span class="nc" id="L247">		setDirty(true);</span>
-<span class="nc" id="L248">	}</span>
+<span class="nc" id="L247">		getEngine().dispose();</span>
+<span class="nc" id="L248">		setDirty(true);</span>
+<span class="nc" id="L249">	}</span>
 
 	public final void open() {
-<span class="nc" id="L251">		getEngine().consult(getLocation());</span>
-<span class="nc" id="L252">		open = true;</span>
-<span class="nc" id="L253">	}</span>
+<span class="nc" id="L252">		getEngine().consult(getLocation());</span>
+<span class="nc" id="L253">		open = true;</span>
+<span class="nc" id="L254">	}</span>
 
 	public final &lt;O&gt; void insert(O... facts) {
-<span class="nc bnc" id="L256" title="All 4 branches missed.">		if (facts != null &amp;&amp; facts.length &gt; 0) {</span>
-<span class="nc bnc" id="L257" title="All 2 branches missed.">			for (Object object : facts) {</span>
-<span class="nc" id="L258">				checkStorableObject(object);</span>
-<span class="nc" id="L259">				getEngine().assertz(getConverter().toTerm(object));</span>
+<span class="nc bnc" id="L257" title="All 4 branches missed.">		if (facts != null &amp;&amp; facts.length &gt; 0) {</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">			for (Object object : facts) {</span>
+<span class="nc" id="L259">				checkStorableObject(object);</span>
+<span class="nc" id="L260">				getEngine().assertz(getConverter().toTerm(object));</span>
 			}
-<span class="nc" id="L261">			setDirty(true);</span>
+<span class="nc" id="L262">			setDirty(true);</span>
 		}
-<span class="nc" id="L263">	}</span>
+<span class="nc" id="L264">	}</span>
 
 	public final &lt;O&gt; void update(O match, O merge) {
-<span class="nc" id="L266">		checkStorableObject(match);</span>
-<span class="nc" id="L267">		checkStorableObject(merge);</span>
-<span class="nc" id="L268">		checkReplacementObject(match, merge);</span>
-<span class="nc" id="L269">		PrologTerm pMatch = getConverter().toTerm(match);</span>
-<span class="nc" id="L270">		PrologTerm pMerge = getConverter().toTerm(merge);</span>
-<span class="nc" id="L271">		getEngine().retract(pMatch);</span>
-<span class="nc" id="L272">		getEngine().assertz(pMerge);</span>
-<span class="nc" id="L273">		setDirty(true);</span>
-<span class="nc" id="L274">	}</span>
+<span class="nc" id="L267">		checkStorableObject(match);</span>
+<span class="nc" id="L268">		checkStorableObject(merge);</span>
+<span class="nc" id="L269">		checkReplacementObject(match, merge);</span>
+<span class="nc" id="L270">		PrologTerm pMatch = getConverter().toTerm(match);</span>
+<span class="nc" id="L271">		PrologTerm pMerge = getConverter().toTerm(merge);</span>
+<span class="nc" id="L272">		getEngine().retract(pMatch);</span>
+<span class="nc" id="L273">		getEngine().assertz(pMerge);</span>
+<span class="nc" id="L274">		setDirty(true);</span>
+<span class="nc" id="L275">	}</span>
 
 	public final &lt;O&gt; void delete(O... facts) {
-<span class="nc bnc" id="L277" title="All 4 branches missed.">		if (facts != null &amp;&amp; facts.length &gt; 0) {</span>
-<span class="nc bnc" id="L278" title="All 2 branches missed.">			for (Object object : facts) {</span>
-<span class="nc" id="L279">				getEngine().retract(getConverter().toTerm(object));</span>
+<span class="nc bnc" id="L278" title="All 4 branches missed.">		if (facts != null &amp;&amp; facts.length &gt; 0) {</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">			for (Object object : facts) {</span>
+<span class="nc" id="L280">				getEngine().retract(getConverter().toTerm(object));</span>
 			}
-<span class="nc" id="L281">			setDirty(true);</span>
+<span class="nc" id="L282">			setDirty(true);</span>
 		}
-<span class="nc" id="L283">	}</span>
+<span class="nc" id="L284">	}</span>
 
 	public final void delete(Class&lt;?&gt; clazz) {
-<span class="nc" id="L286">		PrologTerm term = getConverter().toTerm(clazz);</span>
-<span class="nc" id="L287">		getEngine().abolish(term.getFunctor(), term.getArity());</span>
-<span class="nc" id="L288">		setDirty(true);</span>
-<span class="nc" id="L289">	}</span>
+<span class="nc" id="L287">		PrologTerm term = getConverter().toTerm(clazz);</span>
+<span class="nc" id="L288">		getEngine().abolish(term.getFunctor(), term.getArity());</span>
+<span class="nc" id="L289">		setDirty(true);</span>
+<span class="nc" id="L290">	}</span>
 
 	public final void include(String path) {
-<span class="nc" id="L292">		getEngine().include(path);</span>
-<span class="nc" id="L293">	}</span>
+<span class="nc" id="L293">		getEngine().include(path);</span>
+<span class="nc" id="L294">	}</span>
 
 	public final PersistentContainer containerOf(Class&lt;?&gt; clazz) {
-<span class="nc" id="L296">		return this;</span>
+<span class="nc" id="L297">		return this;</span>
 	}
 
 	public final String locationOf(Class&lt;?&gt; clazz) {
-<span class="nc" id="L300">		return getLocation();</span>
+<span class="nc" id="L301">		return getLocation();</span>
 	}
 
 	public final boolean hasCapacity() {
-<span class="nc bnc" id="L304" title="All 2 branches missed.">		return getSize() &lt; getCapacity();</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">		return getSize() &lt; getCapacity();</span>
 	}
 
 	public final int getCapacity() {
-<span class="nc" id="L308">		return maxCapacity;</span>
+<span class="nc" id="L309">		return maxCapacity;</span>
 	}
 
 	public final long getLength() {
-<span class="nc" id="L312">		return getFile().length();</span>
+<span class="nc" id="L313">		return getFile().length();</span>
 	}
 
 	public final int getSize() {
-<span class="nc" id="L316">		return getEngine().getProgramSize();</span>
+<span class="nc" id="L317">		return getEngine().getProgramSize();</span>
 	}
 
 	public final File getFile() {
-<span class="nc" id="L320">		return new File(getLocation());</span>
+<span class="nc" id="L321">		return new File(getLocation());</span>
 	}
 
 	public final void setDirty(boolean dirty) {
-<span class="nc" id="L324">		this.dirty = dirty;</span>
-<span class="nc" id="L325">	}</span>
+<span class="nc" id="L325">		this.dirty = dirty;</span>
+<span class="nc" id="L326">	}</span>
 
 	public final boolean isDirty() {
-<span class="nc" id="L328">		return dirty;</span>
+<span class="nc" id="L329">		return dirty;</span>
 	}
 
 	public final boolean locked() {
-<span class="nc" id="L332">		return lock.islock();</span>
+<span class="nc" id="L333">		return lock.islock();</span>
 	}
 
 	public final void defragment() {
 		// do nothing
-<span class="nc" id="L337">	}</span>
+<span class="nc" id="L338">	}</span>
 
 	public final void flush() {
-<span class="nc" id="L340">		lock.lock();</span>
+<span class="nc" id="L341">		lock.lock();</span>
 		try {
-<span class="nc" id="L342">			getEngine().persist(getLocation());</span>
-<span class="nc" id="L343">			setDirty(false);</span>
+<span class="nc" id="L343">			getEngine().persist(getLocation());</span>
+<span class="nc" id="L344">			setDirty(false);</span>
 		} finally {
-<span class="nc" id="L345">			lock.unlock();</span>
-<span class="nc" id="L346">		}</span>
-<span class="nc" id="L347">	}</span>
+<span class="nc" id="L346">			lock.unlock();</span>
+<span class="nc" id="L347">		}</span>
+<span class="nc" id="L348">	}</span>
 
 	public final void close() {
-<span class="nc" id="L350">		getTransaction().close();</span>
-<span class="nc" id="L351">		getEngine().dispose();</span>
-<span class="nc" id="L352">		open = false;</span>
-<span class="nc" id="L353">	}</span>
+<span class="nc" id="L351">		getTransaction().close();</span>
+<span class="nc" id="L352">		getEngine().dispose();</span>
+<span class="nc" id="L353">		open = false;</span>
+<span class="nc" id="L354">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

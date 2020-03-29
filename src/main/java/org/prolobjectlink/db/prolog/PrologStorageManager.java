@@ -41,8 +41,9 @@ import org.prolobjectlink.db.StorageMode;
 import org.prolobjectlink.db.VolatileContainer;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.storage.AbstractStorageManager;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /**
  * Prolog {@link StorageManager} implementation

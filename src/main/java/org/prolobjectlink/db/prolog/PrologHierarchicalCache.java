@@ -37,8 +37,9 @@ import org.prolobjectlink.db.HierarchicalCache;
 import org.prolobjectlink.db.ObjectConverter;
 import org.prolobjectlink.db.cache.AbstractHierarchicalCache;
 import org.prolobjectlink.db.etc.Settings;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class PrologHierarchicalCache extends AbstractHierarchicalCache implements HierarchicalCache {

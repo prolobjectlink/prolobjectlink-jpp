@@ -35,7 +35,8 @@ package org.prolobjectlink.db.prolog;
 import org.prolobjectlink.db.DatabaseFunction;
 import org.prolobjectlink.db.ProcedureQuery;
 import org.prolobjectlink.db.Schema;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 public final class PrologDatabaseFunction extends DatabaseFunction {
 

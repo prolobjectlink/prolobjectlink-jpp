@@ -42,9 +42,10 @@ import org.prolobjectlink.db.RelationalCache;
 import org.prolobjectlink.db.RelationalGraph;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.etc.Settings;
-import org.prolobjectlink.prolog.PrologEngine;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 public class AbstractRelationalCache extends RelationalGraph<Object, Object> implements RelationalCache {
 

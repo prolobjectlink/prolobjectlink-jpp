@@ -34,7 +34,7 @@ package org.prolobjectlink.db.prolog;
 
 import java.sql.Driver;
 
-import org.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 /** @author Jose Zalacain @since 1.0 */
 public interface PrologDriver extends PrologProvider, Driver {

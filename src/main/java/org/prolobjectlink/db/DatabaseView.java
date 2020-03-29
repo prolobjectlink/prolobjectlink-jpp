@@ -35,8 +35,8 @@ package org.prolobjectlink.db;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-import org.prolobjectlink.prolog.PrologEngine;
-import org.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 /**
  * 

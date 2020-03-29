@@ -58,8 +58,9 @@ import org.prolobjectlink.db.prolog.PrologContainerQuery;
 import org.prolobjectlink.db.prolog.PrologTypedQuery;
 import org.prolobjectlink.db.tx.PersistentContainerTransaction;
 import org.prolobjectlink.db.util.JavaLists;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class AbstractStorageManager extends AbstractPersistentContainer implements StorageManager {

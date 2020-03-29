@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2020-03-28T19:05:35.875">
+<pmd version="4.2.5" timestamp="2020-03-29T15:46:48.989">
 <file name="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\AbstractGenerator.java">
 <violation beginline="142" endline="142" begincolumn="52" endcolumn="64" rule="UnusedLocalVariable" ruleset="Unused Code Rules" package="org.prolobjectlink.db" class="AbstractGenerator" method="createSchema" variable="linkedKeyType" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedLocalVariable" priority="3">
 Avoid unused local variables such as 'linkedKeyType'.
@@ -24,55 +24,55 @@ Avoid unused private fields such as 'LOCK_SLEEP'.
 </violation>
 </file>
 <file name="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\etc\Settings.java">
-<violation beginline="331" endline="333" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="332" endline="334" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="335" endline="337" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="336" endline="338" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="339" endline="341" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="340" endline="342" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="343" endline="345" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="344" endline="346" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="347" endline="349" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="348" endline="350" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="351" endline="353" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="352" endline="354" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="355" endline="357" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="356" endline="358" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="359" endline="361" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="360" endline="362" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="363" endline="365" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="364" endline="366" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="367" endline="369" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="368" endline="370" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="371" endline="373" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="372" endline="374" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="375" endline="377" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="376" endline="378" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="379" endline="381" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="380" endline="382" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="383" endline="385" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="384" endline="386" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="387" endline="389" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="388" endline="390" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="391" endline="403" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="392" endline="404" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="405" endline="410" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="406" endline="411" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.etc" class="Settings" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
 </file>
@@ -145,7 +145,7 @@ Unnecessary final modifier in final class
 </violation>
 </file>
 <file name="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteDatabaseClient.java">
-<violation beginline="33" endline="355" begincolumn="1" endcolumn="3" rule="TooManyStaticImports" ruleset="Import Statement Rules" package="org.prolobjectlink.db.persistent" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#TooManyStaticImports" priority="3">
+<violation beginline="33" endline="356" begincolumn="1" endcolumn="3" rule="TooManyStaticImports" ruleset="Import Statement Rules" package="org.prolobjectlink.db.persistent" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#TooManyStaticImports" priority="3">
 Too many static imports may lead to messy code
 </violation>
 </file>
@@ -239,21 +239,21 @@ Unnecessary final modifier in final class
 </violation>
 </file>
 <file name="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologObjectConverter.java">
-<violation beginline="33" endline="584" begincolumn="1" endcolumn="3" rule="TooManyStaticImports" ruleset="Import Statement Rules" package="org.prolobjectlink.db.prolog" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#TooManyStaticImports" priority="3">
+<violation beginline="33" endline="585" begincolumn="1" endcolumn="3" rule="TooManyStaticImports" ruleset="Import Statement Rules" package="org.prolobjectlink.db.prolog" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#TooManyStaticImports" priority="3">
 Too many static imports may lead to messy code
 </violation>
-<violation beginline="119" endline="121" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.prolobjectlink.db.prolog" class="PrologObjectConverter" method="toClass" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+<violation beginline="120" endline="122" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.prolobjectlink.db.prolog" class="PrologObjectConverter" method="toClass" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
 </file>
 <file name="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologRenamer.java">
-<violation beginline="50" endline="67" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.prolog" class="PrologRenamer" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="51" endline="68" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.prolog" class="PrologRenamer" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="69" endline="71" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.prolog" class="PrologRenamer" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="70" endline="72" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.prolog" class="PrologRenamer" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
-<violation beginline="73" endline="85" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.prolog" class="PrologRenamer" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="74" endline="86" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.prolobjectlink.db.prolog" class="PrologRenamer" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
 </file>
@@ -322,7 +322,7 @@ Unnecessary final modifier in final class
 </violation>
 </file>
 <file name="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\AbstractStorageGraph.java">
-<violation beginline="62" endline="62" begincolumn="30" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.prolobjectlink.db.storage" class="AbstractStorageGraph" variable="schema" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+<violation beginline="63" endline="63" begincolumn="30" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.prolobjectlink.db.storage" class="AbstractStorageGraph" variable="schema" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'schema'.
 </violation>
 </file>

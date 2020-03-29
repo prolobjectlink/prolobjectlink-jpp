@@ -34,19 +34,20 @@ package org.prolobjectlink.db.prolog;
 
 import org.prolobjectlink.db.DatabaseView;
 import org.prolobjectlink.db.Schema;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 public final class PrologDatabaseView extends DatabaseView {
 
 	private static final long serialVersionUID = 6645651570601921306L;
 
-<span class="nc" id="L43">	private PrologDatabaseView() {</span>
+<span class="nc" id="L44">	private PrologDatabaseView() {</span>
 		// for internal reflection
-<span class="nc" id="L45">	}</span>
+<span class="nc" id="L46">	}</span>
 
 	public PrologDatabaseView(String path, Class&lt;?&gt; target, String comment, Schema schema, PrologProvider provider) {
-<span class="nc" id="L48">		super(path, target, comment, schema, provider);</span>
-<span class="nc" id="L49">	}</span>
+<span class="nc" id="L49">		super(path, target, comment, schema, provider);</span>
+<span class="nc" id="L50">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

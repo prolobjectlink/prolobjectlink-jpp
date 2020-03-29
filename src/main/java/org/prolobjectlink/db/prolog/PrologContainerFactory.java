@@ -45,7 +45,8 @@ import org.prolobjectlink.db.StorageMode;
 import org.prolobjectlink.db.StoragePool;
 import org.prolobjectlink.db.container.AbstractContainerFactory;
 import org.prolobjectlink.db.etc.Settings;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class PrologContainerFactory extends AbstractContainerFactory implements ContainerFactory {

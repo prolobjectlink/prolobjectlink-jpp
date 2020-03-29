@@ -36,7 +36,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.prolobjectlink.db.Renamer;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 abstract class AbstractRenamer implements Renamer {
 

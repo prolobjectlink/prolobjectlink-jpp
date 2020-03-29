@@ -38,8 +38,9 @@ import org.prolobjectlink.db.PersistentContainer;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.tools.Backup;
 import org.prolobjectlink.db.tools.Restore;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class AbstractPersistentContainer extends AbstractContainer implements PersistentContainer {

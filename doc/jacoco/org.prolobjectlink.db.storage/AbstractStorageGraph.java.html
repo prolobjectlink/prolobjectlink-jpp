@@ -51,9 +51,10 @@ import org.prolobjectlink.db.Transaction;
 import org.prolobjectlink.db.TypedQuery;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.tx.PersistentContainerTransaction;
-import org.prolobjectlink.prolog.PrologEngine;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class AbstractStorageGraph extends RelationalGraph&lt;Object, Object&gt;
@@ -70,258 +71,258 @@ public abstract class AbstractStorageGraph extends RelationalGraph&lt;Object, Ob
 	private final ObjectConverter&lt;PrologTerm&gt; converter;
 
 	public AbstractStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
-<span class="nc" id="L73">			ContainerFactory containerFactory, ObjectConverter&lt;PrologTerm&gt; converter, StorageMode storageMode) {</span>
-<span class="nc" id="L74">		this.storage = containerFactory.createStorageManager(location, storageMode);</span>
-<span class="nc" id="L75">		this.transaction = new PersistentContainerTransaction(this);</span>
-<span class="nc" id="L76">		this.containerFactory = containerFactory;</span>
-<span class="nc" id="L77">		this.engine = provider.newEngine();</span>
-<span class="nc" id="L78">		this.properties = properties;</span>
-<span class="nc" id="L79">		this.converter = converter;</span>
-<span class="nc" id="L80">		this.location = location;</span>
-<span class="nc" id="L81">		this.provider = provider;</span>
-<span class="nc" id="L82">		this.schema = schema;</span>
-<span class="nc" id="L83">	}</span>
+<span class="nc" id="L74">			ContainerFactory containerFactory, ObjectConverter&lt;PrologTerm&gt; converter, StorageMode storageMode) {</span>
+<span class="nc" id="L75">		this.storage = containerFactory.createStorageManager(location, storageMode);</span>
+<span class="nc" id="L76">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L77">		this.containerFactory = containerFactory;</span>
+<span class="nc" id="L78">		this.engine = provider.newEngine();</span>
+<span class="nc" id="L79">		this.properties = properties;</span>
+<span class="nc" id="L80">		this.converter = converter;</span>
+<span class="nc" id="L81">		this.location = location;</span>
+<span class="nc" id="L82">		this.provider = provider;</span>
+<span class="nc" id="L83">		this.schema = schema;</span>
+<span class="nc" id="L84">	}</span>
 
 	public AbstractStorageGraph(String location, Schema schema, Settings properties, StorageMode storageMode,
 			RelationalGraph&lt;Object, Object&gt; graph) {
-<span class="nc" id="L87">		super(graph);</span>
-<span class="nc" id="L88">		this.containerFactory = properties.getContainerFactory();</span>
-<span class="nc" id="L89">		this.storage = containerFactory.createStorageManager(location, storageMode);</span>
-<span class="nc" id="L90">		this.converter = properties.getObjectConverter();</span>
-<span class="nc" id="L91">		this.transaction = new PersistentContainerTransaction(this);</span>
-<span class="nc" id="L92">		this.provider = properties.getProvider();</span>
-<span class="nc" id="L93">		this.engine = provider.newEngine();</span>
-<span class="nc" id="L94">		this.properties = properties;</span>
-<span class="nc" id="L95">		this.location = location;</span>
-<span class="nc" id="L96">		this.schema = schema;</span>
-<span class="nc" id="L97">	}</span>
+<span class="nc" id="L88">		super(graph);</span>
+<span class="nc" id="L89">		this.containerFactory = properties.getContainerFactory();</span>
+<span class="nc" id="L90">		this.storage = containerFactory.createStorageManager(location, storageMode);</span>
+<span class="nc" id="L91">		this.converter = properties.getObjectConverter();</span>
+<span class="nc" id="L92">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L93">		this.provider = properties.getProvider();</span>
+<span class="nc" id="L94">		this.engine = provider.newEngine();</span>
+<span class="nc" id="L95">		this.properties = properties;</span>
+<span class="nc" id="L96">		this.location = location;</span>
+<span class="nc" id="L97">		this.schema = schema;</span>
+<span class="nc" id="L98">	}</span>
 
 	public final &lt;K&gt; K unwrap(Class&lt;K&gt; cls) {
-<span class="nc" id="L100">		return unwrap(this, cls);</span>
+<span class="nc" id="L101">		return unwrap(this, cls);</span>
 	}
 
 	public final &lt;K&gt; K unwrap(Object o, Class&lt;K&gt; cls) {
 		try {
-<span class="nc bnc" id="L105" title="All 2 branches missed.">			if (cls.isAssignableFrom(o.getClass())) {</span>
-<span class="nc" id="L106">				return cls.cast(o);</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">			if (cls.isAssignableFrom(o.getClass())) {</span>
+<span class="nc" id="L107">				return cls.cast(o);</span>
 			}
-<span class="nc" id="L108">		} catch (Exception e) {</span>
-<span class="nc" id="L109">			throw new RuntimeException(</span>
+<span class="nc" id="L109">		} catch (Exception e) {</span>
+<span class="nc" id="L110">			throw new RuntimeException(</span>
 
-<span class="nc" id="L111">					&quot;Impossible unwrap &quot; + getClass()</span>
+<span class="nc" id="L112">					&quot;Impossible unwrap &quot; + getClass()</span>
 
-<span class="nc" id="L113">							+ &quot; to &quot; + cls.getName()</span>
+<span class="nc" id="L114">							+ &quot; to &quot; + cls.getName()</span>
 
 					, e);
-<span class="nc" id="L116">		}</span>
-<span class="nc" id="L117">		return null;</span>
+<span class="nc" id="L117">		}</span>
+<span class="nc" id="L118">		return null;</span>
 	}
 
 	public final boolean isWrappedFor(Class&lt;?&gt; cls) {
-<span class="nc" id="L121">		return cls.isInstance(this);</span>
+<span class="nc" id="L122">		return cls.isInstance(this);</span>
 	}
 
 	public final boolean isWrappedFor(Object o, Class&lt;?&gt; cls) {
-<span class="nc" id="L125">		return cls.isInstance(o);</span>
+<span class="nc" id="L126">		return cls.isInstance(o);</span>
 	}
 
 	public final List&lt;Object&gt; solutionsOf(PrologTerm[] prologTerms, List&lt;Class&lt;?&gt;&gt; classes) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L130">		return new ArrayList&lt;Object&gt;();</span>
+<span class="nc" id="L131">		return new ArrayList&lt;Object&gt;();</span>
 	}
 
 	public final Object[] solutionOf(PrologTerm[] prologTerms, List&lt;Class&lt;?&gt;&gt; classes) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L135">		return new Object[0];</span>
+<span class="nc" id="L136">		return new Object[0];</span>
 	}
 
 	public final boolean contains(String string) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L140">		return false;</span>
+<span class="nc" id="L141">		return false;</span>
 	}
 
 	public final &lt;O&gt; boolean contains(O o) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L145">		return false;</span>
+<span class="nc" id="L146">		return false;</span>
 	}
 
 	public final &lt;O&gt; boolean contains(Class&lt;O&gt; clazz) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L150">		return false;</span>
+<span class="nc" id="L151">		return false;</span>
 	}
 
 	public final &lt;O&gt; boolean contains(Predicate&lt;O&gt; predicate) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L155">		return false;</span>
+<span class="nc" id="L156">		return false;</span>
 	}
 
 	public final boolean contains(String functor, int arity) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L160">		return false;</span>
+<span class="nc" id="L161">		return false;</span>
 	}
 
 	public final Collection&lt;Class&lt;?&gt;&gt; classes() {
-<span class="nc" id="L164">		return storage.classes();</span>
+<span class="nc" id="L165">		return storage.classes();</span>
 	}
 
 	public final ObjectConverter&lt;PrologTerm&gt; getConverter() {
-<span class="nc" id="L168">		return converter;</span>
+<span class="nc" id="L169">		return converter;</span>
 	}
 
 	public final Settings getProperties() {
-<span class="nc" id="L172">		return properties;</span>
+<span class="nc" id="L173">		return properties;</span>
 	}
 
 	public final PrologProvider getProvider() {
-<span class="nc" id="L176">		return provider;</span>
+<span class="nc" id="L177">		return provider;</span>
 	}
 
 	public final PrologEngine getEngine() {
-<span class="nc" id="L180">		return engine;</span>
+<span class="nc" id="L181">		return engine;</span>
 	}
 
 	public final void open() {
-<span class="nc" id="L184">		storage.begin();</span>
-<span class="nc" id="L185">	}</span>
+<span class="nc" id="L185">		storage.begin();</span>
+<span class="nc" id="L186">	}</span>
 
 	public final &lt;O&gt; void insert(O... facts) {
 		// TODO Auto-generated method stub
 
-<span class="nc" id="L190">	}</span>
+<span class="nc" id="L191">	}</span>
 
 	public final &lt;O&gt; void update(O match, O update) {
 		// TODO Auto-generated method stub
 
-<span class="nc" id="L195">	}</span>
+<span class="nc" id="L196">	}</span>
 
 	public final void delete(Class&lt;?&gt; clazz) {
 		// TODO Auto-generated method stub
 
-<span class="nc" id="L200">	}</span>
+<span class="nc" id="L201">	}</span>
 
 	public final &lt;O&gt; void delete(O... facts) {
 		// TODO Auto-generated method stub
 
-<span class="nc" id="L205">	}</span>
+<span class="nc" id="L206">	}</span>
 
 	public final Transaction getTransaction() {
-<span class="nc" id="L208">		return transaction;</span>
+<span class="nc" id="L209">		return transaction;</span>
 	}
 
 	public final Query createQuery(String string) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L213">		return null;</span>
+<span class="nc" id="L214">		return null;</span>
 	}
 
 	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(O o) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L218">		return null;</span>
+<span class="nc" id="L219">		return null;</span>
 	}
 
 	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Class&lt;O&gt; clazz) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L223">		return null;</span>
+<span class="nc" id="L224">		return null;</span>
 	}
 
 	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Predicate&lt;O&gt; predicate) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L228">		return null;</span>
+<span class="nc" id="L229">		return null;</span>
 	}
 
 	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
 		// TODO Auto-generated method stub
-<span class="nc" id="L233">		return null;</span>
+<span class="nc" id="L234">		return null;</span>
 	}
 
 	public final PersistentContainer containerOf(Class&lt;?&gt; clazz) {
-<span class="nc" id="L237">		return storage.containerOf(clazz);</span>
+<span class="nc" id="L238">		return storage.containerOf(clazz);</span>
 	}
 
 	public final String locationOf(Class&lt;?&gt; clazz) {
-<span class="nc" id="L241">		return storage.locationOf(clazz);</span>
+<span class="nc" id="L242">		return storage.locationOf(clazz);</span>
 	}
 
 	public final void backup(String directory, String zipFileName) {
-<span class="nc" id="L245">		storage.backup(directory, zipFileName);</span>
-<span class="nc" id="L246">	}</span>
+<span class="nc" id="L246">		storage.backup(directory, zipFileName);</span>
+<span class="nc" id="L247">	}</span>
 
 	public final void restore(String directory, String zipFileName) {
-<span class="nc" id="L249">		storage.restore(directory, zipFileName);</span>
-<span class="nc" id="L250">	}</span>
+<span class="nc" id="L250">		storage.restore(directory, zipFileName);</span>
+<span class="nc" id="L251">	}</span>
 
 	public final void include(String path) {
-<span class="nc" id="L253">		storage.include(path);</span>
-<span class="nc" id="L254">	}</span>
+<span class="nc" id="L254">		storage.include(path);</span>
+<span class="nc" id="L255">	}</span>
 
 	public final ContainerFactory getContainerFactory() {
-<span class="nc" id="L257">		return containerFactory;</span>
+<span class="nc" id="L258">		return containerFactory;</span>
 	}
 
 	public final String getLocation() {
-<span class="nc" id="L261">		return location;</span>
+<span class="nc" id="L262">		return location;</span>
 	}
 
 	public final void defragment() {
-<span class="nc" id="L265">		storage.defragment();</span>
-<span class="nc" id="L266">	}</span>
+<span class="nc" id="L266">		storage.defragment();</span>
+<span class="nc" id="L267">	}</span>
 
 	public final boolean isOpen() {
-<span class="nc" id="L269">		return storage.isOpen();</span>
+<span class="nc" id="L270">		return storage.isOpen();</span>
 	}
 
 	public final void flush() {
-<span class="nc" id="L273">		storage.commit();</span>
-<span class="nc" id="L274">	}</span>
+<span class="nc" id="L274">		storage.commit();</span>
+<span class="nc" id="L275">	}</span>
 
 	public final void close() {
-<span class="nc" id="L277">		storage.close();</span>
-<span class="nc" id="L278">	}</span>
+<span class="nc" id="L278">		storage.close();</span>
+<span class="nc" id="L279">	}</span>
 
 	public final void begin() {
-<span class="nc" id="L281">		open();</span>
-<span class="nc" id="L282">	}</span>
+<span class="nc" id="L282">		open();</span>
+<span class="nc" id="L283">	}</span>
 
 	public final void commit() {
-<span class="nc" id="L285">		flush();</span>
-<span class="nc" id="L286">	}</span>
+<span class="nc" id="L286">		flush();</span>
+<span class="nc" id="L287">	}</span>
 
 	public final void rollback() {
-<span class="nc" id="L289">		open();</span>
-<span class="nc" id="L290">	}</span>
+<span class="nc" id="L290">		open();</span>
+<span class="nc" id="L291">	}</span>
 
 	public boolean isActive() {
-<span class="nc" id="L293">		return getTransaction().isActive();</span>
+<span class="nc" id="L294">		return getTransaction().isActive();</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="nc" id="L298">		return &quot;AbstractStorageGraph [location=&quot; + location + &quot;]&quot;;</span>
+<span class="nc" id="L299">		return &quot;AbstractStorageGraph [location=&quot; + location + &quot;]&quot;;</span>
 	}
 
 	@Override
 	public int hashCode() {
-<span class="nc" id="L303">		final int prime = 31;</span>
-<span class="nc" id="L304">		int result = super.hashCode();</span>
-<span class="nc bnc" id="L305" title="All 2 branches missed.">		result = prime * result + ((location == null) ? 0 : location.hashCode());</span>
-<span class="nc" id="L306">		return result;</span>
+<span class="nc" id="L304">		final int prime = 31;</span>
+<span class="nc" id="L305">		int result = super.hashCode();</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">		result = prime * result + ((location == null) ? 0 : location.hashCode());</span>
+<span class="nc" id="L307">		return result;</span>
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-<span class="nc bnc" id="L311" title="All 2 branches missed.">		if (this == obj)</span>
-<span class="nc" id="L312">			return true;</span>
-<span class="nc bnc" id="L313" title="All 2 branches missed.">		if (!super.equals(obj))</span>
-<span class="nc" id="L314">			return false;</span>
-<span class="nc bnc" id="L315" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
-<span class="nc" id="L316">			return false;</span>
-<span class="nc" id="L317">		AbstractStorageGraph other = (AbstractStorageGraph) obj;</span>
-<span class="nc bnc" id="L318" title="All 2 branches missed.">		if (location == null) {</span>
-<span class="nc bnc" id="L319" title="All 2 branches missed.">			if (other.location != null)</span>
-<span class="nc" id="L320">				return false;</span>
-<span class="nc bnc" id="L321" title="All 2 branches missed.">		} else if (!location.equals(other.location)) {</span>
-<span class="nc" id="L322">			return false;</span>
+<span class="nc bnc" id="L312" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L313">			return true;</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L315">			return false;</span>
+<span class="nc bnc" id="L316" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L317">			return false;</span>
+<span class="nc" id="L318">		AbstractStorageGraph other = (AbstractStorageGraph) obj;</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">		if (location == null) {</span>
+<span class="nc bnc" id="L320" title="All 2 branches missed.">			if (other.location != null)</span>
+<span class="nc" id="L321">				return false;</span>
+<span class="nc bnc" id="L322" title="All 2 branches missed.">		} else if (!location.equals(other.location)) {</span>
+<span class="nc" id="L323">			return false;</span>
 		}
-<span class="nc" id="L324">		return true;</span>
+<span class="nc" id="L325">		return true;</span>
 	}
 
 }

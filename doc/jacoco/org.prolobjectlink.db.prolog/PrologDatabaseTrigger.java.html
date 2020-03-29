@@ -35,19 +35,20 @@ package org.prolobjectlink.db.prolog;
 import org.prolobjectlink.db.DatabaseTrigger;
 import org.prolobjectlink.db.Schema;
 import org.prolobjectlink.db.Trigger;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 public class PrologDatabaseTrigger extends DatabaseTrigger implements Trigger {
 
 	private static final long serialVersionUID = 8732789501214407838L;
 
-<span class="nc" id="L44">	private PrologDatabaseTrigger() {</span>
+<span class="nc" id="L45">	private PrologDatabaseTrigger() {</span>
 		// for internal reflection
-<span class="nc" id="L46">	}</span>
+<span class="nc" id="L47">	}</span>
 
 	public PrologDatabaseTrigger(String name, String comment, Schema schema, String path, PrologProvider provider) {
-<span class="nc" id="L49">		super(name, comment, schema, path, provider);</span>
-<span class="nc" id="L50">	}</span>
+<span class="nc" id="L50">		super(name, comment, schema, path, provider);</span>
+<span class="nc" id="L51">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

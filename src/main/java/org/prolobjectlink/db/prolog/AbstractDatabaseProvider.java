@@ -32,9 +32,9 @@
  */
 package org.prolobjectlink.db.prolog;
 
-import org.prolobjectlink.prolog.AbstractProvider;
-import org.prolobjectlink.prolog.PrologConverter;
-import org.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.AbstractProvider;
+import io.github.prolobjectlink.prolog.PrologConverter;
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 public abstract class AbstractDatabaseProvider extends AbstractProvider implements PrologProvider {
 

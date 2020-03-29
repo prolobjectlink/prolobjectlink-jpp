@@ -42,8 +42,9 @@ import org.prolobjectlink.db.StoragePool;
 import org.prolobjectlink.db.TypedQuery;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.storage.AbstractStoragePool;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 public class PrologStoragePool extends AbstractStoragePool implements StoragePool {
 
@@ -51,58 +52,58 @@ public class PrologStoragePool extends AbstractStoragePool implements StoragePoo
 
 	public PrologStoragePool(PrologProvider provider, Settings properties, String location, String name,
 			ContainerFactory containerFactory) {
-<span class="nc" id="L54">		this(provider, properties, new PrologObjectConverter(provider), location, name, containerFactory, 1000);</span>
-<span class="nc" id="L55">	}</span>
+<span class="nc" id="L55">		this(provider, properties, new PrologObjectConverter(provider), location, name, containerFactory, 1000);</span>
+<span class="nc" id="L56">	}</span>
 
 	public PrologStoragePool(PrologProvider provider, Settings properties, ObjectConverter&lt;PrologTerm&gt; converter,
 			String location, String name, ContainerFactory containerFactory) {
-<span class="nc" id="L59">		this(provider, properties, converter, location, name, containerFactory, 1000);</span>
-<span class="nc" id="L60">	}</span>
+<span class="nc" id="L60">		this(provider, properties, converter, location, name, containerFactory, 1000);</span>
+<span class="nc" id="L61">	}</span>
 
 	public PrologStoragePool(PrologProvider provider, Settings properties, ObjectConverter&lt;PrologTerm&gt; converter,
 			String location, String name, ContainerFactory containerFactory, int documentCapacity) {
-<span class="nc" id="L64">		super(provider, properties, converter, location, name, containerFactory, documentCapacity);</span>
+<span class="nc" id="L65">		super(provider, properties, converter, location, name, containerFactory, documentCapacity);</span>
 		// this.transaction = new DefaultTransaction(this);
-<span class="nc" id="L66">	}</span>
+<span class="nc" id="L67">	}</span>
 
 	// public Transaction getTransaction() {
 	// return transaction;
 	// }
 
 	public Query createQuery(String string) {
-<span class="nc" id="L73">		open();</span>
-<span class="nc" id="L74">		return new PrologContainerQuery(findAll(string));</span>
+<span class="nc" id="L74">		open();</span>
+<span class="nc" id="L75">		return new PrologContainerQuery(findAll(string));</span>
 	}
 
 	public &lt;O&gt; TypedQuery&lt;O&gt; createQuery(O o) {
-<span class="nc" id="L78">		open();</span>
-<span class="nc" id="L79">		return new PrologTypedQuery&lt;O&gt;(findAll(o));</span>
+<span class="nc" id="L79">		open();</span>
+<span class="nc" id="L80">		return new PrologTypedQuery&lt;O&gt;(findAll(o));</span>
 	}
 
 	public &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Class&lt;O&gt; clazz) {
-<span class="nc" id="L83">		open();</span>
-<span class="nc" id="L84">		return new PrologTypedQuery&lt;O&gt;(findAll(clazz));</span>
+<span class="nc" id="L84">		open();</span>
+<span class="nc" id="L85">		return new PrologTypedQuery&lt;O&gt;(findAll(clazz));</span>
 	}
 
 	public &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Predicate&lt;O&gt; predicate) {
-<span class="nc" id="L88">		open();</span>
-<span class="nc" id="L89">		return new PrologTypedQuery&lt;O&gt;(findAll(predicate));</span>
+<span class="nc" id="L89">		open();</span>
+<span class="nc" id="L90">		return new PrologTypedQuery&lt;O&gt;(findAll(predicate));</span>
 	}
 
 	public ProcedureQuery createProcedureQuery(String functor, String... args) {
-<span class="nc" id="L93">		return new PrologStoragePoolProcedureQuery(functor, args);</span>
+<span class="nc" id="L94">		return new PrologStoragePoolProcedureQuery(functor, args);</span>
 	}
 
 	public Storage createStorage(String location, int maxCapacity) {
-<span class="nc" id="L97">		return new PrologStorage(getProvider(), getProperties(), getConverter(), location, getContainerFactory(),</span>
+<span class="nc" id="L98">		return new PrologStorage(getProvider(), getProperties(), getConverter(), location, getContainerFactory(),</span>
 				maxCapacity);
 	}
 
 	private final class PrologStoragePoolProcedureQuery extends StoragePoolProcedureQuery {
 
-<span class="nc" id="L103">		protected PrologStoragePoolProcedureQuery(String functor, String[] arguments) {</span>
-<span class="nc" id="L104">			super(functor, arguments);</span>
-<span class="nc" id="L105">		}</span>
+<span class="nc" id="L104">		protected PrologStoragePoolProcedureQuery(String functor, String[] arguments) {</span>
+<span class="nc" id="L105">			super(functor, arguments);</span>
+<span class="nc" id="L106">		}</span>
 
 	}
 

@@ -49,10 +49,11 @@ import org.prolobjectlink.db.Storage;
 import org.prolobjectlink.db.container.AbstractPersistentContainer;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.util.JavaReflect;
-import org.prolobjectlink.prolog.PrologClause;
-import org.prolobjectlink.prolog.PrologProvider;
-import org.prolobjectlink.prolog.PrologQuery;
-import org.prolobjectlink.prolog.PrologTerm;
+
+import io.github.prolobjectlink.prolog.PrologClause;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologQuery;
+import io.github.prolobjectlink.prolog.PrologTerm;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class AbstractStorage extends AbstractPersistentContainer implements Storage {

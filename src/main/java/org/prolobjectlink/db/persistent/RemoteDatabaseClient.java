@@ -78,9 +78,10 @@ import org.prolobjectlink.db.TypedQuery;
 import org.prolobjectlink.db.engine.AbstractDatabaseEngine;
 import org.prolobjectlink.db.etc.Settings;
 import org.prolobjectlink.db.tx.PersistentContainerTransaction;
-import org.prolobjectlink.prolog.PrologClause;
-import org.prolobjectlink.prolog.PrologEngine;
-import org.prolobjectlink.prolog.PrologProvider;
+
+import io.github.prolobjectlink.prolog.PrologClause;
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
 
 /** @author Jose Zalacain @since 1.0 */
 public abstract class RemoteDatabaseClient extends AbstractDatabaseEngine implements RemoteDatabase {
