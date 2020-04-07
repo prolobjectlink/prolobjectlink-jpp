@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PrologProcedureQuery.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db.prolog</a> &gt; <span class="el_source">PrologProcedureQuery.java</span></div><h1>PrologProcedureQuery.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db.prolog;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import io.github.prolobjectlink.db.ObjectConverter;
+import io.github.prolobjectlink.db.ProcedureQuery;
+import io.github.prolobjectlink.db.container.AbstractProcedureQuery;
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologQuery;
+import io.github.prolobjectlink.prolog.PrologTerm;
+
+/**
+ * Prolog Procedure Query implementation. Is an query extension for procedures
+ * cases. It allow specify arguments and procedure name.
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+public final class PrologProcedureQuery extends AbstractProcedureQuery implements ProcedureQuery {
+
+	private boolean executed;
+
+	// location to consult
+	private final String path;
+
+	// last returned terms
+	private transient PrologTerm[] returnedTerms;
+
+	// current returned terms
+	private transient PrologTerm[] currentTerms;
+
+	// Prolog query reference
+	private transient PrologQuery query;
+
+	// Prolog engine reference
+	private final transient PrologEngine engine;
+
+	// prolog driver
+	private final transient PrologProvider provider;
+
+	// converter for object/term creation
+	private final transient ObjectConverter&lt;PrologTerm&gt; converter;
+
+	private static final long serialVersionUID = -4371082961137952685L;
+
+	public PrologProcedureQuery(String path, PrologProvider provider, String functor, String... arguments) {
+<span class="nc" id="L84">		super(functor, arguments);</span>
+<span class="nc" id="L85">		this.converter = new PrologObjectConverter(provider);</span>
+<span class="nc" id="L86">		this.currentTerms = new PrologTerm[arguments.length];</span>
+<span class="nc" id="L87">		this.engine = provider.newEngine();</span>
+<span class="nc" id="L88">		this.provider = provider;</span>
+<span class="nc" id="L89">		this.path = path;</span>
+<span class="nc" id="L90">	}</span>
+
+	public ProcedureQuery setMaxSolution(int maxSolution) {
+<span class="nc" id="L93">		this.maxSolution = maxSolution;</span>
+<span class="nc" id="L94">		return this;</span>
+	}
+
+	public ProcedureQuery setFirstSolution(int firstSolution) {
+<span class="nc" id="L98">		this.firstSolution = firstSolution;</span>
+<span class="nc" id="L99">		return this;</span>
+	}
+
+	public Object getArgumentValue(int position) {
+<span class="nc" id="L103">		checkSolutionAt(position, currentTerms.length);</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">		if (returnedTerms != null) {</span>
+<span class="nc" id="L105">			checkSolutionAt(position, returnedTerms.length);</span>
+<span class="nc" id="L106">			return converter.toObject(returnedTerms[position]);</span>
+		}
+<span class="nc" id="L108">		return converter.toObject(currentTerms[position]);</span>
+	}
+
+	public ProcedureQuery setArgumentValue(int position, Object value) {
+<span class="nc" id="L112">		checkSolutionAt(position, currentTerms.length);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		if (returnedTerms != null) {</span>
+<span class="nc" id="L114">			returnedTerms[position] = converter.toTerm(value);</span>
+		}
+<span class="nc" id="L116">		currentTerms[position] = converter.toTerm(value);</span>
+<span class="nc" id="L117">		return this;</span>
+	}
+
+	public ProcedureQuery execute() {
+<span class="nc bnc" id="L121" title="All 4 branches missed.">		if (path != null &amp;&amp; !path.isEmpty()) {</span>
+<span class="nc" id="L122">			engine.consult(path);</span>
+		}
+<span class="nc" id="L124">		PrologTerm[] ts = new PrologTerm[getArguments().length];</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">		for (int i = 0; i &lt; getArguments().length; i++) {</span>
+<span class="nc" id="L126">			String argumentName = getArguments()[i];</span>
+<span class="nc" id="L127">			Object argumentValue = converter.toObject(currentTerms[i]);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">			if (argumentValue == null) {</span>
+<span class="nc" id="L129">				ts[i] = provider.newVariable(argumentName, i);</span>
+			} else {
+<span class="nc" id="L131">				ts[i] = converter.toTerm(argumentValue);</span>
+			}
+		}
+<span class="nc" id="L134">		query = engine.query(provider.newStructure(getFunctor(), ts));</span>
+<span class="nc" id="L135">		PrologTerm[] x = query.nextSolution();</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">		for (int i = 0; i &lt; x.length; i++) {</span>
+<span class="nc" id="L137">			currentTerms[i] = x[i];</span>
+		}
+<span class="nc" id="L139">		executed = true;</span>
+<span class="nc" id="L140">		return this;</span>
+	}
+
+	public List&lt;Object&gt; getSolutions() {
+<span class="nc" id="L144">		int index = 0;</span>
+<span class="nc" id="L145">		List&lt;Object&gt; solutions = new ArrayList&lt;Object&gt;();</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">		for (Iterator&lt;Object&gt; i = this; i.hasNext(); index++) {</span>
+<span class="nc" id="L147">			Object object = i.next();</span>
+<span class="nc bnc" id="L148" title="All 4 branches missed.">			if (index &gt;= firstSolution &amp;&amp; index &lt; maxSolution) {</span>
+<span class="nc" id="L149">				solutions.add(object);</span>
+			}
+		}
+<span class="nc" id="L152">		return solutions;</span>
+	}
+
+	public Object getSolution() {
+<span class="nc" id="L156">		return next();</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L161">		return &quot;&quot; + query + &quot;&quot;;</span>
+	}
+
+	public void dispose() {
+<span class="nc" id="L165">		firstSolution = 0;</span>
+<span class="nc" id="L166">		maxSolution = MAX;</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">		if (query != null) {</span>
+<span class="nc" id="L168">			query.dispose();</span>
+<span class="nc" id="L169">			query = null;</span>
+		}
+<span class="nc" id="L171">	}</span>
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L175">		final int prime = 31;</span>
+<span class="nc" id="L176">		int result = super.hashCode();</span>
+<span class="nc" id="L177">		result = prime * result + Arrays.hashCode(currentTerms);</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">		result = prime * result + (executed ? 1231 : 1237);</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">		result = prime * result + ((path == null) ? 0 : path.hashCode());</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		result = prime * result + ((query == null) ? 0 : query.hashCode());</span>
+<span class="nc" id="L181">		result = prime * result + Arrays.hashCode(returnedTerms);</span>
+<span class="nc" id="L182">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L187" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L188">			return true;</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L190">			return false;</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L192">			return false;</span>
+<span class="nc" id="L193">		PrologProcedureQuery other = (PrologProcedureQuery) obj;</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">		if (!Arrays.equals(currentTerms, other.currentTerms))</span>
+<span class="nc" id="L195">			return false;</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">		if (executed != other.executed)</span>
+<span class="nc" id="L197">			return false;</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">		if (path == null) {</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">			if (other.path != null)</span>
+<span class="nc" id="L200">				return false;</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">		} else if (!path.equals(other.path)) {</span>
+<span class="nc" id="L202">			return false;</span>
+		}
+<span class="nc bnc" id="L204" title="All 2 branches missed.">		if (query == null) {</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">			if (other.query != null)</span>
+<span class="nc" id="L206">				return false;</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">		} else if (!query.equals(other.query)) {</span>
+<span class="nc" id="L208">			return false;</span>
+		}
+<span class="nc" id="L210">		return Arrays.equals(returnedTerms, other.returnedTerms);</span>
+	}
+
+	public boolean hasNext() {
+<span class="nc bnc" id="L214" title="All 2 branches missed.">		if (!executed) {</span>
+<span class="nc" id="L215">			throw new IllegalStateException(&quot;Call execute method&quot;);</span>
+		}
+
+<span class="nc bnc" id="L218" title="All 4 branches missed.">		if (returnedTerms == null &amp;&amp; currentTerms != null) {</span>
+<span class="nc" id="L219">			return true;</span>
+<span class="nc bnc" id="L220" title="All 4 branches missed.">		} else if (returnedTerms != null &amp;&amp; currentTerms != null) {</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">			return !Arrays.equals(returnedTerms, currentTerms);</span>
+		}
+
+<span class="nc" id="L224">		return false;</span>
+	}
+
+	public Object next() {
+<span class="nc bnc" id="L228" title="All 2 branches missed.">		if (!executed) {</span>
+<span class="nc" id="L229">			throw new IllegalStateException(&quot;Call execute method&quot;);</span>
+		}
+
+<span class="nc bnc" id="L232" title="All 2 branches missed.">		if (!hasNext()) {</span>
+<span class="nc" id="L233">			throw new NoSuchElementException();</span>
+		}
+
+<span class="nc" id="L236">		returnedTerms = Arrays.copyOf(currentTerms, currentTerms.length);</span>
+
+		// Never use query.hasNext() or query.hasMoreSolutions()
+		try {
+<span class="nc" id="L240">			currentTerms = query.nextSolution();</span>
+<span class="nc" id="L241">		} catch (Exception e) {</span>
+			// NoSuchElement exception or others
+<span class="nc" id="L243">			currentTerms = null;</span>
+<span class="nc" id="L244">		}</span>
+
+<span class="nc" id="L246">		Object[] values = new Object[returnedTerms.length];</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">		for (int i = 0; i &lt; returnedTerms.length; i++) {</span>
+<span class="nc" id="L248">			values[i] = converter.toObject(returnedTerms[i]);</span>
+		}
+<span class="nc" id="L250">		return values;</span>
+	}
+
+	@Override
+	public void remove() {
+		// skip
+<span class="nc" id="L256">		next();</span>
+<span class="nc" id="L257">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

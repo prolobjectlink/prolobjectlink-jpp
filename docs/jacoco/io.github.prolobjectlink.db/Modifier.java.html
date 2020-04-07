@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Modifier.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db</a> &gt; <span class="el_source">Modifier.java</span></div><h1>Modifier.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db;
+
+public class Modifier {
+
+<span class="nc" id="L37">	public static final Modifier PROTECTED = new Modifier(&quot;protected&quot;);</span>
+<span class="nc" id="L38">	public static final Modifier TRANSIENT = new Modifier(&quot;transient&quot;);</span>
+<span class="nc" id="L39">	public static final Modifier VOLATILE = new Modifier(&quot;volatile&quot;);</span>
+<span class="nc" id="L40">	public static final Modifier ABSTRACT = new Modifier(&quot;abstract&quot;);</span>
+<span class="nc" id="L41">	public static final Modifier PRIVATE = new Modifier(&quot;private&quot;);</span>
+<span class="nc" id="L42">	public static final Modifier PUBLIC = new Modifier(&quot;public&quot;);</span>
+<span class="nc" id="L43">	public static final Modifier STATIC = new Modifier(&quot;static&quot;);</span>
+<span class="nc" id="L44">	public static final Modifier FINAL = new Modifier(&quot;final&quot;);</span>
+
+	private final String name;
+
+<span class="nc" id="L48">	private Modifier(String name) {</span>
+<span class="nc" id="L49">		this.name = name;</span>
+<span class="nc" id="L50">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L54">		return getName();</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L59">		final int prime = 31;</span>
+<span class="nc" id="L60">		int result = 1;</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">		result = prime * result + ((name == null) ? 0 : name.hashCode());</span>
+<span class="nc" id="L62">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L68">			return true;</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L70">			return false;</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L72">			return false;</span>
+<span class="nc" id="L73">		Modifier other = (Modifier) obj;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">		if (name == null) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">			if (other.name != null)</span>
+<span class="nc" id="L76">				return false;</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">		} else if (!name.equals(other.name))</span>
+<span class="nc" id="L78">			return false;</span>
+<span class="nc" id="L79">		return true;</span>
+	}
+
+	public String getName() {
+<span class="nc" id="L83">		return name;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

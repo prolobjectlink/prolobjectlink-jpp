@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractHierarchicalCache.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db.cache</a> &gt; <span class="el_source">AbstractHierarchicalCache.java</span></div><h1>AbstractHierarchicalCache.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db.cache;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import io.github.prolobjectlink.db.ObjectConverter;
+import io.github.prolobjectlink.db.Predicate;
+import io.github.prolobjectlink.db.VolatileContainer;
+import io.github.prolobjectlink.db.container.AbstractVolatileContainer;
+import io.github.prolobjectlink.db.etc.Settings;
+import io.github.prolobjectlink.db.util.JavaReflect;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologQuery;
+import io.github.prolobjectlink.prolog.PrologTerm;
+
+/** @author Jose Zalacain @since 1.0 */
+public abstract class AbstractHierarchicalCache extends AbstractVolatileContainer implements VolatileContainer {
+
+	public AbstractHierarchicalCache(PrologProvider provider, Settings properties,
+			ObjectConverter&lt;PrologTerm&gt; converter) {
+<span class="nc" id="L56">		super(provider, properties, converter);</span>
+<span class="nc" id="L57">	}</span>
+
+	public final &lt;O&gt; void add(O... facts) {
+<span class="nc bnc" id="L60" title="All 4 branches missed.">		if (facts != null &amp;&amp; facts.length &gt; 0) {</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">			for (Object object : facts) {</span>
+<span class="nc" id="L62">				checkStorableObject(object);</span>
+<span class="nc" id="L63">				getEngine().assertz(getConverter().toTerm(object));</span>
+			}
+		}
+<span class="nc" id="L66">	}</span>
+
+	public final &lt;O&gt; void modify(O match, O merge) {
+<span class="nc" id="L69">		checkStorableObject(match);</span>
+<span class="nc" id="L70">		checkStorableObject(merge);</span>
+<span class="nc" id="L71">		checkReplacementObject(match, merge);</span>
+<span class="nc" id="L72">		PrologTerm prologMatch = getConverter().toTerm(match);</span>
+<span class="nc" id="L73">		PrologTerm prologMerge = getConverter().toTerm(merge);</span>
+<span class="nc" id="L74">		getEngine().retract(prologMatch);</span>
+<span class="nc" id="L75">		getEngine().assertz(prologMerge);</span>
+<span class="nc" id="L76">	}</span>
+
+	public final &lt;O&gt; void remove(O... facts) {
+<span class="nc bnc" id="L79" title="All 4 branches missed.">		if (facts != null &amp;&amp; facts.length &gt; 0) {</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">			for (Object object : facts) {</span>
+<span class="nc" id="L81">				getEngine().retract(getConverter().toTerm(object));</span>
+			}
+		}
+<span class="nc" id="L84">	}</span>
+
+	public final void remove(Class&lt;?&gt; clazz) {
+<span class="nc" id="L87">		PrologTerm term = getConverter().toTerm(clazz);</span>
+<span class="nc" id="L88">		getEngine().abolish(term.getFunctor(), term.getArity());</span>
+<span class="nc" id="L89">	}</span>
+
+	public final Object find(String string) {
+<span class="nc" id="L92">		PrologTerm[] prologTerms = getConverter().toTermsArray(string);</span>
+<span class="nc" id="L93">		List&lt;Class&lt;?&gt;&gt; classes = classesOf(prologTerms);</span>
+<span class="nc" id="L94">		return solutionOf(prologTerms, classes);</span>
+	}
+
+	public final Object find(String functor, Object... args) {
+<span class="nc" id="L98">		Class&lt;?&gt; clazz = classOf(functor, args.length);</span>
+<span class="nc" id="L99">		Object instance = JavaReflect.newInstance(clazz);</span>
+<span class="nc" id="L100">		Field[] fields = clazz.getDeclaredFields();</span>
+<span class="nc" id="L101">		checkProcedureInvokation(functor, fields, args);</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc" id="L103">			JavaReflect.writeValue(fields[i], instance, args[i]);</span>
+		}
+<span class="nc" id="L105">		return find(instance);</span>
+	}
+
+	public final &lt;O&gt; O find(O o) {
+<span class="nc" id="L109">		Map&lt;String, PrologTerm&gt; inspectionMap = new HashMap&lt;String, PrologTerm&gt;();</span>
+<span class="nc" id="L110">		PrologQuery query = prologQueryOf(o, inspectionMap);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L112">			Map&lt;String, PrologTerm&gt; solutionMap = query.oneVariablesSolution();</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">			if (!solutionMap.isEmpty()) {</span>
+
+				// put all resolved by inspection
+<span class="nc" id="L116">				solutionMap.putAll(inspectionMap);</span>
+<span class="nc" id="L117">				return (O) getConverter().toObject(classOf(o), solutionMap);</span>
+			} else {
+				// the term exist and is equivalent to the query term
+<span class="nc" id="L120">				return o;</span>
+			}
+		}
+<span class="nc" id="L123">		return null;</span>
+	}
+
+	public final &lt;O&gt; O find(Class&lt;O&gt; clazz) {
+<span class="nc" id="L127">		PrologQuery query = prologQueryOf(clazz);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L129">			Map&lt;String, PrologTerm&gt; solutionMap = query.oneVariablesSolution();</span>
+<span class="nc" id="L130">			return (O) getConverter().toObject(clazz, solutionMap);</span>
+		}
+<span class="nc" id="L132">		return null;</span>
+	}
+
+	public final &lt;O&gt; O find(Predicate&lt;O&gt; query) {
+<span class="nc" id="L136">		List&lt;O&gt; all = findAll(query);</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">		if (!all.isEmpty())</span>
+<span class="nc" id="L138">			return all.get(0);</span>
+<span class="nc" id="L139">		return null;</span>
+	}
+
+	public final List&lt;Object&gt; findAll(String string) {
+<span class="nc" id="L143">		PrologTerm[] prologTerms = getConverter().toTermsArray(string);</span>
+<span class="nc" id="L144">		return solutionsOf(prologTerms, classesOf(prologTerms));</span>
+	}
+
+	public final List&lt;Object&gt; findAll(String functor, Object... args) {
+<span class="nc" id="L148">		Class&lt;?&gt; clazz = classOf(functor, args.length);</span>
+<span class="nc" id="L149">		Object instance = JavaReflect.newInstance(clazz);</span>
+<span class="nc" id="L150">		Field[] fields = clazz.getDeclaredFields();</span>
+<span class="nc" id="L151">		checkProcedureInvokation(functor, fields, args);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc" id="L153">			JavaReflect.writeValue(fields[i], instance, args[i]);</span>
+		}
+<span class="nc" id="L155">		return findAll(instance);</span>
+	}
+
+	public final &lt;O&gt; List&lt;O&gt; findAll(O o) {
+<span class="nc" id="L159">		Map&lt;String, PrologTerm&gt; inspectionMap = new HashMap&lt;String, PrologTerm&gt;();</span>
+<span class="nc" id="L160">		PrologTerm goal = getConverter().toTerm(o, inspectionMap);</span>
+<span class="nc" id="L161">		PrologQuery query = getEngine().query(goal);</span>
+<span class="nc" id="L162">		List&lt;O&gt; solutionSet = new ArrayList&lt;O&gt;();</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L164">			Map&lt;String, PrologTerm&gt;[] solutionsMap = query.allVariablesSolutions();</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">			if (solutionsMap.length &gt; 0) {</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">				for (int i = 0; i &lt; solutionsMap.length; i++) {</span>
+<span class="nc" id="L167">					Map&lt;String, PrologTerm&gt; solutionMap = solutionsMap[i];</span>
+<span class="nc" id="L168">					solutionMap.putAll(inspectionMap);</span>
+<span class="nc" id="L169">					O solution = (O) getConverter().toObject(classOf(o), solutionMap);</span>
+<span class="nc" id="L170">					solutionSet.add(solution);</span>
+				}
+			} else {
+				// a new term is built from the goal because
+				// the term exist but is equivalent to the query term
+<span class="nc" id="L175">				O solution = (O) getConverter().toObject(goal);</span>
+				// add to the solution as unique solution
+<span class="nc" id="L177">				solutionSet.add(solution);</span>
+			}
+		}
+<span class="nc" id="L180">		return solutionSet;</span>
+	}
+
+	public final &lt;O&gt; List&lt;O&gt; findAll(Class&lt;O&gt; clazz) {
+<span class="nc" id="L184">		PrologQuery query = prologQueryOf(clazz);</span>
+<span class="nc" id="L185">		List&lt;O&gt; solutionSet = new ArrayList&lt;O&gt;();</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L187">			Map&lt;String, PrologTerm&gt;[] solutionsMap = query.allVariablesSolutions();</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">			for (int i = 0; i &lt; solutionsMap.length; i++) {</span>
+<span class="nc" id="L189">				O solution = (O) getConverter().toObject(clazz, solutionsMap[i]);</span>
+<span class="nc" id="L190">				solutionSet.add(solution);</span>
+			}
+		}
+<span class="nc" id="L193">		return solutionSet;</span>
+	}
+
+	public final &lt;O&gt; List&lt;O&gt; findAll(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L197">		List&lt;O&gt; selection = new ArrayList&lt;O&gt;();</span>
+<span class="nc" id="L198">		Class&lt;O&gt; toBeFound = classOf(predicate);</span>
+<span class="nc" id="L199">		List&lt;O&gt; allObjects = findAll(toBeFound);</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">		for (O o : allObjects) {</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">			if (predicate.evaluate(o)) {</span>
+<span class="nc" id="L202">				selection.add(o);</span>
+			}
+<span class="nc" id="L204">		}</span>
+<span class="nc" id="L205">		return selection;</span>
+	}
+
+	public final List&lt;Class&lt;?&gt;&gt; classes() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L210">		return new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
+	}
+
+	public final void evict(Class&lt;?&gt; cls) {
+<span class="nc" id="L214">		remove(cls);</span>
+<span class="nc" id="L215">	}</span>
+
+	public final void evictAll() {
+<span class="nc" id="L218">		clear();</span>
+<span class="nc" id="L219">	}</span>
+
+	public final void clear() {
+<span class="nc" id="L222">		getEngine().dispose();</span>
+<span class="nc" id="L223">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

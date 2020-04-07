@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EmbeddedDatabaseClient.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db.persistent</a> &gt; <span class="el_source">EmbeddedDatabaseClient.java</span></div><h1>EmbeddedDatabaseClient.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db.persistent;
+
+import static io.github.prolobjectlink.db.XmlParser.XML;
+
+import java.io.File;
+import java.net.URL;
+
+import io.github.prolobjectlink.db.DatabaseUser;
+import io.github.prolobjectlink.db.EmbeddedDatabase;
+import io.github.prolobjectlink.db.PersistentContainer;
+import io.github.prolobjectlink.db.Predicate;
+import io.github.prolobjectlink.db.ProcedureQuery;
+import io.github.prolobjectlink.db.Query;
+import io.github.prolobjectlink.db.Schema;
+import io.github.prolobjectlink.db.Transaction;
+import io.github.prolobjectlink.db.TypedQuery;
+import io.github.prolobjectlink.db.engine.AbstractDatabaseEngine;
+import io.github.prolobjectlink.db.etc.Settings;
+
+/** @author Jose Zalacain @since 1.0 */
+public abstract class EmbeddedDatabaseClient extends AbstractDatabaseEngine
+		implements PersistentContainer, EmbeddedDatabase {
+
+	private final PersistentContainer storage;
+
+	protected static final String URL_PREFIX = &quot;jdbc:prolobjectlink:&quot;;
+<span class="nc" id="L59">	protected static final URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);</span>
+
+	EmbeddedDatabaseClient(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
+			PersistentContainer storage) {
+<span class="nc" id="L63">		super(settings, url, name, schema, owner);</span>
+<span class="nc" id="L64">		this.storage = storage;</span>
+<span class="nc" id="L65">	}</span>
+
+	public final PersistentContainer getContainer() {
+<span class="nc" id="L68">		return storage;</span>
+	}
+
+	public final String getStorageLocation() {
+<span class="nc" id="L72">		return storage.getLocation();</span>
+	}
+
+	public final void open() {
+<span class="nc" id="L76">		storage.begin();</span>
+<span class="nc" id="L77">	}</span>
+
+	public final &lt;O&gt; void insert(O... facts) {
+<span class="nc" id="L80">		storage.getTransaction().begin();</span>
+<span class="nc" id="L81">		storage.insert(facts);</span>
+<span class="nc" id="L82">		storage.getTransaction().commit();</span>
+<span class="nc" id="L83">		storage.getTransaction().close();</span>
+<span class="nc" id="L84">	}</span>
+
+	public final &lt;O&gt; void update(O match, O update) {
+<span class="nc" id="L87">		storage.getTransaction().begin();</span>
+<span class="nc" id="L88">		storage.update(match, update);</span>
+<span class="nc" id="L89">		storage.getTransaction().commit();</span>
+<span class="nc" id="L90">		storage.getTransaction().close();</span>
+<span class="nc" id="L91">	}</span>
+
+	public final void delete(Class&lt;?&gt; clazz) {
+<span class="nc" id="L94">		storage.getTransaction().begin();</span>
+<span class="nc" id="L95">		storage.delete(clazz);</span>
+<span class="nc" id="L96">		storage.getTransaction().commit();</span>
+<span class="nc" id="L97">		storage.getTransaction().close();</span>
+<span class="nc" id="L98">	}</span>
+
+	public final &lt;O&gt; void delete(O... facts) {
+<span class="nc" id="L101">		storage.getTransaction().begin();</span>
+<span class="nc" id="L102">		storage.delete(facts);</span>
+<span class="nc" id="L103">		storage.getTransaction().commit();</span>
+<span class="nc" id="L104">		storage.getTransaction().close();</span>
+<span class="nc" id="L105">	}</span>
+
+	public final boolean contains(String string) {
+<span class="nc" id="L108">		storage.getTransaction().begin();</span>
+<span class="nc" id="L109">		boolean b = storage.contains(string);</span>
+<span class="nc" id="L110">		storage.getTransaction().commit();</span>
+<span class="nc" id="L111">		storage.getTransaction().close();</span>
+<span class="nc" id="L112">		return b;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(O object) {
+<span class="nc" id="L116">		storage.getTransaction().begin();</span>
+<span class="nc" id="L117">		boolean b = storage.contains(object);</span>
+<span class="nc" id="L118">		storage.getTransaction().commit();</span>
+<span class="nc" id="L119">		storage.getTransaction().close();</span>
+<span class="nc" id="L120">		return b;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Class&lt;O&gt; clazz) {
+<span class="nc" id="L124">		storage.getTransaction().begin();</span>
+<span class="nc" id="L125">		boolean b = storage.contains(clazz);</span>
+<span class="nc" id="L126">		storage.getTransaction().commit();</span>
+<span class="nc" id="L127">		storage.getTransaction().close();</span>
+<span class="nc" id="L128">		return b;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L132">		storage.getTransaction().begin();</span>
+<span class="nc" id="L133">		boolean b = storage.contains(predicate);</span>
+<span class="nc" id="L134">		storage.getTransaction().commit();</span>
+<span class="nc" id="L135">		storage.getTransaction().close();</span>
+<span class="nc" id="L136">		return b;</span>
+	}
+
+	public final boolean contains(String functor, int arity) {
+<span class="nc" id="L140">		storage.getTransaction().begin();</span>
+<span class="nc" id="L141">		boolean b = storage.contains(functor, arity);</span>
+<span class="nc" id="L142">		storage.getTransaction().commit();</span>
+<span class="nc" id="L143">		storage.getTransaction().close();</span>
+<span class="nc" id="L144">		return b;</span>
+	}
+
+	public final Query createQuery(String string) {
+<span class="nc" id="L148">		storage.getTransaction().begin();</span>
+<span class="nc" id="L149">		Query q = storage.createQuery(string);</span>
+<span class="nc" id="L150">		storage.getTransaction().commit();</span>
+<span class="nc" id="L151">		storage.getTransaction().close();</span>
+<span class="nc" id="L152">		return q;</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(O o) {
+<span class="nc" id="L156">		storage.getTransaction().begin();</span>
+<span class="nc" id="L157">		TypedQuery&lt;O&gt; q = storage.createQuery(o);</span>
+<span class="nc" id="L158">		storage.getTransaction().commit();</span>
+<span class="nc" id="L159">		storage.getTransaction().close();</span>
+<span class="nc" id="L160">		return q;</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Class&lt;O&gt; clazz) {
+<span class="nc" id="L164">		storage.getTransaction().begin();</span>
+<span class="nc" id="L165">		TypedQuery&lt;O&gt; q = storage.createQuery(clazz);</span>
+<span class="nc" id="L166">		storage.getTransaction().commit();</span>
+<span class="nc" id="L167">		storage.getTransaction().close();</span>
+<span class="nc" id="L168">		return q;</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L172">		storage.getTransaction().begin();</span>
+<span class="nc" id="L173">		TypedQuery&lt;O&gt; q = storage.createQuery(predicate);</span>
+<span class="nc" id="L174">		storage.getTransaction().commit();</span>
+<span class="nc" id="L175">		storage.getTransaction().close();</span>
+<span class="nc" id="L176">		return q;</span>
+	}
+
+	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
+<span class="nc" id="L180">		storage.getTransaction().begin();</span>
+<span class="nc" id="L181">		ProcedureQuery pq = storage.createProcedureQuery(functor, args);</span>
+<span class="nc" id="L182">		storage.getTransaction().commit();</span>
+<span class="nc" id="L183">		storage.getTransaction().close();</span>
+<span class="nc" id="L184">		return pq;</span>
+	}
+
+	public final PersistentContainer containerOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L188">		return storage.containerOf(clazz);</span>
+	}
+
+	public final String locationOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L192">		return storage.locationOf(clazz);</span>
+	}
+
+	public final void include(String path) {
+<span class="nc" id="L196">		storage.include(path);</span>
+<span class="nc" id="L197">	}</span>
+
+	public final Transaction getTransaction() {
+<span class="nc" id="L200">		return storage.getTransaction();</span>
+	}
+
+	public final boolean isOpen() {
+<span class="nc" id="L204">		return storage.isOpen();</span>
+	}
+
+	public final void flush() {
+<span class="nc" id="L208">		storage.commit();</span>
+<span class="nc" id="L209">	}</span>
+
+	public final void clear() {
+<span class="nc" id="L212">		storage.getTransaction().begin();</span>
+<span class="nc" id="L213">		storage.clear();</span>
+<span class="nc" id="L214">		storage.getTransaction().commit();</span>
+<span class="nc" id="L215">		storage.getTransaction().close();</span>
+<span class="nc" id="L216">	}</span>
+
+	public final void close() {
+<span class="nc" id="L219">		storage.close();</span>
+<span class="nc" id="L220">	}</span>
+
+	public final void begin() {
+<span class="nc" id="L223">		storage.begin();</span>
+<span class="nc" id="L224">	}</span>
+
+	public final void commit() {
+<span class="nc" id="L227">		storage.commit();</span>
+<span class="nc" id="L228">	}</span>
+
+	public final void rollback() {
+<span class="nc" id="L231">		storage.rollback();</span>
+<span class="nc" id="L232">	}</span>
+
+	public final boolean isActive() {
+<span class="nc" id="L235">		return storage.isActive();</span>
+	}
+
+	public final void defragment() {
+<span class="nc" id="L239">		storage.defragment();</span>
+<span class="nc" id="L240">	}</span>
+
+	public final EmbeddedDatabase create() {
+<span class="nc" id="L243">		new File(getRootLocation() + &quot;/functions.pl&quot;);</span>
+<span class="nc" id="L244">		new File(getRootLocation() + &quot;/triggers.pl&quot;);</span>
+<span class="nc" id="L245">		new File(getRootLocation() + &quot;/views.pl&quot;);</span>
+<span class="nc" id="L246">		getSchema().flush();</span>
+<span class="nc" id="L247">		return this;</span>
+	}
+
+	public final EmbeddedDatabase drop() {
+<span class="nc" id="L251">		getSchema().clear();</span>
+<span class="nc" id="L252">		getSchema().flush();</span>
+<span class="nc" id="L253">		clear();</span>
+<span class="nc" id="L254">		flush();</span>
+<span class="nc" id="L255">		return this;</span>
+	}
+
+	public final boolean exist() {
+<span class="nc bnc" id="L259" title="All 2 branches missed.">		return getSchema().countUsers() &gt; 0;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

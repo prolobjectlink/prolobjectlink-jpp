@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractContainer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db.container</a> &gt; <span class="el_source">AbstractContainer.java</span></div><h1>AbstractContainer.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db.container;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import io.github.prolobjectlink.AbstractWrapper;
+import io.github.prolobjectlink.db.Container;
+import io.github.prolobjectlink.db.ObjectConverter;
+import io.github.prolobjectlink.db.Predicate;
+import io.github.prolobjectlink.db.ProcedureInvokationError;
+import io.github.prolobjectlink.db.Transaction;
+import io.github.prolobjectlink.db.etc.Settings;
+import io.github.prolobjectlink.db.util.JavaReflect;
+import io.github.prolobjectlink.logging.LoggerConstants;
+import io.github.prolobjectlink.logging.LoggerUtils;
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologQuery;
+import io.github.prolobjectlink.prolog.PrologTerm;
+
+/**
+ * Implementation of interface {@code Container}. Hold an immutable reference to
+ * {@code IPrologFactory} and to the {@code IPrologEngine} provided by this
+ * factory. The {@code ObjectSerializer} immutable reference is contained too
+ * for convert from object oriented context to prolog context and vice versa.
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+/** @author Jose Zalacain @since 1.0 */
+public abstract class AbstractContainer extends AbstractWrapper implements Container {
+
+	// Prolog engine reference
+	private final PrologEngine engine;
+
+	// prolog driver
+	private final PrologProvider provider;
+
+	//
+	private final Settings properties;
+
+	// factory for term creation
+	private final ObjectConverter&lt;PrologTerm&gt; converter;
+
+	// non store classes map
+	private static final Set&lt;Class&lt;?&gt;&gt; classes;
+
+	static {
+<span class="nc" id="L87">		classes = new HashSet&lt;Class&lt;?&gt;&gt;();</span>
+<span class="nc" id="L88">		classes.add(String.class);</span>
+<span class="nc" id="L89">		classes.add(Boolean.class);</span>
+<span class="nc" id="L90">		classes.add(Integer.class);</span>
+<span class="nc" id="L91">		classes.add(Float.class);</span>
+<span class="nc" id="L92">		classes.add(Long.class);</span>
+<span class="nc" id="L93">		classes.add(Double.class);</span>
+<span class="nc" id="L94">		classes.add(Object[].class);</span>
+<span class="nc" id="L95">	}</span>
+
+<span class="nc" id="L97">	protected AbstractContainer(PrologProvider provider, Settings properties, ObjectConverter&lt;PrologTerm&gt; converter) {</span>
+<span class="nc" id="L98">		this.engine = provider.newEngine();</span>
+<span class="nc" id="L99">		this.properties = properties;</span>
+<span class="nc" id="L100">		this.converter = converter;</span>
+<span class="nc" id="L101">		this.provider = provider;</span>
+<span class="nc" id="L102">	}</span>
+
+	public final ObjectConverter&lt;PrologTerm&gt; getConverter() {
+<span class="nc" id="L105">		return converter;</span>
+	}
+
+	public final Settings getProperties() {
+<span class="nc" id="L109">		return properties;</span>
+	}
+
+	public final PrologProvider getProvider() {
+<span class="nc" id="L113">		return provider;</span>
+	}
+
+	public final PrologEngine getEngine() {
+<span class="nc" id="L117">		return engine;</span>
+	}
+
+	public final &lt;O&gt; Class&lt;O&gt; classOf(O o) {
+<span class="nc" id="L121">		return (Class&lt;O&gt;) o.getClass();</span>
+	}
+
+	public final Class&lt;?&gt; classOf(String functor, int arity) {
+<span class="nc" id="L125">		String className = removeQuoted(functor);</span>
+<span class="nc" id="L126">		Class&lt;?&gt; clazz = JavaReflect.classForName(className);</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		if (clazz.getDeclaredFields().length != arity) {</span>
+			try {
+<span class="nc" id="L129">				throw new IllegalArgumentException(&quot;Non exist &quot; + className + &quot; with &quot; + arity + &quot; fields&quot;);</span>
+<span class="nc" id="L130">			} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L131">				LoggerUtils.error(getClass(), LoggerConstants.ILLEGAL_ARGUMENT, e);</span>
+			}
+		}
+<span class="nc" id="L134">		return clazz;</span>
+	}
+
+	public final &lt;O&gt; Class&lt;O&gt; classOf(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L138">		Class&lt;O&gt; templateClass = null;</span>
+<span class="nc" id="L139">		Class&lt;?&gt; clazz = predicate.getClass();</span>
+<span class="nc" id="L140">		Type[] generics = clazz.getGenericInterfaces();</span>
+<span class="nc bnc" id="L141" title="All 4 branches missed.">		if (generics.length == 1 &amp;&amp; generics[0] instanceof ParameterizedType) {</span>
+<span class="nc" id="L142">			ParameterizedType parameterized = (ParameterizedType) generics[0];</span>
+<span class="nc" id="L143">			Type type = parameterized.getActualTypeArguments()[0];</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">			if (!(type instanceof Class&lt;?&gt;)) {</span>
+				try {
+<span class="nc" id="L146">					throw new ClassNotFoundException(&quot;&quot; + type + &quot;&quot;);</span>
+<span class="nc" id="L147">				} catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L148">					LoggerUtils.error(getClass(), LoggerConstants.CLASS_NOT_FOUND, e);</span>
+				}
+			}
+<span class="nc" id="L151">			templateClass = (Class&lt;O&gt;) type;</span>
+		}
+<span class="nc" id="L153">		return templateClass;</span>
+	}
+
+	public final List&lt;Class&lt;?&gt;&gt; classesOf(String string) {
+<span class="nc" id="L157">		return classesOf(converter.toTermsArray(string));</span>
+	}
+
+	public final List&lt;Class&lt;?&gt;&gt; classesOf(PrologTerm[] prologTerms) {
+<span class="nc" id="L161">		return classesOf(prologTerms, new ArrayList&lt;Class&lt;?&gt;&gt;());</span>
+	}
+
+	public final Object[] solutionOf(PrologTerm[] prologTerms, List&lt;Class&lt;?&gt;&gt; classes) {
+<span class="nc" id="L165">		PrologQuery query = engine.query(prologTerms);</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L167">			Map&lt;String, PrologTerm&gt; solutionsMap = query.oneVariablesSolution();</span>
+<span class="nc" id="L168">			Object[] objects = new Object[classes.size()];</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">			for (int i = 0; i &lt; classes.size(); i++) {</span>
+<span class="nc" id="L170">				objects[i] = converter.toObject(classes.get(i), solutionsMap);</span>
+			}
+<span class="nc" id="L172">			return objects;</span>
+		}
+<span class="nc" id="L174">		return new Object[0];</span>
+	}
+
+	/**
+	 * Find all objects solutions of the prolog terms array. Use a given list of
+	 * classes extracted from prolog terms array for convert the result obtained
+	 * from prolog query result.
+	 * 
+	 * @param prologTerms prolog terms array to query.
+	 * 
+	 * @param classes     classes extracted from prolog terms array.
+	 * @return all objects solutions of prologTerms prolog terms array.
+	 */
+	public final List&lt;Object&gt; solutionsOf(PrologTerm[] prologTerms, List&lt;Class&lt;?&gt;&gt; classes) {
+<span class="nc" id="L188">		List&lt;Object&gt; solutionSet = new ArrayList&lt;Object&gt;();</span>
+<span class="nc" id="L189">		PrologQuery query = engine.query(prologTerms);</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">		if (query.hasSolution()) {</span>
+<span class="nc" id="L191">			Map&lt;String, PrologTerm&gt;[] solutionsMap = query.allVariablesSolutions();</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">			for (int i = 0; i &lt; solutionsMap.length; i++) {</span>
+<span class="nc" id="L193">				Object[] objects = new Object[classes.size()];</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">				for (int j = 0; j &lt; classes.size(); j++) {</span>
+<span class="nc" id="L195">					objects[j] = converter.toObject(classes.get(j), solutionsMap[i]);</span>
+				}
+<span class="nc" id="L197">				solutionSet.add(objects);</span>
+			}
+		}
+<span class="nc" id="L200">		return solutionSet;</span>
+	}
+
+	protected final PrologQuery prologQueryOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L204">		return engine.query(converter.toTerm(clazz));</span>
+	}
+
+	protected final PrologQuery prologQueryOf(Object object, Map&lt;String, PrologTerm&gt; map) {
+<span class="nc" id="L208">		return engine.query(converter.toTerm(object, map));</span>
+	}
+
+	protected final List&lt;Class&lt;?&gt;&gt; classesOf(PrologTerm[] prologTerms, List&lt;Class&lt;?&gt;&gt; classList) {
+<span class="nc bnc" id="L212" title="All 2 branches missed.">		for (int i = 0; i &lt; prologTerms.length; i++) {</span>
+<span class="nc" id="L213">			PrologTerm prologTerm = prologTerms[i];</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">			if (prologTerm.isStructure()) {</span>
+<span class="nc" id="L215">				String functor = prologTerms[i].getFunctor();</span>
+<span class="nc" id="L216">				PrologTerm[] args = prologTerm.getArguments();</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">				if (!prologTerm.isEvaluable()) {</span>
+<span class="nc" id="L218">					String className = removeQuoted(functor);</span>
+<span class="nc" id="L219">					Class&lt;?&gt; clazz = JavaReflect.classForName(className);</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">					if (!classList.contains(clazz)) {</span>
+<span class="nc" id="L221">						classList.add(clazz);</span>
+					}
+				}
+<span class="nc" id="L224">				classesOf(args, classList);</span>
+			}
+		}
+<span class="nc" id="L227">		return classList;</span>
+	}
+
+	protected final String removeQuoted(String functor) {
+<span class="nc bnc" id="L231" title="All 6 branches missed.">		if (functor != null &amp;&amp; functor.startsWith(&quot;\'&quot;) &amp;&amp; functor.endsWith(&quot;\'&quot;)) {</span>
+<span class="nc" id="L232">			return functor.substring(1, functor.length() - 1);</span>
+		}
+<span class="nc" id="L234">		return functor;</span>
+	}
+
+	protected final void checkStorableObject(Object object) {
+<span class="nc bnc" id="L238" title="All 4 branches missed.">		if (classes.contains(object.getClass()) || object.getClass().isArray()) {</span>
+<span class="nc" id="L239">			throw new RuntimeException(&quot;The object do not belong to persistent class: &quot; + object);</span>
+		}
+<span class="nc" id="L241">	}</span>
+
+	protected final void checkReplacementObject(Object match, Object update) {
+<span class="nc bnc" id="L244" title="All 2 branches missed.">		if (match.getClass() != update.getClass()) {</span>
+<span class="nc" id="L245">			throw new RuntimeException(</span>
+					&quot;The update object [ &quot; + match + &quot;]class is different to match object [&quot; + update + &quot;]&quot;);
+		}
+<span class="nc" id="L248">	}</span>
+
+	protected final void checkProcedureInvokation(String name, Field[] fields, Object[] values) {
+<span class="nc" id="L251">		int fieldsNumber = fields.length;</span>
+<span class="nc" id="L252">		int valuesNumber = values.length;</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">		if (fieldsNumber != valuesNumber) {</span>
+<span class="nc" id="L254">			throw new ProcedureInvokationError(name, fieldsNumber, valuesNumber);</span>
+		}
+<span class="nc" id="L256">	}</span>
+
+	protected final void checkActiveTransaction(Transaction transaction) {
+<span class="nc bnc" id="L259" title="All 2 branches missed.">		if (!transaction.isActive()) {</span>
+<span class="nc" id="L260">			throw new IllegalStateException(&quot;Entity Transaction is not active&quot;);</span>
+		}
+<span class="nc" id="L262">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

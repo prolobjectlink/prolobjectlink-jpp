@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractDatabaseEngine.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db.engine</a> &gt; <span class="el_source">AbstractDatabaseEngine.java</span></div><h1>AbstractDatabaseEngine.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db.engine;
+
+import static io.github.prolobjectlink.db.XmlParser.XML;
+
+import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import io.github.prolobjectlink.db.ContainerFactory;
+import io.github.prolobjectlink.db.DatabaseEngine;
+import io.github.prolobjectlink.db.DatabaseRole;
+import io.github.prolobjectlink.db.DatabaseUnitInfo;
+import io.github.prolobjectlink.db.DatabaseUser;
+import io.github.prolobjectlink.db.Predicate;
+import io.github.prolobjectlink.db.Schema;
+import io.github.prolobjectlink.db.container.AbstractContainer;
+import io.github.prolobjectlink.db.etc.Settings;
+import io.github.prolobjectlink.db.tools.Backup;
+import io.github.prolobjectlink.db.tools.Restore;
+import io.github.prolobjectlink.db.util.JavaReflect;
+import io.github.prolobjectlink.logging.LoggerConstants;
+import io.github.prolobjectlink.logging.LoggerUtils;
+
+/** @author Jose Zalacain @since 1.0 */
+public abstract class AbstractDatabaseEngine extends AbstractContainer implements DatabaseEngine {
+
+	private URL url;
+	private final String name;
+	private final Schema schema;
+	private final String location;
+	private final DatabaseUser owner;
+	protected static final char SEPARATOR = '/';
+	private final Map&lt;String, DatabaseUser&gt; users;
+	private final Map&lt;String, DatabaseRole&gt; roles;
+	private final ContainerFactory containerFactory;
+	private final Map&lt;String, DatabaseUnitInfo&gt; units;
+
+<span class="nc" id="L75">	private static final Backup backuper = new Backup();</span>
+<span class="nc" id="L76">	private static final Restore restorer = new Restore();</span>
+
+	protected static final String URL_PREFIX = &quot;jdbc:prolobjectlink:&quot;;
+<span class="nc" id="L79">	protected static final URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);</span>
+
+	public AbstractDatabaseEngine(Settings settings, String location, String name, Schema schema, DatabaseUser owner) {
+<span class="nc" id="L82">		super(settings.getProvider(), settings, settings.getObjectConverter());</span>
+<span class="nc" id="L83">		this.units = new HashMap&lt;String, DatabaseUnitInfo&gt;();</span>
+<span class="nc" id="L84">		this.containerFactory = settings.getContainerFactory();</span>
+<span class="nc" id="L85">		this.roles = new HashMap&lt;String, DatabaseRole&gt;();</span>
+<span class="nc" id="L86">		this.users = new HashMap&lt;String, DatabaseUser&gt;();</span>
+		try {
+<span class="nc" id="L88">			this.url = new URL(&quot;file:/&quot; + location);</span>
+<span class="nc" id="L89">		} catch (MalformedURLException e) {</span>
+<span class="nc" id="L90">			LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
+<span class="nc" id="L91">			this.url = null;</span>
+<span class="nc" id="L92">		}</span>
+<span class="nc" id="L93">		this.location = location;</span>
+<span class="nc" id="L94">		this.schema = schema;</span>
+<span class="nc" id="L95">		this.owner = owner;</span>
+<span class="nc" id="L96">		this.name = name;</span>
+<span class="nc" id="L97">	}</span>
+
+	public AbstractDatabaseEngine(Settings settings, URL url, String name, Schema schema, DatabaseUser owner) {
+<span class="nc" id="L100">		super(settings.getProvider(), settings, settings.getObjectConverter());</span>
+<span class="nc" id="L101">		this.units = new HashMap&lt;String, DatabaseUnitInfo&gt;();</span>
+<span class="nc" id="L102">		this.containerFactory = settings.getContainerFactory();</span>
+<span class="nc" id="L103">		this.roles = new HashMap&lt;String, DatabaseRole&gt;();</span>
+<span class="nc" id="L104">		this.users = new HashMap&lt;String, DatabaseUser&gt;();</span>
+<span class="nc" id="L105">		this.location = url.getPath();</span>
+<span class="nc" id="L106">		this.schema = schema;</span>
+<span class="nc" id="L107">		this.owner = owner;</span>
+<span class="nc" id="L108">		this.name = name;</span>
+<span class="nc" id="L109">		this.url = url;</span>
+<span class="nc" id="L110">	}</span>
+
+	public AbstractDatabaseEngine(DatabaseEngine db) {
+<span class="nc" id="L113">		super(db.getProvider(), db.getProperties(), db.getConverter());</span>
+<span class="nc" id="L114">		this.roles = new HashMap&lt;String, DatabaseRole&gt;();</span>
+<span class="nc" id="L115">		this.users = new HashMap&lt;String, DatabaseUser&gt;();</span>
+<span class="nc" id="L116">		this.containerFactory = db.getContainerFactory();</span>
+<span class="nc" id="L117">		this.units = db.getPersistenceUnits();</span>
+<span class="nc" id="L118">		this.location = db.getLocation();</span>
+<span class="nc" id="L119">		this.schema = db.getSchema();</span>
+<span class="nc" id="L120">		this.owner = db.getOwner();</span>
+<span class="nc" id="L121">		this.name = db.getName();</span>
+<span class="nc" id="L122">		this.url = db.getURL();</span>
+<span class="nc" id="L123">	}</span>
+
+	public void backup(String directory, String zipFileName) {
+<span class="nc" id="L126">		backuper.createBackup(getLocation(), directory, zipFileName);</span>
+<span class="nc" id="L127">	}</span>
+
+	public void restore(String directory, String zipFileName) {
+<span class="nc" id="L130">		restorer.restoreBackup(directory, zipFileName);</span>
+<span class="nc" id="L131">	}</span>
+
+	public Object find(String string) {
+<span class="nc" id="L134">		return createQuery(string).getSolution();</span>
+	}
+
+	public Object find(String functor, Object... args) {
+<span class="nc" id="L138">		Class&lt;?&gt; clazz = classOf(functor, args.length);</span>
+<span class="nc" id="L139">		Object instance = JavaReflect.newInstance(clazz);</span>
+<span class="nc" id="L140">		Field[] fields = clazz.getDeclaredFields();</span>
+<span class="nc" id="L141">		checkProcedureInvokation(functor, fields, args);</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc" id="L143">			JavaReflect.writeValue(fields[i], instance, args[i]);</span>
+		}
+<span class="nc" id="L145">		return find(instance);</span>
+	}
+
+	public &lt;O&gt; O find(O o) {
+<span class="nc" id="L149">		return createQuery(o).getSolution();</span>
+	}
+
+	public &lt;O&gt; O find(Class&lt;O&gt; clazz) {
+<span class="nc" id="L153">		return createQuery(clazz).getSolution();</span>
+	}
+
+	public &lt;O&gt; O find(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L157">		return createQuery(predicate).getSolution();</span>
+	}
+
+	public List&lt;Object&gt; findAll(String string) {
+<span class="nc" id="L161">		return createQuery(string).getSolutions();</span>
+	}
+
+	public final List&lt;Object&gt; findAll(String functor, Object... args) {
+<span class="nc" id="L165">		Class&lt;?&gt; clazz = classOf(functor, args.length);</span>
+<span class="nc" id="L166">		Object instance = JavaReflect.newInstance(clazz);</span>
+<span class="nc" id="L167">		Field[] fields = clazz.getDeclaredFields();</span>
+<span class="nc" id="L168">		checkProcedureInvokation(functor, fields, args);</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc" id="L170">			JavaReflect.writeValue(fields[i], instance, args[i]);</span>
+		}
+<span class="nc" id="L172">		return findAll(instance);</span>
+	}
+
+	public &lt;O&gt; List&lt;O&gt; findAll(O o) {
+<span class="nc" id="L176">		return createQuery(o).getSolutions();</span>
+	}
+
+	public &lt;O&gt; List&lt;O&gt; findAll(Class&lt;O&gt; clazz) {
+<span class="nc" id="L180">		return createQuery(clazz).getSolutions();</span>
+	}
+
+	public &lt;O&gt; List&lt;O&gt; findAll(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L184">		return createQuery(predicate).getSolutions();</span>
+	}
+
+	public final ContainerFactory getContainerFactory() {
+<span class="nc" id="L188">		return containerFactory;</span>
+	}
+
+	public final String getLocation() {
+<span class="nc" id="L192">		return location;</span>
+	}
+
+	public final Collection&lt;DatabaseUser&gt; getUsers() {
+<span class="nc" id="L196">		ArrayList&lt;DatabaseUser&gt; u = new ArrayList&lt;DatabaseUser&gt;();</span>
+<span class="nc" id="L197">		u.add(owner);</span>
+<span class="nc" id="L198">		u.addAll(users.values());</span>
+<span class="nc" id="L199">		return u;</span>
+	}
+
+	public final Collection&lt;DatabaseRole&gt; getRoles() {
+<span class="nc" id="L203">		return roles.values();</span>
+	}
+
+	public final Schema getSchema() {
+<span class="nc" id="L207">		return schema;</span>
+	}
+
+	public final DatabaseUser getOwner() {
+<span class="nc" id="L211">		return owner;</span>
+	}
+
+	public final String getName() {
+<span class="nc" id="L215">		return name;</span>
+	}
+
+	public final Map&lt;String, DatabaseUnitInfo&gt; getPersistenceUnits() {
+<span class="nc" id="L219">		return units;</span>
+	}
+
+	public final String getRootLocation() {
+<span class="nc" id="L223">		return url.getPath();</span>
+	}
+
+	public final List&lt;Class&lt;?&gt;&gt; classes() {
+<span class="nc" id="L227">		return getSchema().getJavaClasses();</span>
+	}
+
+	public final String getDatabaseLocation() {
+<span class="nc" id="L231">		return getLocation() + SEPARATOR + &quot;database&quot;;</span>
+	}
+
+	public final URL getURL() {
+<span class="nc" id="L235">		return url;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

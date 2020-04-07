@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PrologContainerQuery.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db.prolog</a> &gt; <span class="el_source">PrologContainerQuery.java</span></div><h1>PrologContainerQuery.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db.prolog;
+
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import io.github.prolobjectlink.db.Query;
+import io.github.prolobjectlink.db.container.AbstractContainerQuery;
+import io.github.prolobjectlink.db.util.JavaReflect;
+import io.github.prolobjectlink.logging.LoggerConstants;
+import io.github.prolobjectlink.logging.LoggerUtils;
+
+public class PrologContainerQuery extends AbstractContainerQuery implements Query {
+
+	private int index;
+
+	private ArrayList&lt;Object&gt; solution;
+
+<span class="nc" id="L56">	private AscendantComparator ascendant = new AscendantComparator();</span>
+<span class="nc" id="L57">	private DescendantComparator descendant = new DescendantComparator();</span>
+
+	private static final long serialVersionUID = 5670102326238421771L;
+
+<span class="nc" id="L61">	private final class AscendantComparator implements Comparator&lt;Object&gt;, Serializable {</span>
+
+		private static final long serialVersionUID = -6327021886772541537L;
+
+		public int compare(Object o1, Object o2) {
+
+<span class="nc bnc" id="L67" title="All 4 branches missed.">			if (o1 instanceof Object[] &amp;&amp; o2 instanceof Object[]) {</span>
+
+<span class="nc" id="L69">				Object[] objects1 = (Object[]) o1;</span>
+<span class="nc" id="L70">				Object[] objects2 = (Object[]) o2;</span>
+
+				// comparison by length
+<span class="nc bnc" id="L73" title="All 2 branches missed.">				if (objects1.length &lt; objects2.length) {</span>
+<span class="nc" id="L74">					return -1;</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">				} else if (objects1.length &gt; objects2.length) {</span>
+<span class="nc" id="L76">					return 1;</span>
+				}
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">				for (int i = 0; i &lt; objects1.length; i++) {</span>
+
+<span class="nc" id="L81">					Object object1 = objects1[i];</span>
+<span class="nc" id="L82">					Object object2 = objects2[i];</span>
+
+<span class="nc bnc" id="L84" title="All 4 branches missed.">					if (object1 instanceof Object[] &amp;&amp; object2 instanceof Object[]) {</span>
+<span class="nc" id="L85">						return compare(object1, object2);</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">					} else if (object1.hashCode() &lt; object2.hashCode()) {</span>
+<span class="nc" id="L87">						return -1;</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">					} else if (object1.hashCode() &gt; object2.hashCode()) {</span>
+<span class="nc" id="L89">						return 1;</span>
+					}
+
+				}
+
+			}
+
+<span class="nc" id="L96">			return 0;</span>
+
+		}
+
+	}
+
+<span class="nc" id="L102">	private final class DescendantComparator implements Comparator&lt;Object&gt;, Serializable {</span>
+
+		private static final long serialVersionUID = -4336563430577273554L;
+
+		public int compare(Object o1, Object o2) {
+
+<span class="nc bnc" id="L108" title="All 4 branches missed.">			if (o1 instanceof Object[] &amp;&amp; o2 instanceof Object[]) {</span>
+
+<span class="nc" id="L110">				Object[] objects1 = (Object[]) o1;</span>
+<span class="nc" id="L111">				Object[] objects2 = (Object[]) o2;</span>
+
+				// comparison by length
+<span class="nc bnc" id="L114" title="All 2 branches missed.">				if (objects1.length &lt; objects2.length) {</span>
+<span class="nc" id="L115">					return 1;</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">				} else if (objects1.length &gt; objects2.length) {</span>
+<span class="nc" id="L117">					return -1;</span>
+				}
+
+<span class="nc bnc" id="L120" title="All 2 branches missed.">				for (int i = 0; i &lt; objects1.length; i++) {</span>
+
+<span class="nc" id="L122">					Object object1 = objects1[i];</span>
+<span class="nc" id="L123">					Object object2 = objects2[i];</span>
+
+<span class="nc bnc" id="L125" title="All 4 branches missed.">					if (object1 instanceof Object[] &amp;&amp; object2 instanceof Object[]) {</span>
+<span class="nc" id="L126">						return compare(object1, object2);</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">					} else if (object1.hashCode() &lt; object2.hashCode()) {</span>
+<span class="nc" id="L128">						return 1;</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">					} else if (object1.hashCode() &gt; object2.hashCode()) {</span>
+<span class="nc" id="L130">						return -1;</span>
+					}
+
+				}
+
+			}
+
+<span class="nc" id="L137">			return 0;</span>
+
+		}
+
+	}
+
+<span class="nc" id="L143">	public PrologContainerQuery(List&lt;Object&gt; solution) {</span>
+<span class="nc" id="L144">		this.solution = new ArrayList&lt;Object&gt;(solution);</span>
+<span class="nc" id="L145">	}</span>
+
+	public Query setFirstSolution(int first) {
+<span class="nc" id="L148">		checkSolutionAt(first, solution.size());</span>
+<span class="nc" id="L149">		this.firstSolution = first;</span>
+<span class="nc" id="L150">		return this;</span>
+	}
+
+	public Query setMaxSolution(int maxSolution) {
+<span class="nc" id="L154">		this.maxSolution = maxSolution;</span>
+<span class="nc" id="L155">		return this;</span>
+	}
+
+	public Object getSolution() {
+<span class="nc" id="L159">		checkSolutionAt(firstSolution, solution.size());</span>
+<span class="nc" id="L160">		return solution.get(firstSolution);</span>
+	}
+
+	public List&lt;Object&gt; getSolutions() {
+<span class="nc" id="L164">		checkSolutionAt(firstSolution, solution.size());</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">		int size = maxSolution &lt; solution.size() ? maxSolution : solution.size();</span>
+<span class="nc" id="L166">		List&lt;Object&gt; solutionList = new ArrayList&lt;Object&gt;(size);</span>
+<span class="nc" id="L167">		Iterator&lt;Object&gt; iterator = solution.listIterator(firstSolution);</span>
+<span class="nc bnc" id="L168" title="All 4 branches missed.">		for (int i = firstSolution; i &lt; size &amp;&amp; iterator.hasNext(); i++) {</span>
+<span class="nc" id="L169">			solutionList.add(iterator.next());</span>
+		}
+<span class="nc" id="L171">		return solutionList;</span>
+	}
+
+	public boolean hasNext() {
+<span class="nc bnc" id="L175" title="All 2 branches missed.">		return index &lt; solution.size();</span>
+	}
+
+	public Object next() {
+<span class="nc bnc" id="L179" title="All 2 branches missed.">		if (!hasNext()) {</span>
+<span class="nc" id="L180">			throw new NoSuchElementException();</span>
+		}
+<span class="nc" id="L182">		return solution.get(index++);</span>
+	}
+
+	@Override
+	public void remove() {
+		// skip
+<span class="nc" id="L188">		next();</span>
+<span class="nc" id="L189">	}</span>
+
+	public Query orderAscending() {
+<span class="nc" id="L192">		Collections.sort(solution, ascendant);</span>
+<span class="nc" id="L193">		return this;</span>
+	}
+
+	public Query orderDescending() {
+<span class="nc" id="L197">		Collections.sort(solution, descendant);</span>
+<span class="nc" id="L198">		return this;</span>
+	}
+
+	public Query orderBy(Comparator&lt;Object&gt; comparator) {
+<span class="nc" id="L202">		Collections.sort(solution, comparator);</span>
+<span class="nc" id="L203">		return this;</span>
+	}
+
+	public Object max() {
+<span class="nc" id="L207">		return max(ascendant);</span>
+	}
+
+	public Object max(Comparator&lt;Object&gt; comparator) {
+<span class="nc" id="L211">		return Collections.max(solution, comparator);</span>
+	}
+
+	public Object min() {
+<span class="nc" id="L215">		return min(ascendant);</span>
+	}
+
+	public Object min(Comparator&lt;Object&gt; comparator) {
+<span class="nc" id="L219">		return Collections.min(solution, comparator);</span>
+	}
+
+	public Query descend(String name) {
+<span class="nc" id="L223">		checkSolutionAt(firstSolution, solution.size());</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">		int size = maxSolution &lt; solution.size() ? maxSolution : solution.size();</span>
+<span class="nc" id="L225">		List&lt;Object&gt; solutionList = new ArrayList&lt;Object&gt;(size);</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">		for (Object object : solution) {</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">			if (object instanceof Object[]) {</span>
+<span class="nc" id="L228">				Object[] array = (Object[]) object;</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">				for (int i = 0; i &lt; array.length; i++) {</span>
+<span class="nc" id="L230">					Object objectInArray = array[i];</span>
+<span class="nc" id="L231">					Class&lt;?&gt; clazz = objectInArray.getClass();</span>
+					try {
+<span class="nc" id="L233">						Field field = clazz.getDeclaredField(name);</span>
+<span class="nc" id="L234">						array[i] = JavaReflect.readValue(field, objectInArray);</span>
+<span class="nc" id="L235">					} catch (NoSuchFieldException e) {</span>
+<span class="nc" id="L236">						LoggerUtils.error(getClass(), LoggerConstants.NO_SUCH_FIELD, e);</span>
+<span class="nc" id="L237">					}</span>
+				}
+<span class="nc" id="L239">				solutionList.add(array);</span>
+			}
+<span class="nc" id="L241">		}</span>
+<span class="nc" id="L242">		return new PrologContainerQuery(solutionList);</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L247">		final int prime = 31;</span>
+<span class="nc" id="L248">		int result = super.hashCode();</span>
+<span class="nc" id="L249">		result = prime * result + index;</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">		result = prime * result + ((solution == null) ? 0 : solution.hashCode());</span>
+<span class="nc" id="L251">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L256" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L257">			return true;</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L259">			return false;</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L261">			return false;</span>
+<span class="nc" id="L262">		PrologContainerQuery other = (PrologContainerQuery) obj;</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">		if (index != other.index)</span>
+<span class="nc" id="L264">			return false;</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">		if (solution == null) {</span>
+<span class="nc bnc" id="L266" title="All 2 branches missed.">			if (other.solution != null)</span>
+<span class="nc" id="L267">				return false;</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">		} else if (!solution.equals(other.solution))</span>
+<span class="nc" id="L269">			return false;</span>
+<span class="nc" id="L270">		return true;</span>
+	}
+
+	public void dispose() {
+<span class="nc" id="L274">		firstSolution = 0;</span>
+<span class="nc" id="L275">		maxSolution = MAX;</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">		if (solution != null) {</span>
+<span class="nc" id="L277">			solution.clear();</span>
+<span class="nc" id="L278">			solution = null;</span>
+		}
+<span class="nc" id="L280">	}</span>
+
+	public int count() {
+<span class="nc" id="L283">		return solution.size();</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

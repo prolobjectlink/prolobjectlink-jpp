@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractMemoryDatabase.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db.memory</a> &gt; <span class="el_source">AbstractMemoryDatabase.java</span></div><h1>AbstractMemoryDatabase.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db.memory;
+
+import java.net.URL;
+
+import io.github.prolobjectlink.db.DatabaseMode;
+import io.github.prolobjectlink.db.DatabaseUser;
+import io.github.prolobjectlink.db.MemoryDatabase;
+import io.github.prolobjectlink.db.PersistentContainer;
+import io.github.prolobjectlink.db.Predicate;
+import io.github.prolobjectlink.db.ProcedureQuery;
+import io.github.prolobjectlink.db.Query;
+import io.github.prolobjectlink.db.Schema;
+import io.github.prolobjectlink.db.Transaction;
+import io.github.prolobjectlink.db.TypedQuery;
+import io.github.prolobjectlink.db.VolatileContainer;
+import io.github.prolobjectlink.db.engine.AbstractDatabaseEngine;
+import io.github.prolobjectlink.db.etc.Settings;
+import io.github.prolobjectlink.db.prolog.PrologContainerQuery;
+import io.github.prolobjectlink.db.prolog.PrologTypedQuery;
+import io.github.prolobjectlink.db.tx.VolatileTransaction;
+
+/** @author Jose Zalacain @since 1.0 */
+public abstract class AbstractMemoryDatabase extends AbstractDatabaseEngine implements MemoryDatabase {
+
+	private boolean closed;
+	private final VolatileContainer storage;
+	private final VolatileTransaction transaction;
+
+	AbstractMemoryDatabase(Settings settings, URL url, String name, Schema schema, DatabaseUser owner,
+			VolatileContainer container) {
+<span class="nc" id="L63">		super(settings, url, name, schema, owner);</span>
+<span class="nc" id="L64">		this.transaction = new VolatileTransaction();</span>
+<span class="nc" id="L65">		this.storage = container;</span>
+<span class="nc" id="L66">		this.closed = false;</span>
+<span class="nc" id="L67">	}</span>
+
+	public final void backup(String directory, String zipFileName) {
+		// do nothing
+<span class="nc" id="L71">	}</span>
+
+	public final void restore(String directory, String zipFileName) {
+		// do nothing
+<span class="nc" id="L75">	}</span>
+
+	public final String getStorageLocation() {
+<span class="nc" id="L78">		return &quot;&quot;;</span>
+	}
+
+	public final void open() {
+<span class="nc" id="L82">		closed = false;</span>
+<span class="nc" id="L83">	}</span>
+
+	public final &lt;O&gt; void insert(O... facts) {
+<span class="nc" id="L86">		storage.add(facts);</span>
+<span class="nc" id="L87">	}</span>
+
+	public final &lt;O&gt; void update(O match, O update) {
+<span class="nc" id="L90">		storage.modify(match, update);</span>
+<span class="nc" id="L91">	}</span>
+
+	public final void delete(Class&lt;?&gt; clazz) {
+<span class="nc" id="L94">		storage.remove(clazz);</span>
+<span class="nc" id="L95">	}</span>
+
+	public final &lt;O&gt; void delete(O... facts) {
+<span class="nc" id="L98">		storage.remove(facts);</span>
+<span class="nc" id="L99">	}</span>
+
+	public final boolean contains(String string) {
+<span class="nc" id="L102">		return storage.contains(string);</span>
+	}
+
+	public final &lt;O&gt; boolean contains(O object) {
+<span class="nc" id="L106">		return storage.contains(object);</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Class&lt;O&gt; clazz) {
+<span class="nc" id="L110">		return storage.contains(clazz);</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L114">		return storage.contains(predicate);</span>
+	}
+
+	public final boolean contains(String functor, int arity) {
+<span class="nc" id="L118">		return storage.contains(functor, arity);</span>
+	}
+
+	public final Query createQuery(String string) {
+<span class="nc" id="L122">		return new PrologContainerQuery(storage.findAll(string));</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(O o) {
+<span class="nc" id="L126">		return new PrologTypedQuery&lt;O&gt;(storage.findAll(o));</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Class&lt;O&gt; clazz) {
+<span class="nc" id="L130">		return new PrologTypedQuery&lt;O&gt;(storage.findAll(clazz));</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L134">		return new PrologTypedQuery&lt;O&gt;(storage.findAll(predicate));</span>
+	}
+
+	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
+<span class="nc" id="L138">		throw new UnsupportedOperationException(&quot;createProcedureQuery(String functor, String... args)&quot;);</span>
+	}
+
+	public final PersistentContainer containerOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L142">		throw new UnsupportedOperationException(&quot;containerOf(Class&lt;?&gt; clazz)&quot;);</span>
+	}
+
+	public final PersistentContainer getContainer() {
+<span class="nc" id="L146">		throw new UnsupportedOperationException(&quot;containerOf(Class&lt;?&gt; clazz)&quot;);</span>
+	}
+
+	public final String locationOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L150">		String location = &quot;/&quot; + clazz.getName().replace('.', '/');</span>
+<span class="nc" id="L151">		return location.substring(0, location.lastIndexOf('/'));</span>
+	}
+
+	public final void include(String path) {
+<span class="nc" id="L155">		getEngine().include(path);</span>
+<span class="nc" id="L156">	}</span>
+
+	public final Transaction getTransaction() {
+<span class="nc" id="L159">		return transaction;</span>
+	}
+
+	public final boolean isOpen() {
+<span class="nc bnc" id="L163" title="All 2 branches missed.">		return !closed;</span>
+	}
+
+	public final void flush() {
+		// do nothing
+<span class="nc" id="L168">	}</span>
+
+	public final void clear() {
+<span class="nc" id="L171">		storage.clear();</span>
+<span class="nc" id="L172">	}</span>
+
+	public final void close() {
+<span class="nc" id="L175">		closed = true;</span>
+<span class="nc" id="L176">	}</span>
+
+	public final void begin() {
+<span class="nc" id="L179">		closed = false;</span>
+<span class="nc" id="L180">	}</span>
+
+	public final void commit() {
+<span class="nc" id="L183">		getTransaction().commit();</span>
+<span class="nc" id="L184">	}</span>
+
+	public final void rollback() {
+<span class="nc" id="L187">		getTransaction().rollback();</span>
+<span class="nc" id="L188">	}</span>
+
+	public boolean isActive() {
+<span class="nc" id="L191">		return getTransaction().isActive();</span>
+	}
+
+	public final void defragment() {
+		// do nothing
+<span class="nc" id="L196">	}</span>
+
+	public final DatabaseMode getMode() {
+<span class="nc" id="L199">		return DatabaseMode.MEMORY;</span>
+	}
+
+	public final MemoryDatabase create() {
+<span class="nc" id="L203">		return this;</span>
+	}
+
+	public final MemoryDatabase drop() {
+<span class="nc" id="L207">		getSchema().clear();</span>
+<span class="nc" id="L208">		clear();</span>
+<span class="nc" id="L209">		flush();</span>
+<span class="nc" id="L210">		return this;</span>
+	}
+
+	public final boolean exist() {
+<span class="nc bnc" id="L214" title="All 2 branches missed.">		return getSchema().countUsers() &gt; 0;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractGraph.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.graph</a> &gt; <span class="el_source">AbstractGraph.java</span></div><h1>AbstractGraph.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.graph;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+import io.github.prolobjectlink.Direction;
+import io.github.prolobjectlink.Graph;
+import io.github.prolobjectlink.GraphEdge;
+import io.github.prolobjectlink.GraphVertex;
+import io.github.prolobjectlink.graph.DirectedGraph.GenericGraphVertex;
+
+/**
+ * Partial implementation of {@link Graph} interface.
+ * 
+ * @author Jose Zalacain
+ *
+ * @param &lt;V&gt; vertex element type
+ * @param &lt;E&gt; edge element type
+ * 
+ * @since 1.0
+ * @see DirectedGraph
+ * @see Graph
+ */
+public abstract class AbstractGraph&lt;V, E&gt; implements Graph&lt;V, E&gt; {
+
+	protected Collection&lt;GraphEdge&lt;E&gt;&gt; edges;
+	protected Collection&lt;GraphVertex&lt;V&gt;&gt; vertices;
+
+<span class="fc" id="L63">	public AbstractGraph() {</span>
+<span class="fc" id="L64">		edges = new LinkedList&lt;GraphEdge&lt;E&gt;&gt;();</span>
+<span class="fc" id="L65">		vertices = new LinkedList&lt;GraphVertex&lt;V&gt;&gt;();</span>
+<span class="fc" id="L66">	}</span>
+
+<span class="fc" id="L68">	public AbstractGraph(Graph&lt;V, E&gt; graph) {</span>
+<span class="fc" id="L69">		edges = new LinkedList&lt;GraphEdge&lt;E&gt;&gt;();</span>
+<span class="fc" id="L70">		vertices = new LinkedList&lt;GraphVertex&lt;V&gt;&gt;();</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">		if (graph != null) {</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">			for (GraphEdge&lt;E&gt; edge : graph.getEdges()) {</span>
+<span class="fc" id="L73">				edges.add(edge);</span>
+<span class="fc" id="L74">			}</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">			for (GraphVertex&lt;V&gt; vertex : graph.getVertices()) {</span>
+<span class="fc" id="L76">				vertices.add(vertex);</span>
+<span class="fc" id="L77">			}</span>
+		}
+<span class="fc" id="L79">	}</span>
+
+	public final GraphEdge&lt;E&gt; addEdge(V from, V to, E edge) {
+<span class="nc" id="L82">		return addEdge(getVertex(from), getVertex(to), edge);</span>
+	}
+
+	public final GraphEdge&lt;E&gt; addEdge(V from, V to, E edge, Direction direction) {
+<span class="nc" id="L86">		return addEdge(getVertex(from), getVertex(to), edge, direction);</span>
+	}
+
+	public final GraphEdge&lt;E&gt; addEdge(GraphVertex&lt;V&gt; from, GraphVertex&lt;V&gt; to, E edge) {
+<span class="fc" id="L90">		return addEdge(from, to, edge, Direction.BOTH);</span>
+	}
+
+	public final GraphVertex&lt;V&gt; addVertex(GraphVertex&lt;V&gt; vertex) {
+<span class="fc" id="L94">		vertices.add(vertex);</span>
+<span class="fc" id="L95">		return vertex;</span>
+	}
+
+	public final void removeEdges(GraphVertex&lt;V&gt; vertex) {
+<span class="fc" id="L99">		GenericGraphVertex v = vertex.unwrap(GenericGraphVertex.class);</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		for (GraphEdge&lt;E&gt; e : new ArrayList&lt;GraphEdge&lt;E&gt;&gt;(v.outgoing.values())) {</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">			if (e.getFrom() == v) {</span>
+<span class="fc" id="L102">				v.outgoing.remove(e.getTo());</span>
+			}
+<span class="fc" id="L104">		}</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">		for (GraphEdge&lt;E&gt; e : new ArrayList&lt;GraphEdge&lt;E&gt;&gt;(v.incoming.values())) {</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">			if (e.getTo() == v) {</span>
+<span class="fc" id="L107">				v.incoming.remove(e.getFrom());</span>
+			}
+<span class="fc" id="L109">		}</span>
+<span class="fc" id="L110">	}</span>
+
+	public final GraphEdge&lt;E&gt; getEdge(Object o) {
+<span class="fc bfc" id="L113" title="All 2 branches covered.">		for (GraphEdge&lt;E&gt; edge : edges) {</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">			if (edge.getElement().equals(o)) {</span>
+<span class="fc" id="L115">				return edge;</span>
+			}
+<span class="fc" id="L117">		}</span>
+<span class="fc" id="L118">		return null;</span>
+	}
+
+	public final GraphVertex&lt;V&gt; getVertex(Object o) {
+<span class="fc bfc" id="L122" title="All 2 branches covered.">		for (GraphVertex&lt;V&gt; vertex : vertices) {</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">			if (vertex.getElement().equals(o)) {</span>
+<span class="fc" id="L124">				return vertex;</span>
+			}
+<span class="fc" id="L126">		}</span>
+<span class="fc" id="L127">		return null;</span>
+	}
+
+	public final GraphVertex&lt;V&gt; getVertex(GraphVertex&lt;V&gt; vertex, GraphEdge&lt;E&gt; edge) {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">		if (edge != null) {</span>
+<span class="fc" id="L132">			GraphVertex&lt;V&gt; from = edge.getFrom();</span>
+<span class="fc" id="L133">			GraphVertex&lt;V&gt; to = edge.getTo();</span>
+<span class="pc bpc" id="L134" title="1 of 4 branches missed.">			if (from != null &amp;&amp; from.equals(vertex)) {</span>
+<span class="fc" id="L135">				return to;</span>
+<span class="pc bpc" id="L136" title="1 of 4 branches missed.">			} else if (to != null &amp;&amp; to.equals(vertex)) {</span>
+<span class="fc" id="L137">				return from;</span>
+			}
+		}
+<span class="fc" id="L140">		return null;</span>
+	}
+
+	public final int countOutEdges(GraphVertex&lt;V&gt; vertex) {
+<span class="fc" id="L144">		return vertex.countOutgoings();</span>
+	}
+
+	public final int countInEdges(GraphVertex&lt;V&gt; vertex) {
+<span class="fc" id="L148">		return vertex.countIncomings();</span>
+	}
+
+	public final Iterable&lt;GraphEdge&lt;E&gt;&gt; getEdges() {
+<span class="fc" id="L152">		return edges;</span>
+	}
+
+	public final Iterable&lt;GraphVertex&lt;V&gt;&gt; getVertices() {
+<span class="fc" id="L156">		return vertices;</span>
+	}
+
+	public final int countEdges() {
+<span class="fc" id="L160">		return edges.size();</span>
+	}
+
+	public final int countVertices() {
+<span class="fc" id="L164">		return vertices.size();</span>
+	}
+
+	public final boolean isEmpty() {
+<span class="fc" id="L168">		return vertices.isEmpty();</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L173">		StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L174">		Iterator&lt;GraphEdge&lt;E&gt;&gt; ei = edges.iterator();</span>
+<span class="nc" id="L175">		Iterator&lt;GraphVertex&lt;V&gt;&gt; vi = vertices.iterator();</span>
+<span class="nc" id="L176">		sb.append('[');</span>
+
+		// vertices
+<span class="nc" id="L179">		sb.append('[');</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		if (vi.hasNext()) {</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">			while (vi.hasNext()) {</span>
+<span class="nc" id="L182">				GraphVertex&lt;V&gt; v = vi.next();</span>
+<span class="nc" id="L183">				sb.append(v);</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">				if (vi.hasNext()) {</span>
+<span class="nc" id="L185">					sb.append(',');</span>
+<span class="nc" id="L186">					sb.append(' ');</span>
+				}
+<span class="nc" id="L188">			}</span>
+		}
+
+<span class="nc" id="L191">		sb.append(']');</span>
+<span class="nc" id="L192">		sb.append(',');</span>
+
+		// edges
+<span class="nc" id="L195">		sb.append('[');</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">		if (ei.hasNext()) {</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">			while (ei.hasNext()) {</span>
+<span class="nc" id="L198">				GraphEdge&lt;E&gt; e = ei.next();</span>
+<span class="nc" id="L199">				sb.append(e);</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">				if (vi.hasNext()) {</span>
+<span class="nc" id="L201">					sb.append(',');</span>
+<span class="nc" id="L202">					sb.append(' ');</span>
+				}
+<span class="nc" id="L204">			}</span>
+		}
+<span class="nc" id="L206">		sb.append(']');</span>
+<span class="nc" id="L207">		sb.append(']');</span>
+<span class="nc" id="L208">		return &quot;&quot; + sb + &quot;&quot;;</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="fc" id="L213">		final int prime = 31;</span>
+<span class="fc" id="L214">		int result = 1;</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">		result = prime * result + ((edges == null) ? 0 : edges.hashCode());</span>
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">		result = prime * result + ((vertices == null) ? 0 : vertices.hashCode());</span>
+<span class="fc" id="L217">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L223">			return true;</span>
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L225">			return false;</span>
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L227">			return false;</span>
+<span class="fc" id="L228">		AbstractGraph&lt;?, ?&gt; other = (AbstractGraph&lt;?, ?&gt;) obj;</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">		if (edges == null) {</span>
+<span class="nc bnc" id="L230" title="All 2 branches missed.">			if (other.edges != null)</span>
+<span class="nc" id="L231">				return false;</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">		} else if (!edges.equals(other.edges)) {</span>
+<span class="fc" id="L233">			return false;</span>
+		}
+<span class="pc bpc" id="L235" title="1 of 2 branches missed.">		if (vertices == null) {</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">			if (other.vertices != null)</span>
+<span class="nc" id="L237">				return false;</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">		} else if (!vertices.equals(other.vertices)) {</span>
+<span class="nc" id="L239">			return false;</span>
+		}
+<span class="fc" id="L241">		return true;</span>
+	}
+
+	public final void clear() {
+<span class="fc bfc" id="L245" title="All 2 branches covered.">		for (GraphVertex&lt;V&gt; vertex : new ArrayList&lt;GraphVertex&lt;V&gt;&gt;(vertices)) {</span>
+<span class="fc" id="L246">			removeVertex(vertex);</span>
+<span class="fc" id="L247">			removeEdges(vertex);</span>
+<span class="fc" id="L248">		}</span>
+<span class="fc" id="L249">		vertices.clear();</span>
+<span class="fc" id="L250">		edges.clear();</span>
+<span class="fc" id="L251">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

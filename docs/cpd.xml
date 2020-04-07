@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="121" tokens="855">
-<file line="89" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
-<file line="117" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\AbstractStorage.java"/>
+<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
+<file line="116" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\storage\AbstractStorage.java"/>
 <codefragment>
 <![CDATA[
 		return getEngine().currentPredicate(functor, arity);
@@ -130,8 +130,8 @@
 </codefragment>
 </duplication>
 <duplication lines="29" tokens="297">
-<file line="163" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
-<file line="163" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="163" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="163" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
 <codefragment>
 <![CDATA[
 		if (embeddedRelationalDB == null) {
@@ -167,8 +167,8 @@
 </codefragment>
 </duplication>
 <duplication lines="28" tokens="280">
-<file line="158" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
-<file line="157" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteRelational.java"/>
+<file line="158" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="157" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
 <codefragment>
 <![CDATA[
 		if (remoteRelationalDatabase == null) {
@@ -203,8 +203,8 @@
 </codefragment>
 </duplication>
 <duplication lines="28" tokens="280">
-<file line="84" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
-<file line="84" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="84" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="84" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
 <codefragment>
 <![CDATA[
 		if (embeddedRelationalDB == null) {
@@ -239,8 +239,8 @@
 </codefragment>
 </duplication>
 <duplication lines="27" tokens="275">
-<file line="80" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
-<file line="80" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteRelational.java"/>
+<file line="80" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="80" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
 <codefragment>
 <![CDATA[
 		if (remoteRelationalDatabase == null) {
@@ -274,8 +274,8 @@
 </codefragment>
 </duplication>
 <duplication lines="25" tokens="254">
-<file line="162" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="158" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="162" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="158" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
 <codefragment>
 <![CDATA[
 		if (remoteHierarchicalDatabase == null) {
@@ -307,8 +307,8 @@
 </codefragment>
 </duplication>
 <duplication lines="25" tokens="251">
-<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
-<file line="122" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
+<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
+<file line="122" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
 <codefragment>
 <![CDATA[
 			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -340,8 +340,8 @@
 </codefragment>
 </duplication>
 <duplication lines="25" tokens="250">
-<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="124" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="124" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
 <codefragment>
 <![CDATA[
 			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -373,8 +373,8 @@
 </codefragment>
 </duplication>
 <duplication lines="23" tokens="245">
-<file line="86" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteRelational.java"/>
-<file line="121" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteRelational.java"/>
+<file line="86" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
+<file line="121" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
 <codefragment>
 <![CDATA[
 			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -404,8 +404,8 @@
 </codefragment>
 </duplication>
 <duplication lines="24" tokens="245">
-<file line="86" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
-<file line="121" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="86" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="121" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
 <codefragment>
 <![CDATA[
 			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -436,8 +436,8 @@
 </codefragment>
 </duplication>
 <duplication lines="34" tokens="240">
-<file line="298" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologObjectConverter.java"/>
-<file line="418" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologObjectConverter.java"/>
+<file line="297" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\PrologObjectConverter.java"/>
+<file line="417" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\PrologObjectConverter.java"/>
 <codefragment>
 <![CDATA[
 	public PrologTerm toTerm(Object object, Map<String, PrologTerm> solutionsMap) {
@@ -478,8 +478,8 @@
 </codefragment>
 </duplication>
 <duplication lines="23" tokens="239">
-<file line="91" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
-<file line="126" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="91" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="126" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
 <codefragment>
 <![CDATA[
 			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -509,8 +509,8 @@
 </codefragment>
 </duplication>
 <duplication lines="23" tokens="239">
-<file line="91" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
-<file line="126" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="91" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="126" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
 <codefragment>
 <![CDATA[
 			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -540,8 +540,8 @@
 </codefragment>
 </duplication>
 <duplication lines="23" tokens="232">
-<file line="119" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
-<file line="119" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteRelational.java"/>
+<file line="119" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="119" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
 <codefragment>
 <![CDATA[
 		if (remoteRelationalDatabase == null) {
@@ -571,8 +571,8 @@
 </codefragment>
 </duplication>
 <duplication lines="24" tokens="232">
-<file line="162" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="163" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="162" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="163" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
 <codefragment>
 <![CDATA[
 		if (embeddedHierarchicalDatabase == null) {
@@ -603,8 +603,8 @@
 </codefragment>
 </duplication>
 <duplication lines="23" tokens="231">
-<file line="124" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
-<file line="124" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="124" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="124" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
 <codefragment>
 <![CDATA[
 		if (embeddedRelationalDB == null) {
@@ -633,21 +633,20 @@
 ]]>
 </codefragment>
 </duplication>
-<duplication lines="21" tokens="220">
-<file line="121" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
-<file line="86" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteRelational.java"/>
+<duplication lines="21" tokens="219">
+<file line="126" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="91" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
 <codefragment>
 <![CDATA[
 					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
 					URL url = null;
 					try {
-						System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
 						url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
 						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
 							throw new MalformedURLException("The URL path don't have database name at the end");
 						}
 					} catch (MalformedURLException e) {
-						LoggerUtils.error(RemoteHierarchical.class, LoggerConstants.IO, e);
+						LoggerUtils.error(EmbeddedHierarchical.class, LoggerConstants.IO, e);
 					}
 
 					assert url != null;
@@ -655,6 +654,7 @@
 					String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
 					String user = unit.getProperties().getProperty(DatabaseProperties.USER);
 					DatabaseUser owner = new DatabaseUser(user, password);
+					StorageManager storage = settings.createStorageManager(url.getFile() + "/database", mode);
 					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
 					for (String managedClass : unit.getManagedClassNames()) {
 						schema.addClass(JavaReflect.classForName(managedClass), "");
@@ -663,8 +663,8 @@
 </codefragment>
 </duplication>
 <duplication lines="34" tokens="214">
-<file line="89" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
-<file line="87" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\AbstractStorage.java"/>
+<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="86" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\storage\AbstractStorage.java"/>
 <codefragment>
 <![CDATA[
 	}
@@ -705,8 +705,8 @@
 </codefragment>
 </duplication>
 <duplication lines="26" tokens="188">
-<file line="159" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
-<file line="189" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="158" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
+<file line="188" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
 <codefragment>
 <![CDATA[
 	public <O> List<O> findAll(O o) {
@@ -739,8 +739,8 @@
 </codefragment>
 </duplication>
 <duplication lines="17" tokens="177">
-<file line="162" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="160" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
+<file line="162" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="160" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
 <codefragment>
 <![CDATA[
 		if (memoryRelationalDB == null) {
@@ -764,9 +764,9 @@
 </codefragment>
 </duplication>
 <duplication lines="16" tokens="172">
-<file line="82" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="82" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
-<file line="80" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="82" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="82" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
+<file line="80" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
 <codefragment>
 <![CDATA[
 		if (remoteHierarchicalDatabase == null) {
@@ -789,8 +789,8 @@
 </codefragment>
 </duplication>
 <duplication lines="42" tokens="150">
-<file line="335" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologTreeMap.java"/>
-<file line="314" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologTreeSet.java"/>
+<file line="335" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\PrologTreeMap.java"/>
+<file line="314" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\PrologTreeSet.java"/>
 <codefragment>
 <![CDATA[
 	private void fixAfterChange(PrologTreeSet<E> root) {
@@ -839,8 +839,8 @@
 </codefragment>
 </duplication>
 <duplication lines="20" tokens="143">
-<file line="138" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractContainer.java"/>
-<file line="86" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologStorageGraph.java"/>
+<file line="137" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\container\AbstractContainer.java"/>
+<file line="85" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\PrologStorageGraph.java"/>
 <codefragment>
 <![CDATA[
 	public <O> Class<O> classOf(Predicate<O> predicate) {
@@ -867,8 +867,8 @@
 </codefragment>
 </duplication>
 <duplication lines="32" tokens="142">
-<file line="241" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractRelationalCache.java"/>
-<file line="98" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\AbstractStorageGraph.java"/>
+<file line="240" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\cache\AbstractRelationalCache.java"/>
+<file line="97" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\storage\AbstractStorageGraph.java"/>
 <codefragment>
 <![CDATA[
 	}
@@ -907,8 +907,8 @@
 </codefragment>
 </duplication>
 <duplication lines="20" tokens="137">
-<file line="134" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
-<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="134" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
@@ -935,8 +935,8 @@
 </codefragment>
 </duplication>
 <duplication lines="20" tokens="137">
-<file line="134" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
-<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="134" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
@@ -963,8 +963,8 @@
 </codefragment>
 </duplication>
 <duplication lines="16" tokens="133">
-<file line="99" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
-<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="99" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
@@ -987,8 +987,8 @@
 </codefragment>
 </duplication>
 <duplication lines="16" tokens="133">
-<file line="99" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
-<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="99" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
@@ -1011,8 +1011,8 @@
 </codefragment>
 </duplication>
 <duplication lines="20" tokens="131">
-<file line="131" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
-<file line="176" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
+<file line="131" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
+<file line="176" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryRelational.class, LoggerConstants.URL, e);
@@ -1039,8 +1039,8 @@
 </codefragment>
 </duplication>
 <duplication lines="20" tokens="130">
-<file line="133" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="178" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="133" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="178" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
@@ -1067,9 +1067,9 @@
 </codefragment>
 </duplication>
 <duplication lines="12" tokens="129">
-<file line="122" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="120" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
-<file line="119" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="122" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="120" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
+<file line="119" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
 <codefragment>
 <![CDATA[
 		if (remoteHierarchicalDatabase == null) {
@@ -1088,8 +1088,8 @@
 </codefragment>
 </duplication>
 <duplication lines="13" tokens="128">
-<file line="1049" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
-<file line="1107" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
+<file line="1048" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
+<file line="1106" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
 <codefragment>
 <![CDATA[
 	public final void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
@@ -1109,8 +1109,8 @@
 </codefragment>
 </duplication>
 <duplication lines="23" tokens="127">
-<file line="43" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\Storage.java"/>
-<file line="47" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\StoragePool.java"/>
+<file line="43" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\Storage.java"/>
+<file line="47" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\StoragePool.java"/>
 <codefragment>
 <![CDATA[
 public interface StoragePool extends PersistentContainer {
@@ -1140,8 +1140,8 @@ public interface StoragePool extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="16" tokens="127">
-<file line="97" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
-<file line="176" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
+<file line="97" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
+<file line="176" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryRelational.class, LoggerConstants.URL, e);
@@ -1164,8 +1164,8 @@ public interface StoragePool extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="34" tokens="127">
-<file line="45" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\DatabaseEngine.java"/>
-<file line="43" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\Storage.java"/>
+<file line="45" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\DatabaseEngine.java"/>
+<file line="43" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\Storage.java"/>
 <codefragment>
 <![CDATA[
 public interface Storage extends PersistentContainer {
@@ -1206,8 +1206,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="16" tokens="126">
-<file line="97" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="178" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="97" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="178" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
@@ -1230,8 +1230,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="19" tokens="125">
-<file line="130" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteRelational.java"/>
-<file line="173" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteRelational.java"/>
+<file line="130" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
+<file line="173" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
@@ -1257,8 +1257,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="20" tokens="125">
-<file line="130" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
-<file line="174" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="130" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="174" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
@@ -1285,8 +1285,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="26" tokens="124">
-<file line="47" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\DatabaseEngine.java"/>
-<file line="52" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\VolatileContainer.java"/>
+<file line="47" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\DatabaseEngine.java"/>
+<file line="52" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\VolatileContainer.java"/>
 <codefragment>
 <![CDATA[
 	public Object find(String string);
@@ -1319,8 +1319,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="15" tokens="121">
-<file line="95" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteRelational.java"/>
-<file line="173" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteRelational.java"/>
+<file line="95" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
+<file line="173" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
@@ -1342,8 +1342,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="16" tokens="121">
-<file line="95" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
-<file line="174" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="95" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="174" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
 <codefragment>
 <![CDATA[
 				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
@@ -1366,8 +1366,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="19" tokens="118">
-<file line="107" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
-<file line="129" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
+<file line="107" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
+<file line="129" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
 <codefragment>
 <![CDATA[
 			Callable<List<O>> worker = new StorageFindAllClass<O>(storage, clazz);
@@ -1392,30 +1392,12 @@ public interface Storage extends PersistentContainer {
 ]]>
 </codefragment>
 </duplication>
-<duplication lines="10" tokens="117">
-<file line="124" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
-<codefragment>
-<![CDATA[
-					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
-					URL url = null;
-					try {
-						System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
-						url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
-						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
-							throw new MalformedURLException("The URL path don't have database name at the end");
-						}
-					} catch (MalformedURLException e) {
-						LoggerUtils.error(MemoryRelational.class, LoggerConstants.IO, e);
-]]>
-</codefragment>
-</duplication>
 <duplication lines="13" tokens="113">
-<file line="99" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
-<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="134" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
 <codefragment>
 <![CDATA[
-				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
+				LoggerUtils.error(EmbeddedHierarchical.class, LoggerConstants.IO, e);
 			}
 
 			assert url != null;
@@ -1432,8 +1414,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="8" tokens="111">
-<file line="123" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="168" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="123" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="168" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
 <codefragment>
 <![CDATA[
 			String name = unit.getPersistenceUnitName();
@@ -1448,8 +1430,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="33" tokens="111">
-<file line="51" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\ArrayQueue.java"/>
-<file line="55" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\AbstractQueue.java"/>
+<file line="51" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\ArrayQueue.java"/>
+<file line="55" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\AbstractQueue.java"/>
 <codefragment>
 <![CDATA[
 	public boolean offer(E e) {
@@ -1489,8 +1471,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="19" tokens="109">
-<file line="107" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
-<file line="151" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
+<file line="107" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
+<file line="151" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
 <codefragment>
 <![CDATA[
 			Callable<List<O>> worker = new StorageFindAllPredicate<O>(storage, predicate);
@@ -1516,8 +1498,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="19" tokens="109">
-<file line="63" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
-<file line="85" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
+<file line="63" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
+<file line="85" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\storage\StoragePoolExecutor.java"/>
 <codefragment>
 <![CDATA[
 			Callable<List<Object>> worker = new StorageFindAllStringArray(storage, functor, args);
@@ -1543,8 +1525,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="12" tokens="107">
-<file line="178" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
-<file line="164" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\engine\AbstractDatabaseEngine.java"/>
+<file line="177" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="164" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\engine\AbstractDatabaseEngine.java"/>
 <codefragment>
 <![CDATA[
 	public final List<Object> findAll(String functor, Object... args) {
@@ -1563,8 +1545,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="14" tokens="106">
-<file line="184" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
-<file line="214" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="183" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
+<file line="213" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
 <codefragment>
 <![CDATA[
 	public <O> List<O> findAll(Class<O> clazz) {
@@ -1585,8 +1567,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="15" tokens="104">
-<file line="125" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
-<file line="134" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\engine\AbstractDatabaseEngine.java"/>
+<file line="124" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="134" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\engine\AbstractDatabaseEngine.java"/>
 <codefragment>
 <![CDATA[
 		return createQuery(string).getSolution();
@@ -1608,8 +1590,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="19" tokens="103">
-<file line="203" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologHashMap.java"/>
-<file line="84" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologTreeMap.java"/>
+<file line="203" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\PrologHashMap.java"/>
+<file line="84" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\PrologTreeMap.java"/>
 <codefragment>
 <![CDATA[
 	}
@@ -1635,8 +1617,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="7" tokens="103">
-<file line="169" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\memory\MemoryRelational.java"/>
+<file line="169" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
 <codefragment>
 <![CDATA[
 					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
@@ -1650,8 +1632,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="21" tokens="102">
-<file line="195" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\RelationalGraph.java"/>
-<file line="333" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\RelationalGraph.java"/>
+<file line="194" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\RelationalGraph.java"/>
+<file line="332" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\RelationalGraph.java"/>
 <codefragment>
 <![CDATA[
 			Class<?> to = getToVertexElementClass();
@@ -1679,8 +1661,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="19" tokens="102">
-<file line="109" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
-<file line="139" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
+<file line="108" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\cache\AbstractHierarchicalCache.java"/>
+<file line="138" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
 <codefragment>
 <![CDATA[
 	public <O> O find(O o) {
@@ -1706,8 +1688,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="24" tokens="101">
-<file line="266" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\engine\AbstractHierarchicalDatabase.java"/>
-<file line="183" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\engine\AbstractRelationalDatabase.java"/>
+<file line="266" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\engine\AbstractHierarchicalDatabase.java"/>
+<file line="183" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\engine\AbstractRelationalDatabase.java"/>
 <codefragment>
 <![CDATA[
 		return storage.isOpen();
@@ -1738,8 +1720,8 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="20" tokens="100">
-<file line="242" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologContainerQuery.java"/>
-<file line="182" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\org\prolobjectlink\db\prolog\PrologTypedQuery.java"/>
+<file line="242" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\PrologContainerQuery.java"/>
+<file line="182" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\PrologTypedQuery.java"/>
 <codefragment>
 <![CDATA[
 		return new PrologTypedQuery<Object>(solutionList);

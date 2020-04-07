@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractStorageManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db.storage</a> &gt; <span class="el_source">AbstractStorageManager.java</span></div><h1>AbstractStorageManager.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db.storage;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+
+import io.github.prolobjectlink.db.ContainerFactory;
+import io.github.prolobjectlink.db.ObjectConverter;
+import io.github.prolobjectlink.db.PersistentContainer;
+import io.github.prolobjectlink.db.Predicate;
+import io.github.prolobjectlink.db.ProcedureQuery;
+import io.github.prolobjectlink.db.Query;
+import io.github.prolobjectlink.db.Storage;
+import io.github.prolobjectlink.db.StorageManager;
+import io.github.prolobjectlink.db.StorageMode;
+import io.github.prolobjectlink.db.StoragePool;
+import io.github.prolobjectlink.db.Transaction;
+import io.github.prolobjectlink.db.TypedQuery;
+import io.github.prolobjectlink.db.container.AbstractPersistentContainer;
+import io.github.prolobjectlink.db.container.DummyProcedureQuery;
+import io.github.prolobjectlink.db.etc.Settings;
+import io.github.prolobjectlink.db.prolog.PrologContainerQuery;
+import io.github.prolobjectlink.db.prolog.PrologTypedQuery;
+import io.github.prolobjectlink.db.tx.PersistentContainerTransaction;
+import io.github.prolobjectlink.db.util.JavaLists;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
+
+/** @author Jose Zalacain @since 1.0 */
+public abstract class AbstractStorageManager extends AbstractPersistentContainer implements StorageManager {
+
+	private final StorageMode storageMode;
+	private final Transaction transaction;
+	private final IdentityHashMap&lt;Class&lt;?&gt;, PersistentContainer&gt; master;
+	private final IdentityHashMap&lt;Class&lt;?&gt;, PersistentContainer&gt; logger;
+
+	protected AbstractStorageManager(PrologProvider provider, Settings properties,
+			ObjectConverter&lt;PrologTerm&gt; converter, String location, ContainerFactory containerFactory,
+			StorageMode storageMode) {
+<span class="nc" id="L75">		super(provider, properties, converter, location, containerFactory);</span>
+<span class="nc" id="L76">		this.master = new IdentityHashMap&lt;Class&lt;?&gt;, PersistentContainer&gt;();</span>
+<span class="nc" id="L77">		this.logger = new IdentityHashMap&lt;Class&lt;?&gt;, PersistentContainer&gt;();</span>
+<span class="nc" id="L78">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L79">		this.storageMode = storageMode;</span>
+<span class="nc" id="L80">	}</span>
+
+	public final void open() {
+<span class="nc" id="L83">		open = true;</span>
+<span class="nc" id="L84">	}</span>
+
+	public final &lt;O&gt; void insert(O... objects) {
+<span class="nc" id="L87">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L88" title="All 4 branches missed.">		if (objects != null &amp;&amp; objects.length &gt; 0) {</span>
+<span class="nc" id="L89">			Class&lt;?&gt; clazz = objects.getClass();</span>
+<span class="nc" id="L90">			Class&lt;?&gt; type = clazz.getComponentType();</span>
+<span class="nc" id="L91">			PersistentContainer c = containerOf(type);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">			if (c != null) {</span>
+<span class="nc" id="L93">				c.getTransaction().begin();</span>
+<span class="nc" id="L94">				c.insert(objects);</span>
+<span class="nc" id="L95">				c.getTransaction().commit();</span>
+<span class="nc" id="L96">				c.getTransaction().close();</span>
+			}
+		}
+<span class="nc" id="L99">	}</span>
+
+	public final &lt;O&gt; void update(O match, O update) {
+<span class="nc" id="L102">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L103">		checkReplacementObject(match, update);</span>
+<span class="nc" id="L104">		Class&lt;?&gt; clazz = match.getClass();</span>
+<span class="nc" id="L105">		PersistentContainer c = containerOf(clazz);</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L107">			c.getTransaction().begin();</span>
+<span class="nc" id="L108">			c.update(match, update);</span>
+<span class="nc" id="L109">			c.getTransaction().commit();</span>
+<span class="nc" id="L110">			c.getTransaction().close();</span>
+		}
+<span class="nc" id="L112">	}</span>
+
+	public final &lt;O&gt; void delete(O... objects) {
+<span class="nc" id="L115">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L116" title="All 4 branches missed.">		if (objects != null &amp;&amp; objects.length &gt; 0) {</span>
+<span class="nc" id="L117">			Class&lt;?&gt; clazz = objects.getClass();</span>
+<span class="nc" id="L118">			Class&lt;?&gt; type = clazz.getComponentType();</span>
+<span class="nc" id="L119">			PersistentContainer c = containerOf(type);</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">			if (c != null) {</span>
+<span class="nc" id="L121">				c.getTransaction().begin();</span>
+<span class="nc" id="L122">				c.delete(objects);</span>
+<span class="nc" id="L123">				c.getTransaction().commit();</span>
+<span class="nc" id="L124">				c.getTransaction().close();</span>
+			}
+		}
+<span class="nc" id="L127">	}</span>
+
+	public final void delete(Class&lt;?&gt; clazz) {
+<span class="nc" id="L130">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L131">		PersistentContainer c = containerOf(clazz);</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L133">			c.getTransaction().begin();</span>
+<span class="nc" id="L134">			c.delete(clazz);</span>
+<span class="nc" id="L135">			c.getTransaction().commit();</span>
+<span class="nc" id="L136">			c.getTransaction().close();</span>
+<span class="nc" id="L137">			String path = locationOf(clazz);</span>
+<span class="nc" id="L138">			File fileLock = new File(path + &quot;.lock&quot;);</span>
+<span class="nc" id="L139">			File file = new File(path);</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">			if (file.delete()) {</span>
+<span class="nc" id="L141">				fileLock.deleteOnExit();</span>
+			}
+		}
+<span class="nc" id="L144">	}</span>
+
+	public final boolean contains(String string) {
+<span class="nc" id="L147">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L148">		List&lt;Class&lt;?&gt;&gt; classes = classesOf(string);</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">		for (Class&lt;?&gt; clazz : classes) {</span>
+<span class="nc" id="L150">			PersistentContainer pc = containerOf(clazz);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">			if (pc instanceof StoragePool) {</span>
+<span class="nc" id="L152">				StoragePool sp = (StoragePool) pc;</span>
+<span class="nc" id="L153">				sp.getTransaction().begin();</span>
+<span class="nc" id="L154">				List&lt;Storage&gt; storages = sp.getStorages();</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">				for (Storage storage : storages) {</span>
+<span class="nc" id="L156">					String path = storage.getLocation();</span>
+<span class="nc" id="L157">					getEngine().include(path);</span>
+<span class="nc" id="L158">				}</span>
+<span class="nc" id="L159">				sp.getTransaction().close();</span>
+			}
+<span class="nc" id="L161">		}</span>
+<span class="nc" id="L162">		return getEngine().contains(string);</span>
+	}
+
+	public final &lt;O&gt; boolean contains(O o) {
+<span class="nc" id="L166">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L167">		Class&lt;O&gt; type = classOf(o);</span>
+<span class="nc" id="L168">		PersistentContainer c = containerOf(type);</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L170">			c.getTransaction().begin();</span>
+<span class="nc" id="L171">			boolean chk = c.contains(o);</span>
+<span class="nc" id="L172">			c.getTransaction().commit();</span>
+<span class="nc" id="L173">			c.getTransaction().close();</span>
+<span class="nc" id="L174">			return chk;</span>
+		}
+<span class="nc" id="L176">		return false;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Class&lt;O&gt; clazz) {
+<span class="nc" id="L180">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L181">		PersistentContainer c = containerOf(clazz);</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L183">			c.getTransaction().begin();</span>
+<span class="nc" id="L184">			boolean chk = c.contains(clazz);</span>
+<span class="nc" id="L185">			c.getTransaction().commit();</span>
+<span class="nc" id="L186">			c.getTransaction().close();</span>
+<span class="nc" id="L187">			return chk;</span>
+		}
+<span class="nc" id="L189">		return false;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L193">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L194">		Class&lt;O&gt; type = classOf(predicate);</span>
+<span class="nc" id="L195">		PersistentContainer c = containerOf(type);</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L197">			c.getTransaction().begin();</span>
+<span class="nc" id="L198">			boolean chk = c.contains(predicate);</span>
+<span class="nc" id="L199">			c.getTransaction().commit();</span>
+<span class="nc" id="L200">			c.getTransaction().close();</span>
+<span class="nc" id="L201">			return chk;</span>
+		}
+<span class="nc" id="L203">		return false;</span>
+	}
+
+	public final boolean contains(String f, int a) {
+<span class="nc" id="L207">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L208">		Class&lt;?&gt; type = classOf(f, a);</span>
+<span class="nc" id="L209">		PersistentContainer c = containerOf(type);</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L211">			c.getTransaction().begin();</span>
+<span class="nc" id="L212">			boolean chk = c.contains(f, a);</span>
+<span class="nc" id="L213">			c.getTransaction().commit();</span>
+<span class="nc" id="L214">			c.getTransaction().close();</span>
+<span class="nc" id="L215">			return chk;</span>
+		}
+<span class="nc" id="L217">		return false;</span>
+	}
+
+	public final Query createQuery(String string) {
+<span class="nc" id="L221">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L222">		ObjectConverter&lt;PrologTerm&gt; c = getConverter();</span>
+<span class="nc" id="L223">		PrologTerm[] terms = c.toTermsArray(string);</span>
+<span class="nc" id="L224">		List&lt;Class&lt;?&gt;&gt; classes = classesOf(terms);</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">		for (Class&lt;?&gt; clazz : classes) {</span>
+<span class="nc" id="L226">			PersistentContainer pc = containerOf(clazz);</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">			if (pc instanceof StoragePool) {</span>
+<span class="nc" id="L228">				StoragePool sp = (StoragePool) pc;</span>
+<span class="nc" id="L229">				sp.getTransaction().begin();</span>
+<span class="nc" id="L230">				List&lt;Storage&gt; storages = sp.getStorages();</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">				for (Storage storage : storages) {</span>
+<span class="nc" id="L232">					String path = storage.getLocation();</span>
+<span class="nc" id="L233">					getEngine().include(path);</span>
+<span class="nc" id="L234">				}</span>
+<span class="nc" id="L235">				sp.getTransaction().close();</span>
+			}
+<span class="nc" id="L237">		}</span>
+<span class="nc" id="L238">		return new PrologContainerQuery(solutionsOf(terms, classes));</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(O o) {
+<span class="nc" id="L242">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L243">		Class&lt;O&gt; type = classOf(o);</span>
+<span class="nc" id="L244">		PersistentContainer c = containerOf(type);</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L246">			c.getTransaction().begin();</span>
+<span class="nc" id="L247">			TypedQuery&lt;O&gt; q = c.createQuery(o);</span>
+<span class="nc" id="L248">			c.getTransaction().commit();</span>
+<span class="nc" id="L249">			c.getTransaction().close();</span>
+<span class="nc" id="L250">			return q;</span>
+		}
+<span class="nc" id="L252">		ArrayList&lt;O&gt; s = new ArrayList&lt;O&gt;();</span>
+<span class="nc" id="L253">		return new PrologTypedQuery&lt;O&gt;(s);</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Class&lt;O&gt; clazz) {
+<span class="nc" id="L257">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L258">		PersistentContainer c = containerOf(clazz);</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L260">			c.getTransaction().begin();</span>
+<span class="nc" id="L261">			TypedQuery&lt;O&gt; q = c.createQuery(clazz);</span>
+<span class="nc" id="L262">			c.getTransaction().commit();</span>
+<span class="nc" id="L263">			c.getTransaction().close();</span>
+<span class="nc" id="L264">			return q;</span>
+		}
+<span class="nc" id="L266">		ArrayList&lt;O&gt; s = new ArrayList&lt;O&gt;();</span>
+<span class="nc" id="L267">		return new PrologTypedQuery&lt;O&gt;(s);</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Predicate&lt;O&gt; predicate) {
+<span class="nc" id="L271">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L272">		Class&lt;O&gt; type = classOf(predicate);</span>
+<span class="nc" id="L273">		PersistentContainer c = containerOf(type);</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L275">			c.getTransaction().begin();</span>
+<span class="nc" id="L276">			TypedQuery&lt;O&gt; q = c.createQuery(predicate);</span>
+<span class="nc" id="L277">			c.getTransaction().commit();</span>
+<span class="nc" id="L278">			c.getTransaction().close();</span>
+<span class="nc" id="L279">			return q;</span>
+		}
+<span class="nc" id="L281">		ArrayList&lt;O&gt; s = new ArrayList&lt;O&gt;();</span>
+<span class="nc" id="L282">		return new PrologTypedQuery&lt;O&gt;(s);</span>
+	}
+
+	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
+<span class="nc" id="L286">		checkActiveTransaction(transaction);</span>
+<span class="nc" id="L287">		Class&lt;?&gt; type = classOf(functor, args.length);</span>
+<span class="nc" id="L288">		PersistentContainer c = containerOf(type);</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L290">			c.getTransaction().begin();</span>
+<span class="nc" id="L291">			ProcedureQuery q = c.createProcedureQuery(functor, args);</span>
+<span class="nc" id="L292">			c.getTransaction().commit();</span>
+<span class="nc" id="L293">			c.getTransaction().close();</span>
+<span class="nc" id="L294">			return q;</span>
+		}
+<span class="nc" id="L296">		return new DummyProcedureQuery(functor, args);</span>
+	}
+
+	public final Transaction getTransaction() {
+<span class="nc" id="L300">		return transaction;</span>
+	}
+
+	/**
+	 * @deprecated Use containerOf(Class, Map), masterOf(Class) instead
+	 */
+	@Deprecated
+	public final PersistentContainer containerOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L308">		return masterOf(clazz);</span>
+	}
+
+	public final PersistentContainer masterOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L312">		PersistentContainer container = master.get(clazz);</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">		if (container == null) {</span>
+<span class="nc" id="L314">			String path = locationOf(clazz);</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">			if (storageMode == StorageMode.STORAGE_POOL) {</span>
+<span class="nc" id="L316">				String name = clazz.getSimpleName();</span>
+<span class="nc" id="L317">				container = containerFactory.createStoragePool(path, name);</span>
+<span class="nc bnc" id="L318" title="All 2 branches missed.">			} else if (storageMode == StorageMode.SINGLE_STORAGE) {</span>
+<span class="nc" id="L319">				container = containerFactory.createStorage(path);</span>
+			}
+<span class="nc" id="L321">			master.put(clazz, container);</span>
+		}
+<span class="nc" id="L323">		return container;</span>
+	}
+
+	public final PersistentContainer loggerOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L327">		PersistentContainer container = logger.get(clazz);</span>
+<span class="nc bnc" id="L328" title="All 2 branches missed.">		if (container == null) {</span>
+<span class="nc" id="L329">			String path = locationOf(clazz);</span>
+<span class="nc bnc" id="L330" title="All 2 branches missed.">			if (storageMode == StorageMode.STORAGE_POOL) {</span>
+<span class="nc" id="L331">				String name = clazz.getSimpleName();</span>
+<span class="nc" id="L332">				container = containerFactory.createStoragePool(path, name + &quot;-log&quot;);</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">			} else if (storageMode == StorageMode.SINGLE_STORAGE) {</span>
+<span class="nc" id="L334">				container = containerFactory.createStorage(path + &quot;-log&quot;);</span>
+			}
+<span class="nc" id="L336">			logger.put(clazz, container);</span>
+		}
+<span class="nc" id="L338">		return container;</span>
+	}
+
+	public final void include(String path) {
+<span class="nc bnc" id="L342" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L343">			c.include(path);</span>
+<span class="nc" id="L344">		}</span>
+<span class="nc" id="L345">	}</span>
+
+	public final String locationOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L348">		String name = clazz.getName();</span>
+<span class="nc" id="L349">		String path = name.replace('.', SEPARATOR);</span>
+<span class="nc" id="L350">		path = path.substring(0, path.lastIndexOf(SEPARATOR));</span>
+<span class="nc" id="L351">		return getLocation() + SEPARATOR + path;</span>
+	}
+
+	public final void defragment() {
+<span class="nc bnc" id="L355" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L356">			c.defragment();</span>
+<span class="nc" id="L357">		}</span>
+<span class="nc" id="L358">	}</span>
+
+	public final Collection&lt;Class&lt;?&gt;&gt; classes() {
+<span class="nc" id="L361">		List&lt;Class&lt;?&gt;&gt; l = JavaLists.arrayList(master.size());</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L363">			c.getTransaction().begin();</span>
+<span class="nc" id="L364">			l.addAll(c.classes());</span>
+<span class="nc" id="L365">			c.getTransaction().close();</span>
+<span class="nc" id="L366">		}</span>
+<span class="nc" id="L367">		return l;</span>
+	}
+
+	public final void flush() {
+<span class="nc bnc" id="L371" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L372">			c.flush();</span>
+<span class="nc" id="L373">		}</span>
+<span class="nc" id="L374">	}</span>
+
+	public final void clear() {
+<span class="nc" id="L377">		checkActiveTransaction(transaction);</span>
+<span class="nc bnc" id="L378" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L379">			c.begin();</span>
+<span class="nc" id="L380">			c.clear();</span>
+<span class="nc" id="L381">			c.commit();</span>
+<span class="nc" id="L382">			c.close();</span>
+<span class="nc" id="L383">		}</span>
+<span class="nc" id="L384">		master.clear();</span>
+<span class="nc" id="L385">	}</span>
+
+	public final void close() {
+<span class="nc bnc" id="L388" title="All 2 branches missed.">		for (PersistentContainer c : master.values()) {</span>
+<span class="nc" id="L389">			c.begin();</span>
+<span class="nc" id="L390">			c.clear();</span>
+<span class="nc" id="L391">			c.commit();</span>
+<span class="nc" id="L392">			c.close();</span>
+<span class="nc" id="L393">		}</span>
+<span class="nc" id="L394">		master.clear();</span>
+<span class="nc" id="L395">		open = false;</span>
+<span class="nc" id="L396">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

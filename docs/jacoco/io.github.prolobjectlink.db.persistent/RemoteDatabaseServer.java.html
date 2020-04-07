@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RemoteDatabaseServer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db.persistent</a> &gt; <span class="el_source">RemoteDatabaseServer.java</span></div><h1>RemoteDatabaseServer.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db.persistent;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import io.github.prolobjectlink.AbstractPlatform;
+import io.github.prolobjectlink.Platform;
+import io.github.prolobjectlink.db.DatabaseEngine;
+import io.github.prolobjectlink.db.DatabaseSchema;
+import io.github.prolobjectlink.db.DatabaseServer;
+import io.github.prolobjectlink.db.DatabaseServerType;
+import io.github.prolobjectlink.db.DatabaseType;
+import io.github.prolobjectlink.db.DatabaseUser;
+import io.github.prolobjectlink.db.Protocol;
+import io.github.prolobjectlink.db.Schema;
+import io.github.prolobjectlink.db.StorageGraph;
+import io.github.prolobjectlink.db.StorageManager;
+import io.github.prolobjectlink.db.StorageMode;
+import io.github.prolobjectlink.db.etc.Settings;
+import io.github.prolobjectlink.db.util.JavaMaps;
+import io.github.prolobjectlink.logging.LoggerConstants;
+import io.github.prolobjectlink.logging.LoggerUtils;
+
+public class RemoteDatabaseServer extends AbstractPlatform implements Platform, DatabaseServer {
+
+	private int threadId;
+	private int serverPort;
+	private volatile boolean stop;
+	private final Settings settings;
+	private ServerSocket serverSocket;
+	private final ExecutorService running;
+	private static DatabaseServer server;
+	private final DatabaseUser systemAdmin;
+	private final Map&lt;String, RemoteDatabaseThread&gt; threads;
+
+<span class="nc" id="L77">	private static final String PROTOCOL = Protocol.class.getPackage().getName();</span>
+
+	public static final DatabaseServer getInstance(Settings settings, DatabaseUser systemAdmin) {
+<span class="nc bnc" id="L80" title="All 2 branches missed.">		if (server == null) {</span>
+<span class="nc" id="L81">			server = new RemoteDatabaseServer(settings, systemAdmin, 5370);</span>
+		}
+<span class="nc" id="L83">		return server;</span>
+	}
+
+<span class="nc" id="L86">	protected RemoteDatabaseServer(Settings settings, DatabaseUser systemAdmin, int serverPort) {</span>
+<span class="nc" id="L87">		this.threads = new HashMap&lt;String, RemoteDatabaseThread&gt;();</span>
+<span class="nc" id="L88">		this.running = Executors.newCachedThreadPool();</span>
+<span class="nc" id="L89">		this.systemAdmin = systemAdmin;</span>
+<span class="nc" id="L90">		this.serverPort = serverPort;</span>
+<span class="nc" id="L91">		this.settings = settings;</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">		if (serverSocket == null) {</span>
+			try {
+<span class="nc" id="L94">				serverSocket = new ServerSocket(serverPort);</span>
+<span class="nc" id="L95">				Runtime.getRuntime().addShutdownHook(new Thread() {</span>
+					@Override
+					public void run() {
+<span class="nc" id="L98">						shutdown();</span>
+<span class="nc" id="L99">					}</span>
+				});
+<span class="nc" id="L101">			} catch (IOException e) {</span>
+<span class="nc" id="L102">				LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
+<span class="nc" id="L103">			}</span>
+		}
+<span class="nc" id="L105">	}</span>
+
+	public Map&lt;String, DatabaseEngine&gt; relationals() throws IOException {
+<span class="nc" id="L108">		Map&lt;String, DatabaseEngine&gt; relationals = JavaMaps.hashMap();</span>
+
+		// load relational databases
+<span class="nc" id="L111">		String relational = &quot;db/pdb/relational&quot;;</span>
+<span class="nc" id="L112">		File rdat = new File(relational);</span>
+<span class="nc" id="L113">		File[] files = rdat.listFiles();</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">		if (files != null) {</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">			for (File file : files) {</span>
+<span class="nc" id="L116">				String name = file.getName();</span>
+
+				// create schema instance at &quot;name&quot; location an load
+<span class="nc" id="L119">				Schema schema = new DatabaseSchema(relational + &quot;/&quot; + name, settings.getProvider(), settings,</span>
+<span class="nc" id="L120">						systemAdmin).load();</span>
+
+<span class="nc" id="L122">				StorageGraph storage = settings.createStorageGraph(relational + &quot;/&quot; + name + &quot;/database&quot;, schema,</span>
+						StorageMode.STORAGE_POOL);
+
+				// create remote URL to embedded URL
+<span class="nc" id="L126">				URL embeddedURL = new URL(&quot;file:/&quot; + relational + &quot;/&quot; + name);</span>
+
+<span class="nc" id="L128">				relationals.put(name, new EmbeddedRelational(name, embeddedURL, schema, systemAdmin, storage));</span>
+			}
+		}
+<span class="nc" id="L131">		return relationals;</span>
+	}
+
+	public Map&lt;String, DatabaseEngine&gt; hierarchicals() throws IOException {
+<span class="nc" id="L135">		Map&lt;String, DatabaseEngine&gt; hierarchicals = JavaMaps.hashMap();</span>
+
+		// load hierarchical databases
+<span class="nc" id="L138">		String hierarchical = &quot;db/pdb/hierarchical&quot;;</span>
+<span class="nc" id="L139">		File hdat = new File(hierarchical);</span>
+<span class="nc" id="L140">		File[] files = hdat.listFiles();</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">		if (files != null) {</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">			for (File file : files) {</span>
+<span class="nc" id="L143">				String name = file.getName();</span>
+
+				// create schema instance at &quot;name&quot; location an load
+<span class="nc" id="L146">				Schema schema = new DatabaseSchema(hierarchical + &quot;/&quot; + name, settings.getProvider(), settings,</span>
+<span class="nc" id="L147">						systemAdmin).load();</span>
+
+				// create storage instance at &quot;name&quot; location
+<span class="nc" id="L150">				StorageManager storage = settings.createStorageManager(hierarchical + &quot;/&quot; + name + &quot;/database&quot;,</span>
+						StorageMode.STORAGE_POOL);
+
+				// create remote URL to embedded URL
+<span class="nc" id="L154">				URL embeddedURL = new URL(&quot;file:/&quot; + hierarchical + &quot;/&quot; + name);</span>
+
+				// create database using storage and schema
+<span class="nc" id="L157">				hierarchicals.put(name, new EmbeddedHierarchical(name, embeddedURL, schema, systemAdmin, storage));</span>
+			}
+		}
+<span class="nc" id="L160">		return hierarchicals;</span>
+	}
+
+	public final boolean isRunning() {
+<span class="nc bnc" id="L164" title="All 2 branches missed.">		return serverSocket != null;</span>
+	}
+
+	public final synchronized void shutdown() {
+<span class="nc" id="L168">		stop = true;</span>
+<span class="nc" id="L169">	}</span>
+
+	public final String getURL() {
+		try {
+<span class="nc" id="L173">			return &quot;rempdb://&quot; + InetAddress.getLocalHost() + &quot;:&quot; + serverPort;</span>
+<span class="nc" id="L174">		} catch (UnknownHostException e) {</span>
+<span class="nc" id="L175">			LoggerUtils.error(getClass(), LoggerConstants.UNKNOWN_HOST, e);</span>
+		}
+<span class="nc" id="L177">		return &quot;Unknown Host&quot;;</span>
+	}
+
+	public final String getName() {
+<span class="nc" id="L181">		return &quot;Prolobjectlink Server&quot;;</span>
+	}
+
+	public final DatabaseServerType getType() {
+<span class="nc" id="L185">		return DatabaseServerType.TCP;</span>
+	}
+
+	public final synchronized void startup() throws IOException {
+
+<span class="nc" id="L190">		LoggerUtils.info(getClass(), getName() + &quot; is starting...&quot;);</span>
+
+		// protocol system register
+<span class="nc" id="L193">		System.setProperty(&quot;java.protocol.handler.pkgs&quot;, PROTOCOL);</span>
+
+		// load existing databases
+<span class="nc" id="L196">		Map&lt;String, DatabaseEngine&gt; hierarchicals = hierarchicals();</span>
+<span class="nc" id="L197">		Map&lt;String, DatabaseEngine&gt; relationals = relationals();</span>
+
+<span class="nc" id="L199">		LoggerUtils.info(getClass(), getName() + &quot; is started&quot;);</span>
+
+		// listening loop
+<span class="nc bnc" id="L202" title="All 4 branches missed.">		while (!stop &amp;&amp; serverSocket != null) {</span>
+<span class="nc" id="L203">			Socket socket = serverSocket.accept();</span>
+<span class="nc" id="L204">			String clientAddress = socket.getInetAddress().getHostAddress();</span>
+<span class="nc" id="L205">			RemoteDatabaseThread thread = threads.get(clientAddress);</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">			if (thread == null) {</span>
+<span class="nc" id="L207">				thread = new RemoteDatabaseThread(threadId++, socket, this);</span>
+<span class="nc" id="L208">				thread.putDatabases(DatabaseType.HIERARCHICAL, hierarchicals);</span>
+<span class="nc" id="L209">				thread.putDatabases(DatabaseType.RELATIONAL, relationals);</span>
+<span class="nc" id="L210">				threads.put(clientAddress, thread);</span>
+			}
+<span class="nc" id="L212">			thread.setSocket(socket);</span>
+<span class="nc" id="L213">			thread.setServer(this);</span>
+<span class="nc" id="L214">			running.submit(thread);</span>
+<span class="nc" id="L215">		}</span>
+
+<span class="nc" id="L217">		LoggerUtils.info(getClass(), getName() + &quot; is shutting down...&quot;);</span>
+
+		// close all databases after stop listening loop
+<span class="nc bnc" id="L220" title="All 2 branches missed.">		for (DatabaseEngine e : hierarchicals.values()) {</span>
+<span class="nc" id="L221">			e.close();</span>
+<span class="nc" id="L222">		}</span>
+<span class="nc" id="L223">		hierarchicals.clear();</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">		for (DatabaseEngine e : relationals.values()) {</span>
+<span class="nc" id="L225">			e.close();</span>
+<span class="nc" id="L226">		}</span>
+<span class="nc" id="L227">		relationals.clear();</span>
+
+		// shutdown the executor
+<span class="nc" id="L230">		running.shutdown();</span>
+
+		// clear active threads
+<span class="nc" id="L233">		threads.clear();</span>
+
+		// close server socket
+<span class="nc bnc" id="L236" title="All 2 branches missed.">		if (serverSocket != null) {</span>
+<span class="nc" id="L237">			serverSocket.close();</span>
+<span class="nc" id="L238">			serverSocket = null;</span>
+		}
+
+<span class="nc" id="L241">		LoggerUtils.info(getClass(), getName() + &quot; is shutdown&quot;);</span>
+
+<span class="nc" id="L243">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

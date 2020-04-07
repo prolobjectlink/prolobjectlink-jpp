@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>LoggerConstants.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.logging</a> &gt; <span class="el_source">LoggerConstants.java</span></div><h1>LoggerConstants.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.logging;
+
+<span class="nc" id="L35">public enum LoggerConstants {</span>
+
+<span class="nc" id="L37">	RUNTIME_ERROR(&quot;Runtime error &quot;),</span>
+
+<span class="nc" id="L39">	FILE_NOT_FOUND(&quot;File not found &quot;),</span>
+
+<span class="nc" id="L41">	CLASS_NOT_FOUND(&quot;Class not found &quot;),</span>
+
+<span class="nc" id="L43">	UNKNOW_PREDICATE(&quot;Unknow predicate&quot;),</span>
+
+<span class="nc" id="L45">	SYNTAX_ERROR(&quot;Syntax error in the file &quot;),</span>
+
+<span class="nc" id="L47">	NON_SOLUTION(&quot;The query no have solution &quot;),</span>
+
+<span class="nc" id="L49">	INDICATOR_NOT_FOUND(&quot;Predicate not found for&quot;),</span>
+
+<span class="nc" id="L51">	IO(&quot;Some error occurs opening the file&quot;),</span>
+
+<span class="nc" id="L53">	ERROR_LOADING_BUILT_INS(&quot;Error loading prolog built-ins &quot;),</span>
+
+<span class="nc" id="L55">	DONT_WORRY(&quot;Don't worry about it, the file was create for you &quot;),</span>
+
+<span class="nc" id="L57">	INTERRUPTED_ERROR(&quot;Thread interrupted error&quot;),</span>
+
+<span class="nc" id="L59">	EXECUTION_ERROR(&quot;Thread execution error&quot;),</span>
+
+<span class="nc" id="L61">	FILE_NOT_DELETE(&quot;File not delete &quot;),</span>
+
+<span class="nc" id="L63">	INSTANTIATION(&quot;Instantiation error &quot;),</span>
+
+<span class="nc" id="L65">	ILLEGAL_ACCESS(&quot;Illegal access error &quot;),</span>
+
+<span class="nc" id="L67">	NO_SUCH_METHOD(&quot;No such method error&quot;),</span>
+
+<span class="nc" id="L69">	SECURITY(&quot;Security error &quot;),</span>
+
+<span class="nc" id="L71">	SQL_ERROR(&quot;SQL error &quot;),</span>
+
+<span class="nc" id="L73">	UNKNOWN_HOST(&quot;Unknow Host error&quot;),</span>
+
+<span class="nc" id="L75">	ILLEGAL_ARGUMENT(&quot;Illegal argument error&quot;),</span>
+
+<span class="nc" id="L77">	INVOCATION_TARGET(&quot;Invocation target error&quot;),</span>
+
+<span class="nc" id="L79">	NO_SUCH_FIELD(&quot;No such field error&quot;),</span>
+
+<span class="nc" id="L81">	CLASS_CAST(&quot;Class cast error&quot;),</span>
+
+<span class="nc" id="L83">	URI(&quot;URI Syntax error&quot;),</span>
+
+<span class="nc" id="L85">	URL(&quot;URL Syntax error&quot;),</span>
+
+<span class="nc" id="L87">	LINK(&quot;Link library error&quot;),</span>
+
+<span class="nc" id="L89">	SERVLET_ERROR(&quot;Servlet error&quot;);</span>
+
+	private final String name;
+
+<span class="nc" id="L93">	LoggerConstants(String name) {</span>
+<span class="nc" id="L94">		this.name = name;</span>
+<span class="nc" id="L95">	}</span>
+
+	public final String getName() {
+<span class="nc" id="L98">		return name;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

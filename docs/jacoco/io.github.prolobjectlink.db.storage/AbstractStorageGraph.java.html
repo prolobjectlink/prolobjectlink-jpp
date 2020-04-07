@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractStorageGraph.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db.storage</a> &gt; <span class="el_source">AbstractStorageGraph.java</span></div><h1>AbstractStorageGraph.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db.storage;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import io.github.prolobjectlink.db.ContainerFactory;
+import io.github.prolobjectlink.db.ObjectConverter;
+import io.github.prolobjectlink.db.PersistentContainer;
+import io.github.prolobjectlink.db.Predicate;
+import io.github.prolobjectlink.db.ProcedureQuery;
+import io.github.prolobjectlink.db.Query;
+import io.github.prolobjectlink.db.RelationalGraph;
+import io.github.prolobjectlink.db.Schema;
+import io.github.prolobjectlink.db.StorageGraph;
+import io.github.prolobjectlink.db.StorageManager;
+import io.github.prolobjectlink.db.StorageMode;
+import io.github.prolobjectlink.db.Transaction;
+import io.github.prolobjectlink.db.TypedQuery;
+import io.github.prolobjectlink.db.etc.Settings;
+import io.github.prolobjectlink.db.tx.PersistentContainerTransaction;
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
+
+/** @author Jose Zalacain @since 1.0 */
+public abstract class AbstractStorageGraph extends RelationalGraph&lt;Object, Object&gt;
+		implements PersistentContainer, StorageGraph {
+
+	private final Schema schema;
+	private final String location;
+	private final PrologEngine engine;
+	private final Settings properties;
+	private final StorageManager storage;
+	private final PrologProvider provider;
+	private final Transaction transaction;
+	private final ContainerFactory containerFactory;
+	private final ObjectConverter&lt;PrologTerm&gt; converter;
+
+	public AbstractStorageGraph(String location, Schema schema, Settings properties, PrologProvider provider,
+<span class="nc" id="L73">			ContainerFactory containerFactory, ObjectConverter&lt;PrologTerm&gt; converter, StorageMode storageMode) {</span>
+<span class="nc" id="L74">		this.storage = containerFactory.createStorageManager(location, storageMode);</span>
+<span class="nc" id="L75">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L76">		this.containerFactory = containerFactory;</span>
+<span class="nc" id="L77">		this.engine = provider.newEngine();</span>
+<span class="nc" id="L78">		this.properties = properties;</span>
+<span class="nc" id="L79">		this.converter = converter;</span>
+<span class="nc" id="L80">		this.location = location;</span>
+<span class="nc" id="L81">		this.provider = provider;</span>
+<span class="nc" id="L82">		this.schema = schema;</span>
+<span class="nc" id="L83">	}</span>
+
+	public AbstractStorageGraph(String location, Schema schema, Settings properties, StorageMode storageMode,
+			RelationalGraph&lt;Object, Object&gt; graph) {
+<span class="nc" id="L87">		super(graph);</span>
+<span class="nc" id="L88">		this.containerFactory = properties.getContainerFactory();</span>
+<span class="nc" id="L89">		this.storage = containerFactory.createStorageManager(location, storageMode);</span>
+<span class="nc" id="L90">		this.converter = properties.getObjectConverter();</span>
+<span class="nc" id="L91">		this.transaction = new PersistentContainerTransaction(this);</span>
+<span class="nc" id="L92">		this.provider = properties.getProvider();</span>
+<span class="nc" id="L93">		this.engine = provider.newEngine();</span>
+<span class="nc" id="L94">		this.properties = properties;</span>
+<span class="nc" id="L95">		this.location = location;</span>
+<span class="nc" id="L96">		this.schema = schema;</span>
+<span class="nc" id="L97">	}</span>
+
+	public final &lt;K&gt; K unwrap(Class&lt;K&gt; cls) {
+<span class="nc" id="L100">		return unwrap(this, cls);</span>
+	}
+
+	public final &lt;K&gt; K unwrap(Object o, Class&lt;K&gt; cls) {
+		try {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">			if (cls.isAssignableFrom(o.getClass())) {</span>
+<span class="nc" id="L106">				return cls.cast(o);</span>
+			}
+<span class="nc" id="L108">		} catch (Exception e) {</span>
+<span class="nc" id="L109">			throw new RuntimeException(</span>
+
+<span class="nc" id="L111">					&quot;Impossible unwrap &quot; + getClass()</span>
+
+<span class="nc" id="L113">							+ &quot; to &quot; + cls.getName()</span>
+
+					, e);
+<span class="nc" id="L116">		}</span>
+<span class="nc" id="L117">		return null;</span>
+	}
+
+	public final boolean isWrappedFor(Class&lt;?&gt; cls) {
+<span class="nc" id="L121">		return cls.isInstance(this);</span>
+	}
+
+	public final boolean isWrappedFor(Object o, Class&lt;?&gt; cls) {
+<span class="nc" id="L125">		return cls.isInstance(o);</span>
+	}
+
+	public final List&lt;Object&gt; solutionsOf(PrologTerm[] prologTerms, List&lt;Class&lt;?&gt;&gt; classes) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L130">		return new ArrayList&lt;Object&gt;();</span>
+	}
+
+	public final Object[] solutionOf(PrologTerm[] prologTerms, List&lt;Class&lt;?&gt;&gt; classes) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L135">		return new Object[0];</span>
+	}
+
+	public final boolean contains(String string) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L140">		return false;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(O o) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L145">		return false;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Class&lt;O&gt; clazz) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L150">		return false;</span>
+	}
+
+	public final &lt;O&gt; boolean contains(Predicate&lt;O&gt; predicate) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L155">		return false;</span>
+	}
+
+	public final boolean contains(String functor, int arity) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L160">		return false;</span>
+	}
+
+	public final Collection&lt;Class&lt;?&gt;&gt; classes() {
+<span class="nc" id="L164">		return storage.classes();</span>
+	}
+
+	public final ObjectConverter&lt;PrologTerm&gt; getConverter() {
+<span class="nc" id="L168">		return converter;</span>
+	}
+
+	public final Settings getProperties() {
+<span class="nc" id="L172">		return properties;</span>
+	}
+
+	public final PrologProvider getProvider() {
+<span class="nc" id="L176">		return provider;</span>
+	}
+
+	public final PrologEngine getEngine() {
+<span class="nc" id="L180">		return engine;</span>
+	}
+
+	public final void open() {
+<span class="nc" id="L184">		storage.begin();</span>
+<span class="nc" id="L185">	}</span>
+
+	public final &lt;O&gt; void insert(O... facts) {
+		// TODO Auto-generated method stub
+
+<span class="nc" id="L190">	}</span>
+
+	public final &lt;O&gt; void update(O match, O update) {
+		// TODO Auto-generated method stub
+
+<span class="nc" id="L195">	}</span>
+
+	public final void delete(Class&lt;?&gt; clazz) {
+		// TODO Auto-generated method stub
+
+<span class="nc" id="L200">	}</span>
+
+	public final &lt;O&gt; void delete(O... facts) {
+		// TODO Auto-generated method stub
+
+<span class="nc" id="L205">	}</span>
+
+	public final Transaction getTransaction() {
+<span class="nc" id="L208">		return transaction;</span>
+	}
+
+	public final Query createQuery(String string) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L213">		return null;</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(O o) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L218">		return null;</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Class&lt;O&gt; clazz) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L223">		return null;</span>
+	}
+
+	public final &lt;O&gt; TypedQuery&lt;O&gt; createQuery(Predicate&lt;O&gt; predicate) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L228">		return null;</span>
+	}
+
+	public final ProcedureQuery createProcedureQuery(String functor, String... args) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L233">		return null;</span>
+	}
+
+	public final PersistentContainer containerOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L237">		return storage.containerOf(clazz);</span>
+	}
+
+	public final String locationOf(Class&lt;?&gt; clazz) {
+<span class="nc" id="L241">		return storage.locationOf(clazz);</span>
+	}
+
+	public final void backup(String directory, String zipFileName) {
+<span class="nc" id="L245">		storage.backup(directory, zipFileName);</span>
+<span class="nc" id="L246">	}</span>
+
+	public final void restore(String directory, String zipFileName) {
+<span class="nc" id="L249">		storage.restore(directory, zipFileName);</span>
+<span class="nc" id="L250">	}</span>
+
+	public final void include(String path) {
+<span class="nc" id="L253">		storage.include(path);</span>
+<span class="nc" id="L254">	}</span>
+
+	public final ContainerFactory getContainerFactory() {
+<span class="nc" id="L257">		return containerFactory;</span>
+	}
+
+	public final String getLocation() {
+<span class="nc" id="L261">		return location;</span>
+	}
+
+	public final void defragment() {
+<span class="nc" id="L265">		storage.defragment();</span>
+<span class="nc" id="L266">	}</span>
+
+	public final boolean isOpen() {
+<span class="nc" id="L269">		return storage.isOpen();</span>
+	}
+
+	public final void flush() {
+<span class="nc" id="L273">		storage.commit();</span>
+<span class="nc" id="L274">	}</span>
+
+	public final void close() {
+<span class="nc" id="L277">		storage.close();</span>
+<span class="nc" id="L278">	}</span>
+
+	public final void begin() {
+<span class="nc" id="L281">		open();</span>
+<span class="nc" id="L282">	}</span>
+
+	public final void commit() {
+<span class="nc" id="L285">		flush();</span>
+<span class="nc" id="L286">	}</span>
+
+	public final void rollback() {
+<span class="nc" id="L289">		open();</span>
+<span class="nc" id="L290">	}</span>
+
+	public boolean isActive() {
+<span class="nc" id="L293">		return getTransaction().isActive();</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L298">		return &quot;AbstractStorageGraph [location=&quot; + location + &quot;]&quot;;</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L303">		final int prime = 31;</span>
+<span class="nc" id="L304">		int result = super.hashCode();</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">		result = prime * result + ((location == null) ? 0 : location.hashCode());</span>
+<span class="nc" id="L306">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L311" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L312">			return true;</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L314">			return false;</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L316">			return false;</span>
+<span class="nc" id="L317">		AbstractStorageGraph other = (AbstractStorageGraph) obj;</span>
+<span class="nc bnc" id="L318" title="All 2 branches missed.">		if (location == null) {</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">			if (other.location != null)</span>
+<span class="nc" id="L320">				return false;</span>
+<span class="nc bnc" id="L321" title="All 2 branches missed.">		} else if (!location.equals(other.location)) {</span>
+<span class="nc" id="L322">			return false;</span>
+		}
+<span class="nc" id="L324">		return true;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

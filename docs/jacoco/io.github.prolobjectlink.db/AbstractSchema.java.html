@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractSchema.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db</a> &gt; <span class="el_source">AbstractSchema.java</span></div><h1>AbstractSchema.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db;
+
+import java.io.File;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import io.github.prolobjectlink.Direction;
+import io.github.prolobjectlink.db.prolog.PrologDatabaseFunction;
+import io.github.prolobjectlink.db.prolog.PrologDatabaseTrigger;
+import io.github.prolobjectlink.db.prolog.PrologDatabaseView;
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologProvider;
+
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+public abstract class AbstractSchema implements Schema {
+
+	private int version;
+	private final String location;
+	private final DatabaseUser owner;
+
+	//
+	private final transient Storage storage;
+	private final transient PrologProvider provider;
+	private final transient ContainerFactory containerFactory;
+
+	//
+	private final Map&lt;String, DatabaseView&gt; views;
+	private final Map&lt;String, DatabaseUser&gt; users;
+	private final Map&lt;String, DatabaseClass&gt; classes;
+	private final Map&lt;String, DatabaseTrigger&gt; triggers;
+	private final Map&lt;String, DatabaseFunction&gt; functions;
+	private final Map&lt;String, DatabaseSequence&gt; sequences;
+
+	private static final long serialVersionUID = 2324575651388389914L;
+
+	private DatabaseClass newDatabaseClass(Class&lt;?&gt; clazz, String comment) {
+<span class="nc" id="L78">		DatabaseClass c = new DatabaseClass(clazz, comment, this);</span>
+<span class="nc" id="L79">		Field[] fields = clazz.getDeclaredFields();</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">		for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc" id="L81">			Field field = fields[i];</span>
+<span class="nc" id="L82">			String name = field.getName();</span>
+<span class="nc" id="L83">			Class&lt;?&gt; type = field.getType();</span>
+<span class="nc" id="L84">			c.addField(name, &quot;&quot;, i, type);</span>
+		}
+<span class="nc" id="L86">		return c;</span>
+	}
+
+	private DatabaseClass newDatabaseClass(String clazz, String comment) {
+<span class="nc" id="L90">		return new DatabaseClass(clazz, comment, this);</span>
+	}
+
+	private DatabaseFunction newDatabaseFunction(String name, String comment) {
+<span class="nc" id="L94">		String path0 = location.substring(0, location.lastIndexOf(File.separatorChar));</span>
+<span class="nc" id="L95">		String path1 = path0.replace(File.separatorChar, '/') + &quot;/functions.pl&quot;;</span>
+<span class="nc" id="L96">		return new PrologDatabaseFunction(name, comment, this, path1, provider);</span>
+	}
+
+	private DatabaseTrigger newDatabaseTrigger(String name, String comment) {
+<span class="nc" id="L100">		String path0 = location.substring(0, location.lastIndexOf(File.separatorChar));</span>
+<span class="nc" id="L101">		String path1 = path0.replace(File.separatorChar, '/') + &quot;/triggers.pl&quot;;</span>
+<span class="nc" id="L102">		return new PrologDatabaseTrigger(name, comment, this, path1, provider);</span>
+	}
+
+	private DatabaseView newDatabaseView(Class&lt;?&gt; target, String comment) {
+<span class="nc" id="L106">		String path0 = location.substring(0, location.lastIndexOf(File.separatorChar));</span>
+<span class="nc" id="L107">		String path1 = path0.replace(File.separatorChar, '/') + &quot;/views.pl&quot;;</span>
+<span class="nc" id="L108">		return new PrologDatabaseView(path1, target, comment, this, provider);</span>
+	}
+
+<span class="nc" id="L111">	public AbstractSchema(String location, PrologProvider provider, ContainerFactory factory, DatabaseUser owner) {</span>
+<span class="nc" id="L112">		this.storage = factory.createStorage(location + File.separator + &quot;metadata&quot; + File.separator + &quot;schema.pl&quot;);</span>
+<span class="nc" id="L113">		this.functions = new LinkedHashMap&lt;String, DatabaseFunction&gt;();</span>
+<span class="nc" id="L114">		this.sequences = new LinkedHashMap&lt;String, DatabaseSequence&gt;();</span>
+<span class="nc" id="L115">		this.triggers = new LinkedHashMap&lt;String, DatabaseTrigger&gt;();</span>
+<span class="nc" id="L116">		this.classes = new LinkedHashMap&lt;String, DatabaseClass&gt;();</span>
+<span class="nc" id="L117">		this.users = new LinkedHashMap&lt;String, DatabaseUser&gt;();</span>
+<span class="nc" id="L118">		this.views = new LinkedHashMap&lt;String, DatabaseView&gt;();</span>
+<span class="nc" id="L119">		this.location = location + File.separator + &quot;metadata&quot;;</span>
+<span class="nc" id="L120">		this.containerFactory = factory;</span>
+<span class="nc" id="L121">		this.provider = provider;</span>
+<span class="nc" id="L122">		this.owner = owner;</span>
+<span class="nc" id="L123">		this.version = 0;</span>
+<span class="nc" id="L124">	}</span>
+
+	public final String generate() {
+<span class="nc" id="L127">		StringBuilder buffer = new StringBuilder();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">		for (DatabaseClass clazz : classes.values()) {</span>
+<span class="nc" id="L129">			buffer.append(clazz.generate());</span>
+<span class="nc" id="L130">		}</span>
+<span class="nc" id="L131">		return &quot;&quot; + buffer + &quot;&quot;;</span>
+	}
+
+	public final List&lt;Class&lt;?&gt;&gt; compile() {
+<span class="nc" id="L135">		int size = classes.size();</span>
+<span class="nc" id="L136">		List&lt;Class&lt;?&gt;&gt; l = new ArrayList&lt;Class&lt;?&gt;&gt;(size);</span>
+<span class="nc" id="L137">		DynamicClassLoader dcl = new DynamicClassLoader();</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">		for (DatabaseClass c : classes.values()) {</span>
+<span class="nc" id="L139">			l.add(dcl.defineClass(c.getName(), c.compile()));</span>
+<span class="nc" id="L140">		}</span>
+<span class="nc" id="L141">		return l;</span>
+	}
+
+	public final boolean isRelationalType(Class&lt;?&gt; type) {
+<span class="nc bnc" id="L145" title="All 4 branches missed.">		return !isJavaLangType(type) &amp;&amp; isJavaUtilType(type);</span>
+	}
+
+	public final boolean isJavaUtilType(Class&lt;?&gt; type) {
+<span class="nc bnc" id="L149" title="All 8 branches missed.">		return isSet(type) || isList(type) || isCollection(type) || isMap(type);</span>
+	}
+
+	public final boolean isMap(Class&lt;?&gt; type) {
+<span class="nc" id="L153">		return type.equals(Map.class);</span>
+	}
+
+	public final boolean isCollection(Class&lt;?&gt; type) {
+<span class="nc" id="L157">		return type.equals(Collection.class);</span>
+	}
+
+	public final boolean isList(Class&lt;?&gt; type) {
+<span class="nc" id="L161">		return type.equals(List.class);</span>
+	}
+
+	public final boolean isSet(Class&lt;?&gt; type) {
+<span class="nc" id="L165">		return type.equals(Set.class);</span>
+	}
+
+	public final boolean isJavaLangType(Class&lt;?&gt; type) {
+<span class="nc" id="L169">		Package langPackage = Object.class.getPackage();</span>
+<span class="nc" id="L170">		Package typePackage = type.getPackage();</span>
+<span class="nc" id="L171">		return typePackage.equals(langPackage);</span>
+	}
+
+	public final DatabaseClass addClass(Class&lt;?&gt; clazz, String comment) {
+<span class="nc" id="L175">		DatabaseClass c = newDatabaseClass(clazz, comment);</span>
+<span class="nc" id="L176">		classes.put(clazz.getName(), c);</span>
+<span class="nc" id="L177">		return c;</span>
+	}
+
+	/**
+	 * Add a class to the current schema
+	 * 
+	 * @param className name for the class
+	 * @return database class instance.
+	 * @since 1.0
+	 */
+	public final DatabaseClass addClass(String className, String comment) {
+<span class="nc" id="L188">		DatabaseClass c = newDatabaseClass(className, comment);</span>
+<span class="nc" id="L189">		classes.put(className, c);</span>
+<span class="nc" id="L190">		return c;</span>
+	}
+
+	/**
+	 * Add a class to the current schema and set a parent super class.
+	 * 
+	 * @param className  name for the class
+	 * @param superClass parent superclass
+	 * @return database class instance.
+	 * @since 1.0
+	 */
+	public final DatabaseClass addClass(String className, String comment, DatabaseClass superClass) {
+<span class="nc" id="L202">		DatabaseClass c = newDatabaseClass(className, comment);</span>
+<span class="nc" id="L203">		classes.put(className, c.setSuperClass(superClass));</span>
+<span class="nc" id="L204">		return c;</span>
+	}
+
+	/**
+	 * Add a class to the current schema and set a parent super classes.
+	 * 
+	 * @param className    name for the class
+	 * @param superClasses parent super classes
+	 * @return database class instance
+	 * @since 1.0
+	 */
+	public final DatabaseClass addClass(String className, String comment, DatabaseClass... superClasses) {
+<span class="nc" id="L216">		DatabaseClass c = newDatabaseClass(className, comment);</span>
+<span class="nc bnc" id="L217" title="All 4 branches missed.">		if (superClasses != null &amp;&amp; superClasses.length &gt;= 1) {</span>
+<span class="nc" id="L218">			c.setSuperClass(superClasses[0]);</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">			for (int i = 1; i &lt; superClasses.length; i++) {</span>
+<span class="nc" id="L220">				DatabaseClass superClass = superClasses[i];</span>
+<span class="nc" id="L221">				c.addSuperClass(superClass);</span>
+			}
+		}
+<span class="nc" id="L224">		classes.put(className, c);</span>
+<span class="nc" id="L225">		return c;</span>
+	}
+
+	public final DatabaseClass addAbstractClass(Class&lt;?&gt; clazz, String comment) {
+<span class="nc" id="L229">		DatabaseClass c = newDatabaseClass(clazz, comment);</span>
+<span class="nc" id="L230">		c.setAbstract(true).setJavaClass(clazz);</span>
+<span class="nc" id="L231">		classes.put(clazz.getSimpleName(), c);</span>
+<span class="nc" id="L232">		return c;</span>
+	}
+
+	public final DatabaseClass addAbstractClass(String n, String comment) {
+<span class="nc" id="L236">		DatabaseClass c = newDatabaseClass(n, comment);</span>
+<span class="nc" id="L237">		classes.put(n, c.setAbstract(true));</span>
+<span class="nc" id="L238">		return c;</span>
+	}
+
+	public final DatabaseClass addAbstractClass(String className, String comment, DatabaseClass superClass) {
+<span class="nc" id="L242">		DatabaseClass c = addClass(className, comment, superClass);</span>
+<span class="nc" id="L243">		c.setAbstract(true);</span>
+<span class="nc" id="L244">		return c;</span>
+	}
+
+	public final DatabaseClass addAbstractClass(String className, String comment, DatabaseClass... superClasses) {
+<span class="nc" id="L248">		DatabaseClass c = addClass(className, comment, superClasses);</span>
+<span class="nc" id="L249">		c.setAbstract(true);</span>
+<span class="nc" id="L250">		return c;</span>
+	}
+
+	public final Schema removeClass(String className) {
+<span class="nc" id="L254">		classes.remove(className);</span>
+<span class="nc" id="L255">		return this;</span>
+	}
+
+	public final boolean containsClass(String className) {
+<span class="nc" id="L259">		return classes.containsKey(className);</span>
+	}
+
+	public final DatabaseClass getClass(Class&lt;?&gt; clazz) {
+<span class="nc" id="L263">		return getClass(clazz.getName());</span>
+	}
+
+	public final DatabaseClass getClass(String className) {
+<span class="nc" id="L267">		return classes.get(className);</span>
+	}
+
+	public final DatabaseClass getOrAddClass(String className) {
+<span class="nc" id="L271">		DatabaseClass clazz = getClass(className);</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">		if (clazz != null) {</span>
+<span class="nc" id="L273">			return clazz;</span>
+		}
+<span class="nc" id="L275">		return addClass(className, &quot;&quot;);</span>
+	}
+
+	public final DatabaseClass getOrAddClass(Class&lt;?&gt; clazz) {
+<span class="nc" id="L279">		DatabaseClass c = getClass(clazz);</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">		if (c != null) {</span>
+<span class="nc" id="L281">			return c;</span>
+		}
+<span class="nc" id="L283">		return addClass(clazz, &quot;&quot;);</span>
+	}
+
+	public final DatabaseClass getOrAddClass(String className, DatabaseClass superClass) {
+<span class="nc" id="L287">		DatabaseClass c = getOrAddClass(className);</span>
+<span class="nc" id="L288">		c.setSuperClass(superClass);</span>
+<span class="nc" id="L289">		return c;</span>
+	}
+
+	public final DatabaseClass getOrAddClass(String className, DatabaseClass... superClasses) {
+<span class="nc" id="L293">		DatabaseClass c = getOrAddClass(className);</span>
+<span class="nc bnc" id="L294" title="All 4 branches missed.">		if (superClasses != null &amp;&amp; superClasses.length &gt;= 1) {</span>
+<span class="nc" id="L295">			c.setSuperClass(superClasses[0]);</span>
+<span class="nc bnc" id="L296" title="All 2 branches missed.">			for (int i = 1; i &lt; superClasses.length; i++) {</span>
+<span class="nc" id="L297">				DatabaseClass superClass = superClasses[i];</span>
+<span class="nc" id="L298">				c.addSuperClass(superClass);</span>
+			}
+		}
+<span class="nc" id="L301">		return c;</span>
+	}
+
+	public final Collection&lt;DatabaseClass&gt; getClasses() {
+<span class="nc" id="L305">		return classes.values();</span>
+	}
+
+	public final int countClasses() {
+<span class="nc" id="L309">		return classes.size();</span>
+	}
+
+	public final DatabaseFunction addFunction(String name, String comment) {
+<span class="nc" id="L313">		DatabaseFunction f = newDatabaseFunction(name, comment);</span>
+<span class="nc" id="L314">		functions.put(name, f);</span>
+<span class="nc" id="L315">		return f;</span>
+	}
+
+	public final Schema removeFunctions(String name) {
+<span class="nc" id="L319">		functions.remove(name);</span>
+<span class="nc" id="L320">		return this;</span>
+	}
+
+	public final DatabaseFunction getFunction(String name) {
+<span class="nc" id="L324">		return functions.get(name);</span>
+	}
+
+	public final boolean containsFunction(String name) {
+<span class="nc" id="L328">		return functions.containsKey(name);</span>
+	}
+
+	public final Collection&lt;DatabaseFunction&gt; getFunctions() {
+<span class="nc" id="L332">		return functions.values();</span>
+	}
+
+	public final int countFunctions() {
+<span class="nc" id="L336">		return functions.size();</span>
+	}
+
+	public final DatabaseSequence addSequence(String name, String comment, Class&lt;?&gt; clazz, int increment) {
+<span class="nc" id="L340">		DatabaseSequence s = new DatabaseSequence(name, comment, clazz, increment, this);</span>
+<span class="nc" id="L341">		sequences.put(name, s);</span>
+<span class="nc" id="L342">		return s;</span>
+	}
+
+	public final Schema removeSequence(String name) {
+<span class="nc" id="L346">		sequences.remove(name);</span>
+<span class="nc" id="L347">		return this;</span>
+	}
+
+	public final boolean containsSequence(String name) {
+<span class="nc" id="L351">		return sequences.containsKey(name);</span>
+	}
+
+	public final Collection&lt;DatabaseSequence&gt; getSequences() {
+<span class="nc" id="L355">		return sequences.values();</span>
+	}
+
+	public final DatabaseSequence getSequence(String name) {
+<span class="nc" id="L359">		return sequences.get(name);</span>
+	}
+
+	public final DatabaseSequence getSequence(Class&lt;?&gt; clazz) {
+<span class="nc bnc" id="L363" title="All 2 branches missed.">		for (DatabaseSequence sequence : getSequences()) {</span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">			if (sequence.getJavaClass().equals(clazz)) {</span>
+<span class="nc" id="L365">				return sequence;</span>
+			}
+<span class="nc" id="L367">		}</span>
+<span class="nc" id="L368">		return null;</span>
+	}
+
+	public final int countSequences() {
+<span class="nc" id="L372">		return sequences.size();</span>
+	}
+
+	public final DatabaseTrigger addTrigger(String name, String comment) {
+<span class="nc" id="L376">		DatabaseTrigger t = newDatabaseTrigger(name, comment);</span>
+<span class="nc" id="L377">		triggers.put(name, t);</span>
+<span class="nc" id="L378">		return t;</span>
+	}
+
+	public final Schema removeTrigger(String name) {
+<span class="nc" id="L382">		triggers.remove(name);</span>
+<span class="nc" id="L383">		return this;</span>
+	}
+
+	public final DatabaseTrigger getTrigger(String name) {
+<span class="nc" id="L387">		return triggers.get(name);</span>
+	}
+
+	public final boolean containsTrigger(String name) {
+<span class="nc" id="L391">		return triggers.containsKey(name);</span>
+	}
+
+	public final Collection&lt;DatabaseTrigger&gt; getTriggers() {
+<span class="nc" id="L395">		return triggers.values();</span>
+	}
+
+	public final int countTriggers() {
+<span class="nc" id="L399">		return triggers.size();</span>
+	}
+
+	public final DatabaseView addView(Class&lt;?&gt; target, String comment) {
+<span class="nc" id="L403">		DatabaseView f = newDatabaseView(target, comment);</span>
+<span class="nc" id="L404">		views.put(target.getName(), f);</span>
+<span class="nc" id="L405">		return f;</span>
+	}
+
+	public final Schema removeView(Class&lt;?&gt; target) {
+<span class="nc" id="L409">		views.remove(target.getName());</span>
+<span class="nc" id="L410">		return this;</span>
+	}
+
+	public final DatabaseView getView(Class&lt;?&gt; target) {
+<span class="nc" id="L414">		return views.get(target.getName());</span>
+	}
+
+	public final boolean containsView(Class&lt;?&gt; target) {
+<span class="nc" id="L418">		return views.containsKey(target.getName());</span>
+	}
+
+	public final Collection&lt;DatabaseView&gt; getViews() {
+<span class="nc" id="L422">		return views.values();</span>
+	}
+
+	public final int countViews() {
+<span class="nc" id="L426">		return views.size();</span>
+	}
+
+	public final DatabaseUser addUser(String name, String password) {
+<span class="nc" id="L430">		DatabaseUser user = new DatabaseUser(name, password);</span>
+<span class="nc" id="L431">		users.put(name, user);</span>
+<span class="nc" id="L432">		user.setSchema(this);</span>
+<span class="nc" id="L433">		return user;</span>
+	}
+
+	public final Schema removeUser(String name) {
+<span class="nc" id="L437">		users.remove(name);</span>
+<span class="nc" id="L438">		return this;</span>
+	}
+
+	public final boolean containsUser(String name) {
+<span class="nc bnc" id="L442" title="All 2 branches missed.">		if (owner.getUsername().equals(name)) {</span>
+<span class="nc" id="L443">			return true;</span>
+		}
+<span class="nc" id="L445">		return users.containsKey(name);</span>
+	}
+
+	public final Collection&lt;DatabaseUser&gt; getUsers() {
+<span class="nc" id="L449">		List&lt;DatabaseUser&gt; all = new ArrayList&lt;DatabaseUser&gt;();</span>
+<span class="nc" id="L450">		all.add(owner);</span>
+<span class="nc" id="L451">		all.addAll(users.values());</span>
+<span class="nc" id="L452">		return all;</span>
+	}
+
+	public final DatabaseUser getUser(String name) {
+<span class="nc" id="L456">		return users.get(name);</span>
+	}
+
+	public final int countUsers() {
+<span class="nc" id="L460">		return users.size() + 1;</span>
+	}
+
+	public final DatabaseUser getOwner() {
+<span class="nc" id="L464">		return owner;</span>
+	}
+
+	@Override
+	public final int hashCode() {
+<span class="nc" id="L469">		final int prime = 31;</span>
+<span class="nc" id="L470">		int result = 1;</span>
+<span class="nc bnc" id="L471" title="All 2 branches missed.">		result = prime * result + ((classes == null) ? 0 : classes.hashCode());</span>
+<span class="nc bnc" id="L472" title="All 2 branches missed.">		result = prime * result + ((functions == null) ? 0 : functions.hashCode());</span>
+<span class="nc bnc" id="L473" title="All 2 branches missed.">		result = prime * result + ((location == null) ? 0 : location.hashCode());</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">		result = prime * result + ((owner == null) ? 0 : owner.hashCode());</span>
+<span class="nc bnc" id="L475" title="All 2 branches missed.">		result = prime * result + ((triggers == null) ? 0 : triggers.hashCode());</span>
+<span class="nc bnc" id="L476" title="All 2 branches missed.">		result = prime * result + ((users == null) ? 0 : users.hashCode());</span>
+<span class="nc" id="L477">		result = prime * result + version;</span>
+<span class="nc bnc" id="L478" title="All 2 branches missed.">		result = prime * result + ((views == null) ? 0 : views.hashCode());</span>
+<span class="nc" id="L479">		return result;</span>
+	}
+
+	@Override
+	public final boolean equals(Object obj) {
+<span class="nc bnc" id="L484" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L485">			return true;</span>
+<span class="nc bnc" id="L486" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L487">			return false;</span>
+<span class="nc bnc" id="L488" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L489">			return false;</span>
+<span class="nc" id="L490">		AbstractSchema other = (AbstractSchema) obj;</span>
+<span class="nc bnc" id="L491" title="All 2 branches missed.">		if (classes == null) {</span>
+<span class="nc bnc" id="L492" title="All 2 branches missed.">			if (other.classes != null)</span>
+<span class="nc" id="L493">				return false;</span>
+<span class="nc bnc" id="L494" title="All 2 branches missed.">		} else if (!classes.equals(other.classes)) {</span>
+<span class="nc" id="L495">			return false;</span>
+		}
+<span class="nc bnc" id="L497" title="All 2 branches missed.">		if (functions == null) {</span>
+<span class="nc bnc" id="L498" title="All 2 branches missed.">			if (other.functions != null)</span>
+<span class="nc" id="L499">				return false;</span>
+<span class="nc bnc" id="L500" title="All 2 branches missed.">		} else if (!functions.equals(other.functions)) {</span>
+<span class="nc" id="L501">			return false;</span>
+		}
+<span class="nc bnc" id="L503" title="All 2 branches missed.">		if (location == null) {</span>
+<span class="nc bnc" id="L504" title="All 2 branches missed.">			if (other.location != null)</span>
+<span class="nc" id="L505">				return false;</span>
+<span class="nc bnc" id="L506" title="All 2 branches missed.">		} else if (!location.equals(other.location)) {</span>
+<span class="nc" id="L507">			return false;</span>
+		}
+<span class="nc bnc" id="L509" title="All 2 branches missed.">		if (owner == null) {</span>
+<span class="nc bnc" id="L510" title="All 2 branches missed.">			if (other.owner != null)</span>
+<span class="nc" id="L511">				return false;</span>
+<span class="nc bnc" id="L512" title="All 2 branches missed.">		} else if (!owner.equals(other.owner)) {</span>
+<span class="nc" id="L513">			return false;</span>
+		}
+<span class="nc bnc" id="L515" title="All 2 branches missed.">		if (triggers == null) {</span>
+<span class="nc bnc" id="L516" title="All 2 branches missed.">			if (other.triggers != null)</span>
+<span class="nc" id="L517">				return false;</span>
+<span class="nc bnc" id="L518" title="All 2 branches missed.">		} else if (!triggers.equals(other.triggers)) {</span>
+<span class="nc" id="L519">			return false;</span>
+		}
+<span class="nc bnc" id="L521" title="All 2 branches missed.">		if (users == null) {</span>
+<span class="nc bnc" id="L522" title="All 2 branches missed.">			if (other.users != null)</span>
+<span class="nc" id="L523">				return false;</span>
+<span class="nc bnc" id="L524" title="All 2 branches missed.">		} else if (!users.equals(other.users)) {</span>
+<span class="nc" id="L525">			return false;</span>
+		}
+<span class="nc bnc" id="L527" title="All 2 branches missed.">		if (version != other.version)</span>
+<span class="nc" id="L528">			return false;</span>
+<span class="nc bnc" id="L529" title="All 2 branches missed.">		if (views == null) {</span>
+<span class="nc bnc" id="L530" title="All 2 branches missed.">			if (other.views != null)</span>
+<span class="nc" id="L531">				return false;</span>
+<span class="nc bnc" id="L532" title="All 2 branches missed.">		} else if (!views.equals(other.views)) {</span>
+<span class="nc" id="L533">			return false;</span>
+		}
+<span class="nc" id="L535">		return true;</span>
+	}
+
+	public final int getVersion() {
+<span class="nc" id="L539">		return version;</span>
+	}
+
+	public final String getLocation() {
+<span class="nc" id="L543">		return location;</span>
+	}
+
+	public final ContainerFactory getContainerFactory() {
+<span class="nc" id="L547">		return containerFactory;</span>
+	}
+
+	public final PrologProvider getProvider() {
+<span class="nc" id="L551">		return provider;</span>
+	}
+
+	public final PrologEngine getEngine() {
+<span class="nc" id="L555">		return storage.getEngine();</span>
+	}
+
+	public final Storage getStorage() {
+<span class="nc" id="L559">		return storage;</span>
+	}
+
+	public final RelationalGraph&lt;DatabaseClass, DatabaseClass&gt; getGraph() {
+<span class="nc" id="L563">		DatabaseClass relationEdge = addAbstractClass(RelationalEdge.class, &quot;&quot;);</span>
+<span class="nc" id="L564">		RelationalGraph&lt;DatabaseClass, DatabaseClass&gt; g = new RelationalGraph&lt;DatabaseClass, DatabaseClass&gt;();</span>
+<span class="nc bnc" id="L565" title="All 2 branches missed.">		for (DatabaseClass clazz : new ArrayList&lt;DatabaseClass&gt;(classes.values())) {</span>
+<span class="nc bnc" id="L566" title="All 4 branches missed.">			if (!clazz.equals(relationEdge) &amp;&amp; !clazz.isSubClassOf(relationEdge)) {</span>
+<span class="nc bnc" id="L567" title="All 2 branches missed.">				if (g.getVertex(clazz) == null) {</span>
+<span class="nc" id="L568">					g.addVertex(clazz);</span>
+				}
+<span class="nc bnc" id="L570" title="All 2 branches missed.">				for (DatabaseField field : clazz.getFields()) {</span>
+<span class="nc" id="L571">					Class&lt;?&gt; type = field.getType();</span>
+<span class="nc bnc" id="L572" title="All 4 branches missed.">					if (type != null &amp;&amp; isRelationalType(type)) {</span>
+<span class="nc" id="L573">						type = field.getLinkedType();</span>
+					}
+<span class="nc bnc" id="L575" title="All 4 branches missed.">					if (type != null &amp;&amp; !isJavaLangType(type)) {</span>
+<span class="nc" id="L576">						DatabaseClass linkedClass = getClass(type);</span>
+<span class="nc bnc" id="L577" title="All 2 branches missed.">						if (linkedClass != null) {</span>
+<span class="nc" id="L578">							DatabaseField inKey = clazz.getPrimaryKeyField();</span>
+<span class="nc" id="L579">							DatabaseField outKey = linkedClass.getPrimaryKeyField();</span>
+<span class="nc" id="L580">							String inName = linkedClass.getName() + clazz.getName();</span>
+<span class="nc" id="L581">							String outName = clazz.getName() + linkedClass.getName();</span>
+<span class="nc" id="L582">							DatabaseClass in = getOrAddClass(inName, relationEdge);</span>
+<span class="nc" id="L583">							DatabaseClass out = getOrAddClass(outName, relationEdge);</span>
+<span class="nc" id="L584">							in.addField(inKey);</span>
+<span class="nc" id="L585">							in.addField(outKey);</span>
+<span class="nc" id="L586">							out.addField(outKey);</span>
+<span class="nc" id="L587">							out.addField(inKey);</span>
+<span class="nc bnc" id="L588" title="All 2 branches missed.">							if (g.getVertex(linkedClass) == null) {</span>
+<span class="nc" id="L589">								g.addVertex(linkedClass);</span>
+							}
+<span class="nc" id="L591">							g.addEdge(linkedClass, clazz, out, Direction.IN);</span>
+<span class="nc" id="L592">							g.addEdge(clazz, linkedClass, in, Direction.OUT);</span>
+						}
+					}
+<span class="nc" id="L595">				}</span>
+			}
+<span class="nc" id="L597">		}</span>
+<span class="nc" id="L598">		return g;</span>
+	}
+
+	public final List&lt;Class&lt;?&gt;&gt; getJavaClasses() {
+<span class="nc" id="L602">		int size = countClasses();</span>
+<span class="nc" id="L603">		List&lt;Class&lt;?&gt;&gt; l = new ArrayList&lt;Class&lt;?&gt;&gt;(size);</span>
+<span class="nc bnc" id="L604" title="All 2 branches missed.">		for (DatabaseClass c : getClasses()) {</span>
+<span class="nc" id="L605">			l.add(c.getJavaClass());</span>
+<span class="nc" id="L606">		}</span>
+<span class="nc" id="L607">		return l;</span>
+	}
+
+	public final void clear() {
+<span class="nc" id="L611">		sequences.clear();</span>
+<span class="nc" id="L612">		functions.clear();</span>
+<span class="nc" id="L613">		classes.clear();</span>
+<span class="nc" id="L614">		users.clear();</span>
+<span class="nc" id="L615">	}</span>
+
+	public final Schema load() {
+<span class="nc" id="L618">		storage.getTransaction().begin();</span>
+<span class="nc" id="L619">		List&lt;DatabaseUser&gt; u = storage.findAll(DatabaseUser.class);</span>
+<span class="nc bnc" id="L620" title="All 2 branches missed.">		for (DatabaseUser databaseUser : u) {</span>
+<span class="nc" id="L621">			users.put(databaseUser.getUsername(), databaseUser.setSchema(this));</span>
+<span class="nc" id="L622">		}</span>
+<span class="nc" id="L623">		List&lt;DatabaseClass&gt; c = storage.findAll(DatabaseClass.class);</span>
+<span class="nc bnc" id="L624" title="All 2 branches missed.">		for (DatabaseClass databaseClass : c) {</span>
+<span class="nc" id="L625">			classes.put(databaseClass.getName(), databaseClass.setSchema(this));</span>
+<span class="nc" id="L626">		}</span>
+<span class="nc" id="L627">		List&lt;PrologDatabaseFunction&gt; f = storage.findAll(PrologDatabaseFunction.class);</span>
+<span class="nc bnc" id="L628" title="All 2 branches missed.">		for (DatabaseFunction databaseFunction : f) {</span>
+<span class="nc" id="L629">			databaseFunction.setSchema(this);</span>
+<span class="nc" id="L630">			databaseFunction.setEngine(getEngine());</span>
+<span class="nc" id="L631">			databaseFunction.setProvider(getProvider());</span>
+<span class="nc" id="L632">			functions.put(databaseFunction.getName(), databaseFunction);</span>
+<span class="nc" id="L633">		}</span>
+<span class="nc" id="L634">		List&lt;DatabaseSequence&gt; s = storage.findAll(DatabaseSequence.class);</span>
+<span class="nc bnc" id="L635" title="All 2 branches missed.">		for (DatabaseSequence databaseSequence : s) {</span>
+<span class="nc" id="L636">			sequences.put(databaseSequence.getName(), databaseSequence.setSchema(this));</span>
+<span class="nc" id="L637">		}</span>
+<span class="nc" id="L638">		List&lt;DatabaseTrigger&gt; t = storage.findAll(DatabaseTrigger.class);</span>
+<span class="nc bnc" id="L639" title="All 2 branches missed.">		for (DatabaseTrigger databaseTrigger : t) {</span>
+<span class="nc" id="L640">			databaseTrigger.setSchema(this);</span>
+<span class="nc" id="L641">			databaseTrigger.setEngine(getEngine());</span>
+<span class="nc" id="L642">			databaseTrigger.setProvider(getProvider());</span>
+<span class="nc" id="L643">			triggers.put(databaseTrigger.getName(), databaseTrigger);</span>
+<span class="nc" id="L644">		}</span>
+<span class="nc" id="L645">		List&lt;DatabaseView&gt; v = storage.findAll(DatabaseView.class);</span>
+<span class="nc bnc" id="L646" title="All 2 branches missed.">		for (DatabaseView databaseView : v) {</span>
+<span class="nc" id="L647">			databaseView.setSchema(this);</span>
+<span class="nc" id="L648">			databaseView.setEngine(getEngine());</span>
+<span class="nc" id="L649">			databaseView.setProvider(getProvider());</span>
+<span class="nc" id="L650">			views.put(databaseView.getName(), databaseView);</span>
+<span class="nc" id="L651">		}</span>
+<span class="nc" id="L652">		storage.getTransaction().close();</span>
+<span class="nc" id="L653">		return this;</span>
+	}
+
+	public final void flush() {
+<span class="nc" id="L657">		storage.getTransaction().begin();</span>
+<span class="nc bnc" id="L658" title="All 2 branches missed.">		for (DatabaseUser user : getUsers()) {</span>
+<span class="nc" id="L659">			storage.insert(user);</span>
+<span class="nc" id="L660">		}</span>
+<span class="nc bnc" id="L661" title="All 2 branches missed.">		for (DatabaseClass clazz : getClasses()) {</span>
+<span class="nc" id="L662">			storage.insert(clazz);</span>
+<span class="nc" id="L663">		}</span>
+<span class="nc bnc" id="L664" title="All 2 branches missed.">		for (DatabaseFunction function : getFunctions()) {</span>
+<span class="nc" id="L665">			storage.insert(function);</span>
+<span class="nc" id="L666">			function.save();</span>
+<span class="nc" id="L667">		}</span>
+<span class="nc bnc" id="L668" title="All 2 branches missed.">		for (DatabaseSequence sequence : getSequences()) {</span>
+<span class="nc" id="L669">			storage.insert(sequence);</span>
+<span class="nc" id="L670">		}</span>
+<span class="nc bnc" id="L671" title="All 2 branches missed.">		for (DatabaseTrigger trigger : getTriggers()) {</span>
+<span class="nc" id="L672">			storage.insert(trigger);</span>
+<span class="nc" id="L673">			trigger.save();</span>
+<span class="nc" id="L674">		}</span>
+<span class="nc bnc" id="L675" title="All 2 branches missed.">		for (DatabaseView view : getViews()) {</span>
+<span class="nc" id="L676">			storage.insert(view);</span>
+<span class="nc" id="L677">			view.save();</span>
+<span class="nc" id="L678">		}</span>
+		try {
+<span class="nc" id="L680">			storage.getTransaction().commit();</span>
+<span class="nc" id="L681">		} catch (Exception e) {</span>
+<span class="nc" id="L682">			storage.rollback();</span>
+<span class="nc" id="L683">		}</span>
+<span class="nc" id="L684">		storage.getTransaction().close();</span>
+<span class="nc" id="L685">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

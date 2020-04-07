@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DatabaseField.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db</a> &gt; <span class="el_source">DatabaseField.java</span></div><h1>DatabaseField.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db;
+
+import java.io.Serializable;
+
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+
+/**
+ * Represent a field for a database class in the database schema
+ * 
+ * @author Jose Zalacain
+ * @see Schema
+ * @see DatabaseClass
+ * @since 1.0
+ * 
+ */
+public class DatabaseField extends AbstractElement&lt;DatabaseField&gt;
+		implements SchemaElement&lt;DatabaseField&gt;, Comparable&lt;DatabaseField&gt; {
+
+	private int position;
+	protected String typeName;
+	private boolean notNull;
+	private String fullName;
+	private boolean version;
+	private boolean oneToOne;
+	private boolean oneToMany;
+	private boolean manyToOne;
+	private boolean manyToMany;
+	private boolean primaryKey;
+	private boolean isTransient;
+	private String linkedTypeName;
+	private Serializable minValue;
+	private Serializable maxValue;
+	private Serializable defaultValue;
+	private DatabaseClass linkedClass;
+	private transient Class&lt;?&gt; javaType;
+	private transient Class&lt;?&gt; linkedType;
+	private static final long serialVersionUID = 3864527141246876427L;
+
+	/**
+	 * use for internal reflection only
+	 */
+<span class="nc" id="L77">	protected DatabaseField() {</span>
+
+<span class="nc" id="L79">	}</span>
+
+	public DatabaseField(String name, String comment, int position, Class&lt;?&gt; type, Schema schema, DatabaseClass owner) {
+<span class="nc" id="L82">		super(name, comment, schema);</span>
+<span class="nc" id="L83">		this.fullName = owner.getName() + &quot;.&quot; + name;</span>
+<span class="nc" id="L84">		this.typeName = type.getName();</span>
+<span class="nc" id="L85">		this.position = position;</span>
+<span class="nc" id="L86">		this.javaType = type;</span>
+<span class="nc" id="L87">	}</span>
+
+	public void generateField(StringBuilder buffer) {
+<span class="nc" id="L90">		int index = typeName.lastIndexOf('.');</span>
+<span class="nc" id="L91">		String n = typeName.substring(index + 1);</span>
+<span class="nc" id="L92">		buffer.append('\t');</span>
+<span class="nc" id="L93">		buffer.append(Modifier.PRIVATE);</span>
+<span class="nc" id="L94">		buffer.append(' ');</span>
+<span class="nc" id="L95">		buffer.append(n);</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		if (hasLinkedTypeName()) {</span>
+<span class="nc" id="L97">			buffer.append('&lt;');</span>
+<span class="nc" id="L98">			buffer.append(getLinkedTypeShortName());</span>
+<span class="nc" id="L99">			buffer.append('&gt;');</span>
+		}
+<span class="nc" id="L101">		buffer.append(' ');</span>
+<span class="nc" id="L102">		buffer.append(getName());</span>
+<span class="nc" id="L103">		buffer.append(';');</span>
+<span class="nc" id="L104">		buffer.append('\n');</span>
+<span class="nc" id="L105">	}</span>
+
+	public void generateGetter(StringBuilder buffer) {
+<span class="nc" id="L108">		String fieldName = getName();</span>
+<span class="nc" id="L109">		char n = Character.toUpperCase(fieldName.charAt(0));</span>
+<span class="nc" id="L110">		String fname = n + fieldName.substring(1);</span>
+
+		// get
+<span class="nc" id="L113">		buffer.append('\t');</span>
+<span class="nc" id="L114">		buffer.append(Modifier.PUBLIC);</span>
+<span class="nc" id="L115">		buffer.append(' ');</span>
+<span class="nc" id="L116">		buffer.append(getType().getSimpleName());</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">		if (hasLinkedTypeName()) {</span>
+<span class="nc" id="L118">			buffer.append('&lt;');</span>
+<span class="nc" id="L119">			buffer.append(getLinkedTypeShortName());</span>
+<span class="nc" id="L120">			buffer.append('&gt;');</span>
+		}
+<span class="nc" id="L122">		buffer.append(' ');</span>
+<span class="nc" id="L123">		buffer.append(&quot;get&quot;);</span>
+<span class="nc" id="L124">		buffer.append(fname);</span>
+<span class="nc" id="L125">		buffer.append(&quot;()&quot;);</span>
+<span class="nc" id="L126">		buffer.append('{');</span>
+<span class="nc" id="L127">		buffer.append('\n');</span>
+<span class="nc" id="L128">		buffer.append('\t');</span>
+<span class="nc" id="L129">		buffer.append('\t');</span>
+<span class="nc" id="L130">		buffer.append(&quot;return&quot;);</span>
+<span class="nc" id="L131">		buffer.append(' ');</span>
+<span class="nc" id="L132">		buffer.append(fieldName);</span>
+<span class="nc" id="L133">		buffer.append(';');</span>
+<span class="nc" id="L134">		buffer.append('\n');</span>
+<span class="nc" id="L135">		buffer.append('\t');</span>
+<span class="nc" id="L136">		buffer.append('}');</span>
+<span class="nc" id="L137">		buffer.append('\n');</span>
+<span class="nc" id="L138">		buffer.append('\n');</span>
+<span class="nc" id="L139">	}</span>
+
+	public void generateSetter(StringBuilder buffer) {
+<span class="nc" id="L142">		String fieldName = getName();</span>
+<span class="nc" id="L143">		char n = Character.toUpperCase(fieldName.charAt(0));</span>
+<span class="nc" id="L144">		String fname = n + fieldName.substring(1);</span>
+<span class="nc" id="L145">		buffer.append('\t');</span>
+<span class="nc" id="L146">		buffer.append(Modifier.PUBLIC);</span>
+<span class="nc" id="L147">		buffer.append(' ');</span>
+<span class="nc" id="L148">		buffer.append(&quot;void&quot;);</span>
+<span class="nc" id="L149">		buffer.append(' ');</span>
+<span class="nc" id="L150">		buffer.append(&quot;set&quot;);</span>
+<span class="nc" id="L151">		buffer.append(fname);</span>
+<span class="nc" id="L152">		buffer.append('(');</span>
+<span class="nc" id="L153">		buffer.append(getType().getSimpleName());</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">		if (hasLinkedTypeName()) {</span>
+<span class="nc" id="L155">			buffer.append('&lt;');</span>
+<span class="nc" id="L156">			buffer.append(getLinkedTypeShortName());</span>
+<span class="nc" id="L157">			buffer.append('&gt;');</span>
+		}
+<span class="nc" id="L159">		buffer.append(' ');</span>
+<span class="nc" id="L160">		buffer.append(fieldName);</span>
+<span class="nc" id="L161">		buffer.append(')');</span>
+<span class="nc" id="L162">		buffer.append('{');</span>
+<span class="nc" id="L163">		buffer.append('\n');</span>
+<span class="nc" id="L164">		buffer.append('\t');</span>
+<span class="nc" id="L165">		buffer.append('\t');</span>
+<span class="nc" id="L166">		buffer.append(&quot;this&quot;);</span>
+<span class="nc" id="L167">		buffer.append(&quot;.&quot;);</span>
+<span class="nc" id="L168">		buffer.append(fieldName);</span>
+<span class="nc" id="L169">		buffer.append(' ');</span>
+<span class="nc" id="L170">		buffer.append('=');</span>
+<span class="nc" id="L171">		buffer.append(' ');</span>
+<span class="nc" id="L172">		buffer.append(fieldName);</span>
+<span class="nc" id="L173">		buffer.append(';');</span>
+<span class="nc" id="L174">		buffer.append('\n');</span>
+<span class="nc" id="L175">		buffer.append('\t');</span>
+<span class="nc" id="L176">		buffer.append('}');</span>
+<span class="nc" id="L177">		buffer.append('\n');</span>
+<span class="nc" id="L178">		buffer.append('\n');</span>
+<span class="nc" id="L179">	}</span>
+
+	public void generateParameter(StringBuilder buffer) {
+<span class="nc" id="L182">		buffer.append(getType().getSimpleName());</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">		if (hasLinkedTypeName()) {</span>
+<span class="nc" id="L184">			buffer.append('&lt;');</span>
+<span class="nc" id="L185">			buffer.append(getLinkedTypeShortName());</span>
+<span class="nc" id="L186">			buffer.append('&gt;');</span>
+		}
+<span class="nc" id="L188">		buffer.append(' ');</span>
+<span class="nc" id="L189">		buffer.append(getName());</span>
+<span class="nc" id="L190">	}</span>
+
+	public void generateAssigment(StringBuilder buffer) {
+<span class="nc" id="L193">		buffer.append('\t');</span>
+<span class="nc" id="L194">		buffer.append('\t');</span>
+<span class="nc" id="L195">		buffer.append(&quot;this&quot;);</span>
+<span class="nc" id="L196">		buffer.append(&quot;.&quot;);</span>
+<span class="nc" id="L197">		buffer.append(getName());</span>
+<span class="nc" id="L198">		buffer.append(' ');</span>
+<span class="nc" id="L199">		buffer.append('=');</span>
+<span class="nc" id="L200">		buffer.append(' ');</span>
+<span class="nc" id="L201">		buffer.append(getName());</span>
+<span class="nc" id="L202">		buffer.append(';');</span>
+<span class="nc" id="L203">		buffer.append('\n');</span>
+<span class="nc" id="L204">	}</span>
+
+	public boolean hasLinkedTypeName() {
+<span class="nc bnc" id="L207" title="All 4 branches missed.">		return linkedTypeName != null &amp;&amp; !linkedTypeName.isEmpty();</span>
+	}
+
+	/**
+	 * Create a field in byte code instruction
+	 * 
+	 * @param cv class writer to field declaration
+	 * @since 1.0
+	 */
+	public void createField(ClassVisitor cv) {
+<span class="nc" id="L217">		cv.visitField(Opcodes.ACC_PRIVATE, getName(), Type.getDescriptor(getType()), null, null).visitEnd();</span>
+<span class="nc" id="L218">	}</span>
+
+	/**
+	 * Create a getter method associated to this field in byte code instruction
+	 * 
+	 * @param cv        class writer to method declaration
+	 * @param className name of the owner class
+	 * @since 1.0
+	 */
+	public void createSetter(ClassVisitor cv, String className, String type, Class&lt;?&gt; c) {
+<span class="nc" id="L228">		String methodName = &quot;set&quot; + getName().substring(0, 1).toUpperCase() + getName().substring(1);</span>
+<span class="nc" id="L229">		MethodVisitor mv = cv.visitMethod(Opcodes.ACC_PUBLIC, methodName, &quot;(&quot; + type + &quot;)V&quot;, null, null);</span>
+<span class="nc" id="L230">		mv.visitCode();</span>
+<span class="nc" id="L231">		mv.visitVarInsn(Opcodes.ALOAD, 0);</span>
+<span class="nc" id="L232">		mv.visitVarInsn(Type.getType(c).getOpcode(Opcodes.ILOAD), Type.getType(c).getSize());</span>
+<span class="nc" id="L233">		mv.visitFieldInsn(Opcodes.PUTFIELD, className, getName(), type);</span>
+<span class="nc" id="L234">		mv.visitInsn(Opcodes.RETURN);</span>
+<span class="nc" id="L235">		mv.visitMaxs(2, 2);</span>
+<span class="nc" id="L236">		mv.visitEnd();</span>
+<span class="nc" id="L237">	}</span>
+
+	/**
+	 * Create a setter method associated to this field in byte code instruction
+	 * 
+	 * @param cv        class writer to method declaration
+	 * @param className name of the owner class
+	 * @since 1.0
+	 */
+	public void createGetter(ClassVisitor cv, String className, String returnType, Class&lt;?&gt; c) {
+<span class="nc" id="L247">		String methodName = &quot;get&quot; + getName().substring(0, 1).toUpperCase() + getName().substring(1);</span>
+<span class="nc" id="L248">		MethodVisitor mv = cv.visitMethod(Opcodes.ACC_PUBLIC, methodName, &quot;()&quot; + returnType, null, null);</span>
+<span class="nc" id="L249">		mv.visitCode();</span>
+<span class="nc" id="L250">		mv.visitVarInsn(Opcodes.ALOAD, 0);</span>
+<span class="nc" id="L251">		mv.visitFieldInsn(Opcodes.GETFIELD, className, getName(), returnType);</span>
+<span class="nc" id="L252">		mv.visitInsn(Type.getType(c).getOpcode(Opcodes.IRETURN));</span>
+<span class="nc" id="L253">		mv.visitMaxs(1, 1);</span>
+<span class="nc" id="L254">		mv.visitEnd();</span>
+<span class="nc" id="L255">	}</span>
+
+	public int compareTo(DatabaseField o) {
+<span class="nc bnc" id="L258" title="All 2 branches missed.">		if (position &lt; o.position) {</span>
+<span class="nc" id="L259">			return -1 * Math.abs(position - o.position);</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">		} else if (position &gt; o.position) {</span>
+<span class="nc" id="L261">			return Math.abs(position - o.position);</span>
+		}
+<span class="nc" id="L263">		return getName().compareTo(o.getName());</span>
+	}
+
+	public int getPosition() {
+<span class="nc" id="L267">		return position;</span>
+	}
+
+	public String getFullName() {
+<span class="nc" id="L271">		return fullName;</span>
+	}
+
+	public Class&lt;?&gt; getType() {
+<span class="nc" id="L275">		return javaType;</span>
+	}
+
+	public DatabaseField setType(Class&lt;?&gt; type) {
+<span class="nc" id="L279">		this.typeName = type.getName();</span>
+<span class="nc" id="L280">		this.javaType = type;</span>
+<span class="nc" id="L281">		return this;</span>
+	}
+
+	/**
+	 * Return the {@link DatabaseClass} relationship that connect the owner class
+	 * with the field type.
+	 * 
+	 * @return relationship that connect the owner class with the field type.
+	 * @since 1.0
+	 */
+	public DatabaseClass getLinkedClass() {
+<span class="nc" id="L292">		return linkedClass;</span>
+	}
+
+	/**
+	 * Put the {@link DatabaseClass} relationship that connect the owner class with
+	 * the field type.
+	 * 
+	 * @param clazz {@link DatabaseClass} relationship that connect the owner class
+	 *              with the field type.
+	 * @since 1.0
+	 */
+	public DatabaseField setLinkedClass(DatabaseClass clazz) {
+<span class="nc" id="L304">		this.linkedClass = clazz;</span>
+<span class="nc" id="L305">		return this;</span>
+	}
+
+	public Class&lt;?&gt; getLinkedType() {
+<span class="nc" id="L309">		return linkedType;</span>
+	}
+
+	public DatabaseField setLinkedType(Class&lt;?&gt; linkedType) {
+<span class="nc" id="L313">		this.linkedTypeName = linkedType.getName();</span>
+<span class="nc" id="L314">		this.linkedType = linkedType;</span>
+<span class="nc" id="L315">		return this;</span>
+	}
+
+	public String getLinkedTypeName() {
+<span class="nc" id="L319">		return linkedTypeName;</span>
+	}
+
+	public String getLinkedTypeShortName() {
+<span class="nc" id="L323">		int i = linkedTypeName.lastIndexOf('.');</span>
+<span class="nc" id="L324">		return linkedTypeName.substring(i + 1);</span>
+	}
+
+	public boolean isPrimaryKey() {
+<span class="nc" id="L328">		return primaryKey;</span>
+	}
+
+	public DatabaseField setPrimaryKey(boolean primaryKey) {
+<span class="nc" id="L332">		this.primaryKey = primaryKey;</span>
+<span class="nc" id="L333">		return this;</span>
+	}
+
+	public boolean isOneToOne() {
+<span class="nc" id="L337">		return oneToOne;</span>
+	}
+
+	public void setOneToOne(boolean oneToOne) {
+<span class="nc" id="L341">		this.oneToOne = oneToOne;</span>
+<span class="nc" id="L342">	}</span>
+
+	public boolean isOneToMany() {
+<span class="nc" id="L345">		return oneToMany;</span>
+	}
+
+	public void setOneToMany(boolean oneToMany) {
+<span class="nc" id="L349">		this.oneToMany = oneToMany;</span>
+<span class="nc" id="L350">	}</span>
+
+	public boolean isManyToOne() {
+<span class="nc" id="L353">		return manyToOne;</span>
+	}
+
+	public void setManyToOne(boolean manyToOne) {
+<span class="nc" id="L357">		this.manyToOne = manyToOne;</span>
+<span class="nc" id="L358">	}</span>
+
+	public boolean isManyToMany() {
+<span class="nc" id="L361">		return manyToMany;</span>
+	}
+
+	public void setManyToMany(boolean manyToMany) {
+<span class="nc" id="L365">		this.manyToMany = manyToMany;</span>
+<span class="nc" id="L366">	}</span>
+
+	public boolean isVersion() {
+<span class="nc" id="L369">		return version;</span>
+	}
+
+	public DatabaseField setVersion(boolean version) {
+<span class="nc" id="L373">		this.version = version;</span>
+<span class="nc" id="L374">		return this;</span>
+	}
+
+	public boolean isTransient() {
+<span class="nc" id="L378">		return isTransient;</span>
+	}
+
+	public DatabaseField setTransient(boolean isTrnasient) {
+<span class="nc" id="L382">		this.isTransient = isTrnasient;</span>
+<span class="nc" id="L383">		return this;</span>
+	}
+
+	public boolean isNotNull() {
+<span class="nc" id="L387">		return notNull;</span>
+	}
+
+	public DatabaseField setNotNull(boolean notNull) {
+<span class="nc" id="L391">		this.notNull = notNull;</span>
+<span class="nc" id="L392">		return this;</span>
+	}
+
+	public Object getMinValue() {
+<span class="nc" id="L396">		return minValue;</span>
+	}
+
+	public DatabaseField setMinValue(Serializable min) {
+<span class="nc bnc" id="L400" title="All 2 branches missed.">		if (getType() == min.getClass()) {</span>
+<span class="nc" id="L401">			this.minValue = min;</span>
+		}
+<span class="nc" id="L403">		return this;</span>
+	}
+
+	public Object getMaxValue() {
+<span class="nc" id="L407">		return maxValue;</span>
+	}
+
+	public DatabaseField setMaxValue(Serializable max) {
+<span class="nc bnc" id="L411" title="All 2 branches missed.">		if (getType() == max.getClass()) {</span>
+<span class="nc" id="L412">			this.maxValue = max;</span>
+		}
+<span class="nc" id="L414">		return this;</span>
+	}
+
+	public Object getDefaultValue() {
+<span class="nc" id="L418">		return defaultValue;</span>
+	}
+
+	public DatabaseField setDefaultValue(Serializable value) {
+<span class="nc bnc" id="L422" title="All 2 branches missed.">		if (getType() == value.getClass()) {</span>
+<span class="nc" id="L423">			this.defaultValue = value;</span>
+		}
+<span class="nc" id="L425">		return this;</span>
+	}
+
+	public DatabaseField setComment(String comment) {
+<span class="nc" id="L429">		this.comment = comment;</span>
+<span class="nc" id="L430">		return this;</span>
+	}
+
+	public DatabaseField setSchema(Schema schema) {
+<span class="nc" id="L434">		this.schema = schema;</span>
+<span class="nc" id="L435">		return this;</span>
+	}
+
+	public SchemaElementType geElementType() {
+<span class="nc" id="L439">		return SchemaElementType.FIELD;</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L444">		final int prime = 31;</span>
+<span class="nc" id="L445">		int result = super.hashCode();</span>
+<span class="nc" id="L446">		result = prime * result + position;</span>
+<span class="nc" id="L447">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L452" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L453">			return true;</span>
+<span class="nc bnc" id="L454" title="All 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L455">			return false;</span>
+<span class="nc bnc" id="L456" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L457">			return false;</span>
+<span class="nc" id="L458">		DatabaseField other = (DatabaseField) obj;</span>
+<span class="nc bnc" id="L459" title="All 2 branches missed.">		return position == other.position;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L464">		return getName();</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

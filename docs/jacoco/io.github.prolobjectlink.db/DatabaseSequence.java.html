@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DatabaseSequence.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.db</a> &gt; <span class="el_source">DatabaseSequence.java</span></div><h1>DatabaseSequence.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.db;
+
+import java.io.Serializable;
+
+import io.github.prolobjectlink.db.util.JavaReflect;
+
+public final class DatabaseSequence extends AbstractElement&lt;DatabaseSequence&gt;
+		implements Serializable, SchemaElement&lt;DatabaseSequence&gt; {
+
+	private int value;
+	private String javaClass;
+	private final int increment;
+	private static final long serialVersionUID = 937204609884481388L;
+
+	/**
+	 * for internal reflection only
+	 */
+	protected DatabaseSequence() {
+<span class="nc" id="L51">		this(null, null, null, 1, null);</span>
+<span class="nc" id="L52">	}</span>
+
+	public DatabaseSequence(String name, String comment, Class&lt;?&gt; clazz, int increment, Schema schema) {
+<span class="nc" id="L55">		super(name, comment, schema);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		this.javaClass = clazz != null ? clazz.getName() : &quot;&quot;;</span>
+<span class="nc" id="L57">		this.increment = increment;</span>
+<span class="nc" id="L58">		this.schema = schema;</span>
+<span class="nc" id="L59">	}</span>
+
+	public int getIncrement() {
+<span class="nc" id="L62">		return increment;</span>
+	}
+
+	public int getValue() {
+<span class="nc" id="L66">		return value;</span>
+	}
+
+	public void setValue(int value) {
+<span class="nc" id="L70">		this.value = value;</span>
+<span class="nc" id="L71">	}</span>
+
+	public int increment() {
+<span class="nc" id="L74">		this.value++;</span>
+<span class="nc" id="L75">		return value;</span>
+	}
+
+	public DatabaseSequence setSchema(Schema schema) {
+<span class="nc" id="L79">		this.schema = schema;</span>
+<span class="nc" id="L80">		return this;</span>
+	}
+
+	public Class&lt;?&gt; getJavaClass() {
+<span class="nc" id="L84">		return JavaReflect.classForName(javaClass);</span>
+	}
+
+	public void setJavaClass(Class&lt;?&gt; javaClass) {
+<span class="nc" id="L88">		this.javaClass = javaClass.getName();</span>
+<span class="nc" id="L89">	}</span>
+
+	public DatabaseSequence setComment(String comment) {
+<span class="nc" id="L92">		this.comment = comment;</span>
+<span class="nc" id="L93">		return this;</span>
+	}
+
+	public SchemaElementType geElementType() {
+<span class="nc" id="L97">		return SchemaElementType.SEQUENCE;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L102">		return name;</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L107">		final int prime = 31;</span>
+<span class="nc" id="L108">		int result = 1;</span>
+<span class="nc" id="L109">		result = prime * result + increment;</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">		result = prime * result + ((javaClass == null) ? 0 : javaClass.hashCode());</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">		result = prime * result + ((name == null) ? 0 : name.hashCode());</span>
+<span class="nc" id="L112">		result = prime * result + value;</span>
+<span class="nc" id="L113">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L118" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L119">			return true;</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L121">			return false;</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L123">			return false;</span>
+<span class="nc" id="L124">		DatabaseSequence other = (DatabaseSequence) obj;</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">		if (increment != other.increment)</span>
+<span class="nc" id="L126">			return false;</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		if (javaClass == null) {</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">			if (other.javaClass != null)</span>
+<span class="nc" id="L129">				return false;</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">		} else if (!javaClass.equals(other.javaClass))</span>
+<span class="nc" id="L131">			return false;</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">		if (name == null) {</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">			if (other.name != null)</span>
+<span class="nc" id="L134">				return false;</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">		} else if (!name.equals(other.name))</span>
+<span class="nc" id="L136">			return false;</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">		return value == other.value;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
