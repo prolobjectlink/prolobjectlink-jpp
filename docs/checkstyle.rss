@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2020 Prolobjectlink Project</copyright>
     <item>
-      <title>File: 228,
-             Errors: 28996,
+      <title>File: 231,
+             Errors: 29234,
              Warnings: 0,
              Infos: 0
       </title>
@@ -277,6 +277,20 @@
                 </td>
                 <td>
                   58
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://prolobjectlink.github.io/prolobjectlink-jpp/checkstyle.html#io.github.prolobjectlink.etc.AbstractConfiguration.java">io/github/prolobjectlink/etc/AbstractConfiguration.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  81
                 </td>
               </tr>
                           <tr>
@@ -1205,6 +1219,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="https://prolobjectlink.github.io/prolobjectlink-jpp/checkstyle.html#io.github.prolobjectlink.logging.LoggerInterface.java">io/github/prolobjectlink/logging/LoggerInterface.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  41
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://prolobjectlink.github.io/prolobjectlink-jpp/checkstyle.html#io.github.prolobjectlink.db.prolog.PrologTime.java">io/github/prolobjectlink/db/prolog/PrologTime.java</a>
                 </td>
                 <td>
@@ -1247,6 +1275,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="https://prolobjectlink.github.io/prolobjectlink-jpp/checkstyle.html#io.github.prolobjectlink.etc.Configuration.java">io/github/prolobjectlink/etc/Configuration.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://prolobjectlink.github.io/prolobjectlink-jpp/checkstyle.html#io.github.prolobjectlink.db.DatabaseServer.java">io/github/prolobjectlink/db/DatabaseServer.java</a>
                 </td>
                 <td>
@@ -1256,7 +1298,7 @@
                   0
                 </td>
                 <td>
-                  34
+                  38
                 </td>
               </tr>
                           <tr>
@@ -1326,7 +1368,7 @@
                   0
                 </td>
                 <td>
-                  132
+                  133
                 </td>
               </tr>
                           <tr>
@@ -1858,7 +1900,7 @@
                   0
                 </td>
                 <td>
-                  23
+                  35
                 </td>
               </tr>
                           <tr>
@@ -2012,7 +2054,7 @@
                   0
                 </td>
                 <td>
-                  1473
+                  1481
                 </td>
               </tr>
                           <tr>
@@ -2348,7 +2390,7 @@
                   0
                 </td>
                 <td>
-                  569
+                  699
                 </td>
               </tr>
                           <tr>
@@ -2418,7 +2460,7 @@
                   0
                 </td>
                 <td>
-                  216
+                  221
                 </td>
               </tr>
                           <tr>
@@ -2894,7 +2936,7 @@
                   0
                 </td>
                 <td>
-                  508
+                  447
                 </td>
               </tr>
                           <tr>

@@ -33,6 +33,7 @@
 package io.github.prolobjectlink.db;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * 
@@ -41,16 +42,18 @@ import java.io.IOException;
  */
 public interface DatabaseServer {
 
-	public void startup() throws IOException, ClassNotFoundException;
+	public void startup() throws IOException, ClassNotFoundException, SQLException;
+
+	public void shutdown() throws SQLException;
 
 	public DatabaseServerType getType();
 
 	public boolean isRunning();
 
+	public String getVersion();
+
 	public String getName();
 
 	public String getURL();
-
-	public void shutdown();
 
 }

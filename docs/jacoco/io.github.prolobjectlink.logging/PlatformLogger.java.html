@@ -42,87 +42,86 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import io.github.prolobjectlink.AbstractPlatform;
-import io.github.prolobjectlink.Platform;
 
-<span class="nc bnc" id="L47" title="All 2 branches missed.">public final class PlatformLogger extends AbstractPlatform implements Platform {</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">public final class PlatformLogger extends AbstractPlatform implements LoggerInterface {</span>
 
 	private static final String MESSAGE = &quot;Logger File Handler can't be created&quot;;
-<span class="nc" id="L50">	public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);</span>
+<span class="nc" id="L49">	public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);</span>
 
 	static PlatformLogger getInstance(Level level) {
-<span class="nc" id="L53">		LOGGER.setLevel(level);</span>
-<span class="nc" id="L54">		Logger rootlogger = LOGGER.getParent();</span>
-<span class="nc" id="L55">		SimpleDateFormat f = new SimpleDateFormat(&quot;yyyy.MM.dd&quot;);</span>
-<span class="nc" id="L56">		String date = f.format(new Date());</span>
-<span class="nc" id="L57">		Formatter formatter = new LoggerFormatter();</span>
-<span class="nc bnc" id="L58" title="All 2 branches missed.">		for (Handler h : rootlogger.getHandlers()) {</span>
-<span class="nc" id="L59">			h.setFormatter(formatter);</span>
-<span class="nc" id="L60">			h.setLevel(level);</span>
+<span class="nc" id="L52">		LOGGER.setLevel(level);</span>
+<span class="nc" id="L53">		Logger rootlogger = LOGGER.getParent();</span>
+<span class="nc" id="L54">		SimpleDateFormat f = new SimpleDateFormat(&quot;yyyy.MM.dd&quot;);</span>
+<span class="nc" id="L55">		String date = f.format(new Date());</span>
+<span class="nc" id="L56">		Formatter formatter = new LoggerFormatter();</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">		for (Handler h : rootlogger.getHandlers()) {</span>
+<span class="nc" id="L58">			h.setFormatter(formatter);</span>
+<span class="nc" id="L59">			h.setLevel(level);</span>
 		}
-<span class="nc" id="L62">		FileHandler file = null;</span>
+<span class="nc" id="L61">		FileHandler file = null;</span>
 		try {
-<span class="nc" id="L64">			file = new FileHandler(&quot;%t/prolobjectlink-&quot; + date + &quot;.log&quot;, true);</span>
-<span class="nc" id="L65">		} catch (SecurityException e) {</span>
-<span class="nc" id="L66">			rootlogger.log(Level.SEVERE, MESSAGE, e);</span>
-<span class="nc" id="L67">		} catch (IOException e) {</span>
-<span class="nc" id="L68">			rootlogger.log(Level.SEVERE, MESSAGE, e);</span>
-<span class="nc" id="L69">		}</span>
-<span class="nc bnc" id="L70" title="All 4 branches missed.">		assert file != null;</span>
-<span class="nc" id="L71">		file.setFormatter(formatter);</span>
-<span class="nc" id="L72">		LOGGER.addHandler(file);</span>
-<span class="nc" id="L73">		return new PlatformLogger();</span>
+<span class="nc" id="L63">			file = new FileHandler(&quot;%t/prolobjectlink-&quot; + date + &quot;.log&quot;, true);</span>
+<span class="nc" id="L64">		} catch (SecurityException e) {</span>
+<span class="nc" id="L65">			rootlogger.log(Level.SEVERE, MESSAGE, e);</span>
+<span class="nc" id="L66">		} catch (IOException e) {</span>
+<span class="nc" id="L67">			rootlogger.log(Level.SEVERE, MESSAGE, e);</span>
+<span class="nc" id="L68">		}</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">		assert file != null;</span>
+<span class="nc" id="L70">		file.setFormatter(formatter);</span>
+<span class="nc" id="L71">		LOGGER.addHandler(file);</span>
+<span class="nc" id="L72">		return new PlatformLogger();</span>
 	}
 
 	public void log(Object sender, Level level, Object message) {
-<span class="nc" id="L77">		LOGGER.log(level, sender + &quot;\n&quot; + message, (Throwable) null);</span>
-<span class="nc" id="L78">	}</span>
+<span class="nc" id="L76">		LOGGER.log(level, sender + &quot;\n&quot; + message, (Throwable) null);</span>
+<span class="nc" id="L77">	}</span>
 
 	public void log(Object sender, Level level, Object message, Throwable throwable) {
-<span class="nc" id="L81">		LOGGER.log(level, sender + &quot;\n&quot; + message, throwable);</span>
-<span class="nc" id="L82">	}</span>
+<span class="nc" id="L80">		LOGGER.log(level, sender + &quot;\n&quot; + message, throwable);</span>
+<span class="nc" id="L81">	}</span>
 
 	public void trace(Object sender, Object message) {
-<span class="nc" id="L85">		log(sender, Level.FINEST, message);</span>
-<span class="nc" id="L86">	}</span>
+<span class="nc" id="L84">		log(sender, Level.FINEST, message);</span>
+<span class="nc" id="L85">	}</span>
 
 	public void trace(Object sender, Object message, Throwable throwable) {
-<span class="nc" id="L89">		log(sender, Level.FINEST, message, throwable);</span>
-<span class="nc" id="L90">	}</span>
+<span class="nc" id="L88">		log(sender, Level.FINEST, message, throwable);</span>
+<span class="nc" id="L89">	}</span>
 
 	public void debug(Object sender, Object message) {
-<span class="nc" id="L93">		log(sender, Level.FINE, message);</span>
-<span class="nc" id="L94">	}</span>
+<span class="nc" id="L92">		log(sender, Level.FINE, message);</span>
+<span class="nc" id="L93">	}</span>
 
 	public void debug(Object sender, Object message, Throwable throwable) {
-<span class="nc" id="L97">		log(sender, Level.FINE, message, throwable);</span>
-<span class="nc" id="L98">	}</span>
+<span class="nc" id="L96">		log(sender, Level.FINE, message, throwable);</span>
+<span class="nc" id="L97">	}</span>
 
 	public void info(Object sender, Object message) {
-<span class="nc" id="L101">		log(sender, Level.INFO, message);</span>
-<span class="nc" id="L102">	}</span>
+<span class="nc" id="L100">		log(sender, Level.INFO, message);</span>
+<span class="nc" id="L101">	}</span>
 
 	public void info(Object sender, Object message, Throwable throwable) {
-<span class="nc" id="L105">		log(sender, Level.INFO, message, throwable);</span>
-<span class="nc" id="L106">	}</span>
+<span class="nc" id="L104">		log(sender, Level.INFO, message, throwable);</span>
+<span class="nc" id="L105">	}</span>
 
 	public void warn(Object sender, Object message) {
-<span class="nc" id="L109">		log(sender, Level.WARNING, message);</span>
-<span class="nc" id="L110">	}</span>
+<span class="nc" id="L108">		log(sender, Level.WARNING, message);</span>
+<span class="nc" id="L109">	}</span>
 
 	public void warn(Object sender, Object message, Throwable throwable) {
-<span class="nc" id="L113">		log(sender, Level.WARNING, message, throwable);</span>
-<span class="nc" id="L114">	}</span>
+<span class="nc" id="L112">		log(sender, Level.WARNING, message, throwable);</span>
+<span class="nc" id="L113">	}</span>
 
 	public void error(Object sender, Object message) {
-<span class="nc" id="L117">		log(sender, Level.SEVERE, message);</span>
-<span class="nc" id="L118">	}</span>
+<span class="nc" id="L116">		log(sender, Level.SEVERE, message);</span>
+<span class="nc" id="L117">	}</span>
 
 	public void error(Object sender, Object message, Throwable throwable) {
-<span class="nc" id="L121">		log(sender, Level.SEVERE, message, throwable);</span>
-<span class="nc" id="L122">	}</span>
+<span class="nc" id="L120">		log(sender, Level.SEVERE, message, throwable);</span>
+<span class="nc" id="L121">	}</span>
 
-<span class="nc" id="L124">	private PlatformLogger() {</span>
-<span class="nc" id="L125">	}</span>
+<span class="nc" id="L123">	private PlatformLogger() {</span>
+<span class="nc" id="L124">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

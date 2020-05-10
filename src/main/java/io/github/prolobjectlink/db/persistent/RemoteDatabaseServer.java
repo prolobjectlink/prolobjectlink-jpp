@@ -177,6 +177,10 @@ public class RemoteDatabaseServer extends AbstractPlatform implements Platform, 
 		return "Unknown Host";
 	}
 
+	public String getVersion() {
+		return "1.0.0";
+	}
+
 	public final String getName() {
 		return "Prolobjectlink Server";
 	}

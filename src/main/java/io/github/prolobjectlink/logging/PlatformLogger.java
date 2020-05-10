@@ -42,9 +42,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import io.github.prolobjectlink.AbstractPlatform;
-import io.github.prolobjectlink.Platform;
 
-public final class PlatformLogger extends AbstractPlatform implements Platform {
+public final class PlatformLogger extends AbstractPlatform implements LoggerInterface {
 
 	private static final String MESSAGE = "Logger File Handler can't be created";
 	public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);

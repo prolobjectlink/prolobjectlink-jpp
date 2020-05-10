@@ -633,32 +633,61 @@
 ]]>
 </codefragment>
 </duplication>
-<duplication lines="21" tokens="219">
-<file line="126" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
-<file line="91" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<duplication lines="21" tokens="220">
+<file line="86" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteHierarchical.java"/>
+<file line="121" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
 <codefragment>
 <![CDATA[
-					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
-					URL url = null;
-					try {
-						url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
-						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
-							throw new MalformedURLException("The URL path don't have database name at the end");
-						}
-					} catch (MalformedURLException e) {
-						LoggerUtils.error(EmbeddedHierarchical.class, LoggerConstants.IO, e);
-					}
+			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
+			URL url = null;
+			try {
+				System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
+				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
+				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
+					throw new MalformedURLException("The URL path don't have database name at the end");
+				}
+			} catch (MalformedURLException e) {
+				LoggerUtils.error(RemoteHierarchical.class, LoggerConstants.IO, e);
+			}
 
-					assert url != null;
+			assert url != null;
 
-					String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
-					String user = unit.getProperties().getProperty(DatabaseProperties.USER);
-					DatabaseUser owner = new DatabaseUser(user, password);
-					StorageManager storage = settings.createStorageManager(url.getFile() + "/database", mode);
-					Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
-					for (String managedClass : unit.getManagedClassNames()) {
-						schema.addClass(JavaReflect.classForName(managedClass), "");
-					}
+			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
+			String user = unit.getProperties().getProperty(DatabaseProperties.USER);
+			DatabaseUser owner = new DatabaseUser(user, password);
+			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
+			for (String managedClass : unit.getManagedClassNames()) {
+				schema.addClass(JavaReflect.classForName(managedClass), "");
+			}
+]]>
+</codefragment>
+</duplication>
+<duplication lines="21" tokens="219">
+<file line="91" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="126" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<codefragment>
+<![CDATA[
+			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
+			URL url = null;
+			try {
+				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
+				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
+					throw new MalformedURLException("The URL path don't have database name at the end");
+				}
+			} catch (MalformedURLException e) {
+				LoggerUtils.error(EmbeddedHierarchical.class, LoggerConstants.IO, e);
+			}
+
+			assert url != null;
+
+			String password = unit.getProperties().getProperty(DatabaseProperties.PASSWORD);
+			String user = unit.getProperties().getProperty(DatabaseProperties.USER);
+			DatabaseUser owner = new DatabaseUser(user, password);
+			StorageManager storage = settings.createStorageManager(url.getFile() + "/database", mode);
+			Schema schema = new DatabaseSchema(url.getPath(), settings.getProvider(), settings, owner);
+			for (String managedClass : unit.getManagedClassNames()) {
+				schema.addClass(JavaReflect.classForName(managedClass), "");
+			}
 ]]>
 </codefragment>
 </duplication>
@@ -1087,27 +1116,6 @@
 ]]>
 </codefragment>
 </duplication>
-<duplication lines="13" tokens="128">
-<file line="1048" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
-<file line="1106" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\prolog\AbstractProgrammer.java"/>
-<codefragment>
-<![CDATA[
-	public final void codingModel(PrintWriter stdout, JarFile jarFile, File folder, boolean warnings) {
-		ClassLoader l = Thread.currentThread().getContextClassLoader();
-		Enumeration<JarEntry> entries = jarFile.entries();
-		while (entries.hasMoreElements()) {
-			JarEntry jarEntry = entries.nextElement();
-			String jarEntryName = jarEntry.getName();
-			if (isValidJarEntry(jarEntryName)) {
-				String className = jarEntryName.substring(0, jarEntryName.length() - 6);
-				String fileName = fromCamelCase(className) + ".pl";
-				try {
-					Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
-					if (isValidClass(runtimeClass)) {
-						File runtimeFile = createRuntimeFile(folder, fileName);
-]]>
-</codefragment>
-</duplication>
 <duplication lines="23" tokens="127">
 <file line="43" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\Storage.java"/>
 <file line="47" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\StoragePool.java"/>
@@ -1392,12 +1400,30 @@ public interface Storage extends PersistentContainer {
 ]]>
 </codefragment>
 </duplication>
-<duplication lines="13" tokens="113">
-<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
-<file line="134" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<duplication lines="10" tokens="117">
+<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
+<file line="121" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\RemoteRelational.java"/>
 <codefragment>
 <![CDATA[
-				LoggerUtils.error(EmbeddedHierarchical.class, LoggerConstants.IO, e);
+			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
+			URL url = null;
+			try {
+				System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
+				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
+				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
+					throw new MalformedURLException("The URL path don't have database name at the end");
+				}
+			} catch (MalformedURLException e) {
+				LoggerUtils.error(RemoteHierarchical.class, LoggerConstants.IO, e);
+]]>
+</codefragment>
+</duplication>
+<duplication lines="13" tokens="113">
+<file line="99" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedHierarchical.java"/>
+<file line="179" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\persistent\EmbeddedRelational.java"/>
+<codefragment>
+<![CDATA[
+				LoggerUtils.error(MemoryHierarchical.class, LoggerConstants.URL, e);
 			}
 
 			assert url != null;
@@ -1566,6 +1592,32 @@ public interface Storage extends PersistentContainer {
 ]]>
 </codefragment>
 </duplication>
+<duplication lines="18" tokens="104">
+<file line="220" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\DatabaseField.java"/>
+<file line="259" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\DatabaseField.java"/>
+<codefragment>
+<![CDATA[
+			buffer.append("remove");
+			buffer.append(fname);
+			buffer.append('(');
+			if (hasLinkedTypeName()) {
+				buffer.append(getLinkedTypeShortName());
+			}
+			buffer.append(' ');
+			buffer.append(fieldName.charAt(0));
+			buffer.append(')');
+			buffer.append('{');
+			buffer.append('\n');
+			buffer.append('\t');
+			buffer.append('\t');
+			buffer.append("this");
+			buffer.append(".");
+			buffer.append(fieldName);
+			buffer.append('.');
+			buffer.append("remove(");
+]]>
+</codefragment>
+</duplication>
 <duplication lines="15" tokens="104">
 <file line="124" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\container\AbstractVolatileContainer.java"/>
 <file line="134" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\engine\AbstractDatabaseEngine.java"/>
@@ -1617,17 +1669,17 @@ public interface Storage extends PersistentContainer {
 </codefragment>
 </duplication>
 <duplication lines="7" tokens="103">
+<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
 <file line="169" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryHierarchical.java"/>
-<file line="88" path="C:\Users\Jose Zalacain\Documents\eclipse-java-photon-workspace\prolobjectlink-jpp\src\main\java\io\github\prolobjectlink\db\memory\MemoryRelational.java"/>
 <codefragment>
 <![CDATA[
-					Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
-					URL url = null;
-					try {
-						System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
-						url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
-						if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
-							throw new MalformedURLException("The URL path don't have database name at the end");
+			Settings settings = new Settings(unit.getProperties().getProperty(DatabaseProperties.DRIVER));
+			URL url = null;
+			try {
+				System.setProperty("java.protocol.handler.pkgs", Protocol.class.getPackage().getName());
+				url = new URL(unit.getProperties().getProperty(DatabaseProperties.URL).replace(URL_PREFIX, ""));
+				if (!url.getPath().substring(url.getPath().lastIndexOf('/') + 1).equals(name)) {
+					throw new MalformedURLException("The URL path don't have database named " + name);
 ]]>
 </codefragment>
 </duplication>

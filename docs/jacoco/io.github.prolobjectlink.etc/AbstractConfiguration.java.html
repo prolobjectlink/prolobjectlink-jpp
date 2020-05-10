@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractConfiguration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpp</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.etc</a> &gt; <span class="el_source">AbstractConfiguration.java</span></div><h1>AbstractConfiguration.java</h1><pre class="source lang-java linenums">/*-
+ * #%L
+ * prolobjectlink-jpp
+ * %%
+ * Copyright (C) 2020 Prolobjectlink Project
+ * %%
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the Prolobjectlink Project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package io.github.prolobjectlink.etc;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.Properties;
+
+<span class="nc" id="L43">public abstract class AbstractConfiguration&lt;K, V&gt; extends AbstractMap&lt;K, V&gt; implements Map&lt;K, V&gt; {</span>
+
+<span class="nc" id="L45">	protected final Properties properties = new Properties();</span>
+
+	public final Map&lt;K, V&gt; asMap() {
+<span class="nc" id="L48">		return this;</span>
+	}
+
+	protected final File getConfiguration(String xmlFile) throws IOException {
+<span class="nc" id="L52">		File configuration = null;</span>
+<span class="nc" id="L53">		String folder = getCurrentPath();</span>
+<span class="nc" id="L54">		File plk = new File(folder);</span>
+<span class="nc" id="L55">		File pdk = plk.getParentFile();</span>
+<span class="nc" id="L56">		File prt = pdk.getParentFile();</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">		if (prt.getCanonicalPath().contains(&quot;prolobjectlink-jpp&quot;)) { // dev mode</span>
+<span class="nc" id="L58">			configuration = new File(xmlFile);</span>
+		} else { // production mode
+<span class="nc" id="L60">			configuration = new File(prt.getCanonicalPath() + File.separator + xmlFile);</span>
+		}
+<span class="nc" id="L62">		return configuration;</span>
+	}
+
+	protected final String getCurrentPath() {
+<span class="nc" id="L66">		Class&lt;?&gt; c = getClass();</span>
+<span class="nc" id="L67">		ProtectionDomain d = c.getProtectionDomain();</span>
+<span class="nc" id="L68">		CodeSource s = d.getCodeSource();</span>
+<span class="nc" id="L69">		return s.getLocation().getPath();</span>
+	}
+
+	@Override
+	public final int hashCode() {
+<span class="nc" id="L74">		final int prime = 31;</span>
+<span class="nc" id="L75">		int result = super.hashCode();</span>
+<span class="nc" id="L76">		result = prime * result + properties.hashCode();</span>
+<span class="nc" id="L77">		return result;</span>
+	}
+
+	@Override
+	public final boolean equals(Object obj) {
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L83">			return true;</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L85">			return false;</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L87">			return false;</span>
+<span class="nc" id="L88">		AbstractConfiguration&lt;K, V&gt; other = (AbstractConfiguration&lt;K, V&gt;) obj;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">		if (!properties.equals(other.properties)) {</span>
+<span class="nc" id="L90">			return false;</span>
+		}
+<span class="nc" id="L92">		return true;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L97">		return &quot;UserManagement [properties=&quot; + properties + &quot;]&quot;;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

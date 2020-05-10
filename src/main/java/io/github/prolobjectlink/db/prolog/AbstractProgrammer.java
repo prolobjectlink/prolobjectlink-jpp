@@ -76,6 +76,7 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 	protected final PrologProvider provider;
 	private static final String NECK = " :- \n\t";
 	private final Set<String> ignorePackages = new HashSet<String>();
+	private final Set<String> illegalAccessClasses = new HashSet<String>();
 
 	protected AbstractProgrammer(PrologProvider provider) {
 		this.provider = provider;
@@ -719,6 +720,9 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 		ignorePackages.add("schemasMicrosoftComOfficeExcel");
 		ignorePackages.add("schemasMicrosoftComOfficeOffice");
 		ignorePackages.add("schemasMicrosoftComVml");
+
+		// illegal access classes
+		illegalAccessClasses.add("org/xml/sax/helpers/SecuritySupport");
 	}
 
 	protected final boolean isValidJarEntry(String name) {
@@ -1111,30 +1115,32 @@ public abstract class AbstractProgrammer extends AbstractPlatform implements Pro
 			String jarEntryName = jarEntry.getName();
 			if (isValidJarEntry(jarEntryName)) {
 				String className = jarEntryName.substring(0, jarEntryName.length() - 6);
-				String fileName = fromCamelCase(className) + ".pl";
-				try {
-					Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
-					if (isValidClass(runtimeClass)) {
-						File runtimeFile = createRuntimeFile(folder, fileName);
-						PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
-						codingLicense(programmer);
-						codingUser(programmer);
-						codingInclusion(programmer, jarEntryName);
-						codingConstants(programmer, runtimeClass);
-						codingConstructors(programmer, runtimeClass);
-						codingMethods(programmer, runtimeClass);
-						programmer.close();
+				if (!illegalAccessClasses.contains(className)) {
+					String fileName = fromCamelCase(className) + ".pl";
+					try {
+						Class<?> runtimeClass = l.loadClass(className.replace('/', '.'));
+						if (isValidClass(runtimeClass)) {
+							File runtimeFile = createRuntimeFile(folder, fileName);
+							PrintWriter programmer = new PrintWriter(new FileOutputStream(runtimeFile));
+							codingLicense(programmer);
+							codingUser(programmer);
+							codingInclusion(programmer, jarEntryName);
+							codingConstants(programmer, runtimeClass);
+							codingConstructors(programmer, runtimeClass);
+							codingMethods(programmer, runtimeClass);
+							programmer.close();
+						}
+					} catch (NoClassDefFoundError e) {
+						stdout.println("WARNING: No definition of the class could be found " + e);
+						warnings = true;
+						continue;
+					} catch (ClassNotFoundException e) {
+						stdout.println("WARNING: No definition of the class could be found " + e);
+						warnings = true;
+						continue;
+					} catch (IOException e) {
+						Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
 					}
-				} catch (NoClassDefFoundError e) {
-					stdout.println("WARNING: No definition of the class could be found " + e);
-					warnings = true;
-					continue;
-				} catch (ClassNotFoundException e) {
-					stdout.println("WARNING: No definition of the class could be found " + e);
-					warnings = true;
-					continue;
-				} catch (IOException e) {
-					Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
 				}
 			}
 		}

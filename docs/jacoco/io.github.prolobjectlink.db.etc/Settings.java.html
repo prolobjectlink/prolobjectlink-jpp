@@ -40,11 +40,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import io.github.prolobjectlink.db.ContainerFactory;
@@ -54,7 +49,6 @@ import io.github.prolobjectlink.db.HierarchicalDatabase;
 import io.github.prolobjectlink.db.ObjectConverter;
 import io.github.prolobjectlink.db.RelationalCache;
 import io.github.prolobjectlink.db.RelationalDatabase;
-import io.github.prolobjectlink.db.SaveLoad;
 import io.github.prolobjectlink.db.Schema;
 import io.github.prolobjectlink.db.Storage;
 import io.github.prolobjectlink.db.StorageGraph;
@@ -62,28 +56,30 @@ import io.github.prolobjectlink.db.StorageManager;
 import io.github.prolobjectlink.db.StorageMode;
 import io.github.prolobjectlink.db.StoragePool;
 import io.github.prolobjectlink.db.util.JavaReflect;
+import io.github.prolobjectlink.etc.AbstractConfiguration;
+import io.github.prolobjectlink.etc.Configuration;
 import io.github.prolobjectlink.logging.LoggerConstants;
 import io.github.prolobjectlink.logging.LoggerUtils;
 import io.github.prolobjectlink.prolog.PrologProvider;
 import io.github.prolobjectlink.prolog.PrologTerm;
 
-public final class Settings extends AbstractMap&lt;Object, Object&gt;
-		implements Map&lt;Object, Object&gt;, ContainerFactory, SaveLoad&lt;Settings&gt; {
+public class Settings extends AbstractConfiguration&lt;Object, Object&gt;
+		implements Configuration&lt;Object, Object&gt;, ContainerFactory {
 
-<span class="nc" id="L73">	protected URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);</span>
+<span class="nc" id="L69">	protected URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);</span>
 
-<span class="nc" id="L75">	public static final String PROVIDER = Settings.class.getPackage().getName().concat(&quot;.prologProvider&quot;);</span>
-<span class="nc" id="L76">	public static final String FACTORY = Settings.class.getPackage().getName().concat(&quot;.containerFactory&quot;);</span>
-<span class="nc" id="L77">	public static final String SECRET = Settings.class.getPackage().getName().concat(&quot;.password&quot;);</span>
-<span class="nc" id="L78">	public static final String USER = Settings.class.getPackage().getName().concat(&quot;.user&quot;);</span>
+<span class="nc" id="L71">	public static final String PROVIDER = Settings.class.getPackage().getName().concat(&quot;.prologProvider&quot;);</span>
+<span class="nc" id="L72">	public static final String FACTORY = Settings.class.getPackage().getName().concat(&quot;.containerFactory&quot;);</span>
+<span class="nc" id="L73">	public static final String SECRET = Settings.class.getPackage().getName().concat(&quot;.password&quot;);</span>
+<span class="nc" id="L74">	public static final String USER = Settings.class.getPackage().getName().concat(&quot;.user&quot;);</span>
 
-<span class="nc" id="L80">	public static final String PORT = Settings.class.getPackage().getName().concat(&quot;.server.port&quot;);</span>
-<span class="nc" id="L81">	public static final String STORAGE = Settings.class.getPackage().getName().concat(&quot;.storage.mode&quot;);</span>
-<span class="nc" id="L82">	public static final String TIME_GRANULARITY = Settings.class.getPackage().getName().concat(&quot;.lock.granularity&quot;);</span>
-<span class="nc" id="L83">	public static final String SLEEP_GAP = Settings.class.getPackage().getName().concat(&quot;.lock.timegap&quot;);</span>
-<span class="nc" id="L84">	public static final String LOCK_SLEEP = Settings.class.getPackage().getName().concat(&quot;.lock.sleep&quot;);</span>
+<span class="nc" id="L76">	public static final String PORT = Settings.class.getPackage().getName().concat(&quot;.server.port&quot;);</span>
+<span class="nc" id="L77">	public static final String STORAGE = Settings.class.getPackage().getName().concat(&quot;.storage.mode&quot;);</span>
+<span class="nc" id="L78">	public static final String TIME_GRANULARITY = Settings.class.getPackage().getName().concat(&quot;.lock.granularity&quot;);</span>
+<span class="nc" id="L79">	public static final String SLEEP_GAP = Settings.class.getPackage().getName().concat(&quot;.lock.timegap&quot;);</span>
+<span class="nc" id="L80">	public static final String LOCK_SLEEP = Settings.class.getPackage().getName().concat(&quot;.lock.sleep&quot;);</span>
 
-<span class="nc" id="L86">	public static final String CONFIG = &quot;etc&quot; + File.separator + &quot;prolobjectlink.xml&quot;;</span>
+<span class="nc" id="L82">	public static final String CONFIG = &quot;etc&quot; + File.separator + &quot;prolobjectlink.xml&quot;;</span>
 
 	public static final String DEFAULT_USER = &quot;sa&quot;;
 	public static final String DEFAULT_SECRET = &quot;&quot;;
@@ -96,7 +92,6 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 	private ContainerFactory containerFactory;
 	private PrologProvider prologProvider;
 	private StorageMode storageMode;
-	private Properties properties;
 
 	private String username;
 	private String password;
@@ -106,127 +101,99 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 	private int sleepGap;
 	private int port;
 
-<span class="nc" id="L109">	public Settings() {</span>
-<span class="nc" id="L110">		this.properties = new Properties();</span>
-<span class="nc" id="L111">	}</span>
+<span class="nc" id="L104">	public Settings() {</span>
+<span class="nc" id="L105">	}</span>
 
 	public Settings(String driver) {
-<span class="nc" id="L114">		this((Class&lt;? extends ContainerFactory&gt;) JavaReflect.classForName(driver));</span>
-<span class="nc" id="L115">	}</span>
+<span class="nc" id="L108">		this((Class&lt;? extends ContainerFactory&gt;) JavaReflect.classForName(driver));</span>
+<span class="nc" id="L109">	}</span>
 
 	public Settings(Class&lt;? extends ContainerFactory&gt; driver) {
-<span class="nc" id="L118">		this((ContainerFactory) JavaReflect.newInstance(driver));</span>
-<span class="nc" id="L119">	}</span>
+<span class="nc" id="L112">		this((ContainerFactory) JavaReflect.newInstance(driver));</span>
+<span class="nc" id="L113">	}</span>
 
-<span class="nc" id="L121">	public Settings(ContainerFactory containerFactory) {</span>
-<span class="nc" id="L122">		this.properties = new Properties();</span>
-<span class="nc" id="L123">		this.containerFactory = containerFactory;</span>
-<span class="nc" id="L124">		this.containerFactory.setSettings(this);</span>
-<span class="nc" id="L125">		this.timeGranularity = DEFAULT_TIME_GRANULARITY;</span>
-<span class="nc" id="L126">		this.lockSleep = DEFAULT_LOCK_SLEEP;</span>
-<span class="nc" id="L127">		this.sleepGap = DEFAULT_SLEEP_GAP;</span>
-<span class="nc" id="L128">		this.storageMode = StorageMode.STORAGE_POOL;</span>
-<span class="nc" id="L129">		this.password = DEFAULT_SECRET;</span>
-<span class="nc" id="L130">		this.username = DEFAULT_USER;</span>
-<span class="nc" id="L131">		this.port = DEFAULT_PORT;</span>
-<span class="nc" id="L132">		prologProvider = containerFactory.getProvider();</span>
-<span class="nc" id="L133">		properties.put(PROVIDER, prologProvider.getClass().getName());</span>
-<span class="nc" id="L134">		properties.put(FACTORY, containerFactory.getClass().getName());</span>
-<span class="nc" id="L135">		properties.put(TIME_GRANULARITY, DEFAULT_TIME_GRANULARITY);</span>
-<span class="nc" id="L136">		properties.put(STORAGE, StorageMode.STORAGE_POOL);</span>
-<span class="nc" id="L137">		properties.put(LOCK_SLEEP, DEFAULT_LOCK_SLEEP);</span>
-<span class="nc" id="L138">		properties.put(SLEEP_GAP, DEFAULT_SLEEP_GAP);</span>
-<span class="nc" id="L139">		properties.put(SECRET, DEFAULT_SECRET);</span>
-<span class="nc" id="L140">		properties.put(USER, DEFAULT_USER);</span>
-<span class="nc" id="L141">		properties.put(PORT, DEFAULT_PORT);</span>
-<span class="nc" id="L142">	}</span>
+<span class="nc" id="L115">	public Settings(ContainerFactory containerFactory) {</span>
+<span class="nc" id="L116">		this.containerFactory = containerFactory;</span>
+<span class="nc" id="L117">		this.containerFactory.setSettings(this);</span>
+<span class="nc" id="L118">		this.timeGranularity = DEFAULT_TIME_GRANULARITY;</span>
+<span class="nc" id="L119">		this.lockSleep = DEFAULT_LOCK_SLEEP;</span>
+<span class="nc" id="L120">		this.sleepGap = DEFAULT_SLEEP_GAP;</span>
+<span class="nc" id="L121">		this.storageMode = StorageMode.STORAGE_POOL;</span>
+<span class="nc" id="L122">		this.password = DEFAULT_SECRET;</span>
+<span class="nc" id="L123">		this.username = DEFAULT_USER;</span>
+<span class="nc" id="L124">		this.port = DEFAULT_PORT;</span>
+<span class="nc" id="L125">		prologProvider = containerFactory.getProvider();</span>
+<span class="nc" id="L126">		properties.put(PROVIDER, prologProvider.getClass().getName());</span>
+<span class="nc" id="L127">		properties.put(FACTORY, containerFactory.getClass().getName());</span>
+<span class="nc" id="L128">		properties.put(TIME_GRANULARITY, DEFAULT_TIME_GRANULARITY);</span>
+<span class="nc" id="L129">		properties.put(STORAGE, StorageMode.STORAGE_POOL);</span>
+<span class="nc" id="L130">		properties.put(LOCK_SLEEP, DEFAULT_LOCK_SLEEP);</span>
+<span class="nc" id="L131">		properties.put(SLEEP_GAP, DEFAULT_SLEEP_GAP);</span>
+<span class="nc" id="L132">		properties.put(SECRET, DEFAULT_SECRET);</span>
+<span class="nc" id="L133">		properties.put(USER, DEFAULT_USER);</span>
+<span class="nc" id="L134">		properties.put(PORT, DEFAULT_PORT);</span>
+<span class="nc" id="L135">	}</span>
 
 	public ContainerFactory getContainerFactory() {
-<span class="nc" id="L145">		return containerFactory;</span>
+<span class="nc" id="L138">		return containerFactory;</span>
 	}
 
 	public Settings load() {
 		try {
-<span class="nc" id="L150">			File configuration = getConfiguration();</span>
-<span class="nc" id="L151">			properties.loadFromXML(new FileInputStream(configuration));</span>
-<span class="nc" id="L152">			String driver = properties.getProperty(FACTORY);</span>
-<span class="nc" id="L153">			String provider = properties.getProperty(PROVIDER);</span>
-<span class="nc" id="L154">			Class&lt;?&gt; clazzDriver = JavaReflect.classForName(driver);</span>
-<span class="nc" id="L155">			Class&lt;?&gt; clazzProvider = JavaReflect.classForName(provider);</span>
+<span class="nc" id="L143">			File configuration = getConfiguration(CONFIG);</span>
+<span class="nc" id="L144">			properties.loadFromXML(new FileInputStream(configuration));</span>
+<span class="nc" id="L145">			String driver = properties.getProperty(FACTORY);</span>
+<span class="nc" id="L146">			String provider = properties.getProperty(PROVIDER);</span>
+<span class="nc" id="L147">			Class&lt;?&gt; clazzDriver = JavaReflect.classForName(driver);</span>
+<span class="nc" id="L148">			Class&lt;?&gt; clazzProvider = JavaReflect.classForName(provider);</span>
 
-<span class="nc" id="L157">			this.timeGranularity = Integer</span>
-<span class="nc" id="L158">					.valueOf((String) properties.getProperty(TIME_GRANULARITY, &quot;&quot; + DEFAULT_TIME_GRANULARITY + &quot;&quot;));</span>
-<span class="nc" id="L159">			this.lockSleep = Integer.valueOf((String) properties.getProperty(LOCK_SLEEP, &quot;&quot; + DEFAULT_LOCK_SLEEP + &quot;&quot;));</span>
-<span class="nc" id="L160">			this.sleepGap = Integer.valueOf((String) properties.getProperty(SLEEP_GAP, &quot;&quot; + DEFAULT_SLEEP_GAP + &quot;&quot;));</span>
-<span class="nc" id="L161">			this.port = Integer.valueOf((String) properties.getProperty(PORT, &quot;&quot; + DEFAULT_PORT + &quot;&quot;));</span>
-<span class="nc" id="L162">			this.password = properties.getProperty(SECRET, DEFAULT_SECRET);</span>
-<span class="nc" id="L163">			this.username = properties.getProperty(USER, DEFAULT_USER);</span>
+<span class="nc" id="L150">			this.timeGranularity = Integer</span>
+<span class="nc" id="L151">					.valueOf((String) properties.getProperty(TIME_GRANULARITY, &quot;&quot; + DEFAULT_TIME_GRANULARITY + &quot;&quot;));</span>
+<span class="nc" id="L152">			this.lockSleep = Integer.valueOf((String) properties.getProperty(LOCK_SLEEP, &quot;&quot; + DEFAULT_LOCK_SLEEP + &quot;&quot;));</span>
+<span class="nc" id="L153">			this.sleepGap = Integer.valueOf((String) properties.getProperty(SLEEP_GAP, &quot;&quot; + DEFAULT_SLEEP_GAP + &quot;&quot;));</span>
+<span class="nc" id="L154">			this.port = Integer.valueOf((String) properties.getProperty(PORT, &quot;&quot; + DEFAULT_PORT + &quot;&quot;));</span>
+<span class="nc" id="L155">			this.password = properties.getProperty(SECRET, DEFAULT_SECRET);</span>
+<span class="nc" id="L156">			this.username = properties.getProperty(USER, DEFAULT_USER);</span>
 
-<span class="nc" id="L165">			String storage = properties.getProperty(STORAGE);</span>
-<span class="nc bnc" id="L166" title="All 2 branches missed.">			if (storage.equals(&quot;&quot; + StorageMode.SINGLE_STORAGE + &quot;&quot;)) {</span>
-<span class="nc" id="L167">				this.storageMode = StorageMode.SINGLE_STORAGE;</span>
+<span class="nc" id="L158">			String storage = properties.getProperty(STORAGE);</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">			if (storage.equals(&quot;&quot; + StorageMode.SINGLE_STORAGE + &quot;&quot;)) {</span>
+<span class="nc" id="L160">				this.storageMode = StorageMode.SINGLE_STORAGE;</span>
 			} else {
-<span class="nc" id="L169">				this.storageMode = StorageMode.STORAGE_POOL;</span>
+<span class="nc" id="L162">				this.storageMode = StorageMode.STORAGE_POOL;</span>
 			}
-<span class="nc" id="L171">			prologProvider = (PrologProvider) JavaReflect.newInstance(clazzProvider);</span>
-<span class="nc" id="L172">			containerFactory = (ContainerFactory) JavaReflect.newInstance(clazzDriver);</span>
-<span class="nc" id="L173">			containerFactory.setProvider(prologProvider);</span>
-<span class="nc" id="L174">			containerFactory.setSettings(this);</span>
-<span class="nc" id="L175">		} catch (FileNotFoundException e) {</span>
-<span class="nc" id="L176">			LoggerUtils.error(getClass(), LoggerConstants.FILE_NOT_FOUND, e);</span>
-<span class="nc" id="L177">		} catch (IOException e) {</span>
-<span class="nc" id="L178">			LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
-<span class="nc" id="L179">		}</span>
-<span class="nc" id="L180">		return this;</span>
+<span class="nc" id="L164">			prologProvider = (PrologProvider) JavaReflect.newInstance(clazzProvider);</span>
+<span class="nc" id="L165">			containerFactory = (ContainerFactory) JavaReflect.newInstance(clazzDriver);</span>
+<span class="nc" id="L166">			containerFactory.setProvider(prologProvider);</span>
+<span class="nc" id="L167">			containerFactory.setSettings(this);</span>
+<span class="nc" id="L168">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L169">			LoggerUtils.error(getClass(), LoggerConstants.FILE_NOT_FOUND, e);</span>
+<span class="nc" id="L170">		} catch (IOException e) {</span>
+<span class="nc" id="L171">			LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
+<span class="nc" id="L172">		}</span>
+<span class="nc" id="L173">		return this;</span>
 	}
 
 	public Settings save() {
 		try {
-<span class="nc" id="L185">			properties.put(PROVIDER, prologProvider.getClass().getName());</span>
-<span class="nc" id="L186">			properties.put(FACTORY, containerFactory.getClass().getName());</span>
-<span class="nc" id="L187">			properties.put(TIME_GRANULARITY, &quot;&quot; + timeGranularity + &quot;&quot;);</span>
-<span class="nc" id="L188">			properties.put(LOCK_SLEEP, &quot;&quot; + lockSleep + &quot;&quot;);</span>
-<span class="nc" id="L189">			properties.put(SLEEP_GAP, &quot;&quot; + sleepGap + &quot;&quot;);</span>
-<span class="nc" id="L190">			properties.put(STORAGE, &quot;&quot; + storageMode + &quot;&quot;);</span>
-<span class="nc" id="L191">			properties.put(PORT, &quot;&quot; + port + &quot;&quot;);</span>
-<span class="nc" id="L192">			properties.put(SECRET, password);</span>
-<span class="nc" id="L193">			properties.put(USER, username);</span>
-<span class="nc" id="L194">			File configuration = getConfiguration();</span>
-<span class="nc" id="L195">			properties.storeToXML(new FileOutputStream(configuration), null);</span>
-<span class="nc" id="L196">		} catch (IOException e) {</span>
-<span class="nc" id="L197">			LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
-<span class="nc" id="L198">		}</span>
-<span class="nc" id="L199">		return this;</span>
-	}
-
-	@Override
-	public int hashCode() {
-<span class="nc" id="L204">		final int prime = 31;</span>
-<span class="nc" id="L205">		int result = super.hashCode();</span>
-<span class="nc bnc" id="L206" title="All 2 branches missed.">		result = prime * result + ((properties == null) ? 0 : properties.hashCode());</span>
-<span class="nc" id="L207">		return result;</span>
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-<span class="nc bnc" id="L212" title="All 2 branches missed.">		if (this == obj)</span>
-<span class="nc" id="L213">			return true;</span>
-<span class="nc bnc" id="L214" title="All 2 branches missed.">		if (!super.equals(obj))</span>
-<span class="nc" id="L215">			return false;</span>
-<span class="nc bnc" id="L216" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
-<span class="nc" id="L217">			return false;</span>
-<span class="nc" id="L218">		Settings other = (Settings) obj;</span>
-<span class="nc bnc" id="L219" title="All 2 branches missed.">		if (properties == null) {</span>
-<span class="nc bnc" id="L220" title="All 2 branches missed.">			if (other.properties != null)</span>
-<span class="nc" id="L221">				return false;</span>
-<span class="nc bnc" id="L222" title="All 2 branches missed.">		} else if (!properties.equals(other.properties)) {</span>
-<span class="nc" id="L223">			return false;</span>
-		}
-<span class="nc" id="L225">		return true;</span>
+<span class="nc" id="L178">			properties.put(PROVIDER, prologProvider.getClass().getName());</span>
+<span class="nc" id="L179">			properties.put(FACTORY, containerFactory.getClass().getName());</span>
+<span class="nc" id="L180">			properties.put(TIME_GRANULARITY, &quot;&quot; + timeGranularity + &quot;&quot;);</span>
+<span class="nc" id="L181">			properties.put(LOCK_SLEEP, &quot;&quot; + lockSleep + &quot;&quot;);</span>
+<span class="nc" id="L182">			properties.put(SLEEP_GAP, &quot;&quot; + sleepGap + &quot;&quot;);</span>
+<span class="nc" id="L183">			properties.put(STORAGE, &quot;&quot; + storageMode + &quot;&quot;);</span>
+<span class="nc" id="L184">			properties.put(PORT, &quot;&quot; + port + &quot;&quot;);</span>
+<span class="nc" id="L185">			properties.put(SECRET, password);</span>
+<span class="nc" id="L186">			properties.put(USER, username);</span>
+<span class="nc" id="L187">			File configuration = getConfiguration(CONFIG);</span>
+<span class="nc" id="L188">			properties.storeToXML(new FileOutputStream(configuration), null);</span>
+<span class="nc" id="L189">		} catch (IOException e) {</span>
+<span class="nc" id="L190">			LoggerUtils.error(getClass(), LoggerConstants.IO, e);</span>
+<span class="nc" id="L191">		}</span>
+<span class="nc" id="L192">		return this;</span>
 	}
 
 	public HierarchicalCache createHierarchicalCache() {
-<span class="nc" id="L229">		return getContainerFactory().createHierarchicalCache();</span>
+<span class="nc" id="L196">		return getContainerFactory().createHierarchicalCache();</span>
 	}
 
 	/**
@@ -236,7 +203,7 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 	 */
 	@Deprecated
 	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
-<span class="nc" id="L239">		return getContainerFactory().createHierarchicalDatabase(storageMode, name, user);</span>
+<span class="nc" id="L206">		return getContainerFactory().createHierarchicalDatabase(storageMode, name, user);</span>
 	}
 
 	/**
@@ -247,27 +214,27 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 	@Deprecated
 	public HierarchicalDatabase createHierarchicalDatabase(StorageMode storageMode, String name, String username,
 			String password) {
-<span class="nc" id="L250">		return containerFactory.createHierarchicalDatabase(storageMode, name, username, password);</span>
+<span class="nc" id="L217">		return containerFactory.createHierarchicalDatabase(storageMode, name, username, password);</span>
 	}
 
 	public Storage createStorage(String location) {
-<span class="nc" id="L254">		return getContainerFactory().createStorage(location);</span>
+<span class="nc" id="L221">		return getContainerFactory().createStorage(location);</span>
 	}
 
 	public StoragePool createStoragePool(String poolRoot, String poolName) {
-<span class="nc" id="L258">		return getContainerFactory().createStoragePool(poolRoot, poolName);</span>
+<span class="nc" id="L225">		return getContainerFactory().createStoragePool(poolRoot, poolName);</span>
 	}
 
 	public StorageGraph createStorageGraph(String path, Schema schema, StorageMode storageMode) {
-<span class="nc" id="L262">		return containerFactory.createStorageGraph(path, schema, storageMode);</span>
+<span class="nc" id="L229">		return containerFactory.createStorageGraph(path, schema, storageMode);</span>
 	}
 
 	public StorageManager createStorageManager(String path, StorageMode storageMode) {
-<span class="nc" id="L266">		return getContainerFactory().createStorageManager(path, storageMode);</span>
+<span class="nc" id="L233">		return getContainerFactory().createStorageManager(path, storageMode);</span>
 	}
 
 	public RelationalCache createRelationalCache(Schema schema) {
-<span class="nc" id="L270">		return containerFactory.createRelationalCache(schema);</span>
+<span class="nc" id="L237">		return containerFactory.createRelationalCache(schema);</span>
 	}
 
 	/**
@@ -277,7 +244,7 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 	 */
 	@Deprecated
 	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, DatabaseUser user) {
-<span class="nc" id="L280">		return getContainerFactory().createRelationalDatabase(storageMode, name, user);</span>
+<span class="nc" id="L247">		return getContainerFactory().createRelationalDatabase(storageMode, name, user);</span>
 	}
 
 	/**
@@ -289,34 +256,34 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 	@Deprecated
 	public RelationalDatabase createRelationalDatabase(StorageMode storageMode, String name, String username,
 			String password) {
-<span class="nc" id="L292">		return containerFactory.createRelationalDatabase(storageMode, name, username, password);</span>
+<span class="nc" id="L259">		return containerFactory.createRelationalDatabase(storageMode, name, username, password);</span>
 	}
 
 	public ObjectConverter&lt;PrologTerm&gt; getObjectConverter() {
-<span class="nc" id="L296">		return containerFactory.getObjectConverter();</span>
+<span class="nc" id="L263">		return containerFactory.getObjectConverter();</span>
 	}
 
 	public void setProvider(PrologProvider provider) {
-<span class="nc" id="L300">		this.prologProvider = provider;</span>
-<span class="nc" id="L301">	}</span>
+<span class="nc" id="L267">		this.prologProvider = provider;</span>
+<span class="nc" id="L268">	}</span>
 
 	public void setSettings(Settings s) {
-<span class="nc" id="L304">		containerFactory = s.containerFactory;</span>
-<span class="nc" id="L305">		prologProvider = s.prologProvider;</span>
-<span class="nc" id="L306">		properties = s.properties;</span>
-<span class="nc" id="L307">	}</span>
+<span class="nc" id="L271">		containerFactory = s.containerFactory;</span>
+<span class="nc" id="L272">		prologProvider = s.prologProvider;</span>
+<span class="nc" id="L273">		properties.putAll(s.properties);</span>
+<span class="nc" id="L274">	}</span>
 
 	public Settings getSettings() {
-<span class="nc" id="L310">		return this;</span>
+<span class="nc" id="L277">		return this;</span>
 	}
 
 	public PrologProvider getProvider() {
-<span class="nc" id="L314">		return prologProvider;</span>
+<span class="nc" id="L281">		return prologProvider;</span>
 	}
 
 	@Override
 	public Object put(Object key, Object value) {
-<span class="nc" id="L319">		return properties.put(key, value);</span>
+<span class="nc" id="L286">		return properties.put(key, value);</span>
 	}
 
 //	public &lt;K&gt; PrologConverter&lt;K&gt; getConverter() {
@@ -324,90 +291,65 @@ public final class Settings extends AbstractMap&lt;Object, Object&gt;
 //	}
 
 	@Override
-	public Set&lt;Entry&lt;Object, Object&gt;&gt; entrySet() {
-<span class="nc" id="L328">		return properties.entrySet();</span>
-	}
-
-	public final Map&lt;Object, Object&gt; asMap() {
-<span class="nc" id="L332">		return this;</span>
+	public final Set&lt;Entry&lt;Object, Object&gt;&gt; entrySet() {
+<span class="nc" id="L295">		return properties.entrySet();</span>
 	}
 
 	public final StorageMode getStorageMode() {
-<span class="nc" id="L336">		return storageMode;</span>
+<span class="nc" id="L299">		return storageMode;</span>
 	}
 
 	public final void setStorageMode(StorageMode storageMode) {
-<span class="nc" id="L340">		this.storageMode = storageMode;</span>
-<span class="nc" id="L341">	}</span>
+<span class="nc" id="L303">		this.storageMode = storageMode;</span>
+<span class="nc" id="L304">	}</span>
 
 	public final String getUsername() {
-<span class="nc" id="L344">		return username;</span>
+<span class="nc" id="L307">		return username;</span>
 	}
 
 	public final void setUsername(String username) {
-<span class="nc" id="L348">		this.username = username;</span>
-<span class="nc" id="L349">	}</span>
+<span class="nc" id="L311">		this.username = username;</span>
+<span class="nc" id="L312">	}</span>
 
 	public final String getPassword() {
-<span class="nc" id="L352">		return password;</span>
+<span class="nc" id="L315">		return password;</span>
 	}
 
 	public final void setPassword(String password) {
-<span class="nc" id="L356">		this.password = password;</span>
-<span class="nc" id="L357">	}</span>
+<span class="nc" id="L319">		this.password = password;</span>
+<span class="nc" id="L320">	}</span>
 
 	public final int getTimeGranularity() {
-<span class="nc" id="L360">		return timeGranularity;</span>
+<span class="nc" id="L323">		return timeGranularity;</span>
 	}
 
 	public final void setTimeGranularity(int timeGranularity) {
-<span class="nc" id="L364">		this.timeGranularity = timeGranularity;</span>
-<span class="nc" id="L365">	}</span>
+<span class="nc" id="L327">		this.timeGranularity = timeGranularity;</span>
+<span class="nc" id="L328">	}</span>
 
 	public final int getLockSleep() {
-<span class="nc" id="L368">		return lockSleep;</span>
+<span class="nc" id="L331">		return lockSleep;</span>
 	}
 
 	public final void setLockSleep(int lockSleep) {
-<span class="nc" id="L372">		this.lockSleep = lockSleep;</span>
-<span class="nc" id="L373">	}</span>
+<span class="nc" id="L335">		this.lockSleep = lockSleep;</span>
+<span class="nc" id="L336">	}</span>
 
 	public final int getSleepGap() {
-<span class="nc" id="L376">		return sleepGap;</span>
+<span class="nc" id="L339">		return sleepGap;</span>
 	}
 
 	public final void setSleepGap(int sleepGap) {
-<span class="nc" id="L380">		this.sleepGap = sleepGap;</span>
-<span class="nc" id="L381">	}</span>
+<span class="nc" id="L343">		this.sleepGap = sleepGap;</span>
+<span class="nc" id="L344">	}</span>
 
 	public final int getPort() {
-<span class="nc" id="L384">		return port;</span>
+<span class="nc" id="L347">		return port;</span>
 	}
 
 	public final void setPort(int port) {
-<span class="nc" id="L388">		this.port = port;</span>
-<span class="nc" id="L389">	}</span>
-
-	public final File getConfiguration() throws IOException {
-<span class="nc" id="L392">		File configuration = null;</span>
-<span class="nc" id="L393">		String folder = getCurrentPath();</span>
-<span class="nc" id="L394">		File plk = new File(folder);</span>
-<span class="nc" id="L395">		File pdk = plk.getParentFile();</span>
-<span class="nc" id="L396">		File prt = pdk.getParentFile();</span>
-<span class="nc bnc" id="L397" title="All 2 branches missed.">		if (prt.getCanonicalPath().contains(&quot;prolobjectlink-jpp&quot;)) { // dev mode</span>
-<span class="nc" id="L398">			configuration = new File(CONFIG);</span>
-		} else { // production mode
-<span class="nc" id="L400">			configuration = new File(prt.getCanonicalPath() + File.separator + CONFIG);</span>
-		}
-<span class="nc" id="L402">		return configuration;</span>
-	}
-
-	public final String getCurrentPath() {
-<span class="nc" id="L406">		Class&lt;?&gt; c = getClass();</span>
-<span class="nc" id="L407">		ProtectionDomain d = c.getProtectionDomain();</span>
-<span class="nc" id="L408">		CodeSource s = d.getCodeSource();</span>
-<span class="nc" id="L409">		return s.getLocation().getPath();</span>
-	}
+<span class="nc" id="L351">		this.port = port;</span>
+<span class="nc" id="L352">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

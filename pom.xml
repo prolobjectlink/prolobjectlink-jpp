@@ -56,7 +56,7 @@
 		<system>GitHub</system>
 		<url>https://github.com/prolobjectlink/${project.name}/issues</url>
 	</issueManagement>
-	
+
 	<mailingLists>
 		<mailingList>
 			<name>Developer List</name>
@@ -375,13 +375,24 @@
 						<Bundle-DocURL>${project.url}</Bundle-DocURL>
 						<Bundle-Name>Java Prolog Persistence</Bundle-Name>
 						<Export-Package>${project.groupId}.db.*;${project.groupId}.graph;${project.groupId}.logging</Export-Package>
-						<Import-Package>javax.script;javax.sql; javax.xml;
-							javax.xml.parsers; javax.xml.transform;
-							javax.xml.transform.stream; javax.xml.validation;
-							org.objectweb.asm; org.objectweb.asm.util;
-							org.w3c.dom;javax.xml.transform.sax; org.xml.sax;
+						<Import-Package>
+							javax.script;
+							javax.sql;
+							javax.xml;
+							javax.xml.parsers;
+							javax.xml.transform;
+							javax.xml.transform.stream;
+							javax.xml.validation;
+							javax.xml.transform.sax;
+							org.objectweb.asm;
+							org.objectweb.asm.util;
+							org.w3c.dom;
+							org.xml.sax;
 							org.xml.sax.ext;
-							org.xml.sax.helpers;${project.groupId}.*;provide:=true</Import-Package>
+							org.xml.sax.helpers;
+							${project.groupId}.*;
+							provide:=true
+						</Import-Package>
 						<Bundle-SymbolicName>${project.groupId}.jpp.plugin;singleton:=true</Bundle-SymbolicName>
 						<Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
 						<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
@@ -476,6 +487,18 @@
 						<include>**/src/**/*.xml</include>
 					</includes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.6</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm</artifactId>
+						<version>5.0.3</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
@@ -614,6 +637,24 @@
 							<report>dependency-updates-report</report>
 							<report>plugin-updates-report</report>
 							<report>property-updates-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<artifactId>maven-changelog-plugin</artifactId>
+				<version>2.2</version>
+				<reportSets>
+					<reportSet>
+						<id>dual-report</id>
+						<configuration>
+							<type>range</type>
+							<range>30</range>
+						</configuration>
+						<reports>
+							<report>changelog</report>
+							<report>file-activity</report>
+							<report>dev-activity</report>
 						</reports>
 					</reportSet>
 				</reportSets>

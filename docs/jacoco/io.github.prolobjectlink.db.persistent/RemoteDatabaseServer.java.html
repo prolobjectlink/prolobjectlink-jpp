@@ -177,70 +177,74 @@ public class RemoteDatabaseServer extends AbstractPlatform implements Platform, 
 <span class="nc" id="L177">		return &quot;Unknown Host&quot;;</span>
 	}
 
+	public String getVersion() {
+<span class="nc" id="L181">		return &quot;1.0.0&quot;;</span>
+	}
+
 	public final String getName() {
-<span class="nc" id="L181">		return &quot;Prolobjectlink Server&quot;;</span>
+<span class="nc" id="L185">		return &quot;Prolobjectlink Server&quot;;</span>
 	}
 
 	public final DatabaseServerType getType() {
-<span class="nc" id="L185">		return DatabaseServerType.TCP;</span>
+<span class="nc" id="L189">		return DatabaseServerType.TCP;</span>
 	}
 
 	public final synchronized void startup() throws IOException {
 
-<span class="nc" id="L190">		LoggerUtils.info(getClass(), getName() + &quot; is starting...&quot;);</span>
+<span class="nc" id="L194">		LoggerUtils.info(getClass(), getName() + &quot; is starting...&quot;);</span>
 
 		// protocol system register
-<span class="nc" id="L193">		System.setProperty(&quot;java.protocol.handler.pkgs&quot;, PROTOCOL);</span>
+<span class="nc" id="L197">		System.setProperty(&quot;java.protocol.handler.pkgs&quot;, PROTOCOL);</span>
 
 		// load existing databases
-<span class="nc" id="L196">		Map&lt;String, DatabaseEngine&gt; hierarchicals = hierarchicals();</span>
-<span class="nc" id="L197">		Map&lt;String, DatabaseEngine&gt; relationals = relationals();</span>
+<span class="nc" id="L200">		Map&lt;String, DatabaseEngine&gt; hierarchicals = hierarchicals();</span>
+<span class="nc" id="L201">		Map&lt;String, DatabaseEngine&gt; relationals = relationals();</span>
 
-<span class="nc" id="L199">		LoggerUtils.info(getClass(), getName() + &quot; is started&quot;);</span>
+<span class="nc" id="L203">		LoggerUtils.info(getClass(), getName() + &quot; is started&quot;);</span>
 
 		// listening loop
-<span class="nc bnc" id="L202" title="All 4 branches missed.">		while (!stop &amp;&amp; serverSocket != null) {</span>
-<span class="nc" id="L203">			Socket socket = serverSocket.accept();</span>
-<span class="nc" id="L204">			String clientAddress = socket.getInetAddress().getHostAddress();</span>
-<span class="nc" id="L205">			RemoteDatabaseThread thread = threads.get(clientAddress);</span>
-<span class="nc bnc" id="L206" title="All 2 branches missed.">			if (thread == null) {</span>
-<span class="nc" id="L207">				thread = new RemoteDatabaseThread(threadId++, socket, this);</span>
-<span class="nc" id="L208">				thread.putDatabases(DatabaseType.HIERARCHICAL, hierarchicals);</span>
-<span class="nc" id="L209">				thread.putDatabases(DatabaseType.RELATIONAL, relationals);</span>
-<span class="nc" id="L210">				threads.put(clientAddress, thread);</span>
+<span class="nc bnc" id="L206" title="All 4 branches missed.">		while (!stop &amp;&amp; serverSocket != null) {</span>
+<span class="nc" id="L207">			Socket socket = serverSocket.accept();</span>
+<span class="nc" id="L208">			String clientAddress = socket.getInetAddress().getHostAddress();</span>
+<span class="nc" id="L209">			RemoteDatabaseThread thread = threads.get(clientAddress);</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">			if (thread == null) {</span>
+<span class="nc" id="L211">				thread = new RemoteDatabaseThread(threadId++, socket, this);</span>
+<span class="nc" id="L212">				thread.putDatabases(DatabaseType.HIERARCHICAL, hierarchicals);</span>
+<span class="nc" id="L213">				thread.putDatabases(DatabaseType.RELATIONAL, relationals);</span>
+<span class="nc" id="L214">				threads.put(clientAddress, thread);</span>
 			}
-<span class="nc" id="L212">			thread.setSocket(socket);</span>
-<span class="nc" id="L213">			thread.setServer(this);</span>
-<span class="nc" id="L214">			running.submit(thread);</span>
-<span class="nc" id="L215">		}</span>
+<span class="nc" id="L216">			thread.setSocket(socket);</span>
+<span class="nc" id="L217">			thread.setServer(this);</span>
+<span class="nc" id="L218">			running.submit(thread);</span>
+<span class="nc" id="L219">		}</span>
 
-<span class="nc" id="L217">		LoggerUtils.info(getClass(), getName() + &quot; is shutting down...&quot;);</span>
+<span class="nc" id="L221">		LoggerUtils.info(getClass(), getName() + &quot; is shutting down...&quot;);</span>
 
 		// close all databases after stop listening loop
-<span class="nc bnc" id="L220" title="All 2 branches missed.">		for (DatabaseEngine e : hierarchicals.values()) {</span>
-<span class="nc" id="L221">			e.close();</span>
-<span class="nc" id="L222">		}</span>
-<span class="nc" id="L223">		hierarchicals.clear();</span>
-<span class="nc bnc" id="L224" title="All 2 branches missed.">		for (DatabaseEngine e : relationals.values()) {</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">		for (DatabaseEngine e : hierarchicals.values()) {</span>
 <span class="nc" id="L225">			e.close();</span>
 <span class="nc" id="L226">		}</span>
-<span class="nc" id="L227">		relationals.clear();</span>
+<span class="nc" id="L227">		hierarchicals.clear();</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">		for (DatabaseEngine e : relationals.values()) {</span>
+<span class="nc" id="L229">			e.close();</span>
+<span class="nc" id="L230">		}</span>
+<span class="nc" id="L231">		relationals.clear();</span>
 
 		// shutdown the executor
-<span class="nc" id="L230">		running.shutdown();</span>
+<span class="nc" id="L234">		running.shutdown();</span>
 
 		// clear active threads
-<span class="nc" id="L233">		threads.clear();</span>
+<span class="nc" id="L237">		threads.clear();</span>
 
 		// close server socket
-<span class="nc bnc" id="L236" title="All 2 branches missed.">		if (serverSocket != null) {</span>
-<span class="nc" id="L237">			serverSocket.close();</span>
-<span class="nc" id="L238">			serverSocket = null;</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">		if (serverSocket != null) {</span>
+<span class="nc" id="L241">			serverSocket.close();</span>
+<span class="nc" id="L242">			serverSocket = null;</span>
 		}
 
-<span class="nc" id="L241">		LoggerUtils.info(getClass(), getName() + &quot; is shutdown&quot;);</span>
+<span class="nc" id="L245">		LoggerUtils.info(getClass(), getName() + &quot; is shutdown&quot;);</span>
 
-<span class="nc" id="L243">	}</span>
+<span class="nc" id="L247">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

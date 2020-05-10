@@ -38,4 +38,13 @@ public class DynamicClassLoader extends ClassLoader {
 		return defineClass(name, b, 0, b.length);
 	}
 
+	public Class<?> lookupClass(String name) {
+		try {
+			return loadClass(name);
+		} catch (ClassNotFoundException e) {
+			// do nothing
+		}
+		return null;
+	}
+
 }

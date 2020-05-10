@@ -40,11 +40,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import io.github.prolobjectlink.db.ContainerFactory;
@@ -54,7 +49,6 @@ import io.github.prolobjectlink.db.HierarchicalDatabase;
 import io.github.prolobjectlink.db.ObjectConverter;
 import io.github.prolobjectlink.db.RelationalCache;
 import io.github.prolobjectlink.db.RelationalDatabase;
-import io.github.prolobjectlink.db.SaveLoad;
 import io.github.prolobjectlink.db.Schema;
 import io.github.prolobjectlink.db.Storage;
 import io.github.prolobjectlink.db.StorageGraph;
@@ -62,13 +56,15 @@ import io.github.prolobjectlink.db.StorageManager;
 import io.github.prolobjectlink.db.StorageMode;
 import io.github.prolobjectlink.db.StoragePool;
 import io.github.prolobjectlink.db.util.JavaReflect;
+import io.github.prolobjectlink.etc.AbstractConfiguration;
+import io.github.prolobjectlink.etc.Configuration;
 import io.github.prolobjectlink.logging.LoggerConstants;
 import io.github.prolobjectlink.logging.LoggerUtils;
 import io.github.prolobjectlink.prolog.PrologProvider;
 import io.github.prolobjectlink.prolog.PrologTerm;
 
-public final class Settings extends AbstractMap<Object, Object>
-		implements Map<Object, Object>, ContainerFactory, SaveLoad<Settings> {
+public class Settings extends AbstractConfiguration<Object, Object>
+		implements Configuration<Object, Object>, ContainerFactory {
 
 	protected URL persistenceXml = Thread.currentThread().getContextClassLoader().getResource(XML);
 
@@ -96,7 +92,6 @@ public final class Settings extends AbstractMap<Object, Object>
 	private ContainerFactory containerFactory;
 	private PrologProvider prologProvider;
 	private StorageMode storageMode;
-	private Properties properties;
 
 	private String username;
 	private String password;
@@ -107,7 +102,6 @@ public final class Settings extends AbstractMap<Object, Object>
 	private int port;
 
 	public Settings() {
-		this.properties = new Properties();
 	}
 
 	public Settings(String driver) {
@@ -119,7 +113,6 @@ public final class Settings extends AbstractMap<Object, Object>
 	}
 
 	public Settings(ContainerFactory containerFactory) {
-		this.properties = new Properties();
 		this.containerFactory = containerFactory;
 		this.containerFactory.setSettings(this);
 		this.timeGranularity = DEFAULT_TIME_GRANULARITY;
@@ -147,7 +140,7 @@ public final class Settings extends AbstractMap<Object, Object>
 
 	public Settings load() {
 		try {
-			File configuration = getConfiguration();
+			File configuration = getConfiguration(CONFIG);
 			properties.loadFromXML(new FileInputStream(configuration));
 			String driver = properties.getProperty(FACTORY);
 			String provider = properties.getProperty(PROVIDER);
@@ -191,38 +184,12 @@ public final class Settings extends AbstractMap<Object, Object>
 			properties.put(PORT, "" + port + "");
 			properties.put(SECRET, password);
 			properties.put(USER, username);
-			File configuration = getConfiguration();
+			File configuration = getConfiguration(CONFIG);
 			properties.storeToXML(new FileOutputStream(configuration), null);
 		} catch (IOException e) {
 			LoggerUtils.error(getClass(), LoggerConstants.IO, e);
 		}
 		return this;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((properties == null) ? 0 : properties.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Settings other = (Settings) obj;
-		if (properties == null) {
-			if (other.properties != null)
-				return false;
-		} else if (!properties.equals(other.properties)) {
-			return false;
-		}
-		return true;
 	}
 
 	public HierarchicalCache createHierarchicalCache() {
@@ -303,7 +270,7 @@ public final class Settings extends AbstractMap<Object, Object>
 	public void setSettings(Settings s) {
 		containerFactory = s.containerFactory;
 		prologProvider = s.prologProvider;
-		properties = s.properties;
+		properties.putAll(s.properties);
 	}
 
 	public Settings getSettings() {
@@ -324,12 +291,8 @@ public final class Settings extends AbstractMap<Object, Object>
 //	}
 
 	@Override
-	public Set<Entry<Object, Object>> entrySet() {
+	public final Set<Entry<Object, Object>> entrySet() {
 		return properties.entrySet();
-	}
-
-	public final Map<Object, Object> asMap() {
-		return this;
 	}
 
 	public final StorageMode getStorageMode() {
@@ -386,27 +349,6 @@ public final class Settings extends AbstractMap<Object, Object>
 
 	public final void setPort(int port) {
 		this.port = port;
-	}
-
-	public final File getConfiguration() throws IOException {
-		File configuration = null;
-		String folder = getCurrentPath();
-		File plk = new File(folder);
-		File pdk = plk.getParentFile();
-		File prt = pdk.getParentFile();
-		if (prt.getCanonicalPath().contains("prolobjectlink-jpp")) { // dev mode
-			configuration = new File(CONFIG);
-		} else { // production mode
-			configuration = new File(prt.getCanonicalPath() + File.separator + CONFIG);
-		}
-		return configuration;
-	}
-
-	public final String getCurrentPath() {
-		Class<?> c = getClass();
-		ProtectionDomain d = c.getProtectionDomain();
-		CodeSource s = d.getCodeSource();
-		return s.getLocation().getPath();
 	}
 
 }

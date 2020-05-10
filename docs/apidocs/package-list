@@ -22,5 +22,6 @@ io.github.prolobjectlink.db.tools
 io.github.prolobjectlink.db.tx
 io.github.prolobjectlink.db.util
 io.github.prolobjectlink.db.xml
+io.github.prolobjectlink.etc
 io.github.prolobjectlink.graph
 io.github.prolobjectlink.logging

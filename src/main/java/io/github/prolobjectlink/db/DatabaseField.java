@@ -33,6 +33,10 @@
 package io.github.prolobjectlink.db;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -203,6 +207,85 @@ public class DatabaseField extends AbstractElement<DatabaseField>
 		buffer.append('\n');
 	}
 
+	public void generateAdderer(StringBuilder buffer) {
+		if (isList(getType()) || isSet(getType()) || isCollection(getType())) {
+			String fieldName = getName();
+			char n = Character.toUpperCase(fieldName.charAt(0));
+			String fname = n + fieldName.substring(1);
+			buffer.append('\t');
+			buffer.append(Modifier.PUBLIC);
+			buffer.append(' ');
+			buffer.append("void");
+			buffer.append(' ');
+			buffer.append("add");
+			buffer.append(fname);
+			buffer.append('(');
+			if (hasLinkedTypeName()) {
+				buffer.append(getLinkedTypeShortName());
+			}
+			buffer.append(' ');
+			buffer.append(fieldName.charAt(0));
+			buffer.append(')');
+			buffer.append('{');
+			buffer.append('\n');
+			buffer.append('\t');
+			buffer.append('\t');
+			buffer.append("this");
+			buffer.append(".");
+			buffer.append(fieldName);
+			buffer.append('.');
+			buffer.append("add(");
+			buffer.append(fieldName.charAt(0));
+			buffer.append(')');
+			buffer.append(';');
+			buffer.append('\n');
+			buffer.append('\t');
+			buffer.append('}');
+			buffer.append('\n');
+			buffer.append('\n');
+		}
+	}
+
+	public void generateRemover(StringBuilder buffer) {
+		if (isList(getType()) || isSet(getType()) || isCollection(getType())) {
+			String fieldName = getName();
+			char n = Character.toUpperCase(fieldName.charAt(0));
+			String fname = n + fieldName.substring(1);
+			buffer.append('\t');
+			buffer.append(Modifier.PUBLIC);
+			buffer.append(' ');
+			buffer.append("void");
+			buffer.append(' ');
+			buffer.append("remove");
+			buffer.append(fname);
+			buffer.append('(');
+			if (hasLinkedTypeName()) {
+				buffer.append(getLinkedTypeShortName());
+			}
+			buffer.append(' ');
+			buffer.append(fieldName.charAt(0));
+			buffer.append(')');
+			buffer.append('{');
+			buffer.append('\n');
+			buffer.append('\t');
+			buffer.append('\t');
+			buffer.append("this");
+			buffer.append(".");
+			buffer.append(fieldName);
+			buffer.append('.');
+			buffer.append("remove(");
+			buffer.append(fieldName.charAt(0));
+			buffer.append(')');
+			buffer.append(';');
+			buffer.append('\n');
+			buffer.append('\t');
+			buffer.append('}');
+			buffer.append('\n');
+			buffer.append('\n');
+		}
+	}
+
+	
 	public boolean hasLinkedTypeName() {
 		return linkedTypeName != null && !linkedTypeName.isEmpty();
 	}
@@ -439,6 +522,13 @@ public class DatabaseField extends AbstractElement<DatabaseField>
 		return SchemaElementType.FIELD;
 	}
 
+	public boolean isBasicType() {
+		Package pack = getType().getPackage();
+		String name = pack.getName();
+		String basic = "java.lang";
+		return name.contains(basic);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -462,6 +552,38 @@ public class DatabaseField extends AbstractElement<DatabaseField>
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	public final boolean isList(Class<?> clazz) {
+		return clazz.isAssignableFrom(List.class);
+	}
+
+	public final boolean isMap(Class<?> clazz) {
+		return clazz.isAssignableFrom(Map.class);
+	}
+
+	public final boolean isSet(Class<?> clazz) {
+		return clazz.isAssignableFrom(Set.class);
+	}
+
+	public final boolean isCollection(Class<?> clazz) {
+		return clazz.isAssignableFrom(Collection.class);
+	}
+
+	public final boolean isList() {
+		return isList(getType());
+	}
+
+	public final boolean isMap() {
+		return isMap(getType());
+	}
+
+	public final boolean isSet() {
+		return isSet(getType());
+	}
+
+	public final boolean isCollection() {
+		return isCollection(getType());
 	}
 
 }
